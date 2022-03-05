@@ -35,13 +35,6 @@ namespace Battery {
 	//}
 
 	void Sleep(double seconds) {
-
-		if (AllegroContext::GetInstance()->IsInitialized()) {
-			//al_rest(seconds);
-			std::this_thread::sleep_for(std::chrono::microseconds((long long)(seconds * 1000000)));
-		}
-		else {
-			LOG_CORE_ERROR(__FUNCTION__ "(): Can't sleep: The Allegro context was not initialized!");
-		}
+		std::this_thread::sleep_for(std::chrono::microseconds((size_t)(seconds * 1000000.0)));
 	}
 }
