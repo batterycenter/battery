@@ -11,8 +11,8 @@ newoption {
     value = "on",
     description = "Enable or disable ASIO TCP/UDP networking",
     allowed = {
-       "on",
-       "off"
+        { "on", "Enable networking" },
+        { "off", "Disable networking" }
     },
     default = "on"
 }
@@ -21,9 +21,8 @@ newoption {
 
 
 -- Include the generated dependency paths from Conan
-include "conanbuildinfo.premake5.lua"
+include "conanbuildinfo.premake.lua"
 conan_basic_setup()
-
 
 
 
@@ -71,9 +70,9 @@ project "Battery"
 
     -- Common defines
     defines { "ALLEGRO_STATICLINK", "SPDLOG_COMPILED_LIB" }
-    if BATTERYENGINE_DISABLE_NETWORKING == true then
-        defines { "BATTERYENGINE_DISABLE_NETWORKING" }
-    end
+    --if BATTERYENGINE_DISABLE_NETWORKING == true then
+    --    defines { "BATTERYENGINE_DISABLE_NETWORKING" }
+    --end
 
 
 
@@ -88,8 +87,8 @@ project "Battery"
         _SCRIPT_DIR .. "/modules/spdlog/include",
         _SCRIPT_DIR .. "/modules/serial/include",
         _SCRIPT_DIR .. "/modules/clip",
-        _SCRIPT_DIR .. "/modules/allegro5-binaries/include",
-        "C:/Program Files/OpenSSL-Win64/include/"
+        _SCRIPT_DIR .. "/modules/allegro5-binaries/include"
+    --    "C:/Program Files/OpenSSL-Win64/include/"
     }
     includedirs (_includedirs)
 
@@ -99,33 +98,11 @@ project "Battery"
     -- Main source files
     files ({ "include/**", "src/**" })
 
-    -- Clip library
-    files ({ "modules/clip/clip.cpp" })
-    files ({ "modules/clip/clip_win.cpp" })
-    files ({ "modules/clip/image.cpp" })
-
-
 
 
     -- Precompiled headers
     pchheader "Battery/pch.h"
     pchsource "src/pch.cpp"
-    filter { "files:include/glm/detail/glm.cpp or files:modules/**" }
-        flags { 'NoPCH' }
-    filter { "files:include/asio/impl/src.cpp" }
-        flags { 'ExcludeFromBuild' }
-    filter {}
-
-
-
-    -- Warning suppressions
-    filter { "files:modules/clip/clip_win.cpp" }            -- Ignore signed/unsigned warning from 'clip' library 
-        disablewarnings { "4018", "4267" }
-    filter { "files:modules/serial/src/impl/win.cc" }       -- Ignore possible loss of data warning from 'serial' library 
-        disablewarnings { "4244" }
-    filter { "files:modules/serial/src/serial.cc" }         -- Ignore unreferenced local variable warning from 'serial' library 
-        disablewarnings { "4101" }
-    filter {}
 
 
 
@@ -133,14 +110,14 @@ project "Battery"
     -- Include and linker information for premake projects using this library
     BATTERY_INCLUDE_DIRS = {}
     appendTable(BATTERY_INCLUDE_DIRS, _includedirs)
-    appendTable(BATTERY_INCLUDE_DIRS, ALLEGRO5_INCLUDE_DIRS)
+    --appendTable(BATTERY_INCLUDE_DIRS, ALLEGRO5_INCLUDE_DIRS)
 
     BATTERY_LINK_DIRS = { _SCRIPT_DIR .. "/bin/%{cfg.buildcfg}/", "C:/Program Files/OpenSSL-Win64/lib/VC/static/" }
-    appendTable(BATTERY_LINK_DIRS)
+    --appendTable(BATTERY_LINK_DIRS)
 
     BATTERY_LINKS = { "Battery" }
     BATTERY_SYSTEM_LINKS = { "opengl32", "winmm", "shlwapi" }
-    appendTable(BATTERY_LINKS, ALLEGRO5_LINKS)
-    if not BATTERY_DISABLE_NETWORKING == true then
-        appendTable(BATTERY_LINKS, { "libcrypto64MTd", "libssl64MTd" } )
-    end
+    --appendTable(BATTERY_LINKS, ALLEGRO5_LINKS)
+    --if not BATTERY_DISABLE_NETWORKING == true then
+    --    appendTable(BATTERY_LINKS, { "libcrypto64MTd", "libssl64MTd" } )
+    --end
