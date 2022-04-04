@@ -16,12 +16,16 @@
 #include <cstddef>
 #include <thread>
 
-#include "glm/glm.hpp"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wvolatile"
+#include "glm/glm.hpp"                  // Disable warning (because of C++20)
+#pragma GCC diagnostic pop
 
 #include "nlohmann/json.hpp"
 
 // ImGui library
 #include "imgui.h"
+#include "imgui_internal.h"
 #include "../res/bindings/imgui_impl_allegro5.h"
 #include "implot.h"
 

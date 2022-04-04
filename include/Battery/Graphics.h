@@ -28,8 +28,8 @@ namespace Battery {
 		void Stroke(glm::vec3 color, double thickness);
 		void NoFill();
 		void NoStroke();
-		void UseLineCap(enum class LINECAP linecap);
-		void UseLineJoin(enum class LINEJOIN linejoin);
+		void UseLineCap(enum LINECAP linecap);
+		void UseLineJoin(enum LINEJOIN linejoin);
 
 		void DrawLine(glm::vec2 p1, glm::vec2 p2);
 

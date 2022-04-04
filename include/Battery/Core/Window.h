@@ -48,6 +48,8 @@ namespace Battery {
 		bool GetLeftMouseButton();
 		bool GetRightMouseButton();
 		bool GetMouseWheel();
+		
+#ifdef _WIN32
 		HWND GetWinHandle();
 		bool IsFocused();
 		bool Focus();
@@ -55,6 +57,8 @@ namespace Battery {
 		bool Show();
 		void HideFromTaskbar();
 		void ShowInTaskbar();
+#endif
+
 		void SetFrameless(bool frameless);
 		void FlipDisplay();
 
@@ -82,7 +86,9 @@ namespace Battery {
 		/// </summary>
 		/// <param name="iconID">- the id of the embedded icon in the executable.</param>
 		/// <returns>bool - if loading the icon was successful</returns>
+#ifdef _WIN32
 		bool SetWindowExecutableIcon(int iconID);
+#endif
 
 		ALLEGRO_DISPLAY* allegroDisplayPointer = nullptr;
 		ALLEGRO_EVENT_QUEUE* allegroEventQueue = nullptr;

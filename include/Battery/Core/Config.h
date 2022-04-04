@@ -1,23 +1,13 @@
 #pragma once
 
 // Set build configurations
-#if defined(DEBUG) && !defined(NDEBUG) && !defined(DEPLOY) && defined(NDEPLOY)
+#ifndef NDEBUG
 	#define BATTERY_DEBUG
-#elif !defined(DEBUG) && defined(NDEBUG) && !defined(DEPLOY) && defined(NDEPLOY)
-	#define BATTERY_RELEASE
-#elif !defined(DEBUG) && defined(NDEBUG) && defined(DEPLOY) && !defined(NDEPLOY)
-	#define BATTERY_DEPLOY
-#else
-	#error Invalid build configuration: A valid combination of the preprocessor macros 'DEBUG', 'NDEBUG', 'DEPLOY' and 'NDEPLOY' must be defined globally!
 #endif
 
-// Enable logging, uncomment to enable
-#if defined(BATTERY_DEBUG)
+// Enable or disable logging
+#ifndef DISABLE_LOGGING
 	#define BATTERY_LOGGING
-#elif defined(BATTERY_RELEASE)
-	#define BATTERY_LOGGING
-#elif defined(BATTERY_DEPLOY)
-//	#define BATTERY_LOGGING 
 #endif
 
 // Log levels

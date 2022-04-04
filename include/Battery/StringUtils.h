@@ -57,7 +57,7 @@ namespace Battery {
 			ALLEGRO_USTR* ustr = al_ustr_new("");
 			al_ustr_append_chr(ustr, codepoint);
 
-			strncpy_s(buffer, al_cstr(ustr), length);
+			strncpy(buffer, al_cstr(ustr), length);
 
 			al_ustr_free(ustr);
 		}

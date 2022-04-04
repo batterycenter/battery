@@ -3,6 +3,7 @@
 #include "Battery/Log/Log.h"
 #include "Battery/Core/Exception.h"
 #include "Battery/Platform/Dialog.h"
+#include "Battery/Core/Allegro.h"
 
 namespace Battery {
 

@@ -239,8 +239,8 @@ namespace Battery {
 		MouseScrolledEvent			mouseScrolledEvent;
 		PureAllegroEvent			pureAllegroEvent;
 
-		enum class EventType primaryEventType = EventType::None;
-		enum class EventType secondaryEventType = EventType::None;
+		enum EventType primaryEventType = Battery::EventType::NONE;
+		enum EventType secondaryEventType = Battery::EventType::NONE;
 		Battery::Event* primaryEvent = nullptr;
 		Battery::Event* secondaryEvent = nullptr;
 	};

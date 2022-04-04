@@ -68,10 +68,10 @@ namespace Battery {
 			ImGui::End();
 		}
 
-		template <typename T>
-		T* GetFontContainer() {
-			return __getUserInterface()->GetFontContainer<T>();
-		}
+		//template <typename T>
+		//T* GetFontContainer() {
+		//	return __getUserInterface()->GetFontContainer<T>();
+		//}
 
 		/// <summary>
 		/// Don't show this ImGui window. Must be called every frame in OnUpdate()
