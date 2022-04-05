@@ -9,9 +9,9 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_opengl.h>
 #include <allegro5/allegro_memfile.h>
+#include <allegro5/allegro_native_dialog.h>
 
 //#include <allegro5/allegro_windows.h>
-//#include <allegro5/allegro_native_dialog.h>
 
 #ifdef RegisterClipboardFormat
 #undef RegisterClipboardFormat

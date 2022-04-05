@@ -6,6 +6,7 @@ nlohmann_json/3.10.5
 spdlog/1.9.2
 imgui/1.87
 implot/0.13
+serial/1.2.1
 
 [generators]
 cmake

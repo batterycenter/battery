@@ -28,9 +28,6 @@ int main(int argc, const char** argv);
 
 namespace Battery {
 
-	template <typename TFontContainer>
-	class ImGuiLayer;
-
 	class Application;
 	extern Application* CreateApplication();	// This will be defined in the client project
 

@@ -3,7 +3,6 @@
 #include "Battery/Core/AllegroContext.h"
 #include "Battery/Platform/Dialog.h"
 
-#ifdef _WIN32
 namespace Battery {
 
 	void ShowErrorMessageBox(const std::string& msg, ALLEGRO_DISPLAY* display) {
@@ -43,4 +42,3 @@ namespace Battery {
 	}
 
 }
-#endif

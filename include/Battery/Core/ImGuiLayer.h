@@ -11,26 +11,27 @@ struct ALLEGRO_DISPLAY;
 
 namespace Battery {
 
-	struct FontContainer {
-		ImFont* defaultFont = ImGui::GetIO().Fonts->AddFontDefault();
+	struct Fonts {
+		inline static ImFont* defaultFont = nullptr;
+
+		static void loadDefault() {
+			LOG_ERROR("Loading default");
+			defaultFont = ImGui::GetIO().Fonts->AddFontDefault();
+		}
 	};
 
-	Battery::ImGuiLayer<Battery::FontContainer>* __getUserInterface();
-	void __setUserInterface(Battery::ImGuiLayer<Battery::FontContainer>* ui);
 	bool __acknowledgeResize(ALLEGRO_DISPLAY* display);		// TODO: Solve allegro acknowledge problem (linking)
 
 	// This Layer can only be attached once in an application
-	template <typename TFontContainer = Battery::FontContainer>
+	template<typename TFont>
 	class ImGuiLayer : public Layer {
 
 		ImGuiIO dummyIO;
 		inline static bool attached = false;
 		std::vector<std::shared_ptr<ImGuiPanel<>>> panels;
-		std::unique_ptr<TFontContainer> fontContainer;
 
 	public:
 		ImGuiIO& io = dummyIO;
-		ImFont* defaultFont = nullptr;
 
 		ImGuiLayer() {
 
@@ -58,9 +59,6 @@ namespace Battery {
 			if (attached)
 				throw Battery::Exception("A Battery::ImGuiLayer is already attached! Only one instance is allowed in an application.");
 
-			// Set this instance in the global user interface pointer
-			__setUserInterface(reinterpret_cast<Battery::ImGuiLayer<Battery::FontContainer>*>(this));
-
 			// Setup Dear ImGui context
 			IMGUI_CHECKVERSION();
 			ImGui::CreateContext();
@@ -77,7 +75,8 @@ namespace Battery {
 			ImGui_ImplAllegro5_Init(Battery::GetMainWindow().allegroDisplayPointer);
 
 			io = ImGui::GetIO();
-			fontContainer = std::make_unique<TFontContainer>();
+			TFont::loadDefault();
+			TFont::load();
 			OnImGuiAttach();
 			io.Fonts->Build();
 
@@ -144,15 +143,6 @@ namespace Battery {
 		virtual void OnImGuiUpdate() = 0;
 		virtual void OnImGuiEvent(Battery::Event* event) = 0;
 
-		template <typename T>
-		T* GetFontContainer() {
-			return reinterpret_cast<T*>(fontContainer.get());
-		}
-		
-		template <typename T>
-		static T* GetUserInterface() {
-			return reinterpret_cast<T*>(__getUserInterface());
-		}
 	};
 
 }

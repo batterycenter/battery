@@ -108,19 +108,19 @@ namespace Battery {
 		// The window is clean now, now it can be moved back to the center
 		CenterOnPrimaryMonitor();
 		
-		allegroDefaultFont = al_load_ttf_font(defaultFontFile.c_str(), 64, 0);
-		if (allegroDefaultFont == nullptr) {
-			al_destroy_display(allegroDisplayPointer);
-			allegroDisplayPointer = nullptr;
-			throw Battery::Exception("Failed to load Allegro font " + defaultFontFile);
-		}
+		//allegroDefaultFont = al_load_ttf_font(defaultFontFile.c_str(), 64, 0);
+		//if (allegroDefaultFont == nullptr) {
+		//	al_destroy_display(allegroDisplayPointer);
+		//	allegroDisplayPointer = nullptr;
+		//	throw Battery::Exception("Failed to load Allegro font " + defaultFontFile);
+		//}
 
 		allegroEventQueue = al_create_event_queue();
 		if (allegroEventQueue == nullptr) {
 			al_destroy_display(allegroDisplayPointer);
-			al_destroy_font(allegroDefaultFont);
+			//al_destroy_font(allegroDefaultFont);
 			allegroDisplayPointer = nullptr;
-			allegroDefaultFont = nullptr;
+			//allegroDefaultFont = nullptr;
 			throw Battery::Exception("Failed to create Allegro event queue");
 		}
 
@@ -147,10 +147,10 @@ namespace Battery {
 		// Destroy everything
 		LOG_CORE_TRACE("Destroying Allegro window");
 		al_destroy_display(allegroDisplayPointer);
-		al_destroy_font(allegroDefaultFont);
+		//al_destroy_font(allegroDefaultFont);
 		al_destroy_event_queue(allegroEventQueue);
 		allegroDisplayPointer = nullptr;
-		allegroDefaultFont = nullptr;
+		//allegroDefaultFont = nullptr;
 		allegroEventQueue = nullptr;
 		valid = false;
 	}

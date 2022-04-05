@@ -6,10 +6,10 @@
 #define EVENT_CLASS_TYPE_BASE(type) virtual const char* GetTypeString() { return #type; }
 #define EVENT_CLASS_TYPE(type) const char* GetTypeString() override { return #type; }
 #define EVENT_INFO_STRING_BASE(__format, ...) virtual void GetInfoString(char* buffer, size_t length) { \
-	snprintf(buffer, length, "%s: " __format, GetTypeString(), __VA_ARGS__);	\
+	snprintf(buffer, length, "%s: " __format, GetTypeString(), ##__VA_ARGS__);	\
 }
 #define EVENT_INFO_STRING(__format, ...) void GetInfoString(char* buffer, size_t length) override { \
-	snprintf(buffer, length, "%s: " __format, GetTypeString(), __VA_ARGS__);	\
+	snprintf(buffer, length, "%s: " __format, GetTypeString(), ##__VA_ARGS__);	\
 }
 #else
 #define EVENT_CLASS_TYPE_BASE(type)

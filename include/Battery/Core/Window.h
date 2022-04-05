@@ -92,10 +92,8 @@ namespace Battery {
 
 		ALLEGRO_DISPLAY* allegroDisplayPointer = nullptr;
 		ALLEGRO_EVENT_QUEUE* allegroEventQueue = nullptr;
-		ALLEGRO_FONT* allegroDefaultFont = nullptr;
 
 	private:
-		std::string defaultFontFile = "C:\\Windows\\Fonts\\consola.ttf";
 
 		// These are only for remembering the size until the window is created
 		int width = 0;

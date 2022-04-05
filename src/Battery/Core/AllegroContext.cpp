@@ -66,9 +66,9 @@ namespace Battery {
 		}
 
 		if (!al_install_mouse()) {
-			LOG_CORE_CRITICAL("Failed to install the Allegro mouse module!");
-			ShowErrorMessageBox("Failed to install the Allegro mouse module!");
-			return false;
+			LOG_CORE_ERROR("No mouse driver was found, continuing without one!");
+			//ShowErrorMessageBox("Failed to install the Allegro mouse module!");
+			//return false;
 		}
 
 		LOG_CORE_TRACE("Allegro context created");

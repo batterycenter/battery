@@ -8,7 +8,7 @@
 
 #include "Battery/Core/Application.h"
 #include "Battery/Core/AllegroContext.h"
-#include "Battery/Core/AllegroWindow.h"
+#include "Battery/Core/Window.h"
 #include "Battery/Core/ImGuiLayer.h"
 #include "Battery/Core/ImGuiPanel.h"
 #include "Battery/Core/Event.h"
@@ -22,13 +22,6 @@
 #include "Battery/Renderer/Renderer2D.h"
 #include "Battery/Renderer/Bitmap.h"
 #include "Battery/Renderer/ShaderProgram.h"
-
-// ImGui library
-#include "imgui.h"
-#include "imgui/imgui.h"
-#include "imgui/imgui_internal.h"
-#include "imgui_impl_allegro5.h"
-#include "implot.h"
 
 // Serial library
 #include "serial/serial.h"
