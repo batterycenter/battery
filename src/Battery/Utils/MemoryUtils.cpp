@@ -8,7 +8,7 @@
 #include <cstdint>
 
 #ifdef BATTERY_DEBUG // TODO
-#pragma warning REMOVE BATTERY_DEBUG
+#pragma warning	REMOVE BATTERY_DEBUG
 
 namespace Battery {
 	namespace MemoryUtils {

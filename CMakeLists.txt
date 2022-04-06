@@ -55,11 +55,13 @@ endif()
 
 
 
+
 #######################
 # Precompiled Headers #
 #######################
 
 target_precompile_headers(${LIBRARY_NAME} PUBLIC include/Battery/pch.h)
+
 
 
 
@@ -76,6 +78,7 @@ target_include_directories(${LIBRARY_NAME} PUBLIC "include/clip")
 # Source files #
 ################
 
+FILE(GLOB_RECURSE HEADER_FILES "include/*")
 file(GLOB_RECURSE COMMON_SRC "src/Battery/*")
 list(APPEND COMMON_SRC "src/clip/clip.cpp" "src/clip/image.cpp")
 
@@ -90,7 +93,25 @@ else()
     list(REMOVE_ITEM COMMON_SRC ${REMOVE_WIN})
 endif()
 
-target_sources(${LIBRARY_NAME} PUBLIC ${COMMON_SRC} ${PLATFORM_SRC})
+list(APPEND SRC_FILES ${COMMON_SRC} ${PLATFORM_SRC})
+
+target_sources(${LIBRARY_NAME} PUBLIC ${SRC_FILES} ${HEADER_FILES})
+
+
+
+
+
+if (WIN32)
+    set_source_files_properties(
+        "src/clip/clip_win.cpp" "src/clip/clip.cpp" "src/clip/image.cpp"
+        PROPERTIES COMPILE_FLAGS "/wd4018 /wd4267"
+    )
+else()
+    #set_source_files_properties(
+    #    "src/clip/clip_win.cpp" "src/clip/clip.cpp" "src/clip/image.cpp"
+    #    PROPERTIES COMPILE_FLAGS "..."
+    #)
+endif()
 
 
 
@@ -99,6 +120,18 @@ target_sources(${LIBRARY_NAME} PUBLIC ${COMMON_SRC} ${PLATFORM_SRC})
 ###########
 
 target_link_libraries(${LIBRARY_NAME} PUBLIC ${CONAN_LIBS})
+
+
+
+
+#######
+# IDE #
+#######
+
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" PREFIX "Source Files" FILES ${SRC_FILES})
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" PREFIX "Header Files" FILES ${HEADER_FILES})
 
 
 
