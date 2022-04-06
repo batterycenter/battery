@@ -4,7 +4,6 @@
 // Ignore possible loss of data warnings
 #pragma warning( disable : 4244 4267 )
 
-#define _CRT_SECURE_NO_WARNINGS
 typedef unsigned int stb_uint;
 typedef unsigned char stb_uchar;
 

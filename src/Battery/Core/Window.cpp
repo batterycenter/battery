@@ -89,20 +89,17 @@ namespace Battery {
 		
 		// Immediately draw the background color
 		if (hidden) {
-			//Hide();
-			#warning Implement Hiding
+			Hide();
 		}
 		al_clear_to_color(ConvertAllegroColor(BATTERY_DEFAULT_BACKGROUND_COLOR));
 		al_flip_display();
 
 		// Now show or hide the window in the taskbar
 		if (noTaskbar) {
-			//HideFromTaskbar();
-			#warning Implement Hiding
+			HideFromTaskbar();
 		}
 		else {
-			//ShowInTaskbar();
-			#warning Implement Hiding
+			ShowInTaskbar();
 		}
 
 		// The window is clean now, now it can be moved back to the center
@@ -305,7 +302,6 @@ namespace Battery {
 		return mouse.buttons & 0x04;
 	}
 
-#ifdef _WIN32
 	HWND Window::GetWinHandle() {
 		CHECK_ALLEGRO_INIT();
 		return al_get_win_window_handle(allegroDisplayPointer);
@@ -332,21 +328,20 @@ namespace Battery {
 	}
 
 	void Window::HideFromTaskbar() {
-		long style = GetWindowLong(GetWinHandle(), GWL_STYLE);
+		long style = GetWindowLongW(GetWinHandle(), GWL_STYLE);
 		style |= WS_VISIBLE;
 		ShowWindow(GetWinHandle(), SW_HIDE);
-		SetWindowLong(GetWinHandle(), GWL_STYLE, style);
+		SetWindowLongW(GetWinHandle(), GWL_STYLE, style);
 		ShowWindow(GetWinHandle(), SW_SHOW);
 		Focus();
 	}
 
 	void Window::ShowInTaskbar() {
-		long style = GetWindowLong(GetWinHandle(), GWL_STYLE);
+		long style = GetWindowLongW(GetWinHandle(), GWL_STYLE);
 		style &= ~(WS_VISIBLE);
-		SetWindowLong(GetWinHandle(), GWL_STYLE, style);
+		SetWindowLongW(GetWinHandle(), GWL_STYLE, style);
 		ShowWindow(GetWinHandle(), SW_SHOW);
 	}
-#endif
 
 	void Window::SetFrameless(bool frameless) {
 		al_set_display_flag(allegroDisplayPointer, ALLEGRO_FRAMELESS, frameless);

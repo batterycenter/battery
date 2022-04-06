@@ -19,10 +19,12 @@ option(DISABLE_LOGGING "Strip all logging commands" OFF)
 add_library(${LIBRARY_NAME} "")
 target_compile_features(${LIBRARY_NAME} PUBLIC cxx_std_20)
 set_target_properties(${LIBRARY_NAME} PROPERTIES CXX_EXTENSIONS OFF)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose Release or Debug" FORCE)
 endif()
+
 
 
 
@@ -47,6 +49,7 @@ if (WIN32)
     target_compile_definitions(${LIBRARY_NAME} PRIVATE
        WIN32_LEAN_AND_MEAN      # Prevents Windows.h from adding unnecessary includes
        NOMINMAX                 # Prevents Windows.h from defining min/max as macros 
+       _CRT_SECURE_NO_WARNINGS
     )
 endif()
 
@@ -74,7 +77,7 @@ target_include_directories(${LIBRARY_NAME} PUBLIC "include/clip")
 ################
 
 file(GLOB_RECURSE COMMON_SRC "src/Battery/*")
-list(APPEND COMMON_SRC "src/clip/clip_none.cpp" "src/clip/clip.cpp" "src/clip/image.cpp")
+list(APPEND COMMON_SRC "src/clip/clip.cpp" "src/clip/image.cpp")
 
 file(GLOB_RECURSE REMOVE_WIN "src/Battery/Platform/win/*")
 file(GLOB_RECURSE REMOVE_X11 "src/Battery/Platform/x11/*")

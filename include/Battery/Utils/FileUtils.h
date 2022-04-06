@@ -1,9 +1,8 @@
 #pragma once
 
-#include "Battery/Core/Window.h"
 #include "Battery/pch.h"
-
-#undef RemoveDirectory
+#include "Battery/Core/Window.h"
+#include "Battery/Platform/Platform.h"
 
 struct ALLEGRO_FILE;
 
@@ -39,16 +38,17 @@ namespace Battery {
 	};
 
 	/// <summary>
-	/// Throws a Battery::LockfileUnavailableException if the lockfile can't be retrieved
-	/// (e.g. is already locked by another process).
+	/// Throws: 
+	/// Battery::LockfileUnavailableException if the lockfile is already locked or
+	/// Battery::NoSuchFileOrDirectoryException if the filename is invalid or contains directories
 	/// </summary>
 	class Lockfile {
-
-		void* lockfile;
-
 	public:
-		Lockfile(const std::string& file);
+		Lockfile(const std::string& file, bool createDirectories = false);
 		~Lockfile();
+
+	private:
+		void* fileDescriptor = nullptr;
 	};
 
 	/// <summary>

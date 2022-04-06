@@ -261,36 +261,10 @@ namespace Battery {
 		return std::make_optional<std::pair<std::vector<uint32_t>, clip::image_spec>>(std::make_pair(std::move(data), spec));
 	}
 
-#ifdef _WIN32
 	bool Bitmap::LoadEmbeddedResource(int id) {
-		HMODULE hMod = GetModuleHandle(NULL);
-		if (hMod == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Module Handle is null!", id); return false; }
-
-		HRSRC hRes = FindResource(hMod, MAKEINTRESOURCE(id), L"PNG");
-		if (hRes == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: No such resource!", id); return false; }
-
-		HGLOBAL hGlobal = LoadResource(hMod, hRes);
-		if (hGlobal == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Resource can't be loaded!", id); return false; }
-
-		void* data = LockResource(hGlobal);
-		if (data == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Resource can't be locked!", id); return false; }
-
-		size_t size = SizeofResource(hMod, hRes);
-		if (size == 0) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Size of resource is invalid!", id); return false; }
-
-		ALLEGRO_FILE* file = al_open_memfile(data, size, "r");
-		if (file == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Cannot open Allegro memfile!", id); return false; }
-
-		ALLEGRO_BITMAP* bitmap = al_load_bitmap_f(file, ".png");
-		if (bitmap == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't load resource {}: Memfile cannot be loaded!", id); return false; }
-
-		allegroBitmap.reset(bitmap);
-
-		al_fclose(file);
-
-		return (bool)allegroBitmap;
+		// TODO !!!!!!!!!!!!!!!!!!!!!!!
+		throw Battery::NotImplementedException();
 	}
-#endif
 
 
 

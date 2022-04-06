@@ -11,7 +11,9 @@
 #include <allegro5/allegro_memfile.h>
 #include <allegro5/allegro_native_dialog.h>
 
-//#include <allegro5/allegro_windows.h>
+#ifdef _WIN32
+#include <allegro5/allegro_windows.h>
+#endif
 
 #ifdef RegisterClipboardFormat
 #undef RegisterClipboardFormat

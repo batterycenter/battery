@@ -15,6 +15,12 @@ namespace Battery {
 		std::string msg;
 	};
 
+	class NoSuchFileOrDirectoryException : public Battery::Exception {
+	public:
+		NoSuchFileOrDirectoryException(const std::string& msg = "")
+		 : Battery::Exception(msg.c_str()) {}
+	};
+
 	class LockfileUnavailableException : public Battery::Exception {
 	public:
 		LockfileUnavailableException(const std::string& msg = "")

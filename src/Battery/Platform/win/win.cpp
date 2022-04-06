@@ -1,8 +1,24 @@
 
 #include "Battery/Platform/Platform.h"
 #include "Battery/StringUtils.h"
+#include "Battery/Utils/FileUtils.h"
+
+#include "shellapi.h"
 
 namespace Battery {
+
+	void* platform_LockFileDescriptor(const std::string& file) {
+		std::wstring wide = StringUtils::MultiByteToWideChar(file);
+		void* descriptor = ::CreateFileW(wide.c_str(), GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+		if (descriptor == INVALID_HANDLE_VALUE) {
+			throw Battery::LockfileUnavailableException();
+		}
+		return descriptor;
+	}
+
+	void platform_UnlockFileDescriptor(void* fileDescriptor) {
+		::CloseHandle(fileDescriptor);
+	}
 
 	bool platform_ExtractArchive(const std::string& file, const std::string& targetDirectory, bool force) {
 
@@ -16,15 +32,15 @@ namespace Battery {
 		if (force)
 			command += " -Force";
 
-		auto ret = ExecuteShellCommandSilent(command, true);
-		return ret.first && (ret.second == 0);
+		auto[success, returnCode] = ExecuteShellCommandSilent(command, true);
+		return success && returnCode == 0;
 	}
 
     std::pair<bool, size_t> platform_ExecuteShellCommandSilent(const std::string& command, bool hidden) {
 
 		std::wstring Lcommand = L"/c " + StringUtils::MultiByteToWideChar(command);
 
-		SHELLEXECUTEINFO ShExecInfo = { 0 };
+		SHELLEXECUTEINFOW ShExecInfo = { 0 };
 		ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
 		ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
 		ShExecInfo.hwnd = NULL;
@@ -35,7 +51,7 @@ namespace Battery {
 		ShExecInfo.nShow = hidden ? SW_HIDE : SW_SHOW;
 		ShExecInfo.hInstApp = NULL;
 
-		if (!ShellExecuteEx(&ShExecInfo)) {
+		if (!ShellExecuteExW(&ShExecInfo)) {
 			return std::make_pair(false, GetLastError());
 		}
 
@@ -52,10 +68,10 @@ namespace Battery {
 	}
 	
 	ALLEGRO_FILE* platform_LoadEmbeddedResource(int id, const char* type) {
-		HMODULE hMod = GetModuleHandle(NULL);
+		HMODULE hMod = GetModuleHandleW(NULL);
 		if (hMod == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Module Handle is null!", id); return nullptr; }
 
-		HRSRC hRes = FindResource(hMod, MAKEINTRESOURCE(id), Battery::StringUtils::MultiByteToWideChar(type).c_str());
+		HRSRC hRes = FindResourceW(hMod, MAKEINTRESOURCEW(id), Battery::StringUtils::MultiByteToWideChar(type).c_str());
 		if (hRes == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: No such resource!", id); return nullptr; }
 		
 		HGLOBAL hGlobal = LoadResource(hMod, hRes);

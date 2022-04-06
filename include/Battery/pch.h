@@ -16,10 +16,16 @@
 #include <cstddef>
 #include <thread>
 
+#ifndef _WIN32
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wvolatile"
-#include "glm/glm.hpp"                  // Disable warning (because of C++20)
+#pragma GCC diagnostic ignored "-Wvolatile"		// Disable a glm warning (because of C++20)
+#endif
+
+	#include "glm/glm.hpp"                  
+
+#ifndef _WIN32
 #pragma GCC diagnostic pop
+#endif
 
 #include "nlohmann/json.hpp"
 

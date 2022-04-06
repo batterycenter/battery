@@ -83,69 +83,35 @@ namespace Battery {
 			return IsUpperCase(c) || IsLowerCase(c);
 		}
 
-#ifdef _WIN32
 		std::wstring MultiByteToWideChar(const std::string& mbString) {
 
 			if (mbString.length() == 0)
 				return L"";
 
-			size_t bufferSize;
-			mbstowcs_s(&bufferSize, nullptr, 0, mbString.c_str(), 0);
-
-			if (bufferSize == 0)
-				throw Battery::Exception("{}: {}", __FUNCTION__, "BufferSize is 0!");
-
+			size_t bufferSize = std::mbstowcs(nullptr, mbString.c_str(), 0);
 			std::wstring wtext(bufferSize, 0);
 
-			size_t bytesConverted;
-			mbstowcs_s(&bytesConverted, &wtext[0], wtext.size(), mbString.c_str(), mbString.length());
+			std::mbstowcs(&wtext[0], mbString.c_str(), wtext.size());
 
 			return wtext;
 		}
 
 		std::string WideCharToMultiByte(const std::wstring& wString) {
-
-			if (wString.length() == 0)
-				return "";
-
-			size_t bufferSize;
-			wcstombs_s(&bufferSize, nullptr, 0, wString.c_str(), 0);
-
-			if (bufferSize == 0)
-				throw Battery::Exception("{}: {}", __FUNCTION__, "BufferSize is 0!");
-
-			std::string str(bufferSize, 0);
-
-			size_t bytesConverted;
-			wcstombs_s(&bytesConverted, &str[0], str.size(), wString.c_str(), wString.size());
-
-			return str;
+			return WideCharToMultiByte(wString.c_str());
 		}
 
-		// TODO: Convert to std::wcstombs functions, not C-style
-
 		std::string WideCharToMultiByte(const wchar_t* wString) {
-
-			if (wString == nullptr)
-				return "";
 
 			if (wcslen(wString) == 0)
 				return "";
 
-			size_t bufferSize;
-			wcstombs_s(&bufferSize, nullptr, 0, wString, 0);
+			size_t bufferSize = std::wcstombs(nullptr, wString, 0);
+			std::string text(bufferSize, 0);
 
-			if (bufferSize == 0)
-				throw Battery::Exception("{}: {}", __FUNCTION__, "BufferSize is 0!");
+			std::wcstombs(&text[0], wString, text.size());
 
-			std::string str(bufferSize, 0);
-
-			size_t bytesConverted;
-			wcstombs_s(&bytesConverted, &str[0], str.length(), wString, wcslen(wString));
-
-			return str;
+			return text;
 		}
-#endif
 
 	}
 }

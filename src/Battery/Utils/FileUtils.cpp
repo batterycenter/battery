@@ -22,24 +22,16 @@
 
 namespace Battery {
 
-
-
-#ifdef _WIN32
-	Lockfile::Lockfile(const std::string& file) {
-
-		auto wide = StringUtils::MultiByteToWideChar(file);
-		lockfile = ::CreateFile(&wide[0], GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-		if (lockfile == INVALID_HANDLE_VALUE) {
-			throw Battery::LockfileUnavailableException("Lockfile is already locked");
+	Lockfile::Lockfile(const std::string& file, bool createDirectories) {
+		if (createDirectories) {
+			Battery::WriteFile(file, "");
 		}
+		fileDescriptor = platform_LockFileDescriptor(file);
 	}
 
 	Lockfile::~Lockfile() {
-		CloseHandle(lockfile);
+		platform_UnlockFileDescriptor(fileDescriptor);
 	}
-
-#endif
-
 
 
 
