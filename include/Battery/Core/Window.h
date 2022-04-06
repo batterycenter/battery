@@ -48,8 +48,6 @@ namespace Battery {
 		bool GetLeftMouseButton();
 		bool GetRightMouseButton();
 		bool GetMouseWheel();
-		
-#ifdef _WIN32
 		HWND GetWinHandle();
 		bool IsFocused();
 		bool Focus();
@@ -57,8 +55,6 @@ namespace Battery {
 		bool Show();
 		void HideFromTaskbar();
 		void ShowInTaskbar();
-#endif
-
 		void SetFrameless(bool frameless);
 		void FlipDisplay();
 

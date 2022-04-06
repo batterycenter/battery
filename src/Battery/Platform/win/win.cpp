@@ -88,4 +88,40 @@ namespace Battery {
 
 		return file;
 	}
+
+	HWND platform_GetWinHandle(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+		return al_get_win_window_handle(allegroDisplayPointer);
+	}
+
+	bool platform_IsFocused(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+		return GetForegroundWindow() == platform_GetWinHandle(allegroDisplayPointer);
+	}
+
+	bool platform_Focus(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+		return SetForegroundWindow(platform_GetWinHandle(allegroDisplayPointer));
+	}
+
+	bool platform_Hide(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+		return ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_HIDE);
+	}
+
+	bool platform_Show(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+		return ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_SHOW);
+	}
+
+	void platform_HideFromTaskbar(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+		long style = GetWindowLongW(platform_GetWinHandle(allegroDisplayPointer), GWL_STYLE);
+		style |= WS_VISIBLE;
+		ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_HIDE);
+		SetWindowLongW(platform_GetWinHandle(allegroDisplayPointer), GWL_STYLE, style);
+		ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_SHOW);
+	}
+
+	void platform_ShowInTaskbar(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+		long style = GetWindowLongW(platform_GetWinHandle(allegroDisplayPointer), GWL_STYLE);
+		style &= ~(WS_VISIBLE);
+		SetWindowLongW(platform_GetWinHandle(allegroDisplayPointer), GWL_STYLE, style);
+		ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_SHOW);
+	}
+
 }

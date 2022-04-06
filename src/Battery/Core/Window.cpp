@@ -8,6 +8,7 @@
 #include "Battery/Renderer/Bitmap.h"
 #include "Battery/Renderer/Renderer2D.h"
 #include "Battery/Core/AllegroContext.h"
+#include "Battery/Platform/Platform.h"
 #include "clip.h"
 
 // TODO: Do something about allegro default font
@@ -304,43 +305,38 @@ namespace Battery {
 
 	HWND Window::GetWinHandle() {
 		CHECK_ALLEGRO_INIT();
-		return al_get_win_window_handle(allegroDisplayPointer);
+		return platform_GetWinHandle(allegroDisplayPointer);
 	}
 
 	bool Window::IsFocused() {
 		CHECK_ALLEGRO_INIT();
-		return GetForegroundWindow() == GetWinHandle();
+		return platform_IsFocused(allegroDisplayPointer);
 	}
 
 	bool Window::Focus() {
 		CHECK_ALLEGRO_INIT();
-		return SetForegroundWindow(GetWinHandle());
+		return platform_Focus(allegroDisplayPointer);
 	}
 
 	bool Window::Hide() {
 		CHECK_ALLEGRO_INIT();
-		return ShowWindow(GetWinHandle(), SW_HIDE);
+		return platform_Hide(allegroDisplayPointer);
 	}
 
 	bool Window::Show() {
 		CHECK_ALLEGRO_INIT();
-		return ShowWindow(GetWinHandle(), SW_SHOW);
+		return platform_Show(allegroDisplayPointer);
 	}
 
 	void Window::HideFromTaskbar() {
-		long style = GetWindowLongW(GetWinHandle(), GWL_STYLE);
-		style |= WS_VISIBLE;
-		ShowWindow(GetWinHandle(), SW_HIDE);
-		SetWindowLongW(GetWinHandle(), GWL_STYLE, style);
-		ShowWindow(GetWinHandle(), SW_SHOW);
+		CHECK_ALLEGRO_INIT();
+		platform_HideFromTaskbar(allegroDisplayPointer);
 		Focus();
 	}
 
 	void Window::ShowInTaskbar() {
-		long style = GetWindowLongW(GetWinHandle(), GWL_STYLE);
-		style &= ~(WS_VISIBLE);
-		SetWindowLongW(GetWinHandle(), GWL_STYLE, style);
-		ShowWindow(GetWinHandle(), SW_SHOW);
+		CHECK_ALLEGRO_INIT();
+		platform_ShowInTaskbar(allegroDisplayPointer);
 	}
 
 	void Window::SetFrameless(bool frameless) {
@@ -353,8 +349,7 @@ namespace Battery {
 	}
 
 	ClipboardFormatID Window::RegisterClipboardFormat(const std::string& format) {
-		clip::format id = clip::register_format(format);
-		return id;
+		return clip::register_format(format);
 	}
 
 	bool Window::HasClipboardText() {
