@@ -35,6 +35,12 @@
 .vs
 *.sln
 
+# Conan
+conan*
+!conanfile.txt
+graph_info.json
+Makefile
+
 # Miscellaneous
 bin/
 build/

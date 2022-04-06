@@ -11,12 +11,6 @@
 
 namespace Battery {
 
-	template <typename TFontContainer>
-	class ImGuiLayer;
-	struct FontContainer;
-
-	Battery::ImGuiLayer<Battery::FontContainer>* __getUserInterface();
-
 	template<typename... Targs>
 	class ImGuiPanel {
 
@@ -66,11 +60,6 @@ namespace Battery {
 							ImGui::GetMousePos().y <= ImGui::GetWindowPos().y + ImGui::GetWindowSize().y;
 
 			ImGui::End();
-		}
-
-		template <typename T>
-		T* GetFontContainer() {
-			return __getUserInterface()->GetFontContainer<T>();
 		}
 
 		/// <summary>

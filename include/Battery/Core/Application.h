@@ -5,7 +5,7 @@
 #include "Battery/Core/LayerStack.h"
 #include "Battery/Core/ApplicationEvents.h"
 #include "Battery/Core/AllegroContext.h"
-#include "Battery/Core/AllegroWindow.h"
+#include "Battery/Core/Window.h"
 #include "Battery/Core/Config.h"
 #include "Battery/Core/Event.h"
 #include "Battery/Utils/TimeUtils.h"
@@ -28,14 +28,11 @@ int main(int argc, const char** argv);
 
 namespace Battery {
 
-	template <typename TFontContainer>
-	class ImGuiLayer;
-
 	class Application;
 	extern Application* CreateApplication();	// This will be defined in the client project
 
 	Application& GetApp();
-	AllegroWindow& GetMainWindow();
+	Window& GetMainWindow();
 
 	class Application {
 	public:
@@ -55,8 +52,8 @@ namespace Battery {
 		// TODO: Add keyboard leds cuz why not
 
 		void SetFramerate(double f);
-		void SetWindowFlag(enum class WindowFlags flag);
-		void ClearWindowFlag(enum class WindowFlags flag);
+		void SetWindowFlag(enum WindowFlags flag);
+		void ClearWindowFlag(enum WindowFlags flag);
 		void PushLayer(std::shared_ptr<Layer> layer);
 		void PushOverlay(std::shared_ptr<Layer> overlay);
 		void ClearLayerStack();
@@ -95,8 +92,8 @@ namespace Battery {
 		bool frameDiscarded = false;
 
 	protected:
-		friend AllegroWindow& GetMainWindow();
-		AllegroWindow window;
+		friend Window& GetMainWindow();
+		Window window;
 	};
 
 }

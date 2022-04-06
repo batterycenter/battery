@@ -4,20 +4,33 @@
 
 namespace Battery {
 
-	/// <summary>
-	/// Custom exception class used in the entire engine
-	/// </summary>
 	class Exception : public std::exception {
 	public:
-		Exception(const std::string& msg);
+		Exception(const std::string& msg = "") : msg(msg) {}
+		const char* what() const noexcept {
+			return msg.c_str();
+		}
+	
+	private:
+		std::string msg;
 	};
 
-	/// <summary>
-	/// Lockfile cannot be retrieved by the Battery::Lockfile class: It's already locked
-	/// </summary>
+	class NoSuchFileOrDirectoryException : public Battery::Exception {
+	public:
+		NoSuchFileOrDirectoryException(const std::string& msg = "")
+		 : Battery::Exception(msg.c_str()) {}
+	};
+
 	class LockfileUnavailableException : public Battery::Exception {
 	public:
-		LockfileUnavailableException(const std::string& msg);
+		LockfileUnavailableException(const std::string& msg = "")
+		 : Battery::Exception(msg.c_str()) {}
+	};
+
+	class NotImplementedException : public Battery::Exception {
+	public:
+		NotImplementedException(const std::string& msg = "")
+		 : Battery::Exception(msg.c_str()) {}
 	};
 
 }

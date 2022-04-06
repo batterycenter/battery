@@ -1,0 +1,12 @@
+[requires]
+allegro5/5.2.7
+glm/0.9.9.8
+asio/1.22.1
+nlohmann_json/3.10.5
+spdlog/1.9.2
+imgui/1.87
+implot/0.13
+serial/1.2.1
+
+[generators]
+cmake

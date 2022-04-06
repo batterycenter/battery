@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Battery/pch.h"
+#include "Battery/Log/Log.h"
 #include "Battery/Core/AllegroContext.h"
-#include "Battery/Core/AllegroWindow.h"
+#include "Battery/Core/Window.h"
 #include "Battery/Renderer/ShaderProgram.h"
 #include "Battery/Renderer/Bitmap.h"
 #include "Battery/DefaultShaders.h"
@@ -32,21 +33,21 @@ namespace Battery {
 
 	struct Scene {
 
-		Scene(std::reference_wrapper<AllegroWindow> window) {
+		Scene(std::reference_wrapper<Window> window) {
 			this->window = window;
-			LOG_CORE_TRACE(__FUNCTION__"(): Constructed Battery::Scene, loading shaders");
+			LOG_CORE_TRACE("{}: {}", __FUNCTION__, "Constructed Battery::Scene, loading shaders");
 			LoadShaders();
 		}
 
-		Scene(std::reference_wrapper<AllegroWindow> window, std::reference_wrapper<Battery::Bitmap> texture) {
+		Scene(std::reference_wrapper<Window> window, std::reference_wrapper<Battery::Bitmap> texture) {
 			this->window = window;
 			this->texture = texture;
-			LOG_CORE_TRACE(__FUNCTION__"(): Constructed Battery::Scene, loading shaders");
+			LOG_CORE_TRACE("{}: {}", __FUNCTION__, "Constructed Battery::Scene, loading shaders");
 			LoadShaders();
 		}
 
 		~Scene() {
-			LOG_CORE_TRACE(__FUNCTION__"(): Destroying Battery::Scene");
+			LOG_CORE_TRACE("{}: {}", __FUNCTION__, "Destroying Battery::Scene");
 		}
 
 	private:
@@ -85,7 +86,7 @@ namespace Battery {
 		std::unique_ptr<ShaderProgram> arcShader;
 		std::unique_ptr<ShaderProgram> rectangleShader;
 
-		std::optional<std::reference_wrapper<AllegroWindow>> window;
+		std::optional<std::reference_wrapper<Window>> window;
 		std::optional<std::reference_wrapper<Battery::Bitmap>> texture;
 	};
 

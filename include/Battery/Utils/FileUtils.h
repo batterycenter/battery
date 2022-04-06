@@ -1,9 +1,8 @@
 #pragma once
 
-#include "Battery/Core/AllegroWindow.h"
 #include "Battery/pch.h"
-
-#undef RemoveDirectory
+#include "Battery/Core/Window.h"
+#include "Battery/Platform/Platform.h"
 
 struct ALLEGRO_FILE;
 
@@ -39,16 +38,17 @@ namespace Battery {
 	};
 
 	/// <summary>
-	/// Throws a Battery::LockfileUnavailableException if the lockfile can't be retrieved
-	/// (e.g. is already locked by another process).
+	/// Throws: 
+	/// Battery::LockfileUnavailableException if the lockfile is already locked or
+	/// Battery::NoSuchFileOrDirectoryException if the filename is invalid or contains directories
 	/// </summary>
 	class Lockfile {
-
-		void* lockfile;
-
 	public:
-		Lockfile(const std::string& file);
+		Lockfile(const std::string& file, bool createDirectories = false);
 		~Lockfile();
+
+	private:
+		void* fileDescriptor = nullptr;
 	};
 
 	/// <summary>
@@ -176,12 +176,12 @@ namespace Battery {
 	/// or "" when no file was chosen
 	/// </summary>
 	/// <param name="acceptedFiles">- Filter of accepted file types, for example: { "*.*", "*.txt", "*.wav" }"</param>
-	/// <param name="parentWindow">- An AllegroWindow reference to the parent window</param>
+	/// <param name="parentWindow">- An Window reference to the parent window</param>
 	/// <param name="defaultLocation">- The default path at which the dialog starts when opened, "" for no default</param>
 	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
 	/// <returns>std::string - The full path to the file chosen</returns>
 	std::string PromptFileSaveDialog(const std::vector<std::string>& acceptedFilesArray,
-		std::optional<std::reference_wrapper<AllegroWindow>> parentWindow = std::nullopt,
+		std::optional<std::reference_wrapper<Window>> parentWindow = std::nullopt,
 		const std::string& defaultLocation = "");
 
 	/// <summary>
@@ -189,12 +189,12 @@ namespace Battery {
 	/// or "" when no file was chosen
 	/// </summary>
 	/// <param name="acceptedFiles">- Filter of accepted file types, for example: { "*.*", "*.txt", "*.wav" }</param>
-	/// <param name="parentWindow">- An AllegroWindow reference to the parent window</param>
+	/// <param name="parentWindow">- An Window reference to the parent window</param>
 	/// <param name="defaultLocation">- The default path at which the dialog starts when opened, "" for no default</param>
 	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
 	/// <returns>std::string - The full path to the file chosen</returns>
 	std::string PromptFileOpenDialog(const std::vector<std::string>& acceptedFilesArray,
-		std::optional<std::reference_wrapper<AllegroWindow>> parentWindow = std::nullopt,
+		std::optional<std::reference_wrapper<Window>> parentWindow = std::nullopt,
 		const std::string& defaultLocation = "");
 
 	/// <summary>
@@ -207,7 +207,7 @@ namespace Battery {
 	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
 	/// <returns>std::vector&lt;std::string&gt; - An array of the files chosen</returns>
 	std::vector<std::string> PromptFileOpenDialogMultiple(const std::vector<std::string>& acceptedFilesArray,
-		std::optional<std::reference_wrapper<AllegroWindow>> parentWindow = std::nullopt,
+		std::optional<std::reference_wrapper<Window>> parentWindow = std::nullopt,
 		const std::string& defaultLocation = "");
 
 	/// <summary>
@@ -215,11 +215,11 @@ namespace Battery {
 	/// or "" when no folder was chosen
 	/// </summary>
 	/// 
-	/// <param name="parentWindow">- An AllegroWindow reference to the parent window</param>
+	/// <param name="parentWindow">- An Window reference to the parent window</param>
 	/// <param name="defaultLocation">- The default path at which the dialog starts when opened, "" for no default</param>
 	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
 	/// <returns>std::string - The full path to the file chosen</returns>
-	std::string PromptFileOpenDialogFolder(std::optional<std::reference_wrapper<AllegroWindow>> parentWindow = std::nullopt,
+	std::string PromptFileOpenDialogFolder(std::optional<std::reference_wrapper<Window>> parentWindow = std::nullopt,
 		const std::string& defaultLocation = "");
 
 	/// <summary>
@@ -230,13 +230,13 @@ namespace Battery {
 	/// </summary>
 	/// <param name="extension">- The file extension, which will be added to the name, for example "txt"</param>
 	/// <param name="fileContent">- The content of the file to save</param>
-	/// <param name="parentWindow">- The AllegroWindow reference to the parent window if one exists</param>
+	/// <param name="parentWindow">- The Window reference to the parent window if one exists</param>
 	/// <param name="defaultLocation">- The full path to the location when the dialog pops up</param>
 	/// <param name="forceSave">- When true, the dialog is repeated and only returns when the file has been successfully saved</param>
 	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
 	/// <returns>std::string - The full path to the saved file or ""</returns>
 	std::string SaveFileWithDialog(const char* extension, const std::string& fileContent,
-		std::optional<std::reference_wrapper<AllegroWindow>> parentWindow = std::nullopt,
+		std::optional<std::reference_wrapper<Window>> parentWindow = std::nullopt,
 		const std::string& defaultLocation = "", bool forceSave = false);
 
 	/// <summary>
@@ -250,7 +250,7 @@ namespace Battery {
 	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
 	/// <returns>File class - Containing information about the loaded file</returns>
 	Battery::File LoadFileWithDialog(const char* extension,
-		std::optional<std::reference_wrapper<AllegroWindow>> parentWindow = std::nullopt,
+		std::optional<std::reference_wrapper<Window>> parentWindow = std::nullopt,
 		const std::string& defaultLocation = "");
 
 

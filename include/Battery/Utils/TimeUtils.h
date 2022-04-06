@@ -40,7 +40,7 @@ namespace Battery {
 
 
 	// A container for the results from profiling
-	struct ProfileResults {
+	/*struct ProfileResults {
 		char names[BATTERY_PROFILING_MAX_SCOPED_NUMBER][BATTERY_PROFILING_SCOPED_STRING_LENGTH];
 		double times[BATTERY_PROFILING_MAX_SCOPED_NUMBER];
 		size_t nextIndex = 0;
@@ -60,7 +60,7 @@ namespace Battery {
 		void AddResult(const char* name, double value) {
 
 			if (nextIndex >= BATTERY_PROFILING_MAX_SCOPED_NUMBER) {
-				LOG_CORE_ERROR(__FUNCTION__"(): Can't add another profiler result: The result buffer is full! "
+				LOG_CORE_ERROR(__FUNCTION__ "(): Can't add another profiler result: The result buffer is full! "
 					"Up to " + std::to_string(BATTERY_PROFILING_MAX_SCOPED_NUMBER) + " results are supported!");
 				return;
 			}
@@ -111,7 +111,7 @@ namespace Battery {
 		void AddTimestamp(const char* name) {
 
 			if (nextIndex >= BATTERY_PROFILING_MAX_TIMEPOINT_NUMBER) {
-				LOG_CORE_ERROR(__FUNCTION__"(): Can't add another timepoint: The profiler timepoint buffer is full! "
+				LOG_CORE_ERROR("{}: {}", __FUNCTION__, "Can't add another timepoint: The profiler timepoint buffer is full! "
 					"Up to " + std::to_string(BATTERY_PROFILING_MAX_TIMEPOINT_NUMBER) + " timepoints are supported!");
 				return;
 			}
@@ -172,7 +172,7 @@ namespace Battery {
 
 	private:
 		ProfilerStorage() {}
-	};
+	};*/
 
 	// A macro for scoped profiling
 #ifdef BATTERY_PROFILING
@@ -194,7 +194,7 @@ namespace Battery {
 #endif
 
 		// A class for measuring the time from contruction to destruction
-	class ScopedTimer {
+	/*class ScopedTimer {
 
 		char name[BATTERY_PROFILING_SCOPED_STRING_LENGTH];
 		double startTime = 0.0;
@@ -248,5 +248,5 @@ namespace Battery {
 
 			return difference;
 		}
-	};
+	};*/
 }
