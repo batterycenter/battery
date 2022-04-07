@@ -48,26 +48,32 @@ namespace Battery {
 	}
 
 	bool platform_IsFocused(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		//throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 
 		Display* dpy = XOpenDisplay(NULL);
   		if (dpy == NULL)  {
-  		  	fprintf(stderr, "Cannot open display\n");
-  		  	exit(1);
+			return false;
   		}
 
 		XID focused;
 		int revert_to;
-
 		XGetInputFocus(dpy, &focused, &revert_to);
   		XCloseDisplay(dpy);
-		//LOG_WARN("TODO: Implement platform_IsFocused");
-		//LOG_INFO("{}, {}, {}", (void*)dpy, focused, revert_to);
-		return focused == platform_GetWindowIdentifier();
+
+		return focused == platform_GetWindowIdentifier(allegroDisplayPointer);
 	}
 
 	bool platform_Focus(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
+
+		Display* dpy = XOpenDisplay(NULL);
+  		if (dpy == NULL)  {
+			return false;
+  		}
+
+		XSetInputFocus(dpy, platform_GetWindowIdentifier(allegroDisplayPointer), RevertToNone, CurrentTime);
+		XRaiseWindow(dpy, platform_GetWindowIdentifier(allegroDisplayPointer));
+  		XCloseDisplay(dpy);
+
+		return true;
 	}
 
 	bool platform_Hide(ALLEGRO_DISPLAY* allegroDisplayPointer) {
