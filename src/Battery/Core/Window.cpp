@@ -44,6 +44,7 @@ namespace Battery {
 
 	void Window::Create(int windowFlags) {
 		CHECK_ALLEGRO_INIT();
+		LOG_CORE_TRACE("Creating Window");
 
 		if (valid) {
 			LOG_CORE_WARN("Can't create window: Already exists!");

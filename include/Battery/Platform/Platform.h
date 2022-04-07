@@ -9,6 +9,7 @@
 // Forward declarations for the Windows handle
 struct HWND__;
 typedef HWND__* HWND;
+typedef unsigned long XID;
 
 struct ALLEGRO_FILE;
 
@@ -24,6 +25,7 @@ namespace Battery {
 	ALLEGRO_FILE* platform_LoadEmbeddedResource(int id, const char* type);
 
 	HWND platform_GetWinHandle(ALLEGRO_DISPLAY* allegroDisplayPointer);
+	XID platform_GetWindowIdentifier(ALLEGRO_DISPLAY* allegroDisplayPointer);
 	bool platform_IsFocused(ALLEGRO_DISPLAY* allegroDisplayPointer);
 	bool platform_Focus(ALLEGRO_DISPLAY* allegroDisplayPointer);
 	bool platform_Hide(ALLEGRO_DISPLAY* allegroDisplayPointer);

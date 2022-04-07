@@ -18,19 +18,19 @@ namespace Battery {
 	class NoSuchFileOrDirectoryException : public Battery::Exception {
 	public:
 		NoSuchFileOrDirectoryException(const std::string& msg = "")
-		 : Battery::Exception(msg.c_str()) {}
+		 : Battery::Exception(("Battery::NoSuchFileOrDirectoryException: " + msg).c_str()) {}
 	};
 
 	class LockfileUnavailableException : public Battery::Exception {
 	public:
 		LockfileUnavailableException(const std::string& msg = "")
-		 : Battery::Exception(msg.c_str()) {}
+		 : Battery::Exception(("Battery::LockfileUnavailableException: " + msg).c_str()) {}
 	};
 
 	class NotImplementedException : public Battery::Exception {
 	public:
 		NotImplementedException(const std::string& msg = "")
-		 : Battery::Exception(msg.c_str()) {}
+		 : Battery::Exception(("Battery::NotImplementedException: " + msg).c_str()) {}
 	};
 
 }
