@@ -27,9 +27,9 @@ namespace Battery {
 	HWND platform_GetWinHandle(ALLEGRO_DISPLAY* allegroDisplayPointer);
 	XID platform_GetWindowIdentifier(ALLEGRO_DISPLAY* allegroDisplayPointer);
 	bool platform_IsFocused(ALLEGRO_DISPLAY* allegroDisplayPointer);
-	bool platform_Focus(ALLEGRO_DISPLAY* allegroDisplayPointer);
-	bool platform_Hide(ALLEGRO_DISPLAY* allegroDisplayPointer);
-	bool platform_Show(ALLEGRO_DISPLAY* allegroDisplayPointer);
+	void platform_Focus(ALLEGRO_DISPLAY* allegroDisplayPointer);
+	void platform_Hide(ALLEGRO_DISPLAY* allegroDisplayPointer);
+	void platform_Show(ALLEGRO_DISPLAY* allegroDisplayPointer);
 	void platform_HideFromTaskbar(ALLEGRO_DISPLAY* allegroDisplayPointer);
 	void platform_ShowInTaskbar(ALLEGRO_DISPLAY* allegroDisplayPointer);
 

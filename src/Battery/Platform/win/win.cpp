@@ -97,16 +97,16 @@ namespace Battery {
 		return GetForegroundWindow() == platform_GetWinHandle(allegroDisplayPointer);
 	}
 
-	bool platform_Focus(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		return SetForegroundWindow(platform_GetWinHandle(allegroDisplayPointer));
+	void platform_Focus(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+		SetForegroundWindow(platform_GetWinHandle(allegroDisplayPointer));
 	}
 
-	bool platform_Hide(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		return ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_HIDE);
+	void platform_Hide(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+		ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_HIDE);
 	}
 
-	bool platform_Show(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		return ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_SHOW);
+	void platform_Show(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+		ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_SHOW);
 	}
 
 	void platform_HideFromTaskbar(ALLEGRO_DISPLAY* allegroDisplayPointer) {

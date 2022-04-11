@@ -2,7 +2,12 @@
 #include "Battery/Platform/Platform.h"
 #include "Battery/StringUtils.h"
 
+#include <X11/Xatom.h>
 #include <allegro5/allegro_x.h>
+
+#define _NET_WM_STATE_REMOVE        0    /* remove/unset property */
+#define _NET_WM_STATE_ADD           1    /* add/set property */
+#define _NET_WM_STATE_TOGGLE        2    /* toggle property  */
 
 #include <unistd.h>
 #include <sys/file.h>
@@ -49,52 +54,96 @@ namespace Battery {
 
 	bool platform_IsFocused(ALLEGRO_DISPLAY* allegroDisplayPointer) {
 
-		Display* dpy = XOpenDisplay(NULL);
-  		if (dpy == NULL)  {
+		Display* display = XOpenDisplay(NULL);
+  		if (display == NULL)  {
 			return false;
   		}
 
 		XID focused;
 		int revert_to;
-		XGetInputFocus(dpy, &focused, &revert_to);
-  		XCloseDisplay(dpy);
+		XGetInputFocus(display, &focused, &revert_to);
+  		XCloseDisplay(display);
 
 		return focused == platform_GetWindowIdentifier(allegroDisplayPointer);
 	}
 
-	bool platform_Focus(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+	void platform_Focus(ALLEGRO_DISPLAY* allegroDisplayPointer) {
 
-		Display* dpy = XOpenDisplay(NULL);
-  		if (dpy == NULL)  {
-			return false;
+		Display* display = XOpenDisplay(NULL);
+  		if (display == NULL)  {
+			return;
   		}
 
-		XSetInputFocus(dpy, platform_GetWindowIdentifier(allegroDisplayPointer), RevertToNone, CurrentTime);
-		XRaiseWindow(dpy, platform_GetWindowIdentifier(allegroDisplayPointer));
-  		XCloseDisplay(dpy);
-
-		return true;
+		XSetInputFocus(display, platform_GetWindowIdentifier(allegroDisplayPointer), RevertToNone, CurrentTime);
+		XRaiseWindow(display, platform_GetWindowIdentifier(allegroDisplayPointer));
+  		XCloseDisplay(display);
 	}
 
-	bool platform_Hide(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		//throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
-		LOG_WARN("TODO: Implement platform_Hide");
-		return false;
+	void platform_Hide(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+
+		Display* display = XOpenDisplay(NULL);
+  		if (display == NULL)  {
+			return;
+  		}
+
+		XUnmapWindow(display, platform_GetWindowIdentifier(allegroDisplayPointer));
+  		XCloseDisplay(display);
 	}
 
-	bool platform_Show(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		//throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
-		LOG_WARN("TODO: Implement platform_Show");
-		return false;
+	void platform_Show(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+
+		Display* display = XOpenDisplay(NULL);
+  		if (display == NULL)  {
+			return;
+  		}
+
+		XMapWindow(display, platform_GetWindowIdentifier(allegroDisplayPointer));
+  		XCloseDisplay(display);
 	}
 
 	void platform_HideFromTaskbar(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		//throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
-		LOG_WARN("TODO: Implement platform_HideFromTaskbar");
+
+		Display* display = XOpenDisplay(NULL);
+  		if (display == NULL)  {
+			return;
+  		}
+		
+		XEvent event;
+  		event.xclient.type = ClientMessage;
+  		event.xclient.serial = 0;
+  		event.xclient.send_event = True;
+  		event.xclient.message_type = XInternAtom(display, "_NET_WM_STATE", False);
+  		event.xclient.window = platform_GetWindowIdentifier(allegroDisplayPointer);
+  		event.xclient.format = 32;
+  		event.xclient.data.l[0] = _NET_WM_STATE_ADD;
+  		event.xclient.data.l[1] = XInternAtom(display, "_NET_WM_STATE_SKIP_TASKBAR", False);
+
+  		long mask = SubstructureRedirectMask | SubstructureNotifyMask;
+  		XSendEvent(display, DefaultRootWindow(display), False, mask, &event);
+  		
+		XCloseDisplay(display);
 	}
 
 	void platform_ShowInTaskbar(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		//throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
-		LOG_WARN("TODO: Implement platform_ShowInTaskbar");
+		
+		Display* display = XOpenDisplay(NULL);
+  		if (display == NULL)  {
+			return;
+  		}
+		
+		XEvent event;
+  		event.xclient.type = ClientMessage;
+  		event.xclient.serial = 0;
+  		event.xclient.send_event = True;
+  		event.xclient.message_type = XInternAtom(display, "_NET_WM_STATE", False);
+  		event.xclient.window = platform_GetWindowIdentifier(allegroDisplayPointer);
+  		event.xclient.format = 32;
+  		event.xclient.data.l[0] = _NET_WM_STATE_REMOVE;
+  		event.xclient.data.l[1] = XInternAtom(display, "_NET_WM_STATE_SKIP_TASKBAR", False);
+
+  		long mask = SubstructureRedirectMask | SubstructureNotifyMask;
+  		XSendEvent(display, DefaultRootWindow(display), False, mask, &event);
+  		
+		XCloseDisplay(display);
 	}
 }

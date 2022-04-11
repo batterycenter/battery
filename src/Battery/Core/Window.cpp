@@ -314,25 +314,24 @@ namespace Battery {
 		return platform_IsFocused(allegroDisplayPointer);
 	}
 
-	bool Window::Focus() {
+	void Window::Focus() {
 		CHECK_ALLEGRO_INIT();
-		return platform_Focus(allegroDisplayPointer);
+		platform_Focus(allegroDisplayPointer);
 	}
 
-	bool Window::Hide() {
+	void Window::Hide() {
 		CHECK_ALLEGRO_INIT();
-		return platform_Hide(allegroDisplayPointer);
+		platform_Hide(allegroDisplayPointer);
 	}
 
-	bool Window::Show() {
+	void Window::Show() {
 		CHECK_ALLEGRO_INIT();
-		return platform_Show(allegroDisplayPointer);
+		platform_Show(allegroDisplayPointer);
 	}
 
 	void Window::HideFromTaskbar() {
 		CHECK_ALLEGRO_INIT();
 		platform_HideFromTaskbar(allegroDisplayPointer);
-		Focus();
 	}
 
 	void Window::ShowInTaskbar() {

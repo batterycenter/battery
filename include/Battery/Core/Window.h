@@ -50,9 +50,9 @@ namespace Battery {
 		bool GetMouseWheel();
 		HWND GetWinHandle();
 		bool IsFocused();
-		bool Focus();
-		bool Hide();
-		bool Show();
+		void Focus();
+		void Hide();
+		void Show();
 		void HideFromTaskbar();
 		void ShowInTaskbar();
 		void SetFrameless(bool frameless);
