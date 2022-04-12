@@ -7,7 +7,6 @@
 #define SPDLOG_COMPILED_LIB
 #endif
 
-#define SPDLOG_FMT_EXTERNAL
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/sinks/basic_file_sink.h"

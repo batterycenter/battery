@@ -35,16 +35,6 @@
 .vs
 *.sln
 
-# Conan
-conan*
-!conanfile.txt
-graph_info.json
-Makefile
-
 # Miscellaneous
 bin/
 build/
-!premake5.exe
-!packages/**
-!modules/**
-!lib/**

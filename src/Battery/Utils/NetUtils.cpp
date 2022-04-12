@@ -18,7 +18,6 @@
 
 #include "Battery/Extern/magic_enum.hpp"
 
-#define ASIO_STANDALONE
 #include "Battery/Core/AllegroContext.h"		// -> Allegro sets some WINNT defines needed for asio/winsock
 #include <asio.hpp>
 using asio::ip::udp;

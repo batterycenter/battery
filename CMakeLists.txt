@@ -1,22 +1,22 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(LIBRARY_NAME Battery)
-project(${LIBRARY_NAME} VERSION 0.1.1 LANGUAGES CXX)
+project(Battery VERSION 0.1.1 LANGUAGES CXX)
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
+list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
+
 
 
 ##################################
 # Options: Library configuration #
 ##################################
 
-option(DISABLE_LOGGING "Strip all logging commands" OFF)
 
 
 
-
-
-################
-# Source files #
-################
+#############################
+# Static library definition #
+#############################
 
 file(GLOB_RECURSE HEADER_FILES CONFIGURE_DEPENDS "include/*")
 file(GLOB_RECURSE COMMON_SRC CONFIGURE_DEPENDS "src/Battery/*")
@@ -35,8 +35,26 @@ endif()
 
 list(APPEND SRC_FILES ${COMMON_SRC} ${PLATFORM_SRC})
 
+add_library(${PROJECT_NAME} STATIC ${SRC_FILES} ${HEADER_FILES})
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)
+
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose Release or Debug" FORCE)
+endif()
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+target_include_directories(${PROJECT_NAME} PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/Battery/clip>
+    $<INSTALL_INTERFACE:include/Battery/clip>
+)
 
 
+
+# Suppress warnings for some source files
 if (WIN32)
     set_source_files_properties(
         "src/clip/clip_win.cpp" "src/clip/clip.cpp" "src/clip/image.cpp"
@@ -51,48 +69,12 @@ endif()
 
 
 
-#############################
-# Static library definition #
-#############################
-
-add_library(${LIBRARY_NAME} STATIC ${SRC_FILES} ${HEADER_FILES})
-target_compile_features(${LIBRARY_NAME} PUBLIC cxx_std_20)
-set_target_properties(${LIBRARY_NAME} PROPERTIES CXX_EXTENSIONS OFF)
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose Release or Debug" FORCE)
-endif()
-
-target_include_directories(${LIBRARY_NAME} PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>)
-    target_include_directories(${LIBRARY_NAME} PRIVATE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/Battery/clip>
-        $<INSTALL_INTERFACE:include/Battery/clip>)
-
-
-
-
-######################
-# Conan dependencies #
-######################
-
-include(${CMAKE_BINARY_DIR}/../conanbuildinfo.cmake)
-conan_basic_setup()
-
-
-
 ############################
 # Preprocessor definitions #
 ############################
 
-if (DISABLE_LOGGING)
-    target_compile_definitions(${LIBRARY_NAME} PRIVATE DISABLE_LOGGING=1)
-endif()
-
 if (WIN32)
-    target_compile_definitions(${LIBRARY_NAME} PRIVATE
+    target_compile_definitions(${PROJECT_NAME} PRIVATE
        WIN32_LEAN_AND_MEAN      # Prevents Windows.h from adding unnecessary includes
        NOMINMAX                 # Prevents Windows.h from defining min/max as macros 
        _CRT_SECURE_NO_WARNINGS
@@ -102,11 +84,20 @@ endif()
 
 
 
-#######################
-# Precompiled Headers #
-#######################
 
-target_precompile_headers(${LIBRARY_NAME} PUBLIC include/Battery/pch.h)
+################
+# Dependencies #
+################
+
+find_package(allegro5 REQUIRED)
+find_package(glm REQUIRED)
+find_package(nlohmann_json REQUIRED)
+find_package(imgui REQUIRED)
+find_package(implot REQUIRED)
+find_package(spdlog REQUIRED)
+find_package(asio REQUIRED)
+
+
 
 
 
@@ -114,7 +105,12 @@ target_precompile_headers(${LIBRARY_NAME} PUBLIC include/Battery/pch.h)
 # Linking #
 ###########
 
-target_link_libraries(${LIBRARY_NAME} PUBLIC ${CONAN_LIBS})
+target_link_libraries(${PROJECT_NAME} allegro5::allegro5)
+target_link_libraries(${PROJECT_NAME} glm::glm)
+target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
+target_link_libraries(${PROJECT_NAME} implot::implot)
+target_link_libraries(${PROJECT_NAME} spdlog::spdlog)
+target_link_libraries(${PROJECT_NAME} asio::asio)
 
 
 
@@ -136,15 +132,15 @@ source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" PREFIX "Header Files" FI
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
-    BatteryConfigVersion.cmake
+    ${PROJECT_NAME}ConfigVersion.cmake
     VERSION ${PACKAGE_VERSION}
     COMPATIBILITY AnyNewerVersion
 )
 
 # Install binaries
 install(
-    TARGETS ${LIBRARY_NAME}
-    EXPORT BatteryTargets
+    TARGETS ${PROJECT_NAME}
+    EXPORT ${PROJECT_NAME}Targets
     LIBRARY DESTINATION "lib"
     ARCHIVE DESTINATION "lib"
     RUNTIME DESTINATION "bin"
@@ -159,15 +155,15 @@ install(
 )
 
 install(
-    EXPORT BatteryTargets 
-    DESTINATION "lib/cmake/Battery"
-    NAMESPACE Battery::
+    EXPORT ${PROJECT_NAME}Targets 
+    DESTINATION "lib/cmake/${PROJECT_NAME}"
+    NAMESPACE ${PROJECT_NAME}::
 )
 
 # Install Targets
-configure_file(cmake/BatteryConfig.cmake.in BatteryConfig.cmake @ONLY)
+configure_file(cmake/${PROJECT_NAME}Config.cmake.in ${PROJECT_NAME}Config.cmake @ONLY)
 install(
-    FILES "${CMAKE_CURRENT_BINARY_DIR}/BatteryConfig.cmake"
-          "${CMAKE_CURRENT_BINARY_DIR}/BatteryConfigVersion.cmake"
-    DESTINATION lib/cmake/Battery
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+          "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+    DESTINATION lib/cmake/${PROJECT_NAME}
 )
