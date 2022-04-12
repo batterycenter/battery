@@ -167,3 +167,11 @@ install(
           "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
     DESTINATION lib/cmake/${PROJECT_NAME}
 )
+
+# Set default install path on windows
+if (WIN32)
+    if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+        set (CMAKE_INSTALL_PREFIX "C:/dev" CACHE PATH "default install path" FORCE)
+    endif ()
+endif ()
+
