@@ -3,7 +3,13 @@ include(CMakeFindDependencyMacro)
 #set(my-config-var @my-config-var@)
 
 # Same syntax as find_package
-#find_dependency(MYDEP REQUIRED)
+find_dependency(allegro5 REQUIRED)
+find_dependency(glm REQUIRED)
+find_dependency(nlohmann_json REQUIRED)
+find_dependency(imgui REQUIRED)
+find_dependency(implot REQUIRED)
+find_dependency(spdlog REQUIRED)
+find_dependency(asio REQUIRED)
 
 # Any extra setup
 
