@@ -40,11 +40,11 @@ namespace Battery {
 		Application(int width, int height, const std::string applicationFolderName = BATTERY_DEFAULT_FOLDER_NAME);
 		virtual ~Application();
 
-		virtual bool OnStartup() { return true; }
-		virtual void OnUpdate() {}
-		virtual void OnRender() {}
-		virtual void OnShutdown() {}
-		virtual void OnEvent(Battery::Event* e) {}
+		virtual bool OnStartup() = 0;
+		virtual void OnUpdate() = 0;
+		virtual void OnRender() = 0;
+		virtual void OnShutdown() = 0;
+		virtual void OnEvent(Battery::Event* e) = 0;
 
 		bool GetKey(int allegroKeycode);
 		std::string GetKeyName(int allegroKeycode);
