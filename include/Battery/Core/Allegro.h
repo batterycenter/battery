@@ -2,6 +2,11 @@
 
 #include "Battery/Core/Config.h"
 
+#ifdef _MSC_VER
+#  pragma warning(push)
+#  pragma warning(disable : 5054)
+#endif
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
@@ -13,6 +18,10 @@
 
 #ifdef _WIN32
 #include <allegro5/allegro_windows.h>
+#endif
+
+#ifdef _MSC_VER
+#  pragma warning(pop)
 #endif
 
 #ifdef RegisterClipboardFormat

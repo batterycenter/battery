@@ -23,7 +23,4 @@
 #include "Battery/Renderer/Bitmap.h"
 #include "Battery/Renderer/ShaderProgram.h"
 
-// Serial library
-#include "serial/serial.h"
-
 #pragma warning( disable : 4244 )	// Always suppress warning about possible loss of data

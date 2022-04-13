@@ -21,8 +21,7 @@ namespace Battery {
 
 	Application& GetApp() {
 		if (!applicationPointer) {
-			throw Battery::Exception(std::string(__FUNCTION__) + ": Can't return application instance: Not initialized! "
-				"Make sure not to access core functions in constructors or destructors!");
+			throw Battery::Exception(std::string(__FUNCTION__) + ": The application has not been constructed yet! Use a Battery::Application derived class!");
 		}
 
 		return *applicationPointer;
@@ -35,10 +34,17 @@ namespace Battery {
 
 	Application::Application(int width, int height, const std::string applicationFolderName) : window(width, height) {
 		this->applicationFolderName = applicationFolderName;
+
+		if (applicationPointer != nullptr) {
+			throw Battery::Exception("Cannot construct Battery::Application: Another application has already been constructed!");
+		}
+
+		applicationPointer = this;
 		LOG_CORE_TRACE("Creating Application");
 	}
 
 	Application::~Application() {
+		applicationPointer = nullptr;
 		LOG_CORE_TRACE("Application stopped, destroying");
 	}
 

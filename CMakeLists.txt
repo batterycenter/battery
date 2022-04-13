@@ -18,6 +18,7 @@ endif()
 
 
 
+
 #############################
 # Static library definition #
 #############################
@@ -54,17 +55,14 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 
 
-# Suppress warnings for some source files
-if (WIN32)
+if(MSVC)
     set_source_files_properties(
         "src/clip/clip_win.cpp" "src/clip/clip.cpp" "src/clip/image.cpp"
         PROPERTIES COMPILE_FLAGS "/wd4018 /wd4267"
     )
+    set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 else()
-    #set_source_files_properties(
-    #    "src/clip/clip_win.cpp" "src/clip/clip.cpp" "src/clip/image.cpp"
-    #    PROPERTIES COMPILE_FLAGS "..."
-    #)
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
 
@@ -101,6 +99,7 @@ find_package(asio REQUIRED)
 
 
 
+
 ###########
 # Linking #
 ###########
@@ -111,6 +110,7 @@ target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
 target_link_libraries(${PROJECT_NAME} implot::implot)
 target_link_libraries(${PROJECT_NAME} spdlog::spdlog)
 target_link_libraries(${PROJECT_NAME} asio::asio)
+
 
 
 
@@ -145,6 +145,13 @@ install(
     ARCHIVE DESTINATION "lib"
     RUNTIME DESTINATION "bin"
     INCLUDES DESTINATION "include"
+)
+
+# Install symbols
+install(
+    DIRECTORY build/
+    DESTINATION "lib"
+    FILES_MATCHING PATTERN "*.pdb"
 )
 
 # Install headers
