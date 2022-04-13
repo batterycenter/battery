@@ -9,4 +9,5 @@ implot/0.13
 serial/1.2.1
 
 [generators]
-cmake_find_package
+CMakeDeps
+CMakeToolchain
