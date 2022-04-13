@@ -35,9 +35,11 @@ namespace Battery {
 
 	Application::Application(int width, int height, const std::string applicationFolderName) : window(width, height) {
 		this->applicationFolderName = applicationFolderName;
+		LOG_CORE_TRACE("Creating Application");
 	}
 
 	Application::~Application() {
+		LOG_CORE_TRACE("Application stopped, destroying");
 	}
 
 
@@ -75,7 +77,25 @@ namespace Battery {
 
 
 
-	void Application::Run(int argc, const char** argv) {
+	void Application::run(int argc, const char** argv) {
+		try {
+			runApplication(argc, argv);
+		}
+		catch (const Battery::Exception& e) {
+			LOG_CORE_CRITICAL(std::string("Unhandled Battery::Exception: '") + e.what() + "'");
+			Battery::ShowErrorMessageBox(std::string("Unhandled Battery::Exception: '") + e.what() + "'");
+		}
+		catch (const std::exception& e) {
+			LOG_CORE_CRITICAL(std::string("Unhandled std::exception: '") + e.what() + "'");
+			Battery::ShowErrorMessageBox(std::string("Unhandled std::exception: '") + e.what() + "'");
+		}
+		catch (...) {
+			LOG_CORE_CRITICAL("Unhandled exception: Unknown exception type, make sure to catch it correctly!");
+			Battery::ShowErrorMessageBox("Unhandled exception: Unknown exception type, make sure to catch it correctly!");
+		}
+	}
+
+	void Application::runApplication(int argc, const char** argv) {
 
 		// Initialize the Allegro framework
 		if (!AllegroContext::GetInstance()->Initialize(applicationFolderName)) {

@@ -61,7 +61,8 @@ namespace Battery {
 		void DiscardFrame();
 
 	private:
-		void Run(int argc, const char** argv);
+		void run(int argc, const char** argv);
+		void runApplication(int argc, const char** argv);
 		friend int ::main(int argc, const char** argv);
 
 		void _preUpdate();
