@@ -19,6 +19,22 @@ endif()
 
 
 
+################
+# Dependencies #
+################
+
+find_package(allegro5 REQUIRED)
+find_package(glm REQUIRED)
+find_package(nlohmann_json REQUIRED)
+find_package(imgui REQUIRED)
+find_package(implot REQUIRED)
+find_package(spdlog REQUIRED)
+find_package(asio REQUIRED)
+
+
+
+
+
 #############################
 # Static library definition #
 #############################
@@ -62,7 +78,7 @@ if(MSVC)
     )
     set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 else()
-    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wno-psabi)
 endif()
 
 
@@ -83,22 +99,6 @@ endif()
 
 
 
-################
-# Dependencies #
-################
-
-find_package(allegro5 REQUIRED)
-find_package(glm REQUIRED)
-find_package(nlohmann_json REQUIRED)
-find_package(imgui REQUIRED)
-find_package(implot REQUIRED)
-find_package(spdlog REQUIRED)
-find_package(asio REQUIRED)
-
-
-
-
-
 
 ###########
 # Linking #
@@ -107,6 +107,7 @@ find_package(asio REQUIRED)
 target_link_libraries(${PROJECT_NAME} allegro5::allegro5)
 target_link_libraries(${PROJECT_NAME} glm::glm)
 target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
+target_link_libraries(${PROJECT_NAME} imgui::imgui)
 target_link_libraries(${PROJECT_NAME} implot::implot)
 target_link_libraries(${PROJECT_NAME} spdlog::spdlog)
 target_link_libraries(${PROJECT_NAME} asio::asio)
@@ -172,5 +173,12 @@ configure_file(cmake/${PROJECT_NAME}Config.cmake.in ${PROJECT_NAME}Config.cmake 
 install(
     FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
           "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+    DESTINATION lib/cmake/${PROJECT_NAME}
+)
+
+# Install any conan dependencies
+file(GLOB CONAN_DEPS "${CMAKE_CURRENT_BINARY_DIR}/*.cmake")
+install(
+    FILES ${CONAN_DEPS}
     DESTINATION lib/cmake/${PROJECT_NAME}
 )
