@@ -37,7 +37,7 @@ namespace Battery {
 	class Application {
 	public:
 
-		Application(int width, int height, const std::string applicationFolderName = BATTERY_DEFAULT_FOLDER_NAME);
+		Application(int width = -1, int height = -1, const std::string applicationFolderName = BATTERY_DEFAULT_FOLDER_NAME);
 		virtual ~Application();
 
 		virtual bool OnStartup() = 0;
