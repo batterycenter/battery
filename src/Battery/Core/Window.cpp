@@ -134,12 +134,6 @@ namespace Battery {
 		al_register_event_source(allegroEventQueue, al_get_mouse_event_source());
 		al_register_event_source(allegroEventQueue, al_get_keyboard_event_source());
 		al_register_event_source(allegroEventQueue, al_get_display_event_source(allegroDisplayPointer));
-
-		// Limit window size
-		if (!al_set_window_constraints(allegroDisplayPointer, BATTERY_MIN_WINDOW_WIDTH, BATTERY_MIN_WINDOW_HEIGHT, 0, 0)) {
-			LOG_CORE_WARN("{}: {}", __FUNCTION__, "Window constraints could not be set!");
-		}
-		al_apply_window_constraints(allegroDisplayPointer, true);
 		
 		// Set the window title
 		SetTitle(BATTERY_DEFAULT_TITLE);
@@ -234,6 +228,16 @@ namespace Battery {
 		CHECK_ALLEGRO_INIT();
 		al_set_window_position(allegroDisplayPointer, position.x, position.y);
 	}
+	
+	bool Window::SetWindowSizeConstraints(const glm::ivec2& minimum, const glm::ivec2& maximum) {
+
+		// Limit window size
+		if (!al_set_window_constraints(allegroDisplayPointer, minimum.x, minimum.y, maximum.x, maximum.y)) {
+			return false;
+		}
+		al_apply_window_constraints(allegroDisplayPointer, true);
+		return true;
+	}
 
 	void Window::CenterOnPrimaryMonitor() {
 		CHECK_ALLEGRO_INIT(); 
@@ -259,7 +263,7 @@ namespace Battery {
 	void Window::SetSize(const glm::vec2 size) {
 		CHECK_ALLEGRO_INIT();
 		al_resize_display(allegroDisplayPointer, 
-			std::max((int)size.x, BATTERY_MIN_WINDOW_WIDTH), std::max((int)size.y, BATTERY_MIN_WINDOW_HEIGHT));
+			std::max((int)size.x, 0), std::max((int)size.y, 0));
 	}
 
 	void Window::SetTitle(const std::string title) {
