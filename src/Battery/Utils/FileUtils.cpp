@@ -666,8 +666,12 @@ namespace Battery {
 
 		std::vector<std::string> arr = GetPathComponents(path);
 
-		if (arr.size() > 1)
+		if (arr.size() > 1) {
 			arr.pop_back();
+		}
+		else {		// There is no parent in the path (relative)
+			arr.push_back("..");
+		}
 
 		return StringUtils::JoinStrings(arr, "/") + "/";
 	}
