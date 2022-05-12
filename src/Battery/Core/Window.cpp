@@ -32,8 +32,8 @@ namespace Battery {
 
 
 	Window::Window(int w, int h) {
-		width = std::max(w, BATTERY_MIN_WINDOW_WIDTH);
-		height = std::max(h, BATTERY_MIN_WINDOW_HEIGHT);
+		width = w;
+		height = h;
 	}
 
 	Window::~Window() {
@@ -79,6 +79,13 @@ namespace Battery {
 		if (windowFlags & (int)WindowFlags::HIDDEN) {
 			hidden = true;
 		}
+		
+		if (width <= 0)
+			width = GetApp().GetPrimaryMonitorSize().x;
+
+		if (height <= 0)
+			height = GetApp().GetPrimaryMonitorSize().y;
+
 												// Move the window very far to the bottom temporarily 
 		al_set_new_window_position(0, 3000);	// to prevent visible flickering
 		
