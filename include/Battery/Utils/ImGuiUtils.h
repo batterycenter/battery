@@ -2,13 +2,11 @@
 
 #include "Battery/pch.h"
 
-#define __ESC(x) x
-
-#define ADD_FONT(symbolName, size) Battery::ImGuiUtils::AddEmbeddedFont(__ESC(symbolName)_compressed_data, \
-	__ESC(symbolName)_compressed_size, size);
+#define ADD_FONT(symbolName, size) Battery::ImGuiUtils::AddEmbeddedFont(symbolName ## _compressed_data, \
+	symbolName ## _compressed_size, size);
 
 #define ADD_FONT_UNCOMPRESSED(symbolName, size) Battery::ImGuiUtils::AddEmbeddedFontUncompressed( \
-	__ESC(symbolName)_compressed_data, __ESC(symbolName)_compressed_size, size);
+	symbolName ## _compressed_data, symbolName ## _compressed_size, size);
 
 namespace Battery {
 	namespace ImGuiUtils {
