@@ -54,7 +54,7 @@ namespace Battery {
 		codepoint = event->keyboard.unichar;
 		repeat = event->keyboard.repeat;
 		modifiers = event->keyboard.modifiers;
-		StringUtils::ConvertCodepointToUTF8(codepoint, character);
+		StringUtils::ConvertCodepointToUTF8(codepoint, character, sizeof(character));
 	}
 
 	void MouseButtonPressedEvent::Load(ALLEGRO_EVENT* event) {
