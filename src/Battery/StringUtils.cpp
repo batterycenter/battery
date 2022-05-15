@@ -113,5 +113,15 @@ namespace Battery {
 			return text;
 		}
 
+		void ConvertCodepointToUTF8(int32_t codepoint, char* buffer, size_t length) {
+
+			ALLEGRO_USTR* ustr = al_ustr_new("");
+			al_ustr_append_chr(ustr, codepoint);
+
+			strncpy(buffer, al_cstr(ustr), length);
+
+			al_ustr_free(ustr);
+		}
+
 	}
 }

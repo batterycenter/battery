@@ -7,7 +7,6 @@
 #include "Battery/Graphics.h"
 
 #include "Battery/Core/Application.h"
-#include "Battery/Core/AllegroContext.h"
 #include "Battery/Core/Window.h"
 #include "Battery/Core/ImGuiLayer.h"
 #include "Battery/Core/ImGuiPanel.h"

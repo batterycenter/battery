@@ -1,5 +1,6 @@
 
 #include "Battery/Platform/Platform.h"
+#include "Battery/Core/Exception.h"
 #include "Battery/StringUtils.h"
 
 #include <X11/Xatom.h>

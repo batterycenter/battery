@@ -4,7 +4,6 @@
 #include "Battery/Core/Layer.h"
 #include "Battery/Core/LayerStack.h"
 #include "Battery/Core/ApplicationEvents.h"
-#include "Battery/Core/AllegroContext.h"
 #include "Battery/Core/Window.h"
 #include "Battery/Core/Config.h"
 #include "Battery/Core/Event.h"

@@ -2,7 +2,6 @@
 
 #include "Battery/pch.h"
 #include "Battery/Log/Log.h"
-#include "Battery/Core/AllegroContext.h"
 #include "Battery/Core/Window.h"
 #include "Battery/Renderer/ShaderProgram.h"
 #include "Battery/Renderer/Bitmap.h"
