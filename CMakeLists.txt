@@ -56,8 +56,8 @@ endif()
 
 list(APPEND SRC_FILES ${COMMON_SRC} ${PLATFORM_SRC})
 
-add_library(${PROJECT_NAME} STATIC ${SRC_FILES} ${HEADER_FILES})
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
+add_library(${PROJECT_NAME} STATIC ${SRC_FILES} ${HEADER_FILES} "conanfile.py" "cmake/BatteryConfig.cmake.in")
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
@@ -124,6 +124,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" PREFIX "Source Files" FILES ${SRC_FILES})
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" PREFIX "Header Files" FILES ${HEADER_FILES})
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/cmake" PREFIX "cmake" FILES "cmake/BatteryConfig.cmake.in")
 
 
 
