@@ -35,6 +35,7 @@ namespace Battery {
 
 		glm::ivec2 GetScreenPosition();
 		void SetScreenPosition(const glm::ivec2& position);
+		bool SetWindowSizeConstraints(const glm::ivec2& minimum, const glm::ivec2& maximum);
 		void CenterOnPrimaryMonitor();
 		int GetWidth();
 		int GetHeight();
