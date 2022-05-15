@@ -15,7 +15,6 @@ namespace Battery {
 		inline static ImFont* defaultFont = nullptr;
 
 		static void loadDefault() {
-			LOG_ERROR("Loading default");
 			defaultFont = ImGui::GetIO().Fonts->AddFontDefault();
 		}
 	};
@@ -68,8 +67,8 @@ namespace Battery {
 
 			// Save the default ImGui color scheme and then load the Battery color scheme
 			ImGui::StyleColorsDark();
-			ImGuiUtils::defaultColorScheme = ImGuiUtils::GetColorScheme();
-			ImGuiUtils::LoadBatteryColorScheme();
+			CaptureCurrentColorSchemeAsDefault();
+			LoadBatteryColorScheme();
 
 			// Setup Platform/Renderer backends
 			ImGui_ImplAllegro5_Init(Battery::GetMainWindow().allegroDisplayPointer);
