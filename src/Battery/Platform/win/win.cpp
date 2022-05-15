@@ -3,6 +3,7 @@
 #include "Battery/StringUtils.h"
 #include "Battery/Utils/FileUtils.h"
 
+#include "Battery/Core/Allegro.h"
 #include "shellapi.h"
 
 namespace Battery {
