@@ -148,11 +148,11 @@ namespace Battery {
 		ImGui::PushID(specificID);
         const char* label = (items.size() == 0) ? "" : items[selected].c_str();
 		if (ImGui::BeginCombo(name.c_str(), label)) {
-			if (items.size() == 0) {
+			if (items.size() != 0) {
 			    for (size_t i = 0; i < items.size(); i++) {
 					ImGui::PushID(i);
 			        bool is_selected = (i == selected);
-			        if (ImGui::Selectable(items[selected].c_str(), is_selected))
+			        if (ImGui::Selectable(items[i].c_str(), is_selected))
 			            selected = i;
 			        if (is_selected)
 			            ImGui::SetItemDefaultFocus();
