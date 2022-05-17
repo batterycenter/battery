@@ -1,5 +1,4 @@
 
-#include "Battery/pch.h"
 #include "Battery/Renderer/Renderer2D.h"
 #include "Battery/Core/Exception.h"
 #include "Battery/Core/AllegroContext.h"

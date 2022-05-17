@@ -1,5 +1,4 @@
 
-#include "Battery/pch.h"
 #include "Battery/Platform/API.h"
 
 #ifdef _WIN32

@@ -1,6 +1,4 @@
 
-#include "Battery/pch.h"
-
 // Ignore possible loss of data warnings
 #pragma warning( disable : 4244 4267 )
 

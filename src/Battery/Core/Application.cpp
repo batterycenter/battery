@@ -1,5 +1,4 @@
 
-#include "Battery/pch.h"
 #include "Battery/Core/Application.h"
 #include "Battery/Renderer/Renderer2D.h"
 #include "Battery/Utils/TimeUtils.h"

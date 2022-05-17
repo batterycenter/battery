@@ -1,5 +1,4 @@
 
-#include "Battery/pch.h"
 #include "Battery/Utils/MemoryUtils.h"
 #include "Battery/Core/Config.h"
 #include "Battery/Log/Log.h"

@@ -1,5 +1,4 @@
 
-#include "Battery/pch.h"
 #include "Battery/Core/ImGuiLayer.h"
 #include "Battery/Core/AllegroContext.h"
 

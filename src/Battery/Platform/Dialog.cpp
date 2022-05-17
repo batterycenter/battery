@@ -1,5 +1,4 @@
 
-#include "Battery/pch.h"
 #include "Battery/Core/AllegroContext.h"
 #include "Battery/Platform/Dialog.h"
 
