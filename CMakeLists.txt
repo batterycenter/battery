@@ -115,6 +115,15 @@ target_link_libraries(${PROJECT_NAME} asio::asio)
 
 
 
+#######################
+# Precompiled Headers #
+#######################
+
+target_precompile_headers(${PROJECT_NAME} PRIVATE include/Battery/pch.h)
+
+
+
+
 
 #######
 # IDE #
