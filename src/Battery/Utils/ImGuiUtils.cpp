@@ -119,14 +119,14 @@ namespace Battery {
         return WriteFile(outputFile, EmbedTTFAsHeaderFileDirect(ttfBytes.content(), symbolName, compress));
     }
 
-    ImFont* AddEmbeddedFont(const unsigned int* data, unsigned int length, float pixels) {
-        return ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(data, length, pixels);
+    ImFont* AddEmbeddedFont(const unsigned int* data, unsigned int length, float pixels, const ImWchar* glyphRange) {
+        return ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(data, length, pixels, nullptr, glyphRange);
     }
 
-    ImFont* AddEmbeddedFontUncompressed(const unsigned int* data, unsigned int length, float pixels) {
-        void* temp = new uint8_t[length];
-        memcpy(temp, data, length);   // This buffer is tranferred to ImGui and then deleted by ImGui
-        return ImGui::GetIO().Fonts->AddFontFromMemoryTTF(temp, length, pixels);
+    ImFont* AddEmbeddedFontUncompressed(const unsigned int* data, unsigned int length, float pixels, const ImWchar* glyphRange) {
+        void* temp = new uint8_t[length];   // This buffer is tranferred to ImGui and then deleted by ImGui
+        memcpy(temp, data, length);         // cfg.FontDataOwnedByAtlas is not used to avoid data lifetime issues
+        return ImGui::GetIO().Fonts->AddFontFromMemoryTTF(temp, length, pixels, nullptr, glyphRange);
     }
 
 

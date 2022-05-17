@@ -2,11 +2,47 @@
 
 #include "Battery/pch.h"
 
+static const ImWchar icons_ranges[3] = { 0xe005, 0xf8ff, 0 };
+
 #define ADD_FONT(symbolName, size) Battery::AddEmbeddedFont(symbolName ## _compressed_data, \
 	symbolName ## _compressed_size, size);
 
 #define ADD_FONT_UNCOMPRESSED(symbolName, size) Battery::AddEmbeddedFontUncompressed( \
 	symbolName ## _compressed_data, symbolName ## _compressed_size, size);
+
+#define ADD_ICON_FONT(symbolName, size) Battery::AddEmbeddedFont(symbolName ## _compressed_data, \
+	symbolName ## _compressed_size, size, icons_ranges);
+
+#define ADD_ICON_FONT_UNCOMPRESSED(symbolName, size) Battery::AddEmbeddedFontUncompressed( \
+	symbolName ## _compressed_data, symbolName ## _compressed_size, size, icons_ranges);
+
+// Using icon fonts:
+//
+// For example, using Battery/Fonts/FontAwesomeWebfont.h
+// use 
+//		<font_name> = ADD_ICON_FONT(FontAwesomeWebfont, <size>); to load it
+// 
+// Then, load the font with
+// 
+//		ImGui::PushFont(Fonts::<font_name>);
+//		 -> use it
+//		ImGui::PopFont();
+// 
+// You are encouraged to copy a glyph from https://fontawesome.com/icons 
+// and convert it to hex using https://onlineunicodetools.com/convert-unicode-to-hex
+// 
+// Example:
+// 
+//  fa-heart   ->    heart icon ('heart', codepoint U+F004)
+//  Copy glyph to online converter: hex is '0xef 0x80 0x84' (copy the glyph, not the codepoint)
+//	Then adapt manually to a C++ string: "\xef\x80\x84"
+// 
+// Now you can use it:
+// 
+//	ImGui::PushFont(Fonts::fontAwesome);
+//  ImGui::Text("\xef\x80\x84");
+//  ImGui::PopFont();
+//
 
 namespace Battery {
 
@@ -75,8 +111,9 @@ namespace Battery {
 	/// <param name="data"></param>
 	/// <param name="length"></param>
 	/// <param name="pixels"></param>
+	/// <param name="glyphRange"></param>
 	/// <returns></returns>
-	ImFont* AddEmbeddedFont(const unsigned int* data, unsigned int length, float pixels);
+	ImFont* AddEmbeddedFont(const unsigned int* data, unsigned int length, float pixels, const ImWchar* glyphRange = nullptr);
 
 	/// <summary>
 	/// Load an embedded font from a compressed header, generated with ImGuiUtils::EmbedTTFAsHeaderFile().
@@ -85,8 +122,9 @@ namespace Battery {
 	/// <param name="data"></param>
 	/// <param name="length"></param>
 	/// <param name="pixels"></param>
+	/// <param name="glyphRange"></param>
 	/// <returns></returns>
-	ImFont* AddEmbeddedFontUncompressed(const unsigned int* data, unsigned int length, float pixels);
+	ImFont* AddEmbeddedFontUncompressed(const unsigned int* data, unsigned int length, float pixels, const ImWchar* glyphRange = nullptr);
 
 
 	class DropdownMenu {
