@@ -23,13 +23,14 @@ endif()
 # Dependencies #
 ################
 
-find_package(allegro5 REQUIRED)
-find_package(glm REQUIRED)
-find_package(nlohmann_json REQUIRED)
-find_package(imgui REQUIRED)
-find_package(implot REQUIRED)
-find_package(spdlog REQUIRED)
-find_package(asio REQUIRED)
+set(BUILD_SHARED_LIBS False)
+add_subdirectory(modules/SFML)
+
+include(cmake/glm.cmake)
+include(cmake/imgui.cmake)
+include(cmake/implot.cmake)
+include(cmake/spdlog.cmake)
+include(cmake/clip.cmake)
 
 
 
@@ -40,23 +41,9 @@ find_package(asio REQUIRED)
 #############################
 
 file(GLOB_RECURSE HEADER_FILES CONFIGURE_DEPENDS "include/*")
-file(GLOB_RECURSE COMMON_SRC CONFIGURE_DEPENDS "src/Battery/*")
-list(APPEND COMMON_SRC "src/clip/clip.cpp" "src/clip/image.cpp")
+file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS "src/Battery/*")
 
-file(GLOB_RECURSE REMOVE_WIN CONFIGURE_DEPENDS "src/Battery/Platform/win/*")
-file(GLOB_RECURSE REMOVE_X11 CONFIGURE_DEPENDS "src/Battery/Platform/x11/*")
-
-if (WIN32)
-    list(APPEND PLATFORM_SRC "src/clip/clip_win.cpp")
-    list(REMOVE_ITEM COMMON_SRC ${REMOVE_X11})
-else()
-    list(APPEND PLATFORM_SRC "src/clip/clip_x11.cpp")
-    list(REMOVE_ITEM COMMON_SRC ${REMOVE_WIN})
-endif()
-
-list(APPEND SRC_FILES ${COMMON_SRC} ${PLATFORM_SRC})
-
-add_library(${PROJECT_NAME} STATIC ${SRC_FILES} ${HEADER_FILES} "conanfile.py" "cmake/BatteryConfig.cmake.in")
+add_library(${PROJECT_NAME} STATIC ${SRC_FILES} ${HEADER_FILES} "cmake/BatteryConfig.cmake.in")
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)
 
@@ -64,18 +51,10 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
-target_include_directories(${PROJECT_NAME} PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/Battery/clip>
-    $<INSTALL_INTERFACE:include/Battery/clip>
-)
 
 
 
 if(MSVC)
-    set_source_files_properties(
-        "src/clip/clip_win.cpp" "src/clip/clip.cpp" "src/clip/image.cpp"
-        PROPERTIES COMPILE_FLAGS "/wd4018 /wd4267"
-    )
     set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 else()
     target_compile_options(${PROJECT_NAME} PRIVATE -Wno-psabi)
@@ -104,13 +83,12 @@ endif()
 # Linking #
 ###########
 
-target_link_libraries(${PROJECT_NAME} allegro5::allegro5)
-target_link_libraries(${PROJECT_NAME} glm::glm)
-target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
-target_link_libraries(${PROJECT_NAME} imgui::imgui)
-target_link_libraries(${PROJECT_NAME} implot::implot)
-target_link_libraries(${PROJECT_NAME} spdlog::spdlog)
-target_link_libraries(${PROJECT_NAME} asio::asio)
+target_link_libraries(${PROJECT_NAME} SFML)
+target_link_libraries(${PROJECT_NAME} glm)
+target_link_libraries(${PROJECT_NAME} imgui)
+target_link_libraries(${PROJECT_NAME} implot)
+target_link_libraries(${PROJECT_NAME} spdlog)
+target_link_libraries(${PROJECT_NAME} clip)
 
 
 

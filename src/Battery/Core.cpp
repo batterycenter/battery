@@ -1,6 +1,6 @@
 
+#include "Battery/SFML.h"
 #include "Battery/Core.h"
-#include "Battery/Core/Allegro.h"
 
 namespace Battery {
 	namespace Core {

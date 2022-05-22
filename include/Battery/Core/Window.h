@@ -3,14 +3,11 @@
 #include "Battery/Core/Exception.h"
 #include "Battery/Core/ApplicationEvents.h"
 #include "Battery/Renderer/Bitmap.h"
+#include "clip.h"
 
 // Forward declarations for the Windows handle
 struct HWND__;
 typedef HWND__* HWND;
-
-struct ALLEGRO_DISPLAY;
-struct ALLEGRO_EVENT_QUEUE;
-struct ALLEGRO_FONT;
 
 namespace Battery {
 
@@ -86,9 +83,6 @@ namespace Battery {
 #ifdef _WIN32
 		bool SetWindowExecutableIcon(int iconID);
 #endif
-
-		ALLEGRO_DISPLAY* allegroDisplayPointer = nullptr;
-		ALLEGRO_EVENT_QUEUE* allegroEventQueue = nullptr;
 
 	private:
 

@@ -27,12 +27,11 @@
 #pragma GCC diagnostic pop
 #endif
 
-#include "nlohmann/json.hpp"
+#include "Battery/Extern/json.hpp"
 
 // ImGui library
 #include "imgui.h"
 #include "imgui_internal.h"
-#include "../res/bindings/imgui_impl_allegro5.h"
 #include "implot.h"
 
 #endif // _BATTERY_PCH_H
