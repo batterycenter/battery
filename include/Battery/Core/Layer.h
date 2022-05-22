@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Battery/pch.h"
-#include "Battery/Core/ApplicationEvents.h"
+//#include "Battery/Core/ApplicationEvents.h"
 #include "Battery/Log/Log.h"
 
 namespace Battery {
 
 	// Forward declaration
 	class Application;
+	class Event;
 
 
 	class Layer {

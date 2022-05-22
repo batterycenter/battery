@@ -1,10 +1,9 @@
 
-#include "Battery/Core/AllegroContext.h"
 #include "Battery/Platform/Dialog.h"
 
 namespace Battery {
 
-	void ShowErrorMessageBox(const std::string& msg, ALLEGRO_DISPLAY* display) {
+	/*void ShowErrorMessageBox(const std::string& msg, ALLEGRO_DISPLAY* display) {
 		al_show_native_message_box(display, "Error", msg.c_str(), "", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
 	}
 
@@ -38,6 +37,6 @@ namespace Battery {
 
 	bool ShowInfoMessageBoxOkCancel(const std::string& msg, ALLEGRO_DISPLAY* display) {
 		return 1 == al_show_native_message_box(display, "Info", msg.c_str(), "", nullptr, ALLEGRO_MESSAGEBOX_QUESTION | ALLEGRO_MESSAGEBOX_OK_CANCEL);
-	}
+	}*/
 
 }

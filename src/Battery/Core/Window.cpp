@@ -1,16 +1,13 @@
 
 #include "Battery/Core/Window.h"
 #include "Battery/Core/Application.h"
-#include "Battery/Core/AllegroContext.h"
 #include "Battery/Core/Config.h"
 #include "Battery/Utils/TimeUtils.h"
 #include "Battery/Renderer/Bitmap.h"
 #include "Battery/Renderer/Renderer2D.h"
-#include "Battery/Core/AllegroContext.h"
 #include "Battery/Platform/Platform.h"
 #include "clip.h"
 
-// TODO: Do something about allegro default font
 
 // TODO: Handle crashes when allegro window fails, maybe try again
 
@@ -23,135 +20,39 @@
 
 namespace Battery {
 
-	// This function is local within this .cpp file
-	static ALLEGRO_COLOR ConvertAllegroColor(const glm::vec4& color) {
-		return al_map_rgba(color.r, color.g, color.b, color.a);
-	}
-
-
-
 	Window::Window(int w, int h) {
 		width = w;
 		height = h;
 	}
 
 	Window::~Window() {
-		if (valid) {
-			Destroy();
-		}
+		Destroy();
 	}
 
 	void Window::Create(int windowFlags) {
-		CHECK_ALLEGRO_INIT();
 		LOG_CORE_TRACE("Creating Window");
-
-		if (valid) {
-			LOG_CORE_WARN("Can't create window: Already exists!");
-			return;
-		}
-
-		if (!al_is_system_installed())
-			throw Battery::Exception("Failed to create Allegro window: Allegro is not initialized!");
-
-		// Window flags are Battery flags, need to be converted now
-		int allegroFlags = ALLEGRO_PROGRAMMABLE_PIPELINE | ALLEGRO_OPENGL | ALLEGRO_RESIZABLE;
-		bool frameless = false;
-		bool noTaskbar = false;
-		bool hidden = false;
-
-		if (windowFlags & (int)WindowFlags::NON_RESIZABLE) {
-			allegroFlags &= ~ALLEGRO_RESIZABLE;
-		}
-		if (windowFlags & (int)WindowFlags::FULLSCREEN) {
-			allegroFlags |= ALLEGRO_FULLSCREEN;
-		}
-		if (windowFlags & (int)WindowFlags::WINDOWED_FULLSCREEN) {
-			allegroFlags |= ALLEGRO_FULLSCREEN_WINDOW;
-		}
-		if (windowFlags & (int)WindowFlags::FRAMELESS) {
-			allegroFlags |= ALLEGRO_FRAMELESS;
-			frameless = true;
-		}
-		if (windowFlags & (int)WindowFlags::NO_TASKBAR) {
-			noTaskbar = true;
-		}
-		if (windowFlags & (int)WindowFlags::HIDDEN) {
-			hidden = true;
-		}
 		
-		if (width <= 0)
-			width = GetApp().GetPrimaryMonitorSize().x;
+		// Auto-fit window size
+		if (width <= 0) width = GetApp().GetPrimaryMonitorSize().x;
+		if (height <= 0) height = GetApp().GetPrimaryMonitorSize().y;
 
-		if (height <= 0)
-			height = GetApp().GetPrimaryMonitorSize().y;
-
-												// Move the window very far to the bottom temporarily 
-		al_set_new_window_position(0, 3000);	// to prevent visible flickering
+		// Finally create the window
+		window.create(sf::VideoMode({ width, height }), BATTERY_DEFAULT_TITLE);
+		if (!window.isOpen())
+			throw Battery::Exception("Could not create SFML window! Please check the graphics drivers!");
 		
-		al_set_new_display_flags(allegroFlags);
-		al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
-
-		allegroDisplayPointer = al_create_display(width, height);
-		if (allegroDisplayPointer == nullptr)
-			throw Battery::Exception("Failed to create Allegro window! Please check the graphics drivers!");
-		
-		// Immediately draw the background color
-		if (hidden) {
-			Hide();
-		}
-		al_clear_to_color(ConvertAllegroColor(BATTERY_DEFAULT_BACKGROUND_COLOR));
-		al_flip_display();
-
-		// Now show or hide the window in the taskbar
-		if (noTaskbar) {
-			HideFromTaskbar();
-		}
-		else {
-			ShowInTaskbar();
-		}
-
 		// The window is clean now, now it can be moved back to the center
 		CenterOnPrimaryMonitor();
 		
-		//allegroDefaultFont = al_load_ttf_font(defaultFontFile.c_str(), 64, 0);
-		//if (allegroDefaultFont == nullptr) {
-		//	al_destroy_display(allegroDisplayPointer);
-		//	allegroDisplayPointer = nullptr;
-		//	throw Battery::Exception("Failed to load Allegro font " + defaultFontFile);
-		//}
-
-		allegroEventQueue = al_create_event_queue();
-		if (allegroEventQueue == nullptr) {
-			al_destroy_display(allegroDisplayPointer);
-			//al_destroy_font(allegroDefaultFont);
-			allegroDisplayPointer = nullptr;
-			//allegroDefaultFont = nullptr;
-			throw Battery::Exception("Failed to create Allegro event queue");
-		}
-
-		// Attach event sources
-		al_register_event_source(allegroEventQueue, al_get_mouse_event_source());
-		al_register_event_source(allegroEventQueue, al_get_keyboard_event_source());
-		al_register_event_source(allegroEventQueue, al_get_display_event_source(allegroDisplayPointer));
-		
-		// Set the window title
-		SetTitle(BATTERY_DEFAULT_TITLE);
-		
 		// Window is created and valid
 		LOG_CORE_TRACE("Created Allegro window");
-		valid = true;
 	}
 
 	void Window::Destroy() {
-		// Destroy everything
-		LOG_CORE_TRACE("Destroying Allegro window");
-		al_destroy_display(allegroDisplayPointer);
-		//al_destroy_font(allegroDefaultFont);
-		al_destroy_event_queue(allegroEventQueue);
-		allegroDisplayPointer = nullptr;
-		//allegroDefaultFont = nullptr;
-		allegroEventQueue = nullptr;
-		valid = false;
+		if (window.isOpen()) {
+			LOG_CORE_TRACE("Destroying window");
+			window.close();
+		}
 	}
 
 	void Window::SetEventCallback(std::function<void(Battery::Event* event)> eventCallback) {
@@ -164,9 +65,7 @@ namespace Battery {
 	}
 
 	void Window::HandleEvents() {
-		CHECK_ALLEGRO_INIT();
-		//PROFILE_CORE_SCOPE("{}: {}", __FUNCTION__, "");
-
+		/*
 		if (eventCallback != nullptr && allegroEventQueue != nullptr) {
 
 			while (!al_is_event_queue_empty(allegroEventQueue)) {
@@ -186,19 +85,19 @@ namespace Battery {
 				}
 			}
 
-		}
+		}*/
 	}
 
 	void Window::HandleEvent(Battery::Event* event) {
 
 #ifdef BATTERY_DEBUG // TODO
-		static const size_t length = 1024;
+		/*static const size_t length = 1024;
 		char info[length];
 		event->GetInfoString(info, length);
-		LOG_CORE_TRACE("Handling Event {}", info);
+		LOG_CORE_TRACE("Handling Event {}", info);*/
 #endif
 		
-		if (event->GetType() == Battery::EventType::WindowResize) {
+		/*if (event->GetType() == Battery::EventType::WindowResize) {
 			al_acknowledge_resize(allegroDisplayPointer);
 		}
 
@@ -213,149 +112,103 @@ namespace Battery {
 		}
 		else {
 			LOG_CORE_TRACE("{}: {}", __FUNCTION__, "OnEvent callback can't be called: Function pointer is nullptr!");
-		}
+		}*/
 	}
 
 	glm::ivec2 Window::GetScreenPosition() {
-		CHECK_ALLEGRO_INIT();
-		glm::ivec2 position;
-		al_get_window_position(allegroDisplayPointer, &position.x, &position.y);
-		return position;
+		auto [x, y] = window.getPosition();
+		return { x, y };
 	}
 
 	void Window::SetScreenPosition(const glm::ivec2& position) {
-		CHECK_ALLEGRO_INIT();
-		al_set_window_position(allegroDisplayPointer, position.x, position.y);
+		window.setPosition({ position.x, position.y });
 	}
 	
 	bool Window::SetWindowSizeConstraints(const glm::ivec2& minimum, const glm::ivec2& maximum) {
-
+		/*
 		// Limit window size
 		if (!al_set_window_constraints(allegroDisplayPointer, minimum.x, minimum.y, maximum.x, maximum.y)) {
 			return false;
 		}
-		al_apply_window_constraints(allegroDisplayPointer, true);
+		al_apply_window_constraints(allegroDisplayPointer, true);*/
 		return true;
 	}
 
 	void Window::CenterOnPrimaryMonitor() {
-		CHECK_ALLEGRO_INIT(); 
 		glm::vec2 monitor = Battery::GetApp().GetPrimaryMonitorSize();
 		SetScreenPosition((monitor - glm::vec2(GetSize())) / 2.f + glm::vec2(0, -30));
 	}
 
 	int Window::GetWidth() {
-		CHECK_ALLEGRO_INIT();
-		return al_get_display_width(allegroDisplayPointer);
+		return GetSize().x;
 	}
 
 	int Window::GetHeight() {
-		CHECK_ALLEGRO_INIT();
-		return al_get_display_height(allegroDisplayPointer);
+		return GetSize().y;
 	}
 
 	glm::ivec2 Window::GetSize() {
-		CHECK_ALLEGRO_INIT();
-		return glm::ivec2(GetWidth(), GetHeight());
+		auto [x, y] = window.getSize();
+		return { x, y };
 	}
 
-	void Window::SetSize(const glm::vec2 size) {
-		CHECK_ALLEGRO_INIT();
-		al_resize_display(allegroDisplayPointer, 
-			std::max((int)size.x, 0), std::max((int)size.y, 0));
+	void Window::SetSize(const glm::ivec2 size) {
+		window.setSize({ (uint32_t)size.x, (uint32_t)size.y });
 	}
 
 	void Window::SetTitle(const std::string title) {
-		CHECK_ALLEGRO_INIT();
-		al_set_window_title(allegroDisplayPointer, title.c_str());
+		window.setTitle(title);
 	}
 
 	void Window::Maximize() {
-		CHECK_ALLEGRO_INIT();
-		al_set_display_flag(allegroDisplayPointer, ALLEGRO_MAXIMIZED, true);
+		//al_set_display_flag(allegroDisplayPointer, ALLEGRO_MAXIMIZED, true);
 	}
 
 	void Window::Minimize() {
-		CHECK_ALLEGRO_INIT();
-		al_set_display_flag(allegroDisplayPointer, ALLEGRO_MINIMIZED, true);
+		//al_set_display_flag(allegroDisplayPointer, ALLEGRO_MINIMIZED, true);
 	}
 
 	void Window::Restore() {
-		CHECK_ALLEGRO_INIT();
-		al_set_display_flag(allegroDisplayPointer, ALLEGRO_MAXIMIZED, false);
-		al_set_display_flag(allegroDisplayPointer, ALLEGRO_MINIMIZED, false);
+		//al_set_display_flag(allegroDisplayPointer, ALLEGRO_MAXIMIZED, false);
+		//al_set_display_flag(allegroDisplayPointer, ALLEGRO_MINIMIZED, false);
 	}
 
-	glm::vec2 Window::GetMousePosition() {
-		CHECK_ALLEGRO_INIT();
-		ALLEGRO_MOUSE_STATE mouse;
-		al_get_mouse_state(&mouse);
-		return glm::vec2(mouse.x, mouse.y);
-	}
-
-	bool Window::GetLeftMouseButton() {
-		CHECK_ALLEGRO_INIT();
-		ALLEGRO_MOUSE_STATE mouse;
-		al_get_mouse_state(&mouse);
-		return mouse.buttons & 0x01;
-	}
-
-	bool Window::GetRightMouseButton() {
-		CHECK_ALLEGRO_INIT();
-		ALLEGRO_MOUSE_STATE mouse;
-		al_get_mouse_state(&mouse);
-		return mouse.buttons & 0x02;
-	}
-
-	bool Window::GetMouseWheel() {
-		CHECK_ALLEGRO_INIT();
-		ALLEGRO_MOUSE_STATE mouse;
-		al_get_mouse_state(&mouse);
-		return mouse.buttons & 0x04;
-	}
-
-	HWND Window::GetWinHandle() {
-		CHECK_ALLEGRO_INIT();
-		return platform_GetWinHandle(allegroDisplayPointer);
+	sf::WindowHandle Window::GetSystemHandle() {
+		return window.getSystemHandle();
 	}
 
 	bool Window::IsFocused() {
-		CHECK_ALLEGRO_INIT();
-		return platform_IsFocused(allegroDisplayPointer);
+		//return platform_IsFocused(allegroDisplayPointer);
+		return false;
 	}
 
 	void Window::Focus() {
-		CHECK_ALLEGRO_INIT();
-		platform_Focus(allegroDisplayPointer);
+		//platform_Focus(allegroDisplayPointer);
 	}
 
 	void Window::Hide() {
-		CHECK_ALLEGRO_INIT();
-		platform_Hide(allegroDisplayPointer);
+		//platform_Hide(allegroDisplayPointer);
 	}
 
 	void Window::Show() {
-		CHECK_ALLEGRO_INIT();
-		platform_Show(allegroDisplayPointer);
+		//platform_Show(allegroDisplayPointer);
 	}
 
 	void Window::HideFromTaskbar() {
-		CHECK_ALLEGRO_INIT();
-		platform_HideFromTaskbar(allegroDisplayPointer);
+		//platform_HideFromTaskbar(allegroDisplayPointer);
 	}
 
 	void Window::ShowInTaskbar() {
-		CHECK_ALLEGRO_INIT();
-		platform_ShowInTaskbar(allegroDisplayPointer);
+		//platform_ShowInTaskbar(allegroDisplayPointer);
 	}
 
 	void Window::SetFrameless(bool frameless) {
-		al_set_display_flag(allegroDisplayPointer, ALLEGRO_FRAMELESS, frameless);
+		//al_set_display_flag(allegroDisplayPointer, ALLEGRO_FRAMELESS, frameless);
 	}
 
 	void Window::FlipDisplay() {
-		al_set_target_backbuffer(allegroDisplayPointer);
-		al_flip_display();
+		//al_set_target_backbuffer(allegroDisplayPointer);
+		//al_flip_display();
 	}
 
 	ClipboardFormatID Window::RegisterClipboardFormat(const std::string& format) {
@@ -452,13 +305,13 @@ namespace Battery {
 	}
 
 	bool Window::SetMouseCursor(int cursorID) {
-		return al_set_system_mouse_cursor(allegroDisplayPointer, (ALLEGRO_SYSTEM_MOUSE_CURSOR)cursorID);
+		//return al_set_system_mouse_cursor(allegroDisplayPointer, (ALLEGRO_SYSTEM_MOUSE_CURSOR)cursorID);
+		return false;
 	}
 
 #ifdef _WIN32
 	bool Window::SetWindowExecutableIcon(int iconID) {
-		CHECK_ALLEGRO_INIT();
-
+		/*
 		// Load the embedded icon to the Allegro window so no external 
 		// icon resource is needed
 		HICON icon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(iconID));
@@ -470,7 +323,8 @@ namespace Battery {
 		SetClassLongPtr(winhandle, GCLP_HICON, (LONG_PTR)icon);
 		SetClassLongPtr(winhandle, GCLP_HICONSM, (LONG_PTR)icon);
 
-		return true;
+		return true;*/
+		return false;
 	}
 #endif
 

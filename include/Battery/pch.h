@@ -34,4 +34,7 @@
 #include "imgui_internal.h"
 #include "implot.h"
 
+// SFML
+#include <SFML/Graphics.hpp>
+
 #endif // _BATTERY_PCH_H

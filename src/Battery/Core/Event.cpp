@@ -1,4 +1,4 @@
-
+/*
 #include "Battery/Core/Event.h"
 #include "Battery/Log/Log.h"
 
@@ -37,4 +37,4 @@ namespace Battery {
 		return event;
 	}
 
-}
+}*/

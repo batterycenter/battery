@@ -10,16 +10,16 @@
 #define BATTERYENGINE_DISABLE_NETWORKING
 #endif
 
-#ifndef BATTERYENGINE_DISABLE_NETWORKING
-#define CPPHTTPLIB_OPENSSL_SUPPORT
-#include "Battery/Extern/httplib.h"
-#endif
+//#ifndef BATTERYENGINE_DISABLE_NETWORKING
+//#define CPPHTTPLIB_OPENSSL_SUPPORT
+//#include "Battery/Extern/httplib.h"
+//#endif
 
 #include "Battery/Extern/magic_enum.hpp"
 
-#include "Battery/Core/AllegroContext.h"		// -> Allegro sets some WINNT defines needed for asio/winsock
-#include <asio.hpp>
-using asio::ip::udp;
+//#include "Battery/Core/AllegroContext.h"		// -> Allegro sets some WINNT defines needed for asio/winsock
+//#include <asio.hpp>
+//using asio::ip::udp;
 
 #pragma warning( disable : 4101 )		// Suppress warning about unused variable 'e' (Only in this .cpp file)
 
@@ -28,7 +28,7 @@ namespace Battery {
 	// TODO: Fix UDPServer and Client with the IncompleteTypeWrapper, also for RobotinoLib
 
 	// UDPServer
-
+	/*
 	struct UDPServerData {
 
 		asio::io_service ioService;
@@ -536,5 +536,5 @@ namespace Battery {
 		bool followRedirect) {
 		throw std::logic_error("Feature disabled");
 	}
-#endif
+#endif*/
 }

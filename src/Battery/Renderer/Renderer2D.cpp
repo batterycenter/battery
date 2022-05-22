@@ -1,10 +1,8 @@
 
 #include "Battery/Renderer/Renderer2D.h"
 #include "Battery/Core/Exception.h"
-#include "Battery/Core/AllegroContext.h"
 #include "Battery/Log/Log.h"
 #include "Battery/Core/Config.h"
-#include "Battery/Core/AllegroContext.h"
 
 #ifdef BATTERY_DEBUG // TODO
 #define CHECK_INIT() \
@@ -18,14 +16,7 @@
 
 namespace Battery {
 
-	// This function is local within this .cpp file
-	static ALLEGRO_COLOR ConvertAllegroColor(const glm::vec4& color) {
-		return al_map_rgba(color.r, color.g, color.b, color.a);
-	}
-
-
-
-	VertexData::operator ALLEGRO_VERTEX() const {
+	/*VertexData::operator ALLEGRO_VERTEX() const {
 		ALLEGRO_VERTEX v;
 
 		v.x = position.x;
@@ -359,6 +350,6 @@ namespace Battery {
 	void Renderer2D::DrawPrimitiveLine(const glm::vec2& p1, const glm::vec2& p2, float thickness, const glm::vec4& color) {
 		CHECK_INIT();
 		al_draw_line(p1.x, p1.y, p2.x, p2.y, ConvertAllegroColor(color), thickness);
-	}
+	}*/
 
 }

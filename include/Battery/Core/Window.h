@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Battery/Core/Exception.h"
-#include "Battery/Core/ApplicationEvents.h"
+//#include "Battery/Core/ApplicationEvents.h"
 #include "Battery/Renderer/Bitmap.h"
 #include "clip.h"
 
@@ -10,6 +10,8 @@ struct HWND__;
 typedef HWND__* HWND;
 
 namespace Battery {
+
+	class Event;
 
 	typedef clip::format ClipboardFormatID;
 
@@ -37,16 +39,12 @@ namespace Battery {
 		int GetWidth();
 		int GetHeight();
 		glm::ivec2 GetSize();
-		void SetSize(const glm::vec2 size);
+		void SetSize(const glm::ivec2 size);
 		void SetTitle(const std::string title);		// TODO: Get window title
 		void Maximize();
 		void Minimize();
 		void Restore();
-		glm::vec2 GetMousePosition();
-		bool GetLeftMouseButton();
-		bool GetRightMouseButton();
-		bool GetMouseWheel();
-		HWND GetWinHandle();
+		HWND GetSystemHandle();
 		bool IsFocused();
 		void Focus();
 		void Hide();
@@ -86,12 +84,13 @@ namespace Battery {
 
 	private:
 
-		// These are only for remembering the size until the window is created
-		int width = 0;
-		int height = 0;
-		bool valid = false;
+		sf::RenderWindow window;
 
-		ParentEventContainer eventContainer;
+		// These are only for remembering the size until the window is created
+		uint32_t width = 0;
+		uint32_t height = 0;
+
+		//ParentEventContainer eventContainer;
 		std::function<void(Battery::Event* event)> eventCallback = nullptr;
 	};
 

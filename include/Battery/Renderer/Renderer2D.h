@@ -57,7 +57,7 @@ namespace Battery {
 			arcShader = std::make_unique<ShaderProgram>();
 			rectangleShader = std::make_unique<ShaderProgram>();
 
-			ALLEGRO_DISPLAY* display = window.value().get().allegroDisplayPointer;
+			/*ALLEGRO_DISPLAY* display = window.value().get().allegroDisplayPointer;
 
 			// Load the shader for drawing antialiased lines
 			lineShader->LoadSource(display,
@@ -70,7 +70,7 @@ namespace Battery {
 				BATTERY_SHADER_SOURCE_VERTEX_SIMPLE, BATTERY_SHADER_SOURCE_FRAGMENT_ARC);
 
 			rectangleShader->LoadSource(display,
-				BATTERY_SHADER_SOURCE_VERTEX_SIMPLE, BATTERY_SHADER_SOURCE_FRAGMENT_COLOR_GRADIENT);
+				BATTERY_SHADER_SOURCE_VERTEX_SIMPLE, BATTERY_SHADER_SOURCE_FRAGMENT_COLOR_GRADIENT);*/
 		}
 
 	public:

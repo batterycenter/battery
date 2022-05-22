@@ -1,6 +1,6 @@
 
 #include "Battery/Utils/TimeUtils.h"
-#include "Battery/Core/AllegroContext.h"
+//#include "Battery/Core/AllegroContext.h"
 
 namespace Battery {
 
@@ -20,12 +20,13 @@ namespace Battery {
 	double GetRuntime() {
 		//using namespace std::chrono;
 		//return (std::time_t)duration_cast<microseconds>(system_clock::now().time_since_epoch()).count();
-		if (AllegroContext::GetInstance()->IsInitialized()) {
+		/*if (AllegroContext::GetInstance()->IsInitialized()) {
 			return al_get_time();
 		}
 		else {
 			return 0.0;
-		}
+		}*/
+		return 0.0;
 	}
 
 	//void SleepMicroseconds(std::time_t microseconds) {

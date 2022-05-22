@@ -1,8 +1,6 @@
 
-#include "Battery/Core/AllegroContext.h"
 #include "Battery/Renderer/Bitmap.h"
 #include "Battery/Graphics.h"
-#include "Battery/Core/AllegroContext.h"
 
 #undef LoadBitmap
 
@@ -10,7 +8,7 @@
 
 namespace Battery {
 
-	Bitmap::Bitmap() {}
+	/*Bitmap::Bitmap() {}
 
 	Bitmap::Bitmap(ALLEGRO_BITMAP* bitmap) {
 		allegroBitmap.reset(bitmap);
@@ -294,6 +292,6 @@ namespace Battery {
 		if (allegroBitmap) {
 			allegroBitmap.reset();
 		}
-	}
+	}*/
 
 }

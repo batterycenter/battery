@@ -2,14 +2,8 @@
 #include "Battery/Core/Application.h"
 #include "Battery/Renderer/Renderer2D.h"
 #include "Battery/Utils/TimeUtils.h"
-#include "Battery/Core/AllegroContext.h"
 
 namespace Battery {
-
-	// This function is local within this .cpp file
-	static ALLEGRO_COLOR ConvertAllegroColor(const glm::vec4& color) {
-		return al_map_rgba(color.r, color.g, color.b, color.a);
-	}
 
 	// TODO: Allegro version printen
 
@@ -54,22 +48,10 @@ namespace Battery {
 
 
 
-
-
-	bool Application::GetKey(int allegroKeycode) {
-		ALLEGRO_KEYBOARD_STATE keyboard;
-		al_get_keyboard_state(&keyboard);
-		return al_key_down(&keyboard, allegroKeycode);
-	}
-
-	std::string Application::GetKeyName(int allegroKeycode) {
-		return al_keycode_to_name(allegroKeycode);
-	}
+	
 
 	glm::ivec2 Application::GetPrimaryMonitorSize() {
-		ALLEGRO_MONITOR_INFO monitor;
-		al_get_monitor_info(0, &monitor);
-		return glm::ivec2(monitor.x2 - monitor.x1, monitor.y2 - monitor.y1);
+		return glm::ivec2(sf::VideoMode::getDesktopMode().size.x, sf::VideoMode::getDesktopMode().size.y);
 	}
 
 
@@ -101,12 +83,6 @@ namespace Battery {
 	}
 
 	void Application::runApplication(int argc, const char** argv) {
-
-		// Initialize the Allegro framework
-		if (!AllegroContext::GetInstance()->Initialize(applicationFolderName)) {
-			LOG_CORE_WARN("The Allegro context failed to initialize, closing application...");
-			return;
-		}
 
 		// Create Allegro window
 		window.Create(windowFlags);
@@ -171,10 +147,6 @@ namespace Battery {
 		// Clear layer stack
 		LOG_CORE_TRACE("Clearing any left over layers from layer stack");
 		layers.ClearStack();
-
-		// Shut the allegro framework down
-		LOG_CORE_TRACE("Destroying Allegro context");
-		AllegroContext::GetInstance()->Destroy();
 
 		LOG_CORE_INFO("Application stopped");
 	}
@@ -268,8 +240,8 @@ namespace Battery {
 			if (!frameDiscarded) {
 				PROFILE_CORE_SCOPE("Mainloop flipping frame buffers");
 				LOG_CORE_TRACE("Flipping displays");
-				al_set_current_opengl_context(window.allegroDisplayPointer);
-				al_flip_display();
+				//al_set_current_opengl_context(window.allegroDisplayPointer);
+				//al_flip_display();
 				PROFILE_TIMESTAMP("Flipped display buffers");
 			}
 
@@ -328,7 +300,7 @@ namespace Battery {
 		LOG_CORE_TRACE("Application::OnEvent()");
 		OnEvent(e);
 
-		if (e->WasHandled()) {
+		/*if (e->WasHandled()) {
 			LOG_CORE_TRACE("Event was handled by the base application");
 			return;
 		}
@@ -343,7 +315,7 @@ namespace Battery {
 				LOG_CORE_TRACE("Event was handled by Layer '{}'", layer->GetDebugName().c_str());
 				break;
 			}
-		}
+		}*/
 	}
 
 	void Application::SetFramerate(double f) {

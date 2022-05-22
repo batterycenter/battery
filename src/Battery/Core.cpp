@@ -1,5 +1,4 @@
 
-#include "Battery/SFML.h"
 #include "Battery/Core.h"
 
 namespace Battery {
@@ -10,23 +9,25 @@ namespace Battery {
 
 
 		std::string GetApplicationName() {
-			return al_get_app_name();
+			//return al_get_app_name();
+			return "";
 		}
 
 		std::string GetOrganizationName() {
-			return al_get_org_name();
+			//return al_get_org_name();
+			return "";
 		}
 
 		void SetApplicationName(const std::string& name) {
-			al_set_app_name(name.c_str());
+			//al_set_app_name(name.c_str());
 		}
 
 		void SetOrganizationName(const std::string& name) {
-			al_set_org_name(name.c_str());
+			//al_set_org_name(name.c_str());
 		}
 
 		std::string GetAllegroVersion() {
-			uint32_t version = al_get_allegro_version();
+			uint32_t version = 0;// al_get_allegro_version();
 			int major = version >> 24;
 			int minor = (version >> 16) & 255;
 			int revision = (version >> 8) & 255;

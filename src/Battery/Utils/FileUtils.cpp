@@ -1,15 +1,14 @@
 
 #include "Battery/Core.h"
 #include "Battery/Core/Exception.h"
-#include "Battery/Core/AllegroContext.h"
 #include "Battery/Core/Config.h"
 #include "Battery/Utils/FileUtils.h"
-#include "Battery/Core/AllegroContext.h"
 #include "Battery/Platform/Platform.h"
 
 #include <filesystem>
 
 #ifdef _WIN32
+#include <windows.h>
 #include <shellapi.h>
 #endif
 
@@ -35,7 +34,7 @@ namespace Battery {
 
 
 
-
+	/*
 	bool FilenameExists(const std::string& path) {
 		return al_filename_exists(path.c_str());
 	}
@@ -736,6 +735,6 @@ namespace Battery {
 
 	ALLEGRO_FILE* LoadEmbeddedResource(int id, const char* type) {
 		return platform_LoadEmbeddedResource(id, type);
-	}
+	}*/
 
 }

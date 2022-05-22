@@ -7,7 +7,6 @@
 // ImGui library
 #include "imgui.h"
 #include "imgui_internal.h"
-#include "../res/bindings/imgui_impl_allegro5.h"
 
 /*
 

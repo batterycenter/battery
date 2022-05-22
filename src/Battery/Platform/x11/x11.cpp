@@ -1,4 +1,6 @@
 
+#ifdef __linux__
+
 #include "Battery/Platform/Platform.h"
 #include "Battery/Core/Exception.h"
 #include "Battery/StringUtils.h"
@@ -45,14 +47,6 @@ namespace Battery {
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
 
-	HWND platform_GetWinHandle(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
-	}
-
-	XID platform_GetWindowIdentifier(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		return al_get_x_window_id(allegroDisplayPointer);
-	}
-
 	bool platform_IsFocused(ALLEGRO_DISPLAY* allegroDisplayPointer) {
 
 		Display* display = XOpenDisplay(NULL);
@@ -65,7 +59,7 @@ namespace Battery {
 		XGetInputFocus(display, &focused, &revert_to);
   		XCloseDisplay(display);
 
-		return focused == platform_GetWindowIdentifier(allegroDisplayPointer);
+		return focused == al_get_x_window_id(allegroDisplayPointer);
 	}
 
 	void platform_Focus(ALLEGRO_DISPLAY* allegroDisplayPointer) {
@@ -75,8 +69,8 @@ namespace Battery {
 			return;
   		}
 
-		XSetInputFocus(display, platform_GetWindowIdentifier(allegroDisplayPointer), RevertToNone, CurrentTime);
-		XRaiseWindow(display, platform_GetWindowIdentifier(allegroDisplayPointer));
+		XSetInputFocus(display, al_get_x_window_id(allegroDisplayPointer), RevertToNone, CurrentTime);
+		XRaiseWindow(display, al_get_x_window_id(allegroDisplayPointer));
   		XCloseDisplay(display);
 	}
 
@@ -87,7 +81,7 @@ namespace Battery {
 			return;
   		}
 
-		XUnmapWindow(display, platform_GetWindowIdentifier(allegroDisplayPointer));
+		XUnmapWindow(display, al_get_x_window_id(allegroDisplayPointer));
   		XCloseDisplay(display);
 	}
 
@@ -98,7 +92,7 @@ namespace Battery {
 			return;
   		}
 
-		XMapWindow(display, platform_GetWindowIdentifier(allegroDisplayPointer));
+		XMapWindow(display, al_get_x_window_id(allegroDisplayPointer));
   		XCloseDisplay(display);
 	}
 
@@ -114,7 +108,7 @@ namespace Battery {
   		event.xclient.serial = 0;
   		event.xclient.send_event = True;
   		event.xclient.message_type = XInternAtom(display, "_NET_WM_STATE", False);
-  		event.xclient.window = platform_GetWindowIdentifier(allegroDisplayPointer);
+  		event.xclient.window = al_get_x_window_id(allegroDisplayPointer);
   		event.xclient.format = 32;
   		event.xclient.data.l[0] = _NET_WM_STATE_ADD;
   		event.xclient.data.l[1] = XInternAtom(display, "_NET_WM_STATE_SKIP_TASKBAR", False);
@@ -137,7 +131,7 @@ namespace Battery {
   		event.xclient.serial = 0;
   		event.xclient.send_event = True;
   		event.xclient.message_type = XInternAtom(display, "_NET_WM_STATE", False);
-  		event.xclient.window = platform_GetWindowIdentifier(allegroDisplayPointer);
+  		event.xclient.window = al_get_x_window_id(allegroDisplayPointer);
   		event.xclient.format = 32;
   		event.xclient.data.l[0] = _NET_WM_STATE_REMOVE;
   		event.xclient.data.l[1] = XInternAtom(display, "_NET_WM_STATE_SKIP_TASKBAR", False);
@@ -148,3 +142,5 @@ namespace Battery {
 		XCloseDisplay(display);
 	}
 }
+
+#endif // __linux__

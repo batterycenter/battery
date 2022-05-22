@@ -83,7 +83,8 @@ endif()
 # Linking #
 ###########
 
-target_link_libraries(${PROJECT_NAME} SFML)
+target_link_libraries(${PROJECT_NAME} SFML::Main)
+target_link_libraries(${PROJECT_NAME} SFML::Graphics)
 target_link_libraries(${PROJECT_NAME} glm)
 target_link_libraries(${PROJECT_NAME} imgui)
 target_link_libraries(${PROJECT_NAME} implot)

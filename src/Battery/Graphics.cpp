@@ -1,7 +1,6 @@
 
 #include "Battery/Graphics.h"
-#include "Battery/Core/AllegroContext.h"
-
+/*
 namespace Battery {
 	namespace Graphics {
 
@@ -116,3 +115,4 @@ namespace Battery {
 
 	}
 }
+*/

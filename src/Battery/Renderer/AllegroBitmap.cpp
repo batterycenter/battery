@@ -1,10 +1,9 @@
 
 #include "Battery/Renderer/AllegroBitmap.h"
-#include "Battery/Core/AllegroContext.h"
 
 namespace Battery {
 
-	AllegroBitmap::AllegroBitmap(AllegroBitmap&& bitmap) noexcept {
+	/*AllegroBitmap::AllegroBitmap(AllegroBitmap&& bitmap) noexcept {
 		if (this->bitmap) {
 			al_destroy_bitmap(this->bitmap);
 		}
@@ -30,5 +29,5 @@ namespace Battery {
 			bitmap = nullptr;
 		}
 	}
-
+	*/
 }

@@ -1,9 +1,11 @@
 
+#ifdef _WIN32
+
 #include "Battery/Platform/Platform.h"
 #include "Battery/StringUtils.h"
 #include "Battery/Utils/FileUtils.h"
 
-#include "Battery/Core/Allegro.h"
+#include "windows.h"
 #include "shellapi.h"
 
 namespace Battery {
@@ -84,45 +86,45 @@ namespace Battery {
 		size_t size = SizeofResource(hMod, hRes);
 		if (size == 0) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Size of resource is invalid!", id); return nullptr; }
 
-		ALLEGRO_FILE* file = al_open_memfile(data, size, "r");
-		if (file == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Cannot open Allegro memfile!", id); return nullptr; }
+		//ALLEGRO_FILE* file = al_open_memfile(data, size, "r");
+		//if (file == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Cannot open Allegro memfile!", id); return nullptr; }
 
-		return file;
-	}
-
-	HWND platform_GetWinHandle(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		return al_get_win_window_handle(allegroDisplayPointer);
+		//return file;
+		return nullptr;
 	}
 
 	bool platform_IsFocused(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		return GetForegroundWindow() == platform_GetWinHandle(allegroDisplayPointer);
+		//return GetForegroundWindow() == platform_GetWinHandle(allegroDisplayPointer);
+		return false;
 	}
 
 	void platform_Focus(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		SetForegroundWindow(platform_GetWinHandle(allegroDisplayPointer));
+		//SetForegroundWindow(platform_GetWinHandle(allegroDisplayPointer));
 	}
 
 	void platform_Hide(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_HIDE);
+		//ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_HIDE);
 	}
 
 	void platform_Show(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_SHOW);
+		//ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_SHOW);
 	}
 
 	void platform_HideFromTaskbar(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		long style = GetWindowLongW(platform_GetWinHandle(allegroDisplayPointer), GWL_STYLE);
-		style |= WS_VISIBLE;
-		ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_HIDE);
-		SetWindowLongW(platform_GetWinHandle(allegroDisplayPointer), GWL_STYLE, style);
-		ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_SHOW);
+		//long style = GetWindowLongW(platform_GetWinHandle(allegroDisplayPointer), GWL_STYLE);
+		//style |= WS_VISIBLE;
+		//ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_HIDE);
+		//SetWindowLongW(platform_GetWinHandle(allegroDisplayPointer), GWL_STYLE, style);
+		//ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_SHOW);
 	}
 
 	void platform_ShowInTaskbar(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		long style = GetWindowLongW(platform_GetWinHandle(allegroDisplayPointer), GWL_STYLE);
-		style &= ~(WS_VISIBLE);
-		SetWindowLongW(platform_GetWinHandle(allegroDisplayPointer), GWL_STYLE, style);
-		ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_SHOW);
+		//long style = GetWindowLongW(platform_GetWinHandle(allegroDisplayPointer), GWL_STYLE);
+		//style &= ~(WS_VISIBLE);
+		//SetWindowLongW(platform_GetWinHandle(allegroDisplayPointer), GWL_STYLE, style);
+		//ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_SHOW);
 	}
 
 }
+
+#endif // _WIN32

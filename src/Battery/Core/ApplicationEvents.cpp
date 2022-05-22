@@ -1,4 +1,4 @@
-
+/*
 #include "Battery/Core/ApplicationEvents.h"
 #include "Battery/Core/AllegroContext.h"
 
@@ -194,3 +194,4 @@ namespace Battery {
 	}
 
 }
+*/
