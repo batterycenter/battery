@@ -1,6 +1,7 @@
 
 set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/modules/imgui)
 add_library(imgui STATIC)
+add_library(imgui::imgui ALIAS imgui)
 
 target_sources(imgui PRIVATE
         ${IMGUI_DIR}/imgui_demo.cpp

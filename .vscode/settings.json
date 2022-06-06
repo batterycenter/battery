@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.cmake.in": "cmake",
+        "chrono": "cpp"
+    }
+}

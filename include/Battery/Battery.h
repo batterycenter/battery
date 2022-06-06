@@ -17,7 +17,7 @@
 #include "Battery/Utils/NetUtils.h"
 #include "Battery/Utils/ImGuiUtils.h"
 #include "Battery/Platform/Dialog.h"
-#include "Battery/Log/Log.h"
+#include "Battery/Core/Log.h"
 #include "Battery/Renderer/Renderer2D.h"
 #include "Battery/Renderer/Bitmap.h"
 #include "Battery/Renderer/ShaderProgram.h"

@@ -9,8 +9,6 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose Release or Debug" FORCE)
 endif()
 
-
-
 ##################################
 # Options: Library configuration #
 ##################################
@@ -34,11 +32,13 @@ set_property(TARGET sfml-system PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<
 
 include(cmake/glm.cmake)
 include(cmake/imgui.cmake)
+include(cmake/imgui-sfml.cmake)
 include(cmake/implot.cmake)
 include(cmake/spdlog.cmake)
 include(cmake/clip.cmake)
 
 set_property(TARGET imgui PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set_property(TARGET imgui_sfml PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 set_property(TARGET implot PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 set_property(TARGET spdlog PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 set_property(TARGET clip PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
@@ -51,23 +51,24 @@ set_property(TARGET clip PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:
 #############################
 
 file(GLOB_RECURSE HEADER_FILES CONFIGURE_DEPENDS "include/*")
-file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS "src/Battery/*")
+file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS "src/*")
 
-add_library(${PROJECT_NAME} STATIC ${SRC_FILES} ${HEADER_FILES} "cmake/BatteryConfig.cmake.in")
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)
+add_library(Battery STATIC ${SRC_FILES} ${HEADER_FILES} "cmake/BatteryConfig.cmake.in")
+add_library(Battery::Battery ALIAS Battery)
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+target_compile_features(Battery PRIVATE cxx_std_17)
+set_target_properties(Battery PROPERTIES CXX_EXTENSIONS OFF)
+
+target_include_directories(Battery PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
 
 
-
 if(MSVC)
-    set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    set_property(TARGET Battery PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 else()
-    target_compile_options(${PROJECT_NAME} PRIVATE -Wno-psabi)
+    target_compile_options(Battery PRIVATE -Wno-psabi)
 endif()
 
 
@@ -77,7 +78,7 @@ endif()
 ############################
 
 if (WIN32)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE
+    target_compile_definitions(Battery PRIVATE
        WIN32_LEAN_AND_MEAN      # Prevents Windows.h from adding unnecessary includes
        NOMINMAX                 # Prevents Windows.h from defining min/max as macros 
        _CRT_SECURE_NO_WARNINGS
@@ -93,13 +94,14 @@ endif()
 # Linking #
 ###########
 
-target_link_libraries(${PROJECT_NAME} SFML::Main)
-target_link_libraries(${PROJECT_NAME} SFML::Graphics)
-target_link_libraries(${PROJECT_NAME} glm)
-target_link_libraries(${PROJECT_NAME} imgui)
-target_link_libraries(${PROJECT_NAME} implot)
-target_link_libraries(${PROJECT_NAME} spdlog)
-target_link_libraries(${PROJECT_NAME} clip)
+target_link_libraries(Battery SFML::Main)
+target_link_libraries(Battery SFML::Graphics)
+target_link_libraries(Battery glm::glm)
+target_link_libraries(Battery imgui::imgui)
+target_link_libraries(Battery imgui_sfml::imgui_sfml)
+target_link_libraries(Battery implot::implot)
+target_link_libraries(Battery spdlog::spdlog)
+target_link_libraries(Battery clip::clip)
 
 
 
@@ -108,7 +110,7 @@ target_link_libraries(${PROJECT_NAME} clip)
 # Precompiled Headers #
 #######################
 
-target_precompile_headers(${PROJECT_NAME} PRIVATE include/Battery/pch.h)
+target_precompile_headers(Battery PRIVATE include/Battery/pch.h)
 
 
 
@@ -120,9 +122,9 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE include/Battery/pch.h)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" PREFIX "Source Files" FILES ${SRC_FILES})
-source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" PREFIX "Header Files" FILES ${HEADER_FILES})
-source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/cmake" PREFIX "cmake" FILES "cmake/BatteryConfig.cmake.in")
+source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/src" PREFIX "Source Files" FILES ${SRC_FILES})
+source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include" PREFIX "Header Files" FILES ${HEADER_FILES})
+source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/cmake" PREFIX "cmake" FILES "cmake/BatteryConfig.cmake.in")
 
 
 
@@ -132,15 +134,15 @@ source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/cmake" PREFIX "cmake" FILES "cmak
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
-    ${PROJECT_NAME}ConfigVersion.cmake
+    BatteryConfigVersion.cmake
     VERSION ${PACKAGE_VERSION}
     COMPATIBILITY AnyNewerVersion
 )
 
 # Install binaries
 install(
-    TARGETS ${PROJECT_NAME}
-    EXPORT ${PROJECT_NAME}Targets
+    TARGETS Battery
+    EXPORT BatteryTargets
     LIBRARY DESTINATION "lib"
     ARCHIVE DESTINATION "lib"
     RUNTIME DESTINATION "bin"
@@ -155,15 +157,15 @@ install(
 )
 
 install(
-    EXPORT ${PROJECT_NAME}Targets 
-    DESTINATION "lib/cmake/${PROJECT_NAME}"
-    NAMESPACE ${PROJECT_NAME}::
+    EXPORT BatteryTargets 
+    DESTINATION "lib/cmake/Battery"
+    NAMESPACE Battery::
 )
 
 # Install Targets
-configure_file(cmake/${PROJECT_NAME}Config.cmake.in ${PROJECT_NAME}Config.cmake @ONLY)
+configure_file(cmake/BatteryConfig.cmake.in BatteryConfig.cmake @ONLY)
 install(
-    FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-          "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
-    DESTINATION lib/cmake/${PROJECT_NAME}
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/BatteryConfig.cmake"
+          "${CMAKE_CURRENT_BINARY_DIR}/BatteryConfigVersion.cmake"
+    DESTINATION lib/cmake/Battery
 )

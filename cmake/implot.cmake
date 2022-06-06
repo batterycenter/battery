@@ -1,6 +1,7 @@
 
 set(IMPLOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/modules/implot)
 add_library(implot STATIC)
+add_library(implot::implot ALIAS implot)
 
 target_sources(implot PRIVATE
         ${IMPLOT_DIR}/implot_demo.cpp

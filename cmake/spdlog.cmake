@@ -1,6 +1,7 @@
 
 set(SPDLOG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/modules/spdlog)
 add_library(spdlog STATIC)
+add_library(spdlog::spdlog ALIAS spdlog)
 
 target_sources(spdlog PRIVATE
         ${SPDLOG_DIR}/src/async.cpp

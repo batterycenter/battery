@@ -1,6 +1,7 @@
 
 set(CLIP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/modules/clip)
 add_library(clip STATIC)
+add_library(clip::clip ALIAS clip)
 
 set(SRC_FILES)
 if (WIN32)

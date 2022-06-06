@@ -2,37 +2,22 @@
 #include "Battery/Core/Application.h"
 #include "Battery/Renderer/Renderer2D.h"
 #include "Battery/Utils/TimeUtils.h"
+#include "imgui-SFML.h"
 
 namespace Battery {
 
-	// Global application pointer
-	Application* applicationPointer = nullptr;
-
-	Application& GetApp() {
-		if (!applicationPointer) {
-			throw Battery::Exception(std::string(__FUNCTION__) + ": The application has not been constructed yet! Use a Battery::Application derived class!");
-		}
-
-		return *applicationPointer;
-	}
-
-	sf::Window& GetMainWindow() {
-		return GetApp().window;
-	}
-
 	Application::Application() {
-
-		if (applicationPointer != nullptr) {
-			throw Battery::Exception("Cannot construct Battery::Application: Another application has already been constructed!");
-		}
-
-		applicationPointer = this;
 		LOG_CORE_TRACE("Creating Application");
 	}
 
 	Application::~Application() {
-		applicationPointer = nullptr;
 		LOG_CORE_TRACE("Application stopped, destroying");
+	}
+
+	void Application::OnEvent(sf::Event event, bool& handled) {
+		if (event.type == sf::Event::EventType::Closed) {
+			CloseApplication();
+		}
 	}
 
 
@@ -60,7 +45,37 @@ namespace Battery {
 
 	void Application::Run(int width, int height, int argc, const char** argv) {
 		try {
-			RunApplication(width, height, argc, argv);
+
+			// Auto-fit window size
+			if (width <= 0) width = GetPrimaryMonitorSize().x;
+			if (height <= 0) height = GetPrimaryMonitorSize().y;
+
+			// Create window
+			window.create(sf::VideoMode({ (uint32_t)width, (uint32_t)height }), BATTERY_DEFAULT_TITLE);
+			if (!window.isOpen())
+				throw Battery::Exception("Could not create SFML window! Please check the graphics drivers!");
+
+			// Parse command line arguments
+			LOG_CORE_TRACE("Command line arguments:");
+			for (int i = 0; i < argc; i++) {
+				args.push_back(argv[i]);
+				LOG_CORE_TRACE(std::string("[") + std::to_string(i) + "]: " + args[i]);
+			}
+
+			ImGui::SFML::Init(window);
+			Renderer2D::Setup();
+
+			OnStartup();
+			RunMainloop();
+			OnShutdown();
+
+			Renderer2D::Shutdown();
+			ImGui::SFML::Shutdown();
+
+			layers.ClearStack();
+			window.close();
+
+			LOG_CORE_INFO("Application stopped");
 		}
 		catch (const Battery::Exception& e) {
 			LOG_CORE_CRITICAL(std::string("Unhandled Battery::Exception: '") + e.what() + "'");
@@ -73,76 +88,9 @@ namespace Battery {
 		}
 	}
 
-	void Application::RunApplication(int width, int height, int argc, const char** argv) {
-
-		// Auto-fit window size
-		if (width <= 0) width = GetPrimaryMonitorSize().x;
-		if (height <= 0) height = GetPrimaryMonitorSize().y;
-
-		window.create(sf::VideoMode({ (uint32_t)width, (uint32_t)height }), BATTERY_DEFAULT_TITLE);
-		if (!window.isOpen())
-			throw Battery::Exception("Could not create SFML window! Please check the graphics drivers!");
-
-		// Load 2D renderer and draw the default background color
-		//Renderer2D::Setup();
-
-		// Parse command line arguments
-		LOG_CORE_TRACE("Command line arguments:");
-		for (int i = 0; i < argc; i++) {
-			args.push_back(argv[i]);
-			LOG_CORE_TRACE(std::string("[") + std::to_string(i) + "]: " + args[i]);
-		}
-
-		// Client startup
-		try {
-			LOG_CORE_INFO("Application created, loading client OnStartup()");
-			OnStartup();
-			LOG_CORE_INFO("Application loaded, entering main loop");
-		}
-		catch (const Battery::Exception& e) {
-			LOG_CORE_CRITICAL(std::string("Application::OnStartup() threw Battery::Exception: ") + e.what());
-			LOG_CORE_ERROR("Shutting engine down...");
-			shouldClose = true;
-		}
-
-		// Client update
-		try {
-			RunMainloop();
-		}
-		catch (const Battery::Exception& e) {
-			LOG_CORE_CRITICAL(std::string("Some Layer's OnUpdate() function threw Battery::Exception: ") + e.what());
-			LOG_CORE_ERROR("Shutting engine down...");
-		}
-
-		// Client shutdown
-		try {
-			LOG_CORE_INFO("Shutting down: client OnShutdown()");
-			OnShutdown();
-		}
-		catch (const Battery::Exception& e) {
-			LOG_CORE_CRITICAL(std::string("Application::OnShutdown() threw Battery::Exception: ") + e.what());
-		}
-
-		// Unload 2D renderer
-		LOG_CORE_TRACE("Shutting down 2D Renderer");
-		Renderer2D::Shutdown();
-
-		// Destroy Allegro window
-		window.close();
-
-		// Clear layer stack
-		LOG_CORE_TRACE("Clearing any left over layers from layer stack");
-		layers.ClearStack();
-
-		LOG_CORE_INFO("Application stopped");
-	}
-
 	void Application::RunMainloop() {
 
-		double nextFrame = GetRuntime();
-		double desiredFrametime = 0.0;
-
-		while (!shouldClose) {
+		while (!shutdownRequested) {
 
 			// Update everything
 			PreUpdate();
@@ -154,27 +102,8 @@ namespace Battery {
 			RenderApp();
 			PostRender();
 
-			// Wait for the right time to render
-			desiredFrametime = 1.0 / desiredFramerate;
-			LOG_CORE_TRACE("Waiting for frametime before flipping screen");
-			Sleep(nextFrame - GetRuntime());
-
-			// Set time for next frame
-			double now = GetRuntime();
-			if (now <= nextFrame + desiredFrametime) {	// Everything is on time, just increment for
-				nextFrame += desiredFrametime;			// maximum accuracy in framerate
-			}
-			else {	// Too slow, a frame was missed, increment from timepoint now, but framerate will
-				nextFrame = now + desiredFrametime;					// not be 100% accurate
-			}
-
-			// Show rendered image
-			if (!frameDiscarded) {
-				//al_set_current_opengl_context(window.allegroDisplayPointer);
-				//al_flip_display();
-			}
-
-			//ProfilerStorage::GetInstance().ApplyProfiles(frametimeTimer.Update());
+			// Show rendered image (and sleep)
+			window.display();
 		}
 	}
 
@@ -189,7 +118,8 @@ namespace Battery {
 			framerate = 1.0 / frametime;
 		}
 
-		frameDiscarded = false;
+		HandleEvents();
+        ImGui::SFML::Update(window, window_dt.restart());
 	}
 
 	void Application::PostUpdate() {
@@ -197,11 +127,11 @@ namespace Battery {
 	}
 
 	void Application::PreRender() {
-		// Paint the background by default
-		Renderer2D::DrawBackground(BATTERY_DEFAULT_BACKGROUND_COLOR);
+		window.clear(BATTERY_DEFAULT_BACKGROUND_COLOR);
 	}
 
 	void Application::PostRender() {
+        ImGui::SFML::Render(window);
 		Renderer2D::EndUnfinishedScene();
 	}
 
@@ -210,11 +140,6 @@ namespace Battery {
 		// First update the base application
 		LOG_CORE_TRACE("Application::OnUpdate()");
 		OnUpdate();
-
-		if (frameDiscarded) {
-			LOG_CORE_TRACE("{}: {}", __FUNCTION__, "Skipping further update routines, frame was discarded");
-			return;
-		}
 
 		// Then propagate through the stack and update all layers sequentially
 		for (auto& layer : layers.GetLayers()) {
@@ -225,54 +150,51 @@ namespace Battery {
 
 	void Application::RenderApp() {
 
-		if (frameDiscarded) {
-			LOG_CORE_TRACE("{}: {}", __FUNCTION__, "Skipping main render routine, frame was discarded");
-			return;
-		}
-
 		// First render the base application
 		LOG_CORE_TRACE("Application::OnRender()");
 		OnRender();
-
-		if (frameDiscarded) {
-			LOG_CORE_TRACE("{}: {}", __FUNCTION__, "Skipping further render routines, frame was discarded");
-			return;
-		}
 
 		// Then propagate through the stack and render all layers sequentially
 		for (auto& layer : layers.GetLayers()) {
 			LOG_CORE_TRACE("Layer '{}' OnRender()", layer->GetDebugName().c_str());
 			layer->OnRender();
 		}
-		PROFILE_TIMESTAMP(__FUNCTION__"()");
 	}
 
-	void Application::RunEvents(Event* e) {
+	void Application::HandleEvents() {
 
-		// Give the event to the base application
-		LOG_CORE_TRACE("Application::OnEvent()");
-		OnEvent(e);
+        sf::Event event;
+		bool handled = false;
 
-		/*if (e->WasHandled()) {
-			LOG_CORE_TRACE("Event was handled by the base application");
-			return;
-		}
+		while (window.pollEvent(event)) {
+            ImGui::SFML::ProcessEvent(window, event);
 
-		// Propagate through the layer stack in reverse order
-		for (size_t i = 0; i < layers.GetLayers().size(); i++) {
-			auto& layer = layers.GetLayers()[layers.GetLayers().size() - i - 1];
-			LOG_CORE_TRACE("Layer '{}' OnEvent()", layer->GetDebugName().c_str());
-			layer->OnEvent(e);
+			// Give the event to the base application
+			LOG_CORE_TRACE("Application::OnEvent()");
+			OnEvent(event, handled);
 
-			if (e->WasHandled()) {
-				LOG_CORE_TRACE("Event was handled by Layer '{}'", layer->GetDebugName().c_str());
-				break;
+			if (handled) {
+				LOG_CORE_TRACE("Event was handled by the base application");
+				continue;
 			}
-		}*/
+
+			// Propagate through the layer stack in reverse order
+			for (size_t i = 0; i < layers.GetLayers().size(); i++) {
+				auto& layer = layers.GetLayers()[layers.GetLayers().size() - i - 1];
+				LOG_CORE_TRACE("Layer '{}' OnEvent()", layer->GetDebugName().c_str());
+				handled = false;
+				layer->OnEvent(event, handled);
+
+				if (handled) {
+					LOG_CORE_TRACE("Event was handled by Layer '{}'", layer->GetDebugName().c_str());
+					break;
+				}
+			}
+        }
 	}
 
-	void Application::SetFramerate(double f) {
-		desiredFramerate = f;
+	void Application::SetFramerate(float fps) {
+		window.setFramerateLimit(fps);
 	}
 
 	void Application::PushLayer(std::shared_ptr<Layer> layer) {
@@ -288,10 +210,6 @@ namespace Battery {
 	}
 
 	void Application::CloseApplication() {
-		shouldClose = true;
-	}
-
-	void Application::DiscardFrame() {
-		frameDiscarded = true;
+		shutdownRequested = true;
 	}
 }

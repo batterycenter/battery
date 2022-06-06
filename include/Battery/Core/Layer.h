@@ -38,7 +38,7 @@ namespace Battery {
 
 		virtual void OnRender() {}
 
-		virtual void OnEvent(Battery::Event* e) {}
+		virtual void OnEvent(sf::Event e, bool& handled) {}
 
 		const std::string& GetDebugName() const {
 			return layerName;

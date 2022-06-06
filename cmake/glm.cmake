@@ -1,6 +1,7 @@
 
 set(GLM_DIR ${CMAKE_CURRENT_SOURCE_DIR}/modules/glm)
 add_library(glm INTERFACE)
+add_library(glm::glm ALIAS glm)
 
 target_include_directories(glm INTERFACE
     $<BUILD_INTERFACE:${GLM_DIR}/>
