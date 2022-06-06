@@ -16,3 +16,6 @@
 [submodule "modules/clip"]
 	path = modules/clip
 	url = https://github.com/dacap/clip.git
+[submodule "modules/imgui-sfml"]
+	path = modules/imgui-sfml
+	url = https://github.com/eliasdaler/imgui-sfml.git
