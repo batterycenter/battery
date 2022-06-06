@@ -17,23 +17,19 @@ namespace Battery {
 		}
 
 		~LayerStack() {
-			if (layers.size() > 0) {
-				ClearStack();
-			}
+			ClearStack();
 		}
 
 		void PushLayer(std::shared_ptr<Layer> layer) {
-			LOG_CORE_TRACE("Pushing Layer '" + layer->GetDebugName() + "' onto Layer Stack");
+			LOG_CORE_TRACE("Pushing Layer onto Layer Stack");
 			auto it = layers.insert(layers.begin() + layerNum, std::move(layer));
-			LOG_CORE_TRACE("Layer '{}' OnAttach()", (*it)->GetDebugName().c_str());
 			(*it)->OnAttach();
 			layerNum++;
 		}
 		
 		void PushOverlay(std::shared_ptr<Layer> overlay) {
-			LOG_CORE_TRACE("Pushing Overlay '" + overlay->GetDebugName() + "' onto Layer Stack");
+			LOG_CORE_TRACE("Pushing Overlay onto Layer Stack");
 			layers.push_back(std::move(overlay));
-			LOG_CORE_TRACE("Layer '{}' OnAttach()", layers[layers.size() - 1]->GetDebugName().c_str());
 			layers[layers.size() - 1]->OnAttach();
 		}
 
@@ -42,10 +38,13 @@ namespace Battery {
 		}
 
 		void ClearStack() {
-			LOG_CORE_TRACE("Popping all left over layers from Layer Stack");
 
+			if (layers.size() == 0)
+				return;
+
+			LOG_CORE_TRACE("Popping all layers from LayerStack");
 			while (layers.size() > 0) {
-				LOG_CORE_TRACE("Layer '{}' OnDetach()", layers[layers.size() - 1]->GetDebugName().c_str());
+				LOG_CORE_TRACE("Layer OnDetach()");
 				layers[layers.size() - 1]->OnDetach();
 				layers.pop_back();
 			}

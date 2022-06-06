@@ -1,10 +1,7 @@
 #pragma once
 
 #include "Battery/pch.h"
-#include "Battery/Core/Window.h"
 #include "Battery/Platform/Platform.h"
-
-struct ALLEGRO_FILE;
 
 namespace Battery {
 

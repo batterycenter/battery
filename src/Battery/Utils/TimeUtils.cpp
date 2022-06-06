@@ -3,7 +3,7 @@
 
 namespace Battery {
 
-	double runtime_start = 0.0;
+	sf::Time runtime_start = sf::microseconds(0);
 
 	std::time_t ConvertTimestamp(const std::string& timestamp) {
 		std::istringstream ss(timestamp);
@@ -18,14 +18,14 @@ namespace Battery {
 		return mktime(&t);
 	}
 
-	double GetRuntime() {
+	sf::Time GetRuntime() {
 		
-		if (runtime_start == 0.0)
-			return 0.0;
-		
+		if (runtime_start.asMicroseconds() == 0)	// Not initialized yet
+			return sf::microseconds(0);
+
 		using namespace std::chrono;
-		double timestamp = duration_cast<microseconds>(system_clock::now().time_since_epoch()).count() / 1000000.0;
-		return timestamp - runtime_start;
+		uint64_t timestamp = duration_cast<std::chrono::microseconds>(system_clock::now().time_since_epoch()).count();
+		return sf::microseconds(timestamp - runtime_start.asMicroseconds());
 	}
 
 	void ClearRuntime() {
@@ -34,5 +34,9 @@ namespace Battery {
 
 	void Sleep(double seconds) {
 		std::this_thread::sleep_for(std::chrono::microseconds((size_t)(seconds * 1000000.0)));
+	}
+
+	void Sleep(sf::Time time) {
+		std::this_thread::sleep_for(std::chrono::microseconds((size_t)(time.asMicroseconds())));
 	}
 }

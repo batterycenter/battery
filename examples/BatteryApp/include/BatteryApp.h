@@ -7,6 +7,6 @@ public:
 
     //void OnStartup() override;
     //void OnUpdate() override;
-    //void OnRender() override;
+    void OnRender() override;
     //void OnShutdown() override;
 };

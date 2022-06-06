@@ -15,11 +15,10 @@ namespace Battery {
 	std::time_t ConvertTimestamp(const std::string& timestamp);
 
 	/// <summary>
-	/// Get the time in seconds since the Application has been initalized, 
-	/// Precision goes down to the microseconds range. If not initialized, returns 0.
+	/// Get the time since the Application has been initalized, if not initialized, returns 0.
 	/// </summary>
-	/// <returns>double - Time since engine is running in seconds</returns>
-	double GetRuntime();
+	/// <returns>Time since engine is running</returns>
+	sf::Time GetRuntime();
 
 	/// <summary>
 	/// Reset the runtime counter to 0. WARNING: Only to be used internally!!
@@ -31,4 +30,10 @@ namespace Battery {
 	/// </summary>
 	/// <param name="microseconds">- Time to sleep in seconds</param>
 	void Sleep(double seconds);
+
+	/// <summary>
+	/// Put the current thread to sleep.
+	/// </summary>
+	/// <param name="microseconds">- Time to sleep</param>
+	void Sleep(sf::Time time);
 }

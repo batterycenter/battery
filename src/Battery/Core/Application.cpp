@@ -2,6 +2,10 @@
 #include "Battery/Core/Application.h"
 #include "Battery/Renderer/Renderer2D.h"
 #include "Battery/Utils/TimeUtils.h"
+#include "Battery/Utils/ImGuiUtils.h"
+
+#include "Battery/Fonts/RobotoMedium.h"
+
 #include "imgui-SFML.h"
 
 namespace Battery {
@@ -14,20 +18,36 @@ namespace Battery {
 		LOG_CORE_TRACE("Application stopped, destroying");
 	}
 
+	void Application::OnStartup() {}
+	void Application::OnUpdate() {}
+	void Application::OnRender() {}
+	void Application::OnShutdown() {}
+
 	void Application::OnEvent(sf::Event event, bool& handled) {
 		if (event.type == sf::Event::EventType::Closed) {
 			CloseApplication();
 		}
 	}
 
+	void Application::SetFramerate(float fps) {
+		window.setFramerateLimit(fps);
+	}
 
+	void Application::PushLayer(std::shared_ptr<Layer> layer) {
+		layers.PushLayer(layer);
+	}
 
+	void Application::PushOverlay(std::shared_ptr<Layer> overlay) {
+		layers.PushOverlay(overlay);
+	}
 
+	void Application::ClearLayerStack() {
+		layers.ClearStack();
+	}
 
-
-
-
-	
+	void Application::CloseApplication() {
+		shutdownRequested = true;
+	}
 
 	glm::ivec2 Application::GetPrimaryMonitorSize() {
 		return glm::ivec2(sf::VideoMode::getDesktopMode().size.x, sf::VideoMode::getDesktopMode().size.y);
@@ -41,10 +61,9 @@ namespace Battery {
 
 
 
-
-
 	void Application::Run(int width, int height, int argc, const char** argv) {
 		try {
+			LOG_CORE_INFO("Loading Application");
 
 			// Auto-fit window size
 			if (width <= 0) width = GetPrimaryMonitorSize().x;
@@ -62,14 +81,27 @@ namespace Battery {
 				LOG_CORE_TRACE(std::string("[") + std::to_string(i) + "]: " + args[i]);
 			}
 
+			// Load ImGui
+			IMGUI_CHECKVERSION();
 			ImGui::SFML::Init(window);
+			ImGui::StyleColorsDark();
+			CaptureCurrentColorSchemeAsDefault();
+			LoadBatteryColorScheme();
+
+			defaultFont = ADD_FONT(RobotoMedium, 16);
+			ImGui::GetIO().Fonts->Build();
+
+			ImPlot::CreateContext();
 			Renderer2D::Setup();
 
 			OnStartup();
+			LOG_CORE_INFO("Application running");
 			RunMainloop();
+			LOG_CORE_INFO("Stopping Application");
 			OnShutdown();
 
 			Renderer2D::Shutdown();
+			ImPlot::DestroyContext();
 			ImGui::SFML::Shutdown();
 
 			layers.ClearStack();
@@ -109,30 +141,15 @@ namespace Battery {
 
 	void Application::PreUpdate() {
 
-		static double old = GetRuntime();
-		double now = GetRuntime();
-		frametime = now - old;
-		old = now;
+		sf::Time dt = frametime_clock.restart();
+		frametime = dt.asSeconds();
 				
 		if (frametime != 0.f) {
-			framerate = 1.0 / frametime;
+			framerate = 1.f / frametime;
 		}
 
 		HandleEvents();
-        ImGui::SFML::Update(window, window_dt.restart());
-	}
-
-	void Application::PostUpdate() {
-		framecount++;
-	}
-
-	void Application::PreRender() {
-		window.clear(BATTERY_DEFAULT_BACKGROUND_COLOR);
-	}
-
-	void Application::PostRender() {
-        ImGui::SFML::Render(window);
-		Renderer2D::EndUnfinishedScene();
+        ImGui::SFML::Update(window, dt);
 	}
 
 	void Application::UpdateApp() {
@@ -143,9 +160,18 @@ namespace Battery {
 
 		// Then propagate through the stack and update all layers sequentially
 		for (auto& layer : layers.GetLayers()) {
-			LOG_CORE_TRACE("Layer '{}' OnUpdate()", layer->GetDebugName().c_str());
+			LOG_CORE_TRACE("Layer OnUpdate()");
 			layer->OnUpdate();
 		}
+	}
+
+	void Application::PostUpdate() {
+		framecount++;
+	}
+
+	void Application::PreRender() {
+		window.clear(BATTERY_DEFAULT_BACKGROUND_COLOR);
+		ImGui::PushFont(defaultFont);
 	}
 
 	void Application::RenderApp() {
@@ -156,9 +182,14 @@ namespace Battery {
 
 		// Then propagate through the stack and render all layers sequentially
 		for (auto& layer : layers.GetLayers()) {
-			LOG_CORE_TRACE("Layer '{}' OnRender()", layer->GetDebugName().c_str());
+			LOG_CORE_TRACE("Layer OnRender()");
 			layer->OnRender();
 		}
+	}
+
+	void Application::PostRender() {
+		ImGui::PopFont();
+        ImGui::SFML::Render(window);
 	}
 
 	void Application::HandleEvents() {
@@ -181,35 +212,15 @@ namespace Battery {
 			// Propagate through the layer stack in reverse order
 			for (size_t i = 0; i < layers.GetLayers().size(); i++) {
 				auto& layer = layers.GetLayers()[layers.GetLayers().size() - i - 1];
-				LOG_CORE_TRACE("Layer '{}' OnEvent()", layer->GetDebugName().c_str());
+				LOG_CORE_TRACE("Layer OnEvent()");
 				handled = false;
 				layer->OnEvent(event, handled);
 
 				if (handled) {
-					LOG_CORE_TRACE("Event was handled by Layer '{}'", layer->GetDebugName().c_str());
+					LOG_CORE_TRACE("Event was handled by Layer #{}", i);
 					break;
 				}
 			}
         }
-	}
-
-	void Application::SetFramerate(float fps) {
-		window.setFramerateLimit(fps);
-	}
-
-	void Application::PushLayer(std::shared_ptr<Layer> layer) {
-		layers.PushLayer(layer);
-	}
-
-	void Application::PushOverlay(std::shared_ptr<Layer> overlay) {
-		layers.PushOverlay(overlay);
-	}
-
-	void Application::ClearLayerStack() {
-		layers.ClearStack();
-	}
-
-	void Application::CloseApplication() {
-		shutdownRequested = true;
 	}
 }

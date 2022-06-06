@@ -37,11 +37,11 @@ namespace Battery {
 	/*
 	bool FilenameExists(const std::string& path) {
 		return al_filename_exists(path.c_str());
-	}
+	}*/
 
 	bool FileExists(const std::string& path) {
 
-		if (!FilenameExists(path))
+		/*if (!FilenameExists(path))
 			return false;
 
 		ALLEGRO_FILE* file = al_fopen(path.c_str(), "r");
@@ -49,13 +49,13 @@ namespace Battery {
 		if (file == nullptr)
 			return false;
 
-		al_fclose(file);
+		al_fclose(file);*/
 		return true;
 	}
 
 	bool DirectoryExists(const std::string& path) {
 
-		if (!FilenameExists(path))
+		/*if (!FilenameExists(path))
 			return false;
 
 		ALLEGRO_FILE* file = al_fopen(path.c_str(), "r");
@@ -63,10 +63,10 @@ namespace Battery {
 		if (file == nullptr)
 			return true;
 
-		al_fclose(file);
+		al_fclose(file);*/
 		return false;
 	}
-
+/*
 	std::vector<std::string> GetDirectoryContent(const std::string& path) {
 		std::vector<std::string> elements;
 
@@ -95,12 +95,13 @@ namespace Battery {
 		al_destroy_fs_entry(dir);
 
 		return elements;
-	}
+	}*/
 
 	bool MakeDirectory(const std::string& path) {
-		return al_make_directory(path.c_str());
+		//return al_make_directory(path.c_str());
+		return false;
 	}
-
+/*
 	bool RenameFile(const std::string& file, const std::string& targetFile) {
 		LOG_CORE_TRACE("{}: {}", __FUNCTION__, "Renaming file '{}' to '{}'", file, targetFile);
 		try {
@@ -169,9 +170,11 @@ namespace Battery {
 
 		LOG_CORE_TRACE("{}: {}", __FUNCTION__, "Done");
 		return true;
-	}
+	}*/
 
 	File ReadFile(const std::string& path, bool binary) {
+
+		/*std::ifstream file(path, (binary ? "rb" : "r"));
 
 		ALLEGRO_FILE* file = al_fopen(path.c_str(), (binary ? "rb" : "r"));
 
@@ -193,12 +196,13 @@ namespace Battery {
 		} while (!al_feof(file));
 
 		al_fclose(file);
-		return File(path, str, true);
+		return File(path, str, true);*/
+		return File("", "", false);
 	}
 
 	bool WriteFile(const std::string& path, const std::string& content, bool binary) {
 
-		PrepareDirectory(GetParentDirectory(path));
+		/*PrepareDirectory(GetParentDirectory(path));
 
 		ALLEGRO_FILE* file = al_fopen(path.c_str(), (binary ? "wb" : "w"));
 
@@ -234,10 +238,10 @@ namespace Battery {
 			return false;
 		}
 
-		al_fclose(file);
+		al_fclose(file);*/
 		return true;
 	}
-
+/*
 	bool RemoveFile(const std::string& path) {
 		return al_remove_filename(path.c_str());
 	}
@@ -262,10 +266,10 @@ namespace Battery {
 		}
 
 		return RemoveFile(path);
-	}
+	}*/
 
 	bool RemoveDirectoryContent(const std::string& path) {
-
+/*
 		if (!DirectoryExists(path)) {
 			return false;
 		}
@@ -281,7 +285,7 @@ namespace Battery {
 				if (!RemoveFile(path + "/" + e))
 					return false;
 			}
-		}
+		}*/
 
 		return true;
 	}
@@ -304,7 +308,7 @@ namespace Battery {
 		return MakeDirectory(path);
 	}
 
-
+/*
 
 
 
@@ -717,13 +721,13 @@ namespace Battery {
 		auto exitCode = system(command.c_str());
 
 		return std::make_pair(exitCode == 0, exitCode);
-	}
+	}*/
 
 	std::pair<bool, size_t> ExecuteShellCommandSilent(const std::string& command, bool hidden) {
 		return platform_ExecuteShellCommandSilent(command, hidden);
 	}
 
-
+/*
 
 
 
