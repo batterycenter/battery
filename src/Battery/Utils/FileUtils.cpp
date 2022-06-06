@@ -314,7 +314,7 @@ namespace Battery {
 
 
 	std::string PromptFileSaveDialog(const std::vector<std::string>& acceptedFilesArray,
-		std::optional<std::reference_wrapper<Window>> parentWindow, const std::string& defaultLocation) {
+		std::optional<sf::WindowHandle> parentWindow, const std::string& defaultLocation) {
 
 		if (!AllegroContext::GetInstance()->IsInitialized())
 			throw Battery::Exception("The Engine is not initialized");
@@ -355,7 +355,7 @@ namespace Battery {
 	}
 
 	std::string PromptFileOpenDialog(const std::vector<std::string>& acceptedFilesArray,
-		std::optional<std::reference_wrapper<Window>> parentWindow, const std::string& defaultLocation) {
+		std::optional<sf::WindowHandle> parentWindow, const std::string& defaultLocation) {
 
 		if (!AllegroContext::GetInstance()->IsInitialized())
 			throw Battery::Exception("The Engine is not initialized");
@@ -396,7 +396,7 @@ namespace Battery {
 	}
 
 	std::vector<std::string> PromptFileOpenDialogMultiple(const std::vector<std::string>& acceptedFilesArray,
-		std::optional<std::reference_wrapper<Window>> parentWindow, const std::string& defaultLocation) {
+		std::optional<sf::WindowHandle> parentWindow, const std::string& defaultLocation) {
 
 		if (!AllegroContext::GetInstance()->IsInitialized())
 			throw Battery::Exception("The Engine is not initialized");
@@ -439,7 +439,7 @@ namespace Battery {
 		return paths;
 	}
 
-	std::string PromptFileOpenDialogFolder(std::optional<std::reference_wrapper<Window>> parentWindow,
+	std::string PromptFileOpenDialogFolder(std::optional<sf::WindowHandle> parentWindow,
 		const std::string& defaultLocation) {
 
 		if (!AllegroContext::GetInstance()->IsInitialized())
@@ -481,7 +481,7 @@ namespace Battery {
 	}
 
 	std::string SaveFileWithDialog(const char* extension, const std::string& fileContent,
-		std::optional<std::reference_wrapper<Window>> parentWindow, const std::string& defaultLocation,
+		std::optional<sf::WindowHandle> parentWindow, const std::string& defaultLocation,
 		bool forceSave) {
 
 		if (!AllegroContext::GetInstance()->IsInitialized())
@@ -534,7 +534,7 @@ namespace Battery {
 		};
 	}
 
-	File LoadFileWithDialog(const char* extension, std::optional<std::reference_wrapper<Window>> parentWindow,
+	File LoadFileWithDialog(const char* extension, std::optional<sf::WindowHandle> parentWindow,
 		const std::string& defaultLocation) {
 
 		if (!AllegroContext::GetInstance()->IsInitialized())

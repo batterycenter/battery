@@ -181,7 +181,7 @@ namespace Battery {
 	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
 	/// <returns>std::string - The full path to the file chosen</returns>
 	std::string PromptFileSaveDialog(const std::vector<std::string>& acceptedFilesArray,
-		std::optional<std::reference_wrapper<Window>> parentWindow = std::nullopt,
+		std::optional<sf::WindowHandle> parentWindow = std::nullopt,
 		const std::string& defaultLocation = "");
 
 	/// <summary>
@@ -194,7 +194,7 @@ namespace Battery {
 	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
 	/// <returns>std::string - The full path to the file chosen</returns>
 	std::string PromptFileOpenDialog(const std::vector<std::string>& acceptedFilesArray,
-		std::optional<std::reference_wrapper<Window>> parentWindow = std::nullopt,
+		std::optional<sf::WindowHandle> parentWindow = std::nullopt,
 		const std::string& defaultLocation = "");
 
 	/// <summary>
@@ -207,7 +207,7 @@ namespace Battery {
 	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
 	/// <returns>std::vector&lt;std::string&gt; - An array of the files chosen</returns>
 	std::vector<std::string> PromptFileOpenDialogMultiple(const std::vector<std::string>& acceptedFilesArray,
-		std::optional<std::reference_wrapper<Window>> parentWindow = std::nullopt,
+		std::optional<sf::WindowHandle> parentWindow = std::nullopt,
 		const std::string& defaultLocation = "");
 
 	/// <summary>
@@ -219,7 +219,7 @@ namespace Battery {
 	/// <param name="defaultLocation">- The default path at which the dialog starts when opened, "" for no default</param>
 	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
 	/// <returns>std::string - The full path to the file chosen</returns>
-	std::string PromptFileOpenDialogFolder(std::optional<std::reference_wrapper<Window>> parentWindow = std::nullopt,
+	std::string PromptFileOpenDialogFolder(std::optional<sf::WindowHandle> parentWindow = std::nullopt,
 		const std::string& defaultLocation = "");
 
 	/// <summary>
@@ -236,7 +236,7 @@ namespace Battery {
 	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
 	/// <returns>std::string - The full path to the saved file or ""</returns>
 	std::string SaveFileWithDialog(const char* extension, const std::string& fileContent,
-		std::optional<std::reference_wrapper<Window>> parentWindow = std::nullopt,
+		std::optional<sf::WindowHandle> parentWindow = std::nullopt,
 		const std::string& defaultLocation = "", bool forceSave = false);
 
 	/// <summary>
@@ -250,7 +250,7 @@ namespace Battery {
 	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
 	/// <returns>File class - Containing information about the loaded file</returns>
 	Battery::File LoadFileWithDialog(const char* extension,
-		std::optional<std::reference_wrapper<Window>> parentWindow = std::nullopt,
+		std::optional<sf::WindowHandle> parentWindow = std::nullopt,
 		const std::string& defaultLocation = "");
 
 

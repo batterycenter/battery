@@ -8,19 +8,9 @@
 #include "Battery/Platform/Platform.h"
 #include "clip.h"
 
-
-// TODO: Handle crashes when allegro window fails, maybe try again
-
-#undef CreateEvent
-
-#define CHECK_ALLEGRO_INIT() \
-	if (!Battery::AllegroContext::GetInstance()->IsInitialized()) {	\
-		throw Battery::Exception(std::string(__FUNCTION__) + ": Allegro Context is not initialized!");	\
-	}
-
 namespace Battery {
 
-	Window::Window(int w, int h) {
+	/*Window::Window(int w, int h) {
 		width = w;
 		height = h;
 	}
@@ -88,7 +78,7 @@ namespace Battery {
 		}*/
 	}
 
-	void Window::HandleEvent(Battery::Event* event) {
+	//void Window::HandleEvent(Battery::Event* event) {
 
 #ifdef BATTERY_DEBUG // TODO
 		/*static const size_t length = 1024;
@@ -112,7 +102,7 @@ namespace Battery {
 		}
 		else {
 			LOG_CORE_TRACE("{}: {}", __FUNCTION__, "OnEvent callback can't be called: Function pointer is nullptr!");
-		}*/
+		}
 	}
 
 	glm::ivec2 Window::GetScreenPosition() {
@@ -125,12 +115,12 @@ namespace Battery {
 	}
 	
 	bool Window::SetWindowSizeConstraints(const glm::ivec2& minimum, const glm::ivec2& maximum) {
-		/*
+		
 		// Limit window size
 		if (!al_set_window_constraints(allegroDisplayPointer, minimum.x, minimum.y, maximum.x, maximum.y)) {
 			return false;
 		}
-		al_apply_window_constraints(allegroDisplayPointer, true);*/
+		al_apply_window_constraints(allegroDisplayPointer, true);
 		return true;
 	}
 
@@ -307,25 +297,25 @@ namespace Battery {
 	bool Window::SetMouseCursor(int cursorID) {
 		//return al_set_system_mouse_cursor(allegroDisplayPointer, (ALLEGRO_SYSTEM_MOUSE_CURSOR)cursorID);
 		return false;
-	}
+	}*/
 
 #ifdef _WIN32
-	bool Window::SetWindowExecutableIcon(int iconID) {
-		/*
-		// Load the embedded icon to the Allegro window so no external 
-		// icon resource is needed
-		HICON icon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(iconID));
-
-		if (!icon)
-			return false;
-
-		HWND winhandle = al_get_win_window_handle(allegroDisplayPointer);
-		SetClassLongPtr(winhandle, GCLP_HICON, (LONG_PTR)icon);
-		SetClassLongPtr(winhandle, GCLP_HICONSM, (LONG_PTR)icon);
-
-		return true;*/
-		return false;
-	}
+	//bool Window::SetWindowExecutableIcon(int iconID) {
+	//	/*
+	//	// Load the embedded icon to the Allegro window so no external 
+	//	// icon resource is needed
+	//	HICON icon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(iconID));
+	//
+	//	if (!icon)
+	//		return false;
+	//
+	//	HWND winhandle = al_get_win_window_handle(allegroDisplayPointer);
+	//	SetClassLongPtr(winhandle, GCLP_HICON, (LONG_PTR)icon);
+	//	SetClassLongPtr(winhandle, GCLP_HICONSM, (LONG_PTR)icon);
+	//
+	//	return true;*/
+	//	return false;
+	//}
 #endif
 
-}
+//}

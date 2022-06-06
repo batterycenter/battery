@@ -1,9 +1,11 @@
 
 #ifdef _WIN32
 
+#include "Battery/Core/Log.h"
 #include "Battery/Platform/Platform.h"
 #include "Battery/StringUtils.h"
 #include "Battery/Utils/FileUtils.h"
+#include "Battery/Core/Exception.h"
 
 #include "windows.h"
 #include "shellapi.h"

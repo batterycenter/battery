@@ -1,7 +1,5 @@
 
-#include "Battery/Log/Log.h"
-
-#ifdef BATTERY_LOGGING
+#include "Battery/Core/Log.h"
 
 namespace Battery {
 	namespace Log {
@@ -11,5 +9,3 @@ namespace Battery {
 
 	}
 }
-
-#endif

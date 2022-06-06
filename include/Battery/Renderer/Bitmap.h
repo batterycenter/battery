@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Battery/Core/Log.h"
 #include "Battery/Renderer/AllegroBitmap.h"
-#include "Battery/Log/Log.h"
 #include "Battery/Utils/TypeUtils.h"
 #include "clip.h"
 
@@ -11,7 +11,7 @@
 
 namespace Battery {
 
-	class Bitmap {
+	/*class Bitmap {
 	public:
 		Bitmap();
 		Bitmap(ALLEGRO_BITMAP* bitmap);
@@ -48,5 +48,5 @@ namespace Battery {
 
 	private:
 		AllegroBitmap allegroBitmap;
-	};
+	};*/
 }

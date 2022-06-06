@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 #include "Battery/pch.h"
 struct ALLEGRO_DISPLAY;
 
@@ -81,3 +81,4 @@ namespace Battery {
 	bool ShowInfoMessageBoxOkCancel(const std::string& msg, ALLEGRO_DISPLAY* display = nullptr);
 
 }
+*/

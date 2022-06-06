@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 #include "Battery/Core/Exception.h"
 //#include "Battery/Core/ApplicationEvents.h"
 #include "Battery/Renderer/Bitmap.h"
@@ -59,11 +59,11 @@ namespace Battery {
 		bool HasClipboardImage();
 		bool HasClipboardFormat(ClipboardFormatID format);
 		std::pair<std::string, bool> GetClipboardText();
-		std::optional<Battery::Bitmap> GetClipboardImage();
+		//std::optional<Battery::Bitmap> GetClipboardImage();
 		std::optional<std::vector<uint8_t>> GetClipboardCustomFormat(ClipboardFormatID customFormat);
 		std::optional<std::string> GetClipboardCustomFormatString(ClipboardFormatID customFormat);
 		bool SetClipboardText(const std::string& text);
-		bool SetClipboardImage(const Battery::Bitmap& image);
+		//bool SetClipboardImage(const Battery::Bitmap& image);
 		bool SetClipboardCustomFormat(ClipboardFormatID customFormat, void* data, size_t size);
 		bool SetClipboardCustomFormatString(ClipboardFormatID customFormat, const std::string& string);
 
@@ -94,4 +94,4 @@ namespace Battery {
 		std::function<void(Battery::Event* event)> eventCallback = nullptr;
 	};
 
-}
+}*/

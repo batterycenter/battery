@@ -1,18 +1,10 @@
 
+#include "Battery/Core/Log.h"
 #include "Battery/Renderer/Renderer2D.h"
 #include "Battery/Core/Exception.h"
-#include "Battery/Log/Log.h"
 #include "Battery/Core/Config.h"
 
-#ifdef BATTERY_DEBUG // TODO
-#define CHECK_INIT() \
-	if (data == nullptr) { \
-		LOG_CORE_ERROR("{}: {}", __FUNCTION__, "Renderer is not initialized!"); \
-		return;	\
-	}
-#else
-#define CHECK_INIT()
-#endif
+#pragma comment(lib, "shlwapi.lib")
 
 namespace Battery {
 
@@ -72,78 +64,78 @@ namespace Battery {
 
 
 
-
+	*/
 
 	void Renderer2D::Setup() {
-		if (data == nullptr) {
-			data = new Renderer2DData();
-		}
-		else {
-			LOG_CORE_CRITICAL("Can't setup Renderer2D: Already initialized!");
-		}
+		//if (data == nullptr) {
+		//	data = new Renderer2DData();
+		//}
+		//else {
+		//	LOG_CORE_CRITICAL("Can't setup Renderer2D: Already initialized!");
+		//}
 	}
 
 	void Renderer2D::Shutdown() {
-		if (data != nullptr) {
-			delete data;
-			data = nullptr;
-		}
-		else {
-			LOG_CORE_CRITICAL("Can't shutdown Renderer2D: Not initialized!");
-		}
+		//if (data != nullptr) {
+		//	delete data;
+		//	data = nullptr;
+		//}
+		//else {
+		//	LOG_CORE_CRITICAL("Can't shutdown Renderer2D: Not initialized!");
+		//}
 	}
 
 	void Renderer2D::BeginScene(Scene* scene) {
-		CHECK_INIT();
-
-		// Some sanity checks
-		if (data->currentScene != nullptr) {
-			LOG_CORE_ERROR("{}: {}", __FUNCTION__, "Can't begin scene, another scene is still active!");
-			return;
-		}
-
-		if (scene == nullptr) {
-			LOG_CORE_ERROR("{}: {}", __FUNCTION__, "Can't load scene: Supplied scene pointer is null!");
-			return;
-		}
-
-		if (!scene->window.has_value()) {
-			LOG_CORE_ERROR("{}: {}", __FUNCTION__, "Can't load scene: AllegroWindow pointer has no value!");
-			return;
-		}
-
-		// Change pointer to the new scene
-		data->currentScene = scene;
-
-		if (scene->texture.has_value()) {	// Render to texture
-			// Initialize the canvas for the scene
-			al_set_target_bitmap(scene->texture.value().get().GetAllegroBitmap());
-		}
-		else {			// Render to screen normally
-			// Initialize the canvas for the scene
-			al_set_target_backbuffer(scene->window.value().get().allegroDisplayPointer);
-		}
+		//CHECK_INIT();
+		//
+		//// Some sanity checks
+		//if (data->currentScene != nullptr) {
+		//	LOG_CORE_ERROR("{}: {}", __FUNCTION__, "Can't begin scene, another scene is still active!");
+		//	return;
+		//}
+		//
+		//if (scene == nullptr) {
+		//	LOG_CORE_ERROR("{}: {}", __FUNCTION__, "Can't load scene: Supplied scene pointer is null!");
+		//	return;
+		//}
+		//
+		//if (!scene->window.has_value()) {
+		//	LOG_CORE_ERROR("{}: {}", __FUNCTION__, "Can't load scene: AllegroWindow pointer has no value!");
+		//	return;
+		//}
+		//
+		//// Change pointer to the new scene
+		//data->currentScene = scene;
+		//
+		//if (scene->texture.has_value()) {	// Render to texture
+		//	// Initialize the canvas for the scene
+		//	al_set_target_bitmap(scene->texture.value().get().GetAllegroBitmap());
+		//}
+		//else {			// Render to screen normally
+		//	// Initialize the canvas for the scene
+		//	al_set_target_backbuffer(scene->window.value().get().allegroDisplayPointer);
+		//}
 	}
 
 	void Renderer2D::EndScene() {
-		CHECK_INIT();
-
-		if (data->currentScene == nullptr) {
-			LOG_CORE_ERROR("{}: {}", __FUNCTION__, "Can't end scene: No scene is currently active!");
-			return;
-		}
-
-		// Let go of the reference to the scene object
-		data->currentScene = nullptr;
+		//CHECK_INIT();
+		//
+		//if (data->currentScene == nullptr) {
+		//	LOG_CORE_ERROR("{}: {}", __FUNCTION__, "Can't end scene: No scene is currently active!");
+		//	return;
+		//}
+		//
+		//// Let go of the reference to the scene object
+		//data->currentScene = nullptr;
 	}
 
 	void Renderer2D::EndUnfinishedScene() {
-		CHECK_INIT();
-
-		if (data->currentScene != nullptr) {
-			LOG_CORE_WARN("{}: {}", __FUNCTION__, "The most recent scene is still active, make sure to call Renderer2D::EndScene()!");
-			EndScene();
-		}
+		//CHECK_INIT();
+		//
+		//if (data->currentScene != nullptr) {
+		//	LOG_CORE_WARN("{}: {}", __FUNCTION__, "The most recent scene is still active, make sure to call Renderer2D::EndScene()!");
+		//	EndScene();
+		//}
 	}
 
 
@@ -151,7 +143,7 @@ namespace Battery {
 
 
 	
-
+	/*
 	void Renderer2D::DrawQuad(const VertexData& v1, const VertexData& v2, const VertexData& v3, const VertexData& v4, 
 			ShaderProgram* shaderProgram, int textureID) {
 		CHECK_INIT();
@@ -337,17 +329,17 @@ namespace Battery {
 
 
 
-
+	*/
 
 
 	// Primitive drawing routines
 
 	void Renderer2D::DrawBackground(const glm::vec4& color) {
-		CHECK_INIT();
-		al_clear_to_color(ConvertAllegroColor(color));
+		//CHECK_INIT();
+		//al_clear_to_color(ConvertAllegroColor(color));
 	}
 
-	void Renderer2D::DrawPrimitiveLine(const glm::vec2& p1, const glm::vec2& p2, float thickness, const glm::vec4& color) {
+	/*void Renderer2D::DrawPrimitiveLine(const glm::vec2& p1, const glm::vec2& p2, float thickness, const glm::vec4& color) {
 		CHECK_INIT();
 		al_draw_line(p1.x, p1.y, p2.x, p2.y, ConvertAllegroColor(color), thickness);
 	}*/

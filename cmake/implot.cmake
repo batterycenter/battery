@@ -29,3 +29,15 @@ install(
     DESTINATION "lib/cmake/implot"
     NAMESPACE implot::
 )
+
+# Install headers
+install(
+    DIRECTORY "${IMPLOT_DIR}/"
+    DESTINATION "include"
+    FILES_MATCHING PATTERN "*.h"
+)
+
+install(
+    FILES "cmake/implotConfig.cmake"
+    DESTINATION "lib/cmake/implot"
+)

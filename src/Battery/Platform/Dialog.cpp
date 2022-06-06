@@ -3,10 +3,10 @@
 
 namespace Battery {
 
-	/*void ShowErrorMessageBox(const std::string& msg, ALLEGRO_DISPLAY* display) {
-		al_show_native_message_box(display, "Error", msg.c_str(), "", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
+	void MessageBoxError(const std::string& msg) {
+		//al_show_native_message_box(display, "Error", msg.c_str(), "", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
 	}
-
+	/*
 	bool ShowErrorMessageBoxYesNo(const std::string& msg, ALLEGRO_DISPLAY* display) {
 		return 1 == al_show_native_message_box(display, "Error", msg.c_str(), "", nullptr, ALLEGRO_MESSAGEBOX_ERROR | ALLEGRO_MESSAGEBOX_YES_NO);
 	}

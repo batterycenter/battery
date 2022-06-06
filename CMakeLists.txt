@@ -23,8 +23,14 @@ endif()
 # Dependencies #
 ################
 
-set(BUILD_SHARED_LIBS False)
+set(BUILD_SHARED_LIBS FALSE)
+set(SFML_USE_STATIC_STD_LIBS TRUE)
 add_subdirectory(modules/SFML)
+
+set_property(TARGET sfml-graphics PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set_property(TARGET sfml-window PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set_property(TARGET sfml-main PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set_property(TARGET sfml-system PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 include(cmake/glm.cmake)
 include(cmake/imgui.cmake)
@@ -32,6 +38,10 @@ include(cmake/implot.cmake)
 include(cmake/spdlog.cmake)
 include(cmake/clip.cmake)
 
+set_property(TARGET imgui PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set_property(TARGET implot PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set_property(TARGET spdlog PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set_property(TARGET clip PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 
 
@@ -137,13 +147,6 @@ install(
     INCLUDES DESTINATION "include"
 )
 
-# Install symbols
-install(
-    DIRECTORY build/
-    DESTINATION "lib"
-    FILES_MATCHING PATTERN "*.pdb"
-)
-
 # Install headers
 install(
     DIRECTORY include/
@@ -162,12 +165,5 @@ configure_file(cmake/${PROJECT_NAME}Config.cmake.in ${PROJECT_NAME}Config.cmake 
 install(
     FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
           "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
-    DESTINATION lib/cmake/${PROJECT_NAME}
-)
-
-# Install any conan dependencies
-file(GLOB CONAN_DEPS "${CMAKE_CURRENT_BINARY_DIR}/*.cmake")
-install(
-    FILES ${CONAN_DEPS}
     DESTINATION lib/cmake/${PROJECT_NAME}
 )

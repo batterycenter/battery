@@ -5,10 +5,6 @@
 
 namespace Battery {
 
-	// TODO: Allegro version printen
-
-	// TODO: Application name / window title optional
-
 	// Global application pointer
 	Application* applicationPointer = nullptr;
 
@@ -20,13 +16,11 @@ namespace Battery {
 		return *applicationPointer;
 	}
 
-	Window& GetMainWindow() {
+	sf::Window& GetMainWindow() {
 		return GetApp().window;
 	}
 
-
-	Application::Application(int width, int height, const std::string applicationFolderName) : window(width, height) {
-		this->applicationFolderName = applicationFolderName;
+	Application::Application() {
 
 		if (applicationPointer != nullptr) {
 			throw Battery::Exception("Cannot construct Battery::Application: Another application has already been constructed!");
@@ -64,32 +58,33 @@ namespace Battery {
 
 
 
-	void Application::run(int argc, const char** argv) {
+	void Application::Run(int width, int height, int argc, const char** argv) {
 		try {
-			runApplication(argc, argv);
+			RunApplication(width, height, argc, argv);
 		}
 		catch (const Battery::Exception& e) {
 			LOG_CORE_CRITICAL(std::string("Unhandled Battery::Exception: '") + e.what() + "'");
-			Battery::ShowErrorMessageBox(std::string("Unhandled Battery::Exception: '") + e.what() + "'");
 		}
 		catch (const std::exception& e) {
 			LOG_CORE_CRITICAL(std::string("Unhandled std::exception: '") + e.what() + "'");
-			Battery::ShowErrorMessageBox(std::string("Unhandled std::exception: '") + e.what() + "'");
 		}
 		catch (...) {
 			LOG_CORE_CRITICAL("Unhandled exception: Unknown exception type, make sure to catch it correctly!");
-			Battery::ShowErrorMessageBox("Unhandled exception: Unknown exception type, make sure to catch it correctly!");
 		}
 	}
 
-	void Application::runApplication(int argc, const char** argv) {
+	void Application::RunApplication(int width, int height, int argc, const char** argv) {
 
-		// Create Allegro window
-		window.Create(windowFlags);
-		window.SetEventCallback(std::bind(&Application::_onEvent, this, std::placeholders::_1));
+		// Auto-fit window size
+		if (width <= 0) width = GetPrimaryMonitorSize().x;
+		if (height <= 0) height = GetPrimaryMonitorSize().y;
+
+		window.create(sf::VideoMode({ (uint32_t)width, (uint32_t)height }), BATTERY_DEFAULT_TITLE);
+		if (!window.isOpen())
+			throw Battery::Exception("Could not create SFML window! Please check the graphics drivers!");
 
 		// Load 2D renderer and draw the default background color
-		Renderer2D::Setup();
+		//Renderer2D::Setup();
 
 		// Parse command line arguments
 		LOG_CORE_TRACE("Command line arguments:");
@@ -101,29 +96,21 @@ namespace Battery {
 		// Client startup
 		try {
 			LOG_CORE_INFO("Application created, loading client OnStartup()");
-			if (!OnStartup()) {
-				LOG_CORE_WARN("Application::OnStartup() returned false, "
-					"skipping main loop and shutting engine down...");
-				shouldClose = true;
-			}
-			else {
-				LOG_CORE_INFO("Everything loaded, entering main loop");
-			}
+			OnStartup();
+			LOG_CORE_INFO("Application loaded, entering main loop");
 		}
 		catch (const Battery::Exception& e) {
 			LOG_CORE_CRITICAL(std::string("Application::OnStartup() threw Battery::Exception: ") + e.what());
-			ShowErrorMessageBox(std::string("Application::OnStartup() threw Battery::Exception: ") + e.what());
 			LOG_CORE_ERROR("Shutting engine down...");
 			shouldClose = true;
 		}
 
 		// Client update
 		try {
-			_mainLoop();
+			RunMainloop();
 		}
 		catch (const Battery::Exception& e) {
 			LOG_CORE_CRITICAL(std::string("Some Layer's OnUpdate() function threw Battery::Exception: ") + e.what());
-			ShowErrorMessageBox(std::string("Some Layer's OnUpdate() function threw Battery::Exception: ") + e.what());
 			LOG_CORE_ERROR("Shutting engine down...");
 		}
 
@@ -134,7 +121,6 @@ namespace Battery {
 		}
 		catch (const Battery::Exception& e) {
 			LOG_CORE_CRITICAL(std::string("Application::OnShutdown() threw Battery::Exception: ") + e.what());
-			ShowErrorMessageBox(std::string("Application::OnShutdown() threw Battery::Exception: ") + e.what());
 		}
 
 		// Unload 2D renderer
@@ -142,7 +128,7 @@ namespace Battery {
 		Renderer2D::Shutdown();
 
 		// Destroy Allegro window
-		window.Destroy();
+		window.close();
 
 		// Clear layer stack
 		LOG_CORE_TRACE("Clearing any left over layers from layer stack");
@@ -151,81 +137,27 @@ namespace Battery {
 		LOG_CORE_INFO("Application stopped");
 	}
 
-	void Application::_preUpdate() {
-		double now = GetRuntime();
-		
-		frametime = now - oldPreUpdateTime;
-		
-		if (oldPreUpdateTime == 0) {
-			frametime = 0.f;
-		}
-		
-		oldPreUpdateTime = now;
-		if (frametime != 0.f)
-			framerate = 1.0 / frametime;
-
-		frameDiscarded = false;
-
-		// Handle events
-		window.HandleEvents();
-		PROFILE_TIMESTAMP(__FUNCTION__"() (and Handled events)");
-	}
-
-	void Application::_postUpdate() {
-		framecount++;
-		PROFILE_TIMESTAMP(__FUNCTION__"()");
-	}
-
-	void Application::_preRender() {
-		// Paint the background by default
-		Renderer2D::DrawBackground(BATTERY_DEFAULT_BACKGROUND_COLOR);
-		PROFILE_TIMESTAMP(__FUNCTION__"()");
-	}
-
-	void Application::_postRender() {
-		Renderer2D::EndUnfinishedScene();
-		PROFILE_TIMESTAMP(__FUNCTION__"()");
-	}
-
-	void Application::_mainLoop() {
+	void Application::RunMainloop() {
 
 		double nextFrame = GetRuntime();
 		double desiredFrametime = 0.0;
 
-		//ConsistentTimer frametimeTimer;
-		//frametimeTimer.Update();
-
 		while (!shouldClose) {
 
-			PROFILE_TIMESTAMP_START("Mainloop start");
-			LOG_CORE_TRACE("Main loop started");
-
 			// Update everything
-			{
-				//PROFILE_CORE_SCOPE("Mainloop update routines");
-				_preUpdate();
-				_updateApp();
-				_postUpdate();
-			}
-			
-			// Render everything
-			{
-				PROFILE_CORE_SCOPE("Mainloop render rountines");
-				_preRender();
-				_renderApp();
-				_postRender();
-			}
+			PreUpdate();
+			UpdateApp();
+			PostUpdate();
 
-			{
-				PROFILE_CORE_SCOPE("Mainloop sleeping until next frame");
-				// Wait for the right time to render
-				desiredFrametime = 1.0 / desiredFramerate;
-				LOG_CORE_TRACE("Waiting for frametime before flipping screen");
-				Sleep(nextFrame - GetRuntime());
-				while (GetRuntime() < nextFrame);	// Shouldn't do anything, for safety if sleeping
-																// was not successful
-				PROFILE_TIMESTAMP("Slept until next frame timepoint");
-			}
+			// Render everything
+			PreRender();
+			RenderApp();
+			PostRender();
+
+			// Wait for the right time to render
+			desiredFrametime = 1.0 / desiredFramerate;
+			LOG_CORE_TRACE("Waiting for frametime before flipping screen");
+			Sleep(nextFrame - GetRuntime());
 
 			// Set time for next frame
 			double now = GetRuntime();
@@ -238,20 +170,42 @@ namespace Battery {
 
 			// Show rendered image
 			if (!frameDiscarded) {
-				PROFILE_CORE_SCOPE("Mainloop flipping frame buffers");
-				LOG_CORE_TRACE("Flipping displays");
 				//al_set_current_opengl_context(window.allegroDisplayPointer);
 				//al_flip_display();
-				PROFILE_TIMESTAMP("Flipped display buffers");
 			}
 
-			LOG_CORE_TRACE("Main loop finished, applying profiling results");
-			PROFILE_TIMESTAMP("Entire frametime");
 			//ProfilerStorage::GetInstance().ApplyProfiles(frametimeTimer.Update());
 		}
 	}
 
-	void Application::_updateApp() {
+	void Application::PreUpdate() {
+
+		static double old = GetRuntime();
+		double now = GetRuntime();
+		frametime = now - old;
+		old = now;
+				
+		if (frametime != 0.f) {
+			framerate = 1.0 / frametime;
+		}
+
+		frameDiscarded = false;
+	}
+
+	void Application::PostUpdate() {
+		framecount++;
+	}
+
+	void Application::PreRender() {
+		// Paint the background by default
+		Renderer2D::DrawBackground(BATTERY_DEFAULT_BACKGROUND_COLOR);
+	}
+
+	void Application::PostRender() {
+		Renderer2D::EndUnfinishedScene();
+	}
+
+	void Application::UpdateApp() {
 
 		// First update the base application
 		LOG_CORE_TRACE("Application::OnUpdate()");
@@ -267,10 +221,9 @@ namespace Battery {
 			LOG_CORE_TRACE("Layer '{}' OnUpdate()", layer->GetDebugName().c_str());
 			layer->OnUpdate();
 		}
-		//PROFILE_TIMESTAMP(__FUNCTION__ "()");
 	}
 
-	void Application::_renderApp() {
+	void Application::RenderApp() {
 
 		if (frameDiscarded) {
 			LOG_CORE_TRACE("{}: {}", __FUNCTION__, "Skipping main render routine, frame was discarded");
@@ -294,7 +247,7 @@ namespace Battery {
 		PROFILE_TIMESTAMP(__FUNCTION__"()");
 	}
 
-	void Application::_onEvent(Event* e) {
+	void Application::RunEvents(Event* e) {
 
 		// Give the event to the base application
 		LOG_CORE_TRACE("Application::OnEvent()");
@@ -320,14 +273,6 @@ namespace Battery {
 
 	void Application::SetFramerate(double f) {
 		desiredFramerate = f;
-	}
-
-	void Application::SetWindowFlag(enum WindowFlags flag) {
-		this->windowFlags |= (int)flag;
-	}
-
-	void Application::ClearWindowFlag(enum WindowFlags flag) {
-		this->windowFlags &= ~(int)flag;
 	}
 
 	void Application::PushLayer(std::shared_ptr<Layer> layer) {

@@ -33,3 +33,15 @@ install(
     DESTINATION "lib/cmake/spdlog"
     NAMESPACE spdlog::
 )
+
+# Install headers
+install(
+    DIRECTORY "${SPDLOG_DIR}/include/"
+    DESTINATION "include"
+    FILES_MATCHING PATTERN "*.h"
+)
+
+install(
+    FILES "cmake/spdlogConfig.cmake"
+    DESTINATION "lib/cmake/spdlog"
+)

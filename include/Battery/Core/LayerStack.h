@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Battery/pch.h"
+#include "Battery/Core/Log.h"
 #include "Battery/Core/Layer.h"
-#include "Battery/Log/Log.h"
 
 namespace Battery {
 

@@ -13,8 +13,6 @@
 #include "spdlog/sinks/rotating_file_sink.h"
 #include "Battery/Core/Config.h"
 
-#ifdef BATTERY_LOGGING
-
 namespace Battery {
 	namespace Log {
 
@@ -69,7 +67,5 @@ namespace Battery {
 #define LOG_INFO(...)					{ ; }
 #define LOG_ERROR(...)					{ ; }
 #define LOG_CRITICAL(...)				{ ; }
-
-#endif
 
 #endif // SPDLOG

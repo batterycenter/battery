@@ -1,6 +1,6 @@
 
+#include "Battery/Core/Log.h"
 #include "Battery/Core/Exception.h"
-#include "Battery/Log/Log.h"
 #include "Battery/Utils/NetUtils.h"
 #include "Battery/StringUtils.h"
 #include "Battery/Utils/TimeUtils.h"

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Battery/pch.h"
-#include "Battery/Log/Log.h"
+#include "Battery/Core/Log.h"
 #include "Battery/Core/Window.h"
 #include "Battery/Renderer/ShaderProgram.h"
 #include "Battery/Renderer/Bitmap.h"
@@ -26,24 +26,22 @@ namespace Battery {
 			position = p;
 			color = c;
 		}
-
-		operator ALLEGRO_VERTEX() const;
 	};
 
 	struct Scene {
 
-		Scene(std::reference_wrapper<Window> window) {
+		Scene(std::reference_wrapper<sf::Window> window) {
 			this->window = window;
 			LOG_CORE_TRACE("{}: {}", __FUNCTION__, "Constructed Battery::Scene, loading shaders");
 			LoadShaders();
 		}
 
-		Scene(std::reference_wrapper<Window> window, std::reference_wrapper<Battery::Bitmap> texture) {
+		/*Scene(sf::WindowHandle window, std::reference_wrapper<Battery::Bitmap> texture) {
 			this->window = window;
 			this->texture = texture;
 			LOG_CORE_TRACE("{}: {}", __FUNCTION__, "Constructed Battery::Scene, loading shaders");
 			LoadShaders();
-		}
+		}*/
 
 		~Scene() {
 			LOG_CORE_TRACE("{}: {}", __FUNCTION__, "Destroying Battery::Scene");
@@ -77,7 +75,7 @@ namespace Battery {
 		// The Renderer2D class is allowed to access
 		friend class Renderer2D;
 
-		std::vector<Bitmap> textures;
+		//std::vector<Bitmap> textures;
 
 	protected:
 		std::unique_ptr<ShaderProgram> lineShader;
@@ -85,8 +83,8 @@ namespace Battery {
 		std::unique_ptr<ShaderProgram> arcShader;
 		std::unique_ptr<ShaderProgram> rectangleShader;
 
-		std::optional<std::reference_wrapper<Window>> window;
-		std::optional<std::reference_wrapper<Battery::Bitmap>> texture;
+		std::optional<std::reference_wrapper<sf::Window>> window;
+		//std::optional<std::reference_wrapper<Battery::Bitmap>> texture;
 	};
 
 	class Renderer2D {

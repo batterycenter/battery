@@ -1,7 +1,7 @@
 
+#include "Battery/Core/Log.h"
 #include "Battery/Utils/MemoryUtils.h"
 #include "Battery/Core/Config.h"
-#include "Battery/Log/Log.h"
 #include <new>
 #include <iostream>
 #include <cstdint>

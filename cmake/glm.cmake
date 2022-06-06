@@ -21,3 +21,15 @@ install(
     DESTINATION "lib/cmake/glm"
     NAMESPACE glm::
 )
+
+# Install headers
+install(
+    DIRECTORY "${GLM_DIR}/"
+    DESTINATION "include"
+    FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp" PATTERN "*.inl"
+)
+
+install(
+    FILES "cmake/glmConfig.cmake"
+    DESTINATION "lib/cmake/glm"
+)

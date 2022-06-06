@@ -11,6 +11,7 @@ endif ()
 
 target_sources(clip PRIVATE
         ${CLIP_DIR}/clip.cpp
+        ${CLIP_DIR}/image.cpp
         ${CLIP_SRC}
 )
 
@@ -32,4 +33,16 @@ install(
     EXPORT clipTargets 
     DESTINATION "lib/cmake/clip"
     NAMESPACE clip::
+)
+
+# Install headers
+install(
+    DIRECTORY "${CLIP_DIR}/"
+    DESTINATION "include"
+    FILES_MATCHING PATTERN "*.h"
+)
+
+install(
+    FILES "cmake/clipConfig.cmake"
+    DESTINATION "lib/cmake/clip"
 )

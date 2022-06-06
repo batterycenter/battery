@@ -29,3 +29,15 @@ install(
     DESTINATION "lib/cmake/imgui"
     NAMESPACE imgui::
 )
+
+# Install headers
+install(
+    DIRECTORY "${IMGUI_DIR}/"
+    DESTINATION "include"
+    FILES_MATCHING PATTERN "*.h"
+)
+
+install(
+    FILES "cmake/imguiConfig.cmake"
+    DESTINATION "lib/cmake/imgui"
+)

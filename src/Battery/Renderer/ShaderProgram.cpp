@@ -1,7 +1,7 @@
 
+#include "Battery/Core/Log.h"
 #include "Battery/Renderer/ShaderProgram.h"
 #include "Battery/Utils/FileUtils.h"
-#include "Battery/Log/Log.h"
 /*
 namespace Battery {
 

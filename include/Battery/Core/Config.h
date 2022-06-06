@@ -1,15 +1,5 @@
 #pragma once
 
-// Set build configurations
-#ifndef NDEBUG
-	#define BATTERY_DEBUG
-#endif
-
-// Enable or disable logging
-#ifndef DISABLE_LOGGING
-	#define BATTERY_LOGGING
-#endif
-
 // Log levels
 #define BATTERY_LOG_LEVEL_CRITICAL	spdlog::level::critical
 #define BATTERY_LOG_LEVEL_ERROR		spdlog::level::err
@@ -23,8 +13,7 @@
 #define BATTERY_CLIENT_LOGGER_NAME	"Application"
 
 // General settings
-#define BATTERY_DEFAULT_TITLE		"BatteryEngine Application"
-#define BATTERY_DEFAULT_FOLDER_NAME "BatteryApplication"
+#define BATTERY_DEFAULT_TITLE		"Battery Application"
 
 // Profiling											// TODO: Remove profiling
 #define BATTERY_PROFILING_MAX_TIMEPOINT_NUMBER 64
@@ -38,9 +27,3 @@
 // Graphics
 #define BATTERY_ANTIALIASING_LINE_FALLOFF 1
 #define BATTERY_DEFAULT_BACKGROUND_COLOR glm::vec4(60, 60, 60, 255)
-
-// File I/O
-#define BATTERY_FILE_BLOCK_SIZE 1024
-
-// Enable experimental allegro features
-#define ALLEGRO_UNSTABLE

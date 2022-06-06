@@ -1,5 +1,5 @@
 
-#include "Battery/Log/Log.h"
+#include "Battery/Core/Log.h"
 #include "Battery/Core/Exception.h"
 #include "Battery/Utils/ImGuiUtils.h"
 #include "Battery/Utils/FileUtils.h"
