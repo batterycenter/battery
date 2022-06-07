@@ -40,14 +40,16 @@ namespace Battery {
 	}
 
     std::pair<bool, size_t> platform_ExecuteShellCommandSilent(const std::string& command, bool hidden) {
-		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
+		system(command);
 	}
+
+	fix this shitty file
 	
 	ALLEGRO_FILE* platform_LoadEmbeddedResource(int id, const char* type) {
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
 
-	bool platform_IsFocused(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+	bool platform_IsFocused(sf::WindowHandle window) {
 
 		Display* display = XOpenDisplay(NULL);
   		if (display == NULL)  {
@@ -62,7 +64,7 @@ namespace Battery {
 		return focused == al_get_x_window_id(allegroDisplayPointer);
 	}
 
-	void platform_Focus(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+	void platform_Focus(sf::WindowHandle window) {
 
 		Display* display = XOpenDisplay(NULL);
   		if (display == NULL)  {
@@ -74,7 +76,7 @@ namespace Battery {
   		XCloseDisplay(display);
 	}
 
-	void platform_Hide(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+	void platform_Hide(sf::WindowHandle window) {
 
 		Display* display = XOpenDisplay(NULL);
   		if (display == NULL)  {
@@ -85,7 +87,7 @@ namespace Battery {
   		XCloseDisplay(display);
 	}
 
-	void platform_Show(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+	void platform_Show(sf::WindowHandle window) {
 
 		Display* display = XOpenDisplay(NULL);
   		if (display == NULL)  {
@@ -96,7 +98,7 @@ namespace Battery {
   		XCloseDisplay(display);
 	}
 
-	void platform_HideFromTaskbar(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+	void platform_HideFromTaskbar(sf::WindowHandle window) {
 
 		Display* display = XOpenDisplay(NULL);
   		if (display == NULL)  {
@@ -119,7 +121,7 @@ namespace Battery {
 		XCloseDisplay(display);
 	}
 
-	void platform_ShowInTaskbar(ALLEGRO_DISPLAY* allegroDisplayPointer) {
+	void platform_ShowInTaskbar(sf::WindowHandle window) {
 		
 		Display* display = XOpenDisplay(NULL);
   		if (display == NULL)  {
@@ -140,6 +142,10 @@ namespace Battery {
   		XSendEvent(display, DefaultRootWindow(display), False, mask, &event);
   		
 		XCloseDisplay(display);
+	}
+
+	std::string platform_GetLastWin32ErrorAsString() {
+		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
 }
 

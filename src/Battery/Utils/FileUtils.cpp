@@ -1,5 +1,4 @@
 
-#include "Battery/Core.h"
 #include "Battery/Core/Exception.h"
 #include "Battery/Core/Config.h"
 #include "Battery/Utils/FileUtils.h"
@@ -10,6 +9,10 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <shellapi.h>
+#endif
+
+#ifdef MoveFile
+#undef MoveFile
 #endif
 
 #define CHECK_ALLEGRO_INIT() \
@@ -34,82 +37,41 @@ namespace Battery {
 
 
 
-	/*
+	
 	bool FilenameExists(const std::string& path) {
-		return al_filename_exists(path.c_str());
-	}*/
+		return FileExists(path) || DirectoryExists(path);
+	}
 
 	bool FileExists(const std::string& path) {
-
-		/*if (!FilenameExists(path))
-			return false;
-
-		ALLEGRO_FILE* file = al_fopen(path.c_str(), "r");
-
-		if (file == nullptr)
-			return false;
-
-		al_fclose(file);*/
-		return true;
+  		struct stat buffer;   
+  		return (stat (path.c_str(), &buffer) == 0); 
 	}
 
 	bool DirectoryExists(const std::string& path) {
-
-		/*if (!FilenameExists(path))
-			return false;
-
-		ALLEGRO_FILE* file = al_fopen(path.c_str(), "r");
-
-		if (file == nullptr)
-			return true;
-
-		al_fclose(file);*/
-		return false;
+		struct stat info;
+    	if(stat(path.c_str(), &info) != 0) return 0;
+		else if(info.st_mode & S_IFDIR) return 1;
+		return 0;
 	}
-/*
-	std::vector<std::string> GetDirectoryContent(const std::string& path) {
-		std::vector<std::string> elements;
 
-		if (!DirectoryExists(path))
-			return elements;
-
-		ALLEGRO_FS_ENTRY* dir = al_create_fs_entry(path.c_str());
-
-		if (dir == nullptr)
-			return elements;
-
-		ALLEGRO_FS_ENTRY* e;
-		al_open_directory(dir);
-		do {
-			e = al_read_directory(dir);
-
-			if (e != nullptr) {
-				elements.push_back(GetFilename(al_get_fs_entry_name(e)));
-			}
-
-			al_destroy_fs_entry(e);
-
-		} while (e != nullptr);
-		al_close_directory(dir);
-
-		al_destroy_fs_entry(dir);
-
+	std::vector<std::filesystem::path> GetDirectoryContent(const std::string& path) {
+		std::vector<std::filesystem::path> elements;
+		for (const auto& entry : std::filesystem::directory_iterator(path))
+        	elements.push_back(entry.path());
 		return elements;
-	}*/
+	}
 
 	bool MakeDirectory(const std::string& path) {
-		//return al_make_directory(path.c_str());
-		return false;
+		return std::filesystem::create_directory(path);
 	}
-/*
+
 	bool RenameFile(const std::string& file, const std::string& targetFile) {
-		LOG_CORE_TRACE("{}: {}", __FUNCTION__, "Renaming file '{}' to '{}'", file, targetFile);
 		try {
 			std::filesystem::rename(file, targetFile);
 			return true;
 		}
 		catch (std::filesystem::filesystem_error& e) {
-			LOG_CORE_WARN("Failed to rename file '{}' to '{}': {}", file, targetFile, e.what());
+			LOG_CORE_ERROR("Failed to rename file '{}' to '{}': {}", file, targetFile, e.what());
 		}
 
 		return false;
@@ -120,38 +82,30 @@ namespace Battery {
 		PrepareDirectory(directory);
 		std::string targetFile = directory + GetFilename(file);
 
-		LOG_CORE_TRACE("{}: {}", __FUNCTION__, "Moving file '{}' to '{}'", file, targetFile);
-
 		try {
 			std::filesystem::rename(file, targetFile);
 			return true;
 		}
 		catch (std::filesystem::filesystem_error& e) {
-			LOG_CORE_WARN("{}: {}", __FUNCTION__, "Failed to move file: {}", e.what());
+			LOG_CORE_ERROR("{}: {}", __FUNCTION__, "Failed to move file: {}", e.what());
 		}
 
 		return false;
 	}
 
 	bool MoveDirectory(std::string source, std::string target) {
-
-		if (source.back() != '/')
-			source += "/";
-
-		if (target.back() != '/')
-			target += "/";
-
+		if (source.back() != '/') source += "/";
+		if (target.back() != '/') target += "/";
 		if (!DirectoryExists(source)) {
-			LOG_CORE_TRACE("{}: {}", __FUNCTION__, "Source directory '{}' not available", source);
+			LOG_CORE_ERROR("{}: {}", __FUNCTION__, "Source directory '{}' not available", source);
 			return false;
 		}
 
 		PrepareDirectory(target);
+		LOG_CORE_DEBUG("{}: {}", __FUNCTION__, "Moving directory '{}' to '{}' recursively", source, target);
 
-		LOG_CORE_TRACE("{}: {}", __FUNCTION__, "Moving directory '{}' to '{}' recursively", source, target);
-
-		std::vector<std::string> entries = GetDirectoryContent(source);
-		for (std::string entry : entries) {
+		std::vector<std::filesystem::path> entries = GetDirectoryContent(source);
+		for (std::filesystem::path entry : entries) {
 			if (FileExists(source + entry)) {	// It's a file
 				if (!MoveFile(source + entry, target)) {
 					LOG_CORE_WARN("{}: {}", __FUNCTION__, "File '{}' could not be moved", source + entry);
@@ -703,7 +657,7 @@ namespace Battery {
 		}
 
 		return str;
-	}
+	}*/
 
 
 
@@ -717,17 +671,15 @@ namespace Battery {
 
 
 	std::pair<bool, size_t> ExecuteShellCommand(const std::string& command) {
-
-		auto exitCode = system(command.c_str());
-
+		int exitCode = system(command.c_str());
 		return std::make_pair(exitCode == 0, exitCode);
-	}*/
+	}
 
 	std::pair<bool, size_t> ExecuteShellCommandSilent(const std::string& command, bool hidden) {
 		return platform_ExecuteShellCommandSilent(command, hidden);
 	}
 
-/*
+
 
 
 
@@ -737,8 +689,8 @@ namespace Battery {
 		return platform_ExtractArchive(file, targetDirectory, force);
 	}
 
-	ALLEGRO_FILE* LoadEmbeddedResource(int id, const char* type) {
+	std::vector<uint8_t> LoadEmbeddedResource(int id, const char* type) {
 		return platform_LoadEmbeddedResource(id, type);
-	}*/
+	}
 
 }

@@ -133,8 +133,8 @@ namespace Battery {
 		std::vector<std::string> items;
 		std::string name;
 
-		DropdownMenu() { LOG_WARN("ID: {}", specificID); }
-		DropdownMenu(const std::string& name) : name(name) { LOG_WARN("ID: {}", specificID); }
+		DropdownMenu() {}
+		DropdownMenu(const std::string& name) : name(name) {}
 
 		/// <summary>
 		/// Render the dropdown menu. Returns the array index of the currently selected item,

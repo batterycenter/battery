@@ -14,10 +14,6 @@ namespace Battery {
 	Battery::ImGuiColors defaultColorScheme;
 
 	ImGuiColors GetColorScheme() {
-
-		if (!ImGui::GetCurrentContext())	// ImGui is not initialized yet
-			throw Battery::Exception("Can't get ImGui color scheme: Not initialized yet! Define a class derived from Battery::ImGuiLayer and push it with PushLayer()!");
-
 		ImGuiColors scheme;
 
 		for (size_t i = 0; i < ImGuiCol_COUNT; i++) {
@@ -29,10 +25,6 @@ namespace Battery {
 	}
 
 	void LoadColorScheme(const ImGuiColors& scheme) {
-
-		if (!ImGui::GetCurrentContext())	// ImGui is not initialized yet
-			throw Battery::Exception("Can't get ImGui color scheme: Not initialized yet! Define a class derived from Battery::ImGuiLayer and push it with PushLayer()!");
-
 		ImVec4* colors = ImGui::GetStyle().Colors;
 
 		for (size_t i = 0; i < scheme.size() && i < ImGuiCol_COUNT; i++) {

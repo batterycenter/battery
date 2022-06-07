@@ -6,7 +6,6 @@
 #include "Battery/Core/LayerStack.h"
 #include "Battery/Core/Config.h"
 #include "Battery/Utils/TimeUtils.h"
-#include "Battery/Platform/Dialog.h"
 
 #include "SFML/Window.hpp"
 

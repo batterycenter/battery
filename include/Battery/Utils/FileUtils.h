@@ -74,8 +74,8 @@ namespace Battery {
 	/// FileExists() and DirectoryExists() to know whether it's a file or directory
 	/// </summary>
 	/// <param name="path">- The full or relative path</param>
-	/// <returns>std::vector&lt;std::string&gt; - An array with all filenames and directory names</returns>
-	std::vector<std::string> GetDirectoryContent(const std::string& path);
+	/// <returns>An array with all filenames and directory names</returns>
+	std::vector<std::filesystem::path> GetDirectoryContent(const std::string& path);
 
 	/// <summary>
 	/// Create a new directory, parent directories are created as needed
@@ -373,9 +373,8 @@ namespace Battery {
 
 	/// <summary>
 	/// Load an embedded file from the resource compiler (.rc file). Parameter is the Win32 ID, 
-	/// taken from 'resource.h'. Check if nullptr, otherwise must be deleted with al_fclose().
-	/// Second parameter is the type from resource.rc ("ICON", "PNG", "FONT", ...)
+	/// taken from 'resource.h'. Second parameter is the expected type from resource.rc ("ICON", "PNG", "FONT", ...)
 	/// </summary>
-	ALLEGRO_FILE* LoadEmbeddedResource(int id, const char* type);
+	std::vector<uint8_t> LoadEmbeddedResource(int id, const char* type);
 
 }

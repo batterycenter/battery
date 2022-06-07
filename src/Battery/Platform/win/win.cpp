@@ -3,7 +3,7 @@
 
 #include "Battery/Core/Log.h"
 #include "Battery/Platform/Platform.h"
-#include "Battery/StringUtils.h"
+#include "Battery/Utils/StringUtils.h"
 #include "Battery/Utils/FileUtils.h"
 #include "Battery/Core/Exception.h"
 
@@ -13,7 +13,7 @@
 namespace Battery {
 
 	void* platform_LockFileDescriptor(const std::string& file) {
-		std::wstring wide = StringUtils::MultiByteToWideChar(file);
+		std::wstring wide = MultiByteToWideChar(file);
 		void* descriptor = ::CreateFileW(wide.c_str(), GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (descriptor == INVALID_HANDLE_VALUE) {
 			throw Battery::LockfileUnavailableException();
@@ -43,7 +43,7 @@ namespace Battery {
 
     std::pair<bool, size_t> platform_ExecuteShellCommandSilent(const std::string& command, bool hidden) {
 
-		std::wstring Lcommand = L"/c " + StringUtils::MultiByteToWideChar(command);
+		std::wstring Lcommand = L"/c " + MultiByteToWideChar(command);
 
 		SHELLEXECUTEINFOW ShExecInfo = { 0 };
 		ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
@@ -72,59 +72,75 @@ namespace Battery {
 		return std::make_pair(true, exitCode);
 	}
 	
-	ALLEGRO_FILE* platform_LoadEmbeddedResource(int id, const char* type) {
-		HMODULE hMod = GetModuleHandleW(NULL);
-		if (hMod == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Module Handle is null!", id); return nullptr; }
+	std::vector<uint8_t> platform_LoadEmbeddedResource(int id, const char* type) {
+		std::vector<uint8_t> buffer;
 
-		HRSRC hRes = FindResourceW(hMod, MAKEINTRESOURCEW(id), Battery::StringUtils::MultiByteToWideChar(type).c_str());
-		if (hRes == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: No such resource!", id); return nullptr; }
+		HMODULE hMod = GetModuleHandleW(NULL);
+		if (hMod == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Module Handle is null!", id); return buffer; }
+
+		HRSRC hRes = FindResourceW(hMod, MAKEINTRESOURCEW(id), Battery::MultiByteToWideChar(type).c_str());
+		if (hRes == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: No such resource!", id); return buffer; }
 		
 		HGLOBAL hGlobal = LoadResource(hMod, hRes);
-		if (hGlobal == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Resource can't be loaded!", id); return nullptr; }
+		if (hGlobal == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Resource can't be loaded!", id); return buffer; }
 
 		void* data = LockResource(hGlobal);
-		if (data == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Resource can't be locked!", id); return nullptr; }
+		if (data == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Resource can't be locked!", id); return buffer; }
 
 		size_t size = SizeofResource(hMod, hRes);
-		if (size == 0) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Size of resource is invalid!", id); return nullptr; }
+		if (size == 0) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Size of resource is invalid!", id); return buffer; }
 
-		//ALLEGRO_FILE* file = al_open_memfile(data, size, "r");
-		//if (file == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Cannot open Allegro memfile!", id); return nullptr; }
-
-		//return file;
-		return nullptr;
+		buffer.resize(size);
+		memcpy(&buffer[0], data, size);
+		
+		return buffer;
 	}
 
-	bool platform_IsFocused(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		//return GetForegroundWindow() == platform_GetWinHandle(allegroDisplayPointer);
-		return false;
+	bool platform_IsFocused(sf::WindowHandle window) {
+		return GetForegroundWindow() == window;
 	}
 
-	void platform_Focus(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		//SetForegroundWindow(platform_GetWinHandle(allegroDisplayPointer));
+	void platform_Focus(sf::WindowHandle window) {
+		SetForegroundWindow(window);
 	}
 
-	void platform_Hide(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		//ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_HIDE);
+	void platform_Hide(sf::WindowHandle window) {
+		ShowWindow(window, SW_HIDE);
 	}
 
-	void platform_Show(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		//ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_SHOW);
+	void platform_Show(sf::WindowHandle window) {
+		ShowWindow(window, SW_SHOW);
 	}
 
-	void platform_HideFromTaskbar(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		//long style = GetWindowLongW(platform_GetWinHandle(allegroDisplayPointer), GWL_STYLE);
-		//style |= WS_VISIBLE;
-		//ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_HIDE);
-		//SetWindowLongW(platform_GetWinHandle(allegroDisplayPointer), GWL_STYLE, style);
-		//ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_SHOW);
+	void platform_HideFromTaskbar(sf::WindowHandle window) {
+		long style = GetWindowLongW(window, GWL_STYLE);
+		style |= WS_VISIBLE;
+		ShowWindow(window, SW_HIDE);
+		SetWindowLongW(window, GWL_STYLE, style);
+		ShowWindow(window, SW_SHOW);
 	}
 
-	void platform_ShowInTaskbar(ALLEGRO_DISPLAY* allegroDisplayPointer) {
-		//long style = GetWindowLongW(platform_GetWinHandle(allegroDisplayPointer), GWL_STYLE);
-		//style &= ~(WS_VISIBLE);
-		//SetWindowLongW(platform_GetWinHandle(allegroDisplayPointer), GWL_STYLE, style);
-		//ShowWindow(platform_GetWinHandle(allegroDisplayPointer), SW_SHOW);
+	void platform_ShowInTaskbar(sf::WindowHandle window) {
+		long style = GetWindowLongW(window, GWL_STYLE);
+		style &= ~(WS_VISIBLE);
+		SetWindowLongW(window, GWL_STYLE, style);
+		ShowWindow(window, SW_SHOW);
+	}
+
+	std::string platform_GetLastWin32ErrorAsString() {
+
+		DWORD errorMessageID = ::GetLastError();
+		if (errorMessageID == 0)
+			return "";
+
+		LPSTR messageBuffer = nullptr;
+		size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
+
+		std::string message(messageBuffer, size);
+		LocalFree(messageBuffer);
+
+		return message;
 	}
 
 }

@@ -12,6 +12,8 @@
 #define BATTERY_CORE_LOGGER_NAME	"BatteryCore"				// Display names for console logging
 #define BATTERY_CLIENT_LOGGER_NAME	"Application"
 
+#define DEFAULT_FONT_SIZE 16
+
 // General settings
 #define BATTERY_DEFAULT_TITLE		"Battery Application"
 

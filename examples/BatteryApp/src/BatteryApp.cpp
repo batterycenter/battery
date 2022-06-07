@@ -4,4 +4,5 @@
 
 void BatteryApp::OnRender() {
     ImGui::ShowDemoWindow();
+    
 }

@@ -1,6 +1,7 @@
 
+#include "Battery/Core/Config.h"
 #include "Battery/Core/Application.h"
-#include "Battery/Renderer/Renderer2D.h"
+#include "Battery/Core/Exception.h"
 #include "Battery/Utils/TimeUtils.h"
 #include "Battery/Utils/ImGuiUtils.h"
 
@@ -88,11 +89,10 @@ namespace Battery {
 			CaptureCurrentColorSchemeAsDefault();
 			LoadBatteryColorScheme();
 
-			defaultFont = ADD_FONT(RobotoMedium, 16);
-			ImGui::GetIO().Fonts->Build();
+			defaultFont = ADD_FONT(RobotoMedium, DEFAULT_FONT_SIZE);
+			ImGui::SFML::UpdateFontTexture();
 
 			ImPlot::CreateContext();
-			Renderer2D::Setup();
 
 			OnStartup();
 			LOG_CORE_INFO("Application running");
@@ -100,7 +100,6 @@ namespace Battery {
 			LOG_CORE_INFO("Stopping Application");
 			OnShutdown();
 
-			Renderer2D::Shutdown();
 			ImPlot::DestroyContext();
 			ImGui::SFML::Shutdown();
 
