@@ -66,7 +66,11 @@ target_include_directories(Battery PUBLIC
 
 
 if(MSVC)
+    set_source_files_properties(
+        "src/serial/serial.cc" "src/serial/impl/win.cc" PROPERTIES COMPILE_FLAGS "/wd4244"
+    )
     set_property(TARGET Battery PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /MP")
 else()
     target_compile_options(Battery PRIVATE -Wno-psabi)
 endif()
