@@ -65,7 +65,7 @@ namespace Battery {
 		return std::filesystem::create_directory(path);
 	}
 
-	bool RenameFile(const std::string& file, const std::string& targetFile) {
+	/*bool RenameFile(const std::string& file, const std::string& targetFile) {
 		try {
 			std::filesystem::rename(file, targetFile);
 			return true;
