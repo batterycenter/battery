@@ -11,6 +11,9 @@
 
 namespace Battery {
 
+	class Application;
+	Application& GetApp();
+
 	class Application {
 	public:
 

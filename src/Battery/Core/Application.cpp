@@ -11,8 +11,18 @@
 
 namespace Battery {
 
+	Application* appPointer = nullptr;
+
+	Application& GetApp() {
+		if (!appPointer)
+			throw Battery::Exception("Not Initialized");
+
+		return *appPointer;
+	}
+
 	Application::Application() {
 		LOG_CORE_TRACE("Creating Application");
+		appPointer = this;
 	}
 
 	Application::~Application() {
@@ -89,15 +99,19 @@ namespace Battery {
 			CaptureCurrentColorSchemeAsDefault();
 			LoadBatteryColorScheme();
 
+			ImPlot::CreateContext();
+			window.clear(BATTERY_DEFAULT_BACKGROUND_COLOR);
+			window.display();
+
+			OnStartup();
+
 			defaultFont = ADD_FONT(RobotoMedium, DEFAULT_FONT_SIZE);
 			ImGui::SFML::UpdateFontTexture();
 
-			ImPlot::CreateContext();
-
-			OnStartup();
 			LOG_CORE_INFO("Application running");
 			RunMainloop();
 			LOG_CORE_INFO("Stopping Application");
+			window.setVisible(false);
 			OnShutdown();
 
 			ImPlot::DestroyContext();
