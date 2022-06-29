@@ -14,6 +14,9 @@ namespace Battery {
 	class Application;
 	Application& GetApp();
 
+	bool SetWindowIcon(sf::RenderWindow& window, uint8_t iconSize, void* data, size_t dataSize);
+	bool SetWindowIconBase64(sf::RenderWindow& window, uint8_t iconSize, const std::string& data);
+
 	class Application {
 	public:
 

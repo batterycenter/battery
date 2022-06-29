@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 // Log levels
 #define BATTERY_LOG_LEVEL_CRITICAL	spdlog::level::critical
 #define BATTERY_LOG_LEVEL_ERROR		spdlog::level::err
@@ -29,3 +31,6 @@
 // Graphics
 #define BATTERY_ANTIALIASING_LINE_FALLOFF 1
 #define BATTERY_DEFAULT_BACKGROUND_COLOR { 60, 60, 60, 255 }
+
+extern const char* BATTERY_DEFAULT_WINDOW_ICON_BASE64;
+extern const size_t BATTERY_DEFAULT_WINDOW_ICON_SIZE;

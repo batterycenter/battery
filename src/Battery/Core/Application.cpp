@@ -4,6 +4,7 @@
 #include "Battery/Core/Exception.h"
 #include "Battery/Utils/TimeUtils.h"
 #include "Battery/Utils/ImGuiUtils.h"
+#include "Battery/Utils/StringUtils.h"
 
 #include "Battery/Fonts/RobotoMedium.h"
 
@@ -18,6 +19,25 @@ namespace Battery {
 			throw Battery::Exception("Not Initialized");
 
 		return *appPointer;
+	}
+
+	bool SetWindowIcon(sf::RenderWindow& window, uint8_t iconSize, void* data, size_t dataSize) {
+		sf::Image image;
+		if (!image.loadFromMemory(data, dataSize)) {
+			LOG_ERROR("Cannot load window icon: Unsupported image format, cannot load sf::Image from memory!");
+			return false;
+		}
+		window.setIcon({ iconSize, iconSize }, image.getPixelsPtr());
+		return true;
+	}
+
+	bool SetWindowIconBase64(sf::RenderWindow& window, uint8_t iconSize, const std::string& data) {
+		auto decoded = DecodeBase64(data);
+		if (decoded.size() == 0) {
+			LOG_ERROR("Cannot load window icon: Base64 encoding contains no data!");
+			return false;
+		}
+		return SetWindowIcon(window, iconSize, &decoded[0], decoded.size());
 	}
 
 	Application::Application() {
@@ -92,9 +112,14 @@ namespace Battery {
 				LOG_CORE_TRACE(std::string("[") + std::to_string(i) + "]: " + args[i]);
 			}
 
+			// Load the default window icon
+			SetWindowIconBase64(window, BATTERY_DEFAULT_WINDOW_ICON_SIZE, BATTERY_DEFAULT_WINDOW_ICON_BASE64);
+
 			// Load ImGui
 			IMGUI_CHECKVERSION();
-			ImGui::SFML::Init(window);
+			if (!ImGui::SFML::Init(window))
+				throw Battery::Exception("Failed to initialize ImGui!");
+
 			ImGui::StyleColorsDark();
 			CaptureCurrentColorSchemeAsDefault();
 			LoadBatteryColorScheme();
@@ -106,7 +131,8 @@ namespace Battery {
 			OnStartup();
 
 			defaultFont = ADD_FONT(RobotoMedium, DEFAULT_FONT_SIZE);
-			ImGui::SFML::UpdateFontTexture();
+			if (!ImGui::SFML::UpdateFontTexture())
+				throw Battery::Exception("Failed to load the ImGui fonts!");
 
 			LOG_CORE_INFO("Application running");
 			RunMainloop();
