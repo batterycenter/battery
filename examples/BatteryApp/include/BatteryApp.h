@@ -5,7 +5,7 @@ class BatteryApp : public Battery::Application {
 public:
     BatteryApp() {}
 
-    //void OnStartup() override;
+    void OnStartup() override;
     //void OnUpdate() override;
     void OnRender() override;
     //void OnShutdown() override;

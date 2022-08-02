@@ -143,6 +143,57 @@ namespace Battery {
 		return message;
 	}
 
+
+
+
+
+
+
+
+
+	static MB_Status win32_IDToEnum(int code) {
+		if (code == IDOK) return MB_Status::OK;
+		if (code == IDYES) return MB_Status::YES;
+		if (code == IDNO) return MB_Status::NO;
+		if (code == IDCANCEL) return MB_Status::CANCEL;
+		if (code == IDABORT) return MB_Status::CANCEL;
+		if (code == IDRETRY) return MB_Status::RETRY;
+		if (code == IDTRYAGAIN) return MB_Status::RETRY;
+		if (code == IDCONTINUE) return MB_Status::CONTINUE;
+		if (code == IDIGNORE) return MB_Status::CONTINUE;
+		return MB_Status::OK;
+	}
+
+	static int win32_BatteryEnumToMessageBoxEnum(MB_Buttons buttons) {
+		if (buttons == MB_Buttons::OK) return MB_OK;
+		if (buttons == MB_Buttons::OK_CANCEL) return MB_OKCANCEL;
+		if (buttons == MB_Buttons::RETRY_CANCEL) return MB_RETRYCANCEL;
+		if (buttons == MB_Buttons::YES_NO) return MB_YESNO;
+		if (buttons == MB_Buttons::YES_NO_CANCEL) return MB_YESNOCANCEL;
+		if (buttons == MB_Buttons::HELP) return MB_HELP;
+		if (buttons == MB_Buttons::CANCEL_TRY_CONTINUE) return MB_CANCELTRYCONTINUE;
+		if (buttons == MB_Buttons::ABORT_RETRY_IGNORE) return MB_ABORTRETRYIGNORE;
+		return MB_OK;
+	}
+
+	MB_Status MessageBoxError(const std::string& message, const std::string& title, MB_Buttons buttons, int defaultButton) {
+		int code = ::MessageBoxA(NULL, message.c_str(), title.c_str(), 
+			MB_ICONERROR | win32_BatteryEnumToMessageBoxEnum(buttons) | ((defaultButton - 1) * 256));
+		return win32_IDToEnum(code);
+	}
+
+	MB_Status MessageBoxWarning(const std::string& message, const std::string& title, MB_Buttons buttons, int defaultButton) {
+		int code = ::MessageBoxA(NULL, message.c_str(), title.c_str(), 
+			MB_ICONWARNING | win32_BatteryEnumToMessageBoxEnum(buttons) | ((defaultButton - 1) * 256));
+		return win32_IDToEnum(code);
+	}
+
+	MB_Status MessageBoxInfo(const std::string& message, const std::string& title, MB_Buttons buttons, int defaultButton) {
+		int code = ::MessageBoxA(NULL, message.c_str(), title.c_str(), 
+			MB_ICONINFORMATION | win32_BatteryEnumToMessageBoxEnum(buttons) | ((defaultButton - 1) * 256));
+		return win32_IDToEnum(code);
+	}
+
 }
 
 #endif // _WIN32

@@ -147,6 +147,30 @@ namespace Battery {
 	std::string platform_GetLastWin32ErrorAsString() {
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
+
+
+
+
+
+
+
+
+	
+
+	MB_Status MessageBoxError(const std::string& message, const std::string& title, MB_Buttons buttons, int defaultButton) {
+#warning TODO: MessageBoxError not implemented
+		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
+	}
+
+	MB_Status MessageBoxWarning(const std::string& message, const std::string& title, MB_Buttons buttons, int defaultButton) {
+#warning TODO: MessageBoxWarning not implemented
+		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
+	}
+
+	MB_Status MessageBoxInfo(const std::string& message, const std::string& title, MB_Buttons buttons, int defaultButton) {
+#warning TODO: MessageBoxInfo not implemented
+		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
+	}
 }
 
 #endif // __linux__

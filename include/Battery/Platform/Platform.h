@@ -28,4 +28,29 @@ namespace Battery {
 
 	std::string platform_GetLastWin32ErrorAsString();
 
+	enum class MB_Buttons {
+		OK,
+		OK_CANCEL,
+		RETRY_CANCEL,
+		YES_NO,
+		YES_NO_CANCEL,
+		HELP,
+		CANCEL_TRY_CONTINUE,
+		ABORT_RETRY_IGNORE
+	};
+
+	enum class MB_Status {
+		OK,
+		YES,
+		NO,
+		CANCEL,			// also contains ABORT
+		RETRY,			// also contains TRY_AGAIN
+		CONTINUE		// also contains IGNORE
+	};
+
+	// defaultButton: 1, 2, 3 or 4
+	MB_Status MessageBoxError(const std::string& message, const std::string& title = "Error", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
+	MB_Status MessageBoxWarning(const std::string& message, const std::string& title = "Warning", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
+	MB_Status MessageBoxInfo(const std::string& message, const std::string& title = "Information", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
+
 }
