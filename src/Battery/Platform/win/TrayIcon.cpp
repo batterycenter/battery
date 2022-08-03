@@ -1,7 +1,7 @@
 
-#include "Battery/Platform/TrayIcon.h"
-
 #ifdef _WIN32
+
+#include "Battery/Platform/TrayIcon.h"
 
 #include "Battery/Core/Log.h"
 #include "Battery/Core/Exception.h"
