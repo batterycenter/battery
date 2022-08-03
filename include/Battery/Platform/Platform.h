@@ -7,6 +7,7 @@
 #endif
 
 #include "SFML/System.hpp"
+#include "Battery/Platform/TrayIcon.h"
 
 namespace Battery {
 
