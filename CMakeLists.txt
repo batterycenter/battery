@@ -27,7 +27,9 @@ if (NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/clip/CMakeLists.txt"
     OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/imgui-sfml/CMakeLists.txt"
     OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/implot/implot.cpp"
     OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/SFML/CMakeLists.txt"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/spdlog/CMakeLists.txt")
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/spdlog/CMakeLists.txt"
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/cpplocate/CMakeLists.txt"
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/nativefiledialog/README.md")
 set(GET_SUB true)
 endif ()
 
@@ -54,7 +56,9 @@ if (NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/clip/CMakeLists.txt"
     OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/imgui-sfml/CMakeLists.txt"
     OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/implot/implot.cpp"
     OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/SFML/CMakeLists.txt"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/spdlog/CMakeLists.txt")
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/spdlog/CMakeLists.txt"
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/cpplocate/CMakeLists.txt"
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/nativefiledialog/README.md")
 message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif ()
 
@@ -75,12 +79,16 @@ include(cmake/imgui-sfml.cmake)
 include(cmake/implot.cmake)
 include(cmake/spdlog.cmake)
 include(cmake/clip.cmake)
+include(cmake/nativefiledialog.cmake)
+include(cmake/cpplocate.cmake)
 
 target_compile_options(imgui PRIVATE "/MT$<$<CONFIG:Debug>:d>")
 target_compile_options(imgui_sfml PRIVATE "/MT$<$<CONFIG:Debug>:d>")
 target_compile_options(implot PRIVATE "/MT$<$<CONFIG:Debug>:d>")
 target_compile_options(spdlog PRIVATE "/MT$<$<CONFIG:Debug>:d>")
 target_compile_options(clip PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+target_compile_options(nativefiledialog PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+target_compile_options(cpplocate PRIVATE "/MT$<$<CONFIG:Debug>:d>")
 
 
 
@@ -142,12 +150,15 @@ target_link_libraries(Battery SFML::Graphics)
 target_link_libraries(Battery SFML::Audio)
 target_link_libraries(Battery SFML::Network)
 target_link_libraries(Battery SFML::System)
+
 target_link_libraries(Battery glm::glm)
 target_link_libraries(Battery imgui::imgui)
 target_link_libraries(Battery imgui_sfml::imgui_sfml)
 target_link_libraries(Battery implot::implot)
 target_link_libraries(Battery spdlog::spdlog)
 target_link_libraries(Battery clip::clip)
+target_link_libraries(Battery nativefiledialog::nativefiledialog)
+target_link_libraries(Battery cpplocate::cpplocate)
 
 
 

@@ -19,3 +19,9 @@
 [submodule "modules/imgui-sfml"]
 	path = modules/imgui-sfml
 	url = https://github.com/eliasdaler/imgui-sfml.git
+[submodule "modules/nativefiledialog"]
+	path = modules/nativefiledialog
+	url = https://github.com/mlabbe/nativefiledialog.git
+[submodule "modules/cpplocate"]
+	path = modules/cpplocate
+	url = https://github.com/cginternals/cpplocate.git
