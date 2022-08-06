@@ -147,4 +147,6 @@ namespace Battery {
 		size_t specificID = objectID++;
 		inline static size_t objectID = 0;		// special ID for every class
 	};
+
+	void DrawImGuiSpinner(const char* label, float radius, float thickness, const ImU32& color);
 }

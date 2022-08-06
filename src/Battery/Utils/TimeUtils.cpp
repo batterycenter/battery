@@ -18,18 +18,22 @@ namespace Battery {
 		return mktime(&t);
 	}
 
+	static sf::Time getEpochTime() {
+		using namespace std::chrono;
+		return sf::microseconds(duration_cast<std::chrono::microseconds>(system_clock::now().time_since_epoch()).count());
+	}
+
 	sf::Time GetRuntime() {
 		
 		if (runtime_start.asMicroseconds() == 0)	// Not initialized yet
 			return sf::microseconds(0);
 
-		using namespace std::chrono;
-		uint64_t timestamp = duration_cast<std::chrono::microseconds>(system_clock::now().time_since_epoch()).count();
-		return sf::microseconds(timestamp - runtime_start.asMicroseconds());
+		return getEpochTime() - runtime_start;
 	}
 
 	void ClearRuntime() {
-		runtime_start = GetRuntime();
+		
+		runtime_start = getEpochTime();
 	}
 
 	void Sleep(double seconds) {

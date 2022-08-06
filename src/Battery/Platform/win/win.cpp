@@ -127,6 +127,20 @@ namespace Battery {
 		ShowWindow(window, SW_SHOW);
 	}
 
+	void platform_SetWindowTransparent(sf::WindowHandle window, bool transparent) {
+		if (transparent) {
+			SetWindowLongPtr(window, GWL_EXSTYLE, GetWindowLongPtr(window, GWL_EXSTYLE) | WS_EX_LAYERED);
+		}
+		else {
+			SetWindowLongPtr(window, GWL_EXSTYLE, GetWindowLongPtr(window, GWL_EXSTYLE) & ~WS_EX_LAYERED);
+			RedrawWindow(window, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_FRAME | RDW_ALLCHILDREN);
+		}
+	}
+
+	void platform_SetWindowAlpha(sf::WindowHandle window, uint8_t alpha) {
+		SetLayeredWindowAttributes(window, 0, alpha, LWA_ALPHA);
+	}
+
 	std::string platform_GetLastWin32ErrorAsString() {
 
 		DWORD errorMessageID = ::GetLastError();
@@ -192,6 +206,12 @@ namespace Battery {
 		int code = ::MessageBoxA(NULL, message.c_str(), title.c_str(), 
 			MB_ICONINFORMATION | win32_BatteryEnumToMessageBoxEnum(buttons) | ((defaultButton - 1) * 256));
 		return win32_IDToEnum(code);
+	}
+
+	glm::vec2 GetUsableDesktopArea() {
+		RECT xy;
+		BOOL fResult = SystemParametersInfo(SPI_GETWORKAREA, 0, &xy, 0);
+		return { xy.right - xy.left, xy.bottom - xy.top };
 	}
 
 }

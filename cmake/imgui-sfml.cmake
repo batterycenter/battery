@@ -29,7 +29,7 @@ install(
 
 install(
     EXPORT imgui_sfmlTargets 
-    DESTINATION "lib/cmake/imgui_sfml"
+    DESTINATION "lib/cmake/imgui-sfml"
     NAMESPACE imgui_sfml::
 )
 
@@ -41,6 +41,6 @@ install(
 )
 
 install(
-    FILES "cmake/imgui_sfmlConfig.cmake"
-    DESTINATION "lib/cmake/imgui_sfml"
+    FILES "cmake/imgui-sfmlConfig.cmake"
+    DESTINATION "lib/cmake/imgui-sfml"
 )

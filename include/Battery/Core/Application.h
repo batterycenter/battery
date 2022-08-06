@@ -15,7 +15,11 @@ namespace Battery {
 	Application& GetApp();
 
 	bool SetWindowIcon(sf::RenderWindow& window, uint8_t iconSize, void* data, size_t dataSize);
+	void SetWindowIcon(sf::RenderWindow& window, uint8_t iconSize, sf::Image image);
 	bool SetWindowIconBase64(sf::RenderWindow& window, uint8_t iconSize, const std::string& data);
+	void SetWindowTransparent(sf::RenderWindow& window, bool transparent);
+	void SetWindowAlpha(sf::RenderWindow& window, uint8_t alpha);
+	void SetWindowFocus(sf::RenderWindow& window);
 
 	class Application {
 	public:
@@ -29,6 +33,7 @@ namespace Battery {
 		virtual void OnShutdown();
 		virtual void OnEvent(sf::Event event, bool& handled);
 
+		void SetWindowStandby(bool standby);
 		void SetFramerate(float fps);
 		void PushLayer(std::shared_ptr<Layer> layer);
 		void PushOverlay(std::shared_ptr<Layer> overlay);
@@ -36,7 +41,7 @@ namespace Battery {
 		void CloseApplication();
 		glm::ivec2 GetPrimaryMonitorSize();
 
-		void Run(int width, int height, int argc, const char** argv);
+		void Run(int width, int height, int argc, const char** argv, int windowStyle = sf::Style::Default);
 
 		float frametime = 0.f;
 		float framerate = 0.f;
@@ -62,6 +67,7 @@ namespace Battery {
     	sf::Clock frametime_clock;
 		ImFont* defaultFont = nullptr;
 		bool shutdownRequested = false;
+		bool windowStandby = false;
 	};
 
 }

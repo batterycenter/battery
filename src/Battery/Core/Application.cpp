@@ -5,6 +5,7 @@
 #include "Battery/Utils/TimeUtils.h"
 #include "Battery/Utils/ImGuiUtils.h"
 #include "Battery/Utils/StringUtils.h"
+#include "Battery/Platform/Platform.h"
 
 #include "Battery/Fonts/RobotoMedium.h"
 
@@ -27,8 +28,12 @@ namespace Battery {
 			LOG_ERROR("Cannot load window icon: Unsupported image format, cannot load sf::Image from memory!");
 			return false;
 		}
-		window.setIcon({ iconSize, iconSize }, image.getPixelsPtr());
+		SetWindowIcon(window, iconSize, image);
 		return true;
+	}
+
+	void SetWindowIcon(sf::RenderWindow& window, uint8_t iconSize, sf::Image image) {
+		window.setIcon({ iconSize, iconSize }, image.getPixelsPtr());
 	}
 
 	bool SetWindowIconBase64(sf::RenderWindow& window, uint8_t iconSize, const std::string& data) {
@@ -39,6 +44,21 @@ namespace Battery {
 		}
 		return SetWindowIcon(window, iconSize, &decoded[0], decoded.size());
 	}
+
+	void SetWindowTransparent(sf::RenderWindow& window, bool transparent) {
+		platform_SetWindowTransparent(window.getSystemHandle(), transparent);
+	}
+
+	void SetWindowAlpha(sf::RenderWindow& window, uint8_t alpha) {
+		platform_SetWindowAlpha(window.getSystemHandle(), alpha);
+	}
+
+	void SetWindowFocus(sf::RenderWindow& window) {
+		platform_Focus(window.getSystemHandle());
+	}
+
+
+
 
 	Application::Application() {
 		LOG_CORE_TRACE("Creating Application");
@@ -60,8 +80,12 @@ namespace Battery {
 		}
 	}
 
+	void Application::SetWindowStandby(bool standby) {
+		windowStandby = standby;
+	}
+
 	void Application::SetFramerate(float fps) {
-		window.setFramerateLimit(fps);
+		window.setFramerateLimit((int)fps);
 	}
 
 	void Application::PushLayer(std::shared_ptr<Layer> layer) {
@@ -92,16 +116,16 @@ namespace Battery {
 
 
 
-	void Application::Run(int width, int height, int argc, const char** argv) {
+	void Application::Run(int width, int height, int argc, const char** argv, int windowStyle) {
 		try {
 			LOG_CORE_INFO("Loading Application");
-
+			
 			// Auto-fit window size
-			if (width <= 0) width = GetPrimaryMonitorSize().x;
-			if (height <= 0) height = GetPrimaryMonitorSize().y;
+			if (width < 0) width = GetPrimaryMonitorSize().x;
+			if (height < 0) height = GetPrimaryMonitorSize().y;
 
 			// Create window
-			window.create(sf::VideoMode({ (uint32_t)width, (uint32_t)height }), BATTERY_DEFAULT_TITLE);
+			window.create(sf::VideoMode({ (uint32_t)width, (uint32_t)height }), BATTERY_DEFAULT_TITLE, windowStyle);
 			if (!window.isOpen())
 				throw Battery::Exception("Could not create SFML window! Please check the graphics drivers!");
 
@@ -113,12 +137,14 @@ namespace Battery {
 			}
 
 			// Load the default window icon
-			SetWindowIconBase64(window, BATTERY_DEFAULT_WINDOW_ICON_SIZE, BATTERY_DEFAULT_WINDOW_ICON_BASE64);
+			SetWindowIconBase64(window, (uint8_t)BATTERY_DEFAULT_WINDOW_ICON_SIZE, BATTERY_DEFAULT_WINDOW_ICON_BASE64);
 
 			// Load ImGui
 			IMGUI_CHECKVERSION();
 			if (!ImGui::SFML::Init(window))
 				throw Battery::Exception("Failed to initialize ImGui!");
+
+			window.setFramerateLimit(60);
 
 			ImGui::StyleColorsDark();
 			CaptureCurrentColorSchemeAsDefault();
@@ -128,6 +154,7 @@ namespace Battery {
 			window.clear(BATTERY_DEFAULT_BACKGROUND_COLOR);
 			window.display();
 
+			ClearRuntime();
 			OnStartup();
 
 			defaultFont = ADD_FONT(RobotoMedium, DEFAULT_FONT_SIZE);
@@ -174,7 +201,12 @@ namespace Battery {
 			PostRender();
 
 			// Show rendered image (and sleep)
-			window.display();
+			if (!windowStandby) {
+				window.display();
+			}
+			else {
+				Sleep(0.05);
+			}
 		}
 	}
 
@@ -188,7 +220,9 @@ namespace Battery {
 		}
 
 		HandleEvents();
-        ImGui::SFML::Update(window, dt);
+		if (!windowStandby) {
+			ImGui::SFML::Update(window, dt);
+		}
 	}
 
 	void Application::UpdateApp() {
@@ -209,8 +243,10 @@ namespace Battery {
 	}
 
 	void Application::PreRender() {
-		window.clear(BATTERY_DEFAULT_BACKGROUND_COLOR);
-		ImGui::PushFont(defaultFont);
+		if (!windowStandby) {
+			window.clear(BATTERY_DEFAULT_BACKGROUND_COLOR);
+			ImGui::PushFont(defaultFont);
+		}
 	}
 
 	void Application::RenderApp() {
@@ -227,8 +263,10 @@ namespace Battery {
 	}
 
 	void Application::PostRender() {
-		ImGui::PopFont();
-        ImGui::SFML::Render(window);
+		if (!windowStandby) {
+			ImGui::PopFont();
+			ImGui::SFML::Render(window);
+		}
 	}
 
 	void Application::HandleEvents() {
@@ -238,15 +276,6 @@ namespace Battery {
 
 		while (window.pollEvent(event)) {
             ImGui::SFML::ProcessEvent(window, event);
-
-			// Give the event to the base application
-			LOG_CORE_TRACE("Application::OnEvent()");
-			OnEvent(event, handled);
-
-			if (handled) {
-				LOG_CORE_TRACE("Event was handled by the base application");
-				continue;
-			}
 
 			// Propagate through the layer stack in reverse order
 			for (size_t i = 0; i < layers.GetLayers().size(); i++) {
@@ -259,6 +288,15 @@ namespace Battery {
 					LOG_CORE_TRACE("Event was handled by Layer #{}", i);
 					break;
 				}
+			}
+
+			// Give the event to the base application
+			LOG_CORE_TRACE("Application::OnEvent()");
+			OnEvent(event, handled);
+
+			if (handled) {
+				LOG_CORE_TRACE("Event was handled by the base application");
+				continue;
 			}
         }
 	}

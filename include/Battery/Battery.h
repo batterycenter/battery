@@ -5,6 +5,7 @@
 #include "Battery/Core/Log.h"
 #include "Battery/Core/Application.h"
 #include "Battery/Core/ImGuiPanel.h"
+#include "Battery/Core/Exception.h"
 #include "Battery/Utils/TimeUtils.h"
 #include "Battery/Utils/FileUtils.h"
 #include "Battery/Utils/MathUtils.h"

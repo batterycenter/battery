@@ -26,6 +26,8 @@ namespace Battery {
 	void platform_Show(sf::WindowHandle window);
 	void platform_HideFromTaskbar(sf::WindowHandle window);
 	void platform_ShowInTaskbar(sf::WindowHandle window);
+	void platform_SetWindowTransparent(sf::WindowHandle window, bool transparent);
+	void platform_SetWindowAlpha(sf::WindowHandle window, uint8_t alpha);
 
 	std::string platform_GetLastWin32ErrorAsString();
 
@@ -54,4 +56,5 @@ namespace Battery {
 	MB_Status MessageBoxWarning(const std::string& message, const std::string& title = "Warning", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
 	MB_Status MessageBoxInfo(const std::string& message, const std::string& title = "Information", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
 
+	glm::vec2 GetUsableDesktopArea();
 }

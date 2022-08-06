@@ -21,14 +21,53 @@ endif()
 # Dependencies #
 ################
 
+if (NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/clip/CMakeLists.txt"
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/glm/CMakeLists.txt"
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/imgui/imgui.cpp"
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/imgui-sfml/CMakeLists.txt"
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/implot/implot.cpp"
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/SFML/CMakeLists.txt"
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/spdlog/CMakeLists.txt")
+set(GET_SUB true)
+endif ()
+
+if (GET_SUB)
+find_package(Git)
+if(GIT_FOUND AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/.git")
+    # Update submodules as needed
+    option(GIT_SUBMODULE "Check submodules during build" ON)
+    if(GIT_SUBMODULE)
+        message(STATUS "Submodule update in ${CMAKE_CURRENT_LIST_DIR}")
+        execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+                        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+                        RESULT_VARIABLE GIT_SUBMOD_RESULT)
+        if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+            message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
+        endif()
+    endif()
+endif()
+endif()
+
+if (NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/clip/CMakeLists.txt"
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/glm/CMakeLists.txt"
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/imgui/imgui.cpp"
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/imgui-sfml/CMakeLists.txt"
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/implot/implot.cpp"
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/SFML/CMakeLists.txt"
+    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/spdlog/CMakeLists.txt")
+message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+endif ()
+
 set(BUILD_SHARED_LIBS FALSE)
 set(SFML_USE_STATIC_STD_LIBS TRUE)
 add_subdirectory(modules/SFML)
 
-set_property(TARGET sfml-graphics PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-set_property(TARGET sfml-window PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-set_property(TARGET sfml-main PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-set_property(TARGET sfml-system PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+target_compile_options(sfml-graphics PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+target_compile_options(sfml-main PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+target_compile_options(sfml-window PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+target_compile_options(sfml-system PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+target_compile_options(sfml-audio PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+target_compile_options(sfml-network PRIVATE "/MT$<$<CONFIG:Debug>:d>")
 
 include(cmake/glm.cmake)
 include(cmake/imgui.cmake)
@@ -37,11 +76,11 @@ include(cmake/implot.cmake)
 include(cmake/spdlog.cmake)
 include(cmake/clip.cmake)
 
-set_property(TARGET imgui PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-set_property(TARGET imgui_sfml PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-set_property(TARGET implot PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-set_property(TARGET spdlog PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-set_property(TARGET clip PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+target_compile_options(imgui PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+target_compile_options(imgui_sfml PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+target_compile_options(implot PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+target_compile_options(spdlog PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+target_compile_options(clip PRIVATE "/MT$<$<CONFIG:Debug>:d>")
 
 
 
@@ -69,7 +108,7 @@ if(MSVC)
     set_source_files_properties(
         "src/serial/serial.cc" "src/serial/impl/win.cc" PROPERTIES COMPILE_FLAGS "/wd4244"
     )
-    set_property(TARGET Battery PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    target_compile_options(Battery PRIVATE "/MT$<$<CONFIG:Debug>:d>")
     string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /MP")
 else()
     target_compile_options(Battery PRIVATE -Wno-psabi)
