@@ -90,10 +90,20 @@ namespace Battery {
 	}
 
 	void TrayIcon::update() {
-        std::lock_guard<std::mutex> lock(messageStackMutex);
-        while (!messageStack.empty()) {
-            handleMessage(messageStack.front());
-            messageStack.pop();
+
+        while (true) {
+			TrayMessage message;
+
+			{
+				std::lock_guard<std::mutex> lock(messageStackMutex);
+				if (messageStack.empty()) {
+					break;
+				}
+				message = messageStack.front();
+				messageStack.pop();
+			}
+
+            handleMessage(message);
         }
 	}
 

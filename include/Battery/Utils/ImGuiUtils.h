@@ -136,14 +136,9 @@ namespace Battery {
 		DropdownMenu() {}
 		DropdownMenu(const std::string& name) : name(name) {}
 
-		/// <summary>
-		/// Render the dropdown menu. Returns the array index of the currently selected item,
-		/// or -1 if the array is empty.
-		/// </summary>
-		size_t Draw();
+		void Draw(size_t& selectedItem);
 
 	private:
-		size_t selected = 0;
 		size_t specificID = objectID++;
 		inline static size_t objectID = 0;		// special ID for every class
 	};

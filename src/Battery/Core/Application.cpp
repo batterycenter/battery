@@ -161,11 +161,18 @@ namespace Battery {
 			if (!ImGui::SFML::UpdateFontTexture())
 				throw Battery::Exception("Failed to load the ImGui fonts!");
 
-			LOG_CORE_INFO("Application running");
-			RunMainloop();
+			if (!shutdownRequested) {
+				LOG_CORE_INFO("Application running");
+				RunMainloop();
+			}
+			else {
+				LOG_CORE_WARN("OnStartup requested shutdown, skipping main loop entirely and shutting down immediately");
+			}
+
 			LOG_CORE_INFO("Stopping Application");
 			window.setVisible(false);
 			OnShutdown();
+
 
 			ImPlot::DestroyContext();
 			ImGui::SFML::Shutdown();

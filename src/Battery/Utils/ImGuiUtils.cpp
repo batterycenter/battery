@@ -104,11 +104,11 @@ namespace Battery {
 
     bool EmbedTTFAsHeaderFile(const std::string& inputFile, const std::string& outputFile, const std::string& symbolName, bool compress) {
         
-        File ttfBytes = ReadFile(inputFile, true);
-        if (ttfBytes.fail())
+        auto[success, ttfBytes] = ReadFile(inputFile, true);
+        if (!success)
             return false;
 
-        return WriteFile(outputFile, EmbedTTFAsHeaderFileDirect(ttfBytes.content(), symbolName, compress));
+        return WriteFile(outputFile, EmbedTTFAsHeaderFileDirect(ttfBytes, symbolName, compress));
     }
 
     ImFont* AddEmbeddedFont(const unsigned int* data, unsigned int length, float pixels, const ImWchar* glyphRange) {
@@ -127,25 +127,25 @@ namespace Battery {
 
 
 
-    size_t DropdownMenu::Draw() {
+    void DropdownMenu::Draw(size_t& selectedItem) {
 
 		ImGui::PushID("BatteryDropdownMenu");
 
-		if (selected >= items.size())
-			selected = items.size() - 1;
+		if (selectedItem >= items.size())
+			selectedItem = items.size() - 1;
 
         if (name.length() == 0)
             name += "##";
 
 		ImGui::PushID(specificID);
-        const char* label = (items.size() == 0) ? "" : items[selected].c_str();
+        const char* label = (items.size() == 0) ? "" : items[selectedItem].c_str();
 		if (ImGui::BeginCombo(name.c_str(), label)) {
 			if (items.size() != 0) {
 			    for (size_t i = 0; i < items.size(); i++) {
 					ImGui::PushID(i);
-			        bool is_selected = (i == selected);
+			        bool is_selected = (i == selectedItem);
 			        if (ImGui::Selectable(items[i].c_str(), is_selected))
-			            selected = i;
+						selectedItem = i;
 			        if (is_selected)
 			            ImGui::SetItemDefaultFocus();
 					ImGui::PopID();
@@ -155,8 +155,6 @@ namespace Battery {
 		}
 		ImGui::PopID();
 		ImGui::PopID();
-
-		return selected;
 	}
 
 	void DrawImGuiSpinner(const char* label, float radius, float thickness, const ImU32& color) {
