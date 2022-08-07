@@ -306,7 +306,7 @@ std::string binary_to_compressed_c(const std::string& file, const std::string& s
         buffer += std::string("static const unsigned int ") + symbol + "_" + compressed_str + "size = " + std::to_string(compressed_sz) + ";\n";
         buffer += std::string("static const unsigned int ") + symbol + "_" + compressed_str + "data[" + std::to_string((int)((compressed_sz + 3) / 4) * 4) + "/4] =\n{";
         int column = 0;
-        for (int i = 0; i < compressed_sz; i += 4)
+        for (size_t i = 0; i < compressed_sz; i += 4)
         {
             char hex[12];
             snprintf(hex, 12, "0x%08x", *(unsigned int*)(compressed + i));

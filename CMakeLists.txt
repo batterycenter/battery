@@ -134,6 +134,10 @@ if (WIN32)
        NOMINMAX                 # Prevents Windows.h from defining min/max as macros 
        _CRT_SECURE_NO_WARNINGS
     )
+    target_compile_definitions(Battery PUBLIC
+       UNICODE
+       _UNICODE
+    )
 endif()
 
 

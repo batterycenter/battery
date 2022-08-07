@@ -166,7 +166,7 @@ namespace Battery {
 	}
 
 	bool RemoveFile(const std::string& path) {
-		return std::remove(path.c_str());
+		return std::remove(path.c_str()) == 0;
 	}
 
 	bool RemoveDirectory(const std::string& path) {
