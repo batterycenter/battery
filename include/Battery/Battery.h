@@ -11,6 +11,7 @@
 #include "Battery/Utils/MathUtils.h"
 #include "Battery/Utils/ImGuiUtils.h"
 #include "Battery/Utils/StringUtils.h"
+#include "Battery/Utils/AppUtils.h"
 
 #include "SFML/Main.hpp"
 #include "SFML/Graphics.hpp"

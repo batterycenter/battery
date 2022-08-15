@@ -62,6 +62,11 @@ namespace Battery {
 	bool RenameFile(const std::string& file, const std::string& targetFile);
 
 	/// <summary>
+	/// Copy file from one place to another by specifying the source file and the target file
+	/// </summary>
+	bool CopyFile(const std::string& sourceFile, std::string targetFile);
+
+	/// <summary>
 	/// Move a file on disk by specifying the filename (absolute or relative path)
 	/// and the target directory, which is created if it does not exist.
 	/// </summary>

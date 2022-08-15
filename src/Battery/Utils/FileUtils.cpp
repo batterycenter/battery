@@ -18,6 +18,10 @@ namespace fs = std::filesystem;
 #undef MoveFile
 #endif
 
+#ifdef CopyFile
+#undef CopyFile
+#endif
+
 #ifdef RemoveDirectory
 #undef RemoveDirectory
 #endif
@@ -79,6 +83,21 @@ namespace Battery {
 		}
 		catch (std::filesystem::filesystem_error& e) {
 			LOG_CORE_ERROR("Failed to rename file '{}' to '{}': {}", file, targetFile, e.what());
+		}
+
+		return false;
+	}
+
+	bool CopyFile(const std::string& sourceFile, std::string targetFile) {
+
+		PrepareDirectory(GetParentDirectory(targetFile));
+
+		try {
+			std::filesystem::copy(sourceFile, targetFile);
+			return true;
+		}
+		catch (std::filesystem::filesystem_error& e) {
+			LOG_CORE_ERROR("{}: {}", __FUNCTION__, "Failed to copy file: {}", e.what());
 		}
 
 		return false;
