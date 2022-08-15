@@ -17,7 +17,8 @@
 #define DEFAULT_FONT_SIZE 16
 
 // General settings
-#define BATTERY_DEFAULT_TITLE		"Battery Application"
+#define BATTERY_DEFAULT_TITLE				"Battery Application"
+#define BATTERY_DEFAULT_APPLICATION_NAME	"BatteryApplication"
 
 // Profiling											// TODO: Remove profiling
 #define BATTERY_PROFILING_MAX_TIMEPOINT_NUMBER 64

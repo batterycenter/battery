@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Battery/pch.h"
+#include "Battery/Core/Config.h"
 #include "Battery/Core/Log.h"
 #include "Battery/Core/Layer.h"
 #include "Battery/Core/LayerStack.h"
@@ -48,6 +49,7 @@ namespace Battery {
 		size_t framecount = 0;
 		std::vector<std::string> args;
 		sf::RenderWindow window;
+		std::string applicationName = BATTERY_DEFAULT_APPLICATION_NAME;
 
 	private:
 		void RunMainloop();
