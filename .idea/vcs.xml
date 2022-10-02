@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/SFML" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/clip" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/glm" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/imgui" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/imgui-sfml" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/implot" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/spdlog" vcs="Git" />
+  </component>
+</project>

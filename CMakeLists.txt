@@ -15,52 +15,45 @@ endif()
 
 
 
+###################
+# Helper function #
+###################
+
+function(GET_GITHUB_DEPENDENCY NAME REQUIRED_FILE REPOSITORY_URL BRANCH COMMIT)
+if (NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/${REQUIRED_FILE}")
+    find_package(Git REQUIRED)
+    if(GIT_FOUND)
+        message(STATUS "${REQUIRED_FILE} not found, getting dependency '${NAME}'")
+        file(MAKE_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/modules)
+        execute_process(COMMAND ${GIT_EXECUTABLE} clone ${REPOSITORY_URL} --single-branch --branch=${BRANCH} --depth=1 && ${GIT_EXECUTABLE} checkout ${COMMIT}
+                        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/modules
+                        RESULT_VARIABLE GIT_RESULT)
+        if(NOT GIT_RESULT EQUAL "0")
+            message(FATAL_ERROR "git clone ${REPOSITORY_URL} failed. Error: '${GIT_RESULT}'. Please check the dependencies")
+        endif()
+    else()
+        message(FATAL_ERROR "Cannot get dependencies, git executable not found. Please install Git")
+    endif()
+endif()
+endfunction()
+
+
+
 
 
 ################
 # Dependencies #
 ################
 
-if (NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/clip/CMakeLists.txt"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/glm/CMakeLists.txt"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/imgui/imgui.cpp"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/imgui-sfml/CMakeLists.txt"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/implot/implot.cpp"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/SFML/CMakeLists.txt"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/spdlog/CMakeLists.txt"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/cpplocate/CMakeLists.txt"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/nativefiledialog/README.md")
-set(GET_SUB true)
-endif ()
-
-if (GET_SUB)
-find_package(Git)
-if(GIT_FOUND AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/.git")
-    # Update submodules as needed
-    option(GIT_SUBMODULE "Check submodules during build" ON)
-    if(GIT_SUBMODULE)
-        message(STATUS "Submodule update in ${CMAKE_CURRENT_LIST_DIR}")
-        execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-                        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
-                        RESULT_VARIABLE GIT_SUBMOD_RESULT)
-        if(NOT GIT_SUBMOD_RESULT EQUAL "0")
-            message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
-        endif()
-    endif()
-endif()
-endif()
-
-if (NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/clip/CMakeLists.txt"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/glm/CMakeLists.txt"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/imgui/imgui.cpp"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/imgui-sfml/CMakeLists.txt"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/implot/implot.cpp"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/SFML/CMakeLists.txt"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/spdlog/CMakeLists.txt"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/cpplocate/CMakeLists.txt"
-    OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/modules/nativefiledialog/README.md")
-message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
-endif ()
+get_github_dependency(clip "modules/clip/CMakeLists.txt" "https://github.com/dacap/clip.git" main 3433235c7faa86d28507558cf07ffa0d933ffd72)
+get_github_dependency(glm "modules/glm/CMakeLists.txt" "https://github.com/g-truc/glm.git" master cc98465e3508535ba8c7f6208df934c156a018dc)
+get_github_dependency(imgui "modules/imgui/CMakeLists.txt" "https://github.com/ocornut/imgui.git" master cc5058e5d7dcbf94f28277d6bee5face7f8b0a63)
+get_github_dependency(imgui-sfml "modules/imgui-sfml/CMakeLists.txt" "https://github.com/eliasdaler/imgui-sfml.git" master 15753d56403a7aeb1cae12fd930cfb1d2eac5e74)
+get_github_dependency(implot "modules/implot/CMakeLists.txt" "https://github.com/epezent/implot.git" master 626e391670a4018a365787e35ef4cf01cb68ee31)
+get_github_dependency(SFML "modules/SFML/CMakeLists.txt" "https://github.com/SFML/SFML.git" master 2f11710abc5aa478503a7ff3f9e654bd2078ebab)
+get_github_dependency(spdlog "modules/spdlog/CMakeLists.txt" "https://github.com/gabime/spdlog.git" v1.10.0 76fb40d95455f249bd70824ecfcae7a8f0930fa3)
+get_github_dependency(cpplocate "modules/cpplocate/CMakeLists.txt" "https://github.com/cginternals/cpplocate.git" master 82e574d937a8d6d379359ede413425f7c35f59d1)
+get_github_dependency(nativefiledialog "modules/nativefiledialog/CMakeLists.txt" "https://github.com/mlabbe/nativefiledialog.git" master 67345b80ebb429ecc2aeda94c478b3bcc5f7888e)
 
 set(BUILD_SHARED_LIBS FALSE)
 set(SFML_USE_STATIC_STD_LIBS TRUE)
