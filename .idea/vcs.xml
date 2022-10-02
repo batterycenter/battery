@@ -4,10 +4,18 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/modules/SFML" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/modules/clip" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/cpplocate" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/modules/glm" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/modules/imgui" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/modules/imgui-sfml" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/modules/implot" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/nativefiledialog" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/modules/spdlog" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/test" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/test1" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/test2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/test3" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/test4" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/test5" vcs="Git" />
   </component>
 </project>

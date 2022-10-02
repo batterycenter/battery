@@ -1,5 +1,5 @@
 
-set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/modules/imgui)
+set(IMGUI_DIR $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/modules/imgui/>$<INSTALL_INTERFACE:>)
 add_library(imgui STATIC)
 add_library(imgui::imgui ALIAS imgui)
 
