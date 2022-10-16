@@ -7,6 +7,7 @@
 
 #include "cpplocate/cpplocate.h"
 #include <filesystem>
+#include <sys/stat.h>
 namespace fs = std::filesystem;
 
 #ifdef _WIN32
@@ -54,8 +55,8 @@ namespace Battery {
 	}
 
 	bool FileExists(const std::string& path) {
-  		struct stat buffer;   
-  		return (stat (path.c_str(), &buffer) == 0); 
+  		struct stat buffer;
+  		return stat(path.c_str(), &buffer) == 0;
 	}
 
 	bool DirectoryExists(const std::string& path) {

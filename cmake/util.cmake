@@ -1,9 +1,5 @@
 
-###################
-# Helper function #
-###################
-
-function(BATTERY_GET_GITHUB_DEPENDENCY NAME REQUIRED_FILE REPOSITORY_URL BRANCH)
+function(GET_GITHUB_DEPENDENCY NAME REQUIRED_FILE REPOSITORY_URL BRANCH)
     if (NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/${REQUIRED_FILE}")
         find_package(Git REQUIRED)
         if(GIT_FOUND)
@@ -22,10 +18,10 @@ function(BATTERY_GET_GITHUB_DEPENDENCY NAME REQUIRED_FILE REPOSITORY_URL BRANCH)
     endif()
 endfunction()
 
-function(BATTERY_TARGET_STATIC_RUNTIME TARGET)
+function(USE_STATIC_RUNTIME TARGET)
     if (MSVC)
-        target_compile_options(${TARGET} PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+        target_compile_options(${TARGET} PRIVATE /MT$<$<CONFIG:Debug>:d>)
     else()
-        target_compile_options(${TARGET} PRIVATE "-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++")
+        target_compile_options(${TARGET} PRIVATE -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++)
     endif()
 endfunction()

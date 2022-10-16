@@ -33,12 +33,12 @@ namespace Battery {
 	}
 
 	void SetWindowIcon(sf::RenderWindow& window, uint8_t iconSize, sf::Image image) {
-		window.setIcon({ iconSize, iconSize }, image.getPixelsPtr());
+		window.setIcon(iconSize, iconSize, image.getPixelsPtr());
 	}
 
 	bool SetWindowIconBase64(sf::RenderWindow& window, uint8_t iconSize, const std::string& data) {
 		auto decoded = DecodeBase64(data);
-		if (decoded.size() == 0) {
+		if (decoded.empty()) {
 			LOG_ERROR("Cannot load window icon: Base64 encoding contains no data!");
 			return false;
 		}
@@ -105,7 +105,7 @@ namespace Battery {
 	}
 
 	glm::ivec2 Application::GetPrimaryMonitorSize() {
-		return glm::ivec2(sf::VideoMode::getDesktopMode().size.x, sf::VideoMode::getDesktopMode().size.y);
+		return {sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height};
 	}
 
 
@@ -141,8 +141,7 @@ namespace Battery {
 
 			// Load ImGui
 			IMGUI_CHECKVERSION();
-			if (!ImGui::SFML::Init(window))
-				throw Battery::Exception("Failed to initialize ImGui!");
+			ImGui::SFML::Init(window);
 
 			window.setFramerateLimit(60);
 
@@ -158,8 +157,7 @@ namespace Battery {
 			OnStartup();
 
 			defaultFont = ADD_FONT(RobotoMedium, DEFAULT_FONT_SIZE);
-			if (!ImGui::SFML::UpdateFontTexture())
-				throw Battery::Exception("Failed to load the ImGui fonts!");
+			ImGui::SFML::UpdateFontTexture();
 
 			if (!shutdownRequested) {
 				LOG_CORE_INFO("Application running");

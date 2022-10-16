@@ -16,14 +16,14 @@
 #include <cstddef>
 #include <thread>
 
-#ifndef _WIN32
+#ifndef _MSC_VER
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wvolatile"		// Disable a glm warning (because of C++20)
 #endif
 
-	#include "glm/glm.hpp"                  
+	#include "glm/glm.hpp"
 
-#ifndef _WIN32
+#ifndef _MSC_VER
 #pragma GCC diagnostic pop
 #endif
 

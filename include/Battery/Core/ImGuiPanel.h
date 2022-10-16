@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Battery/pch.h"
+#include "Battery/pch.hpp"
 
 #define DEFAULT_IMGUI_PANEL_FLAGS \
 	ImGuiWindowFlags_NoTitleBar | \

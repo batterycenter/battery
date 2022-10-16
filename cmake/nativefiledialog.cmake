@@ -7,10 +7,13 @@ if (WIN32)
     target_sources(nativefiledialog PUBLIC
             ${NATIVE_FILE_DIALOG_DIR}/src/nfd_common.c
             ${NATIVE_FILE_DIALOG_DIR}/src/nfd_win.cpp)
+    set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/modules/nativefiledialog/src/nfd_common.c PROPERTIES LANGUAGE CXX)
 elseif ()
     target_sources(nativefiledialog PUBLIC
             ${NATIVE_FILE_DIALOG_DIR}/src/nfd_common.c
             ${NATIVE_FILE_DIALOG_DIR}/src/nfd_zenity.c)
+    set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/modules/nativefiledialog/src/nfd_common.c PROPERTIES LANGUAGE CXX)
+    set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/modules/nativefiledialog/src/nfd_zenity.c PROPERTIES LANGUAGE CXX)
 endif ()
 
 
