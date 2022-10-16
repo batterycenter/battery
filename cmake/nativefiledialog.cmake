@@ -7,45 +7,42 @@ if (WIN32)
     target_sources(nativefiledialog PUBLIC
             ${NATIVE_FILE_DIALOG_DIR}/src/nfd_common.c
             ${NATIVE_FILE_DIALOG_DIR}/src/nfd_win.cpp)
-    set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/modules/nativefiledialog/src/nfd_common.c PROPERTIES LANGUAGE CXX)
 elseif ()
     target_sources(nativefiledialog PUBLIC
             ${NATIVE_FILE_DIALOG_DIR}/src/nfd_common.c
             ${NATIVE_FILE_DIALOG_DIR}/src/nfd_zenity.c)
-    set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/modules/nativefiledialog/src/nfd_common.c PROPERTIES LANGUAGE CXX)
-    set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/modules/nativefiledialog/src/nfd_zenity.c PROPERTIES LANGUAGE CXX)
 endif ()
 
 
 
 target_include_directories(nativefiledialog PUBLIC
-    $<BUILD_INTERFACE:${NATIVE_FILE_DIALOG_DIR}/src/include>
-    $<INSTALL_INTERFACE:/>
+        $<BUILD_INTERFACE:${NATIVE_FILE_DIALOG_DIR}/src/include>
+        $<INSTALL_INTERFACE:/>
+        )
+
+install(
+        TARGETS nativefiledialog
+        EXPORT nativefiledialogTargets
+        LIBRARY DESTINATION "lib"
+        ARCHIVE DESTINATION "lib"
+        RUNTIME DESTINATION "bin"
+        INCLUDES DESTINATION "include"
 )
 
 install(
-    TARGETS nativefiledialog
-    EXPORT nativefiledialogTargets
-    LIBRARY DESTINATION "lib"
-    ARCHIVE DESTINATION "lib"
-    RUNTIME DESTINATION "bin"
-    INCLUDES DESTINATION "include"
-)
-
-install(
-    EXPORT nativefiledialogTargets
-    DESTINATION "lib/cmake/nativefiledialog"
-    NAMESPACE nativefiledialog::
+        EXPORT nativefiledialogTargets
+        DESTINATION "lib/cmake/nativefiledialog"
+        NAMESPACE nativefiledialog::
 )
 
 # Install headers
 install(
-    DIRECTORY "${NATIVE_FILE_DIALOG_DIR}/"
-    DESTINATION "include"
-    FILES_MATCHING PATTERN "*.h"
+        DIRECTORY "${NATIVE_FILE_DIALOG_DIR}/"
+        DESTINATION "include"
+        FILES_MATCHING PATTERN "*.h"
 )
 
 install(
-    FILES "cmake/nativefiledialogConfig.cmake"
-    DESTINATION "lib/cmake/nativefiledialog"
+        FILES "cmake/nativefiledialogConfig.cmake"
+        DESTINATION "lib/cmake/nativefiledialog"
 )

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(Battery VERSION 0.1.1 LANGUAGES CXX)
+project(Battery VERSION 0.1.1 LANGUAGES C CXX)
 
 include(cmake/util.cmake)
 
@@ -108,8 +108,6 @@ else()
     target_compile_options(Battery PRIVATE -Wno-psabi)
 endif()
 
-
-
 ############################
 # Preprocessor definitions #
 ############################
@@ -159,7 +157,7 @@ target_link_libraries(Battery cpplocate)
 #######################
 
 if (BATTERY_USE_PRECOMPILED_HEADER)
-    target_precompile_headers(Battery PRIVATE include/Battery/pch.hpp)
+    target_precompile_headers(Battery PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_LIST_DIR}/include/Battery/pch.hpp>")
 endif()
 
 
