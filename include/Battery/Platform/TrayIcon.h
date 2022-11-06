@@ -1,5 +1,6 @@
 #pragma
 
+#include "Battery/pch.hpp"
 #include "Battery/Utils/TypeUtils.h"
 
 namespace Battery {

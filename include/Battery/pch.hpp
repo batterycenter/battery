@@ -34,7 +34,16 @@
 #include "imgui_internal.h"
 #include "implot.h"
 
+#include "BatteryUI/BatteryUI.h"
+
 // SFML
-#include <SFML/Graphics.hpp>
+#include "SFML/Main.hpp"
+#include "SFML/Graphics.hpp"
+#include "SFML/System.hpp"
+#include "SFML/Network.hpp"
+#include "SFML/Audio.hpp"
+#include "SFML/Window.hpp"
+
+#include "imgui-SFML.h"
 
 #endif // _BATTERY_PCH_H

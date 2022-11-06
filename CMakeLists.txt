@@ -24,10 +24,15 @@ endif()
 # Options: Library configuration #
 ##################################
 
+option(BUILD_EXAMPLES "Build examples" on)
 option(BATTERY_STATIC_RUNTIME "Use statically linked runtime" off)
 option(BATTERY_SHARED_LIB "Build shared library instead of static" off)
-option(BATTERY_USE_PRECOMPILED_HEADER "Using a precompiled header to speed up compile time" ON)
 
+if (MSVC)
+    option(BATTERY_USE_PRECOMPILED_HEADER "Using a precompiled header to speed up compile time" on)
+else()
+    option(BATTERY_USE_PRECOMPILED_HEADER "Using a precompiled header to speed up compile time" off)
+endif()
 
 
 ################
@@ -43,6 +48,7 @@ get_github_dependency(SFML "modules/SFML/CMakeLists.txt" "https://github.com/SFM
 get_github_dependency(spdlog "modules/spdlog/CMakeLists.txt" "https://github.com/gabime/spdlog.git" v1.10.0)
 get_github_dependency(cpplocate "modules/cpplocate/CMakeLists.txt" "https://github.com/cginternals/cpplocate.git" v2.3.0)
 get_github_dependency(nativefiledialog "modules/nativefiledialog/src/include/nfd.h" "https://github.com/mlabbe/nativefiledialog.git" release_116)
+get_github_dependency(BatteryUI "modules/batteryui/CMakeLists.txt" "https://github.com/HerrNamenlos123/BatteryUI.git" master)
 
 # SFML
 set(BUILD_SHARED_LIBS FALSE)
@@ -67,6 +73,7 @@ add_subdirectory(modules/imgui-sfml)
 add_subdirectory(modules/spdlog)
 add_subdirectory(modules/clip)
 add_subdirectory(modules/cpplocate)
+add_subdirectory(modules/BatteryUI)
 
 use_static_runtime(imgui)
 use_static_runtime(implot)
@@ -105,6 +112,7 @@ if(MSVC)
     battery_target_static_runtime(Battery)
     string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /MP")
 else()
+    target_compile_options(clip PRIVATE -Wno-multichar)
     target_compile_options(Battery PRIVATE -Wno-psabi)
 endif()
 
@@ -148,6 +156,7 @@ target_link_libraries(Battery spdlog)
 target_link_libraries(Battery clip)
 target_link_libraries(Battery nativefiledialog)
 target_link_libraries(Battery cpplocate)
+target_link_libraries(Battery BatteryUI)
 
 
 
@@ -173,6 +182,17 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/src" PREFIX "Source Files" FILES ${SRC_FILES})
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include" PREFIX "Header Files" FILES ${HEADER_FILES})
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/cmake" PREFIX "cmake" FILES "cmake/BatteryConfig.cmake.in")
+
+
+
+
+############
+# Examples #
+############
+
+if (BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
 
 
 

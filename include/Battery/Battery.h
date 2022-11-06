@@ -13,13 +13,4 @@
 #include "Battery/Utils/StringUtils.h"
 #include "Battery/Utils/AppUtils.h"
 
-#include "SFML/Main.hpp"
-#include "SFML/Graphics.hpp"
-#include "SFML/System.hpp"
-#include "SFML/Network.hpp"
-#include "SFML/Audio.hpp"
-#include "SFML/Window.hpp"
-
-#include "imgui-SFML.h"
-
 #pragma warning( disable : 4244 )	// Always suppress warning about possible loss of data

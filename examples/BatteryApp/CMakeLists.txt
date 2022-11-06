@@ -2,35 +2,9 @@ cmake_minimum_required(VERSION 3.16)
 
 project(BatteryApp VERSION 0.1.1 LANGUAGES CXX)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
-list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
-
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose Release or Debug" FORCE)
-endif()
-
-
-
-##################################
-# Options: Library configuration #
-##################################
-
-
-
-
-
-################
-# Dependencies #
-################
-
-add_subdirectory(../.. "${CMAKE_CURRENT_BINARY_DIR}/../../build") # Add Battery library
-
-
-
-
-#############################
-# Static library definition #
-#############################
+#####################
+# Target definition #
+#####################
 
 file(GLOB_RECURSE HEADER_FILES CONFIGURE_DEPENDS "include/*")
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS "src/*")
@@ -84,8 +58,9 @@ target_link_libraries(BatteryApp Battery::Battery)
 # Precompiled Headers #
 #######################
 
-target_precompile_headers(BatteryApp PRIVATE include/pch.h)
-
+if (BATTERY_USE_PRECOMPILED_HEADER)
+    target_precompile_headers(BatteryApp PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_LIST_DIR}/include/pch.h>")
+endif()
 
 
 
