@@ -109,7 +109,9 @@ if(MSVC)
     set_source_files_properties(
         "src/serial/serial.cc" "src/serial/impl/win.cc" PROPERTIES COMPILE_FLAGS "/wd4244"
     )
-    battery_target_static_runtime(Battery)
+    if(BATTERY_STATIC_RUNTIME)
+        battery_target_static_runtime(Battery)
+    endif()
     string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /MP")
 else()
     target_compile_options(clip PRIVATE -Wno-multichar)
