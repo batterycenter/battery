@@ -20,14 +20,6 @@ target_include_directories(BatteryApp PUBLIC
 
 
 
-if(MSVC)
-    set_property(TARGET BatteryApp PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-else()
-    target_compile_options(BatteryApp PRIVATE -Wno-psabi)
-endif()
-
-
-
 ############################
 # Preprocessor definitions #
 ############################

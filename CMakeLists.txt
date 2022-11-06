@@ -75,13 +75,15 @@ add_subdirectory(modules/clip)
 add_subdirectory(modules/cpplocate)
 add_subdirectory(modules/BatteryUI)
 
-use_static_runtime(imgui)
-use_static_runtime(implot)
-use_static_runtime(nativefiledialog)
-use_static_runtime(ImGui-SFML)
-use_static_runtime(spdlog)
-use_static_runtime(clip)
-use_static_runtime(cpplocate)
+if (BATTERY_STATIC_RUNTIME)
+    use_static_runtime(imgui)
+    use_static_runtime(implot)
+    use_static_runtime(nativefiledialog)
+    use_static_runtime(ImGui-SFML)
+    use_static_runtime(spdlog)
+    use_static_runtime(clip)
+    use_static_runtime(cpplocate)
+endif()
 
 
 
@@ -104,14 +106,14 @@ target_include_directories(Battery PUBLIC
     $<INSTALL_INTERFACE:include>
 )
 
+if(BATTERY_STATIC_RUNTIME)
+    use_static_runtime(Battery)
+endif()
 
 if(MSVC)
     set_source_files_properties(
         "src/serial/serial.cc" "src/serial/impl/win.cc" PROPERTIES COMPILE_FLAGS "/wd4244"
     )
-    if(BATTERY_STATIC_RUNTIME)
-        battery_target_static_runtime(Battery)
-    endif()
     string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /MP")
 else()
     target_compile_options(clip PRIVATE -Wno-multichar)
@@ -143,12 +145,12 @@ endif()
 # Linking #
 ###########
 
-target_link_libraries(Battery sfml_main)
-target_link_libraries(Battery sfml_graphics)
-target_link_libraries(Battery sfml_audio)
-target_link_libraries(Battery sfml_network)
-target_link_libraries(Battery sfml_system)
-target_link_libraries(Battery sfml_window)
+target_link_libraries(Battery sfml-main)
+target_link_libraries(Battery sfml-graphics)
+target_link_libraries(Battery sfml-audio)
+target_link_libraries(Battery sfml-network)
+target_link_libraries(Battery sfml-system)
+target_link_libraries(Battery sfml-window)
 
 target_link_libraries(Battery glm)
 target_link_libraries(Battery imgui)
