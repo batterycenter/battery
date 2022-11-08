@@ -15,6 +15,7 @@ namespace Battery {
 		void update();
 		void attachLeftClickCallback(std::function<void(void)> callback);
 		void attachRightClickCallback(std::function<void(void)> callback);
+        void setIcon(const sf::Image& icon);
 
 	private:
         void handleMessage(const TrayMessage& msg);

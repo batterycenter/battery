@@ -13,4 +13,4 @@
 #include "Battery/Utils/StringUtils.h"
 #include "Battery/Utils/AppUtils.h"
 
-#pragma warning( disable : 4244 )	// Always suppress warning about possible loss of data
+#include "BatteryUI/BatteryUI.h"

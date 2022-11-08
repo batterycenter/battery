@@ -1,4 +1,6 @@
 
+#include <utility>
+
 #include "Battery/Core/Config.h"
 #include "Battery/Core/Application.h"
 #include "Battery/Core/Exception.h"
@@ -84,16 +86,17 @@ namespace Battery {
 		windowStandby = standby;
 	}
 
-	void Application::SetFramerate(float fps) {
-		window.setFramerateLimit((int)fps);
+	void Application::SetFramerate(uint32_t fps) {
+		window.setFramerateLimit(fps);
+        framerateLimit = fps;
 	}
 
 	void Application::PushLayer(std::shared_ptr<Layer> layer) {
-		layers.PushLayer(layer);
+		layers.PushLayer(std::move(layer));
 	}
 
 	void Application::PushOverlay(std::shared_ptr<Layer> overlay) {
-		layers.PushOverlay(overlay);
+		layers.PushOverlay(std::move(overlay));
 	}
 
 	void Application::ClearLayerStack() {
@@ -132,7 +135,7 @@ namespace Battery {
 			// Parse command line arguments
 			LOG_CORE_TRACE("Command line arguments:");
 			for (int i = 0; i < argc; i++) {
-				args.push_back(argv[i]);
+				args.emplace_back(argv[i]);
 				LOG_CORE_TRACE(std::string("[") + std::to_string(i) + "]: " + args[i]);
 			}
 
@@ -143,7 +146,7 @@ namespace Battery {
 			IMGUI_CHECKVERSION();
 			ImGui::SFML::Init(window);
 
-			window.setFramerateLimit(60);
+            SetFramerate(60);
 
 			ImGui::StyleColorsDark();
 			CaptureCurrentColorSchemeAsDefault();
@@ -154,7 +157,13 @@ namespace Battery {
 			window.display();
 
 			ClearRuntime();
-			OnStartup();
+
+            //ui = BatteryUI::Setup<UI>([&] {
+            //    glfwPostEmptyEvent();
+            //});
+            //BatteryUI::theme = BatteryUI::Theme_Modern();
+
+            OnStartup();    // This is the user's startup function
 
 			defaultFont = ADD_FONT(RobotoMedium, DEFAULT_FONT_SIZE);
 			ImGui::SFML::UpdateFontTexture();
@@ -210,7 +219,7 @@ namespace Battery {
 				window.display();
 			}
 			else {
-				Sleep(0.05);
+				Sleep(1.f / (float)framerateLimit);    // Standby
 			}
 		}
 	}

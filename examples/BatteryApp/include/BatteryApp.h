@@ -1,5 +1,6 @@
 
 #include "pch.h"
+#include "UI.h"
 
 class BatteryApp : public Battery::Application {
 public:
@@ -8,7 +9,7 @@ public:
     std::unique_ptr<Battery::TrayIcon> tray;
 
     void OnStartup() override;
-    //void OnUpdate() override;
+    void OnUpdate() override;
     void OnRender() override;
     //void OnShutdown() override;
 };

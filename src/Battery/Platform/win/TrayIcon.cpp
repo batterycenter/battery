@@ -5,7 +5,9 @@
 
 #include "Battery/Core/Log.h"
 #include "Battery/Core/Exception.h"
+#include "Battery/Utils/StringUtils.h"
 #include <queue>
+#include <utility>
 
 #include "windows.h"
 #include "shellapi.h"
@@ -36,7 +38,7 @@ namespace Battery {
 
 	struct __trayIconData__ {
     	MSG msg;
-		NOTIFYICONDATAA nid;
+		NOTIFYICONDATAW nid;
 		HWND hwnd = NULL;
 		HICON icon = NULL;
 	};
@@ -44,7 +46,7 @@ namespace Battery {
 	HICON CreateWin32IconFromImage(const sf::Image& image) {
 		std::vector<uint8_t> png;
 		if (!image.saveToMemory(png, "png")) return nullptr;
-		return CreateIconFromResourceEx(&png[0], png.size(), true, 0x00030000, image.getSize().x, image.getSize().y, LR_DEFAULTCOLOR);
+		return CreateIconFromResourceEx(png.data(), png.size(), true, 0x00030000, image.getSize().x, image.getSize().y, LR_DEFAULTCOLOR);
 	}
 
 	TrayIcon::TrayIcon(const sf::Image& icon, const std::string& tip) : data(new __trayIconData__()) {
@@ -77,14 +79,14 @@ namespace Battery {
 		data->nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
 		data->nid.uCallbackMessage = WM_USER + 1 + id;
 		data->nid.hIcon = data->icon;
-		strcpy(data->nid.szTip, tip.c_str());
+		wcscpy(data->nid.szTip, MultiByteToWideChar(tip).c_str());
 
-		Shell_NotifyIconA(NIM_ADD, &data->nid);
-		Shell_NotifyIconA(NIM_SETVERSION, &data->nid);
+		Shell_NotifyIconW(NIM_ADD, &data->nid);
+		//Shell_NotifyIconW(NIM_SETVERSION, &data->nid);
 	}
 
 	TrayIcon::~TrayIcon() {
-    	Shell_NotifyIconA(NIM_DELETE, &data->nid);
+    	Shell_NotifyIconW(NIM_DELETE, &data->nid);
 		DestroyWindow(data->hwnd);
 		DestroyIcon(data->icon);
 	}
@@ -108,12 +110,24 @@ namespace Battery {
 	}
 
 	void TrayIcon::attachLeftClickCallback(std::function<void(void)> callback) {
-		leftClickCallback = callback;
+		leftClickCallback = std::move(callback);
 	}
 
 	void TrayIcon::attachRightClickCallback(std::function<void(void)> callback) {
-		rightClickCallback = callback;
+		rightClickCallback = std::move(callback);
 	}
+
+    void TrayIcon::setIcon(const sf::Image& icon) {
+        NOTIFYICONDATAW nid;
+
+        memset(&nid, 0, sizeof(nid));
+        nid.cbSize = sizeof(data->nid);
+        nid.hWnd = data->hwnd;
+        nid.uFlags = NIF_ICON;
+        nid.hIcon = CreateWin32IconFromImage(icon);
+
+        Shell_NotifyIconW(NIM_MODIFY, &data->nid);
+    }
 
     void TrayIcon::handleMessage(const TrayMessage& msg) {
         switch (msg.lParam) {

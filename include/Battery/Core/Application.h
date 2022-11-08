@@ -35,12 +35,17 @@ namespace Battery {
 		virtual void OnEvent(sf::Event event, bool& handled);
 
 		void SetWindowStandby(bool standby);
-		void SetFramerate(float fps);
+		void SetFramerate(uint32_t fps);
 		void PushLayer(std::shared_ptr<Layer> layer);
 		void PushOverlay(std::shared_ptr<Layer> overlay);
 		void ClearLayerStack();
 		void CloseApplication();
 		glm::ivec2 GetPrimaryMonitorSize();
+
+        template<typename T>
+        T* GetUI() {
+            return (T*)ui;
+        }
 
 		void Run(int width, int height, int argc, const char** argv, int windowStyle = sf::Style::Default);
 
@@ -64,9 +69,11 @@ namespace Battery {
 		
 		void HandleEvents();
 
+        std::unique_ptr<BatteryUI::RootUI> ui;
 		LayerStack layers;
     	sf::Clock window_dt;
     	sf::Clock frametime_clock;
+        uint32_t framerateLimit = 0;
 		ImFont* defaultFont = nullptr;
 		bool shutdownRequested = false;
 		bool windowStandby = false;
