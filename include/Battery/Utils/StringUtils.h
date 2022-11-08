@@ -43,10 +43,6 @@ namespace Battery {
 
 	bool IsInAlphabet(char c);
 
-	std::wstring MultiByteToWideChar(const std::string& mbString);
-	std::string WideCharToMultiByte(const std::wstring& wString);
-	std::string WideCharToMultiByte(const wchar_t* wString);	// Windows' LPCWSTR
-
 	std::string EncodeBase64(void* buffer, size_t bufferSize);
 	std::vector<uint8_t> DecodeBase64(const std::string& data);
 

@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 
 #include "Battery/pch.hpp"
 #include "Battery/Utils/TypeUtils.h"

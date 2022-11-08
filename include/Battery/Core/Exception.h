@@ -2,6 +2,8 @@
 
 #include "Battery/pch.hpp"
 
+#define BATTERY_EXCEPTION UI_EXCEPTION
+
 namespace Battery {
 
 	class Exception : public std::exception {

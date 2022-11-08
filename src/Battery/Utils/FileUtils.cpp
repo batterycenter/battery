@@ -171,7 +171,9 @@ namespace Battery {
 
 	bool WriteFile(const std::string& path, const std::string& content, bool binary) {
 
-		PrepareDirectory(GetParentDirectory(path));
+        if (!GetParentDirectory(path).empty()) {
+            PrepareDirectory(GetParentDirectory(path));
+        }
 
 		std::ofstream file(path, binary ? std::ios::binary : std::ios::out);
 		if (!file.is_open()) {

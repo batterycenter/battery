@@ -13,7 +13,7 @@
 namespace Battery {
 
 	void* platform_LockFileDescriptor(const std::string& file) {
-		std::wstring wide = MultiByteToWideChar(file);
+		std::wstring wide = Utf8ToWchar(file);
 		void* descriptor = ::CreateFileW(wide.c_str(), GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (descriptor == INVALID_HANDLE_VALUE) {
 			throw Battery::LockfileUnavailableException();
@@ -43,7 +43,7 @@ namespace Battery {
 
     std::pair<bool, size_t> platform_ExecuteShellCommandSilent(const std::string& command, bool hidden) {
 
-		std::wstring Lcommand = L"/c " + MultiByteToWideChar(command);
+		std::wstring Lcommand = L"/c " + Utf8ToWchar(command);
 
 		SHELLEXECUTEINFOW ShExecInfo = { 0 };
 		ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
@@ -78,7 +78,7 @@ namespace Battery {
 		HMODULE hMod = GetModuleHandleW(NULL);
 		if (hMod == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Module Handle is null!", id); return buffer; }
 
-		HRSRC hRes = FindResourceW(hMod, MAKEINTRESOURCEW(id), Battery::MultiByteToWideChar(type).c_str());
+		HRSRC hRes = FindResourceW(hMod, MAKEINTRESOURCEW(id), Battery::Utf8ToWchar(type).c_str());
 		if (hRes == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: No such resource!", id); return buffer; }
 		
 		HGLOBAL hGlobal = LoadResource(hMod, hRes);
@@ -129,32 +129,16 @@ namespace Battery {
 
 	void platform_SetWindowTransparent(sf::WindowHandle window, bool transparent) {
 		if (transparent) {
-			SetWindowLongPtr(window, GWL_EXSTYLE, GetWindowLongPtr(window, GWL_EXSTYLE) | WS_EX_LAYERED);
+			SetWindowLongPtrW(window, GWL_EXSTYLE, GetWindowLongPtr(window, GWL_EXSTYLE) | WS_EX_LAYERED);
 		}
 		else {
-			SetWindowLongPtr(window, GWL_EXSTYLE, GetWindowLongPtr(window, GWL_EXSTYLE) & ~WS_EX_LAYERED);
+			SetWindowLongPtrW(window, GWL_EXSTYLE, GetWindowLongPtr(window, GWL_EXSTYLE) & ~WS_EX_LAYERED);
 			RedrawWindow(window, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_FRAME | RDW_ALLCHILDREN);
 		}
 	}
 
 	void platform_SetWindowAlpha(sf::WindowHandle window, uint8_t alpha) {
 		SetLayeredWindowAttributes(window, 0, alpha, LWA_ALPHA);
-	}
-
-	std::string platform_GetLastWin32ErrorAsString() {
-
-		DWORD errorMessageID = ::GetLastError();
-		if (errorMessageID == 0)
-			return "";
-
-		LPSTR messageBuffer = nullptr;
-		size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-			NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
-
-		std::string message(messageBuffer, size);
-		LocalFree(messageBuffer);
-
-		return message;
 	}
 
 
@@ -191,19 +175,19 @@ namespace Battery {
 	}
 
 	MB_Status MessageBoxError(const std::string& message, const std::string& title, MB_Buttons buttons, int defaultButton) {
-		int code = ::MessageBoxA(NULL, message.c_str(), title.c_str(), 
+		int code = ::MessageBoxW(NULL, Utf8ToWchar(message).c_str(), Utf8ToWchar(title).c_str(),
 			MB_ICONERROR | win32_BatteryEnumToMessageBoxEnum(buttons) | ((defaultButton - 1) * 256));
 		return win32_IDToEnum(code);
 	}
 
 	MB_Status MessageBoxWarning(const std::string& message, const std::string& title, MB_Buttons buttons, int defaultButton) {
-		int code = ::MessageBoxA(NULL, message.c_str(), title.c_str(), 
+		int code = ::MessageBoxW(NULL, Utf8ToWchar(message).c_str(), Utf8ToWchar(title).c_str(),
 			MB_ICONWARNING | win32_BatteryEnumToMessageBoxEnum(buttons) | ((defaultButton - 1) * 256));
 		return win32_IDToEnum(code);
 	}
 
 	MB_Status MessageBoxInfo(const std::string& message, const std::string& title, MB_Buttons buttons, int defaultButton) {
-		int code = ::MessageBoxA(NULL, message.c_str(), title.c_str(), 
+		int code = ::MessageBoxW(nullptr, Utf8ToWchar(message).c_str(), Utf8ToWchar(title).c_str(),
 			MB_ICONINFORMATION | win32_BatteryEnumToMessageBoxEnum(buttons) | ((defaultButton - 1) * 256));
 		return win32_IDToEnum(code);
 	}
@@ -213,6 +197,118 @@ namespace Battery {
 		BOOL fResult = SystemParametersInfo(SPI_GETWORKAREA, 0, &xy, 0);
 		return { xy.right - xy.left, xy.bottom - xy.top };
 	}
+
+    std::string GetLastWin32ErrorString() {
+
+        DWORD errorMessageID = ::GetLastError();
+        if (errorMessageID == 0)
+            return "";
+
+        LPWSTR messageBuffer = nullptr;
+        size_t size = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+                                     NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&messageBuffer, 0, NULL);
+
+        std::wstring message(messageBuffer, size);
+        LocalFree(messageBuffer);
+
+        return WcharToUtf8(message);
+    }
+
+    std::wstring Utf8ToWchar(const std::string& mbString) {
+        std::wstring buffer;
+
+        if (mbString.empty())
+            return buffer;
+
+        if (mbString.length() > static_cast<size_t>((std::numeric_limits<int>::max)())) {
+            throw std::overflow_error("Input string too long: size_t-length doesn't fit into int.");
+        }
+
+        constexpr DWORD kFlags = MB_ERR_INVALID_CHARS;
+        int bufferSize = ::MultiByteToWideChar(
+                CP_UTF8,                    // Source string is in UTF-8
+                kFlags,                       // Conversion flags
+                (LPCCH)mbString.data(),     // Source UTF-8 string pointer
+                -1,                     // Length of the source UTF-8 string, in chars
+                nullptr,                  // Unused - no conversion done in this step
+                0                          // Request size of destination buffer, in wchar_ts
+        );
+
+        if (bufferSize == 0) {
+            std::cerr << "[WinAPI] Utf8ToWchar failed: " << GetLastWin32ErrorString() << std::endl;
+            throw std::runtime_error(
+                    "Cannot get result string length when converting from UTF-8 to UTF-16 (Utf8ToWchar failed).");
+        }
+
+        buffer.resize(bufferSize);
+        int result = ::MultiByteToWideChar(
+                CP_UTF8,       // Source string is in UTF-8
+                kFlags,        // Conversion flags
+                (LPCCH)mbString.data(),   // Source UTF-8 string pointer
+                -1,    // Length of source UTF-8 string, in chars
+                &buffer[0],     // Pointer to destination buffer
+                bufferSize    // Size of destination buffer, in wchar_ts
+        );
+
+        if (result == 0) {
+            std::cerr << "[WinAPI] Utf8ToWchar failed: " << GetLastWin32ErrorString() << std::endl;
+            throw std::runtime_error("Cannot convert from UTF-8 to UTF-16 (Utf8ToWchar failed).");
+        }
+
+        return buffer;
+    }
+
+    std::string WcharToUtf8(const std::wstring& wString) {
+        std::string buffer;
+
+        if (wString.empty())
+            return buffer;
+
+        if (wString.length() > static_cast<size_t>((std::numeric_limits<int>::max)())) {
+            throw std::overflow_error("Input string too long: size_t-length doesn't fit into int.");
+        }
+
+        constexpr DWORD kFlags = WC_ERR_INVALID_CHARS;
+        int bufferSize = ::WideCharToMultiByte(
+                CP_UTF8,                    // Source string is in UTF-8
+                kFlags,                       // Conversion flags
+                (LPCWCH)wString.data(),     // Source UTF-8 string pointer
+                -1,                     // Length of the source UTF-8 string, in chars
+                nullptr,                  // Unused - no conversion done in this step
+                0,                          // Request size of destination buffer, in wchar_ts,
+                nullptr,
+                NULL
+        );
+
+        if (bufferSize == 0) {
+            std::cerr << "[WinAPI] WcharToUtf8 failed: " << GetLastWin32ErrorString() << std::endl;
+            throw std::runtime_error(
+                    "Cannot get result string length when converting from UTF-16 to UTF-8 (WcharToUtf8 failed).");
+        }
+
+        buffer.resize(bufferSize);
+        int result = ::WideCharToMultiByte(
+                CP_UTF8,       // Source string is in UTF-8
+                kFlags,        // Conversion flags
+                (LPCWCH)wString.data(),   // Source UTF-8 string pointer
+                -1,    // Length of source UTF-8 string, in chars
+                &buffer[0],     // Pointer to destination buffer
+                bufferSize,    // Size of destination buffer, in wchar_ts
+                nullptr,
+                NULL
+        );
+
+        if (result == 0) {
+            std::cerr << "[WinAPI] WcharToUtf8 failed: " << GetLastWin32ErrorString() << std::endl;
+            throw std::runtime_error("Cannot convert from UTF-16 to UTF-8 (WcharToUtf8 failed).");
+        }
+
+        return buffer;
+    }
+
+    std::string WcharToUtf8(const wchar_t* wString) {
+        return WcharToUtf8(std::wstring(wString));
+    }
 
 }
 

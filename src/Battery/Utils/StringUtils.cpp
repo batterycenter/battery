@@ -79,36 +79,6 @@ namespace Battery {
 	bool IsInAlphabet(char c) {
 		return IsUpperCase(c) || IsLowerCase(c);
 	}
-
-	std::wstring MultiByteToWideChar(const std::string& mbString) {
-
-		if (mbString.length() == 0)
-			return L"";
-
-		size_t bufferSize = std::mbstowcs(nullptr, mbString.c_str(), 0);
-		std::wstring wtext(bufferSize, 0);
-
-		std::mbstowcs(&wtext[0], mbString.c_str(), wtext.size());
-
-		return wtext;
-	}
-
-	std::string WideCharToMultiByte(const std::wstring& wString) {
-		return WideCharToMultiByte(wString.c_str());
-	}
-
-	std::string WideCharToMultiByte(const wchar_t* wString) {
-
-		if (wcslen(wString) == 0)
-			return "";
-
-		size_t bufferSize = std::wcstombs(nullptr, wString, 0);
-		std::string text(bufferSize, 0);
-
-		std::wcstombs(&text[0], wString, text.size());
-
-		return text;
-	}
 	
 	static const std::string base64_chars =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"

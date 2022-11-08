@@ -2,10 +2,10 @@
 #ifdef _WIN32
 
 #include "Battery/Platform/TrayIcon.h"
+#include "Battery/Platform/Platform.h"
 
 #include "Battery/Core/Log.h"
 #include "Battery/Core/Exception.h"
-#include "Battery/Utils/StringUtils.h"
 #include <queue>
 #include <utility>
 
@@ -33,14 +33,14 @@ namespace Battery {
             std::lock_guard<std::mutex> lock(messageStackMutex);
             messageStack.push(msg);
 		}
-		return DefWindowProc(hWnd,iMsg,wParam,lParam);
+		return DefWindowProcW(hWnd,iMsg,wParam,lParam);
 	}
 
 	struct __trayIconData__ {
     	MSG msg;
 		NOTIFYICONDATAW nid;
-		HWND hwnd = NULL;
-		HICON icon = NULL;
+		HWND hwnd = nullptr;
+		HICON icon = nullptr;
 	};
 
 	HICON CreateWin32IconFromImage(const sf::Image& image) {
@@ -56,18 +56,20 @@ namespace Battery {
 		__id__++;
 		id = __id__;
 		std::string classname = "TRAY" + std::to_string(id);
+        std::wstring wclassname = Utf8ToWchar(classname);
 		
 		// Create the hidden window responsible for the message stack
-		WNDCLASSEXA wc;
+		WNDCLASSEXW wc;
 		memset(&wc, 0, sizeof(wc));
 		wc.cbSize = sizeof(wc);
 		wc.lpfnWndProc = TrayWndMessage;
-		wc.hInstance = GetModuleHandleA(NULL);
-		wc.lpszClassName = classname.c_str();
-		RegisterClassExA(&wc);
-		data->hwnd = CreateWindowExA(0, (LPCSTR)classname.c_str(), NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-		if (data->hwnd == NULL) {
-			throw Battery::Exception("Failed to create the hidden window for the tray icon message stack");
+		wc.hInstance = GetModuleHandleW(NULL);
+		wc.lpszClassName = wclassname.c_str();
+		RegisterClassExW(&wc);
+		data->hwnd = CreateWindowExW(0, (LPCWSTR)wclassname.c_str(), NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+		if (!data->hwnd) {
+			throw BATTERY_EXCEPTION("Failed to create the hidden window for the tray icon message stack: %s",
+                                    GetLastWin32ErrorString().c_str());
 		}
 		UpdateWindow(data->hwnd);
 
@@ -75,14 +77,16 @@ namespace Battery {
 		memset(&data->nid, 0, sizeof(data->nid));
 		data->nid.cbSize = sizeof(data->nid);
 		data->nid.hWnd = data->hwnd;
-		data->nid.uID = 0;
+		data->nid.uID = id;
 		data->nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
 		data->nid.uCallbackMessage = WM_USER + 1 + id;
 		data->nid.hIcon = data->icon;
-		wcscpy(data->nid.szTip, MultiByteToWideChar(tip).c_str());
+		wcscpy(data->nid.szTip, Utf8ToWchar(tip).c_str());
 
 		Shell_NotifyIconW(NIM_ADD, &data->nid);
-		//Shell_NotifyIconW(NIM_SETVERSION, &data->nid);
+
+        // TODO: NIM_SETFOCUS
+        // https://learn.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shell_notifyiconw
 	}
 
 	TrayIcon::~TrayIcon() {
@@ -118,13 +122,9 @@ namespace Battery {
 	}
 
     void TrayIcon::setIcon(const sf::Image& icon) {
-        NOTIFYICONDATAW nid;
 
-        memset(&nid, 0, sizeof(nid));
-        nid.cbSize = sizeof(data->nid);
-        nid.hWnd = data->hwnd;
-        nid.uFlags = NIF_ICON;
-        nid.hIcon = CreateWin32IconFromImage(icon);
+        DestroyIcon(data->icon);
+        data->nid.hIcon = CreateWin32IconFromImage(icon);
 
         Shell_NotifyIconW(NIM_MODIFY, &data->nid);
     }

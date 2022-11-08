@@ -29,8 +29,6 @@ namespace Battery {
 	void platform_SetWindowTransparent(sf::WindowHandle window, bool transparent);
 	void platform_SetWindowAlpha(sf::WindowHandle window, uint8_t alpha);
 
-	std::string platform_GetLastWin32ErrorAsString();
-
 	enum class MB_Buttons {
 		OK,
 		OK_CANCEL,
@@ -57,4 +55,11 @@ namespace Battery {
 	MB_Status MessageBoxInfo(const std::string& message, const std::string& title = "Information", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
 
 	glm::vec2 GetUsableDesktopArea();
+
+#ifdef _WIN32
+    std::string GetLastWin32ErrorString();
+    std::wstring Utf8ToWchar(const std::string& mbString);
+    std::string WcharToUtf8(const std::wstring& wString);
+    std::string WcharToUtf8(const wchar_t* wString);	// Windows' LPCWSTR
+#endif
 }
