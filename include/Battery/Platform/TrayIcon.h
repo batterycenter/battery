@@ -9,7 +9,8 @@ namespace Battery {
     struct TrayMessage;
 	class TrayIcon {
 	public:
-		TrayIcon(const sf::Image& icon, const std::string& tip = "");
+		TrayIcon(const std::string& icon_path, const std::string& tip = "");
+        TrayIcon(const sf::Image& icon, const std::string& tip = "");
 		~TrayIcon();
 
 		void update();

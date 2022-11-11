@@ -5,3 +5,5 @@ https://www.flaticon.com/free-icon/battery_3165660?term=battery&page=1&position=
 ```
 sudo apt install git cmake build-essential libx11-dev
 ```
+
+https://github.com/zserge/tray -> modified for use with modern C++

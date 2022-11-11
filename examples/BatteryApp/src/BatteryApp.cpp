@@ -3,6 +3,8 @@
 #include "BatteryApp.h"
 #include "Battery/Extern/magic_enum.hpp"
 
+#include "Battery/Extern/tray.h"
+
 #include "windows.h"
 #include "shellapi.h"
 
@@ -49,6 +51,22 @@ void loadSprites() {
     loadAnimation(sprite_raw, sprites_death, 15, 39, 14, 96);
 }
 
+struct tray trays;
+
+void toggle_cb(struct tray_menu *item) {
+    item->checked = !item->checked;
+    tray_update(&trays);
+}
+
+void quit_cb(struct tray_menu *item) {
+    tray_exit();
+}
+
+struct tray_menu menu[] = {{"Ändere mich du Süßölgefäß!", 0, 0, toggle_cb, NULL},
+                           {"-", 0, 0, NULL, NULL},
+                           {"Quit", 0, 0, quit_cb, NULL},
+                           {NULL, 0, 0, NULL, NULL}};
+
 void BatteryApp::OnStartup() {
     using namespace Battery;
 
@@ -62,6 +80,11 @@ void BatteryApp::OnStartup() {
 
     tray->attachLeftClickCallback([&] { sprite = 0; currentAnimation = &sprites_attack; });
     tray->attachRightClickCallback([&] { sprite = 0; currentAnimation = &sprites_death; });
+
+    trays.icon = "resources/tiktok.ico",
+    trays.menu = menu;
+
+    LOG_DEBUG("test: {}", tray_init(&trays));
 }
 
 void BatteryApp::OnUpdate() {
@@ -90,4 +113,10 @@ void BatteryApp::OnRender() {
 
     ImGui::ShowDemoWindow();
     
+}
+
+void BatteryApp::OnShutdown() {
+
+    tray_exit();
+
 }

@@ -56,6 +56,11 @@ namespace Battery {
 
 	glm::vec2 GetUsableDesktopArea();
 
+    class OsString {
+    public:
+        OsString();
+    };
+
 #ifdef _WIN32
     std::string GetLastWin32ErrorString();
     std::wstring Utf8ToWchar(const std::string& mbString);

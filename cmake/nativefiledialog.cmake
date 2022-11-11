@@ -7,7 +7,7 @@ if (WIN32)
     target_sources(nativefiledialog PUBLIC
             ${NATIVE_FILE_DIALOG_DIR}/src/nfd_common.c
             ${NATIVE_FILE_DIALOG_DIR}/src/nfd_win.cpp)
-elseif ()
+else ()
     target_sources(nativefiledialog PUBLIC
             ${NATIVE_FILE_DIALOG_DIR}/src/nfd_common.c
             ${NATIVE_FILE_DIALOG_DIR}/src/nfd_zenity.c)
@@ -19,6 +19,10 @@ target_include_directories(nativefiledialog PUBLIC
         $<BUILD_INTERFACE:${NATIVE_FILE_DIALOG_DIR}/src/include>
         $<INSTALL_INTERFACE:/>
         )
+
+if (NOT MSVC)
+    target_compile_options(nativefiledialog PRIVATE "-Wno-format-truncation")
+endif ()
 
 install(
         TARGETS nativefiledialog

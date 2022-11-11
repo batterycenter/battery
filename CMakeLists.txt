@@ -10,16 +10,6 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose Release or Debug" FORCE)
 endif()
 
-###################
-# Platform checks #
-###################
-
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    message(STATUS "64-bit compiler architecture detected")
-elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
-    message(FATAL_ERROR "Battery only supports 64-bit build systems. Please use a different compiler architecture.")
-endif()
-
 ##################################
 # Options: Library configuration #
 ##################################
@@ -39,6 +29,38 @@ endif()
 # Dependencies #
 ################
 
+if (NOT WIN32)
+    find_package(X11 QUIET)
+    if (NOT X11_FOUND)
+        message(FATAL_ERROR "X11 development libraries not found! Please install them using your system's equivalent to 'sudo apt install libx11-dev'")
+    endif()
+
+    find_package(OpenGL QUIET)
+    if (NOT OpenGL_FOUND)
+        message(FATAL_ERROR "OpenGL development libraries not found! Please install them using your system's equivalent to 'sudo apt install libgl1-mesa-dev'")
+    endif()
+
+    find_package(OpenAL QUIET)
+    if (NOT OpenAL_FOUND)
+        message(FATAL_ERROR "OpenAL development libraries not found! Please install them using your system's equivalent to 'sudo apt install libopenal-dev'")
+    endif()
+
+    include(cmake/FindUDev.cmake)
+    if (NOT UDEV_FOUND)
+        message(FATAL_ERROR "UDEV development libraries not found! Please install them using your system's equivalent to 'sudo apt install libudev-dev'")
+    endif()
+
+    include(cmake/FindVORBIS.cmake)
+    if (NOT VORBIS_FOUND)
+        message(FATAL_ERROR "VORBIS development libraries not found! Please install them using your system's equivalent to 'sudo apt install libvorbis-dev'")
+    endif()
+
+    include(cmake/FindFLAC.cmake)
+    if (NOT FLAC_FOUND)
+        message(FATAL_ERROR "FLAC development libraries not found! Please install them using your system's equivalent to 'sudo apt install libflac-dev'")
+    endif()
+endif()
+
 get_github_dependency(clip "modules/clip/CMakeLists.txt" "https://github.com/dacap/clip.git" v1.5)
 get_github_dependency(glm "modules/glm/CMakeLists.txt" "https://github.com/g-truc/glm.git" 0.9.9.8)
 get_github_dependency(imgui "modules/imgui/imgui.cpp" "https://github.com/ocornut/imgui.git" v1.88)
@@ -48,7 +70,7 @@ get_github_dependency(SFML "modules/SFML/CMakeLists.txt" "https://github.com/SFM
 get_github_dependency(spdlog "modules/spdlog/CMakeLists.txt" "https://github.com/gabime/spdlog.git" v1.10.0)
 get_github_dependency(cpplocate "modules/cpplocate/CMakeLists.txt" "https://github.com/cginternals/cpplocate.git" v2.3.0)
 get_github_dependency(nativefiledialog "modules/nativefiledialog/src/include/nfd.h" "https://github.com/mlabbe/nativefiledialog.git" release_116)
-get_github_dependency(BatteryUI "modules/batteryui/CMakeLists.txt" "https://github.com/HerrNamenlos123/BatteryUI.git" master)
+get_github_dependency(BatteryUI "modules/BatteryUI/CMakeLists.txt" "https://github.com/HerrNamenlos123/BatteryUI.git" master)
 
 # SFML
 set(BUILD_SHARED_LIBS FALSE)
@@ -102,9 +124,9 @@ target_compile_features(Battery PRIVATE cxx_std_17)
 set_target_properties(Battery PROPERTIES CXX_EXTENSIONS OFF)
 
 target_include_directories(Battery PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-)
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+        )
 
 if(BATTERY_STATIC_RUNTIME)
     use_static_runtime(Battery)
@@ -112,7 +134,7 @@ endif()
 
 if(MSVC)
     set_source_files_properties(
-        "src/serial/serial.cc" "src/serial/impl/win.cc" PROPERTIES COMPILE_FLAGS "/wd4244"
+            "src/serial/serial.cc" "src/serial/impl/win.cc" PROPERTIES COMPILE_FLAGS "/wd4244"
     )
     string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /MP")
 else()
@@ -126,14 +148,14 @@ endif()
 
 if (WIN32)
     target_compile_definitions(Battery PRIVATE
-       WIN32_LEAN_AND_MEAN      # Prevents Windows.h from adding unnecessary includes
-       NOMINMAX                 # Prevents Windows.h from defining min/max as macros 
-       _CRT_SECURE_NO_WARNINGS
-    )
+            WIN32_LEAN_AND_MEAN      # Prevents Windows.h from adding unnecessary includes
+            NOMINMAX                 # Prevents Windows.h from defining min/max as macros
+            _CRT_SECURE_NO_WARNINGS
+            )
     target_compile_definitions(Battery PUBLIC
-       UNICODE
-       _UNICODE
-    )
+            UNICODE
+            _UNICODE
+            )
 endif()
 
 
@@ -162,7 +184,7 @@ target_link_libraries(Battery nativefiledialog)
 target_link_libraries(Battery cpplocate)
 target_link_libraries(Battery BatteryUI)
 
-
+# TODO: clip examples are being built
 
 
 #######################
