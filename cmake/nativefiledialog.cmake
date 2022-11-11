@@ -4,11 +4,11 @@ add_library(nativefiledialog STATIC)
 add_library(nativefiledialog::nativefiledialog ALIAS nativefiledialog)
 
 if (WIN32)
-    target_sources(nativefiledialog PUBLIC
+    target_sources(nativefiledialog PRIVATE
             ${NATIVE_FILE_DIALOG_DIR}/src/nfd_common.c
             ${NATIVE_FILE_DIALOG_DIR}/src/nfd_win.cpp)
 else ()
-    target_sources(nativefiledialog PUBLIC
+    target_sources(nativefiledialog PRIVATE
             ${NATIVE_FILE_DIALOG_DIR}/src/nfd_common.c
             ${NATIVE_FILE_DIALOG_DIR}/src/nfd_zenity.c)
 endif ()
