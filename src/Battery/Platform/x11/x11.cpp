@@ -3,7 +3,7 @@
 
 #include "Battery/Platform/Platform.h"
 #include "Battery/Core/Exception.h"
-#include "Battery/StringUtils.h"
+#include "Battery/Utils/StringUtils.h"
 
 #include <X11/Xatom.h>
 #include <allegro5/allegro_x.h>
