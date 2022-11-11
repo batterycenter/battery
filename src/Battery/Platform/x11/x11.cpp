@@ -35,7 +35,7 @@ namespace Battery {
 	}
 
 	bool platform_ExtractArchive(const std::string& file, const std::string& targetDirectory, bool force) {
-#warning TODO: Implement unzipping
+//#warning TODO: Implement unzipping
 		return false;
 	}
 
@@ -145,12 +145,12 @@ namespace Battery {
 	}
 
 	void platform_SetWindowTransparent(sf::WindowHandle window, bool transparent) {
-#warning TODO : platform_SetWindowTransparent not implemented
+//#warning TODO : platform_SetWindowTransparent not implemented
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
 
 	void platform_SetWindowAlpha(sf::WindowHandle window, uint8_t alpha) {}
-#warning TODO : platform_SetWindowAlpha not implemented
+//#warning TODO : platform_SetWindowAlpha not implemented
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
 
@@ -169,22 +169,22 @@ namespace Battery {
 	
 
 	MB_Status MessageBoxError(const std::string& message, const std::string& title, MB_Buttons buttons, int defaultButton) {
-#warning TODO: MessageBoxError not implemented
+//#warning TODO: MessageBoxError not implemented
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
 
 	MB_Status MessageBoxWarning(const std::string& message, const std::string& title, MB_Buttons buttons, int defaultButton) {
-#warning TODO: MessageBoxWarning not implemented
+//#warning TODO: MessageBoxWarning not implemented
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
 
 	MB_Status MessageBoxInfo(const std::string& message, const std::string& title, MB_Buttons buttons, int defaultButton) {
-#warning TODO: MessageBoxInfo not implemented
+//#warning TODO: MessageBoxInfo not implemented
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
 
 	glm::vec2 GetUsableDesktopArea() {
-#warning TODO : GetUsableDesktopArea not implemented
+//#warning TODO : GetUsableDesktopArea not implemented
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
 }
