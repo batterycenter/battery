@@ -9,29 +9,29 @@
 #define _UNICODE
 #endif
 
-#define PRINT_PLATFORMS
+//#define PRINT_PLATFORMS
 
 // Platform & Compiler definitions
 #if defined(__clang__)
-#define BATTERY_COMPILER_CLANG
+    #define BATTERY_COMPILER_CLANG
     #ifdef PRINT_PLATFORMS
-        #pragma message "[Battery] Detected clang compiler"
+    #pragma message "[Battery] Detected clang compiler"
     #endif
 #elif defined(__MINGW32__)
-#define BATTERY_COMPILER_MINGW
-#define BATTERY_COMPILER_GCC
-#ifdef PRINT_PLATFORMS
-#pragma message "[Battery] Detected MINGW GCC compiler"
-#endif
-#elif defined(__GNUC__) || defined(__GNUG__)
-#define BATTERY_COMPILER_GCC
+    #define BATTERY_COMPILER_MINGW
+    #define BATTERY_COMPILER_GCC
     #ifdef PRINT_PLATFORMS
-        #pragma message "[Battery] Detected GCC compiler"
+    #pragma message "[Battery] Detected MINGW GCC compiler"
+    #endif
+#elif defined(__GNUC__) || defined(__GNUG__)
+    #define BATTERY_COMPILER_GCC
+    #ifdef PRINT_PLATFORMS
+    #pragma message "[Battery] Detected GCC compiler"
     #endif
 #elif defined(_MSC_VER)
     #define BATTERY_COMPILER_MSVC
     #ifdef PRINT_PLATFORMS
-        #pragma message "[Battery] Detected MSVC compiler"
+    #pragma message "[Battery] Detected MSVC compiler"
     #endif
 #else
     #error [Battery] Unknown compiler architecture! None of the supported compilers have been detected! Edit include/Battery/pch.hpp to add it at your own risk
@@ -39,20 +39,21 @@
 
 // Platform definitions
 #if _WIN32 || _WIN64
-#define BATTERY_ARCH_WINDOWS     // Target platform is Windows
-#ifdef _WIN64
-#define BATTERY_ARCH_64
-#ifdef PRINT_PLATFORMS
-#pragma message "[Battery] Compiling for Windows/x64"
-#endif
-#else
-#define BATTERY_ARCH_32
+    #define BATTERY_ARCH_WINDOWS     // Target platform is Windows
+    #ifdef _WIN64
+        #define BATTERY_ARCH_64
+        #ifdef PRINT_PLATFORMS
+            #pragma message "[Battery] Compiling for Windows/x64"
+        #endif
+    #else
+        #define BATTERY_ARCH_32
         #ifdef PRINT_PLATFORMS
             #pragma message "[Battery] Compiling for Windows/x86"
         #endif
-#endif
+    #endif
+
 #elif __linux__
-#define BATTERY_ARCH_LINUX       // Target platform is a variation of Linux
+    #define BATTERY_ARCH_LINUX       // Target platform is a variation of Linux
 
     // First check if it's ARM
     #if defined(__aarch64__) || defined(_M_ARM64)
