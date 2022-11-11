@@ -62,7 +62,6 @@ void BatteryApp::OnStartup() {
 
     tray->attachLeftClickCallback([&] { sprite = 0; currentAnimation = &sprites_attack; });
     tray->attachRightClickCallback([&] { sprite = 0; currentAnimation = &sprites_death; });
-
 }
 
 void BatteryApp::OnUpdate() {
@@ -80,12 +79,14 @@ void BatteryApp::OnUpdate() {
         }
         tray->setIcon((*currentAnimation)[sprite]);
     }
-    //image.loadFrom
-    //tray->
 
 }
 
 void BatteryApp::OnRender() {
+
+    ImGui::SetNextWindowPos({ cos(Battery::GetRuntime().asSeconds() * 5) * 100 + 100, sin(Battery::GetRuntime().asSeconds() * 5) * 100 + 100 });
+    ImGui::Begin("test");
+    ImGui::End();
 
     ImGui::ShowDemoWindow();
     

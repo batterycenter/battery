@@ -86,7 +86,7 @@ namespace Battery {
 		windowStandby = standby;
 	}
 
-	void Application::SetFramerate(uint32_t fps) {
+	void Application::SetFramerate(uint32_t fps) {  // TODO: Function not guaranteed to be used
 		window.setFramerateLimit(fps);
         framerateLimit = fps;
 	}
@@ -177,14 +177,13 @@ namespace Battery {
 			}
 
 			LOG_CORE_INFO("Stopping Application");
-			window.setVisible(false);
 			OnShutdown();
+            layers.ClearStack();
 
+            window.setVisible(false);
 
 			ImPlot::DestroyContext();
 			ImGui::SFML::Shutdown();
-
-			layers.ClearStack();
 			window.close();
 
 			LOG_CORE_INFO("Application stopped");
@@ -217,6 +216,7 @@ namespace Battery {
 			// Show rendered image (and sleep)
 			if (!windowStandby) {
 				window.display();
+                LOG_DEBUG("display: {}", Battery::GetRuntime().asSeconds());
 			}
 			else {
 				Sleep(1.f / (float)framerateLimit);    // Standby

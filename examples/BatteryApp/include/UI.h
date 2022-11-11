@@ -55,7 +55,7 @@ class UI : public BatteryUI::RootUI {
 public:
     Window mainWindow;
 
-    // Here you must add all widget names, otherwise they will not be part of the stylesheet. (Except fonts)
+    // Here you must add all widget names, otherwise they will not be part of the stylesheet.
     BATTERYUI_SERIALIZE(UI, mainWindow);
 
     UI() : BatteryUI::RootUI(STYLESHEET) {
@@ -71,13 +71,6 @@ public:
         ImGui::ShowDemoWindow();    // Default ImGui demo window
     }
 
-    void applyJsonRootUI(const nlohmann::json& json) override {
-        from_json(json, *this);
-    }
-
-    void getJsonRootUI(nlohmann::json& json) override {
-        to_json(json, *this);
-    }
-
-    BATTERYUI_STYLESHEET_HOTRELOAD();
+    BATTERYUI_STYLESHEET_HOTRELOAD(/* optional: reload interval in ms */);  // This adds hotreload to your stylesheet (optional)
+    BATTERYUI_ROOT_UI();                                                    // This is always needed
 };
