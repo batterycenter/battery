@@ -14,7 +14,7 @@ namespace Battery {
 	};
 
 	TrayIcon::TrayIcon(const sf::Image& icon, const std::string& tip) : data(new __trayIconData__()) {
-#warning TODO: TrayIcon not implemented
+//#warning TODO: TrayIcon not implemented
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
 
@@ -22,22 +22,22 @@ namespace Battery {
 	}
 
 	void TrayIcon::update() {
-#warning TODO: TrayIcon not implemented
+//#warning TODO: TrayIcon not implemented
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
 
 	void TrayIcon::attachLeftClickCallback(std::function<void(void)> callback) {
-#warning TODO: TrayIcon not implemented
+//#warning TODO: TrayIcon not implemented
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
 
 	void TrayIcon::attachRightClickCallback(std::function<void(void)> callback) {
-#warning TODO: TrayIcon not implemented
+//#warning TODO: TrayIcon not implemented
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
 
     void TrayIcon::handleMessage(const TrayMessage& msg) {
-#warning TODO: TrayIcon not implemented
+//#warning TODO: TrayIcon not implemented
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
     }
 

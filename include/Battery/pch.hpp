@@ -69,14 +69,14 @@
 #include <cstddef>
 #include <thread>
 
-#ifndef _MSC_VER
+#ifdef BATTERY_COMPILER_GCC
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wvolatile"		// Disable a glm warning (because of C++20)
 #endif
 
 	#include "glm/glm.hpp"
 
-#ifndef _MSC_VER
+#ifdef BATTERY_COMPILER_GCC
 #pragma GCC diagnostic pop
 #endif
 
