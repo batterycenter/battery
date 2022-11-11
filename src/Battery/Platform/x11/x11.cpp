@@ -1,6 +1,6 @@
 
 #ifdef __linux__
-
+/*
 #include "Battery/Platform/Platform.h"
 #include "Battery/Core/Exception.h"
 #include "Battery/Utils/StringUtils.h"
@@ -187,6 +187,6 @@ namespace Battery {
 //#warning TODO : GetUsableDesktopArea not implemented
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
-}
+}*/
 
 #endif // __linux__
