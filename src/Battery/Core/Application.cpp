@@ -216,7 +216,6 @@ namespace Battery {
 			// Show rendered image (and sleep)
 			if (!windowStandby) {
 				window.display();
-                LOG_DEBUG("display: {}", Battery::GetRuntime().asSeconds());
 			}
 			else {
 				Sleep(1.f / (float)framerateLimit);    // Standby
