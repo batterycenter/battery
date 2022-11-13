@@ -39,7 +39,8 @@ namespace Battery {
 	}
 
     std::pair<bool, size_t> platform_ExecuteShellCommandSilent(const std::string& command, bool hidden) {
-		system(command.c_str());
+		//system(command.c_str());
+        return {};
 	}
 
 	#pragma warning ("TODO fix this shitty file")
