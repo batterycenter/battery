@@ -182,6 +182,10 @@ target_link_libraries(Battery sfml-network)
 target_link_libraries(Battery sfml-system)
 target_link_libraries(Battery sfml-window)
 
+if (NOT WIN32)
+    target_link_libraries(Battery gtk3)
+endif()
+
 target_link_libraries(Battery glm)
 target_link_libraries(Battery imgui)
 target_link_libraries(Battery ImGui-SFML)
