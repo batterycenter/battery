@@ -59,6 +59,12 @@ if (NOT WIN32)
     if (NOT FLAC_FOUND)
         message(FATAL_ERROR "FLAC development libraries not found! Please install them using your system's equivalent to 'sudo apt install libflac-dev'")
     endif()
+
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(GTK3 gtk+-3.0)
+    if (NOT GTK3_FOUND)
+        message(FATAL_ERROR "GTK3 development libraries not found! Please install them using your system's equivalent to 'sudo apt install libgtk-3-dev'")
+    endif()
 endif()
 
 get_github_dependency(clip "modules/clip/CMakeLists.txt" "https://github.com/dacap/clip.git" v1.5)
@@ -167,7 +173,9 @@ endif()
 # Linking #
 ###########
 
-target_link_libraries(Battery sfml-main)
+if (WIN32)
+    target_link_libraries(Battery sfml-main)
+endif()
 target_link_libraries(Battery sfml-graphics)
 target_link_libraries(Battery sfml-audio)
 target_link_libraries(Battery sfml-network)

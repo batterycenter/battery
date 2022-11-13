@@ -36,6 +36,11 @@ namespace Battery {
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
 
+    void TrayIcon::setIcon(const sf::Image& icon) {
+//#warning TODO: TrayIcon not implemented
+		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
+    }
+
     void TrayIcon::handleMessage(const TrayMessage& msg) {
 //#warning TODO: TrayIcon not implemented
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);

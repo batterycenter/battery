@@ -5,9 +5,6 @@
 
 #include "Battery/Extern/tray.h"
 
-#include "windows.h"
-#include "shellapi.h"
-
 std::vector<sf::Image> sprites_idle;
 std::vector<sf::Image> sprites_attack;
 std::vector<sf::Image> sprites_death;
@@ -70,16 +67,16 @@ struct tray_menu menu[] = {{"Ändere mich du Süßölgefäß!", 0, 0, toggle_cb,
 void BatteryApp::OnStartup() {
     using namespace Battery;
 
-    loadSprites();
+    //loadSprites();
 
     auto im = Battery::DecodeBase64(BATTERY_DEFAULT_WINDOW_ICON_BASE64);
     sf::Image image;
     image.loadFromMemory(&im[0], im.size());
 
-    tray = std::make_unique<Battery::TrayIcon>(image, "sebi is dick");
+    //tray = std::make_unique<Battery::TrayIcon>(image, "sebi is dick");
 
-    tray->attachLeftClickCallback([&] { sprite = 0; currentAnimation = &sprites_attack; });
-    tray->attachRightClickCallback([&] { sprite = 0; currentAnimation = &sprites_death; });
+    //tray->attachLeftClickCallback([&] { sprite = 0; currentAnimation = &sprites_attack; });
+    //tray->attachRightClickCallback([&] { sprite = 0; currentAnimation = &sprites_death; });
 
     trays.icon = "resources/tiktok.ico",
     trays.menu = menu;
@@ -92,7 +89,7 @@ void BatteryApp::OnUpdate() {
     static int cnt = 0;
     cnt++;
 
-    tray->update();
+    //tray->update();
 
     if (cnt % 5 == 0) {
         sprite++;
@@ -100,7 +97,7 @@ void BatteryApp::OnUpdate() {
             sprite = 0;
             currentAnimation = &sprites_idle;
         }
-        tray->setIcon((*currentAnimation)[sprite]);
+        //tray->setIcon((*currentAnimation)[sprite]);
     }
 
 }
@@ -112,7 +109,7 @@ void BatteryApp::OnRender() {
     ImGui::End();
 
     ImGui::ShowDemoWindow();
-    
+
 }
 
 void BatteryApp::OnShutdown() {
