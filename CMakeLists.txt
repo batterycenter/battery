@@ -183,7 +183,10 @@ target_link_libraries(Battery sfml-system)
 target_link_libraries(Battery sfml-window)
 
 if (NOT WIN32)
-    target_link_libraries(Battery gtk3)
+    target_include_directories(Battery PRIVATE ${GTK3_INCLUDE_DIRS})
+    target_link_directories(Battery PRIVATE ${GTK3_LIBRARY_DIRS})
+    target_compile_definitions(Battery PRIVATE ${GTK3_CFLAGS_OTHER})
+    target_link_libraries(Battery ${GTK3_LIBRARIES})
 endif()
 
 target_link_libraries(Battery glm)
