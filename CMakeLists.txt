@@ -30,6 +30,8 @@ endif()
 ################
 
 if (NOT WIN32)
+    find_package(PkgConfig REQUIRED)
+
     find_package(X11 QUIET)
     if (NOT X11_FOUND)
         message(FATAL_ERROR "X11 development libraries not found! Please install them using your system's equivalent to 'sudo apt install libx11-dev'")
@@ -60,10 +62,14 @@ if (NOT WIN32)
         message(FATAL_ERROR "FLAC development libraries not found! Please install them using your system's equivalent to 'sudo apt install libflac-dev'")
     endif()
 
-    find_package(PkgConfig REQUIRED)
     pkg_check_modules(GTK3 gtk+-3.0)
     if (NOT GTK3_FOUND)
         message(FATAL_ERROR "GTK3 development libraries not found! Please install them using your system's equivalent to 'sudo apt install libgtk-3-dev'")
+    endif()
+
+    pkg_check_modules(LIBAPPINDICATOR appindicator3-0.1)
+    if (NOT LIBAPPINDICATOR_FOUND)
+        message(FATAL_ERROR "libappindicator development libraries not found! Please install them using your system's equivalent to 'sudo apt install libappindicator3-dev'")
     endif()
 endif()
 
@@ -183,10 +189,13 @@ target_link_libraries(Battery sfml-system)
 target_link_libraries(Battery sfml-window)
 
 if (NOT WIN32)
-    target_include_directories(Battery PRIVATE ${GTK3_INCLUDE_DIRS})
+    target_include_directories(Battery PUBLIC ${GTK3_INCLUDE_DIRS})
     target_link_directories(Battery PRIVATE ${GTK3_LIBRARY_DIRS})
     add_definitions(${GTK3_CFLAGS_OTHER})
     target_link_libraries(Battery ${GTK3_LIBRARIES})
+    target_link_libraries(Battery ${LIBAPPINDICATOR_LIBRARIES})
+    target_include_directories(Battery PUBLIC ${LIBAPPINDICATOR_INCLUDE_DIRS})
+    target_link_directories(Battery PUBLIC ${LIBAPPINDICATOR_LIBRARY_DIRS})
 endif()
 
 target_link_libraries(Battery glm)
