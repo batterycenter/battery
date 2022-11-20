@@ -1,26 +1,27 @@
 #ifndef TRAY_H
 #define TRAY_H
 
-#include "Battery/Platform/Platform.h"
-#ifdef _WIN32
-#define TRAY_WINAPI 1
+#include "Battery/pch.hpp"
+#include "Battery/Utils/OsString.h"
+#ifdef BATTERY_ARCH_WINDOWS
+    #define TRAY_WINAPI 1
 #else
-#ifdef __linux__
-#define TRAY_APPINDICATOR 1
-#else
-#define TRAY_APPKIT 1
-#endif
+    #ifdef BATTERY_ARCH_LINUX
+        #define TRAY_APPINDICATOR 1
+    #else
+        #define TRAY_APPKIT 1
+    #endif
 #endif
 
 struct tray_menu;
 
 struct tray {
-  char *icon;
+  Battery::OsString icon;
   struct tray_menu *menu;
 };
 
 struct tray_menu {
-  char *text;
+  Battery::OsString text;
   int disabled;
   int checked;
 
@@ -269,7 +270,7 @@ static LRESULT CALLBACK _tray_wnd_proc(HWND hwnd, UINT msg, WPARAM wparam,
 
 static HMENU _tray_menu(struct tray_menu *m, UINT *id) {
   HMENU hmenu = CreatePopupMenu();
-  for (; m != NULL && m->text != NULL; m++, (*id)++) {
+  for (; m != NULL && !m->text.str().empty(); m++, (*id)++) {
     if (strcmp(m->text, "-") == 0) {
       InsertMenu(hmenu, *id, MF_SEPARATOR, TRUE, L"");
     } else {
@@ -279,7 +280,7 @@ static HMENU _tray_menu(struct tray_menu *m, UINT *id) {
       item.fMask = MIIM_ID | MIIM_TYPE | MIIM_STATE | MIIM_DATA;
       item.fType = 0;
       item.fState = 0;
-      if (m->submenu != NULL) {
+      if (m->submenu != nullptr) {
         item.fMask = item.fMask | MIIM_SUBMENU;
         item.hSubMenu = _tray_menu(m->submenu, id);
       }
@@ -291,8 +292,7 @@ static HMENU _tray_menu(struct tray_menu *m, UINT *id) {
       }
       item.wID = *id;
 
-      auto text = Battery::Utf8ToWchar(m->text);
-      item.dwTypeData = (wchar_t*)text.c_str();
+      item.dwTypeData = m->text;
       item.dwItemData = (ULONG_PTR)m;
 
       InsertMenuItem(hmenu, *id, TRUE, &item);
@@ -350,7 +350,7 @@ static void tray_update(struct tray *tray) {
   hmenu = _tray_menu(tray->menu, &id);
   SendMessage(hwnd, WM_INITMENUPOPUP, (WPARAM)hmenu, 0);
   HICON icon;
-  std::wstring tray_icon_path = Battery::Utf8ToWchar(tray->icon);
+  std::wstring tray_icon_path = (tray->icon);
   ExtractIconEx(tray_icon_path.c_str(), 0, NULL, &icon, 1);
   if (nid.hIcon) {
     DestroyIcon(nid.hIcon);

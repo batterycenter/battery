@@ -8,17 +8,18 @@
 
 #include "SFML/System.hpp"
 #include "Battery/Platform/TrayIcon.h"
+#include "Battery/Utils/OsString.h"
 
 namespace Battery {
 
-	void* platform_LockFileDescriptor(const std::string& file);
+	void* platform_LockFileDescriptor(const OsString& filepath);
 	void platform_UnlockFileDescriptor(void* fileDescriptor);
 
 	bool platform_ExtractArchive(const std::string& file, const std::string& targetDirectory, bool force);
 
-    std::pair<bool, size_t> platform_ExecuteShellCommandSilent(const std::string& command, bool hidden);
+    std::pair<bool, size_t> platform_ExecuteShellCommandSilent(const OsString& command, bool hidden);
 	
-	std::vector<uint8_t> platform_LoadEmbeddedResource(int id, const char* type);
+	std::vector<uint8_t> platform_LoadEmbeddedResource(int id, const OsString& type);
 
 	bool platform_IsFocused(sf::WindowHandle window);
 	void platform_Focus(sf::WindowHandle window);
@@ -50,21 +51,13 @@ namespace Battery {
 	};
 
 	// defaultButton: 1, 2, 3 or 4
-	MB_Status MessageBoxError(const std::string& message, const std::string& title = "Error", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
-	MB_Status MessageBoxWarning(const std::string& message, const std::string& title = "Warning", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
-	MB_Status MessageBoxInfo(const std::string& message, const std::string& title = "Information", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
+	MB_Status MessageBoxError(const OsString& message, const OsString& title = "Error", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
+	MB_Status MessageBoxWarning(const OsString& message, const OsString& title = "Warning", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
+	MB_Status MessageBoxInfo(const OsString& message, const OsString& title = "Information", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
 
 	glm::vec2 GetUsableDesktopArea();
 
-    class OsString {
-    public:
-        OsString();
-    };
-
 #ifdef _WIN32
     std::string GetLastWin32ErrorString();
-    std::wstring Utf8ToWchar(const std::string& mbString);
-    std::string WcharToUtf8(const std::wstring& wString);
-    std::string WcharToUtf8(const wchar_t* wString);	// Windows' LPCWSTR
 #endif
 }

@@ -2,6 +2,7 @@
 
 #include "Battery/pch.hpp"
 #include "Battery/Utils/TypeUtils.h"
+#include "Battery/Utils/OsString.h"
 
 namespace Battery {
     
@@ -9,8 +10,8 @@ namespace Battery {
     struct TrayMessage;
 	class TrayIcon {
 	public:
-		TrayIcon(const std::string& icon_path, const std::string& tip = "");
-        TrayIcon(const sf::Image& icon, const std::string& tip = "");
+		//TrayIcon(const std::string& icon_path, const OsString& tip = "");
+        TrayIcon(const sf::Image& icon, const OsString& tip = "");
 		~TrayIcon();
 
 		void update();

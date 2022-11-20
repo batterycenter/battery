@@ -49,24 +49,23 @@ namespace Battery {
 		return CreateIconFromResourceEx(png.data(), png.size(), true, 0x00030000, image.getSize().x, image.getSize().y, LR_DEFAULTCOLOR);
 	}
 
-	TrayIcon::TrayIcon(const sf::Image& icon, const std::string& tip) : data(new __trayIconData__()) {
-		using namespace std::placeholders;
+	TrayIcon::TrayIcon(const sf::Image& icon, const OsString& tip) : data(new __trayIconData__()) {
+        OsString classname = "TRAY" + std::to_string(id);
 
 		data->icon = CreateWin32IconFromImage(icon);
 		__id__++;
 		id = __id__;
-		std::string classname = "TRAY" + std::to_string(id);
-        std::wstring wclassname = Utf8ToWchar(classname);
 		
 		// Create the hidden window responsible for the message stack
 		WNDCLASSEXW wc;
 		memset(&wc, 0, sizeof(wc));
 		wc.cbSize = sizeof(wc);
 		wc.lpfnWndProc = TrayWndMessage;
-		wc.hInstance = GetModuleHandleW(NULL);
-		wc.lpszClassName = wclassname.c_str();
+		wc.hInstance = GetModuleHandleW(nullptr);
+		wc.lpszClassName = classname;
 		RegisterClassExW(&wc);
-		data->hwnd = CreateWindowExW(0, (LPCWSTR)wclassname.c_str(), NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+		data->hwnd = CreateWindowExW(0, classname, nullptr, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 		if (!data->hwnd) {
 			throw BATTERY_EXCEPTION("Failed to create the hidden window for the tray icon message stack: %s",
                                     GetLastWin32ErrorString().c_str());
@@ -81,7 +80,7 @@ namespace Battery {
 		data->nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
 		data->nid.uCallbackMessage = WM_USER + 1 + id;
 		data->nid.hIcon = data->icon;
-		wcscpy(data->nid.szTip, Utf8ToWchar(tip).c_str());
+		wcscpy(data->nid.szTip, tip);
 
 		Shell_NotifyIconW(NIM_ADD, &data->nid);
 

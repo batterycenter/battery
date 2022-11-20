@@ -5,6 +5,8 @@
 
 #include "Battery/Extern/tray.h"
 
+//#pragma execution_character_set("utf-8")
+
 std::vector<sf::Image> sprites_idle;
 std::vector<sf::Image> sprites_attack;
 std::vector<sf::Image> sprites_death;
@@ -62,7 +64,7 @@ void quit_cb(struct tray_menu *item) {
 struct tray_menu menu[] = {{"Ändere mich du Süßölgefäß!", 0, 0, toggle_cb, NULL},
                            {"-", 0, 0, NULL, NULL},
                            {"Quit", 0, 0, quit_cb, NULL},
-                           {NULL, 0, 0, NULL, NULL}};
+                           {"", 0, 0, NULL, NULL}};
 
 void BatteryApp::OnStartup() {
     using namespace Battery;

@@ -12,5 +12,6 @@
 #include "Battery/Utils/ImGuiUtils.h"
 #include "Battery/Utils/StringUtils.h"
 #include "Battery/Utils/AppUtils.h"
+#include "Battery/Utils/OsString.h"
 
 #include "BatteryUI/BatteryUI.h"

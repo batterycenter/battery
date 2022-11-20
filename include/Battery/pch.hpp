@@ -1,5 +1,5 @@
 
-#ifndef _BATTERY_PCH_H  // pragma causes a warning on gcc
+#ifndef _BATTERY_PCH_H  // pragma in pch causes a warning on gcc
 #define _BATTERY_PCH_H
 
 #ifndef UNICODE
