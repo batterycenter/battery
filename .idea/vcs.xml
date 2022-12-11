@@ -12,5 +12,6 @@
     <mapping directory="$PROJECT_DIR$/modules/implot" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/modules/nativefiledialog" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/modules/spdlog" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/modules/tray" vcs="Git" />
   </component>
 </project>

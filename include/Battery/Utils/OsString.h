@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Battery/pch.hpp"
+#include "Battery/Environment.h"
 
 namespace Battery {
 
@@ -28,9 +28,9 @@ namespace Battery {
         operator char*() const;
         operator const char*() const;
         operator std::string() const;
-        operator wchar_t*() const;
-        operator const wchar_t*() const;
-        operator std::wstring() const;
+        //operator wchar_t*() const;
+        //operator const wchar_t*() const;
+        //operator std::wstring() const;
 
     private:
         std::string raw_string;

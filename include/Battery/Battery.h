@@ -15,3 +15,5 @@
 #include "Battery/Utils/OsString.h"
 
 #include "BatteryUI/BatteryUI.h"
+
+#include "BatteryUI/Extern/rang.hpp"

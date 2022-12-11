@@ -18,10 +18,42 @@ function(GET_GITHUB_DEPENDENCY NAME REQUIRED_FILE REPOSITORY_URL BRANCH)
     endif()
 endfunction()
 
-function(USE_STATIC_RUNTIME TARGET)
-    if (MSVC)
-        target_compile_options(${TARGET} PRIVATE /MT$<$<CONFIG:Debug>:d>)
+#function(USE_STATIC_RUNTIME TARGET)
+#    if (MSVC)
+#        set_property(TARGET ${TARGET_NAME} PROPERTY
+#                MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+#    else()
+#        target_compile_options(${TARGET} PRIVATE -static -static-libgcc -static-libstdc++ -Bstatic)
+#    endif()
+#endfunction()
+
+function(BATTERY_ADD_EXECUTABLE TARGET_NAME ARGS)
+
+    # Define Target
+    add_executable(${TARGET_NAME} ${ARGS})
+
+    # Set the C++ Standard
+    target_compile_features(${TARGET_NAME} PRIVATE cxx_std_23)
+    set_target_properties(${TARGET_NAME} PROPERTIES CXX_EXTENSIONS OFF)
+
+    # Set common Preprocessor Flags
+    if(MSVC)
+        string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /MP")
     else()
-        target_compile_options(${TARGET} PRIVATE -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++)
+        target_compile_options(${TARGET_NAME} PRIVATE -Wno-psabi)
     endif()
+
+    if (WIN32)
+        target_compile_definitions(${TARGET_NAME} PRIVATE
+                WIN32_LEAN_AND_MEAN      # Prevents Windows.h from adding unnecessary includes
+                NOMINMAX                 # Prevents Windows.h from defining min/max as macros
+                _CRT_SECURE_NO_WARNINGS
+                )
+        target_compile_definitions(${TARGET_NAME} PRIVATE
+                UNICODE
+                _UNICODE
+                )
+    endif()
+
 endfunction()
+

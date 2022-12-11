@@ -7,6 +7,15 @@
 
 //#pragma execution_character_set("utf-8")
 
+#include <fstream>
+//#include <embed>
+
+constexpr void test() {
+    //std::embed();
+    //std::ifstream fs("test.txt");
+    //std::cout << fs << std::endl;
+}
+
 std::vector<sf::Image> sprites_idle;
 std::vector<sf::Image> sprites_attack;
 std::vector<sf::Image> sprites_death;

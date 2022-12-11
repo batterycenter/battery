@@ -36,7 +36,7 @@
 *.sln
 
 # CLion folder
-cmake-build-debug/
+cmake-build-*/
 
 # Miscellaneous
 bin/

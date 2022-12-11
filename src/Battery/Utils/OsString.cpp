@@ -152,17 +152,17 @@ namespace Battery {
         return raw_string;
     }
 
-    OsString::operator wchar_t*() const {
-        return (wchar_t*)platform_string.c_str();
-    }
+    //OsString::operator wchar_t*() const {
+    //    return (wchar_t*)platform_string.c_str();
+    //}
 
-    OsString::operator const wchar_t*() const {
-        return platform_string.c_str();
-    }
+    //OsString::operator const wchar_t*() const {
+    //    return platform_string.c_str();
+    //}
 
-    OsString::operator std::wstring() const {
-        return platform_string;
-    }
+    //OsString::operator std::wstring() const {
+    //    return platform_string;
+    //}
 
 #endif
 

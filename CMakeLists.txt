@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(Battery VERSION 0.1.1 LANGUAGES C CXX)
 
+include(FetchContent)
 include(cmake/util.cmake)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
@@ -17,6 +18,7 @@ endif()
 option(BUILD_EXAMPLES "Build examples" on)
 option(BATTERY_STATIC_RUNTIME "Use statically linked runtime" off)
 option(BATTERY_SHARED_LIB "Build shared library instead of static" off)
+option(BATTERY_BUILD_TOOLS "Build the Battery Tools" on)
 
 if (MSVC)
     option(BATTERY_USE_PRECOMPILED_HEADER "Using a precompiled header to speed up compile time" on)
@@ -73,13 +75,18 @@ if (NOT WIN32)
     endif()
 endif()
 
+FetchContent_Declare(spdlog
+        GIT_REPOSITORY https://github.com/gabime/spdlog.git
+        GIT_TAG        v1.10.0)
+FetchContent_MakeAvailable(spdlog)
+
 get_github_dependency(clip "modules/clip/CMakeLists.txt" "https://github.com/dacap/clip.git" v1.5)
 get_github_dependency(glm "modules/glm/CMakeLists.txt" "https://github.com/g-truc/glm.git" 0.9.9.8)
 get_github_dependency(imgui "modules/imgui/imgui.cpp" "https://github.com/ocornut/imgui.git" v1.88)
 get_github_dependency(imgui-sfml "modules/imgui-sfml/CMakeLists.txt" "https://github.com/eliasdaler/imgui-sfml.git" v2.5)
 get_github_dependency(implot "modules/implot/implot.cpp" "https://github.com/epezent/implot.git" v0.14)
 get_github_dependency(SFML "modules/SFML/CMakeLists.txt" "https://github.com/SFML/SFML.git" 2.6.x)
-get_github_dependency(spdlog "modules/spdlog/CMakeLists.txt" "https://github.com/gabime/spdlog.git" v1.10.0)
+#get_github_dependency(spdlog "modules/spdlog/CMakeLists.txt" "https://github.com/gabime/spdlog.git" v1.10.0)
 get_github_dependency(cpplocate "modules/cpplocate/CMakeLists.txt" "https://github.com/cginternals/cpplocate.git" v2.3.0)
 get_github_dependency(nativefiledialog "modules/nativefiledialog/src/include/nfd.h" "https://github.com/mlabbe/nativefiledialog.git" release_116)
 get_github_dependency(BatteryUI "modules/BatteryUI/CMakeLists.txt" "https://github.com/HerrNamenlos123/BatteryUI.git" master)
@@ -106,7 +113,7 @@ include(cmake/implot.cmake)
 include(cmake/nativefiledialog.cmake)
 include(cmake/glm.cmake)
 add_subdirectory(modules/imgui-sfml)
-add_subdirectory(modules/spdlog)
+#add_subdirectory(modules/spdlog)
 add_subdirectory(modules/clip)
 add_subdirectory(modules/cpplocate)
 add_subdirectory(modules/BatteryUI)
@@ -134,7 +141,7 @@ file(GLOB_RECURSE SRC_FILES "src/*")
 add_library(Battery STATIC ${SRC_FILES} ${HEADER_FILES} "cmake/BatteryConfig.cmake.in")
 add_library(Battery::Battery ALIAS Battery)
 
-target_compile_features(Battery PRIVATE cxx_std_17)
+target_compile_features(Battery PRIVATE cxx_std_23)
 set_target_properties(Battery PROPERTIES CXX_EXTENSIONS OFF)
 
 target_include_directories(Battery PUBLIC
@@ -238,12 +245,16 @@ source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/cmake" PREFIX "cmake" FILES "cmake/
 
 
 
-############
-# Examples #
-############
+######################
+# Examples and Tools #
+######################
 
 if (BUILD_EXAMPLES)
     add_subdirectory(examples)
+endif()
+
+if (BATTERY_BUILD_TOOLS)
+    add_subdirectory(battery_embed)
 endif()
 
 
