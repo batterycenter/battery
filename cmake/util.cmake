@@ -27,10 +27,10 @@ endfunction()
 #    endif()
 #endfunction()
 
-function(BATTERY_ADD_EXECUTABLE TARGET_NAME ARGS)
+function(BATTERY_ADD_EXECUTABLE TARGET_NAME)
 
     # Define Target
-    add_executable(${TARGET_NAME} ${ARGS})
+    add_executable(${TARGET_NAME} ${ARGN})
 
     # Set the C++ Standard
     target_compile_features(${TARGET_NAME} PRIVATE cxx_std_23)
@@ -54,6 +54,96 @@ function(BATTERY_ADD_EXECUTABLE TARGET_NAME ARGS)
                 _UNICODE
                 )
     endif()
+
+endfunction()
+
+
+
+
+
+function(BATTERY_REQUIRE_FIND_PACKAGE PACKAGE_NAME PACKAGE_NAME_FOUND ADDITIONAL_MESSAGE)
+
+    # Simply test the package and print understandable error message if it's not found
+    find_package(${PACKAGE_NAME} QUIET)
+    if (NOT ${PACKAGE_NAME_FOUND})
+        message(FATAL_ERROR "${PACKAGE_NAME} development libraries not found! ${ADDITIONAL_MESSAGE}")
+    endif()
+
+endfunction()
+
+
+
+
+function(BATTERY_EMBED TARGET FILE_NAME TYPE)
+
+    if (NOT BATTERY_EMBED_BUILT)
+        message(STATUS "[Battery] Building and verifying Battery-Embed tool")
+        file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/battery_embed)
+
+        execute_process(                # Configure the battery_embed project
+            COMMAND ${CMAKE_COMMAND} ${BATTERY_ROOT_DIR}/battery_embed -DCMAKE_BUILD_TYPE=Release
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/battery_embed
+            RESULT_VARIABLE RESULT
+            OUTPUT_VARIABLE OUTPUT
+        )
+        if (NOT ${RESULT} EQUAL 0)
+            message(FATAL_ERROR "[Battery] The Battery-Embed tool failed to configure. Output: \n${OUTPUT}")
+        endif()
+
+        include(ProcessorCount)
+        ProcessorCount(N)
+        execute_process(                # Build the battery_embed project
+            COMMAND ${CMAKE_COMMAND} --build .  -j${N} --config=Release
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/battery_embed
+            RESULT_VARIABLE RESULT
+            OUTPUT_VARIABLE OUTPUT
+        )
+        if (NOT ${RESULT} EQUAL 0)
+            message(FATAL_ERROR "[Battery] The Battery-Embed tool failed to build. Output: \n${OUTPUT}")
+        endif()
+        message(STATUS "[Battery] Battery-Embed built")
+        set(BATTERY_EMBED_BUILT ON PARENT_SCOPE)
+    endif()
+
+
+    # Now verify the tool and retrieve the resulting filename
+    execute_process(
+        COMMAND ${CMAKE_BINARY_DIR}/battery_embed/Release/battery_embed.exe 
+                ${FILE_NAME} ${CMAKE_CURRENT_BINARY_DIR}/resources --print-src-name-only
+        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/
+        OUTPUT_VARIABLE SOURCE_FILE
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        RESULT_VARIABLE RESULT
+    )
+    if (NOT ${RESULT} EQUAL 0)
+        message(FATAL_ERROR "[Battery] Battery-Embed could not be executed (${RESULT}): ${SOURCE_FILE}")
+    endif()
+
+    # Link the source file to the target
+    get_filename_component(OUT_DIR_PARENT ${CMAKE_CURRENT_BINARY_DIR}/resources DIRECTORY)
+    target_include_directories(${TARGET} PUBLIC ${OUT_DIR_PARENT})
+    file(WRITE ${SOURCE_FILE} "")                       # Create an empty file, so that CMake can successfully link.
+    target_sources(${TARGET} PUBLIC "${SOURCE_FILE}")   # Will be overwritten at build time by Battery-Embed
+
+
+
+    # And finally let the file be embedded at build time
+    if (${TYPE} STREQUAL "TEXT")
+        set(COMMAND_PRINT [Battery] -- Embedding text file ${FILE_NAME})
+        set(BINARY "")
+    elseif(${TYPE} STREQUAL "BINARY")
+        set(COMMAND_PRINT [Battery] -- Embedding binary file ${FILE_NAME})
+        set(BINARY "--binary")
+    else()
+        message(FATAL_ERROR "Invalid file type given to battery_embed(). Can either be TEXT or BINARY")
+    endif()
+
+    add_custom_command(TARGET ${TARGET}     # Print and then execute the embedding tool
+        PRE_BUILD
+        COMMAND echo ${COMMAND_PRINT} &&
+                     ${CMAKE_BINARY_DIR}/battery_embed/Release/battery_embed.exe
+                     ${CMAKE_CURRENT_LIST_DIR}/${FILE_NAME} ${CMAKE_CURRENT_BINARY_DIR}/resources ${BINARY}
+    )
 
 endfunction()
 

@@ -49,6 +49,8 @@ namespace Battery {
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
 
+
+#ifdef BATTERY_FEATURES_GRAPHICS
 	bool platform_IsFocused(sf::WindowHandle window) {
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 
@@ -159,6 +161,7 @@ namespace Battery {
 //#warning TODO : platform_SetWindowAlpha not implemented
 		throw Battery::NotImplementedException(__PRETTY_FUNCTION__);
 	}
+#endif // BATTERY_FEATURES_GRAPHICS
 
 
 	std::string platform_GetLastWin32ErrorAsString() {

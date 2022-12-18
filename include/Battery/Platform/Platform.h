@@ -1,14 +1,18 @@
 #pragma once
 
-#ifdef _WIN32
+#ifdef BATTERY_ARCH_WINDOWS
 #include "Battery/Platform/win/win.h"
 #else
 #include "Battery/Platform/x11/x11.h"
 #endif
 
+#include "Battery/common.h"
+#include "Battery/Utils/OsString.h"
+
+#ifdef BATTERY_FEATURES_GRAPHICS
 #include "SFML/System.hpp"
 #include "Battery/Platform/TrayIcon.h"
-#include "Battery/Utils/OsString.h"
+#endif // BATTERY_FEATURES_GRAPHICS
 
 namespace Battery {
 
@@ -21,6 +25,7 @@ namespace Battery {
 	
 	std::vector<uint8_t> platform_LoadEmbeddedResource(int id, const OsString& type);
 
+#ifdef BATTERY_FEATURES_GRAPHICS
 	bool platform_IsFocused(sf::WindowHandle window);
 	void platform_Focus(sf::WindowHandle window);
 	void platform_Hide(sf::WindowHandle window);
@@ -29,6 +34,7 @@ namespace Battery {
 	void platform_ShowInTaskbar(sf::WindowHandle window);
 	void platform_SetWindowTransparent(sf::WindowHandle window, bool transparent);
 	void platform_SetWindowAlpha(sf::WindowHandle window, uint8_t alpha);
+#endif // BATTERY_FEATURES_GRAPHICS
 
 	enum class MB_Buttons {
 		OK,
@@ -57,7 +63,7 @@ namespace Battery {
 
 	glm::vec2 GetUsableDesktopArea();
 
-#ifdef _WIN32
+#ifdef BATTERY_ARCH_WINDOWS
     std::string GetLastWin32ErrorString();
 #endif
 }

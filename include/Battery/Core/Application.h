@@ -1,14 +1,12 @@
 #pragma once
 
-#include "Battery/pch.hpp"
+#include "Battery/common.h"
 #include "Battery/Core/Config.h"
 #include "Battery/Core/Log.h"
 #include "Battery/Core/Layer.h"
 #include "Battery/Core/LayerStack.h"
 #include "Battery/Core/Config.h"
 #include "Battery/Utils/TimeUtils.h"
-
-#include "SFML/Window.hpp"
 
 namespace Battery {
 

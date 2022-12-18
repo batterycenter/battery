@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Battery/pch.hpp"
-
 #define DEFAULT_IMGUI_PANEL_FLAGS \
 	ImGuiWindowFlags_NoTitleBar | \
 	ImGuiWindowFlags_NoMove | \

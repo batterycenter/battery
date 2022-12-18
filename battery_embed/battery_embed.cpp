@@ -1,9 +1,11 @@
 
-#include <filesystem>
-#include "CLI11.hpp"
-#include "../include/Battery/Utils/OsString.h"
-namespace fs = std::filesystem;
-using Battery::OsString;
+#include "Battery/Battery.h"
+using namespace Battery;
+
+// TODO: Print version (add option)
+// TODO: Create cache file besides executable, that remembers the hash of a file and does not overwrite if not necessary
+// TODO: Support file encryption while embedding, for executable reverse-engineering security
+// TODO: Support nested directories in the resource folder
 
 enum class ErrorCode {
     SUCCESS = 0,
@@ -40,104 +42,91 @@ size_t write_hex_comma(char* buf, uint8_t num) {
     return 5;
 }
 
-std::string replace(std::string str, const std::string& from, const std::string& to) {
-    if (from.empty())
-        return str;
-    size_t start_pos = 0;
-    while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
-        str.replace(start_pos, from.length(), to);
-        start_pos += to.length();
-    }
-    return str;
-}
+// Do the main conversion by reading and writing the files
+ErrorCode convert(const std::string& input_file, const std::string& source_dir, const std::string& header_dir,
+            std::string symbol_name, bool binary, bool print_header_name_only, bool print_src_name_only) {
+    auto infile_name = FS::path(input_file).filename().string();
 
-ErrorCode convert(const OsString& input_file, const OsString& source_dir, const OsString& header_dir,
-            std::string symbol_name, bool binary) {
-    auto infile_name = fs::path(input_file.str()).filename().string();
-
+	// Replace a few characters to create a valid C++ symbol name
     if (symbol_name.empty()) {
-        symbol_name = fs::path(input_file.str()).filename().string();
-		symbol_name = replace(symbol_name, ".", "_");
-		symbol_name = replace(symbol_name, ":", "_");
-		symbol_name = replace(symbol_name, ",", "_");
-		symbol_name = replace(symbol_name, "-", "_");
-		symbol_name = replace(symbol_name, " ", "_");
-		symbol_name = replace(symbol_name, "Ä", "ae");
-		symbol_name = replace(symbol_name, "ä", "ae");
-		symbol_name = replace(symbol_name, "Ö", "oe");
-		symbol_name = replace(symbol_name, "ö", "oe");
-		symbol_name = replace(symbol_name, "Ü", "ue");
-		symbol_name = replace(symbol_name, "ü", "ue");
-		symbol_name = replace(symbol_name, "ß", "ss");
+        symbol_name = FS::path(input_file).filename().string();
+		symbol_name = String::Replace(symbol_name, ".", "_");
+		symbol_name = String::Replace(symbol_name, ":", "_");
+		symbol_name = String::Replace(symbol_name, ",", "_");
+		symbol_name = String::Replace(symbol_name, "-", "_");
+		symbol_name = String::Replace(symbol_name, " ", "_");
+		symbol_name = String::Replace(symbol_name, "Ä", "ae");
+		symbol_name = String::Replace(symbol_name, "ä", "ae");
+		symbol_name = String::Replace(symbol_name, "Ö", "oe");
+		symbol_name = String::Replace(symbol_name, "ö", "oe");
+		symbol_name = String::Replace(symbol_name, "Ü", "ue");
+		symbol_name = String::Replace(symbol_name, "ü", "ue");
+		symbol_name = String::Replace(symbol_name, "ß", "ss");
     }
 
-    OsString header_file = fs::path(header_dir.str()).append(symbol_name).string() + ".h";
-    OsString source_file = fs::path(source_dir.str()).append(symbol_name).string() + ".cpp";
+    auto header_file = FS::path(header_dir).append(symbol_name).string() + ".h";
+    auto source_file = FS::path(source_dir).append(symbol_name).string() + ".cpp";
+
+    if (print_src_name_only) {
+        std::cout << source_file << std::endl;
+        return ErrorCode::SUCCESS;
+    }
+    if (print_header_name_only) {
+        std::cout << header_file << std::endl;
+        return ErrorCode::SUCCESS;
+    }
 
     // Open input file to be embedded
-    std::ifstream in(input_file.wstr(), binary ? (std::ios::in | std::ios::binary) : (std::ios::in));
-    if (!in.is_open()) return ErrorCode::INPUT_FILE_FAILED;
+    Battery::FS::ifstream infile(input_file, binary ? FS::Mode::BINARY : FS::Mode::TEXT);
+    if (!infile.is_open()) return ErrorCode::INPUT_FILE_FAILED;
+    size_t filesize = infile.file_size();
 
-    // Read the filesize
-    std::string temp;                                       // Buffer is as large as file on-disk
-	size_t filesize_temp = fs::file_size(input_file.str()); // -> Reading will make it smaller, but not larger  
-    temp.resize(filesize_temp);         
-    in.read(temp.data(), temp.size());  // Yes, the whole input file is read twice, but it's necessary
-    size_t filesize = in.gcount();      //   and huge files are not supposed to be embedded anyways
-    in.clear();             // Clear errors
-	in.seekg(0, in.beg);    // And rewind to the beginning
-
-    // Open output file (.cpp)
-    fs::create_directories(fs::path(source_file.str()).parent_path().string());
-    std::ofstream out(source_file.wstr(), std::ios::out);
-    if (!out.is_open()) return ErrorCode::OUTPUT_FILE_FAILED;
-
-    // Generate the source file
-    out << "// File generated using battery_embed. https://github.com/HerrNamenlos123/Battery\n";
-    out << "// Embedded file: " << fs::path(input_file.str()).filename().string() << " | filesize: "
-        << filesize << " bytes | was embedded as binary: " << (binary ? "true" : "false") << "\n";
-    out << "// Header file containing the declaration for retrieving the data: " + infile_name + ".h\n";
-    out << "// DO NOT EDIT THIS FILE!!!\n";
-    out << "\n#include <cinttypes>\n\n";
-    out << "namespace Battery::Embed {\n\n";
-    out << "const size_t __" << symbol_name << "_size = " << filesize << ";\n";
-    out << "const uint8_t __" << symbol_name << "_data[] = {\n";
-    out << "    ";
+    // Open output file for writing (.cpp)
+    Battery::FS::ofstream outfile(source_file, FS::Mode::TEXT);
+    if (!outfile.is_open()) return ErrorCode::OUTPUT_FILE_FAILED;
 	
-	// And now parse all bytes as fast as possible, this is performance intensive
-    size_t bufferSize = 1024 * 64;  // 64kb chunks
-    std::string outbuf;
-    outbuf.resize(bufferSize * 5 + (bufferSize / 20 * 5) + 2); // Calculate the required buffer size
+    // Generate the source file
+    outfile << "// File generated using battery_embed. https://github.com/HerrNamenlos123/Battery\n";
+    outfile << "// Embedded file: " << FS::path(input_file).filename().string() << " | filesize: "
+        << filesize << " bytes | was embedded as binary: " << (binary ? "true" : "false") << "\n";
+    outfile << "// Header file containing the declaration for retrieving the data: " + infile_name + ".h\n";
+    outfile << "// DO NOT EDIT THIS FILE!!!\n";
+    outfile << "\n#include <cinttypes>\n\n";
+    outfile << "namespace resources::internal {\n\n";
+    outfile << "extern const size_t __" << symbol_name << "_size = " << filesize << ";\n";
+    outfile << "extern const uint8_t __" << symbol_name << "_data[] = {\n";
+    outfile << "    ";
+	
+	// And now parse all bytes as fast as possible, this part is computationally intensive
+    size_t chunk_size = 1024 * 64;  // 64kb chunks
+    std::string outbuffer;
+    outbuffer.resize(chunk_size * 5 + (chunk_size / 20 * 5) + 2); // Calculate the required buffer size
                                                            // 5 bytes per byte + 5 bytes every 20 bytes + 2 (\0)
-    std::vector<char> inbuf(bufferSize, 0);
-    while (!in.eof()) {
-        in.read(inbuf.data(), inbuf.size());    // Read a chunk of the file
-        size_t chunk_size = in.gcount();
-
-		// And parse the chunk
+	
+	infile.read_in_chunks(chunk_size, [&] (std::string_view chunk) {
+        // Parse each chunk of the file
         size_t index = 0;
-        for (int i = 0; i < chunk_size; i++) {
-            char c = inbuf.data()[i];
-            index += write_hex_comma(outbuf.data() + index, c);
+        for (int i = 0; i < chunk.size(); i++) {
+			index += write_hex_comma(outbuffer.data() + index, chunk[i]);
 
             if (i % 20 == 19) {
-                strcpy(outbuf.data() + index, "\n    ");
+                strcpy(outbuffer.data() + index, "\n    ");
                 index += 5;
             }
         }
-        out << std::string(outbuf.data(), index);
-    }
-    out << "\n};\n\n} // namespace Battery::Embed\n";
+        outfile << std::string(outbuffer.data(), index);
+    });
+	
+    outfile << "\n};\n\n} // namespace Battery::Embed\n";
 
 
     // Open output file (.h)
-    fs::create_directories(fs::path(header_file.str()).parent_path().string());
-    std::ofstream header(header_file.wstr(), std::ios::out);
+    Battery::FS::ofstream header(header_file, FS::Mode::TEXT);
     if (!header.is_open()) return ErrorCode::OUTPUT_HEADER_FILE_FAILED;
 
     // Generate the header file
     header << "// File generated using battery_embed. https://github.com/HerrNamenlos123/Battery\n";
-    header << "// Embedded file: " << fs::path(input_file.str()).filename().string() << " | filesize: "
+    header << "// Embedded file: " << FS::path(input_file).filename().string() << " | filesize: "
            << filesize << " bytes | was embedded as binary: " << (binary ? "true" : "false") << "\n";
     header << "// Source file containing the data: " + infile_name + ".cpp\n";
     header << "// DO NOT EDIT THIS FILE!!!\n";
@@ -147,78 +136,82 @@ ErrorCode convert(const OsString& input_file, const OsString& source_dir, const 
     header << "#include <iostream>\n";
     header << "#include <string>\n";
     header << "#include <vector>\n\n";
-    header << "namespace Battery::Embed {\n\n";
-    header << "    class " + symbol_name + "_t {\n";
-    header << "    public:\n";
-    header << "        " + symbol_name + "_t() = default;\n";
-    header << "        static std::string str() {\n";
-    header << "            return { reinterpret_cast<const char*>(__" + symbol_name + "_data), __" + symbol_name +
-              "_size };\n";
-    header << "        }\n";
-    header << "        operator std::string() { return str(); }\n";
-    header << "        \n";
-    header << "        static std::vector<uint8_t> vec() {\n";
-    header << "            return { __" + symbol_name + "_data, __" + symbol_name + "_data + __" + symbol_name +
-              "_size };\n";
-    header << "        }\n";
-    header << "        operator std::vector<uint8_t>() { return vec(); }\n";
-    header << "    };\n";
-    header << "    std::ostream& operator<<(std::ostream& os, const " + symbol_name + "_t& data) { os << data.str(); return os; }\n\n";
-    header << "    extern const size_t __" << symbol_name << "_size;\n";
-    header << "    extern const uint8_t* __" << symbol_name << "_data;\n\n";
-    header << "    inline " + symbol_name + "_t " + symbol_name + ";\n";
+    header << "namespace resources {\n\n";
+    header << "    namespace internal {\n\n";
+    header << "        extern const size_t __" << symbol_name << "_size;\n";
+    header << "        extern const uint8_t __" << symbol_name << "_data[];\n\n";
+    header << "        class " + symbol_name + "_t {\n";
+    header << "        public:\n";
+    header << "            " + symbol_name + "_t() = default;\n";
+    header << "            static std::string str() {\n";
+    header << "                return { reinterpret_cast<const char*>(__" + symbol_name + "_data), __" + symbol_name + "_size };\n";
+    header << "            }\n";
+    header << "            operator std::string() { return str(); }\n";
+    header << "            \n";
+    header << "            static std::vector<uint8_t> vec() {\n";
+    header << "                return { __" + symbol_name + "_data, __" + symbol_name + "_data + __" + symbol_name + "_size };\n";
+    header << "            }\n";
+    header << "            operator std::vector<uint8_t>() { return vec(); }\n\n";
+    header << "            size_t size() {\n";
+    header << "                return str().size();\n";
+    header << "            }\n";
+    header << "        };\n";
+    header << "        std::ostream& operator<<(std::ostream& os, const " + symbol_name + "_t& data) { os << data.str(); return os; }\n";
+    header << "    };\n\n";
+    header << "    inline internal::" + symbol_name + "_t " + symbol_name + ";\n";
     header << "}\n";
     header << "#endif // __battery_embed_" + symbol_name + "_\n";
 
     return ErrorCode::SUCCESS;
 }
 
-int wmain(int argc, wchar_t** argv_raw) {
-
+int Battery::Main(const Args_t& args) {
+    
     CLI::App app{"Utility for converting Text and Binary files to C++ source files.\n"
                  "This is part of the Battery framework: https://github.com/HerrNamenlos123/Battery\n"};
 
-    std::string input_file_raw;
-    app.add_option("input_file", input_file_raw, "The file to be embedded")->required();
+    std::string input_file;
+    app.add_option("input_file", input_file, "The file to be embedded")->required();
 
-    std::string source_file_output_directory_raw;
-    app.add_option("out_dir", source_file_output_directory_raw,
+    std::string source_file_output_directory;
+    app.add_option("out_dir", source_file_output_directory,
                    "Output dir for C++ source file")->required();
 
-    std::string header_file_output_directory_raw;
-    app.add_option("out_dir_header", header_file_output_directory_raw,
+    std::string header_file_output_directory;
+    app.add_option("out_dir_header", header_file_output_directory,
                    "Output dir for C++ header file (If omitted, the same output dir is used)");
 
-    std::string symbol_name_raw;
-    app.add_option("--symbol_name", symbol_name_raw, "Override the symbol name for the output files");
+    std::string symbol_name;
+    app.add_option("--symbol_name", symbol_name, "Override the symbol name for the output files");
 
     bool binary = false;
-    app.add_flag("--binary", binary,"File is in binary format instead of plain text (regarding line endings)");
+    app.add_flag("--binary", binary, "File is in binary format instead of plain text (regarding line endings)");
+
+    bool print_header_name_only = false;
+    app.add_flag("--print-header-name-only", print_header_name_only, "Only print the final output name of the generated C++ header file");
+
+    bool print_src_name_only = false;
+    app.add_flag("--print-src-name-only", print_src_name_only, "Only print the final output name of the generated C++ source file");
 
 	// Convert argv to UTF-8
     std::vector<OsString> argv_str;
-    for (int i = 0; i < argc; i++) {
-        argv_str.push_back(argv_raw[i]);
+    for (int i = 0; i < args.size(); i++) {
+        argv_str.emplace_back(args[i]);
     }
     std::vector<const char*> argv;
-    for (int i = 0; i < argc; i++) {
+    for (int i = 0; i < args.size(); i++) {
         argv.push_back(argv_str[i].c_str());
     }
 	
 	// Parse the CLI options
-    CLI11_PARSE(app, argc, argv.data());
+    CLI11_PARSE(app, args.size(), argv.data());
 
-    if (header_file_output_directory_raw.empty()) {
-        header_file_output_directory_raw = source_file_output_directory_raw;
+    if (header_file_output_directory.empty()) {
+        header_file_output_directory = source_file_output_directory;
     }
-	
-	// Convert file path string encoding (Windows -> Unix)
-    OsString input_file = argv[1];
-    OsString source_file_output_directory = source_file_output_directory_raw;
-    OsString header_file_output_directory = header_file_output_directory_raw;
-    OsString symbol_name = symbol_name_raw;
 
-    ErrorCode status = convert(input_file, source_file_output_directory, header_file_output_directory, symbol_name, binary);
+    ErrorCode status = convert(input_file, source_file_output_directory, header_file_output_directory, 
+                                symbol_name, binary, print_header_name_only, print_src_name_only);
     switch (status) {
         case ErrorCode::SUCCESS: break;  // Success
         case ErrorCode::INPUT_FILE_FAILED: std::cerr << "Failed to open input file for reading (error code " << (int)status << ")" << std::endl; break;
@@ -228,9 +221,3 @@ int wmain(int argc, wchar_t** argv_raw) {
     }
     return (int)status;
 }
-
-
-// Here we "include" the source file, so it is compiled here in this translation unit
-// Doing this to keep this a single cpp file and prevent code duplication, but we
-// do not want to link to Battery. We only want to "steal" this module
-#include "../src/Battery/Utils/OsString.cpp"

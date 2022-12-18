@@ -1,10 +1,8 @@
 #pragma once
 
-#include "Battery/pch.hpp"
+#include "Battery/common.h"
 
-#include <string.h>
-
-namespace Battery {
+namespace Battery::String {
 
 	/// <summary>
 	/// Split a string into an array of string pieces by a delimeter character. For example: pass "This is a test." 
@@ -16,7 +14,7 @@ namespace Battery {
 	/// <param name="str">- The string to split</param>
 	/// <param name="delimeter">- A single character at which to split the string</param>
 	/// <returns>std::vector&lt;std::string&gt; - An array with the split string fragments</returns>
-	std::vector<std::string> SplitString(std::string str, char delimeter);
+	std::vector<std::string> Split(std::string str, char delimeter);
 
 	/// <summary>
 	/// Join any number of strings and combine it into a single long one with spacers inbetween.
@@ -28,7 +26,13 @@ namespace Battery {
 	/// <param name="strings">- A vector with strings to join</param>
 	/// <param name="spacer">- The spacer which is inserted between the string fragments, defaults to ""</param>
 	/// <returns>std::string - The final joined string</returns>
-	std::string JoinStrings(std::vector<std::string> strings, std::string spacer = "");
+	std::string Join(std::vector<std::string> strings, std::string spacer = "");
+
+    std::string Replace(std::string string, const std::string& from, const std::string& to);
+
+    std::string ReplaceOne(std::string string, const std::string& from, const std::string& to, int occurrence = 0);
+
+
 
 
 
@@ -43,7 +47,9 @@ namespace Battery {
 
 	bool IsInAlphabet(char c);
 
-	std::string EncodeBase64(void* buffer, size_t bufferSize);
-	std::vector<uint8_t> DecodeBase64(const std::string& data);
+    std::string EncodeBase64(const std::string& str);
+	std::string EncodeBase64(const void* buffer, size_t buffer_size);
+    std::vector<uint8_t> DecodeBase64(const std::string& data);
+	std::vector<uint8_t> DecodeBase64(const void* buffer, size_t buffer_size);
 
 }

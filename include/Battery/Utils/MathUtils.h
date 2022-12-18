@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Battery/pch.hpp"
-
 namespace Battery {
 
 	template<typename T>

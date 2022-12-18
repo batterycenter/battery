@@ -1,4 +1,6 @@
 
+#ifdef BATTERY_FEATURES_GRAPHICS
+
 #include "Battery/Utils/TimeUtils.h"
 
 namespace Battery {
@@ -44,3 +46,5 @@ namespace Battery {
 		std::this_thread::sleep_for(std::chrono::microseconds((size_t)(time.asMicroseconds())));
 	}
 }
+
+#endif // BATTERY_FEATURES_GRAPHICS

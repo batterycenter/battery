@@ -13,7 +13,7 @@
 namespace Battery {
 
 	void* platform_LockFileDescriptor(const OsString& filepath) {
-		void* descriptor = ::CreateFileW(filepath, GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+		void* descriptor = ::CreateFileW(filepath.wstr().c_str(), GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (descriptor == INVALID_HANDLE_VALUE) {
 			throw Battery::LockfileUnavailableException();
 		}
@@ -26,17 +26,17 @@ namespace Battery {
 
 	bool platform_ExtractArchive(const std::string& file, const std::string& targetDirectory, bool force) {
 
-		if (!FileExists(file))
+		if (!FS::exists(file))
 			return false;
 
-		PrepareDirectory(targetDirectory);
+		FS::create_directories(targetDirectory);
 
 		std::string command = std::string("powershell Expand-Archive ") + file.c_str() + " " + targetDirectory.c_str();
 
 		if (force)
 			command += " -Force";
 
-		auto[success, returnCode] = ExecuteShellCommandSilent(command, true);
+		auto[success, returnCode] = FS::ExecuteShellCommandSilent(command, true);
 		return success && returnCode == 0;
 	}
 
@@ -48,7 +48,7 @@ namespace Battery {
 		ShExecInfo.hwnd = nullptr;
 		ShExecInfo.lpVerb = nullptr;
 		ShExecInfo.lpFile = L"cmd";
-		ShExecInfo.lpParameters = command;
+		ShExecInfo.lpParameters = command.wstr().c_str();
 		ShExecInfo.lpDirectory = nullptr;
 		ShExecInfo.nShow = hidden ? SW_HIDE : SW_SHOW;
 		ShExecInfo.hInstApp = nullptr;
@@ -72,20 +72,20 @@ namespace Battery {
 	std::vector<uint8_t> platform_LoadEmbeddedResource(int id, const OsString& type) {
 		std::vector<uint8_t> buffer;
 
-		HMODULE hMod = GetModuleHandleW(nullptr);
-		if (hMod == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Module Handle is null!", id); return buffer; }
+		HMODULE hMod = GetModuleHandleW(nullptr);   // TODO: Message format is wrong!!!
+		if (hMod == nullptr) { Log::Core::Warn("{}: {}", __FUNCTION__, "Can't find resource id {}: Module Handle is null!", id); return buffer; }
 
-		HRSRC hRes = FindResourceW(hMod, MAKEINTRESOURCEW(id), type);
-		if (hRes == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: No such resource!", id); return buffer; }
+		HRSRC hRes = FindResourceW(hMod, MAKEINTRESOURCEW(id), type.wstr().c_str());
+		if (hRes == nullptr) { Log::Core::Warn("{}: {}", __FUNCTION__, "Can't find resource id {}: No such resource!", id); return buffer; }
 		
 		HGLOBAL hGlobal = LoadResource(hMod, hRes);
-		if (hGlobal == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Resource can't be loaded!", id); return buffer; }
+		if (hGlobal == nullptr) { Log::Core::Warn("{}: {}", __FUNCTION__, "Can't find resource id {}: Resource can't be loaded!", id); return buffer; }
 
 		void* data = LockResource(hGlobal);
-		if (data == nullptr) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Resource can't be locked!", id); return buffer; }
+		if (data == nullptr) { Log::Core::Warn("{}: {}", __FUNCTION__, "Can't find resource id {}: Resource can't be locked!", id); return buffer; }
 
 		size_t size = SizeofResource(hMod, hRes);
-		if (size == 0) { LOG_CORE_WARN("{}: {}", __FUNCTION__, "Can't find resource id {}: Size of resource is invalid!", id); return buffer; }
+		if (size == 0) { Log::Core::Warn("{}: {}", __FUNCTION__, "Can't find resource id {}: Size of resource is invalid!", id); return buffer; }
 
 		buffer.resize(size);
 		memcpy(&buffer[0], data, size);
@@ -93,6 +93,9 @@ namespace Battery {
 		return buffer;
 	}
 
+
+
+#ifdef BATTERY_FEATURES_GRAPHICS
 	bool platform_IsFocused(sf::WindowHandle window) {
 		return GetForegroundWindow() == window;
 	}
@@ -137,6 +140,7 @@ namespace Battery {
 	void platform_SetWindowAlpha(sf::WindowHandle window, uint8_t alpha) {
 		SetLayeredWindowAttributes(window, 0, alpha, LWA_ALPHA);
 	}
+#endif // BATTERY_FEATURES_GRAPHICS
 
 
 
@@ -172,19 +176,19 @@ namespace Battery {
 	}
 
 	MB_Status MessageBoxError(const OsString& message, const OsString& title, MB_Buttons buttons, int defaultButton) {
-		int code = ::MessageBoxW(nullptr, message, title,
+		int code = ::MessageBoxW(nullptr, message.wstr().c_str(), title.wstr().c_str(),
 			MB_ICONERROR | win32_BatteryEnumToMessageBoxEnum(buttons) | ((defaultButton - 1) * 256));
 		return win32_IDToEnum(code);
 	}
 
 	MB_Status MessageBoxWarning(const OsString& message, const OsString& title, MB_Buttons buttons, int defaultButton) {
-		int code = ::MessageBoxW(nullptr, message, title,
+		int code = ::MessageBoxW(nullptr, message.wstr().c_str(), title.wstr().c_str(),
 			MB_ICONWARNING | win32_BatteryEnumToMessageBoxEnum(buttons) | ((defaultButton - 1) * 256));
 		return win32_IDToEnum(code);
 	}
 
 	MB_Status MessageBoxInfo(const OsString& message, const OsString& title, MB_Buttons buttons, int defaultButton) {
-		int code = ::MessageBoxW(nullptr, message, title,
+		int code = ::MessageBoxW(nullptr, message.wstr().c_str(), title.wstr().c_str(),
 			MB_ICONINFORMATION | win32_BatteryEnumToMessageBoxEnum(buttons) | ((defaultButton - 1) * 256));
 		return win32_IDToEnum(code);
 	}
@@ -203,7 +207,7 @@ namespace Battery {
 
         LPWSTR messageBuffer = nullptr;
         size_t size = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                                     nullptr, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&messageBuffer, 0, NULL);
+                                     nullptr, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&messageBuffer, 0, nullptr);
 
         std::wstring message(messageBuffer, size);
         LocalFree(messageBuffer);

@@ -1,6 +1,8 @@
 
 #ifdef __linux__
 
+#ifdef BATTERY_FEATURES_GRAPHICS
+
 #include "Battery/Platform/TrayIcon.h"
 
 #include "Battery/Core/Log.h"
@@ -47,5 +49,7 @@ namespace Battery {
     }
 
 }
+
+#endif // BATTERY_FEATURES_GRAPHICS
 
 #endif // _WIN32

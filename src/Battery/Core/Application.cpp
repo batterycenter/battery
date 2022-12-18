@@ -1,5 +1,5 @@
 
-#include <utility>
+#ifdef BATTERY_FEATURES_GRAPHICS
 
 #include "Battery/Core/Config.h"
 #include "Battery/Core/Application.h"
@@ -27,7 +27,7 @@ namespace Battery {
 	bool SetWindowIcon(sf::RenderWindow& window, uint8_t iconSize, void* data, size_t dataSize) {
 		sf::Image image;
 		if (!image.loadFromMemory(data, dataSize)) {
-			LOG_ERROR("Cannot load window icon: Unsupported image format, cannot load sf::Image from memory!");
+            Log::Core::Error("Cannot load window icon: Unsupported image format, cannot load sf::Image from memory!");
 			return false;
 		}
 		SetWindowIcon(window, iconSize, image);
@@ -39,9 +39,9 @@ namespace Battery {
 	}
 
 	bool SetWindowIconBase64(sf::RenderWindow& window, uint8_t iconSize, const std::string& data) {
-		auto decoded = DecodeBase64(data);
+		auto decoded = String::DecodeBase64(data);
 		if (decoded.empty()) {
-			LOG_ERROR("Cannot load window icon: Base64 encoding contains no data!");
+            Log::Core::Error("Cannot load window icon: Base64 encoding contains no data!");
 			return false;
 		}
 		return SetWindowIcon(window, iconSize, &decoded[0], decoded.size());
@@ -63,12 +63,12 @@ namespace Battery {
 
 
 	Application::Application() {
-		LOG_CORE_TRACE("Creating Application");
+        Log::Core::Trace("Creating Application");
 		appPointer = this;
 	}
 
 	Application::~Application() {
-		LOG_CORE_TRACE("Application stopped, destroying");
+        Log::Core::Trace("Application stopped, destroying");
 	}
 
 	void Application::OnStartup() {}
@@ -121,7 +121,7 @@ namespace Battery {
 
 	void Application::Run(int width, int height, int argc, const char** argv, int windowStyle) {
 		try {
-			LOG_CORE_INFO("Loading Application");
+            Log::Core::Info("Loading Application");
 			
 			// Auto-fit window size
 			if (width < 0) width = GetPrimaryMonitorSize().x;
@@ -133,10 +133,10 @@ namespace Battery {
 				throw Battery::Exception("Could not create SFML window! Please check the graphics drivers!");
 
 			// Parse command line arguments
-			LOG_CORE_TRACE("Command line arguments:");
+            Log::Core::Trace("Command line arguments:");
 			for (int i = 0; i < argc; i++) {
 				args.emplace_back(argv[i]);
-				LOG_CORE_TRACE(std::string("[") + std::to_string(i) + "]: " + args[i]);
+                Log::Core::Trace("[{}]: {}", i, args[i]);
 			}
 
 			// Load the default window icon
@@ -169,14 +169,14 @@ namespace Battery {
 			ImGui::SFML::UpdateFontTexture();
 
 			if (!shutdownRequested) {
-				LOG_CORE_INFO("Application running");
+                Log::Core::Info("Application running");
 				RunMainloop();
 			}
 			else {
-				LOG_CORE_WARN("OnStartup requested shutdown, skipping main loop entirely and shutting down immediately");
+                Log::Core::Warn("OnStartup requested shutdown, skipping main loop entirely and shutting down immediately");
 			}
 
-			LOG_CORE_INFO("Stopping Application");
+            Log::Core::Info("Stopping Application");
 			OnShutdown();
             layers.ClearStack();
 
@@ -186,16 +186,16 @@ namespace Battery {
 			ImGui::SFML::Shutdown();
 			window.close();
 
-			LOG_CORE_INFO("Application stopped");
+            Log::Core::Info("Application stopped");
 		}
 		catch (const Battery::Exception& e) {
-			LOG_CORE_CRITICAL(std::string("Unhandled Battery::Exception: '") + e.what() + "'");
+            Log::Core::Critical("Unhandled Battery::Exception: '{}'", e.what());
 		}
 		catch (const std::exception& e) {
-			LOG_CORE_CRITICAL(std::string("Unhandled std::exception: '") + e.what() + "'");
+            Log::Core::Critical("Unhandled std::exception: '{}'", e.what());
 		}
 		catch (...) {
-			LOG_CORE_CRITICAL("Unhandled exception: Unknown exception type, make sure to catch it correctly!");
+            Log::Core::Critical("Unhandled exception: Unknown exception type, make sure to catch it correctly!");
 		}
 	}
 
@@ -241,12 +241,12 @@ namespace Battery {
 	void Application::UpdateApp() {
 
 		// First update the base application
-		LOG_CORE_TRACE("Application::OnUpdate()");
+        Log::Core::Trace("Application::OnUpdate()");
 		OnUpdate();
 
 		// Then propagate through the stack and update all layers sequentially
 		for (auto& layer : layers.GetLayers()) {
-			LOG_CORE_TRACE("Layer OnUpdate()");
+            Log::Core::Trace("Layer OnUpdate()");
 			layer->OnUpdate();
 		}
 	}
@@ -265,12 +265,12 @@ namespace Battery {
 	void Application::RenderApp() {
 
 		// First render the base application
-		LOG_CORE_TRACE("Application::OnRender()");
+        Log::Core::Trace("Application::OnRender()");
 		OnRender();
 
 		// Then propagate through the stack and render all layers sequentially
 		for (auto& layer : layers.GetLayers()) {
-			LOG_CORE_TRACE("Layer OnRender()");
+            Log::Core::Trace("Layer OnRender()");
 			layer->OnRender();
 		}
 	}
@@ -284,7 +284,7 @@ namespace Battery {
 
 	void Application::HandleEvents() {
 
-        sf::Event event;
+        sf::Event event{};
 		bool handled = false;
 
 		while (window.pollEvent(event)) {
@@ -293,24 +293,26 @@ namespace Battery {
 			// Propagate through the layer stack in reverse order
 			for (size_t i = 0; i < layers.GetLayers().size(); i++) {
 				auto& layer = layers.GetLayers()[layers.GetLayers().size() - i - 1];
-				LOG_CORE_TRACE("Layer OnEvent()");
+                Log::Core::Trace("Layer OnEvent()");
 				handled = false;
 				layer->OnEvent(event, handled);
 
 				if (handled) {
-					LOG_CORE_TRACE("Event was handled by Layer #{}", i);
+                    Log::Core::Trace("Event was handled by Layer #{}", i);
 					break;
 				}
 			}
 
 			// Give the event to the base application
-			LOG_CORE_TRACE("Application::OnEvent()");
+            Log::Core::Trace("Application::OnEvent()");
 			OnEvent(event, handled);
 
 			if (handled) {
-				LOG_CORE_TRACE("Event was handled by the base application");
+                Log::Core::Trace("Event was handled by the base application");
 				continue;
 			}
         }
 	}
 }
+
+#endif // BATTERY_FEATURES_GRAPHICS

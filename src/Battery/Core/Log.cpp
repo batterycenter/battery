@@ -1,11 +1,9 @@
 
 #include "Battery/Core/Log.h"
 
-namespace Battery {
-	namespace Log {
+namespace Battery::Log {
 
-		std::shared_ptr<spdlog::logger> coreLogger;
-		std::shared_ptr<spdlog::logger> clientLogger;
+    std::shared_ptr<spdlog::logger> core_logger;
+    std::shared_ptr<spdlog::logger> user_logger;
 
-	}
 }

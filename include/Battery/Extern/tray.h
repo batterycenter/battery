@@ -1,8 +1,7 @@
 #ifndef TRAY_H
 #define TRAY_H
 
-#include "Battery/pch.hpp"
-#include "Battery/Utils/OsString.h"
+#include "Battery/common.h"
 #ifdef BATTERY_ARCH_WINDOWS
     #define TRAY_WINAPI 1
 #else
@@ -270,7 +269,7 @@ static LRESULT CALLBACK _tray_wnd_proc(HWND hwnd, UINT msg, WPARAM wparam,
 
 static HMENU _tray_menu(struct tray_menu *m, UINT *id) {
   HMENU hmenu = CreatePopupMenu();
-  for (; m != NULL && !m->text.str().empty(); m++, (*id)++) {
+  for (; m != nullptr && !m->text.str().empty(); m++, (*id)++) {
     if (strcmp(m->text, "-") == 0) {
       InsertMenu(hmenu, *id, MF_SEPARATOR, TRUE, L"");
     } else {
@@ -292,7 +291,7 @@ static HMENU _tray_menu(struct tray_menu *m, UINT *id) {
       }
       item.wID = *id;
 
-      item.dwTypeData = m->text;
+      item.dwTypeData = (wchar_t*)m->text.wstr().c_str();
       item.dwItemData = (ULONG_PTR)m;
 
       InsertMenuItem(hmenu, *id, TRUE, &item);
@@ -332,9 +331,9 @@ static int tray_init(struct tray *tray) {
 static int tray_loop(int blocking) {
   MSG msg;
   if (blocking) {
-    GetMessage(&msg, NULL, 0, 0);
+    GetMessage(&msg, nullptr, 0, 0);
   } else {
-    PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
+    PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE);
   }
   if (msg.message == WM_QUIT) {
     return -1;
@@ -350,29 +349,28 @@ static void tray_update(struct tray *tray) {
   hmenu = _tray_menu(tray->menu, &id);
   SendMessage(hwnd, WM_INITMENUPOPUP, (WPARAM)hmenu, 0);
   HICON icon;
-  std::wstring tray_icon_path = (tray->icon);
-  ExtractIconEx(tray_icon_path.c_str(), 0, NULL, &icon, 1);
+  ExtractIconEx(tray->icon.wstr().c_str(), 0, NULL, &icon, 1);
   if (nid.hIcon) {
     DestroyIcon(nid.hIcon);
   }
   nid.hIcon = icon;
   Shell_NotifyIcon(NIM_MODIFY, &nid);
 
-  if (prevmenu != NULL) {
+  if (prevmenu != nullptr) {
     DestroyMenu(prevmenu);
   }
 }
 
 static void tray_exit() {
   Shell_NotifyIcon(NIM_DELETE, &nid);
-  if (nid.hIcon != 0) {
+  if (nid.hIcon != nullptr) {
     DestroyIcon(nid.hIcon);
   }
-  if (hmenu != 0) {
+  if (hmenu != nullptr) {
     DestroyMenu(hmenu);
   }
   PostQuitMessage(0);
-  UnregisterClass(WC_TRAY_CLASS_NAME, GetModuleHandle(NULL));
+  UnregisterClass(WC_TRAY_CLASS_NAME, GetModuleHandle(nullptr));
 }
 #else
 static int tray_init(struct tray *tray) { return -1; }

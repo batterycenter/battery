@@ -2,18 +2,6 @@
 
 #include <string>
 
-// Log levels
-#define BATTERY_LOG_LEVEL_CRITICAL	spdlog::level::critical
-#define BATTERY_LOG_LEVEL_ERROR		spdlog::level::err
-#define BATTERY_LOG_LEVEL_WARN		spdlog::level::warn
-#define BATTERY_LOG_LEVEL_INFO		spdlog::level::info
-#define BATTERY_LOG_LEVEL_DEBUG		spdlog::level::debug
-#define BATTERY_LOG_LEVEL_TRACE		spdlog::level::trace
-
-#define BATTERY_DEFAULT_LOG_LEVEL	BATTERY_LOG_LEVEL_DEBUG	
-#define BATTERY_CORE_LOGGER_NAME	"BatteryCore"				// Display names for console logging
-#define BATTERY_CLIENT_LOGGER_NAME	"Application"
-
 #define DEFAULT_FONT_SIZE 16
 
 // General settings

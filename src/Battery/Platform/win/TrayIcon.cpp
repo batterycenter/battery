@@ -1,6 +1,8 @@
 
 #ifdef _WIN32
 
+#ifdef BATTERY_FEATURES_GRAPHICS
+
 #include "Battery/Platform/TrayIcon.h"
 #include "Battery/Platform/Platform.h"
 
@@ -62,10 +64,10 @@ namespace Battery {
 		wc.cbSize = sizeof(wc);
 		wc.lpfnWndProc = TrayWndMessage;
 		wc.hInstance = GetModuleHandleW(nullptr);
-		wc.lpszClassName = classname;
+		wc.lpszClassName = classname.wstr().c_str();
 		RegisterClassExW(&wc);
 
-		data->hwnd = CreateWindowExW(0, classname, nullptr, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+		data->hwnd = CreateWindowExW(0, classname.wstr().c_str(), nullptr, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 		if (!data->hwnd) {
 			throw BATTERY_EXCEPTION("Failed to create the hidden window for the tray icon message stack: %s",
                                     GetLastWin32ErrorString().c_str());
@@ -80,7 +82,7 @@ namespace Battery {
 		data->nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
 		data->nid.uCallbackMessage = WM_USER + 1 + id;
 		data->nid.hIcon = data->icon;
-		wcscpy(data->nid.szTip, tip);
+		wcscpy(data->nid.szTip, tip.wstr().c_str());
 
 		Shell_NotifyIconW(NIM_ADD, &data->nid);
 
@@ -146,5 +148,7 @@ namespace Battery {
     }
 
 }
+
+#endif // BATTERY_FEATURES_GRAPHICS
 
 #endif // _WIN32

@@ -1,5 +1,8 @@
 
 #include "Battery/Utils/OsString.h"
+#include <limits>
+#include <stdexcept>
+#include <iostream>
 
 #ifdef BATTERY_ARCH_WINDOWS
 #include "windows.h"
@@ -10,7 +13,7 @@
 namespace Battery {
 
 #ifdef BATTERY_ARCH_WINDOWS
-    std::string WcharToUtf8(const std::wstring& wString);
+    static std::string WcharToUtf8(const std::wstring& wString);
 
     static std::string GetLastWin32ErrorString() {
 
@@ -20,7 +23,7 @@ namespace Battery {
 
         LPWSTR messageBuffer = nullptr;
         size_t size = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                                     NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&messageBuffer, 0, NULL);
+                                     nullptr, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&messageBuffer, 0, nullptr);
 
         std::wstring message(messageBuffer, size);
         LocalFree(messageBuffer);
@@ -91,7 +94,7 @@ namespace Battery {
                 nullptr,                  // Unused - no conversion done in this step
                 0,                          // Request size of destination buffer, in wchar_ts,
                 nullptr,
-                NULL
+                nullptr
         );
 
         if (bufferSize == 0) {
@@ -109,7 +112,7 @@ namespace Battery {
                 &buffer[0],     // Pointer to destination buffer
                 bufferSize,    // Size of destination buffer, in wchar_ts
                 nullptr,
-                NULL
+                nullptr
         );
 
         if (result == 0) {

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Battery/pch.hpp"
-
 namespace Battery {
 
 	extern const std::string BATTERY_SHADER_SOURCE_VERTEX_SIMPLE;

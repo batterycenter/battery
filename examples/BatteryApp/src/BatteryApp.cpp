@@ -80,7 +80,7 @@ void BatteryApp::OnStartup() {
 
     //loadSprites();
 
-    auto im = Battery::DecodeBase64(BATTERY_DEFAULT_WINDOW_ICON_BASE64);
+    auto im = Battery::String::DecodeBase64(BATTERY_DEFAULT_WINDOW_ICON_BASE64);
     sf::Image image;
     image.loadFromMemory(&im[0], im.size());
 
@@ -92,7 +92,7 @@ void BatteryApp::OnStartup() {
     trays.icon = "resources/tiktok.ico",
     trays.menu = menu;
 
-    LOG_DEBUG("test: {}", tray_init(&trays));
+    Battery::Log::Debug("test: {}", tray_init(&trays));
 }
 
 void BatteryApp::OnUpdate() {

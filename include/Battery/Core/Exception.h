@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Battery/pch.hpp"
-
 #define BATTERY_EXCEPTION UI_EXCEPTION
 
 namespace Battery {

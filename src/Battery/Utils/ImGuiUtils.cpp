@@ -1,4 +1,6 @@
 
+#ifdef BATTERY_FEATURES_GRAPHICS
+
 #include "Battery/Core/Log.h"
 #include "Battery/Core/Exception.h"
 #include "Battery/Utils/ImGuiUtils.h"
@@ -104,11 +106,11 @@ namespace Battery {
 
     bool EmbedTTFAsHeaderFile(const std::string& inputFile, const std::string& outputFile, const std::string& symbolName, bool compress) {
         
-        auto[success, ttfBytes] = ReadFile(inputFile, true);
+        auto[success, ttfBytes] = FS::ReadFile(inputFile, true);
         if (!success)
             return false;
 
-        return WriteFile(outputFile, EmbedTTFAsHeaderFileDirect(ttfBytes, symbolName, compress));
+        return FS::WriteFile(outputFile, EmbedTTFAsHeaderFileDirect(ttfBytes, symbolName, compress));
     }
 
     ImFont* AddEmbeddedFont(const unsigned int* data, unsigned int length, float pixels, const ImWchar* glyphRange) {
@@ -195,3 +197,5 @@ namespace Battery {
 		window->DrawList->PathStroke(color, false, thickness);
 	}
 }
+
+#endif // BATTERY_FEATURES_GRAPHICS

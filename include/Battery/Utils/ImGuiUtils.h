@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Battery/pch.hpp"
+#include "Battery/common.h"
 
 static const ImWchar icons_ranges[3] = { 0xe005, 0xf8ff, 0 };
 

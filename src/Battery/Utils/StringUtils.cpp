@@ -1,9 +1,9 @@
 
 #include "Battery/Utils/StringUtils.h"
 
-namespace Battery {
+namespace Battery::String {
 
-	std::vector<std::string> SplitString(std::string str, char delimeter) {
+	std::vector<std::string> Split(std::string str, char delimeter) {
 		std::string::size_type b = 0;
 		std::vector<std::string> result;
 
@@ -16,7 +16,7 @@ namespace Battery {
 		return result;
 	}
 
-	std::string JoinStrings(std::vector<std::string> strings, std::string spacer) {
+	std::string Join(std::vector<std::string> strings, std::string spacer) {
 		std::string str = "";
 
 		for (size_t i = 0; i < strings.size(); i++) {
@@ -29,6 +29,30 @@ namespace Battery {
 
 		return str;
 	}
+
+    std::string Replace(std::string string, const std::string& from, const std::string& to) {
+        if (from.empty())
+            return string;
+        size_t start_pos = 0;
+        while ((start_pos = string.find(from, start_pos)) != std::string::npos) {
+            string.replace(start_pos, from.length(), to);
+            start_pos += to.length();
+        }
+        return string;
+    }
+
+    /*std::string ReplaceOne(std::string string, const std::string& from, const std::string& to, int occurrence) {
+        if (from.empty())
+            return string;
+        size_t start_pos = 0;
+        while ((start_pos = string.find(from, start_pos)) != std::string::npos) {
+            string.replace(start_pos, from.length(), to);
+            start_pos += to.length();
+        }
+        return string;
+    }*/
+
+    // TODO: REGEX
 
 
 
@@ -89,7 +113,11 @@ namespace Battery {
 		return (isalnum(c) || (c == '+') || (c == '/'));
 	}
 
-	std::string EncodeBase64(void* buffer, size_t bufferSize) {
+    std::string EncodeBase64(const std::string& str) {
+        return EncodeBase64(str.data(), str.size());
+    }
+
+	std::string EncodeBase64(const void* buffer, size_t buffer_size) {
 		uint8_t* buf = (uint8_t*)buffer;
 		int i = 0;
 		int j = 0;
@@ -97,7 +125,7 @@ namespace Battery {
 		uint8_t char_array_4[4];
 
 		std::string ret;
-		while (bufferSize--) {
+		while (buffer_size--) {
 			char_array_3[i++] = *(buf++);
 			if (i == 3) {
 				char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
@@ -131,15 +159,19 @@ namespace Battery {
 	}
 
 	std::vector<uint8_t> DecodeBase64(const std::string& data) {
-		size_t in_len = data.size();
+		return DecodeBase64(data.data(), data.size());
+	}
+
+	std::vector<uint8_t> DecodeBase64(const void* buffer, size_t buffer_size) {
+        const uint8_t* buf = (const uint8_t*)buffer;
 		int i = 0;
 		int j = 0;
 		int in_ = 0;
 		uint8_t char_array_4[4], char_array_3[3];
 		std::vector<uint8_t> ret;
 
-		while (in_len-- && (data[in_] != '=') && is_base64(data[in_])) {
-			char_array_4[i++] = data[in_]; in_++;
+		while (buffer_size-- && (buf[in_] != '=') && is_base64(buf[in_])) {
+			char_array_4[i++] = buf[in_]; in_++;
 			if (i == 4) {
 				for (i = 0; i < 4; i++)
 					char_array_4[i] = (uint8_t)base64_chars.find(char_array_4[i]);

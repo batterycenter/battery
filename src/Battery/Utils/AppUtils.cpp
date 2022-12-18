@@ -1,12 +1,10 @@
 
+#ifdef BATTERY_FEATURES_GRAPHICS
+
 #include "Battery/Core/Application.h"
 #include "Battery/Utils/AppUtils.h"
 #include "Battery/Utils/FileUtils.h"
 #include "Battery/Extern/PlatformFolders.h"
-
-#ifdef _WIN32
-#define WINDOWS		// Linux = Non-Windows
-#endif
 
 namespace Battery {
 	
@@ -19,7 +17,7 @@ namespace Battery {
 	}
 
 	std::string GetRawLocalAppDataDir() {
-#ifdef WINDOWS
+#ifdef BATTERY_ARCH_WINDOWS
 		return sago::getCacheDir();
 #else
 		return GetParentDirectory(sago::getDataHome());
@@ -27,7 +25,7 @@ namespace Battery {
 	}
 
 	std::string GetConfigDir() {
-#ifdef WINDOWS
+#ifdef BATTERY_ARCH_WINDOWS
 		return GetLocalInstallDir() + "/config";
 #else
 		return sago::getConfigHome() + "/" + Battery::GetApp().applicationName;
@@ -39,7 +37,7 @@ namespace Battery {
 	}
 	
 	std::string GetCacheDir() {
-#ifdef WINDOWS
+#ifdef BATTERY_ARCH_WINDOWS
 		return GetLocalInstallDir() + "/cache";
 #else
 		return sago::getCacheDir() + "/" + Battery::GetApp().applicationName;
@@ -47,7 +45,7 @@ namespace Battery {
 	}
 
 	std::string GetStartupDir() {
-#ifdef WINDOWS
+#ifdef BATTERY_ARCH_WINDOWS
 		return GetRawAppDataDir() + "/Microsoft/Windows/Start Menu/Programs/Startup";
 #else
 		return "/etc/init.d";
@@ -83,3 +81,5 @@ namespace Battery {
 	}
 	
 }
+
+#endif // BATTERY_FEATURES_GRAPHICS
