@@ -11,3 +11,15 @@ https://github.com/zserge/tray -> modified for use with modern C++
 https://github.com/CLIUtils/CLI11 -> BSD-Clause
 
 https://github.com/agauniyal/rang -> Unlicensed
+
+#TODOs
+
+TODO: Add unit testing
+
+TODO: Add pipelines and automate testing
+
+TODO: Fix build system and the dependency problem (what includes what and what the examples need)
+
+TODO: Setup examples so that they have their own copy of battery
+
+TODO: Properly implement install scripts for installing the CMake library and the resulting binaries
