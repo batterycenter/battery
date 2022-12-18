@@ -209,7 +209,7 @@ namespace Battery {
         size_t size = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
                                      nullptr, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&messageBuffer, 0, nullptr);
 
-        std::wstring message(messageBuffer, size);
+        std::wstring message(messageBuffer, size);		// TODO: Check if buffer is still alive or if string is copied
         LocalFree(messageBuffer);
 
         return OsString(message);

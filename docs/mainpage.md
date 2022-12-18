@@ -1,11 +1,15 @@
+# Battery Library
+
 Oh hello, how are you?
 
 Inspiration: https://jothepro.github.io/doxygen-awesome-css/
 
-# Heading
+@ingroup  Motor
+
+## Heading
 oh hi
 
-# Code fragment
+## Code fragment
 
 Here is a quick example:
 
@@ -19,7 +23,7 @@ Here is a quick example:
 
 Did you see that?
 
-# HLKSAs
+## HLKSAs
 
 
 dsf
@@ -44,3 +48,5 @@ ds
 # Doxygen
 
 Doxygen download link: https://sourceforge.net/projects/doxygen/files/rel-1.9.4/
+
+## Doxygen sub-group
