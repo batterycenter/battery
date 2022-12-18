@@ -5,6 +5,11 @@
 
 #include <filesystem>
 
+	/// <summary>
+	/// Throws: 
+	/// Battery::LockfileUnavailableException if the lockfile is already locked or
+	/// Battery::NoSuchFileOrDirectoryException if the filename is invalid or contains directories
+	/// </summary>
 namespace Battery::FS {
 
 	using std::filesystem::path;					// Path class for working with filenames

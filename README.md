@@ -12,8 +12,6 @@ https://github.com/CLIUtils/CLI11 -> BSD-Clause
 
 https://github.com/agauniyal/rang -> Unlicensed
 
-#TODOs
-
 TODO: Add unit testing
 
 TODO: Add pipelines and automate testing

@@ -41,7 +41,7 @@ namespace Battery::String {
         return string;
     }
 
-    /*std::string ReplaceOne(std::string string, const std::string& from, const std::string& to, int occurrence) {
+    std::string ReplaceOne(std::string string, const std::string& from, const std::string& to, int occurrence) {
         if (from.empty())
             return string;
         size_t start_pos = 0;
@@ -50,13 +50,9 @@ namespace Battery::String {
             start_pos += to.length();
         }
         return string;
-    }*/
+    }
 
-    // TODO: REGEX
-
-
-
-
+    // TODO: Add REGEX functions
 
 	std::string ToUpperCase(const std::string& str) {
 		std::string s;

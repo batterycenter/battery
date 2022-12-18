@@ -32,7 +32,7 @@ namespace fs = std::filesystem;
 #endif
 
 namespace Battery::FS {
-
+	
 	Lockfile::Lockfile(const std::string& filename, bool createDirectories) {
 		if (createDirectories) {
 			FS::ofstream file(filename);	// TODO: Check this
