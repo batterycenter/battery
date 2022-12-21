@@ -95,11 +95,11 @@ Just make sure that `wstring`, `wchar_t`, `LPWSTR` and so on are only used direc
 
 The Linux API doesn't have the `UTF-8` problems, it only gives you headache because it is so complicated and so easy to write bugs and memory leaks. Besides from the fact that it makes your code unportable, of course.
 
-If you write code using any of these APIs, you should make sure to always take the time and read the documentation on the [Linux man pages](https://linux.die.net/man/) or the [Microsoft Docs](https://learn.microsoft.com/en-us/windows/win32/api/). The best way is to search the internet, find out what functions to use, then search for these functions and make sure you get to one of these pages.
+If you write code using any of these APIs, you should make sure to always take the time and read the documentation on the [Linux man pages](https://linux.die.net/man/) or the [Microsoft Docs](https://learn.microsoft.com/en-us/windows/win32/api/). The best way is to search the internet, find out what functions to use, and then look out for the documentation of the needed functions on these two documentation pages.
 
-Then the most important things to look out for are return values, error codes, exceptions (probably not with these APIs), but most importantly constraints on input parameters and if they allocate memory or free the memory you pass to it.
+The most important things to look out for in the function documentation are return values, error codes and exceptions, but most importantly: constraints on input parameters and if they allocate or free the memory you pass to it.
 
-Once you know exactly how to deal with this function, you can apply high-level containers, to make it safe. Most importantly, `std::string` and `std::vector`. Most calls need some kind of arrays and almost everything can be done with `std::vector` and it's very safe and clean code. One example of using a high-level container directly with the API can be seen in [OsString](#OsString).
+Once you know exactly how to deal with this function, you can apply high-level containers to make it safe. Most importantly `std::string` and `std::vector`. Many API calls need arrays of some sort and every kind of array can be implemented with an `std::vector`, instead of using `new` and `delete`. This will result in very safe code and the memory will be freed automatically. One example of using a high-level container directly with the API can be seen in [OsString](#OsString).
 
 ### Keeping WinAPI / Linux API cross-platform
 
@@ -126,14 +126,14 @@ void foo(const std::string& bar) {
 #elif defined(BATTERY_ARCH_LINUX)
     // Do some Linux-specific work
     // ...
-#else
+#else               // MacOS is not supported yet, but planned
     #error Unsupported architecture!
 #endif
     return bar;
 }
 ```
 
-This is how you write functions that use platform-specific functions, but still stay available cross-platform.
+This is how you write functions that use OS-specific features without sacrificing cross-platform availability.
 
 
 
