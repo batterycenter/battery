@@ -20,10 +20,10 @@ int main(int argc, const char** argv) {
     // On Windows, parse CLI arguments from WinAPI and convert to UTF-8
     LPWSTR* _args;
     int _argc = 0;
-    _args = CommandLineToArgvW((LPCWSTR)GetCommandLineW(), &_argc);
+    _args = CommandLineToArgvW((LPCWSTR)GetCommandLineW(), &_argc);     // TODO: Check memory leak
     if (!_args) {
         std::cerr << "CommandLineToArgvW failed: " << Battery::GetLastWin32ErrorString() << std::endl;
-        return -1;      // TODO
+        return -1;      // TODO: Return condition
     }
     std::vector<std::string> args;
     for (int i = 0; i < argc; i++) {

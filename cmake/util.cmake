@@ -27,39 +27,77 @@ endfunction()
 #    endif()
 #endfunction()
 
+function(__APPLY_COMMON_TARGET_OPTIONS TARGET)  # For all libraries and executables
+
+    # Set the C++ Standard
+    target_compile_features(${TARGET} PRIVATE cxx_std_23)
+    set_target_properties(${TARGET} PROPERTIES CXX_EXTENSIONS OFF)
+
+    # Set common Preprocessor Flags
+    if(MSVC)
+        string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /MP")      # TODO: Do this properly per-target
+    else()
+        target_compile_options(${TARGET} PRIVATE -Wno-psabi)
+    endif()
+
+    if (WIN32)
+        target_compile_definitions(${TARGET} PRIVATE
+            WIN32_LEAN_AND_MEAN      # Prevents Windows.h from adding unnecessary includes
+            NOMINMAX                 # Prevents Windows.h from defining min/max as macros
+            _CRT_SECURE_NO_WARNINGS
+            )
+        target_compile_definitions(${TARGET} PRIVATE
+            UNICODE
+            _UNICODE
+            )
+    else()
+        target_compile_options(${TARGET} PRIVATE -Wno-psabi)
+    endif()
+    
+    # Set common folders for the IDE
+    battery_set_ide_folder("${CMAKE_CURRENT_LIST_DIR}/src" "Source Files")
+    battery_set_ide_folder("${CMAKE_CURRENT_LIST_DIR}/include" "Header Files")
+    battery_set_ide_folder("${CMAKE_CURRENT_LIST_DIR}/cmake" "CMake")
+    battery_set_ide_folder("${CMAKE_CURRENT_LIST_DIR}/resources" "Resources")
+
+endfunction()
+
+
+
+function(BATTERY_ADD_LIBRARY TARGET_NAME TYPE)
+
+    # Define Target
+    add_library(${TARGET_NAME} ${TYPE} ${ARGN})
+    add_library(${TARGET_NAME}::${TARGET_NAME} ALIAS ${TARGET_NAME})
+
+    # Apply things like C++ Standard, preprocessor defines, etc.
+    __apply_common_target_options(${TARGET_NAME})
+
+endfunction()
+
 function(BATTERY_ADD_EXECUTABLE TARGET_NAME)
 
     # Define Target
     add_executable(${TARGET_NAME} ${ARGN})
 
-    # Set the C++ Standard
-    target_compile_features(${TARGET_NAME} PRIVATE cxx_std_23)
-    set_target_properties(${TARGET_NAME} PROPERTIES CXX_EXTENSIONS OFF)
-
-    # Set common Preprocessor Flags
-    if(MSVC)
-        string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /MP")
-    else()
-        target_compile_options(${TARGET_NAME} PRIVATE -Wno-psabi)
-    endif()
-
-    if (WIN32)
-        target_compile_definitions(${TARGET_NAME} PRIVATE
-                WIN32_LEAN_AND_MEAN      # Prevents Windows.h from adding unnecessary includes
-                NOMINMAX                 # Prevents Windows.h from defining min/max as macros
-                _CRT_SECURE_NO_WARNINGS
-                )
-        target_compile_definitions(${TARGET_NAME} PRIVATE
-                UNICODE
-                _UNICODE
-                )
-    endif()
+    # Apply things like C++ Standard, preprocessor defines, etc.
+    __apply_common_target_options(${TARGET_NAME})
 
 endfunction()
 
 
 
 
+
+function(BATTERY_SET_IDE_FOLDER DIRECTORY LABEL)
+    set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+    file(GLOB_RECURSE FILES "${DIRECTORY}/*")
+    source_group(TREE "${DIRECTORY}" PREFIX ${LABEL} FILES ${FILES})
+endfunction()
+
+function(BATTERY_SET_CACHE_VARIABLE VARIABLE VALUE)
+    set(${VARIABLE} ${VALUE} CACHE BOOL "" FORCE)
+endfunction()
 
 function(BATTERY_REQUIRE_FIND_PACKAGE PACKAGE_NAME PACKAGE_NAME_FOUND ADDITIONAL_MESSAGE)
 
@@ -76,13 +114,17 @@ endfunction()
 
 function(BATTERY_EMBED TARGET FILE_NAME TYPE)
 
+    if (NOT BATTERY_ROOT_DIR)
+        message(FATAL_ERROR "ERROR: Battery root directory has not been set. Did you include the Battery library?")
+    endif()
+
     if (NOT BATTERY_EMBED_BUILT)
         message(STATUS "[Battery] Building and verifying Battery-Embed tool")
-        file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/battery_embed)
+        file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/battery_embed)
 
         execute_process(                # Configure the battery_embed project
             COMMAND ${CMAKE_COMMAND} ${BATTERY_ROOT_DIR}/battery_embed -DCMAKE_BUILD_TYPE=Release
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/battery_embed
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/battery_embed
             RESULT_VARIABLE RESULT
             OUTPUT_VARIABLE OUTPUT
         )
@@ -94,7 +136,7 @@ function(BATTERY_EMBED TARGET FILE_NAME TYPE)
         ProcessorCount(N)
         execute_process(                # Build the battery_embed project
             COMMAND ${CMAKE_COMMAND} --build .  -j${N} --config=Release
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/battery_embed
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/battery_embed
             RESULT_VARIABLE RESULT
             OUTPUT_VARIABLE OUTPUT
         )
@@ -108,7 +150,7 @@ function(BATTERY_EMBED TARGET FILE_NAME TYPE)
 
     # Now verify the tool and retrieve the resulting filename
     execute_process(
-        COMMAND ${CMAKE_BINARY_DIR}/battery_embed/Release/battery_embed.exe 
+        COMMAND ${CMAKE_CURRENT_BINARY_DIR}/battery_embed/Release/battery_embed.exe 
                 ${FILE_NAME} ${CMAKE_CURRENT_BINARY_DIR}/resources --print-src-name-only
         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/
         OUTPUT_VARIABLE SOURCE_FILE

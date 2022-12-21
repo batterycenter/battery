@@ -3,6 +3,7 @@ project(Battery VERSION 0.1.1 LANGUAGES C CXX)
 
 include(FetchContent)
 include(cmake/util.cmake)
+set(BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR} PARENT_SCOPE)
 set(BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 ##################################
@@ -24,7 +25,7 @@ endif()
 # Dependencies #
 ################
 
-set(BUILD_SHARED_LIBS FALSE)
+battery_set_cache_variable(BUILD_SHARED_LIBS off)
 
 if (NOT WIN32 AND BATTERY_FEATURES_GRAPHICS)
     find_package(PkgConfig REQUIRED)
@@ -80,7 +81,7 @@ get_github_dependency(BatteryUI "modules/BatteryUI/CMakeLists.txt" "https://gith
 # SFML and other graphics features
 if (BATTERY_FEATURES_GRAPHICS)
     add_subdirectory(modules/SFML)
-    set(IMGUI_SFML_FIND_SFML false)
+    battery_set_cache_variable(IMGUI_SFML_FIND_SFML off)
     set(IMGUI_DIR ${CMAKE_CURRENT_LIST_DIR}/modules/imgui)
     include(cmake/imgui.cmake)
     add_subdirectory(modules/imgui-sfml)
@@ -90,10 +91,10 @@ endif()
 include(cmake/nativefiledialog.cmake)
 include(cmake/glm.cmake)
 #add_subdirectory(modules/spdlog)
-set(CLIP_EXAMPLES OFF CACHE BOOL "Do not build examples" FORCE)
-set(CLIP_TESTS OFF CACHE BOOL "Do not build tests" FORCE)
+battery_set_cache_variable(CLIP_EXAMPLES off)
+battery_set_cache_variable(CLIP_TESTS off)
 add_subdirectory(modules/clip)
-set(OPTION_BUILD_TESTS OFF CACHE BOOL "Do not build tests" FORCE)
+battery_set_cache_variable(OPTION_BUILD_TESTS off)
 add_subdirectory(modules/cpplocate)
 add_subdirectory(modules/BatteryUI)
 
@@ -104,36 +105,12 @@ add_subdirectory(modules/BatteryUI)
 # Static library definition #
 #############################
 
-add_library(Battery STATIC
+file(GLOB_RECURSE SOURCES "${BATTERY_ROOT_DIR}/src/*")
+file(GLOB_RECURSE HEADERS "${BATTERY_ROOT_DIR}/include/*")
+file(GLOB_RECURSE CMAKE_FILES "${BATTERY_ROOT_DIR}/cmake/*")
 
-        src/Battery/Core/Application.cpp
-        src/Battery/Core/Config.cpp
-        src/Battery/Core/Log.cpp
-        src/Battery/Core/Main.cpp
-
-        src/Battery/Extern/PlatformFolders.cpp
-
-        src/Battery/Platform/win/TrayIcon.cpp
-        src/Battery/Platform/win/win.cpp
-        src/Battery/Platform/x11/TrayIcon.cpp
-        src/Battery/Platform/x11/x11.cpp
-
-        src/Battery/Utils/AppUtils.cpp
-        src/Battery/Utils/FileUtils.cpp
-        src/Battery/Utils/ImGuiCompressor.cpp
-        src/Battery/Utils/ImGuiUtils.cpp
-        src/Battery/Utils/OsString.cpp
-        src/Battery/Utils/StringUtils.cpp
-        src/Battery/Utils/TimeUtils.cpp
-
-        src/Battery/DefaultShaders.cpp
-
-        "cmake/BatteryConfig.cmake.in")
-
-add_library(Battery::Battery ALIAS Battery)
-
-target_compile_features(Battery PRIVATE cxx_std_23)
-set_target_properties(Battery PROPERTIES CXX_EXTENSIONS OFF)
+battery_add_library(Battery STATIC
+    ${SOURCES} ${HEADERS} ${CMAKE_FILES})
 
 target_include_directories(Battery PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
@@ -149,26 +126,6 @@ if(MSVC)
             "modules/cpplocate/source/liblocate/source/liblocate.c"
             PROPERTIES COMPILE_FLAGS "/wd5105"
     )
-    string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /MP")
-else()
-    #target_compile_options(clip PRIVATE -Wno-multichar)
-    target_compile_options(Battery PRIVATE -Wno-psabi)
-endif()
-
-############################
-# Preprocessor definitions #
-############################
-
-if (WIN32)
-    target_compile_definitions(Battery PRIVATE
-            WIN32_LEAN_AND_MEAN      # Prevents Windows.h from adding unnecessary includes
-            NOMINMAX                 # Prevents Windows.h from defining min/max as macros
-            _CRT_SECURE_NO_WARNINGS
-            )
-    target_compile_definitions(Battery PUBLIC
-            UNICODE
-            _UNICODE
-            )
 endif()
 
 if (BATTERY_FEATURES_GRAPHICS)
@@ -237,64 +194,18 @@ endif()
 # IDE #
 #######
 
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set_property(TARGET Battery PROPERTY FOLDER "Battery")
 
-source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/src" PREFIX "Source Files" FILES ${SRC_FILES})
-source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include" PREFIX "Header Files" FILES ${HEADER_FILES})
-source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/cmake" PREFIX "cmake" FILES "cmake/BatteryConfig.cmake.in")
+set_property(TARGET cpplocate PROPERTY FOLDER "Battery/deps/cpplocate")
+set_property(TARGET component_install PROPERTY FOLDER "Battery/deps/cpplocate")
+set_property(TARGET liblocate PROPERTY FOLDER "Battery/deps/cpplocate")
+set_property(TARGET pack PROPERTY FOLDER "Battery/deps/cpplocate")
+set_property(TARGET pack-cpplocate PROPERTY FOLDER "Battery/deps/cpplocate")
+set_property(TARGET check-all PROPERTY FOLDER "Battery/deps/cpplocate")
+set_property(TARGET check-cpplocate PROPERTY FOLDER "Battery/deps/cpplocate")
+set_property(TARGET check-liblocate PROPERTY FOLDER "Battery/deps/cpplocate")
+set_property(TARGET check-template PROPERTY FOLDER "Battery/deps/cpplocate")
 
-
-
-
-######################
-# Examples and Tools #
-######################
-
-if (BATTERY_BUILD_EXAMPLES)
-    add_subdirectory(examples)
-endif()
-
-
-
-###########
-# Install #
-###########
-
-#include(CMakePackageConfigHelpers)
-#write_basic_package_version_file(
-#    BatteryConfigVersion.cmake
-#    VERSION ${PACKAGE_VERSION}
-#    COMPATIBILITY AnyNewerVersion
-#)
-#
-## Install binaries
-#install(
-#    TARGETS Battery glm spdlog clip
-#    EXPORT BatteryTargets
-#    LIBRARY DESTINATION "lib"
-#    ARCHIVE DESTINATION "lib"
-#    RUNTIME DESTINATION "bin"
-#    INCLUDES DESTINATION "include"
-#)
-#
-## Install headers
-#install(
-#    DIRECTORY include/
-#    DESTINATION "include"
-#    FILES_MATCHING PATTERN "*.h*"
-#)
-#
-#install(
-#    EXPORT BatteryTargets
-#    DESTINATION "lib/cmake/Battery"
-#    NAMESPACE Battery::
-#)
-#
-## Install Targets
-#configure_file(cmake/BatteryConfig.cmake.in BatteryConfig.cmake @ONLY)
-#install(
-#    FILES "${CMAKE_CURRENT_BINARY_DIR}/BatteryConfig.cmake"
-#          "${CMAKE_CURRENT_BINARY_DIR}/BatteryConfigVersion.cmake"
-#    DESTINATION lib/cmake/Battery
-#)
-#
+set_property(TARGET spdlog PROPERTY FOLDER "Battery/deps")
+set_property(TARGET nativefiledialog PROPERTY FOLDER "Battery/deps")
+set_property(TARGET clip PROPERTY FOLDER "Battery/deps")
