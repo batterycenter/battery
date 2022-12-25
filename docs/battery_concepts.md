@@ -153,3 +153,12 @@ Battery implements real Lockfiles: The difference is that the lock is not retrie
 The advantage with this is that when the process stops or crashes, the lock is dropped immediately by the operating system. It is much closer to the process needing a resource: If a process does not exist anymore, it does not need the resource anymore.
 
 The only disadvantage with this is that this operation might not be supported on networked locations. If you want a local Hard-Lock that is tied to a very specific process, use the hard lock option. If you want a Soft-Lock that can also work across network drives and is not tied to a specific process, use the soft lock option. Just be aware of the infinite lockup problem, when your process stops unexpectedly and then restarts.
+
+
+
+
+
+
+
+
+# OsString -> Always terminates at '\0'

@@ -43,8 +43,15 @@ size_t write_hex_comma(char* buf, uint8_t num) {
 }
 
 // Do the main conversion by reading and writing the files
-ErrorCode convert(const std::string& input_file, const std::string& source_dir, const std::string& header_dir,
-            std::string symbol_name, bool binary, bool print_header_name_only, bool print_src_name_only) {
+std::pair<ErrorCode, std::string> convert(
+    const std::string& input_file, 
+    const std::string& source_dir, 
+    const std::string& header_dir,
+    std::string symbol_name, 
+    bool binary, 
+    bool print_header_name_only, 
+    bool print_src_name_only
+) {
     auto infile_name = FS::path(input_file).filename().string();
 
 	// Replace a few characters to create a valid C++ symbol name
@@ -69,21 +76,21 @@ ErrorCode convert(const std::string& input_file, const std::string& source_dir, 
 
     if (print_src_name_only) {
         std::cout << source_file << std::endl;
-        return ErrorCode::SUCCESS;
+        return { ErrorCode::SUCCESS, "" };
     }
     if (print_header_name_only) {
         std::cout << header_file << std::endl;
-        return ErrorCode::SUCCESS;
+        return { ErrorCode::SUCCESS, "" };
     }
 
     // Open input file to be embedded
     Battery::FS::ifstream infile(input_file, binary ? FS::Mode::BINARY : FS::Mode::TEXT);
-    if (!infile.is_open()) return ErrorCode::INPUT_FILE_FAILED;
+    if (!infile.is_open()) return { ErrorCode::INPUT_FILE_FAILED, input_file };
     size_t filesize = infile.file_size();
 
     // Open output file for writing (.cpp)
     Battery::FS::ofstream outfile(source_file, FS::Mode::TEXT);
-    if (!outfile.is_open()) return ErrorCode::OUTPUT_FILE_FAILED;
+    if (!outfile.is_open()) return { ErrorCode::OUTPUT_FILE_FAILED, source_file + strerror(errno) };
 	
     // Generate the source file
     outfile << "// File generated using battery_embed. https://github.com/HerrNamenlos123/Battery\n";
@@ -122,7 +129,7 @@ ErrorCode convert(const std::string& input_file, const std::string& source_dir, 
 
     // Open output file (.h)
     Battery::FS::ofstream header(header_file, FS::Mode::TEXT);
-    if (!header.is_open()) return ErrorCode::OUTPUT_HEADER_FILE_FAILED;
+    if (!header.is_open()) return { ErrorCode::OUTPUT_HEADER_FILE_FAILED, header_file };
 
     // Generate the header file
     header << "// File generated using battery_embed. https://github.com/HerrNamenlos123/Battery\n";
@@ -162,7 +169,7 @@ ErrorCode convert(const std::string& input_file, const std::string& source_dir, 
     header << "}\n";
     header << "#endif // __battery_embed_" + symbol_name + "_\n";
 
-    return ErrorCode::SUCCESS;
+    return { ErrorCode::SUCCESS, "" };
 }
 
 int Battery::Main(const Args_t& args) {
@@ -171,7 +178,7 @@ int Battery::Main(const Args_t& args) {
                  "This is part of the Battery framework: https://github.com/HerrNamenlos123/Battery\n"};
 
     std::string input_file;
-    app.add_option("input_file", input_file, "The file to be embedded")->required();
+    app.add_option("input_file", input_file, "The file to be embedded")->required()->check(CLI::ExistingFile);
 
     std::string source_file_output_directory;
     app.add_option("out_dir", source_file_output_directory,
@@ -192,32 +199,36 @@ int Battery::Main(const Args_t& args) {
 
     bool print_src_name_only = false;
     app.add_flag("--print-src-name-only", print_src_name_only, "Only print the final output name of the generated C++ source file");
-
-	// Convert argv to UTF-8
-    std::vector<OsString> argv_str;
-    for (int i = 0; i < args.size(); i++) {
-        argv_str.emplace_back(args[i]);
-    }
-    std::vector<const char*> argv;
-    for (int i = 0; i < args.size(); i++) {
-        argv.push_back(argv_str[i].c_str());
-    }
 	
-	// Parse the CLI options
-    CLI11_PARSE(app, args.size(), argv.data());
+    // Parse the CLI options
+    CLI11_PARSE(app, args.size(), ArgsToCStr(args));
 
     if (header_file_output_directory.empty()) {
         header_file_output_directory = source_file_output_directory;
     }
 
-    ErrorCode status = convert(input_file, source_file_output_directory, header_file_output_directory, 
+    auto [status, error] = convert(input_file, source_file_output_directory, header_file_output_directory, 
                                 symbol_name, binary, print_header_name_only, print_src_name_only);
     switch (status) {
-        case ErrorCode::SUCCESS: break;  // Success
-        case ErrorCode::INPUT_FILE_FAILED: std::cerr << "Failed to open input file for reading (error code " << (int)status << ")" << std::endl; break;
-        case ErrorCode::OUTPUT_HEADER_FILE_FAILED: std::cerr << "Failed to open header output file for writing (error code " << (int)status << ")" << std::endl; break;
-        case ErrorCode::OUTPUT_FILE_FAILED: std::cerr << "Failed to open source output file for writing (error code " << (int)status << ")" << std::endl; break;
-        default: std::cerr << "Unknown error code (error code " << (int)status << ")" << std::endl; break;
+
+        case ErrorCode::SUCCESS: 
+            break;  // Success
+
+        case ErrorCode::INPUT_FILE_FAILED:
+            Log::Error("Failed to open input file for reading (error code {}): {}", (int)status, error);
+            break;
+
+        case ErrorCode::OUTPUT_HEADER_FILE_FAILED:
+            Log::Error("Failed to open header output file for writing (error code {}): {}", (int)status, error);
+            break;
+
+        case ErrorCode::OUTPUT_FILE_FAILED:
+            Log::Error("Failed to open source output file for writing (error code {}): {}", (int)status, error);
+            break;
+
+        default:
+            Log::Error("Unknown error (error code {}): {}", (int)status, error);
+            break;
     }
     return (int)status;
 }

@@ -19,8 +19,11 @@ namespace Battery::FS {
 	using std::filesystem::create_directories;		// Creates a directory and all above
 	using std::filesystem::copy;					// Copy either a file or a directory
 
+	using std::filesystem::status;					// Get filesystem status: what type of entry it is
 	using std::filesystem::is_regular_file;
 	using std::filesystem::is_directory;
+
+	// TODO: filesystem::path seems to be incorrect for UTF-8 (try status())
 
 	enum class Mode {
 		TEXT,

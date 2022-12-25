@@ -16,3 +16,8 @@
     #include "Battery/Utils/AppUtils.h"
     #include "BatteryUI/BatteryUI.h"
 #endif
+
+#include "Battery/Extern/json.hpp"
+#include "Battery/Extern/CLI11.hpp"
+#include "Battery/Extern/magic_enum.hpp"
+#include "Battery/Extern/rang.hpp"

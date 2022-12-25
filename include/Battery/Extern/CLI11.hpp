@@ -33,6 +33,8 @@
 
 #pragma once
 
+#include "Battery/Utils/FileUtils.h"
+
 // Standard combined includes:
 #include <functional>
 #include <locale>
@@ -2676,7 +2678,7 @@ class Config {
 
     /// Parse a config file, throw an error (ParseError:ConfigParseError or FileError) on failure
     CLI11_NODISCARD std::vector<ConfigItem> from_file(const std::string &name) const {
-        std::ifstream input{name};
+        std::ifstream input(Battery::OsString(name).wstr());
         if(!input.good())
             throw FileError::Missing(name);
 
@@ -3737,7 +3739,7 @@ namespace detail {
 #if defined CLI11_HAS_FILESYSTEM && CLI11_HAS_FILESYSTEM > 0
 CLI11_INLINE path_type check_path(const char *file) noexcept {
     std::error_code ec;
-    auto stat = std::filesystem::status(file, ec);
+    auto stat = std::filesystem::status(Battery::OsString(file).wstr(), ec);
     if(ec) {
         return path_type::nonexistent;
     }

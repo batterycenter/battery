@@ -19,7 +19,7 @@
 
 #ifdef BATTERY_COMPILER_GCC
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wvolatile"		// Disable a glm warning (C++20 and up)
+#pragma GCC diagnostic ignored "-Wvolatile"		// Disable a GCC-specific glm warning (C++20 and up)
 #endif
 
 #include "glm/glm.hpp"
@@ -28,10 +28,6 @@
 #pragma GCC diagnostic pop
 #endif
 
-#include "Battery/Extern/json.hpp"
-#include "Battery/Extern/CLI11.hpp"
-
-// ImGui library
 #ifdef BATTERY_FEATURES_GRAPHICS
     #include "imgui.h"
     #include "imgui_internal.h"
@@ -50,11 +46,4 @@
     #include "imgui-SFML.h"
 #endif
 
-#ifndef SPDLOG_COMPILED_LIB
-#define SPDLOG_COMPILED_LIB     // Force SPDLOG to recognize the prebuilt library
-#endif
-
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
-#include "spdlog/sinks/basic_file_sink.h"
-#include "spdlog/sinks/rotating_file_sink.h"
+#include "Battery/Core/Log.h"       // Almost everything needs logging

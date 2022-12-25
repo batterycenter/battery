@@ -43,36 +43,36 @@ namespace Battery {
 
         constexpr DWORD kFlags = MB_ERR_INVALID_CHARS;
         int bufferSize = ::MultiByteToWideChar(
-                CP_UTF8,                    // Source string is in UTF-8
-                kFlags,                       // Conversion flags
-                (LPCCH)mbString.data(),     // Source UTF-8 string pointer
-                -1,                     // Length of the source UTF-8 string, in chars
-                nullptr,                  // Unused - no conversion done in this step
-                0                          // Request size of destination buffer, in wchar_ts
+            CP_UTF8,                    // Source string is in UTF-8
+            kFlags,                     // Conversion flags
+            (LPCCH)mbString.data(),     // Source UTF-8 string pointer
+            -1,                         // Length of the source UTF-8 string, in chars
+            nullptr,                    // Unused - no conversion done in this step
+            0                           // Request size of destination buffer, in wchar_ts
         );
 
         if (bufferSize == 0) {
-            std::cerr << "[WinAPI] Utf8ToWchar failed: " << GetLastWin32ErrorString() << std::endl;
+            Log::Critical("[WinAPI] Utf8ToWchar failed: {}", GetLastWin32ErrorString());    // TODO: Handle error gracefully
             throw std::runtime_error(
                     "Cannot get result string length when converting from UTF-8 to UTF-16 (Utf8ToWchar failed).");
         }
 
         buffer.resize(bufferSize);
         int result = ::MultiByteToWideChar(
-                CP_UTF8,       // Source string is in UTF-8
-                kFlags,        // Conversion flags
-                (LPCCH)mbString.data(),   // Source UTF-8 string pointer
-                -1,    // Length of source UTF-8 string, in chars
-                &buffer[0],     // Pointer to destination buffer
-                bufferSize    // Size of destination buffer, in wchar_ts
+            CP_UTF8,                  // Source string is in UTF-8
+            kFlags,                   // Conversion flags
+            (LPCCH)mbString.data(),   // Source UTF-8 string pointer
+            -1,                       // Length of source UTF-8 string, in chars
+            &buffer[0],               // Pointer to destination buffer
+			bufferSize                // Size of destination buffer, in wchar_ts
         );
 
         if (result == 0) {
-            std::cerr << "[WinAPI] Utf8ToWchar failed: " << GetLastWin32ErrorString() << std::endl;
+            Log::Critical("[WinAPI] Utf8ToWchar failed: {}", GetLastWin32ErrorString());
             throw std::runtime_error("Cannot convert from UTF-8 to UTF-16 (Utf8ToWchar failed).");
         }
-
-        return buffer;
+		
+		return { buffer.c_str() };   // This re-builds the string and therefore exits at first null-terminator
     }
 
     static std::string WcharToUtf8(const std::wstring& wString) {
@@ -87,40 +87,40 @@ namespace Battery {
 
         constexpr DWORD kFlags = WC_ERR_INVALID_CHARS;
         int bufferSize = ::WideCharToMultiByte(
-                CP_UTF8,                    // Source string is in UTF-8
-                kFlags,                       // Conversion flags
-                (LPCWCH)wString.data(),     // Source UTF-8 string pointer
-                -1,                     // Length of the source UTF-8 string, in chars
-                nullptr,                  // Unused - no conversion done in this step
-                0,                          // Request size of destination buffer, in wchar_ts,
-                nullptr,
-                nullptr
+            CP_UTF8,                    // Source string is in UTF-8
+            kFlags,                     // Conversion flags
+            (LPCWCH)wString.data(),     // Source UTF-8 string pointer
+            -1,                         // Length of the source UTF-8 string, in chars
+            nullptr,                    // Unused - no conversion done in this step
+            0,                          // Request size of destination buffer, in wchar_ts,
+            nullptr,
+            nullptr
         );
 
         if (bufferSize == 0) {
-            std::cerr << "[WinAPI] WcharToUtf8 failed: " << GetLastWin32ErrorString() << std::endl;
+            Log::Critical("[WinAPI] WcharToUtf8 failed: {}", GetLastWin32ErrorString());
             throw std::runtime_error(
                     "Cannot get result string length when converting from UTF-16 to UTF-8 (WcharToUtf8 failed).");
         }
 
         buffer.resize(bufferSize);
         int result = ::WideCharToMultiByte(
-                CP_UTF8,       // Source string is in UTF-8
-                kFlags,        // Conversion flags
-                (LPCWCH)wString.data(),   // Source UTF-8 string pointer
-                -1,    // Length of source UTF-8 string, in chars
-                &buffer[0],     // Pointer to destination buffer
-                bufferSize,    // Size of destination buffer, in wchar_ts
-                nullptr,
-                nullptr
+            CP_UTF8,                    // Source string is in UTF-8
+            kFlags,                     // Conversion flags
+            (LPCWCH)wString.data(),     // Source UTF-8 string pointer
+            -1,                         // Length of source UTF-8 string, in chars
+            &buffer[0],                 // Pointer to destination buffer
+            bufferSize,                 // Size of destination buffer, in wchar_ts
+            nullptr,
+            nullptr
         );
 
         if (result == 0) {
-            std::cerr << "[WinAPI] WcharToUtf8 failed: " << GetLastWin32ErrorString() << std::endl;
+            Log::Critical("[WinAPI] WcharToUtf8 failed: {}", GetLastWin32ErrorString());
             throw std::runtime_error("Cannot convert from UTF-16 to UTF-8 (WcharToUtf8 failed).");
         }
 
-        return buffer;
+        return { buffer.c_str() };   // This re-builds the string and therefore exits at first null-terminator
     }
 
     OsString& OsString::operator=(const char* str) {
@@ -128,7 +128,7 @@ namespace Battery {
     }
 
     OsString& OsString::operator=(const std::string& str) {
-        raw_string = str;
+		raw_string = str.c_str();           // Re-build to intentionally end at first null-terminator
         platform_string = Utf8ToWchar(str);
         return *this;
     }
@@ -139,7 +139,7 @@ namespace Battery {
 
     OsString& OsString::operator=(const std::wstring& str) {
         raw_string = WcharToUtf8(str);
-        platform_string = str;
+        platform_string = str.c_str();      // Re-build to intentionally end at first null-terminator
         return *this;
     }
 
