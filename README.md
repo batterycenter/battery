@@ -23,3 +23,5 @@ TODO: Setup examples so that they have their own copy of battery
 TODO: Properly implement install scripts for installing the CMake library and the resulting binaries
 
 TODO: Check support for network drives (filesystem)
+
+TODO: Allow battery_embed() CMake command take absolute paths

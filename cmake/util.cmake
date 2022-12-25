@@ -184,7 +184,7 @@ function(BATTERY_EMBED TARGET FILE_NAME TYPE)
         PRE_BUILD
         COMMAND echo ${COMMAND_PRINT} &&
                      ${CMAKE_BINARY_DIR}/battery_embed/Release/battery_embed.exe
-                     ${CMAKE_CURRENT_LIST_DIR}/${FILE_NAME} ${CMAKE_CURRENT_BINARY_DIR}/resources ${BINARY}
+                     ${FILE_NAME} ${CMAKE_CURRENT_BINARY_DIR}/resources ${BINARY}
     )
 
 endfunction()
