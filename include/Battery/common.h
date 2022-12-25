@@ -16,6 +16,7 @@
 #include <cstddef>
 #include <thread>
 #include <filesystem>
+#include <expected>
 
 #ifdef BATTERY_COMPILER_GCC
 #pragma GCC diagnostic push

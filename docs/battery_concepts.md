@@ -162,3 +162,7 @@ The only disadvantage with this is that this operation might not be supported on
 
 
 # OsString -> Always terminates at '\0'
+
+
+    auto path = std::filesystem::current_path(); 	// get path
+    std::filesystem::current_path(path); 			// set path

@@ -28,7 +28,8 @@ namespace Battery {
 int main(int argc, const char** argv) {
 
 #ifdef BATTERY_ARCH_WINDOWS
-    std::system("chcp 65001>NUL");
+    //std::system("chcp 65001>NUL");
+    SetConsoleOutputCP(CP_UTF8);
     Battery::Log::Core::Trace("Switched terminal codepage to Unicode (UTF-8)");
 
     // On Windows, parse CLI arguments from WinAPI and convert to UTF-8

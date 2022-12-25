@@ -21,3 +21,6 @@
 #include "Battery/Extern/CLI11.hpp"
 #include "Battery/Extern/magic_enum.hpp"
 #include "Battery/Extern/rang.hpp"
+#include "Battery/Extern/semver.hpp"
+
+#include "toml.hpp"

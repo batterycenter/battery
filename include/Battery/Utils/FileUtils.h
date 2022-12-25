@@ -5,14 +5,19 @@
 
 #include <filesystem>
 
-	/// <summary>
-	/// Throws: 
-	/// Battery::LockfileUnavailableException if the lockfile is already locked or
-	/// Battery::NoSuchFileOrDirectoryException if the filename is invalid or contains directories
-	/// </summary>
+inline std::ostream& operator<<(std::ostream& os, const std::u8string& str) {
+	os << reinterpret_cast<const char*>(str.c_str());
+	return os;
+}
+
+/// <summary>
+/// Throws: 
+/// Battery::LockfileUnavailableException if the lockfile is already locked or
+/// Battery::NoSuchFileOrDirectoryException if the filename is invalid or contains directories
+/// </summary>
 namespace Battery::FS {
 
-	using std::filesystem::path;					// Path class for working with filenames
+	//using std::filesystem::path;					// Path class for working with filenames
 
 	using std::filesystem::exists;					// Checks if a path exists on-disk (file or directory)
 	using std::filesystem::create_directory;		// Creates a single directory
@@ -24,6 +29,25 @@ namespace Battery::FS {
 	using std::filesystem::is_directory;
 
 	// TODO: filesystem::path seems to be incorrect for UTF-8 (try status())
+
+	class Path : public std::filesystem::path {
+	public:
+		Path() : std::filesystem::path() {}
+		Path(const char* path) : std::filesystem::path(path) {}
+		Path(const std::string& path) : std::filesystem::path(path) {}
+
+		Path(const std::filesystem::path& path) : std::filesystem::path(path) {}
+		Path(std::filesystem::path& path) : std::filesystem::path(path) {}
+		Path(std::filesystem::path&& path) : std::filesystem::path(path) {}
+
+		virtual ~Path() = default;
+
+		std::string string() const = delete;
+		std::string to_string() const {
+			return reinterpret_cast<const char*>(std::filesystem::path::u8string().c_str());
+		}
+
+	};
 
 	enum class Mode {
 		TEXT,
@@ -118,7 +142,7 @@ namespace Battery::FS {
 			}
 			
 			// Otherwise, now create a directory
-			FS::create_directories(FS::path(path).parent_path());
+			FS::create_directories(FS::Path(path).parent_path());
 		}
 	};
 

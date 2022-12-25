@@ -12,6 +12,8 @@ https://github.com/CLIUtils/CLI11 -> BSD-Clause, modified to use Battery::FS::if
 
 https://github.com/agauniyal/rang -> Unlicensed
 
+https://github.com/Neargye/semver -> MIT License
+
 TODO: Add unit testing
 
 TODO: Add pipelines and automate testing

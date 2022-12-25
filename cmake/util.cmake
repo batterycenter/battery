@@ -99,6 +99,10 @@ function(BATTERY_SET_CACHE_VARIABLE VARIABLE VALUE)
     set(${VARIABLE} ${VALUE} CACHE BOOL "" FORCE)
 endfunction()
 
+function(BATTERY_PRECOMPILE_HEADERS TARGET FILE)
+    target_precompile_headers(${TARGET} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${FILE}>")
+endfunction()
+
 function(BATTERY_REQUIRE_FIND_PACKAGE PACKAGE_NAME PACKAGE_NAME_FOUND ADDITIONAL_MESSAGE)
 
     # Simply test the package and print understandable error message if it's not found
