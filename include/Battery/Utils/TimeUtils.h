@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Battery/pch.h"
+#include "Battery/common.h"
 #include "Battery/Core/Log.h"
 #include "Battery/Core/Config.h"
 

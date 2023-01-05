@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Battery/pch.h"
+#define BATTERY_EXCEPTION UI_EXCEPTION
 
 namespace Battery {
 

@@ -1,5 +1,5 @@
 
-set(IMPLOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/modules/implot)
+set(IMPLOT_DIR $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/modules/implot/>$<INSTALL_INTERFACE:>)
 add_library(implot STATIC)
 add_library(implot::implot ALIAS implot)
 

@@ -1,36 +1,148 @@
 #pragma once
 
-#include "Battery/pch.h"
+#include "Battery/common.h"
 #include "Battery/Platform/Platform.h"
 
-namespace Battery {
+#include <filesystem>
 
-	class File {
+inline std::ostream& operator<<(std::ostream& os, const std::u8string& str) {
+	os << reinterpret_cast<const char*>(str.c_str());
+	return os;
+}
 
-		std::string _path;
-		std::string _content;
-		bool valid = false;
+/// <summary>
+/// Throws: 
+/// Battery::LockfileUnavailableException if the lockfile is already locked or
+/// Battery::NoSuchFileOrDirectoryException if the filename is invalid or contains directories
+/// </summary>
+namespace Battery::FS {
 
+	//using std::filesystem::path;					// Path class for working with filenames
+
+	using std::filesystem::exists;					// Checks if a path exists on-disk (file or directory)
+	using std::filesystem::create_directory;		// Creates a single directory
+	using std::filesystem::create_directories;		// Creates a directory and all above
+	using std::filesystem::copy;					// Copy either a file or a directory
+
+	using std::filesystem::status;					// Get filesystem status: what type of entry it is
+	using std::filesystem::is_regular_file;
+	using std::filesystem::is_directory;
+
+	// TODO: filesystem::path seems to be incorrect for UTF-8 (try status())
+
+	class Path : public std::filesystem::path {
 	public:
-		File() {
+		Path() : std::filesystem::path() {}
+		Path(const char* path) : std::filesystem::path(path) {}
+		Path(const std::string& path) : std::filesystem::path(path) {}
+
+		Path(const std::filesystem::path& path) : std::filesystem::path(path) {}
+		Path(std::filesystem::path& path) : std::filesystem::path(path) {}
+		Path(std::filesystem::path&& path) : std::filesystem::path(path) {}
+
+		virtual ~Path() = default;
+
+		std::string string() const = delete;
+		std::string to_string() const {
+			return reinterpret_cast<const char*>(std::filesystem::path::u8string().c_str());
 		}
 
-		File(const std::string& p, const std::string& c, bool v) {
-			_path = p;
-			_content = c;
-			valid = v;
+	};
+
+	enum class Mode {
+		TEXT,
+		BINARY
+	};
+
+	class ifstream : public std::ifstream {
+	public:
+		ifstream(const std::string& path, enum Mode filemode = Mode::TEXT)
+			: std::ifstream(convert(path), 
+				(filemode == Mode::TEXT) ? (std::ios::in) : (std::ios::in | std::ios::binary)) {
+			this->path = path;
+			binary = (filemode == Mode::BINARY);	// remember for later
+		}
+		
+		ifstream(const std::string& path, std::ios_base::openmode mode)
+			: std::ifstream(convert(path), mode) {
+			this->path = path;
+			binary = (mode & std::ios::binary);		// remember for later
 		}
 
-		bool fail() const {
-			return !valid;
+		virtual ~ifstream() {}
+
+		// In Binary mode this function is cheap, it reads the filesize from the filesystem.
+		// In Text mode this function is expensive, it reads the entire file into memory, just for the filesize.
+		// There is no other way to get the filesize in text mode, because the representation on-disk is different
+		// from what is read into memory. (Line endings)
+		size_t file_size() {
+			if (binary) {		// Binary mode
+				return std::filesystem::file_size(convert(path));
+			}
+			else {				// Text mode: read the entire file into memory to compensate line-endings
+				// Buffer
+				std::string temp;													// Buffer is as large as the file on-disk
+				size_t filesize_temp = std::filesystem::file_size(convert(path));   // -> Reading will make it smaller, but not larger
+				temp.resize(filesize_temp);
+				
+				// Read file
+				FS::ifstream file(path, Mode::TEXT);
+				file.read(temp.data(), temp.size());
+				return file.gcount();
+			}
 		}
 
-		std::string content() const {
-			return _content;
+		size_t read_in_chunks(size_t chunk_size, std::function<void(std::string_view)> callback) {
+			std::string buffer(chunk_size, 0);
+			size_t total_bytes = 0;
+			
+			while (!this->eof()) {
+				this->read(buffer.data(), buffer.size());    // Read a chunk of the file
+				size_t this_chunk_size = this->gcount();
+				total_bytes += this_chunk_size;
+
+				callback(std::string_view(buffer.data(), this_chunk_size));
+			}
+			
+			return total_bytes;
 		}
 
-		std::string path() const {
-			return _path;
+	private:
+		std::wstring convert(const std::string& path) {
+			return Battery::OsString(path).wstr();
+		}
+		
+		std::string path;
+		bool binary = false;
+	};
+
+	class ofstream : public std::ofstream {
+	public:
+		ofstream(const std::string& path, enum Mode filemode = Mode::TEXT, bool createDirectory = true)
+			: std::ofstream((create_directory(createDirectory, path), convert(path)),
+				(filemode == Mode::TEXT) ? (std::ios::out) : (std::ios::out | std::ios::binary)) {}
+
+		ofstream(const std::string& path, std::ios_base::openmode mode, bool createDirectory = true)
+			: std::ofstream((create_directory(createDirectory, path), convert(path)), mode) {}
+		
+		virtual ~ofstream() {}
+
+	private:
+		std::wstring convert(const std::string& path) {
+			return Battery::OsString(path).wstr();
+		}
+
+		static void create_directory(bool create, const std::string& path) {
+			if (!create)
+				return;
+
+			// File or directory already exists
+			if (FS::exists(path)) {
+				return;
+			}
+			
+			// Otherwise, now create a directory
+			FS::create_directories(FS::Path(path).parent_path());
 		}
 	};
 
@@ -41,33 +153,13 @@ namespace Battery {
 	/// </summary>
 	class Lockfile {
 	public:
-		Lockfile(const std::string& file, bool createDirectories = false);
+		Lockfile(const std::string& filename, bool createDirectories = false);
 		~Lockfile();
 
 	private:
 		void* fileDescriptor = nullptr;
 	};
-
-	/// <summary>
-	/// Check if a given filename exists on disk, can either be a directory or a file
-	/// </summary>
-	/// <param name="path">- path to check for, e.g. C:/some/file.txt</param>
-	/// <returns>bool - exists or not</returns>
-	bool FilenameExists(const std::string& path);
-
-	/// <summary>
-	/// Check if the given file exists on disk
-	/// </summary>
-	/// <param name="path">- The full or relative path</param>
-	/// <returns>bool - is a valid file or not</returns>
-	bool FileExists(const std::string& path);
-
-	/// <summary>
-	/// Check if the given directory exists on disk
-	/// </summary>
-	/// <param name="path">- The full or relative path</param>
-	/// <returns>bool - is a valid directory or not</returns>
-	bool DirectoryExists(const std::string& path);
+	
 
 	/// <summary>
 	/// Get the content of a directory. Returns an array of filenames and directory names. Must be checked with
@@ -76,13 +168,6 @@ namespace Battery {
 	/// <param name="path">- The full or relative path</param>
 	/// <returns>An array with all filenames and directory names</returns>
 	std::vector<std::filesystem::path> GetDirectoryContent(const std::string& path);
-
-	/// <summary>
-	/// Create a new directory, parent directories are created as needed
-	/// </summary>
-	/// <param name="path">- The full or relative path</param>
-	/// <returns>bool - true if creation was successful or the directory already existed</returns>
-	bool MakeDirectory(const std::string& path);
 
 	/// <summary>
 	/// Update the name of a file on disk. Essentially equivalent to MoveFile().
@@ -105,46 +190,13 @@ namespace Battery {
 	bool MoveDirectory(std::string source, std::string target);
 
 	/// <summary>
-	/// Load a file from memory and return it as a Battery::FileUtils::File class.
-	/// File class contains the content with .str() and information if it failed with .fail().
-	/// </summary>
-	/// <param name="path">- The full or relative path</param>
-	/// <returns>Battery::FileUtils::File - A File class</returns>
-	Battery::File ReadFile(const std::string& path, bool binary = false);
-
-	/// <summary>
-	/// Write a file to memory at the given path. When the parent directory does not exist, it
-	/// is created with PrepareDirectory()
-	/// </summary>
-	/// <param name="path">- The complete filename and path</param>
-	/// <param name="content">- The content of the file</param>
-	/// <returns>bool - if successful</returns>
-	bool WriteFile(const std::string& path, const std::string& content, bool binary = false);
-
-	/// <summary>
-	/// Delete a file or empty directory from memory
-	/// </summary>
-	/// <param name="path">- The file to delete</param>
-	/// <returns>bool - if deletion was successful</returns>
-	bool RemoveFile(const std::string& path);
-
-	/// <summary>
-	/// Delete an entire directory, will recursively delete all files in it. 
-	/// Will also return true when the directory does not exist, but also when 
-	/// the given path is a file instead of a directory
-	/// </summary>
-	/// <param name="path">- The directory to delete</param>
-	/// <returns>bool - if deletion was successful</returns>
-	bool RemoveDirectory(const std::string& path);
-
-	/// <summary>
 	/// Delete the content of a directory, will recursively delete all files in it. 
 	/// The parent directory is not deleted. Returns true if all content was successfully deleted,
 	/// but returns false when the parent did not exist
 	/// </summary>
 	/// <param name="path">- The directory of which the content is to remove</param>
 	/// <returns>bool - if content deletion was successful</returns>
-	bool RemoveDirectoryContent(const std::string& path);
+	//bool RemoveDirectoryContent(const std::string& path);
 
 	/// <summary>
 	/// Prepare an empty directory: Check if it exists, delete all content or create it, 
@@ -152,7 +204,7 @@ namespace Battery {
 	/// </summary>
 	/// <param name="path">- The directory to prepare</param>
 	/// <returns>bool - if preparation was successful</returns>
-	bool PrepareEmptyDirectory(const std::string& path);
+	//bool PrepareEmptyDirectory(const std::string& path);
 
 	/// <summary>
 	/// Prepare a directory: Check if it exists or create it, but it does not delete any content if
@@ -160,96 +212,7 @@ namespace Battery {
 	/// </summary>
 	/// <param name="path">- The directory to prepare</param>
 	/// <returns>bool - if preparation was successful</returns>
-	bool PrepareDirectory(const std::string& path);
-
-
-
-
-
-
-
-	/// <summary>
-	/// Open a windows file dialog to choose a file for saving. Returns the full path of the selected saving location
-	/// or "" when no file was chosen
-	/// </summary>
-	/// <param name="acceptedFiles">- Filter of accepted file types, for example: { "*.*", "*.txt", "*.wav" }"</param>
-	/// <param name="parentWindow">- An Window reference to the parent window</param>
-	/// <param name="defaultLocation">- The default path at which the dialog starts when opened, "" for no default</param>
-	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
-	/// <returns>std::string - The full path to the file chosen</returns>
-	std::string PromptFileSaveDialog(const std::vector<std::string>& acceptedFilesArray,
-		std::optional<sf::WindowHandle> parentWindow = std::nullopt,
-		const std::string& defaultLocation = "");
-
-	/// <summary>
-	/// Open a windows file dialog to choose a file to load. Returns the full path of the selected loading location
-	/// or "" when no file was chosen
-	/// </summary>
-	/// <param name="acceptedFiles">- Filter of accepted file types, for example: { "*.*", "*.txt", "*.wav" }</param>
-	/// <param name="parentWindow">- An Window reference to the parent window</param>
-	/// <param name="defaultLocation">- The default path at which the dialog starts when opened, "" for no default</param>
-	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
-	/// <returns>std::string - The full path to the file chosen</returns>
-	std::string PromptFileOpenDialog(const std::vector<std::string>& acceptedFilesArray,
-		std::optional<sf::WindowHandle> parentWindow = std::nullopt,
-		const std::string& defaultLocation = "");
-
-	/// <summary>
-	/// Open a windows file dialog to choose multiple files to load. Returns the full path of the selected loading location
-	/// or "" when no file was chosen
-	/// </summary>
-	/// <param name="acceptedFiles">- Filter of accepted file types, for example: "*.*;*.txt;"</param>
-	/// <param name="parentWindow">- An ALLEGRO_DISPLAY pointer to the parent window, nullptr if none</param>
-	/// <param name="defaultLocation">- The default path at which the dialog starts when opened, "" for no default</param>
-	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
-	/// <returns>std::vector&lt;std::string&gt; - An array of the files chosen</returns>
-	std::vector<std::string> PromptFileOpenDialogMultiple(const std::vector<std::string>& acceptedFilesArray,
-		std::optional<sf::WindowHandle> parentWindow = std::nullopt,
-		const std::string& defaultLocation = "");
-
-	/// <summary>
-	/// Open a windows file dialog to choose a folder to load. Returns the full path of the selected loading location
-	/// or "" when no folder was chosen
-	/// </summary>
-	/// 
-	/// <param name="parentWindow">- An Window reference to the parent window</param>
-	/// <param name="defaultLocation">- The default path at which the dialog starts when opened, "" for no default</param>
-	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
-	/// <returns>std::string - The full path to the file chosen</returns>
-	std::string PromptFileOpenDialogFolder(std::optional<sf::WindowHandle> parentWindow = std::nullopt,
-		const std::string& defaultLocation = "");
-
-	/// <summary>
-	/// Save a file with a windows file dialog popup to choose the file location. When the file already exists, a dialog pops up. 
-	/// When successfully saved, the full path of the just saved file is returned, otherwise nothing is returned (""). 
-	/// When forceSave is true, the dialog is repeated until the file is saved, so this can be used when the file needs to be saved
-	/// because the program needs to close
-	/// </summary>
-	/// <param name="extension">- The file extension, which will be added to the name, for example "txt"</param>
-	/// <param name="fileContent">- The content of the file to save</param>
-	/// <param name="parentWindow">- The Window reference to the parent window if one exists</param>
-	/// <param name="defaultLocation">- The full path to the location when the dialog pops up</param>
-	/// <param name="forceSave">- When true, the dialog is repeated and only returns when the file has been successfully saved</param>
-	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
-	/// <returns>std::string - The full path to the saved file or ""</returns>
-	std::string SaveFileWithDialog(const char* extension, const std::string& fileContent,
-		std::optional<sf::WindowHandle> parentWindow = std::nullopt,
-		const std::string& defaultLocation = "", bool forceSave = false);
-
-	/// <summary>
-	/// Load a file with a windows file dialog popup to choose the file location.
-	/// When successfully loaded, a Battery::FileUtils::File class is returned, containing the content, the file location
-	/// and information if it's valid. When it's not valid, either no file was chosen or it could not be loaded.
-	/// </summary>
-	/// <param name="extension">- The file extension, which will be added to the name, for example "txt"</param>
-	/// <param name="parentWindow">- The ALLEGRO_DISPLAY pointer to the parent window if one exists</param>
-	/// <param name="defaultLocation">- The full path to the location when the dialog pops up</param>
-	/// <exception cref="Battery::Exception - Thrown when Allegro was not initialized before this function call"></exception>
-	/// <returns>File class - Containing information about the loaded file</returns>
-	Battery::File LoadFileWithDialog(const char* extension,
-		std::optional<sf::WindowHandle> parentWindow = std::nullopt,
-		const std::string& defaultLocation = "");
-
+	//bool PrepareDirectory(const std::string& path);
 
 
 

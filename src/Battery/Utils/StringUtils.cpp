@@ -1,9 +1,9 @@
 
 #include "Battery/Utils/StringUtils.h"
 
-namespace Battery {
+namespace Battery::String {
 
-	std::vector<std::string> SplitString(std::string str, char delimeter) {
+	std::vector<std::string> Split(std::string str, char delimeter) {
 		std::string::size_type b = 0;
 		std::vector<std::string> result;
 
@@ -16,7 +16,7 @@ namespace Battery {
 		return result;
 	}
 
-	std::string JoinStrings(std::vector<std::string> strings, std::string spacer) {
+	std::string Join(std::vector<std::string> strings, std::string spacer) {
 		std::string str = "";
 
 		for (size_t i = 0; i < strings.size(); i++) {
@@ -30,9 +30,29 @@ namespace Battery {
 		return str;
 	}
 
+    std::string Replace(std::string string, const std::string& from, const std::string& to) {
+        if (from.empty())
+            return string;
+        size_t start_pos = 0;
+        while ((start_pos = string.find(from, start_pos)) != std::string::npos) {
+            string.replace(start_pos, from.length(), to);
+            start_pos += to.length();
+        }
+        return string;
+    }
 
+    std::string ReplaceOne(std::string string, const std::string& from, const std::string& to, int occurrence) {
+        if (from.empty())
+            return string;
+        size_t start_pos = 0;
+        while ((start_pos = string.find(from, start_pos)) != std::string::npos) {
+            string.replace(start_pos, from.length(), to);
+            start_pos += to.length();
+        }
+        return string;
+    }
 
-
+    // TODO: Add REGEX functions
 
 	std::string ToUpperCase(const std::string& str) {
 		std::string s;
@@ -79,36 +99,6 @@ namespace Battery {
 	bool IsInAlphabet(char c) {
 		return IsUpperCase(c) || IsLowerCase(c);
 	}
-
-	std::wstring MultiByteToWideChar(const std::string& mbString) {
-
-		if (mbString.length() == 0)
-			return L"";
-
-		size_t bufferSize = std::mbstowcs(nullptr, mbString.c_str(), 0);
-		std::wstring wtext(bufferSize, 0);
-
-		std::mbstowcs(&wtext[0], mbString.c_str(), wtext.size());
-
-		return wtext;
-	}
-
-	std::string WideCharToMultiByte(const std::wstring& wString) {
-		return WideCharToMultiByte(wString.c_str());
-	}
-
-	std::string WideCharToMultiByte(const wchar_t* wString) {
-
-		if (wcslen(wString) == 0)
-			return "";
-
-		size_t bufferSize = std::wcstombs(nullptr, wString, 0);
-		std::string text(bufferSize, 0);
-
-		std::wcstombs(&text[0], wString, text.size());
-
-		return text;
-	}
 	
 	static const std::string base64_chars =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -119,7 +109,11 @@ namespace Battery {
 		return (isalnum(c) || (c == '+') || (c == '/'));
 	}
 
-	std::string EncodeBase64(void* buffer, size_t bufferSize) {
+    std::string EncodeBase64(const std::string& str) {
+        return EncodeBase64(str.data(), str.size());
+    }
+
+	std::string EncodeBase64(const void* buffer, size_t buffer_size) {
 		uint8_t* buf = (uint8_t*)buffer;
 		int i = 0;
 		int j = 0;
@@ -127,7 +121,7 @@ namespace Battery {
 		uint8_t char_array_4[4];
 
 		std::string ret;
-		while (bufferSize--) {
+		while (buffer_size--) {
 			char_array_3[i++] = *(buf++);
 			if (i == 3) {
 				char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
@@ -161,18 +155,22 @@ namespace Battery {
 	}
 
 	std::vector<uint8_t> DecodeBase64(const std::string& data) {
-		size_t in_len = data.size();
+		return DecodeBase64(data.data(), data.size());
+	}
+
+	std::vector<uint8_t> DecodeBase64(const void* buffer, size_t buffer_size) {
+        const uint8_t* buf = (const uint8_t*)buffer;
 		int i = 0;
 		int j = 0;
 		int in_ = 0;
 		uint8_t char_array_4[4], char_array_3[3];
 		std::vector<uint8_t> ret;
 
-		while (in_len-- && (data[in_] != '=') && is_base64(data[in_])) {
-			char_array_4[i++] = data[in_]; in_++;
+		while (buffer_size-- && (buf[in_] != '=') && is_base64(buf[in_])) {
+			char_array_4[i++] = buf[in_]; in_++;
 			if (i == 4) {
 				for (i = 0; i < 4; i++)
-					char_array_4[i] = base64_chars.find(char_array_4[i]);
+					char_array_4[i] = (uint8_t)base64_chars.find(char_array_4[i]);
 
 				char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
 				char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
@@ -189,7 +187,7 @@ namespace Battery {
 				char_array_4[j] = 0;
 
 			for (j = 0; j < 4; j++)
-				char_array_4[j] = base64_chars.find(char_array_4[j]);
+				char_array_4[j] = (uint8_t)base64_chars.find(char_array_4[j]);
 
 			char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
 			char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);

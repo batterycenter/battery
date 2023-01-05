@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Battery/pch.h"
-
 #define DEFAULT_IMGUI_PANEL_FLAGS \
 	ImGuiWindowFlags_NoTitleBar | \
 	ImGuiWindowFlags_NoMove | \
@@ -11,47 +9,46 @@
 
 namespace Battery {
 
-	template<typename... Targs>
 	class ImGuiPanel {
-
-		ImGuiWindowFlags flags;
-		bool hideWindow = false;
-
 	public:
-		std::string title;
+		std::string title = "panel";
 		glm::vec2 position;
 		glm::vec2 size;
 		bool mouseOnPanel = false;
 
-		ImGuiPanel(const std::string& title, glm::vec2 position, glm::vec2 size, ImGuiWindowFlags flags = DEFAULT_IMGUI_PANEL_FLAGS) {
-			this->title = title;
-			this->position = position;
-			this->size = size;
+		ImGuiPanel(std::function<void(void)> updateCallback, std::function<void(void)> renderCallback, ImGuiWindowFlags flags = DEFAULT_IMGUI_PANEL_FLAGS) {
+			this->updateCallback = updateCallback;
+			this->renderCallback = renderCallback;
 			this->flags = flags;
+			id = __id__;
+			__id__++;
 		}
 
-		void Update(Targs... args) {
-			hideWindow = false;
-			OnUpdate(args...);
+		void update() {
+			_hideWindow = false;
+			if (updateCallback)
+				updateCallback();
 		}
 
 		/// <summary>
-		/// Render the 
-		/// ImGui panel.
+		/// Render the ImGui panel.
 		/// </summary>
 		/// <param name="...args"> - Arbitrary number of parameters specified in the template</param>
 		/// <param name="flags"> - Optional flags per render call, when applied the stored flags are ignored</param>
-		void Render(Targs... args, std::optional<ImGuiWindowFlags_> flags = std::nullopt) {
+		void render(std::optional<ImGuiWindowFlags_> flags = std::nullopt) {
 
-			if (hideWindow)
+			if (_hideWindow)
 				return;
+
+			ImGui::PushID(id);
 
 			ImGui::SetNextWindowPos(ImVec2(position.x, position.y));
 			ImGui::SetNextWindowSize(ImVec2(size.x, size.y));
 			ImGui::GetStyle().WindowRounding = 0.0f;
 			ImGui::Begin(title.c_str(), nullptr, flags.has_value() ? flags.value() : this->flags);
 
-			OnRender(args...);
+			if (renderCallback)
+				renderCallback();
 
 			// Check if the mouse is hovering the panel, for the next frame to be consistent through update/render call
 			mouseOnPanel =	ImGui::GetMousePos().x >= ImGui::GetWindowPos().x &&
@@ -60,17 +57,26 @@ namespace Battery {
 							ImGui::GetMousePos().y <= ImGui::GetWindowPos().y + ImGui::GetWindowSize().y;
 
 			ImGui::End();
+
+			ImGui::PopID();
 		}
 
 		/// <summary>
 		/// Don't show this ImGui window. Must be called every frame in OnUpdate()
 		/// </summary>
-		void HideWindow() {
-			hideWindow = true;
+		void hideWindow() {
+			_hideWindow = true;
 		}
 
-		virtual void OnUpdate(Targs... args) = 0;
-		virtual void OnRender(Targs... args) = 0;
+	private:
+		ImGuiWindowFlags flags;
+		bool _hideWindow = false;
+
+		inline static size_t __id__ = 0;
+		size_t id = 0;
+
+		std::function<void(void)> updateCallback;
+		std::function<void(void)> renderCallback;
 	};
 
 }

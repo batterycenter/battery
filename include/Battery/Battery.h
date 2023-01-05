@@ -1,23 +1,26 @@
 #pragma once
 
-#include "Battery/pch.h"
-
+#include "Battery/Core/Main.h"
 #include "Battery/Core/Log.h"
-#include "Battery/Core/Application.h"
-#include "Battery/Core/ImGuiPanel.h"
-#include "Battery/Utils/TimeUtils.h"
+#include "Battery/Core/Exception.h"
 #include "Battery/Utils/FileUtils.h"
 #include "Battery/Utils/MathUtils.h"
-#include "Battery/Utils/ImGuiUtils.h"
 #include "Battery/Utils/StringUtils.h"
+#include "Battery/Utils/OsString.h"
 
-#include "SFML/Main.hpp"
-#include "SFML/Graphics.hpp"
-#include "SFML/System.hpp"
-#include "SFML/Network.hpp"
-#include "SFML/Audio.hpp"
-#include "SFML/Window.hpp"
+#ifdef BATTERY_FEATURES_GRAPHICS
+    #include "Battery/Core/Application.h"
+    #include "Battery/Core/ImGuiPanel.h"
+    #include "Battery/Utils/TimeUtils.h"
+    #include "Battery/Utils/ImGuiUtils.h"
+    #include "Battery/Utils/AppUtils.h"
+    #include "BatteryUI/BatteryUI.h"
+#endif
 
-#include "imgui-SFML.h"
+#include "Battery/Extern/json.hpp"
+#include "Battery/Extern/CLI11.hpp"
+#include "Battery/Extern/magic_enum.hpp"
+#include "Battery/Extern/rang.hpp"
+#include "Battery/Extern/semver.hpp"
 
-#pragma warning( disable : 4244 )	// Always suppress warning about possible loss of data
+#include "toml.hpp"

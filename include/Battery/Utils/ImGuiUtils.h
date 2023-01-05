@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Battery/pch.h"
+#include "Battery/common.h"
 
 static const ImWchar icons_ranges[3] = { 0xe005, 0xf8ff, 0 };
 
@@ -136,15 +136,12 @@ namespace Battery {
 		DropdownMenu() {}
 		DropdownMenu(const std::string& name) : name(name) {}
 
-		/// <summary>
-		/// Render the dropdown menu. Returns the array index of the currently selected item,
-		/// or -1 if the array is empty.
-		/// </summary>
-		size_t Draw();
+		void Draw(size_t& selectedItem);
 
 	private:
-		size_t selected = 0;
 		size_t specificID = objectID++;
 		inline static size_t objectID = 0;		// special ID for every class
 	};
+
+	void DrawImGuiSpinner(const char* label, float radius, float thickness, const ImU32& color);
 }

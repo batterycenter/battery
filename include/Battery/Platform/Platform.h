@@ -1,31 +1,69 @@
 #pragma once
 
-#ifdef _WIN32
+#ifdef BATTERY_ARCH_WINDOWS
 #include "Battery/Platform/win/win.h"
 #else
 #include "Battery/Platform/x11/x11.h"
 #endif
 
+#include "Battery/common.h"
+#include "Battery/Utils/OsString.h"
+
+#ifdef BATTERY_FEATURES_GRAPHICS
 #include "SFML/System.hpp"
+#include "Battery/Platform/TrayIcon.h"
+#endif // BATTERY_FEATURES_GRAPHICS
 
 namespace Battery {
 
-	void* platform_LockFileDescriptor(const std::string& file);
+	void* platform_LockFileDescriptor(const OsString& filepath);
 	void platform_UnlockFileDescriptor(void* fileDescriptor);
 
 	bool platform_ExtractArchive(const std::string& file, const std::string& targetDirectory, bool force);
 
-    std::pair<bool, size_t> platform_ExecuteShellCommandSilent(const std::string& command, bool hidden);
+    std::pair<bool, size_t> platform_ExecuteShellCommandSilent(const OsString& command, bool hidden);
 	
-	std::vector<uint8_t> platform_LoadEmbeddedResource(int id, const char* type);
+	std::vector<uint8_t> platform_LoadEmbeddedResource(int id, const OsString& type);
 
+#ifdef BATTERY_FEATURES_GRAPHICS
 	bool platform_IsFocused(sf::WindowHandle window);
 	void platform_Focus(sf::WindowHandle window);
 	void platform_Hide(sf::WindowHandle window);
 	void platform_Show(sf::WindowHandle window);
 	void platform_HideFromTaskbar(sf::WindowHandle window);
 	void platform_ShowInTaskbar(sf::WindowHandle window);
+	void platform_SetWindowTransparent(sf::WindowHandle window, bool transparent);
+	void platform_SetWindowAlpha(sf::WindowHandle window, uint8_t alpha);
+#endif // BATTERY_FEATURES_GRAPHICS
 
-	std::string platform_GetLastWin32ErrorAsString();
+	enum class MB_Buttons {
+		OK,
+		OK_CANCEL,
+		RETRY_CANCEL,
+		YES_NO,
+		YES_NO_CANCEL,
+		HELP,
+		CANCEL_TRY_CONTINUE,
+		ABORT_RETRY_IGNORE
+	};
 
+	enum class MB_Status {
+		OK,
+		YES,
+		NO,
+		CANCEL,			// also contains ABORT
+		RETRY,			// also contains TRY_AGAIN
+		CONTINUE		// also contains IGNORE
+	};
+
+	// defaultButton: 1, 2, 3 or 4
+	MB_Status MessageBoxError(const OsString& message, const OsString& title = "Error", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
+	MB_Status MessageBoxWarning(const OsString& message, const OsString& title = "Warning", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
+	MB_Status MessageBoxInfo(const OsString& message, const OsString& title = "Information", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
+
+	glm::vec2 GetUsableDesktopArea();
+
+#ifdef BATTERY_ARCH_WINDOWS
+    std::string GetLastWin32ErrorString();
+#endif
 }

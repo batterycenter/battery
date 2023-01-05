@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Battery/pch.h"
-
 namespace Battery {
 
 	template<typename T>
@@ -9,7 +7,7 @@ namespace Battery {
 		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 	}
 
-	glm::vec2 MapVec2(glm::vec2 x, glm::vec2 in_min, glm::vec2 in_max, glm::vec2 out_min, glm::vec2 out_max) {
+	static glm::vec2 MapVec2(glm::vec2 x, glm::vec2 in_min, glm::vec2 in_max, glm::vec2 out_min, glm::vec2 out_max) {
 		return { Map(x.x, in_min.x, in_max.x, out_min.x, out_max.x), 
 				 Map(x.y, in_min.y, in_max.y, out_min.y, out_max.y) };
 	}

@@ -35,6 +35,10 @@
 .vs
 *.sln
 
+# CLion folder
+cmake-build-*/
+
 # Miscellaneous
 bin/
 build/
+modules/
