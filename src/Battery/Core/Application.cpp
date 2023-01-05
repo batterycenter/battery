@@ -40,6 +40,12 @@ namespace Battery {
 		return SetWindowIcon(window, iconSize, &decoded[0], decoded.size());
 	}
 
+	void SetMouseCursor(sf::Cursor::Type type) {
+		sf::Cursor cursor;
+		if (cursor.loadFromSystem(type));
+			GetApp().window.setMouseCursor(cursor);
+	}
+
 	Application::Application() {
 		LOG_CORE_TRACE("Creating Application");
 		appPointer = this;
