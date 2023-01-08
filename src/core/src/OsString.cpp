@@ -1,8 +1,7 @@
 
-#include "Battery/Utils/OsString.h"
-#include <limits>
-#include <stdexcept>
-#include <iostream>
+#include "battery/core/OsString.h"
+#include "battery/core/common.h"
+#include "battery/core/platform.h"
 
 #ifdef BATTERY_ARCH_WINDOWS
 #include "windows.h"
@@ -10,26 +9,14 @@
 #error ARCH NOT YET SUPPORTED
 #endif
 
-namespace Battery {
+// TODO: Fix error and exception messages
+
+// TODO: Remove circular dependency and prevent possible infinite loop
+
+namespace battery {
 
 #ifdef BATTERY_ARCH_WINDOWS
     static std::string WcharToUtf8(const std::wstring& wString);
-
-    static std::string GetLastWin32ErrorString() {
-
-        DWORD errorMessageID = ::GetLastError();
-        if (errorMessageID == 0)
-            return "";
-
-        LPWSTR messageBuffer = nullptr;
-        size_t size = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                                     nullptr, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&messageBuffer, 0, nullptr);
-
-        std::wstring message(messageBuffer, size);
-        LocalFree(messageBuffer);
-
-        return WcharToUtf8(message);
-    }
 
     static std::wstring Utf8ToWchar(const std::string& mbString) {
         std::wstring buffer;
@@ -52,7 +39,7 @@ namespace Battery {
         );
 
         if (bufferSize == 0) {
-            Log::Critical("[WinAPI] Utf8ToWchar failed: {}", GetLastWin32ErrorString());    // TODO: Handle error gracefully
+            log::core::critical("[WinAPI] Utf8ToWchar failed: {}", get_last_win32_error());    // TODO: Handle error gracefully
             throw std::runtime_error(
                     "Cannot get result string length when converting from UTF-8 to UTF-16 (Utf8ToWchar failed).");
         }
@@ -68,7 +55,7 @@ namespace Battery {
         );
 
         if (result == 0) {
-            Log::Critical("[WinAPI] Utf8ToWchar failed: {}", GetLastWin32ErrorString());
+            log::core::critical("[WinAPI] Utf8ToWchar failed: {}", get_last_win32_error());
             throw std::runtime_error("Cannot convert from UTF-8 to UTF-16 (Utf8ToWchar failed).");
         }
 		
@@ -98,7 +85,7 @@ namespace Battery {
         );
 
         if (bufferSize == 0) {
-            Log::Critical("[WinAPI] WcharToUtf8 failed: {}", GetLastWin32ErrorString());
+            log::core::critical("[WinAPI] WcharToUtf8 failed: {}", get_last_win32_error());
             throw std::runtime_error(
                     "Cannot get result string length when converting from UTF-16 to UTF-8 (WcharToUtf8 failed).");
         }
@@ -116,7 +103,7 @@ namespace Battery {
         );
 
         if (result == 0) {
-            Log::Critical("[WinAPI] WcharToUtf8 failed: {}", GetLastWin32ErrorString());
+            log::core::critical("[WinAPI] WcharToUtf8 failed: {}", get_last_win32_error());
             throw std::runtime_error("Cannot convert from UTF-16 to UTF-8 (WcharToUtf8 failed).");
         }
 

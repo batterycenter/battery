@@ -1,7 +1,7 @@
-#ifndef BATTERY_EMBED_ENVIRONMENT_H
-#define BATTERY_EMBED_ENVIRONMENT_H
 
-
+// C-style header guards here because pragma once causes a warning in a precompiled header. TODO: Check this
+#ifndef BATTERY_CORE_ENVIRONMENT_H
+#define BATTERY_CORE_ENVIRONMENT_H
 
 #ifndef UNICODE
 #define UNICODE
@@ -35,7 +35,7 @@
     #pragma message "[Battery] Detected MSVC compiler"
     #endif
 #else
-    #error [Battery] Unknown compiler architecture! None of the supported compilers have been detected! Edit include/Battery/pch.hpp to add it at your own risk
+    #error [Battery] Unknown compiler architecture! None of the supported compilers have been detected! Edit battery/core/environment.h to add it at your own risk
 #endif
 
 // Platform definitions
@@ -84,7 +84,7 @@
         #pragma message "[Battery] Compiling for Linux/i386 (32-bit)"
         #endif
     #else
-        #error [Battery] Unknown architecure: None of the supported architectures have been detected! Edit include/Battery/pch.hpp to add it at your own risk
+        #error [Battery] Unknown architecure: None of the supported architectures have been detected! Edit battery/core/environment.h to add it at your own risk
     #endif
 
     /*#elif defined(__ARM_ARCH_2__)
@@ -169,28 +169,25 @@
         #pragma message "[Battery] Compiling for Linux/<unknown architecture>"
     #endif*/
 #elif __sun
-    #error [Battery] Solaris architecture is not supported yet! Feel free to add support yourself by editing include/Battery/pch.hpp, at your own risk.
+    #error [Battery] Solaris architecture is not supported yet! Feel free to add support yourself by editing battery/core/environment.h, at your own risk.
 #elif __FreeBSD__
-    #error [Battery] FreeBSD architecture is not supported yet! Feel free to add support yourself by editing include/Battery/pch.hpp, at your own risk.
+    #error [Battery] FreeBSD architecture is not supported yet! Feel free to add support yourself by editing battery/core/environment.h, at your own risk.
 #elif __NetBSD__
-    #error [Battery] NetBSD architecture is not supported yet! Feel free to add support yourself by editing include/Battery/pch.hpp, at your own risk.
+    #error [Battery] NetBSD architecture is not supported yet! Feel free to add support yourself by editing battery/core/environment.h, at your own risk.
 #elif __OpenBSD__
-    #error [Battery] OpenBSD architecture is not supported yet! Feel free to add support yourself by editing include/Battery/pch.hpp, at your own risk.
+    #error [Battery] OpenBSD architecture is not supported yet! Feel free to add support yourself by editing battery/core/environment.h, at your own risk.
 #elif __APPLE__
-    #error [Battery] Mac OS X architecture is not supported yet! Feel free to add support yourself by editing include/Battery/pch.hpp, at your own risk.
+    #error [Battery] Mac OS X architecture is not supported yet! Feel free to add support yourself by editing battery/core/environment.h, at your own risk.
 #elif __hpux
-    #error [Battery] HP-UX architecture is not supported yet! Feel free to add support yourself by editing include/Battery/pch.hpp, at your own risk.
+    #error [Battery] HP-UX architecture is not supported yet! Feel free to add support yourself by editing battery/core/environment.h, at your own risk.
 #elif __osf__
-    #error [Battery] TRU64 UNIX architecture is not supported yet! Feel free to add support yourself by editing include/Battery/pch.hpp, at your own risk.
+    #error [Battery] TRU64 UNIX architecture is not supported yet! Feel free to add support yourself by editing battery/core/environment.h, at your own risk.
 #elif __sgi
-    #error [Battery] Irix architecture is not supported yet! Feel free to add support yourself by editing include/Battery/pch.hpp, at your own risk.
+    #error [Battery] Irix architecture is not supported yet! Feel free to add support yourself by editing battery/core/environment.h, at your own risk.
 #elif _AIX
-    #error [Battery] AIX architecture is not supported yet! Feel free to add support yourself by editing include/Battery/pch.hpp, at your own risk.
+    #error [Battery] AIX architecture is not supported yet! Feel free to add support yourself by editing battery/core/environment.h, at your own risk.
 #else
-    #error [Battery] Unknown architecure! None of the supported architectures have been detected! Edit include/Battery/pch.hpp to add it at your own risk
+    #error [Battery] Unknown architecure! None of the supported architectures have been detected! Edit battery/core/environment.h to add it at your own risk
 #endif
-
-
-
 
 #endif //BATTERY_EMBED_ENVIRONMENT_H

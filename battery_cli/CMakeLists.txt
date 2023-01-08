@@ -1,11 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
-project(battery_cli LANGUAGES CXX)
+project(battery_cli VERSION 0.1.1 LANGUAGES C CXX)
 
-set(BATTERY_FEATURES_GRAPHICS off CACHE BOOL "" FORCE)
 add_subdirectory(.. battery)
 
 file(GLOB_RECURSE HEADER_FILES "include/*")
-battery_add_executable(battery_cli 
+battery_add_executable(battery_cli
     src/cli_new.cpp
     src/cli_configure.cpp
     src/cli_build.cpp
@@ -14,9 +13,9 @@ battery_add_executable(battery_cli
     src/main.cpp
     ${HEADER_FILES})
 
-set_target_properties(battery_cli PROPERTIES OUTPUT_NAME "battery")     # Call the executable just 'battery' instead of 'battery_cli'
+battery_set_output_name(battery_cli "battery")
 target_include_directories(battery_cli PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include)
-target_link_libraries(battery_cli Battery)
+target_link_libraries(battery_cli battery::core)
 
 battery_precompile_headers(battery_cli "${CMAKE_CURRENT_LIST_DIR}/include/pch.hpp")
 

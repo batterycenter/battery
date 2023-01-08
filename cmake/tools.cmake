@@ -1,4 +1,6 @@
 
+include(cmake/CPM.cmake)
+
 function(GET_GITHUB_DEPENDENCY NAME REQUIRED_FILE REPOSITORY_URL BRANCH)
     if (NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/${REQUIRED_FILE}")
         find_package(Git REQUIRED)
@@ -18,15 +20,6 @@ function(GET_GITHUB_DEPENDENCY NAME REQUIRED_FILE REPOSITORY_URL BRANCH)
     endif()
 endfunction()
 
-#function(USE_STATIC_RUNTIME TARGET)
-#    if (MSVC)
-#        set_property(TARGET ${TARGET_NAME} PROPERTY
-#                MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-#    else()
-#        target_compile_options(${TARGET} PRIVATE -static -static-libgcc -static-libstdc++ -Bstatic)
-#    endif()
-#endfunction()
-
 function(__APPLY_COMMON_TARGET_OPTIONS TARGET)  # For all libraries and executables
 
     # Set the C++ Standard
@@ -42,18 +35,18 @@ function(__APPLY_COMMON_TARGET_OPTIONS TARGET)  # For all libraries and executab
 
     if (WIN32)
         target_compile_definitions(${TARGET} PRIVATE
-            WIN32_LEAN_AND_MEAN      # Prevents Windows.h from adding unnecessary includes
-            NOMINMAX                 # Prevents Windows.h from defining min/max as macros
-            _CRT_SECURE_NO_WARNINGS
-            )
+                WIN32_LEAN_AND_MEAN      # Prevents Windows.h from adding unnecessary includes
+                NOMINMAX                 # Prevents Windows.h from defining min/max as macros
+                _CRT_SECURE_NO_WARNINGS
+                )
         target_compile_definitions(${TARGET} PRIVATE
-            UNICODE
-            _UNICODE
-            )
+                UNICODE
+                _UNICODE
+                )
     else()
         target_compile_options(${TARGET} PRIVATE -Wno-psabi)
     endif()
-    
+
     # Set common folders for the IDE
     battery_set_ide_folder("${CMAKE_CURRENT_LIST_DIR}/src" "Source Files")
     battery_set_ide_folder("${CMAKE_CURRENT_LIST_DIR}/include" "Header Files")
@@ -63,6 +56,25 @@ function(__APPLY_COMMON_TARGET_OPTIONS TARGET)  # For all libraries and executab
 endfunction()
 
 
+
+
+macro(BATTERY_INIT_HUNTER)
+    if (NOT DEFINED BATTERY_HUNTER_INIT_DONE)
+        if (DEFINED PROJECT_NAME)
+            message(FATAL_ERROR "Please include the Battery's .cmake file before any call to project(). This is required by Hunter, the embedded dependency manager for Battery. Detected project(${PROJECT_NAME})")
+        endif()
+
+        cmake_policy(PUSH)
+        cmake_policy(SET CMP0135 OLD)
+        include("${BATTERY_ROOT_DIR}/cmake/HunterGate.cmake")     # Initialize Hunter, our package manager
+        HunterGate(
+                URL "https://github.com/cpp-pm/hunter/archive/v0.24.13.tar.gz"
+                SHA1 "2bc7384b2bf27db5b3847739a6a5361fa04075e7"
+        )
+        cmake_policy(POP)
+        set(BATTERY_HUNTER_INIT_DONE ON)
+    endif()
+endmacro()
 
 function(BATTERY_ADD_LIBRARY TARGET_NAME TYPE)
 
@@ -89,14 +101,22 @@ endfunction()
 
 
 
+macro(BATTERY_ADD_PACKAGE)
+    CPMAddPackage(${ARGN})
+endmacro()
+
+function(BATTERY_SET_CACHE_VARIABLE VARIABLE VALUE)
+    set(${VARIABLE} ${VALUE} CACHE BOOL "" FORCE)
+endfunction()
+
+function(BATTERY_SET_OUTPUT_NAME TARGET NAME)
+    set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME ${NAME})
+endfunction()
+
 function(BATTERY_SET_IDE_FOLDER DIRECTORY LABEL)
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
     file(GLOB_RECURSE FILES "${DIRECTORY}/*")
     source_group(TREE "${DIRECTORY}" PREFIX ${LABEL} FILES ${FILES})
-endfunction()
-
-function(BATTERY_SET_CACHE_VARIABLE VARIABLE VALUE)
-    set(${VARIABLE} ${VALUE} CACHE BOOL "" FORCE)
 endfunction()
 
 function(BATTERY_PRECOMPILE_HEADERS TARGET FILE)
@@ -119,7 +139,7 @@ endfunction()
 function(BATTERY_EMBED TARGET FILE_NAME TYPE)
 
     if (NOT BATTERY_ROOT_DIR)
-        message(FATAL_ERROR "ERROR: Battery root directory has not been set. Did you include the Battery library?")
+        message(FATAL_ERROR "battery_embed(): Battery root directory has not been set. Did you include the Battery library?")
     endif()
 
     if (NOT BATTERY_EMBED_BUILT)
@@ -127,11 +147,11 @@ function(BATTERY_EMBED TARGET FILE_NAME TYPE)
         file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/battery_embed)
 
         execute_process(                # Configure the battery_embed project
-            COMMAND ${CMAKE_COMMAND} ${BATTERY_ROOT_DIR}/battery_embed -DCMAKE_BUILD_TYPE=Release
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/battery_embed
-            RESULT_VARIABLE RESULT
-            OUTPUT_VARIABLE OUTPUT
-        )
+                COMMAND ${CMAKE_COMMAND} ${BATTERY_ROOT_DIR}/battery_embed -DCMAKE_BUILD_TYPE=Release
+                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/battery_embed
+                RESULT_VARIABLE RESULT
+                OUTPUT_VARIABLE OUTPUT
+                )
         if (NOT ${RESULT} EQUAL 0)
             message(FATAL_ERROR "[Battery] The Battery-Embed tool failed to configure. Output: \n${OUTPUT}")
         endif()
@@ -139,11 +159,11 @@ function(BATTERY_EMBED TARGET FILE_NAME TYPE)
         include(ProcessorCount)
         ProcessorCount(N)
         execute_process(                # Build the battery_embed project
-            COMMAND ${CMAKE_COMMAND} --build .  -j${N} --config=Release
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/battery_embed
-            RESULT_VARIABLE RESULT
-            OUTPUT_VARIABLE OUTPUT
-        )
+                COMMAND ${CMAKE_COMMAND} --build .  -j${N} --config=Release
+                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/battery_embed
+                RESULT_VARIABLE RESULT
+                OUTPUT_VARIABLE OUTPUT
+                )
         if (NOT ${RESULT} EQUAL 0)
             message(FATAL_ERROR "[Battery] The Battery-Embed tool failed to build. Output: \n${OUTPUT}")
         endif()
@@ -154,42 +174,39 @@ function(BATTERY_EMBED TARGET FILE_NAME TYPE)
 
     # Now verify the tool and retrieve the resulting filename
     execute_process(
-        COMMAND ${CMAKE_CURRENT_BINARY_DIR}/battery_embed/Release/battery_embed.exe 
-                ${FILE_NAME} ${CMAKE_CURRENT_BINARY_DIR}/resources --print-src-name-only
-        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/
-        OUTPUT_VARIABLE SOURCE_FILE
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-        RESULT_VARIABLE RESULT
+            COMMAND ${CMAKE_CURRENT_BINARY_DIR}/battery_embed/Release/battery_embed.exe
+            ${FILE_NAME} ${CMAKE_CURRENT_BINARY_DIR}/resources --print-src-name-only
+            WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/
+            OUTPUT_VARIABLE SOURCE_FILE
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            RESULT_VARIABLE RESULT
     )
     if (NOT ${RESULT} EQUAL 0)
         message(FATAL_ERROR "[Battery] Battery-Embed could not be executed (${RESULT}): ${SOURCE_FILE}")
     endif()
 
-    # Link the source file to the target
-    get_filename_component(OUT_DIR_PARENT ${CMAKE_CURRENT_BINARY_DIR}/resources DIRECTORY)
-    target_include_directories(${TARGET} PUBLIC ${OUT_DIR_PARENT})
-    file(WRITE ${SOURCE_FILE} "")                       # Create an empty file, so that CMake can successfully link.
-    target_sources(${TARGET} PUBLIC "${SOURCE_FILE}")   # Will be overwritten at build time by Battery-Embed
-
-
-
-    # And finally let the file be embedded at build time
+    # Define the command to be run at build time
     if (${TYPE} STREQUAL "TEXT")
-        set(COMMAND_PRINT [Battery] -- Embedding text file ${FILE_NAME})
+        set(COMMAND_PRINT "Generating TEXT file ${FILE_NAME}")
         set(BINARY "")
     elseif(${TYPE} STREQUAL "BINARY")
-        set(COMMAND_PRINT [Battery] -- Embedding binary file ${FILE_NAME})
+        set(COMMAND_PRINT "Generating BINARY file ${FILE_NAME}")
         set(BINARY "--binary")
     else()
         message(FATAL_ERROR "Invalid file type given to battery_embed(). Can either be TEXT or BINARY")
     endif()
 
-    add_custom_command(TARGET ${TARGET}     # Print and then execute the embedding tool
-        PRE_BUILD
-        COMMAND echo ${COMMAND_PRINT} &&
-                     ${CMAKE_BINARY_DIR}/battery_embed/Release/battery_embed.exe
-                     ${FILE_NAME} ${CMAKE_CURRENT_BINARY_DIR}/resources ${BINARY}
-    )
+    add_custom_command(OUTPUT ${SOURCE_FILE}_nonexistent
+        COMMAND ${CMAKE_BINARY_DIR}/battery_embed/Release/battery_embed.exe     # TODO: This will not work on GCC
+            ${FILE_NAME} ${CMAKE_CURRENT_BINARY_DIR}/resources ${BINARY}
+        COMMENT ${COMMAND_PRINT}
+        )
+
+    # Link the source file to the target
+    get_filename_component(OUT_DIR_PARENT ${CMAKE_CURRENT_BINARY_DIR}/resources DIRECTORY)
+    target_include_directories(${TARGET} PUBLIC ${OUT_DIR_PARENT})
+    file(WRITE ${SOURCE_FILE} "[temporary file by cmake]")          # Create an empty file, so that CMake can successfully link.
+    target_sources(${TARGET} PUBLIC ${SOURCE_FILE} ${SOURCE_FILE}_nonexistent)   # File will be overwritten at build time by Battery-Embed
 
 endfunction()
 

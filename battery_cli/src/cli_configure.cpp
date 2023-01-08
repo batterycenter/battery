@@ -10,7 +10,7 @@
         return std::unexpected(Err{ Result::PROJECT_FILE_INVALID, "The project file " + BATTERY_PROJECT_FILE_NAME + " is invalid" }); \
     }
 
-std::expected<FS::Path, Err> project_root() {
+std::expected<fs::path, Err> project_root() {
     auto path_opt = find_project_root();
     if (!path_opt.has_value()) {
         return std::unexpected(Err{ Result::PROJECT_FILE_NOT_FOUND, 
@@ -21,9 +21,9 @@ std::expected<FS::Path, Err> project_root() {
     return path_opt.value();
 }
 
-std::expected<toml::value, Err> parse_project_file(const FS::Path& project_root) {
-    Battery::FS::Path project_file_path = Battery::FS::Path(project_root).append(BATTERY_PROJECT_FILE_NAME);
-	
+std::expected<toml::value, Err> parse_project_file(const fs::path& project_root) {
+    fs::path project_file_path = fs::path(project_root).append(BATTERY_PROJECT_FILE_NAME);
+
     TRY_TOML(
         return toml::parse(project_file_path);
     );
@@ -51,7 +51,7 @@ Err cli_configure() {
     // Find the root of the project
 	auto project_root_opt = project_root();
 	if (!project_root_opt) return project_root_opt.error();
-    Battery::FS::Path project_root = project_root_opt.value();
+    fs::path project_root = project_root_opt.value();
 	
     // Now we know where the project lives, parse project file
     auto project_file_opt = parse_project_file(project_root);
@@ -63,7 +63,7 @@ Err cli_configure() {
 	if (!project_data_opt) return project_data_opt.error();
 	ProjectData project_data = project_data_opt.value();
 
-    Log::Info("Battery project file found at {}:", project_root.to_string());
+    log::info("Battery project file found at {}:", project_root.to_string());
     std::cout << project_file << std::endl;
 
     return { Result::SUCCESS, "" };

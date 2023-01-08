@@ -2,4 +2,4 @@
 
 #include "pch.hpp"
 
-std::optional<FS::Path> find_project_root();
+std::optional<fs::path> find_project_root();

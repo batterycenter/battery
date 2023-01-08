@@ -2,6 +2,6 @@
 #ifndef BATTERY_CLI_PCH_
 #define BATTERY_CLI_PCH_
 
-#include "Battery/Battery.h"
+#include "battery/core/all.h"
 
 #endif // BATTERY_CLI_PCH_

@@ -2,6 +2,6 @@
 #include "battery_cli.h"
 
 Err cli_build() {
-    Log::Info("battery build command");
+    log::info("battery build command");
     return { Result::SUCCESS, "" };
 }

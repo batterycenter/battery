@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Battery/common.h"
+#include "battery/core/common.h"
 
-namespace Battery {
+namespace battery {
 
     class OsString {
     public:

@@ -14,6 +14,8 @@ https://github.com/agauniyal/rang -> Unlicensed
 
 https://github.com/Neargye/semver -> MIT License
 
+https://github.com/cpm-cmake/CPM.cmake -> MIT License
+
 TODO: Add unit testing
 
 TODO: Add pipelines and automate testing

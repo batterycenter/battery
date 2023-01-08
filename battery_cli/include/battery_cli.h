@@ -2,7 +2,7 @@
 
 #include "pch.hpp"
 #include "resources/version_txt.h"
-using namespace Battery;
+using namespace battery;
 
 #include "tools.h"
 #include "config.h"

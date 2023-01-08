@@ -1,7 +1,7 @@
 
 #ifdef _WIN32
 
-#include "Battery/Core/Log.h"
+#include "Battery/Core/log.h"
 #include "Battery/Platform/Platform.h"
 #include "Battery/Utils/StringUtils.h"
 #include "Battery/Utils/FileUtils.h"
@@ -150,70 +150,11 @@ namespace Battery {
 
 
 
-	static MB_Status win32_IDToEnum(int code) {
-		if (code == IDOK) return MB_Status::OK;
-		if (code == IDYES) return MB_Status::YES;
-		if (code == IDNO) return MB_Status::NO;
-		if (code == IDCANCEL) return MB_Status::CANCEL;
-		if (code == IDABORT) return MB_Status::CANCEL;
-		if (code == IDRETRY) return MB_Status::RETRY;
-		if (code == IDTRYAGAIN) return MB_Status::RETRY;
-		if (code == IDCONTINUE) return MB_Status::CONTINUE;
-		if (code == IDIGNORE) return MB_Status::CONTINUE;
-		return MB_Status::OK;
-	}
-
-	static int win32_BatteryEnumToMessageBoxEnum(MB_Buttons buttons) {
-		if (buttons == MB_Buttons::OK) return MB_OK;
-		if (buttons == MB_Buttons::OK_CANCEL) return MB_OKCANCEL;
-		if (buttons == MB_Buttons::RETRY_CANCEL) return MB_RETRYCANCEL;
-		if (buttons == MB_Buttons::YES_NO) return MB_YESNO;
-		if (buttons == MB_Buttons::YES_NO_CANCEL) return MB_YESNOCANCEL;
-		if (buttons == MB_Buttons::HELP) return MB_HELP;
-		if (buttons == MB_Buttons::CANCEL_TRY_CONTINUE) return MB_CANCELTRYCONTINUE;
-		if (buttons == MB_Buttons::ABORT_RETRY_IGNORE) return MB_ABORTRETRYIGNORE;
-		return MB_OK;
-	}
-
-	MB_Status MessageBoxError(const OsString& message, const OsString& title, MB_Buttons buttons, int defaultButton) {
-		int code = ::MessageBoxW(nullptr, message.wstr().c_str(), title.wstr().c_str(),
-			MB_ICONERROR | win32_BatteryEnumToMessageBoxEnum(buttons) | ((defaultButton - 1) * 256));
-		return win32_IDToEnum(code);
-	}
-
-	MB_Status MessageBoxWarning(const OsString& message, const OsString& title, MB_Buttons buttons, int defaultButton) {
-		int code = ::MessageBoxW(nullptr, message.wstr().c_str(), title.wstr().c_str(),
-			MB_ICONWARNING | win32_BatteryEnumToMessageBoxEnum(buttons) | ((defaultButton - 1) * 256));
-		return win32_IDToEnum(code);
-	}
-
-	MB_Status MessageBoxInfo(const OsString& message, const OsString& title, MB_Buttons buttons, int defaultButton) {
-		int code = ::MessageBoxW(nullptr, message.wstr().c_str(), title.wstr().c_str(),
-			MB_ICONINFORMATION | win32_BatteryEnumToMessageBoxEnum(buttons) | ((defaultButton - 1) * 256));
-		return win32_IDToEnum(code);
-	}
-
 	glm::vec2 GetUsableDesktopArea() {
 		RECT xy;
 		BOOL fResult = SystemParametersInfo(SPI_GETWORKAREA, 0, &xy, 0);
 		return { xy.right - xy.left, xy.bottom - xy.top };
 	}
-
-    std::string GetLastWin32ErrorString() {
-
-        DWORD errorMessageID = ::GetLastError();
-        if (errorMessageID == 0)
-            return "";
-
-        LPWSTR messageBuffer = nullptr;
-        size_t size = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                                     nullptr, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&messageBuffer, 0, nullptr);
-
-        std::wstring message(messageBuffer, size);		// TODO: Check if buffer is still alive or if string is copied
-        LocalFree(messageBuffer);
-
-        return OsString(message);
-    }
 
 }
 

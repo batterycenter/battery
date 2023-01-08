@@ -18,7 +18,7 @@ Err parse_cli(const Args_t& args) {
     batterycli.require_subcommand(1);  // need exactly 1 subcommand
 
     try {
-        batterycli.parse(args.size(), ArgsToCStr(args));
+        batterycli.parse(args.size(), args_to_cstr(args));
     } catch(const CLI::ParseError &e) {
         batterycli.exit(e);     // Simply print the error. We are not interested in the error code
         return { Result::CLI_INVALID_ARGUMENTS, "Invalid arguments were given, CLI failed to parse" };
@@ -40,11 +40,11 @@ Err parse_cli(const Args_t& args) {
     return { Result::INTERNAL_ERROR, "Unreachable Code: Somehow the subcommand check got bypassed, this should be impossible..." };
 }
 
-int Battery::Main(const Args_t& args) {
+int battery::main(const Args_t& args) {
 
     auto [errorcode, errormessage] = parse_cli(args);
     if ((int)errorcode > 0) {                               // Only error codes greater than 0 are printed
-        Log::Error("Error {} {}: {}", (int)errorcode, magic_enum::enum_name(errorcode), errormessage);
+        log::error("Error {} {}: {}", (int)errorcode, magic_enum::enum_name(errorcode), errormessage);
     }
     return (int)errorcode;
 }

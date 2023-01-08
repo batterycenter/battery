@@ -36,34 +36,6 @@ namespace Battery {
 	void platform_SetWindowAlpha(sf::WindowHandle window, uint8_t alpha);
 #endif // BATTERY_FEATURES_GRAPHICS
 
-	enum class MB_Buttons {
-		OK,
-		OK_CANCEL,
-		RETRY_CANCEL,
-		YES_NO,
-		YES_NO_CANCEL,
-		HELP,
-		CANCEL_TRY_CONTINUE,
-		ABORT_RETRY_IGNORE
-	};
-
-	enum class MB_Status {
-		OK,
-		YES,
-		NO,
-		CANCEL,			// also contains ABORT
-		RETRY,			// also contains TRY_AGAIN
-		CONTINUE		// also contains IGNORE
-	};
-
-	// defaultButton: 1, 2, 3 or 4
-	MB_Status MessageBoxError(const OsString& message, const OsString& title = "Error", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
-	MB_Status MessageBoxWarning(const OsString& message, const OsString& title = "Warning", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
-	MB_Status MessageBoxInfo(const OsString& message, const OsString& title = "Information", MB_Buttons buttons = MB_Buttons::OK, int defaultButton = 1);
-
 	glm::vec2 GetUsableDesktopArea();
 
-#ifdef BATTERY_ARCH_WINDOWS
-    std::string GetLastWin32ErrorString();
-#endif
 }
