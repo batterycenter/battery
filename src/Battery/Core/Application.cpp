@@ -47,6 +47,12 @@ namespace Battery {
 		return SetWindowIcon(window, iconSize, &decoded[0], decoded.size());
 	}
 
+	void SetMouseCursor(sf::Cursor::Type type) {
+		sf::Cursor cursor;
+		if (cursor.loadFromSystem(type));
+			GetApp().window.setMouseCursor(cursor);
+	}
+
 	void SetWindowTransparent(sf::RenderWindow& window, bool transparent) {
 		platform_SetWindowTransparent(window.getSystemHandle(), transparent);
 	}

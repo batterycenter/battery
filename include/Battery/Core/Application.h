@@ -16,6 +16,7 @@ namespace Battery {
 	bool SetWindowIcon(sf::RenderWindow& window, uint8_t iconSize, void* data, size_t dataSize);
 	void SetWindowIcon(sf::RenderWindow& window, uint8_t iconSize, sf::Image image);
 	bool SetWindowIconBase64(sf::RenderWindow& window, uint8_t iconSize, const std::string& data);
+	void SetMouseCursor(sf::Cursor::Type type);
 	void SetWindowTransparent(sf::RenderWindow& window, bool transparent);
 	void SetWindowAlpha(sf::RenderWindow& window, uint8_t alpha);
 	void SetWindowFocus(sf::RenderWindow& window);
