@@ -42,3 +42,4 @@ cmake-build-*/
 bin/
 build/
 modules/
+battery.toml
