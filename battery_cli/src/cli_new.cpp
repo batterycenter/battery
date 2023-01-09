@@ -1,5 +1,5 @@
 
-#include "battery_cli.h"
+#include "tools.h"
 
 Err cli_new() {
     log::info("battery new command");

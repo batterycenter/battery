@@ -4,7 +4,8 @@
 /// \author Florian Zachs
 ///
 
-#include "battery/core/common.h"
+#include <string>
+#include <vector>
 
 ///
 /// \brief Battery::String module -> Various string manipulation utilities

@@ -1,7 +1,10 @@
 #pragma once
 
-#include "battery/core/common.h"
 #include "battery/core/OsString.h"
+#include <filesystem>
+#include <string>
+#include <fstream>
+#include <functional>
 
 // First of all, allow std::u8string to be printed to std::cout
 inline std::ostream& operator<<(std::ostream& os, const std::u8string& str) {

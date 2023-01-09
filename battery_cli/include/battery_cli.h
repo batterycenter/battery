@@ -4,8 +4,13 @@
 #include "resources/version_txt.h"
 using namespace battery;
 
-#include "tools.h"
 #include "config.h"
+
+struct ProjectData {
+    fs::path project_root;
+    std::string project_name;
+    semver::version project_version;
+};
 
 enum class Result {
     SUCCESS = 0,

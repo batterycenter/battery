@@ -2,7 +2,7 @@
 
 #include "Battery/Core/Main.h"
 #include "Battery/Core/log.h"
-#include "Battery/Core/Exception.h"
+#include "Battery/Core/exception.h"
 #include "Battery/Utils/FileUtils.h"
 #include "Battery/Utils/MathUtils.h"
 #include "Battery/Utils/StringUtils.h"

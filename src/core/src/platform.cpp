@@ -1,4 +1,5 @@
 
+#include "battery/core/environment.h"
 #include "battery/core/platform.h"
 #include "battery/core/OsString.h"
 

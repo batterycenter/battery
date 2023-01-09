@@ -1,7 +1,8 @@
 #pragma once
 
-#include "battery/core/common.h"
+#include "battery/core/environment.h"
 #include "battery/core/OsString.h"
+#include <string>
 
 namespace battery {
 

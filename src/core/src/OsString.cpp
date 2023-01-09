@@ -1,7 +1,10 @@
 
+#include "battery/core/environment.h"
 #include "battery/core/OsString.h"
-#include "battery/core/common.h"
+#include "battery/core/log.h"
 #include "battery/core/platform.h"
+
+#include <stdexcept>
 
 #ifdef BATTERY_ARCH_WINDOWS
 #include "windows.h"

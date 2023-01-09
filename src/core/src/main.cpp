@@ -1,8 +1,10 @@
 
-#include "battery/core/common.h"
+#include "battery/core/environment.h"
 #include "battery/core/main.h"
+#include "battery/core/log.h"
 #include "battery/core/platform.h"
 #include "battery/core/OsString.h"
+#include "battery/core/exception.h"
 
 namespace battery {
 	
@@ -42,6 +44,25 @@ static std::vector<std::string> retrieve_windows_args() {
 #endif
 
 
+int run_main(const battery::Args_t& args) {
+    try {
+        // And now call the actual entry point, defined by the user
+        return battery::main(args);
+    }
+    catch (const battery::exception& e) {
+        battery::log::core::critical("[battery::exception]: {}", e.what());
+        battery::message_box_error(std::format("[battery::exception]: {}", e.what()));
+    }
+    catch (const std::exception& e) {
+        battery::log::core::critical("[std::exception]: {}", e.what());
+        battery::message_box_error(std::format("[std::exception]: {}", e.what()));
+    }
+    catch (...) {
+        battery::log::core::critical("Unidentifiable exception caught, no further information");
+        battery::message_box_error("Unidentifiable exception caught, no further information");
+    }
+    return -1;
+}
 
 // This is the main entry point for everything
 int main(int argc, const char** argv) {
@@ -58,6 +79,5 @@ int main(int argc, const char** argv) {
     args = { argv, argv + argc };
 #endif
 
-    // And now call the actual entry point, defined by the user
-    return battery::main(args);
+    return run_main(args);
 }

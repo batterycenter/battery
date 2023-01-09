@@ -168,3 +168,6 @@ The only disadvantage with this is that this operation might not be supported on
     std::filesystem::current_path(path); 			// set path
 
 add_custom_command() PRE_BUILD is Visual Studio only !!!!!!
+
+WinAPI docs: 
+WinAPI docs: Do not consider examples, they are outdated!

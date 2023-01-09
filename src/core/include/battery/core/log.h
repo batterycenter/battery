@@ -31,10 +31,10 @@ namespace battery::log {
     inline void __init() {
         if (!internal::core_logger || !internal::user_logger) {
             internal::core_logger = spdlog::stdout_color_mt("battery");
-            internal::core_logger->set_level((spdlog::level::level_enum)Level::Info);
+            internal::core_logger->set_level((spdlog::level::level_enum)Level::Debug);
             internal::core_logger->set_pattern("%^[%T] [%n] %v%$");
             internal::user_logger = spdlog::stdout_color_mt("user");
-            internal::user_logger->set_level((spdlog::level::level_enum)Level::Info);
+            internal::user_logger->set_level((spdlog::level::level_enum)Level::Debug);
             internal::user_logger->set_pattern("%^[%T] %v%$");
         }
     }
