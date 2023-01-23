@@ -8,20 +8,32 @@ namespace battery {
     class process {
     public:
 
-        fs::path executable;
-        std::vector<std::string> args;
-        fs::path working_directory;
+        enum class redirect {
+            PARENT,
+            MEMORY
+        };
+
+        struct {
+            std::vector<std::string> command;
+            std::optional<fs::path> working_directory;
+            enum redirect redirect = redirect::PARENT;
+            int timeout_ms = 0;
+        } in;
+
+        struct {
+            int status = 0;
+            std::string error_message;
+            std::string output;
+        } out;
 
         process();
         ~process();
 
-        [[nodiscard]] void execute();
+        bool execute();
         void execute_async();
-        [[nodiscard]] void join();
+        bool join();
 
     private:
-        std::pair<int, std::string> error;
-
         void run_process();
 
         battery::thread thread;

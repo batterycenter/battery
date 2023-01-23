@@ -1,6 +1,8 @@
 
 battery_add_package("gh:gabime/spdlog#v1.11.0")
 battery_add_package("gh:ToruNiina/toml11#v3.7.1")
+set(REPROC++ ON)
+battery_add_package("gh:DaanDeMeyer/reproc#v14.2.4")
 
 battery_add_library(battery_core STATIC                 # Also add all headers so they're shown correctly in IDEs
 
@@ -35,4 +37,4 @@ add_library(battery::core ALIAS battery_core)
 
 target_include_directories(battery_core PUBLIC include)
 
-target_link_libraries(battery_core spdlog::spdlog toml11::toml11)
+target_link_libraries(battery_core spdlog::spdlog toml11::toml11 reproc++)

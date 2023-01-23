@@ -4,7 +4,8 @@
 #include "battery/core/exception.h"
 #include "battery/core/log.h"
 
-#include <windows.h>
+#include "reproc++/reproc.hpp"
+#include "reproc++/drain.hpp"
 
 namespace battery {
 
@@ -19,7 +20,7 @@ namespace battery {
         }
     }
 
-    void process::execute() {
+    bool process::execute() {
         std::unique_lock<std::mutex> lock(func_mutex);
 
         if (thread.joinable())
@@ -27,6 +28,7 @@ namespace battery {
 
         thread = battery::thread([&] { run_process(); });
         thread.join();
+        return out.status == 0;
     }
 
     void process::execute_async() {
@@ -38,61 +40,68 @@ namespace battery {
         thread = battery::thread([&] { run_process(); });
     }
 
-    void process::join() {
+    bool process::join() {
         std::unique_lock<std::mutex> lock(func_mutex);
 
         if (!thread.joinable())
             throw battery::exception("battery::process::join(): Cannot join process, there is nothing to join. Did you intend to use .execute_async() instead of .execute()?");
 
         thread.join();
+        return out.status == 0;
     }
 
-    void process::run_process() {
+    void process::run_process() {   // TODO !!!!! : Process stdout and stdin has no unicode support!!!
 
-#ifdef BATTERY_ARCH_WINDOWS
-        STARTUPINFOW si;
-        ZeroMemory( &si, sizeof(si) );  // Write zeros over the entire struct because the WinAPI does not initialize variables
-        si.cb = sizeof(si);
+        // Convert commands from STL vector to raw C-style string pointers
+        std::vector<const char*> cmd_cstr;
+        for (auto& c : in.command) cmd_cstr.emplace_back(c.c_str());
+        cmd_cstr.emplace_back(nullptr);
 
-        PROCESS_INFORMATION pi;
-        ZeroMemory( &pi, sizeof(pi) );  // Write zeros over the entire struct because the WinAPI does not initialize variables
-
-        std::string cmd = executable.to_string() + " "; // Forge a single string to be called as a command line
-        for (auto& arg : args) {
-            if (cmd.contains(" ")) {
-                cmd += "\"" + arg + "\" ";
-            }
-            else {
-                cmd += arg + " ";
-            }
+        // Define how to start the process
+        reproc::process process;
+        std::error_code ec;
+        reproc::options options;
+        options.deadline = reproc::milliseconds(in.timeout_ms);
+        if (in.redirect == redirect::PARENT) {
+            options.redirect.parent = true;
         }
-        cmd.pop_back();
-        OsString os_cmd = cmd;
+        std::string workdir = in.working_directory.has_value() ? in.working_directory->to_string() : "";
+        options.working_directory = !workdir.empty() ? workdir.c_str() : nullptr;
 
-        if (!CreateProcess( NULL,           // No module name (use command line)
-                            (LPWSTR)os_cmd.wstr().c_str(),
-                            NULL,           // Process handle not inheritable
-                            NULL,           // Thread handle not inheritable
-                            FALSE,          // Set handle inheritance to FALSE
-                            0,              // No creation flags
-                            NULL,           // Use parent's environment block
-                            OsString(working_directory.to_string()).wstr().c_str(),
-                            &si,            // Pointer to STARTUPINFO structure
-                            &pi )           // Pointer to PROCESS_INFORMATION structure
-                )
-        {
-            error = std::make_pair(GetLastError(), battery::get_last_win32_error());
+        // Now start and detach the process
+        ec = process.start(cmd_cstr.data(), options);
+        if (ec) {
+            out.status = ec.value();
+            out.error_message = ec.message();
+            out.output = "";
             return;
         }
 
-        WaitForSingleObject( pi.hProcess, INFINITE );
+        // Define how to handle stdout and stderr
+        std::string output;
+        reproc::sink::string sink(output);
+        ec = drain(process, sink, reproc::sink::null);
+        if (ec) {
+            out.status = ec.value();
+            out.error_message = ec.message();
+            out.output = "";
+            return;
+        }
 
-        CloseHandle( pi.hProcess );
-        CloseHandle( pi.hThread );
-#else
-#error Architecture not supported yet!
-#endif
+        // And finally join the process and wait until it finishes
+        auto [status, _ec] = process.stop(options.stop);
+        if (_ec) {
+            out.status = _ec.value();
+            out.error_message = _ec.message();
+            out.output = "";
+            return;
+        }
 
+        out.output = output;
+        out.error_message = _ec.message();
+        out.status = status;
+
+        //log::info("Result: {} {} \n{}", status, _ec.message(), output);
     }
 
 }
