@@ -58,6 +58,7 @@ std::expected<ProjectData, Err> extract_project_file_data(const fs::path& root, 
             auto& str = toml::find<std::string>(project_file, "project_version");
             data.project_version = semver::from_string(str)
     );
+    TRY_TOML(data.cmake_path = toml::find<std::string>(project_file, "cmake_path"));
     data.project_root = root;
 
     return data;

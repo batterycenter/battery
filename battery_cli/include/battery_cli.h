@@ -10,6 +10,7 @@ struct ProjectData {
     fs::path project_root;
     std::string project_name;
     semver::version project_version;
+    std::string cmake_path;
 };
 
 enum class Result {
@@ -22,6 +23,7 @@ enum class Result {
     // Negative error codes: Recorded and returned silently, but no console print (print already happened elsewhere)
     CLI_INVALID_ARGUMENTS = -1,
     PROJECT_FILE_INVALID = -2,
+    SUBPROCESS_FAILED = -3,
 };
 
 using Err = std::pair<Result, std::string>;

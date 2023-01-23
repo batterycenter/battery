@@ -45,6 +45,12 @@ namespace battery::fs {
 
     };
 
+    inline fs::path operator+(const fs::path& a, const std::string& b) {
+        fs::path path = a;
+        path.append(b);
+        return path;
+    }
+
     enum class Mode {
         TEXT,
         BINARY

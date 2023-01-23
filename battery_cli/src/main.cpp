@@ -49,21 +49,12 @@ static void test(int z) {
 
 int battery::main(const Args_t& args) {
 
-    battery::process process;
-    process.in.redirect = process::redirect::PARENT;
-    process.in.working_directory = "../../";
-    process.in.command = { "cmd.exe", "/c", "dir", "&&", "tree", "&&", "echo", "hi" };
-
-    process.execute();
-
-    log::info("Result: {} {}", process.out.status, process.out.error_message);
-    log::info("Output: {}", process.out.output);
-
-    return 0;
+    log::pattern("%^>> %v%$");
 
     auto [errorcode, errormessage] = parse_cli(args);
     if ((int)errorcode > 0) {                               // Only error codes greater than 0 are printed
         log::error("Error {} {}: {}", (int)errorcode, magic_enum::enum_name(errorcode), errormessage);
     }
+
     return (int)errorcode;
 }

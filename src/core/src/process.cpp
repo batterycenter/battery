@@ -68,6 +68,10 @@ namespace battery {
         std::string workdir = in.working_directory.has_value() ? in.working_directory->to_string() : "";
         options.working_directory = !workdir.empty() ? workdir.c_str() : nullptr;
 
+        if (!fs::is_directory(options.working_directory)) {
+            throw battery::exception(std::string("Cannot run process in working directory ") + options.working_directory + ": No such file or directory");
+        }
+
         // Now start and detach the process
         ec = process.start(cmd_cstr.data(), options);
         if (ec) {
