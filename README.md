@@ -29,3 +29,7 @@ TODO: Properly implement install scripts for installing the CMake library and th
 TODO: Check support for network drives (filesystem)
 
 TODO: Allow battery_embed() CMake command take absolute paths
+
+Inspiration:
+
+[Battery1](assets/Battery1.png)
