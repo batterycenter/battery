@@ -1,11 +1,8 @@
 
-battery_add_package("gh:gabime/spdlog#v1.11.0")
-battery_add_package("gh:ToruNiina/toml11#v3.7.1")
-set(REPROC++ ON)
-battery_add_package("gh:DaanDeMeyer/reproc#v14.2.4")
+option(BATTERY_CORE_NO_MAIN "Prevent battery from defining the main() function internally" OFF)
 
-battery_add_library(battery_core STATIC                 # Also add all headers so they're shown correctly in IDEs
-
+# Battery core library
+battery_add_library(battery_core STATIC ALIAS battery::core   # Also add all headers so they're shown correctly in IDEs
     include/battery/core/extern/CLI11.hpp
     include/battery/core/extern/inja.hpp
     include/battery/core/extern/json.hpp
@@ -38,8 +35,24 @@ battery_add_library(battery_core STATIC                 # Also add all headers s
     src/string.cpp
 
     )
-add_library(battery::core ALIAS battery_core)
 
+# Properties
 target_include_directories(battery_core PUBLIC include)
 
+if (BATTERY_CORE_NO_MAIN)
+    target_compile_definitions(battery_core PUBLIC BATTERY_CORE_NO_MAIN)
+endif()
+
+# Download dependencies
+set(REPROC++ ON)
+battery_add_package("gh:DaanDeMeyer/reproc#v14.2.4")    # Library for running processes
+battery_add_package("gh:gabime/spdlog#v1.11.0")         # Logging library
+battery_add_package("gh:ToruNiina/toml11#v3.7.1")       # Toml fileformat parsing
+
+# Link dependencies
 target_link_libraries(battery_core spdlog::spdlog toml11::toml11 reproc++)
+
+# Unit-testing
+if(ENABLE_UNIT_TESTS)
+    add_subdirectory(tests)
+endif()

@@ -43,3 +43,4 @@ bin/
 build/
 modules/
 battery.toml
+Testing/

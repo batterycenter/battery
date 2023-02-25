@@ -58,32 +58,22 @@ endfunction()
 
 
 
-macro(BATTERY_INIT_HUNTER)
-    if (NOT DEFINED BATTERY_HUNTER_INIT_DONE)
-        if (DEFINED PROJECT_NAME)
-            message(FATAL_ERROR "Please include the Battery's .cmake file before any call to project(). This is required by Hunter, the embedded dependency manager for Battery. Detected project(${PROJECT_NAME})")
-        endif()
-
-        cmake_policy(PUSH)
-        cmake_policy(SET CMP0135 OLD)
-        include("${BATTERY_ROOT_DIR}/cmake/HunterGate.cmake")     # Initialize Hunter, our package manager
-        HunterGate(
-                URL "https://github.com/cpp-pm/hunter/archive/v0.24.13.tar.gz"
-                SHA1 "2bc7384b2bf27db5b3847739a6a5361fa04075e7"
-        )
-        cmake_policy(POP)
-        set(BATTERY_HUNTER_INIT_DONE ON)
-    endif()
-endmacro()
-
-function(BATTERY_ADD_LIBRARY TARGET_NAME TYPE)
+function(BATTERY_ADD_LIBRARY TARGET TYPE)
+    set(booleanArguments)
+    set(singleValueArguments ALIAS)
+    set(multiValueArguments TARGETS)
+    cmake_parse_arguments(ARGS "${options}" "${singleValueArguments}" "${multiValueArguments}" ${ARGN})
 
     # Define Target
-    add_library(${TARGET_NAME} ${TYPE} ${ARGN})
-    add_library(${TARGET_NAME}::${TARGET_NAME} ALIAS ${TARGET_NAME})
+    add_library(${TARGET} ${TYPE} ${ARGS_UNPARSED_ARGUMENTS})
+    if (${ARGS_ALIAS})
+        add_library(${ARGS_ALIAS} ALIAS ${TARGET})
+    else()
+        add_library(${TARGET}::${TARGET} ALIAS ${TARGET})
+    endif()
 
     # Apply things like C++ Standard, preprocessor defines, etc.
-    __apply_common_target_options(${TARGET_NAME})
+    __apply_common_target_options(${TARGET})
 
 endfunction()
 
@@ -95,6 +85,17 @@ function(BATTERY_ADD_EXECUTABLE TARGET_NAME)
     # Apply things like C++ Standard, preprocessor defines, etc.
     __apply_common_target_options(${TARGET_NAME})
 
+endfunction()
+
+function(BATTERY_ADD_TEST TARGET)
+    if (NOT BATTERY_GTEST_INCLUDED)
+        battery_add_package("gh:google/googletest#main")      # Live at head: main branch recommended
+        include(GoogleTest)
+        set(BATTERY_GTEST_INCLUDED ON PARENT_SCOPE)
+    endif()
+    battery_add_executable(${TARGET} ${ARGN})
+    target_link_libraries(${TARGET} gtest_main)
+    gtest_discover_tests(${TARGET})
 endfunction()
 
 

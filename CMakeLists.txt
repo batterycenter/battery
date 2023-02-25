@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.16)
-project(battery VERSION 0.1.1 LANGUAGES C CXX)
+cmake_minimum_required(VERSION 3.20)
+project(battery VERSION 0.1.1)
 
-set(BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR} PARENT_SCOPE)
+#set(BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR} PARENT_SCOPE)
 set(BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 include(cmake/tools.cmake)
@@ -9,6 +9,13 @@ include(cmake/tools.cmake)
 ##################################
 # Options: Library configuration #
 ##################################
+
+# Options
+option(ENABLE_UNIT_TESTS "Build and run all unit tests" ON)
+
+enable_testing()
+
+add_subdirectory(src/core)
 
 #option(BATTERY_BUILD_EXAMPLES "Build examples" on)
 #option(BATTERY_SHARED_LIB "Build shared library instead of static" off)
@@ -100,8 +107,6 @@ include(cmake/tools.cmake)
 #############################
 # Static library definition #
 #############################
-
-add_subdirectory(src/core)
 
 #if(MSVC)
 #    set_source_files_properties(

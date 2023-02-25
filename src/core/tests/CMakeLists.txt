@@ -1,0 +1,1 @@
+battery_add_test(battery_core_tests_filesystem_utf8 filesystem_utf-8.cpp)
