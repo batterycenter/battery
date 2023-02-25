@@ -1,46 +1,13 @@
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
-# Visual Studio folder
+# IDE files
+.idea
+.vscode
 .vs
-*.sln
 
-# CLion folder
+# Build artifacts
 cmake-build-*/
-
-# Miscellaneous
 bin/
 build/
-modules/
-battery.toml
 Testing/
+
+# Battery configuration file (to be removed from this list)
+battery.toml
