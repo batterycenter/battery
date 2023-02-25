@@ -5,10 +5,12 @@ add_subdirectory(.. battery)
 
 file(GLOB_RECURSE HEADER_FILES "include/*")
 battery_add_executable(battery_cli
+    src/app.cpp
     src/cli_new.cpp
     src/cli_configure.cpp
     src/cli_build.cpp
     src/cli_run.cpp
+    src/scripts.cpp
     src/tools.cpp
     src/main.cpp
     ${HEADER_FILES})

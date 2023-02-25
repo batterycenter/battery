@@ -1,7 +1,7 @@
 #pragma once
 
 #include "pch.hpp"
-#include "battery_cli.h"
+#include "app.h"
 
 std::optional<fs::path> find_project_root();
 

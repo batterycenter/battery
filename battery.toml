@@ -1,0 +1,9 @@
+project_name = "Battery"
+project_version = "0.1.2"
+cmake_path = "battery_cli/build"
+
+[scripts]
+#build = ["cmake", "--build", "."]
+#test = "gtest"
+#run = "./battery"
+#configure = ["cmake",  "..", "-DCONFIG=Release"]

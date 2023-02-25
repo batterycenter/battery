@@ -232,3 +232,7 @@ int battery::main(const Args_t& args) {
     }
     return (int)status;
 }
+
+int main(int argc, const char** argv) {
+    //battery::main();
+}

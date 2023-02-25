@@ -1,7 +1,7 @@
 #pragma once
 
 #include "pch.hpp"
-#include "resources/version_txt.h"
+//#include "resources/version_txt.h"
 using namespace battery;
 
 #include "config.h"
@@ -11,6 +11,8 @@ struct ProjectData {
     std::string project_name;
     semver::version project_version;
     std::string cmake_path;
+
+    std::unordered_map<std::string, std::string> scripts;
 };
 
 enum class Result {
@@ -28,10 +30,14 @@ enum class Result {
 
 using Err = std::pair<Result, std::string>;
 
-Err cli_new();
-Err cli_configure();
-Err cli_build();
-Err cli_run();
+Err cli_new(const ProjectData& project);
+Err cli_configure(const ProjectData& project);
+Err cli_build(const ProjectData& project);
+Err cli_run(const ProjectData& project);
+
+Err cmake_configure(const ProjectData& project);
+Err cmake_build(const ProjectData& project);
+Err cmake_run(const ProjectData& project);
 
 /*template<typename T>
 std::string rangToString(T color) {
@@ -46,3 +52,9 @@ std::string rangToString(T color) {
 
     return ss.str();
 }*/
+
+class App : public battery::Application {
+public:
+    App();
+    ~App();
+};

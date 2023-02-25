@@ -1,7 +1,6 @@
 
-// C-style header guards here because pragma once causes a warning in a precompiled header. TODO: Check this
-#ifndef BATTERY_CORE_ENVIRONMENT_H
-#define BATTERY_CORE_ENVIRONMENT_H
+#ifndef BATTERY_CORE_ENVIRONMENT_H_
+#define BATTERY_CORE_ENVIRONMENT_H_
 
 #ifndef UNICODE
 #define UNICODE
@@ -190,4 +189,4 @@
     #error [Battery] Unknown architecure! None of the supported architectures have been detected! Edit battery/core/environment.h to add it at your own risk
 #endif
 
-#endif //BATTERY_EMBED_ENVIRONMENT_H
+#endif // BATTERY_CORE_ENVIRONMENT_H_

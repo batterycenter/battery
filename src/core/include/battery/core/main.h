@@ -10,6 +10,6 @@ namespace battery {
 	const char** args_to_cstr(const Args_t& _args);
 
 	// This function is to be defined by the user (outside of Battery)
-    int main(const Args_t& args);
+    //int main(const Args_t& args);
 
 }

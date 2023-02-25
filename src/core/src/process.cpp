@@ -54,8 +54,14 @@ namespace battery {
 
         // Convert commands from STL vector to raw C-style string pointers
         std::vector<const char*> cmd_cstr;
+
+#ifdef BATTERY_ARCH_WINDOWS     // TODO: Check if this is cross-platform
+        cmd_cstr.push_back("cmd.exe");
+        cmd_cstr.push_back("/c");
+#endif
+
         for (auto& c : in.command) cmd_cstr.emplace_back(c.c_str());
-        cmd_cstr.emplace_back(nullptr);
+        cmd_cstr.emplace_back(nullptr);                 // TODO: Add feature for continuous memory stream for stdout
 
         // Define how to start the process
         reproc::process process;

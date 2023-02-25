@@ -1,5 +1,6 @@
 
-#include "battery_cli.h"
+#include "app.h"
+#include "scripts.h"
 
 std::optional<fs::path> find_project_root() {
     auto path = std::filesystem::current_path();
@@ -59,6 +60,19 @@ std::expected<ProjectData, Err> extract_project_file_data(const fs::path& root, 
             data.project_version = semver::from_string(str)
     );
     TRY_TOML(data.cmake_path = toml::find<std::string>(project_file, "cmake_path"));
+
+    load_default_scripts(data);
+
+    // Parse scripts table
+    TRY_TOML({
+        if (project_file.contains("scripts")) {
+            auto& table = toml::find(project_file, "scripts");
+            for (auto& [label, command] : toml::find(project_file, "scripts").as_table()) {
+                data.scripts[label] = command.as_string().str;
+            }
+        }
+    });
+
     data.project_root = root;
 
     return data;
@@ -70,6 +84,11 @@ std::expected<ProjectData, Err> fetch_project_data() {
     auto project_root_opt = project_root();
     if (!project_root_opt) return std::unexpected(project_root_opt.error());
     fs::path project_root = project_root_opt.value();
+
+    auto x = [&]() {
+        if (project_root_opt)
+            return project_root_opt.value();
+    };
 
     // Now we know where the project lives, parse project file
     auto project_file_opt = parse_project_file(project_root);

@@ -12,7 +12,9 @@
 #include "battery/core/extern/rang.hpp"
 #include "battery/core/extern/semver.hpp"
 
+#include "battery/core/Application.h"
 #include "battery/core/environment.h"
+#include "battery/core/error.h"
 #include "battery/core/fs.h"
 #include "battery/core/log.h"
 #include "battery/core/main.h"

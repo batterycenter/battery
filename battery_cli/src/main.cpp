@@ -1,9 +1,11 @@
 
+#include "app.h"
 #include "tools.h"
+#include "scripts.h"
 
 Err parse_cli(const Args_t& args) {
 
-    std::string version_message = CLI_PRODUCT_NAME + " version " + resources::version_txt.str();
+    std::string version_message = CLI_PRODUCT_NAME + " version ";// + resources::version_txt.str();     // TODO !!!!
     std::string message = version_message + "\n"
         "Your main tool for working with https://github.com/HerrNamenlos123/Battery\n"
         "Supports you with project generation, building, deploying to your cloud and more!\n";
@@ -24,37 +26,41 @@ Err parse_cli(const Args_t& args) {
         return { Result::CLI_INVALID_ARGUMENTS, "Invalid arguments were given, CLI failed to parse" };
     }
 
+    auto project_data_opt = fetch_project_data();
+    if (!project_data_opt) return project_data_opt.error();
+    ProjectData project = project_data_opt.value();
+
+    log::info("Battery project file found at {}:", project.project_root.to_string());
+    log::info("Project: {}", project.project_name);
+    log::info("Version: {}.{}.{}", project.project_version.major, project.project_version.minor, project.project_version.patch);
+
     if (batterycli_new->parsed()) {               // battery new ...
-        return cli_new();
+        return cli_new(project);
     }
     else if(batterycli_configure->parsed()) {     // battery configure ...
-        return cli_configure();
+        return run_script(project, "configure");
     }
     else if(batterycli_build->parsed()) {         // battery build ...
-        return cli_build();
+        return run_script(project, "build");
     }
-    else if(batterycli_run->parsed()) {           // battery run ...
-        return cli_run();
+    else if(batterycli_run->parsed()) {           // battery start ...
+        return run_script(project, "start");
     }
 
     return { Result::INTERNAL_ERROR, "Unreachable Code: Somehow the subcommand check got bypassed, this should be impossible..." };
 }
 
-static void test(int z) {
-    for (int i = 0; i < 5; i++) {
-        std::cout << "Hello world " << z << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
-}
+int main(int argc, const char** argv) {
 
-int battery::main(const Args_t& args) {
+    App app;
+    app.run(argc, argv, "battery_cli");
 
-    log::pattern("%^>> %v%$");
-
-    auto [errorcode, errormessage] = parse_cli(args);
-    if ((int)errorcode > 0) {                               // Only error codes greater than 0 are printed
-        log::error("Error {} {}: {}", (int)errorcode, magic_enum::enum_name(errorcode), errormessage);
-    }
-
-    return (int)errorcode;
+    //log::pattern("%^>> %v%$");  // Output format of log messages
+//
+    //auto [errorcode, errormessage] = parse_cli(args);
+    //if ((int)errorcode > 0) {                               // Only error codes greater than 0 are printed
+    //    log::error("Error {} {}: {}", (int)errorcode, magic_enum::enum_name(errorcode), errormessage);
+    //}
+//
+    //return (int)errorcode;
 }
