@@ -202,3 +202,5 @@ add_custom_command() PRE_BUILD is Visual Studio only !!!!!!
 
 WinAPI docs: 
 WinAPI docs: Do not consider examples, they are outdated!
+
+`std::source_location::current()` instead of __FUNC__ macros
