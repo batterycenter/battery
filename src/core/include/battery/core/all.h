@@ -4,6 +4,7 @@
 #include <cmath>
 #include <expected>
 #include <mutex>
+#include <source_location>
 
 #include "battery/core/Application.h"
 #include "battery/core/environment.h"

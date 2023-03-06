@@ -19,6 +19,7 @@ namespace battery::fs {
     using std::filesystem::status;					// Get filesystem status: what type of entry it is
     using std::filesystem::is_regular_file;
     using std::filesystem::is_directory;
+    using std::filesystem::current_path;
 
 
 

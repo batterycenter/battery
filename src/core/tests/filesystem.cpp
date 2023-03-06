@@ -1,8 +1,6 @@
 
 #include "battery/core/all.h"
 #include <gtest/gtest.h>
-#include <fstream>
-#include <filesystem>
 
 #ifndef TESTDATA_FOLDER
 #error TESTDATA_FOLDER is not defined! Something is wrong with the unit test build system!
@@ -10,8 +8,10 @@
 
 void change_to_testdata_folder() {
     std::cout << "Setting working directory to " << TESTDATA_FOLDER << std::endl;
-    std::filesystem::current_path(TESTDATA_FOLDER);
+    battery::fs::current_path(TESTDATA_FOLDER);
 }
+
+// TODO: Check current_path for UTF-8
 
 TEST(BatteryCore_Filesystem, ReadFileWithSpacesAndKanji) {
     change_to_testdata_folder();
