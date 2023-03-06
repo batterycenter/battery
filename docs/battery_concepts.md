@@ -31,11 +31,42 @@ What is important for us here is that Windows does not use `UTF-8`, which is the
 
 This is not a problem on Linux and Unix-like systems, as they are built on top of `UTF-8`, all the way through. You could think of it as unifying the application logic to always use `UTF-8` on every system, and on Windows you only convert to `UTF-16` when talking to Windows directly.
 
+## Terminology
+
+https://learnmoderncpp.com/2021/03/24/a-unicode-primer/
+
+ - ASCII is the most common character encoding, understood by everyone. It uses 7 bits only and one byte is one character.
+ - Extended ASCII adds more characters to the ASCII set and uses all 8 bits. It is not compatible with UTF-8.
+ - Unicode is the high-level definition of the character set. It assigns every character of the *Unicode character set* to a 32-bit *Unicode codepoint*. Then, a *Unicode codepoint* can be encoded in multiple ways, e.g. *UTF-8*, *UTF-16*, ...
+ - UTF-32 is the one-to-one encoding of *Unicode*, as every *codepoint* fits in 32 bits. Every character of a UTF-32 string uses 32 bits, always.
+ - UTF-8 is the most common encoding for *Unicode*, every character uses 1 to 4 bytes. Common ones use 1, less common ones use more. The most common ones only use a single byte and are equivalent to *(plain) ASCII*.
+ - UTF-16 follows the same rules as UTF-8, just that every character uses 1 or 2 *16-bit code units*, in other words 2 or 4 bytes, depending on the *Unicode codepoint* being encoded.
+ - UTF-7 is sometimes used to refer to *plain ASCII*. It is like UTF-8, but only single-byte characters are allowed. Thus, *UTF-7* is equivalent to *plain ASCII*.
+
+## Working with Unicode
+
+Following online tools can be used for working with Unicode. Be very cautious of the terminology used.
+
+In the following websites, *unicode* is equivalent to *utf-8*.  
+Be aware that you might have to set the base. If there is no dropdown menu for hexadecimal, set the base to 16 if your input is hexadecimal bytes.  
+
+Convert a *Unicode string* to their corresponding *Unicode codepoints*: https://onlineunicodetools.com/convert-unicode-to-code-points  
+
+Convert a *Unicode string* to their *utf-8 encoded bytes*: https://onlineunicodetools.com/convert-unicode-to-utf8  
+
+Convert *utf-8 encoded bytes* to a *Unicode string* (set base to 16 for hexadecimal bytes): https://onlineutf8tools.com/convert-bytes-to-utf8
+
+Many other converters are available on this site. Be careful of what exactly is encoded in which format. It's often not obvious.
+
 ## Source files
 
 To make `UTF-8` encoded string literals work, you must also save your source files as `UTF-8`. This is the default in most modern IDE's like Visual Studio Code or Jetbrains CLion.
 
 You can usually select the file encoding in the bottom right corner, it should always be set to `UTF-8` for every file you work with. This is necessary so that your compiler interprets the source file correctly, otherwise the string literals means something different to the compiler.
+CMake additionally adds a flag to parse every source file as `UTF-8`.
+
+Be aware that *u8 string literals* do not like byte-encoding.
+Never write `"\x23\x54\xfc"`-style strings, always use Unicode codepoints, like this: `"\uFC34"`.
 
 ## WinAPI / Linux API {#WIN_LINUX_API}
 

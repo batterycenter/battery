@@ -26,15 +26,14 @@ battery_add_library(battery_core STATIC ALIAS battery::core   # Also add all hea
     include/battery/core/internal/windows.h
 
     src/Application.cpp
+    src/exception.cpp
     src/fs.cpp
     src/log.cpp
     src/main.cpp
     src/OsString.cpp
     src/platform.cpp
     src/process.cpp
-    src/string.cpp
-
-    )
+    src/string.cpp)
 
 # Properties
 target_include_directories(battery_core PUBLIC include)
@@ -48,11 +47,12 @@ set(REPROC++ ON)
 battery_add_package("gh:DaanDeMeyer/reproc#v14.2.4")    # Library for running processes
 battery_add_package("gh:gabime/spdlog#v1.11.0")         # Logging library
 battery_add_package("gh:ToruNiina/toml11#v3.7.1")       # Toml fileformat parsing
+battery_add_package("gh:nemtrif/utfcpp#v3.2.3")         # UTF-8 conversions
 
 # Link dependencies
-target_link_libraries(battery_core spdlog::spdlog toml11::toml11 reproc++)
+target_link_libraries(battery_core spdlog::spdlog toml11::toml11 reproc++ utf8::cpp)
 
 # Unit-testing
-if(ENABLE_UNIT_TESTS)
+if(BUILD_TESTS)
     add_subdirectory(tests)
 endif()

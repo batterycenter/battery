@@ -28,9 +28,9 @@ function(__APPLY_COMMON_TARGET_OPTIONS TARGET)  # For all libraries and executab
 
     # Set common Preprocessor Flags
     if(MSVC)
-        string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /MP")      # TODO: Do this properly per-target
+        target_compile_options(${TARGET} PRIVATE /Zc:__cplusplus /MP /W2 /utf-8)
     else()
-        target_compile_options(${TARGET} PRIVATE -Wno-psabi)
+        target_compile_options(${TARGET} PRIVATE -Wno-psabi -Wall -Wextra)
     endif()
 
     if (WIN32)
@@ -43,8 +43,6 @@ function(__APPLY_COMMON_TARGET_OPTIONS TARGET)  # For all libraries and executab
                 UNICODE
                 _UNICODE
                 )
-    else()
-        target_compile_options(${TARGET} PRIVATE -Wno-psabi)
     endif()
 
     # Set common folders for the IDE
@@ -66,7 +64,7 @@ function(BATTERY_ADD_LIBRARY TARGET TYPE)
 
     # Define Target
     add_library(${TARGET} ${TYPE} ${ARGS_UNPARSED_ARGUMENTS})
-    if (${ARGS_ALIAS})
+    if (ARGS_ALIAS)
         add_library(${ARGS_ALIAS} ALIAS ${TARGET})
     else()
         add_library(${TARGET}::${TARGET} ALIAS ${TARGET})
@@ -89,6 +87,7 @@ endfunction()
 
 function(BATTERY_ADD_TEST TARGET)
     if (NOT BATTERY_GTEST_INCLUDED)
+        set(gtest_force_shared_crt "Use shared (DLL) run-time lib even when Google Test is built as static lib." ON FORCE)
         battery_add_package("gh:google/googletest#main")      # Live at head: main branch recommended
         include(GoogleTest)
         set(BATTERY_GTEST_INCLUDED ON PARENT_SCOPE)

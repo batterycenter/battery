@@ -5,11 +5,12 @@
 
 namespace battery {
 
-    using Args_t = std::vector<std::string>;
+	const char** args_to_cstr(const std::vector<std::string>& args);
 
-	const char** args_to_cstr(const Args_t& _args);
+	// This function is to be defined by the user (outside the Battery library)
+    int battery_main(const std::vector<std::string>& args);
 
-	// This function is to be defined by the user (outside of Battery)
-    //int main(const Args_t& args);
+    // This function is only to be called when BATTERY_CORE_NO_MAIN is defined
+    int run_main(int argc, const char** argv);
 
 }

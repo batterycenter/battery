@@ -1,16 +1,18 @@
 #pragma once
 
-#define BATTERY_EXCEPTION UI_EXCEPTION
-
 #include <exception>
 #include <string>
+#include <functional>
+
+#include "battery/core/platform.h"
+#include "battery/core/log.h"
 
 namespace battery {
 
 	class exception : public std::exception {
 	public:
         exception(const std::string& msg = "") : msg(msg) {}
-		const char* what() const noexcept {
+		const char* what() const noexcept override {
 			return msg.c_str();
 		}
 	
@@ -41,5 +43,24 @@ namespace battery {
         not_implemented_exception(const std::string& msg = "")
 		 : battery::exception(("battery::not_implemented_exception: " + msg).c_str()) {}
 	};
+
+    template<typename T>
+    void catch_common_exceptions(T func) {
+        try {
+            func();
+        }
+        catch (const battery::exception& e) {
+            battery::log::core::critical("[battery::exception]: {}", e.what());
+            battery::message_box_error(std::format("[battery::exception]: {}", e.what()));
+        }
+        catch (const std::exception& e) {
+            battery::log::core::critical("[std::exception]: {}", e.what());
+            battery::message_box_error(std::format("[std::exception]: {}", e.what()));
+        }
+        catch (...) {
+            battery::log::core::critical("Unidentifiable exception caught, no further information");
+            battery::message_box_error("Unidentifiable exception caught, no further information");
+        }
+    }
 
 }

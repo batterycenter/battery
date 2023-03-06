@@ -11,7 +11,7 @@ include(cmake/tools.cmake)
 ##################################
 
 # Options
-option(ENABLE_UNIT_TESTS "Build and run all unit tests" ON)
+option(BUILD_TESTS "Build all unit tests" ON)
 
 enable_testing()
 

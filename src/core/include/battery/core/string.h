@@ -6,6 +6,7 @@
 
 #include <string>
 #include <vector>
+#include <optional>
 
 ///
 /// \brief Battery::String module -> Various string manipulation utilities
@@ -22,7 +23,7 @@ namespace battery::string {
     /// \return An array of string tokens
     /// \see battery::string::join()
     ///
-    std::vector<std::string> split(std::string str, char delimeter);
+    std::vector<std::string_view> split(const std::string_view& str, char delimeter);
 
     ///
     /// \brief Takes an array of string tokens and joins them into a single string. The spacer string
@@ -32,7 +33,7 @@ namespace battery::string {
     /// \return The combined string
     /// \see battery::string::split()
     ///
-    std::string join(std::vector<std::string> strings, std::string spacer = "");
+    std::string join(const std::vector<std::string>& strings, const std::string_view& spacer = "");
 
     ///
     /// \brief Replace parts of a string with another string. The parameter `string` is iterated over
@@ -43,7 +44,7 @@ namespace battery::string {
     /// \return The modified string
     /// \see battery::string::replace_one()
     ///
-    std::string replace(std::string string, const std::string& from, const std::string& to);
+    std::string replace(std::string string, const std::string_view& from, const std::string_view& to);
 
     ///
     /// \brief Replace one part of a string with another string. The parameter `string` is iterated over
@@ -58,6 +59,25 @@ namespace battery::string {
     /// \return The modified string
     /// \see battery::string::replace()
     ///
-    std::string replace_one(std::string string, const std::string& from, const std::string& to, int occurrence = 0);
+    std::string replace_one(std::string string, const std::string_view& from, const std::string_view& to, int occurrence = 0);
+
+    ///
+    /// \brief Convert an std::u8string to an std::string. The returned string is a one-to-one copy of the
+    ///        utf-8 encoded bytes. No encoding is changed. This function cannot fail.
+    /// \param[in] str The std::u8string to be converted
+    /// \return The converted string
+    /// \see battery::string::string_to_u8string()
+    ///
+    std::string u8string_to_string(const std::u8string_view& str);
+
+    ///
+    /// \brief Convert an std::string to an std::u8string. The input is expected to be a string containing utf-8 encoded bytes.
+    ///        If the input contains an invalid utf-8 sequence, an exception is thrown.
+    /// \param[in] str The std::string to be converted
+    /// \throw std::invalid_argument on an invalid utf-8 sequence
+    /// \return The converted u8string.
+    /// \see battery::string::u8string_to_string()
+    ///
+    std::u8string string_to_u8string(const std::string_view& str);
 
 }
