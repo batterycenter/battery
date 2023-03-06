@@ -23,7 +23,7 @@ endfunction()
 function(__APPLY_COMMON_TARGET_OPTIONS TARGET)  # For all libraries and executables
 
     # Set the C++ Standard
-    target_compile_features(${TARGET} PRIVATE cxx_std_23)
+    target_compile_features(${TARGET} PRIVATE cxx_std_20)
     set_target_properties(${TARGET} PROPERTIES CXX_EXTENSIONS OFF)
 
     # Set common Preprocessor Flags
