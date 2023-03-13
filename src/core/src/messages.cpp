@@ -8,6 +8,8 @@
 #include <windows.h>
 #endif
 
+// TODO: Check if zenity is available at program startup
+
 namespace battery {
 
 #ifdef BATTERY_ARCH_WINDOWS
@@ -34,20 +36,35 @@ namespace battery {
         auto text = battery::string::utf8_to_osstring(message);
         ::MessageBoxW(nullptr, std::bit_cast<const wchar_t*>(text.c_str()), L"Error", MB_ICONINFORMATION | MB_OK);
 #else
-        //battery::process zenity;
-        //zenity.in.command = { "zenity" };
-        //zenity.in.redirect = battery::process::redirect::MEMORY;
+        battery::process zenity;
+        zenity.options.executable = "zenity";
+        zenity.options.arguments = { "--info", "--text=" + message };
+        zenity.execute_sync();
 #endif
     }
 
     void message_box_warning(const std::string& message) {
+#ifdef BATTERY_ARCH_WINDOWS
         auto text = battery::string::utf8_to_osstring(message);
         ::MessageBoxW(nullptr, std::bit_cast<const wchar_t*>(text.c_str()), L"Error", MB_ICONWARNING | MB_OK);
+#else
+        battery::process zenity;
+        zenity.options.executable = "zenity";
+        zenity.options.arguments = { "--warning", "--text=" + message };
+        zenity.execute_sync();
+#endif
     }
 
     void message_box_error(const std::string& message) {
+#ifdef BATTERY_ARCH_WINDOWS
         auto text = battery::string::utf8_to_osstring(message);
         ::MessageBoxW(nullptr, std::bit_cast<const wchar_t*>(text.c_str()), L"Error", MB_ICONERROR | MB_OK);
+#else
+        battery::process zenity;
+        zenity.options.executable = "zenity";
+        zenity.options.arguments = { "--error", "--text=" + message };
+        zenity.execute_sync();
+#endif
     }
 
 }
