@@ -29,14 +29,17 @@ TEST(BatteryCore_Process, ProcessRunsSuccessfullyAsync) {
     EXPECT_EQ(proc.exit_code, 100);
 }
 
-TEST(BatteryCore_Process, ProcessRedirectStdout) {
+TEST(BatteryCore_Process, ProcessRedirectStdoutUtf8) {
+    const char* p = "gtest.exe";
+    battery::run_main(1, &p);   // Run the battery main function to set up the Unicode codepage
+
     battery::process proc;
 #ifdef BATTERY_ARCH_WINDOWS
     proc.options.executable = "cmd.exe";
-    proc.options.arguments = { "/c", "echo unit test works" };
+    proc.options.arguments = { "/c", "echo unit test works: Süßölgefäß 国 分 高" };
 #else
     proc.options.executable = "bash";
-    proc.options.arguments = { "-c", "echo unit test works" };
+    proc.options.arguments = { "-c", "echo unit test works: Süßölgefäß 国 分 高" };
 #endif
     proc.options.suppress_carriage_return = true;
     proc.options.strip_trailing_whitespace_after_join = true;
@@ -45,8 +48,8 @@ TEST(BatteryCore_Process, ProcessRedirectStdout) {
         output += str;
     };
     proc.execute_sync();
-    EXPECT_EQ(proc.output_combined, "unit test works");
-    EXPECT_EQ(output, "unit test works\n");
+    EXPECT_EQ(proc.output_combined, "unit test works: Süßölgefäß 国 分 高");
+    EXPECT_EQ(output, "unit test works: Süßölgefäß 国 分 高\n");
     EXPECT_EQ(proc.exit_code, 0);
 }
 

@@ -5,5 +5,6 @@ target_compile_definitions(battery_core_tests PRIVATE TESTDATA_FOLDER="${CMAKE_C
 
 target_sources(battery_core_tests PRIVATE
     filesystem.cpp
+    main.cpp
     process.cpp
     string.cpp)

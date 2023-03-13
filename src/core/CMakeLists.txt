@@ -41,10 +41,6 @@ battery_add_library(battery_core STATIC ALIAS battery::core   # Also add all hea
 # Properties
 target_include_directories(battery_core PUBLIC include)
 
-if (BATTERY_CORE_NO_MAIN)
-    target_compile_definitions(battery_core PUBLIC BATTERY_CORE_NO_MAIN)
-endif()
-
 # Download dependencies
 set(REPROC++ ON)
 battery_add_package("gh:DaanDeMeyer/reproc#v14.2.4")    # Library for running processes
@@ -63,6 +59,11 @@ target_link_libraries(battery_core
     )
 
 # Unit-testing
-if(BUILD_TESTS)
+if (BUILD_TESTS)
     add_subdirectory(tests)
+endif()
+
+add_subdirectory(main)
+if (NOT BATTERY_CORE_NO_MAIN)
+    target_link_libraries(battery_core PUBLIC battery::core::main)
 endif()

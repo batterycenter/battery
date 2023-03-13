@@ -78,12 +78,7 @@ namespace battery {
     }
 
     void process::run_process() {   // TODO !!!!! : Process stdout and stdin has no unicode support!!!
-
-        // Convert commands from STL vector to raw C-style string pointers
-        std::vector<const char*> cmd_cstr;
-
-        cmd_cstr.emplace_back(options.executable.c_str());
-
+        std::vector<const char*> cmd_cstr{ options.executable.c_str() };
         for (const auto& c : options.arguments) {
             cmd_cstr.emplace_back(c.c_str());
         }
