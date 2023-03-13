@@ -125,9 +125,15 @@ namespace battery::fs {
         }
 
     private:
+#ifdef BATTERY_ARCH_WINDOWS
         std::wstring convert(const battery::fs::path& _path) const {
-            return OsString(_path.to_string()).wstr();
+            return battery::string::utf8_to_wchar(_path.to_string());
         }
+#else
+        std::string convert(const battery::fs::path& _path) const {
+            return _path.to_string();
+        }
+#endif
 
         battery::fs::path path;
         bool binary = false;
