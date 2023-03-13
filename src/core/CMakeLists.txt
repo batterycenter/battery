@@ -19,7 +19,6 @@ battery_add_library(battery_core STATIC ALIAS battery::core   # Also add all hea
     include/battery/core/log.h
     include/battery/core/main.h
     include/battery/core/messages.h
-    include/battery/core/OsString.h
     include/battery/core/platform.h
     include/battery/core/process.h
     include/battery/core/string.h
@@ -34,7 +33,6 @@ battery_add_library(battery_core STATIC ALIAS battery::core   # Also add all hea
     src/log.cpp
     src/main.cpp
     src/messages.cpp
-    src/OsString.cpp
     src/platform.cpp
     src/process.cpp
     src/string.cpp

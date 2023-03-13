@@ -13,7 +13,6 @@
 #include "battery/core/log.h"
 #include "battery/core/main.h"
 #include "battery/core/messages.h"
-#include "battery/core/OsString.h"
 #include "battery/core/platform.h"
 #include "battery/core/process.h"
 #include "battery/core/string.h"

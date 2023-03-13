@@ -1,9 +1,9 @@
 
 #include "battery/core/environment.h"
 #include "battery/core/main.h"
+#include "battery/core/string.h"
 #include "battery/core/log.h"
 #include "battery/core/platform.h"
-#include "battery/core/OsString.h"
 #include "battery/core/exception.h"
 
 #include "battery/core/internal/windows.h"
@@ -21,7 +21,7 @@ namespace battery {
         }
         std::vector<std::string> args;
         for (int i = 0; i < _argc; i++) {
-            args.push_back(battery::OsString(_args[i]));
+            args.push_back(battery::string::osstring_to_utf8(_args[i]));
         }
         ::LocalFree(_args);
 

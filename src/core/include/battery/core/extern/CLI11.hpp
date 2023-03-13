@@ -5,7 +5,7 @@
 // =========================================================================================
 // === This library is being used as part of https://github.com/HerrNamenlos123/Battery  ===
 // === Parts of this library were modified to work with Battery.                         ===
-// === Modified parts are marked with a comment 'BATTERY MODIFIED'                       ===
+// === Modified parts are marked with a comment '// BATTERY MODIFIED'                    ===
 // === Any credit goes to the original author of the library.                            ===
 // =========================================================================================
 //
@@ -41,7 +41,7 @@
 #pragma once
 
 #include "battery/core/fs.h"                                            // BATTERY MODIFIED
-#include "battery/core/OsString.h"                                      // BATTERY MODIFIED
+#include "battery/core/string.h"                                        // BATTERY MODIFIED
 
 // Standard combined includes:
 #include <functional>
@@ -3747,7 +3747,8 @@ namespace detail {
 #if defined CLI11_HAS_FILESYSTEM && CLI11_HAS_FILESYSTEM > 0
 CLI11_INLINE path_type check_path(const char *file) noexcept {
     std::error_code ec;
-    auto stat = std::filesystem::status(battery::OsString(file).wstr(), ec);           // BATTERY MODIFIED, TODO: Fix this and test if it works
+    auto filename = battery::string::utf8_to_osstring(file);             // BATTERY MODIFIED, TODO: Test if it actually works
+    auto stat = std::filesystem::status(filename, ec);                   // BATTERY MODIFIED
     if(ec) {
         return path_type::nonexistent;
     }

@@ -23,15 +23,15 @@ namespace battery {
                 nullptr, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR) & messageBuffer, 0,
                 nullptr);
 
-        auto buffer = battery::string::wchar_to_utf8(messageBuffer);
+        auto buffer = battery::string::osstring_to_utf8(messageBuffer);
         LocalFree(messageBuffer);
         return buffer;
     }
 #endif  // BATTERY_ARCH_WINDOWS
 
-    void message_box_info(const std::string_view& message) {
+    void message_box_info(const std::string& message) {
 #ifdef BATTERY_ARCH_WINDOWS
-        auto text = battery::string::utf8_to_wchar(message);
+        auto text = battery::string::utf8_to_osstring(message);
         ::MessageBoxW(nullptr, std::bit_cast<const wchar_t*>(text.c_str()), L"Error", MB_ICONINFORMATION | MB_OK);
 #else
         //battery::process zenity;
@@ -40,13 +40,13 @@ namespace battery {
 #endif
     }
 
-    void message_box_warning(const std::string_view& message) {
-        auto text = battery::string::utf8_to_wchar(message);
+    void message_box_warning(const std::string& message) {
+        auto text = battery::string::utf8_to_osstring(message);
         ::MessageBoxW(nullptr, std::bit_cast<const wchar_t*>(text.c_str()), L"Error", MB_ICONWARNING | MB_OK);
     }
 
-    void message_box_error(const std::string_view& message) {
-        auto text = battery::string::utf8_to_wchar(message);
+    void message_box_error(const std::string& message) {
+        auto text = battery::string::utf8_to_osstring(message);
         ::MessageBoxW(nullptr, std::bit_cast<const wchar_t*>(text.c_str()), L"Error", MB_ICONERROR | MB_OK);
     }
 

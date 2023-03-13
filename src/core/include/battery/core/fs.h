@@ -1,6 +1,5 @@
 #pragma once
 
-#include "battery/core/OsString.h"
 #include "battery/core/string.h"
 #include <filesystem>
 #include <string>
@@ -125,15 +124,9 @@ namespace battery::fs {
         }
 
     private:
-#ifdef BATTERY_ARCH_WINDOWS
-        std::wstring convert(const battery::fs::path& _path) const {
-            return battery::string::utf8_to_wchar(_path.to_string());
+        battery::string::osstring convert(const battery::fs::path& _path) const {
+            return battery::string::utf8_to_osstring(_path.to_string());
         }
-#else
-        std::string convert(const battery::fs::path& _path) const {
-            return _path.to_string();
-        }
-#endif
 
         battery::fs::path path;
         bool binary = false;
@@ -159,22 +152,14 @@ namespace battery::fs {
             }
         }
 
-#ifdef BATTERY_ARCH_WINDOWS
-        std::wstring create_dir_return_path(const battery::fs::path& path, bool createDirectory) const {
-#else
-        std::string create_dir_return_path(const battery::fs::path& path, bool createDirectory) const {
-#endif
+        battery::string::osstring create_dir_return_path(const battery::fs::path& path, bool createDirectory) const {
             if (path.has_parent_path() && createDirectory) {
                 auto parent = path.parent_path();
                 if (!fs::exists(parent)) {
                     fs::create_directories(fs::path(path).parent_path());
                 }
             }
-#ifdef BATTERY_ARCH_WINDOWS
-            return battery::string::utf8_to_wchar(path.to_string());
-#else
-            return path.to_string();
-#endif
+            return battery::string::utf8_to_osstring(path.to_string());
         }
     };
 

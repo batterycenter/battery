@@ -18,27 +18,32 @@
 namespace battery::string {
 
 #ifdef BATTERY_ARCH_WINDOWS
-    ///
-    /// \brief Convert an std::string to an std::wstring. The input is expected to be UTF-8, the output is meant to be used
-    ///        only for the Windows API, which accepts UTF-16 wide character strings.
-    ///        If the input contains an invalid UTF-8 sequence, an exception is thrown.
-    /// \param[in] str The string to be converted
-    /// \throw std::invalid_argument on an invalid utf-16 sequence
-    /// \return The converted string.
-    /// \see battery::string::wchar_to_utf8()
-    ///
-    std::wstring utf8_to_wchar(const std::string_view& str);
+    using osstring = std::wstring;
+    using osstring_view = std::wstring_view;
+#else
+    using osstring = std::string;
+    using osstring_view = std::string_view;
+#endif
 
     ///
-    /// \brief Convert an std::wstring to an std::string. The input is expected to be a UTF-16 wide character string from the Windows API.
-    ///        If the input contains an invalid UTF-16 sequence, an exception is thrown.
+    /// \brief Convert an std::string containing utf-8 encoded bytes to utf-16 on Windows, unchanged on other platforms.
+    ///        This function is exclusively for use with the Win32 API
     /// \param[in] str The string to be converted
-    /// \throw std::invalid_argument on an invalid utf-16 sequence
-    /// \return The converted string.
-    /// \see battery::string::utf8_to_wchar()
+    /// \throw std::invalid_argument on an invalid utf-8 sequence on Windows, none on other platforms
+    /// \return The converted string, std::wstring on Windows, std::string on other platforms
+    /// \see battery::string::osstring_to_utf8()
     ///
-    std::string wchar_to_utf8(const std::wstring_view& str);
-#endif
+    osstring utf8_to_osstring(const std::string& str);
+
+    ///
+    /// \brief Convert an std::wstring to an std::string on Windows, returns the unchanged string on other platforms.
+    ///        This function is exclusively for use with the Win32 API
+    /// \param[in] str The string to be converted, std::wstring on Windows, std::string on other platforms
+    /// \throw std::invalid_argument on an invalid utf-16 sequence on Windows, none on other platforms
+    /// \return The converted string
+    /// \see battery::string::utf8_to_osstring()
+    ///
+    std::string osstring_to_utf8(const osstring& str);
 
     ///
     /// \brief Split a string into an array of string pieces by a delimeter character. When no delimeter is found,
