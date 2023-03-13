@@ -11,7 +11,6 @@ battery_add_library(battery_core STATIC ALIAS battery::core   # Also add all hea
     include/battery/core/extern/semver.hpp
 
     include/battery/core/all.h
-    include/battery/core/Application.h
     include/battery/core/detachable_thread.h
     include/battery/core/environment.h
     include/battery/core/error.h
@@ -27,7 +26,6 @@ battery_add_library(battery_core STATIC ALIAS battery::core   # Also add all hea
 
     include/battery/core/internal/windows.h
 
-    src/Application.cpp
     src/exception.cpp
     src/fs.cpp
     src/log.cpp
