@@ -5,7 +5,7 @@
 
 namespace battery {
 
-    class detachable_thread {
+    class detachable_thread {   // TODO: Rework this class using std::async and std::future
     public:
         detachable_thread() = default;
 
