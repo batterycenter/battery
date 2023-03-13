@@ -5,6 +5,7 @@ project(battery VERSION 0.1.1)
 set(BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 include(cmake/tools.cmake)
+battery_check_required_compiler_features()
 
 ##################################
 # Options: Library configuration #
