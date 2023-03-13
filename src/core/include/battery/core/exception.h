@@ -51,11 +51,11 @@ namespace battery {
         }
         catch (const battery::exception& e) {
             battery::log::core::critical("[battery::exception]: {}", e.what());
-            battery::message_box_error(std::format("[battery::exception]: {}", e.what()));
+            battery::message_box_error(fmt::format("[battery::exception]: {}", e.what()));
         }
         catch (const std::exception& e) {
             battery::log::core::critical("[std::exception]: {}", e.what());
-            battery::message_box_error(std::format("[std::exception]: {}", e.what()));
+            battery::message_box_error(fmt::format("[std::exception]: {}", e.what()));
         }
         catch (...) {
             battery::log::core::critical("Unidentifiable exception caught, no further information");
