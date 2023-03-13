@@ -6,6 +6,7 @@
 #include <string>
 #include <fstream>
 #include <functional>
+#include <bit>
 
 namespace battery::fs {
 
@@ -110,7 +111,7 @@ namespace battery::fs {
             return total_bytes;
         }
 
-        std::string to_string() {
+        std::string to_string() {   // NOLINT
             return std::string((std::istreambuf_iterator<char>(*this)), std::istreambuf_iterator<char>());
         }
 

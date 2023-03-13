@@ -8,16 +8,16 @@
 
 namespace battery {
 
-    class thread : public std::thread {
+    using thread = std::jthread;
+
+    /*class thread : public std::jthread {
     public:
         thread() = default;
 
-        template <class _Fn, class... _Args, std::enable_if_t<!std::is_same_v<std::_Remove_cvref_t<_Fn>, thread>, int> = 0>
-        explicit thread(_Fn&& _Fx, _Args&&... _Ax) :
-            std::thread([&] {
-
+        explicit thread(const std::function<void(void)> func) :
+            std::jthread([&] {
                 try {
-                    return _Fx(_Ax...);
+                    func();
                 }
                 catch (const battery::exception& e) {
                     battery::log::core::critical("[battery::exception in battery::thread]: {}", e.what());
@@ -31,9 +31,12 @@ namespace battery {
                     battery::log::core::critical("Unidentifiable exception caught in battery::thread, no further information");
                     battery::message_box_error("Unidentifiable exception caught in battery::thread, no further information");
                 }
-
             })
         {}
-    };
+
+    private:
+        void worker() {
+        }
+    };*/
 
 }

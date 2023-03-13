@@ -4,7 +4,7 @@
 #include <string>
 #include <functional>
 
-#include "battery/core/platform.h"
+#include "battery/core/messages.h"
 #include "battery/core/log.h"
 
 namespace battery {

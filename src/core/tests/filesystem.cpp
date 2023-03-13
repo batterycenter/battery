@@ -3,24 +3,18 @@
 #include <gtest/gtest.h>
 
 #ifndef TESTDATA_FOLDER
-#error TESTDATA_FOLDER is not defined! Something is wrong with the unit test build system!
+#error TESTDATA_FOLDER is not defined! Something is wrong with the unit-testing build system!
 #endif
-
-void change_to_testdata_folder() {
-    std::cout << "Setting working directory to " << TESTDATA_FOLDER << std::endl;
-    battery::fs::current_path(TESTDATA_FOLDER);
-}
 
 // TODO: Check current_path for UTF-8
 
 TEST(BatteryCore_Filesystem, ReadFileWithSpacesAndKanji) {
-    change_to_testdata_folder();
 
     // In the testdata folder, there should be a file named "年 本 Süßölgefäß 国 分 高", with the content "utf-8 filenames work".
     // We just try to open it to see if unicode filenames work
 
     // The filename from above written in unicode codepoints
-    std::string filename = "\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8";
+    std::string filename = TESTDATA_FOLDER "/\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8";
 
     battery::fs::ifstream file(filename);
     ASSERT_FALSE(file.fail());

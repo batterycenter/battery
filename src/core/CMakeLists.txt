@@ -12,16 +12,19 @@ battery_add_library(battery_core STATIC ALIAS battery::core   # Also add all hea
 
     include/battery/core/all.h
     include/battery/core/Application.h
+    include/battery/core/detachable_thread.h
     include/battery/core/environment.h
     include/battery/core/error.h
     include/battery/core/fs.h
     include/battery/core/log.h
     include/battery/core/main.h
+    include/battery/core/messages.h
     include/battery/core/OsString.h
     include/battery/core/platform.h
     include/battery/core/process.h
     include/battery/core/string.h
     include/battery/core/thread.h
+    include/battery/core/time.h
 
     include/battery/core/internal/windows.h
 
@@ -30,10 +33,12 @@ battery_add_library(battery_core STATIC ALIAS battery::core   # Also add all hea
     src/fs.cpp
     src/log.cpp
     src/main.cpp
+    src/messages.cpp
     src/OsString.cpp
     src/platform.cpp
     src/process.cpp
-    src/string.cpp)
+    src/string.cpp
+    src/time.cpp)
 
 # Properties
 target_include_directories(battery_core PUBLIC include)
@@ -50,7 +55,14 @@ battery_add_package("gh:ToruNiina/toml11#v3.7.1")       # Toml fileformat parsin
 battery_add_package("gh:nemtrif/utfcpp#v3.2.3")         # UTF-8 conversions
 
 # Link dependencies
-target_link_libraries(battery_core spdlog::spdlog toml11::toml11 reproc++ utf8::cpp)
+target_link_libraries(battery_core
+    PUBLIC
+        spdlog::spdlog
+        toml11::toml11
+        utf8::cpp
+        reproc++
+    PRIVATE
+    )
 
 # Unit-testing
 if(BUILD_TESTS)

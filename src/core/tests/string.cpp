@@ -50,12 +50,14 @@ std::string replace(std::string string, const std::string& from, const std::stri
 ///
 std::string replace_one(std::string string, const std::string& from, const std::string& to, int occurrence = 0);
 
-TEST(BatteryCore_String, UTF8ToUTF16AndBack) {
+#ifdef BATTERY_ARCH_WINDOWS
+TEST(BatteryCore_String, UTF8ToWCharAndBack) {
     // "年 本 Süßölgefäß 国 分 高"
     std::string u8 = "\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8";
-    std::u16string u16 = utf8::utf8to16(u8);
-    EXPECT_EQ(u8, utf8::utf16to8(u16));
+    std::wstring u16 = battery::string::utf8_to_wchar(u8);
+    EXPECT_EQ(u8, battery::string::wchar_to_utf8(u16));
 }
+#endif
 
 TEST(BatteryCore_String, CodePointsC) {
     std::string codepoints = "\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8";

@@ -2,7 +2,20 @@
 #include "battery/core/string.h"
 #include "utf8.h"
 
+#include <iostream>
 namespace battery::string {
+
+#ifdef BATTERY_ARCH_WINDOWS
+    std::wstring utf8_to_wchar(const std::string_view& str) {
+        std::u16string u16 = utf8::utf8to16(str);
+        std::wstring wide(std::bit_cast<wchar_t*>(u16.data()), u16.size());
+        return wide;
+    }
+    std::string wchar_to_utf8(const std::wstring_view& str) {
+        std::u16string u16(std::bit_cast<char16_t*>(str.data()), str.size());
+        return utf8::utf16to8(u16);
+    }
+#endif
 
     std::vector<std::string_view> split(const std::string_view& str, char delimeter) {
         std::string::size_type b = 0;

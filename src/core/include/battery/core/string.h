@@ -8,12 +8,37 @@
 #include <vector>
 #include <optional>
 
+#include "battery/core/environment.h"
+
 ///
 /// \brief Battery::String module -> Various string manipulation utilities
 /// \addtogroup string
 /// @{
 ///
 namespace battery::string {
+
+#ifdef BATTERY_ARCH_WINDOWS
+    ///
+    /// \brief Convert an std::string to an std::wstring. The input is expected to be UTF-8, the output is meant to be used
+    ///        only for the Windows API, which accepts UTF-16 wide character strings.
+    ///        If the input contains an invalid UTF-8 sequence, an exception is thrown.
+    /// \param[in] str The string to be converted
+    /// \throw std::invalid_argument on an invalid utf-16 sequence
+    /// \return The converted string.
+    /// \see battery::string::wchar_to_utf8()
+    ///
+    std::wstring utf8_to_wchar(const std::string_view& str);
+
+    ///
+    /// \brief Convert an std::wstring to an std::string. The input is expected to be a UTF-16 wide character string from the Windows API.
+    ///        If the input contains an invalid UTF-16 sequence, an exception is thrown.
+    /// \param[in] str The string to be converted
+    /// \throw std::invalid_argument on an invalid utf-16 sequence
+    /// \return The converted string.
+    /// \see battery::string::utf8_to_wchar()
+    ///
+    std::string wchar_to_utf8(const std::wstring_view& str);
+#endif
 
     ///
     /// \brief Split a string into an array of string pieces by a delimeter character. When no delimeter is found,
@@ -64,7 +89,7 @@ namespace battery::string {
     ///
     /// \brief Convert an std::u8string to an std::string. The returned string is a one-to-one copy of the
     ///        utf-8 encoded bytes. No encoding is changed. This function cannot fail.
-    /// \param[in] str The std::u8string to be converted
+    /// \param[in] str The string to be converted
     /// \return The converted string
     /// \see battery::string::string_to_u8string()
     ///
@@ -73,9 +98,9 @@ namespace battery::string {
     ///
     /// \brief Convert an std::string to an std::u8string. The input is expected to be a string containing utf-8 encoded bytes.
     ///        If the input contains an invalid utf-8 sequence, an exception is thrown.
-    /// \param[in] str The std::string to be converted
+    /// \param[in] str The string to be converted
     /// \throw std::invalid_argument on an invalid utf-8 sequence
-    /// \return The converted u8string.
+    /// \return The converted string.
     /// \see battery::string::u8string_to_string()
     ///
     std::u8string string_to_u8string(const std::string_view& str);
