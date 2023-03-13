@@ -1,6 +1,51 @@
 
 include(cmake/CPM.cmake)
 
+function(BATTERY_TEST_IF_COMPILES RESULT_VAR OUTPUT_VAR STD_VERSION SOURCE_CONTENT)
+    message(STATUS "Checking for compiler feature ${RESULT_VAR}")
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/try_compile/main.cpp ${SOURCE_CONTENT})
+    try_compile(
+        ${RESULT_VAR} 
+        ${CMAKE_CURRENT_BINARY_DIR}/try_compile/
+        ${CMAKE_CURRENT_BINARY_DIR}/try_compile/main.cpp
+        CXX_STANDARD ${STD_VERSION}
+        OUTPUT_VARIABLE _OUTPUT_VAR
+    )
+    set(${OUTPUT_VAR} ${_OUTPUT_VAR} PARENT_SCOPE)
+    file(REMOVE_RECURSE ${CMAKE_CURRENT_BINARY_DIR}/try_compile)
+    if (${RESULT_VAR})
+        message(STATUS "Checking for compiler feature ${RESULT_VAR} - Success")
+    else()
+        message(STATUS "Checking for compiler feature ${RESULT_VAR} - Failed")
+    endif()
+endfunction()
+
+function(BATTERY_MUST_HAVE_CXX20_FEATURE FEATURE_NAME SOURCE_CONTENT)
+    if (${FEATURE_NAME})
+        return()
+    endif()
+    battery_test_if_compiles(${FEATURE_NAME} OUTPUT_VAR 20 ${SOURCE_CONTENT})
+    if (NOT ${FEATURE_NAME})
+        message(SEND_ERROR "Test ${FEATURE_NAME} Failed. Reason: Compiler output: ${OUTPUT_VAR}")
+        set(${FEATURE_NAME} OFF CACHE BOOL "" FORCE)
+    else()
+        set(${FEATURE_NAME} ON CACHE BOOL "" FORCE)
+    endif()
+    mark_as_advanced(${FEATURE_NAME})
+endfunction()
+
+function(BATTERY_CHECK_REQUIRED_COMPILER_FEATURES)
+
+    battery_must_have_cxx20_feature(HAVE_JTHREAD
+        "#include <thread>
+        #include <iostream>
+        int main() {
+            std::jthread thread([] {
+                std::cout << \"Hello world\" << std::endl\\\;
+            })\\\;
+        }")
+endfunction()
+
 function(GET_GITHUB_DEPENDENCY NAME REQUIRED_FILE REPOSITORY_URL BRANCH)
     if (NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/${REQUIRED_FILE}")
         find_package(Git REQUIRED)
