@@ -159,14 +159,22 @@ namespace battery::fs {
             }
         }
 
+#ifdef BATTERY_ARCH_WINDOWS
         std::wstring create_dir_return_path(const battery::fs::path& path, bool createDirectory) const {
+#else
+        std::string create_dir_return_path(const battery::fs::path& path, bool createDirectory) const {
+#endif
             if (path.has_parent_path() && createDirectory) {
                 auto parent = path.parent_path();
                 if (!fs::exists(parent)) {
                     fs::create_directories(fs::path(path).parent_path());
                 }
             }
-            return OsString(path).wstr();
+#ifdef BATTERY_ARCH_WINDOWS
+            return battery::string::utf8_to_wchar(path.to_string());
+#else
+            return path.to_string();
+#endif
         }
     };
 

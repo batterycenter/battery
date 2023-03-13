@@ -2,7 +2,7 @@
 #include "battery/core/string.h"
 #include "utf8.h"
 
-#include <iostream>
+#include <cstring>
 namespace battery::string {
 
 #ifdef BATTERY_ARCH_WINDOWS

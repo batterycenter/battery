@@ -8,8 +8,8 @@ TEST(BatteryCore_Process, ProcessRunsSuccessfully) {
     proc.options.executable = "cmd.exe";
     proc.options.arguments = { "/c", "exit", "100" };
 #else
-    proc.options.executable = "sh";
-    proc.options.arguments = { exit", "100" };
+    proc.options.executable = "bash";
+    proc.options.arguments = { "-c", "exit 100" };
 #endif
     proc.execute_sync();
     EXPECT_EQ(proc.exit_code, 100);
@@ -21,8 +21,8 @@ TEST(BatteryCore_Process, ProcessRunsSuccessfullyAsync) {
     proc.options.executable = "cmd.exe";
     proc.options.arguments = { "/c", "exit", "100" };
 #else
-    proc.options.executable = "sh";
-    proc.options.arguments = { exit", "100" };
+    proc.options.executable = "bash";
+    proc.options.arguments = { "-c", "exit 100" };
 #endif
     proc.execute_async();
     proc.join();
@@ -33,14 +33,11 @@ TEST(BatteryCore_Process, ProcessRedirectStdout) {
     battery::process proc;
 #ifdef BATTERY_ARCH_WINDOWS
     proc.options.executable = "cmd.exe";
-    proc.options.arguments.emplace_back("/c");
+    proc.options.arguments = { "/c", "echo unit test works" };
 #else
-    proc.options.executable = "sh";
+    proc.options.executable = "bash";
+    proc.options.arguments = { "-c", "echo unit test works" };
 #endif
-    proc.options.arguments.emplace_back("echo");
-    proc.options.arguments.emplace_back("unit");
-    proc.options.arguments.emplace_back("test");
-    proc.options.arguments.emplace_back("works");
     proc.options.suppress_carriage_return = true;
     proc.options.strip_trailing_whitespace_after_join = true;
     std::string output;
@@ -60,7 +57,7 @@ TEST(BatteryCore_Process, ProcessRedirectStdin) {
     battery::fs::ofstream file(filename);
     file <<
         "@echo off\n"
-        "set /p test=Input: \n"
+        "set /p test=\n"
         "echo %test%\n"
         "exit 100";
     file.close();
@@ -69,13 +66,22 @@ TEST(BatteryCore_Process, ProcessRedirectStdin) {
     proc.options.arguments.emplace_back("/c");
     proc.options.arguments.emplace_back(filename);
 #else
-    proc.options.executable = "sh";
+    auto filename = "battery-core-unit-test-process-redirect.bat";
+    battery::fs::ofstream file(filename);
+    file <<
+        "#!/bin/bash\n"
+        "read -p \"Input: \" test\n"
+        "echo $test\n"
+        "exit 100";
+    file.close();
+
+    proc.options.executable = "bash";
     proc.options.arguments.emplace_back(filename);
 #endif
     proc.execute_async();
     proc.stdin_write("unit test works\n");
     proc.join();
-    EXPECT_EQ(proc.output_combined, "Input: unit test works");
+    EXPECT_EQ(proc.output_combined, "unit test works");
     EXPECT_EQ(proc.exit_code, 100);
     battery::fs::remove(filename);
 }
