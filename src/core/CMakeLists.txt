@@ -7,11 +7,12 @@ battery_add_library(battery_core STATIC ALIAS battery::core   # Also add all hea
     include/battery/core/extern/inja.hpp
     include/battery/core/extern/json.hpp
     include/battery/core/extern/magic_enum.hpp
+    include/battery/core/extern/platform_folders.h
     include/battery/core/extern/rang.hpp
     include/battery/core/extern/semver.hpp
 
     include/battery/core/all.h
-        include/battery/core/async_worker.h
+    include/battery/core/async_worker.h
     include/battery/core/environment.h
     include/battery/core/error.h
     include/battery/core/fs.h
@@ -26,6 +27,7 @@ battery_add_library(battery_core STATIC ALIAS battery::core   # Also add all hea
 
     include/battery/core/internal/windows.h
 
+    src/extern/platform_folders.cpp
     src/exception.cpp
     src/fs.cpp
     src/log.cpp

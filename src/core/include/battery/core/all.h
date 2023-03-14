@@ -29,6 +29,7 @@
 #include "battery/core/extern/inja.hpp"
 #include "battery/core/extern/json.hpp"
 #include "battery/core/extern/magic_enum.hpp"
+//#include "battery/core/extern/platform_folders.h"
 #include "battery/core/extern/rang.hpp"
 #include "battery/core/extern/semver.hpp"
 
