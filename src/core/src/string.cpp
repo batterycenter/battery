@@ -33,9 +33,9 @@ namespace battery::string {
 #endif
     }
 
-    std::vector<std::string_view> split(const std::string_view& str, char delimeter) {
+    std::vector<std::string> split(const std::string& str, char delimeter) {
         std::string::size_type b = 0;
-        std::vector<std::string_view> result;
+        std::vector<std::string> result;
 
         while ((b = str.find_first_not_of(delimeter, b)) != std::string::npos) {
             auto e = str.find_first_of(delimeter, b);
@@ -46,7 +46,7 @@ namespace battery::string {
         return result;
     }
 
-    std::string join(const std::vector<std::string>& strings, const std::string_view& spacer) {
+    std::string join(const std::vector<std::string>& strings, const std::string& spacer) {
         std::string str = "";
 
         for (size_t i = 0; i < strings.size(); i++) {
@@ -60,7 +60,7 @@ namespace battery::string {
         return str;
     }
 
-    std::string replace(std::string string, const std::string_view& from, const std::string_view& to) {
+    std::string replace(std::string string, const std::string& from, const std::string& to) {
         if (from.empty())
             return string;
         size_t start_pos = 0;
@@ -71,7 +71,7 @@ namespace battery::string {
         return string;
     }
 
-    std::string replace_one(std::string string, const std::string_view& from, const std::string_view& to, [[maybe_unused]] int occurrence) {
+    std::string replace_one(std::string string, const std::string& from, const std::string& to, [[maybe_unused]] int occurrence) {
         if (from.empty())
             return string;
 
@@ -83,14 +83,14 @@ namespace battery::string {
         return string;
     }
 
-    std::string u8string_to_string(const std::u8string_view& str) {      // Simply copy the bytes as-is
+    std::string u8string_to_string(const std::u8string& str) {      // Simply copy the bytes as-is
         std::string target;
         target.resize(str.length());
         std::memcpy(target.data(), str.data(), str.length());
         return target;
     }
 
-    std::u8string string_to_u8string(const std::string_view& str) {  // Check for validity and then copy the bytes as-is
+    std::u8string string_to_u8string(const std::string& str) {  // Check for validity and then copy the bytes as-is
         if (!utf8::is_valid(str)) {
             throw std::invalid_argument("Invalid utf-8 sequence");
         }
