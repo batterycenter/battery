@@ -5,7 +5,7 @@
 #include <mutex>
 #include <source_location>
 
-#include "battery/core/detachable_thread.h"
+#include "battery/core/async_worker.h"
 #include "battery/core/environment.h"
 #include "battery/core/error.h"
 #include "battery/core/fs.h"

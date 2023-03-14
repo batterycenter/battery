@@ -10,11 +10,11 @@
 namespace battery {
 
     void process::execute_sync() {
-        worker.execute_sync_thread(&process::run_process, this);
+        worker.execute_sync([this] { process::run_process(); });
     }
 
     void process::execute_async() {
-        worker.execute_async_thread(&process::run_process, this);
+        worker.execute_async([this] { process::run_process(); });
     }
 
     void process::join() {

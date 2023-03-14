@@ -1,7 +1,7 @@
 #pragma once
 
 #include "battery/core/fs.h"
-#include "battery/core/detachable_thread.h"
+#include "battery/core/async_worker.h"
 
 #include "reproc++/reproc.hpp"
 
@@ -52,7 +52,7 @@ namespace battery {
         std::error_code stderr_sink(const uint8_t* _buffer, size_t length);
         void run_process();
 
-        battery::detachable_thread worker;
+        battery::async_worker<void> worker;
         reproc::process _process;
     };
 
