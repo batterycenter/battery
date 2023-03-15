@@ -1,0 +1,4 @@
+
+battery_add_executable(example_tray_icon_animated src/main.cpp)
+target_link_libraries(example_tray_icon_animated battery::core)
+target_compile_definitions(example_tray_icon_animated PUBLIC EXAMPLE_ROOT="${CMAKE_CURRENT_LIST_DIR}")

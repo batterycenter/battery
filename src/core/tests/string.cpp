@@ -2,8 +2,6 @@
 #include "battery/core/all.h"
 #include <gtest/gtest.h>
 
-// TODO: Test string::replace
-
 TEST(BatteryCore_String, StringSplit) {
     std::string str = "This is a string for testing";
     std::vector<std::string> target = { "This", "is", "a", "string", "for", "testing" };

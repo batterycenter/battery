@@ -3,43 +3,59 @@ option(BATTERY_CORE_NO_MAIN "Prevent battery from defining the main() function i
 
 # Battery core library
 battery_add_library(battery_core STATIC ALIAS battery::core   # Also add all headers so they're shown correctly in IDEs
-    include/battery/core/extern/CLI11.hpp
-    include/battery/core/extern/inja.hpp
-    include/battery/core/extern/json.hpp
-    include/battery/core/extern/magic_enum.hpp
-    include/battery/core/extern/platform_folders.h
-    include/battery/core/extern/rang.hpp
-    include/battery/core/extern/semver.hpp
+        include/battery/core/extern/CLI11.hpp
+        include/battery/core/extern/inja.hpp
+        include/battery/core/extern/json.hpp
+        include/battery/core/extern/magic_enum.hpp
+        include/battery/core/extern/platform_folders.h
+        include/battery/core/extern/rang.hpp
+        include/battery/core/extern/semver.hpp
+        include/battery/core/extern/tray.h
 
-    include/battery/core/all.h
-    include/battery/core/async_worker.h
-    include/battery/core/environment.h
-    include/battery/core/error.h
-    include/battery/core/fs.h
-    include/battery/core/log.h
-    include/battery/core/main.h
-    include/battery/core/messages.h
-    include/battery/core/platform.h
-    include/battery/core/process.h
-    include/battery/core/string.h
-    include/battery/core/thread.h
-    include/battery/core/time.h
+        include/battery/core/all.h
+        include/battery/core/async_worker.h
+        include/battery/core/constants.h
+        include/battery/core/environment.h
+        include/battery/core/error.h
+        include/battery/core/fs.h
+        include/battery/core/log.h
+        include/battery/core/main.h
+        include/battery/core/messages.h
+        include/battery/core/platform.h
+        include/battery/core/process.h
+        include/battery/core/resource.h
+        include/battery/core/string.h
+        include/battery/core/thread.h
+        include/battery/core/time.h
+        include/battery/core/tray_icon.h
 
-    include/battery/core/internal/windows.h
+        include/battery/core/internal/windows.h
 
-    src/extern/platform_folders.cpp
-    src/exception.cpp
-    src/fs.cpp
-    src/log.cpp
-    src/main.cpp
-    src/messages.cpp
-    src/platform.cpp
-    src/process.cpp
-    src/string.cpp
-    src/time.cpp)
+        src/extern/platform_folders.cpp
+        src/internal/platform.cpp
+        src/constants.cpp
+        src/exception.cpp
+        src/fs.cpp
+        src/log.cpp
+        src/main.cpp
+        src/messages.cpp
+        src/platform.cpp
+        src/process.cpp
+        src/resource.cpp
+        src/string.cpp
+        src/time.cpp
+        src/tray_icon.cpp)
 
 # Properties
 target_include_directories(battery_core PUBLIC include)
+
+# The core::main module contains the main() function
+add_subdirectory(main)
+if (NOT BATTERY_CORE_NO_MAIN)
+    target_link_libraries(battery_core PUBLIC battery::core::main)
+endif()
+add_subdirectory(traypp)
+target_link_libraries(battery_core PUBLIC battery::core::traypp)
 
 # Download dependencies
 set(REPROC++ ON)
@@ -61,9 +77,4 @@ target_link_libraries(battery_core
 # Unit-testing
 if (BUILD_TESTS)
     add_subdirectory(tests)
-endif()
-
-add_subdirectory(main)
-if (NOT BATTERY_CORE_NO_MAIN)
-    target_link_libraries(battery_core PUBLIC battery::core::main)
 endif()

@@ -7,4 +7,5 @@ target_sources(battery_core_tests PRIVATE
     filesystem.cpp
     main.cpp
     process.cpp
-    string.cpp)
+    string.cpp
+    tray_icon.cpp)

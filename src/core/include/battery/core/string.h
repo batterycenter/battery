@@ -108,4 +108,21 @@ namespace battery::string {
     ///
     std::u8string string_to_u8string(const std::string& str);
 
+    ///
+    /// \brief Encode a string as Base-64. This string can either be a text or a binary-like byte-series (loaded from a file).
+    ///        Especially useful for embedding small resource files in a source file or exchanging binary resources over a network.
+    /// \param[in] str The string or byte-series to encode
+    /// \return Encoded Base-64 string
+    /// \see battery::string::decode_base64()
+    ///
+    std::string encode_base64(const std::string& str);
+
+    ///
+    /// \brief Decode a Base-64 encoded string back to its original form. See battery::string::decode_base64()
+    /// \param[in] str A Base-64 encoded string representing a resource
+    /// \return Decoded resource as a string containing a series of bytes (not necessarily printable characters).
+    /// \see battery::string::encode_base64()
+    ///
+    std::string decode_base64(const std::string& str);
+
 }

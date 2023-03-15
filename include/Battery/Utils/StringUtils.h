@@ -72,42 +72,4 @@ namespace Battery::String {
 	/// 
 	bool IsInAlphabet(char c);
 
-	/// 
-	/// \brief Encode a string as Base-64. This string can either be a text or a binary-like byte-series (loaded from a file).
-	///        Especially useful for embedding small resource files in a source file or exchanging binary resources over a network.
-	/// \param[in] str The string or byte-series to encode
-	/// \return Encoded Base-64 string
-	/// \see Battery::String::DecodeBase64()
-	/// 
-    std::string EncodeBase64(const std::string& str);
-	
-	/// 
-	/// \brief Encode a string as Base-64. This string can either be a text or a binary-like byte-series (loaded from a file).
-	///        Especially useful for embedding small resource files in a source file or exchanging binary resources over a network.
-	/// \param[in] buffer A pointer pointing to an array of characters or bytes
-	/// \param[in] buffer_size The length of the array
-	/// \return Encoded Base-64 string
-	/// \see Battery::String::DecodeBase64()
-	/// 
-	std::string EncodeBase64(const void* buffer, size_t buffer_size);
-	
-	/// 
-	/// \brief Decode a Base-64 encoded string back to its original form.
-	/// \param[in] data A Base-64 encoded string representing a resource
-	/// \return Decoded resource as a C++11 byte array. Use `std::string(vec.begin(),vec.end())`
-	///         to convert return value to a string.
-	/// \see Battery::String::EncodeBase64()
-	/// 
-    std::vector<uint8_t> DecodeBase64(const std::string& data);
-	
-	/// 
-	/// \brief Decode a Base-64 encoded string back to its original form.
-	/// \param[in] buffer A pointer pointing to an array of characters, containing a Base-64 encoded string
-	/// \param[in] buffer_size The length of the string
-	/// \return Decoded resource as a C++11 byte array. Use `std::string(vec.begin(),vec.end())` 
-	///         to convert return value to a string.
-	/// \see Battery::String::EncodeBase64()
-	/// 
-	std::vector<uint8_t> DecodeBase64(const void* buffer, size_t buffer_size);
-
 }

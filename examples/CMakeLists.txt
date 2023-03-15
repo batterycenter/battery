@@ -1,0 +1,2 @@
+
+add_subdirectory(tray_icon_animated)

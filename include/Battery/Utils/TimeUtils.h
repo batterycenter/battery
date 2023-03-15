@@ -24,16 +24,4 @@ namespace Battery {
 	/// Reset the runtime counter to 0. WARNING: Only to be used internally!!
 	/// </summary>
 	void ClearRuntime();
-
-	/// <summary>
-	/// Put the current thread to sleep for x seconds.
-	/// </summary>
-	/// <param name="microseconds">- Time to sleep in seconds</param>
-	void Sleep(double seconds);
-
-	/// <summary>
-	/// Put the current thread to sleep.
-	/// </summary>
-	/// <param name="microseconds">- Time to sleep</param>
-	void Sleep(sf::Time time);
 }

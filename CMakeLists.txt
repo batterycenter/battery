@@ -17,6 +17,7 @@ option(BUILD_TESTS "Build all unit tests" ON)
 enable_testing()
 
 add_subdirectory(src/core)
+add_subdirectory(examples)
 
 #option(BATTERY_BUILD_EXAMPLES "Build examples" on)
 #option(BATTERY_SHARED_LIB "Build shared library instead of static" off)

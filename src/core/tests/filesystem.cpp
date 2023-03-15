@@ -108,6 +108,11 @@ TEST(BatteryCore_Filesystem, FS_PathOperators) {
     EXPECT_EQ(battery::string::replace(p1.to_string(), "\\", "/"), "../test/more/folders");
     EXPECT_EQ(battery::string::replace(p2.to_string(), "\\", "/"), "../test/more/folders/file.txt");
     EXPECT_EQ(battery::string::replace(p3.to_string(), "\\", "/"), "../test/more/folders/test");
+
+    battery::fs::path p4("C:/some/directory");
+    p4 += "more/directories";
+    auto p5 = p4 + "one more";
+    EXPECT_EQ(battery::string::replace(p5.to_string(), "\\", "/"), "C:/some/directory/more/directories/one more");
 }
 
 TEST(BatteryCore_Filesystem, FS_Path_UTF8) {

@@ -3,6 +3,6 @@
 #include "battery/core/all.h"
 #include <gtest/gtest.h>
 
-int battery::battery_main(const std::vector<std::string>& args) {
+int battery_main(const std::vector<std::string>& args) {
     return 0;
 }

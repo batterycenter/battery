@@ -1,10 +1,13 @@
 
+#define PRINT_PLATFORMS
 #include "battery/core/environment.h"
+
 #include "battery/core/main.h"
 #include "battery/core/string.h"
 #include "battery/core/log.h"
 #include "battery/core/platform.h"
 #include "battery/core/exception.h"
+#include "battery/core/time.h"
 
 #include "battery/core/internal/windows.h"
 
@@ -49,10 +52,11 @@ namespace battery {
     }
 
     int run_main(int argc, const char** argv) {
-        int result = 0;
+        internal::reset_time();
+        int result = -1;
         setup_windows_console();
         catch_common_exceptions([&result, argc, argv]() {
-            result = battery::battery_main(parse_cli(argc, argv));
+            result = battery_main(parse_cli(argc, argv));
         });
         return result;
     }

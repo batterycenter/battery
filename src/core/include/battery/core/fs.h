@@ -110,8 +110,10 @@ namespace battery::fs {
             return total_bytes;
         }
 
-        std::string to_string() {   // NOLINT
-            return std::string((std::istreambuf_iterator<char>(*this)), std::istreambuf_iterator<char>());
+        std::string to_string() {
+            std::stringstream buffer;
+            buffer << this->rdbuf();
+            return buffer.str();
         }
 
         void return_to_beginning() {

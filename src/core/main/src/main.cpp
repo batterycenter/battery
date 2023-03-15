@@ -1,6 +1,6 @@
 
 namespace battery {
-    int run_main(int, const char**);
+    int run_main(int, const char**);        // Forward declaration
 }
 
 #ifndef BATTERY_CORE_NO_MAIN
