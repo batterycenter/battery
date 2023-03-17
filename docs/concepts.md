@@ -1,4 +1,7 @@
-# Battery Concepts
+
+@page concepts Battery Concepts
+
+# Unicode
 
 Battery provides you with many concepts that make your life easier: You do not have to stay inline with them,
 but if you do, you will have a much better time.

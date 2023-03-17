@@ -41,3 +41,17 @@ TODO: Allow battery_embed() CMake command take absolute paths
 Inspiration:
 
 ![Battery1](assets/Battery1.png)
+
+# License
+
+Battery is licensed under the Apache License 2.0.  
+Here is the original author's interpretation.  
+You ARE allowed to:
+ - Use the library and all provided tools for any purpose personally or commercially ✅
+ - Modify them, as long as the license remains unchanged and all modifications are clearly marked ✅
+ - Distribute any software freely that depends upon battery as a dependency or is statically linked ✅
+ - Distribute battery in source or binary form while retaining the license ✅
+
+But you are NOT allowed to:
+ - Redistribute battery itself or large portions of it, claiming you are the original author ❌
+ - Battery is distributed without any warranty whatsoever ❌

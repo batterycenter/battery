@@ -1,8 +1,8 @@
-#pragma once
 ///
-/// \file StringUtils.h
+/// \file string.h
 /// \author Florian Zachs
 ///
+#pragma once
 
 #include <string>
 #include <vector>
@@ -13,7 +13,7 @@
 #include "battery/core/environment.h"
 
 ///
-/// \brief Battery::String module -> Various string manipulation utilities
+/// \brief battery::string module -> Various string manipulation utilities
 /// \addtogroup string
 /// @{
 ///
