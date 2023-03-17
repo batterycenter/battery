@@ -51,11 +51,10 @@ You ARE allowed to:
  - Modify them, as long as the license remains unchanged and all modifications are clearly marked ✅
  - Distribute any software freely that depends upon battery as a dependency or is statically linked ✅
  - Distribute battery in source or binary form while retaining the license ✅
- - Use battery for developing closed source applications commercially ✅
 
 But you are NOT allowed to:
  - Redistribute battery itself or large portions of it, claiming you are the original author ❌
  - Battery is distributed without any warranty whatsoever ❌
 
 Battery is striving to become a healthy community of developers. In essence, everything is allowed that contributes 
-to the goal of supporting teams in creating, developing and distributing modern, free software. We love open source solutions ❤️ 
+to the goal of supporting small teams in creating, developing and distributing modern, free software. We love open source ❤️ 
