@@ -15,19 +15,46 @@ int battery_main(const std::vector<std::string>& args) {
         path += fmt::format("resources/fire{}.png", i);
         frames.emplace_back(battery::resource::from_binary_file(path));
     }
+    auto defaultIcon = battery::resource::from_base64(battery::constants::BATTERY_DEFAULT_WINDOW_ICON_BASE64, "png");
 
-    // Create the tray icon
-    auto& tray = battery::tray_icon::get();
-    tray.create();
+    // Everything related to one Tray class must be called from the same thread.
+    // You can easily dispatch this to a background thread using battery::async_worker,
+    // but the class instantiation and event loop must be in the same worker.
+
+    bool animate = true;                           // Here, the MouseButton is which button opens the context menu (optional)
+    Tray::Tray tray("MyTray", "Example Tray Icon Animated", Tray::MouseButton::RIGHT);
+    tray.addClickCallback(Tray::MouseButton::LEFT, [] {
+        battery::log::info("Left mouse button");
+    });
+    tray.addClickCallback(Tray::MouseButton::RIGHT, [] {
+        battery::log::info("Right mouse button");
+    });
+
+    // Here define the options for the context menu. You don't have to define anything.
+    tray.addEntry(Tray::Button("Quit", [&tray] { tray.exit(); }));
+    tray.addEntry(Tray::Button("Disabled button"))->setDisabled(true);
+    tray.addEntry(Tray::Separator());
+    tray.addEntry(Tray::Label("Just a label"));
+    tray.addEntry(Tray::Toggle("Animate", true, [&animate](bool state) {
+        if (state && !animate) {
+            battery::log::info("Start animation");
+            animate = true;
+        }
+        if (!state && animate) {
+            battery::log::info("Stop animation");
+            animate = false;
+        }
+    }));
+    tray.addEntry(Tray::Separator());
+    tray.addEntry(Tray::Submenu("Test Submenu"))->addEntry(Tray::Button("Submenu button!"))->setDisabled(true);
 
     // And start the loop :)
-    while (battery::time() < 30) {
-        for (const auto& frame : frames) {
-            tray.set_icon(frame);
-            battery::sleep(0.02);
-        }
+    int i = 0;
+    while (tray.run_nonblocking()) {
+        tray.setIcon(animate ? frames[i++] : defaultIcon);
+        i %= frames.size();
+        battery::sleep_ms(20);
     }
 
-    tray.destroy();     // Not actually necessary
     return 0;
 }

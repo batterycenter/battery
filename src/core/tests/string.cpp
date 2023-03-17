@@ -87,3 +87,19 @@ TEST(BatteryCore_String, U8StringToString) {
     auto parsed = battery::string::u8string_to_string(u8"年 本 Süßölgefäß 国 分 高");
     EXPECT_EQ(str, parsed);
 }
+
+TEST(BatteryCore_String, Utf8To32AndBack) {
+    std::string str = "年 本 Süßölgefäß 国 分 高";
+    std::u32string u32 = battery::string::utf8_to_utf32(str);
+    EXPECT_EQ(str, battery::string::utf32_to_utf8(u32));
+}
+
+TEST(BatteryCore_String, ToLowercase) {
+    std::string str = "Süßölgefäß ÄÖÜ";
+    EXPECT_EQ(battery::string::to_lowercase(str), "süßölgefäß äöü");
+}
+
+TEST(BatteryCore_String, ToUppercase) {
+    std::string str = "Süßölgefäß ÄÖÜ";
+    EXPECT_EQ(battery::string::to_uppercase(str), "SÜSSÖLGEFÄSS ÄÖÜ");
+}

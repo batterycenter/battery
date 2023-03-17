@@ -19,7 +19,7 @@
 #include "battery/core/string.h"
 #include "battery/core/thread.h"
 #include "battery/core/time.h"
-#include "battery/core/tray_icon.h"
+#include "battery/core/tray/tray.hpp"
 
 #include "toml.hpp"
 

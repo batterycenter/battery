@@ -18,6 +18,12 @@ https://github.com/Neargye/semver -> MIT License
 
 https://github.com/cpm-cmake/CPM.cmake -> MIT License
 
+https://github.com/Soundux/traypp -> MIT License
+
+https://www.reichwein.it/unicode/ -> CC0 1.0 Universal (Like MIT)
+
+https://github.com/JuliaStrings/utf8proc -> MIT "expat"
+
 TODO: Add unit testing
 
 TODO: Add pipelines and automate testing

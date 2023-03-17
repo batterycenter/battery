@@ -1,0 +1,18 @@
+[project]
+name = "Battery"
+version = "0.0.0"
+
+# Optional, adding this will enable direct links from the documentation
+# to your source code.
+git_repo_url = "https://github.com/HerrNamenlos123/Battery/"
+git_default_branch = "master"
+
+[ignore]
+paths = [
+    "build",
+    "/tests/",
+    "/extern/"
+]
+
+[paths]
+compile_commands = "build-hdoc/compile_commands.json"

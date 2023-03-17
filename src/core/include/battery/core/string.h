@@ -6,7 +6,9 @@
 
 #include <string>
 #include <vector>
+#include <variant>
 #include <optional>
+#include <functional>
 
 #include "battery/core/environment.h"
 
@@ -42,6 +44,46 @@ namespace battery::string {
     /// \see battery::string::utf8_to_osstring()
     ///
     std::string osstring_to_utf8(const osstring& str);
+
+    ///
+    /// \brief Convert a utf-8 encoded multibyte string to a utf-32 encoded string.
+    /// \param[in] str The string to be converted
+    /// \throw std::invalid_argument on an invalid utf-8 sequence
+    /// \return The converted string
+    /// \see battery::string::utf32_to_utf8()
+    ///
+    std::u32string utf8_to_utf32(const std::string& str);
+
+    ///
+    /// \brief Convert a utf-32 encoded string back to a utf-8 encoded string.
+    /// \param[in] str The string to be converted
+    /// \throw std::invalid_argument on an invalid utf-32 sequence
+    /// \return The converted string
+    /// \see battery::string::utf8_to_utf32()
+    ///
+    std::string utf32_to_utf8(const std::u32string& str);
+
+    ///
+    /// \brief Convert a single unicode character into its utf-8 encoded form
+    /// \param[in] c The character to be converted
+    /// \throw std::invalid_argument on an invalid unicode character
+    /// \return The utf-8 multibyte string representing the unicode character
+    ///
+    std::string to_utf8(char32_t c);
+
+    ///
+    /// \brief Call a function for every codepoint in the utf-8 sequence. This can be used to do operations on a string
+    ///        whereas the function is called for every character (not for every byte). The return values are appended
+    ///        to one another and returned as another string. Thus, directly returning the character in the callback
+    ///        would make this function return the string unchanged.
+    /// \param[in] str The string over which to iterate
+    /// \param[in] function A callback which is called for every character or codepoint in the string
+    /// \throw std::invalid_argument on an invalid utf-8 sequence
+    /// \see battery::string::utf8_foreach_char32()
+    /// \return All return values from the callbacks appended into a string
+    ///
+    std::string foreach(const std::string& str, std::function<std::variant<std::string,char32_t>(std::string)> function);
+    std::string foreach(const std::string& str, std::function<std::variant<std::string,char32_t>(char32_t)> function);
 
     ///
     /// \brief Split a string into an array of string pieces by a delimeter character. When no delimeter is found,
@@ -107,6 +149,24 @@ namespace battery::string {
     /// \see battery::string::u8string_to_string()
     ///
     std::u8string string_to_u8string(const std::string& str);
+
+    ///
+    /// \brief Make all characters of a utf-8 string lowercase. Throws on error
+    /// \param[in] str The utf-8 string to be converted
+    /// \throw std::invalid_argument on an invalid utf-8 sequence
+    /// \return The converted utf-8 string
+    /// \see battery::string::to_uppercase()
+    ///
+    std::string to_lowercase(const std::string& str);
+
+    ///
+    /// \brief Make all characters of a utf-8 string uppercase. Throws on error
+    /// \param[in] str The utf-8 string to be converted
+    /// \throw std::invalid_argument on an invalid utf-8 sequence
+    /// \return The converted utf-8 string
+    /// \see battery::string::to_lowercase()
+    ///
+    std::string to_uppercase(const std::string& str);
 
     ///
     /// \brief Encode a string as Base-64. This string can either be a text or a binary-like byte-series (loaded from a file).

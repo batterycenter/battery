@@ -1,38 +1,28 @@
 
 option(BATTERY_CORE_NO_MAIN "Prevent battery from defining the main() function internally" OFF)
+option(BATTERY_CORE_NO_TRAY "Compile without support for system tray icons (without libappindicator dependency)" OFF)
 
 # Battery core library
-battery_add_library(battery_core STATIC ALIAS battery::core   # Also add all headers so they're shown correctly in IDEs
-        include/battery/core/extern/CLI11.hpp
-        include/battery/core/extern/inja.hpp
-        include/battery/core/extern/json.hpp
-        include/battery/core/extern/magic_enum.hpp
-        include/battery/core/extern/platform_folders.h
-        include/battery/core/extern/rang.hpp
-        include/battery/core/extern/semver.hpp
-        include/battery/core/extern/tray.h
-
-        include/battery/core/all.h
-        include/battery/core/async_worker.h
-        include/battery/core/constants.h
-        include/battery/core/environment.h
-        include/battery/core/error.h
-        include/battery/core/fs.h
-        include/battery/core/log.h
-        include/battery/core/main.h
-        include/battery/core/messages.h
-        include/battery/core/platform.h
-        include/battery/core/process.h
-        include/battery/core/resource.h
-        include/battery/core/string.h
-        include/battery/core/thread.h
-        include/battery/core/time.h
-        include/battery/core/tray_icon.h
-
-        include/battery/core/internal/windows.h
-
+battery_add_library(battery_core STATIC ALIAS battery::core
         src/extern/platform_folders.cpp
+        src/extern/utf8proc.c
+        src/extern/utf8proc_data.c
         src/internal/platform.cpp
+        src/tray/components/button.cpp
+        src/tray/components/imagebutton.cpp
+        src/tray/components/label.cpp
+        src/tray/components/separator.cpp
+        src/tray/components/submenu.cpp
+        src/tray/components/syncedtoggle.cpp
+        src/tray/components/toggle.cpp
+        src/tray/core/linux/icon.cpp
+        src/tray/core/linux/image.cpp
+        src/tray/core/linux/tray.cpp
+        src/tray/core/windows/icon.cpp
+        src/tray/core/windows/image.cpp
+        src/tray/core/windows/tray.cpp
+        src/tray/core/entry.cpp
+        src/tray/core/traybase.cpp
         src/constants.cpp
         src/exception.cpp
         src/fs.cpp
@@ -43,19 +33,35 @@ battery_add_library(battery_core STATIC ALIAS battery::core   # Also add all hea
         src/process.cpp
         src/resource.cpp
         src/string.cpp
-        src/time.cpp
-        src/tray_icon.cpp)
+        src/time.cpp)
+
+if (MSVC)               # For Visual Studio we add all header files as sources so they're listed in the IDE
+    file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_LIST_DIR}/include/**)
+    target_sources(battery_core PUBLIC ${HEADERS})
+endif()
 
 # Properties
 target_include_directories(battery_core PUBLIC include)
+target_compile_definitions(battery_core PUBLIC UTF8PROC_STATIC)
 
 # The core::main module contains the main() function
 add_subdirectory(main)
 if (NOT BATTERY_CORE_NO_MAIN)
-    target_link_libraries(battery_core PUBLIC battery::core::main)
+    target_link_libraries(battery_core battery::core::main)
 endif()
-add_subdirectory(traypp)
-target_link_libraries(battery_core PUBLIC battery::core::traypp)
+
+# Tray module
+if (UNIX AND NOT BATTERY_CORE_NO_TRAY)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+    pkg_check_modules(APPINDICATOR REQUIRED appindicator3-0.1)
+
+    target_include_directories(battery_core SYSTEM PUBLIC ${GTK3_INCLUDE_DIRS} ${APPINDICATOR_INCLUDE_DIRS})
+    target_link_libraries(battery_core ${GTK3_LIBRARIES} ${APPINDICATOR_LIBRARIES})
+endif()
+if (BATTERY_CORE_NO_TRAY)
+    target_compile_definitions(battery_core PUBLIC BATTERY_CORE_NO_TRAY)
+endif()
 
 # Download dependencies
 set(REPROC++ ON)
@@ -66,12 +72,10 @@ battery_add_package("gh:nemtrif/utfcpp#v3.2.3")         # UTF-8 conversions
 
 # Link dependencies
 target_link_libraries(battery_core
-    PUBLIC
         spdlog::spdlog
         toml11::toml11
         utf8::cpp
         reproc++
-    PRIVATE
     )
 
 # Unit-testing

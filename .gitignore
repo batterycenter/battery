@@ -7,7 +7,7 @@
 cmake-build-*/
 bin/
 build/
-build-*/
+build*/
 Testing/
 
 # Battery configuration file (to be removed from this list)

@@ -27,6 +27,7 @@ namespace battery::fs {
     class path : public std::filesystem::path {
     public:
         path() = default;
+        path(const std::filesystem::path& path) : std::filesystem::path(path.u8string()) {}
         path(const char* path) : std::filesystem::path(battery::string::string_to_u8string(path)) {}
         path(const char8_t* path) : std::filesystem::path(path) {}
         path(const std::string& path) : std::filesystem::path(battery::string::string_to_u8string(path)) {}
@@ -39,12 +40,21 @@ namespace battery::fs {
             return std::bit_cast<const char*>(this->u8string().c_str());
         }
 
+        path extension() const {
+            return std::filesystem::path::extension();
+        }
+
         fs::path& operator+=(const std::string& path) {
             this->append(path);
             return *this;
         }
 
     };
+
+    inline std::ostream& operator<<(std::ostream& stream, const fs::path& path) {
+        stream << path.to_string();
+        return stream;
+    }
 
     inline fs::path operator+(const fs::path& a, const std::string& b) {
         fs::path path = a;
@@ -175,3 +185,14 @@ namespace battery::fs {
     };
 
 }
+
+#include <spdlog/fmt/bundled/format.h>
+template<> struct fmt::formatter<battery::fs::path> {
+    constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {
+        return ctx.end();
+    }
+    template <typename FormatContext>
+    auto format(const battery::fs::path& input, FormatContext& ctx) -> decltype(ctx.out()) {
+        return format_to(ctx.out(), "{}", input.to_string());
+    }
+};

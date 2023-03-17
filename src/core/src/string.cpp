@@ -1,5 +1,7 @@
 
 #include "battery/core/string.h"
+#include "battery/core/log.h"
+#include "battery/core/extern/utf8proc.h"
 #include "utf8.h"
 
 #include <cstring>
@@ -31,6 +33,60 @@ namespace battery::string {
 #else
         return str;
 #endif
+    }
+
+    std::u32string utf8_to_utf32(const std::string& str) {
+        try {
+            return utf8::utf8to32(str);
+        }
+        catch (...) {
+            throw std::invalid_argument("Invalid utf-8 sequence");
+        }
+    }
+
+    std::string utf32_to_utf8(const std::u32string& str) {
+        try {
+            return utf8::utf32to8(str);
+        }
+        catch (...) {
+            throw std::invalid_argument("Invalid utf-8 sequence");
+        }
+    }
+
+    std::string to_utf8(char32_t c) {
+        return utf32_to_utf8(std::u32string(&c, 1));
+    }
+
+    std::string foreach(const std::string& str, std::function<std::variant<std::string,char32_t>(std::string)> function) {
+        std::string result;
+        for (char32_t c : utf8_to_utf32(str)) {
+            auto v = function(to_utf8(c));
+            std::visit([&result](const auto& s) {
+                if constexpr(std::is_same_v<std::decay_t<decltype(s)>,std::string>) {
+                    result += s;
+                }
+                else {
+                    result += to_utf8(s);
+                }
+            }, v);
+        }
+        return result;
+    }
+
+    std::string foreach(const std::string& str, std::function<std::variant<std::string,char32_t>(char32_t)> function) {
+        std::string result;
+        for (char32_t c : utf8_to_utf32(str)) {
+            auto v = function(c);
+            std::visit([&result](const auto& s) {
+                if constexpr(std::is_same_v<std::decay_t<decltype(s)>,std::string>) {
+                    result += s;
+                }
+                else {
+                    result += to_utf8(s);
+                }
+            }, v);
+        }
+        return result;
     }
 
     std::vector<std::string> split(const std::string& str, char delimeter) {
@@ -98,6 +154,21 @@ namespace battery::string {
         u8target.resize(str.length());
         std::memcpy(u8target.data(), str.data(), str.length());
         return u8target;
+    }
+
+    std::string to_lowercase(const std::string& str) {
+        return string::foreach(str, [] (char32_t c) {
+            return (char32_t)utf8proc_tolower(c);
+        });
+    }
+
+    std::string to_uppercase(const std::string& str) {
+        return string::foreach(str, [] (char32_t c) {
+            if (to_utf8(c) == "ß") {                // Special case which is not handled well in the library (at least not how we want)
+                return std::string("SS");
+            }
+            return to_utf8(utf8proc_toupper(c));
+        });
     }
 
     // TODO: Support REGEX
