@@ -56,5 +56,5 @@ But you are NOT allowed to:
  - Redistribute battery itself or large portions of it, claiming you are the original author ❌
  - Battery is distributed without any warranty whatsoever ❌
 
-Battery is striving to become a healthy community of developers. In essence, everything is allowed that contributes 
+Battery is striving to become a healthy community of developers. Everything is allowed that contributes 
 to the goal of supporting small teams in creating, developing and distributing modern, free software. We love open source ❤️ 
