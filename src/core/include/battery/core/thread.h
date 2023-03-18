@@ -16,11 +16,13 @@
 
 #pragma once
 
+#include <future>
 #include <string>
 #include <thread>
 #include "battery/core/platform.h"
 #include "battery/core/messages.h"
 #include "battery/core/log.h"
+#include "battery/core/time.h"
 
 ///
 /// \brief Battery functions related to multithreading
@@ -53,10 +55,10 @@ namespace b {
     /// \param[in] func The lambda function to execute safely
     /// \see b::message_box_on_exception()
     ///
-    template<typename T>
-    void catch_common_exceptions(T&& func) {
+    template<class... Args>
+    void catch_common_exceptions(Args&&... args) {
         try {
-            func();
+            std::invoke(std::forward<Args>(args)...);
         }
         catch (const std::exception& e) {
             battery::log::core::critical("Unhandled exception in b::thread: [std::exception]: {}", e.what());
@@ -90,13 +92,21 @@ namespace b {
         /// \param[in] function The function to execute in the thread
         /// \param[in] args Any number of parameters to pass to the function when calling it
         ///
-        template<typename T, typename... TArgs>
-        thread(T&& function, TArgs... args)
-            : std::jthread([&function, &args...]() {
-                catch_common_exceptions([&function, &args...]() {
-                    function(args...);
-                });
-            }) {}
+        template<class... Args>
+        thread(Args&&... args)
+            : std::jthread([&args...,this]() {
+                promise.set_value(true);                // Apparently we have to wait until the thread is running
+                b::catch_common_exceptions([&args...] {
+                    std::invoke(std::forward<Args>(args)...);
+                    });
+                }
+            )
+        {
+            promise.get_future().get();
+        }
+
+    private:
+        std::promise<bool> promise;
     };
 
 }

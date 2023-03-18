@@ -119,7 +119,7 @@ namespace b {
     std::string u8_foreach(const std::string& str, const std::function<std::variant<std::string,char32_t>(std::string)>& function);
 
     ///
-    /// \brief Call a function for every character in a UTF-8 encoded string.
+    /// \brief Call a function for every character in a UTF-8 encoded string. Check the overload for more info.
     /// \details This is an overload that supplies the callback with `char32_t` instead of `std::string`.
     ///          Please see `b::u8_foreach()` for any other details.
     ///

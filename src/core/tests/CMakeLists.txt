@@ -8,4 +8,6 @@ target_sources(battery_core_tests PRIVATE
     main.cpp
     process.cpp
     string.cpp
+    thread.cpp
+    time.cpp
     tray_icon.cpp)
