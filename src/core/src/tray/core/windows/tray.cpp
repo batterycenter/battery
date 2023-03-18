@@ -19,7 +19,7 @@ std::map<HWND, std::reference_wrapper<Tray::Tray>> Tray::Tray::trayList;
 Tray::Tray::Tray(std::string identifier, std::string tooltip, MouseButton clickAction)
     : BaseTray(std::move(identifier), std::move(tooltip), std::move(clickAction))
 {
-    auto _identifier = battery::string::utf8_to_osstring(this->identifier);
+    auto _identifier = b::to_osstring(this->identifier);
     WNDCLASSEX windowClass;
     memset(&windowClass, 0, sizeof(windowClass));
     windowClass.cbSize = sizeof(windowClass);
@@ -33,7 +33,7 @@ Tray::Tray::Tray(std::string identifier, std::string tooltip, MouseButton clickA
     }
 
     // NOLINTNEXTLINE
-    hwnd = CreateWindow(battery::string::utf8_to_osstring(this->identifier).c_str(), nullptr, 0, 0, 0, 0, 0, nullptr, nullptr, windowClass.hInstance,
+    hwnd = CreateWindow(b::to_osstring(this->identifier).c_str(), nullptr, 0, 0, 0, 0, 0, nullptr, nullptr, windowClass.hInstance,
                         nullptr);
     if (hwnd == nullptr)
     {
@@ -48,7 +48,7 @@ Tray::Tray::Tray(std::string identifier, std::string tooltip, MouseButton clickA
     memset(&notifyData, 0, sizeof(NOTIFYICONDATA));
     notifyData.cbSize = sizeof(NOTIFYICONDATA);
     notifyData.hWnd = hwnd;
-    lstrcpyW(notifyData.szTip, battery::string::utf8_to_osstring(this->tooltip).c_str());
+    lstrcpyW(notifyData.szTip, b::to_osstring(this->tooltip).c_str());
     notifyData.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
     notifyData.uCallbackMessage = WM_TRAY;
     notifyData.hIcon = this->icon;
@@ -69,7 +69,7 @@ void Tray::Tray::exit()
     DestroyIcon(notifyData.hIcon);
     DestroyMenu(menu);
 
-    UnregisterClass(battery::string::utf8_to_osstring(identifier).c_str(), GetModuleHandle(nullptr));
+    UnregisterClass(b::to_osstring(identifier).c_str(), GetModuleHandle(nullptr));
     PostMessage(hwnd, WM_QUIT, 0, 0);
     allocations.clear();
 
@@ -106,7 +106,7 @@ HMENU Tray::Tray::construct(const std::vector<std::shared_ptr<TrayEntry>> &entri
         strcpy(name.get(), item->getText().c_str()); // NOLINT
         parent->allocations.emplace_back(name);
 
-        auto _name = battery::string::utf8_to_osstring(std::string(name.get()));
+        auto _name = b::to_osstring(std::string(name.get()));
         MENUITEMINFO winItem{0};
 
         winItem.wID = ++id;

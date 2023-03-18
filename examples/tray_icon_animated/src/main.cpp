@@ -5,8 +5,34 @@
 #error EXAMPLE_ROOT is not defined, the build system is probably not set up correctly
 #endif
 
+class S {
+public:
+    S() {}
+
+    void run() {
+        thread = b::thread([this]() {
+            th();
+        });
+    }
+
+    void th() {
+        data = "SAKDJ";
+        std::cout << data;
+    }
+
+    std::string data;
+    b::thread thread;
+};
+
+void foo() {
+    S s;
+    s.run();
+};
+
 int battery_main(const std::vector<std::string>& args) {
     battery::log::info("Running battery example tray-icon-animated. Have fun!");
+
+    foo();
 
     // First load the frames into memory
     std::vector<battery::resource> frames;
@@ -53,7 +79,7 @@ int battery_main(const std::vector<std::string>& args) {
     while (tray.run_nonblocking()) {
         tray.setIcon(animate ? frames[i++] : defaultIcon);
         i %= frames.size();
-        battery::sleep_ms(20);
+        b::sleep_ms(20);
     }
 
     return 0;

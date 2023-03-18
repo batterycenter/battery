@@ -23,6 +23,7 @@ namespace battery {
         [[nodiscard]] std::string filetype() const;
         [[nodiscard]] std::string as_string() const;
         [[nodiscard]] std::vector<uint8_t> as_vector() const;
+        [[nodiscard]] std::string as_base64() const;
 
     private:
         std::string _data;

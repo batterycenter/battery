@@ -5,32 +5,53 @@
 TEST(BatteryCore_String, StringSplit) {
     std::string str = "This is a string for testing";
     std::vector<std::string> target = { "This", "is", "a", "string", "for", "testing" };
-    auto v = battery::string::split(str, ' ');
+    auto v = b::split(str, " ");
+    EXPECT_EQ(v, target);
+}
+
+TEST(BatteryCore_String, StringSplitU8) {
+    std::string str = "This is another Süßölgefäß";
+    std::vector<std::string> target = { "This is another ", "ölgefäß" };
+    auto v = b::split(str, "Süß");
     EXPECT_EQ(v, target);
 }
 
 TEST(BatteryCore_String, StringJoin) {
     std::vector<std::string> src = { "This", "is", "a", "string", "for", "testing" };
     std::string target = "This is a string for testing";
-    auto v = battery::string::join(src, " ");
+    auto v = b::join(src, " ");
     EXPECT_EQ(v, target);
 }
 
 TEST(BatteryCore_String, StringReplace) {
     auto src = "This unit test is now a unit test string";
-    auto v = battery::string::replace(src, "unit test", "banana");
+    auto v = b::replace(src, "unit test", "banana");
     EXPECT_EQ(v, "This banana is now a banana string");
 }
 
 TEST(BatteryCore_String, StringReplaceOne) {
-    GTEST_SKIP();   // TODO: Implement function properly and test it
+    std::string str = "aa bb cc bb aa bb";
+    EXPECT_EQ(b::replace_one(str, "aa", "cc", 0), "cc bb cc bb aa bb");
+    EXPECT_EQ(b::replace_one(str, "bb", "aa", 0), "aa aa cc bb aa bb");
+    EXPECT_EQ(b::replace_one(str, "bb", "cc", 2), "aa bb cc bb aa cc");
+    EXPECT_EQ(b::replace_one(str, "aa", "cc", 1), "aa bb cc bb cc bb");
+    EXPECT_EQ(b::replace_one(str, "aa", "cc", -1), "aa bb cc bb cc bb");
+    EXPECT_EQ(b::replace_one(str, "bb", "aa", -2), "aa bb cc aa aa bb");
+    EXPECT_EQ(b::replace_one(str, "cc", "dd", 2), "aa bb cc bb aa bb");
+    EXPECT_EQ(b::replace_one(str, "aa", "dd", -3), "aa bb cc bb aa bb");
+}
+
+TEST(BatteryCore_String, StringReplaceFirstLast) {
+    std::string str = "aa bb cc bb aa bb";
+    EXPECT_EQ(b::replace_first(str, "aa", "cc"), "cc bb cc bb aa bb");
+    EXPECT_EQ(b::replace_last(str, "aa", "cc"), "aa bb cc bb cc bb");
 }
 
 TEST(BatteryCore_String, UTF8ToWCharAndBack) {
     // "年 本 Süßölgefäß 国 分 高"
     std::string u8 = "\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8";
-    battery::string::osstring os = battery::string::utf8_to_osstring(u8);
-    EXPECT_EQ(u8, battery::string::osstring_to_utf8(os));
+    b::osstring os = b::to_osstring(u8);
+    EXPECT_EQ(u8, b::from_osstring(os));
 }
 
 TEST(BatteryCore_String, CodePointsC) {
@@ -77,29 +98,36 @@ TEST(BatteryCore_String, StringLiteralsU8_Codepoint) {
 TEST(BatteryCore_String, StringToU8String) {
     std::string _str = "\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8";
     std::u8string u8 = u8"年 本 Süßölgefäß 国 分 高";
-    auto u8str = battery::string::string_to_u8string(_str);
+    auto u8str = b::to_u8string(_str);
     ASSERT_EQ(u8.size(), u8str.size());
     EXPECT_EQ(0, std::memcmp(u8.data(), u8str.data(),u8.size()));
 }
 
 TEST(BatteryCore_String, U8StringToString) {
     std::string str = "\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8";
-    auto parsed = battery::string::u8string_to_string(u8"年 本 Süßölgefäß 国 分 高");
+    auto parsed = b::from_u8string(u8"年 本 Süßölgefäß 国 分 高");
     EXPECT_EQ(str, parsed);
 }
 
 TEST(BatteryCore_String, Utf8To32AndBack) {
     std::string str = "年 本 Süßölgefäß 国 分 高";
-    std::u32string u32 = battery::string::utf8_to_utf32(str);
-    EXPECT_EQ(str, battery::string::utf32_to_utf8(u32));
+    std::u32string u32 = b::to_u32(str);
+    EXPECT_EQ(str, b::to_u8(u32));
 }
 
 TEST(BatteryCore_String, ToLowercase) {
     std::string str = "Süßölgefäß ÄÖÜ";
-    EXPECT_EQ(battery::string::to_lowercase(str), "süßölgefäß äöü");
+    EXPECT_EQ(b::to_lower(str), "süßölgefäß äöü");
 }
 
 TEST(BatteryCore_String, ToUppercase) {
     std::string str = "Süßölgefäß ÄÖÜ";
-    EXPECT_EQ(battery::string::to_uppercase(str), "SÜSSÖLGEFÄSS ÄÖÜ");
+    EXPECT_EQ(b::to_upper(str), "SÜSSÖLGEFÄSS ÄÖÜ");
+}
+
+TEST(BatteryCore_String, Base64AndBack) {
+    std::string str = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima voluptatum velit mollitia dolorem facilis suscipit cumque, molestias ut ex magni natus laudantium totam quisquam odit consectetur reprehenderit non quae vitae?";
+    std::string encoded = "TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQgY29uc2VjdGV0dXIgYWRpcGlzaWNpbmcgZWxpdC4gTWluaW1hIHZvbHVwdGF0dW0gdmVsaXQgbW9sbGl0aWEgZG9sb3JlbSBmYWNpbGlzIHN1c2NpcGl0IGN1bXF1ZSwgbW9sZXN0aWFzIHV0IGV4IG1hZ25pIG5hdHVzIGxhdWRhbnRpdW0gdG90YW0gcXVpc3F1YW0gb2RpdCBjb25zZWN0ZXR1ciByZXByZWhlbmRlcml0IG5vbiBxdWFlIHZpdGFlPw==";
+    EXPECT_EQ(b::encode_base64(str), encoded);
+    EXPECT_EQ(b::decode_base64(b::encode_base64(str)), str);
 }

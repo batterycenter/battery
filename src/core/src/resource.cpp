@@ -14,7 +14,7 @@ namespace battery {
             throw std::ios::failure("battery::resource: Failed to open file '" + filepath.to_string() + "' for reading: " + strerror(errno));
         resource res;
         res._data = file.to_string();
-        res._filetype = battery::string::to_lowercase(filepath.extension().to_string());
+        res._filetype = b::to_lower(filepath.extension().to_string());
         if (!res._filetype.empty()) {
             if (res._filetype[0] == '.') {
                 res._filetype.erase(res._filetype.begin());
@@ -29,7 +29,7 @@ namespace battery {
             throw std::ios::failure("battery::resource: Failed to open file '" + filepath.to_string() + "' for reading: " + strerror(errno));
         resource res;
         res._data = file.to_string();
-        res._filetype = battery::string::to_lowercase(filepath.extension().to_string());
+        res._filetype = b::to_lower(filepath.extension().to_string());
         if (!res._filetype.empty()) {
             if (res._filetype[0] == '.') {
                 res._filetype.erase(res._filetype.begin());
@@ -54,7 +54,7 @@ namespace battery {
     }
 
     resource resource::from_base64(const std::string& base64, const std::string& filetype) {
-        return resource::from_byte_string(battery::string::decode_base64(base64), filetype);
+        return resource::from_byte_string(b::decode_base64(base64), filetype);
     }
 
     const char* resource::data() const {
@@ -75,6 +75,10 @@ namespace battery {
 
     std::vector<uint8_t> resource::as_vector() const {
         return { _data.begin(), _data.end() };
+    }
+
+    std::string resource::as_base64() const {
+        return b::encode_base64(as_string());
     }
 
 }

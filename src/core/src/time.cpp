@@ -4,7 +4,7 @@
 #include <thread>
 #include <chrono>
 
-namespace battery {
+namespace b {
 
     double time() {
         if (internal::launch_time_us == 0) internal::reset_time();
@@ -42,5 +42,6 @@ namespace battery {
         void reset_time() {
             internal::launch_time_us = epoch_time_us();
         }
+        std::time_t launch_time_us = 0;
     }
 }

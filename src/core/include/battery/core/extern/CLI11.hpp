@@ -3747,7 +3747,7 @@ namespace detail {
 #if defined CLI11_HAS_FILESYSTEM && CLI11_HAS_FILESYSTEM > 0
 CLI11_INLINE path_type check_path(const char *file) noexcept {
     std::error_code ec;
-    auto filename = battery::string::utf8_to_osstring(file);             // BATTERY MODIFIED, TODO: Test if it actually works
+    auto filename = b::to_osstring(file);                            // BATTERY MODIFIED, TODO: Test if it actually works
     auto stat = std::filesystem::status(filename, ec);                   // BATTERY MODIFIED
     if(ec) {
         return path_type::nonexistent;

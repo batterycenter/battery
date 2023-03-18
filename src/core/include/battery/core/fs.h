@@ -28,9 +28,9 @@ namespace battery::fs {
     public:
         path() = default;
         path(const std::filesystem::path& path) : std::filesystem::path(path.u8string()) {}
-        path(const char* path) : std::filesystem::path(battery::string::string_to_u8string(path)) {}
+        path(const char* path) : std::filesystem::path(b::to_u8string(path)) {}
         path(const char8_t* path) : std::filesystem::path(path) {}
-        path(const std::string& path) : std::filesystem::path(battery::string::string_to_u8string(path)) {}
+        path(const std::string& path) : std::filesystem::path(b::to_u8string(path)) {}
         path(const std::u8string& path) : std::filesystem::path(path) {}
 
         ~path() = default;
@@ -136,8 +136,8 @@ namespace battery::fs {
         }
 
     private:
-        battery::string::osstring convert(const battery::fs::path& _path) const {
-            return battery::string::utf8_to_osstring(_path.to_string());
+        b::osstring convert(const battery::fs::path& _path) const {
+            return b::to_osstring(_path.to_string());
         }
 
         battery::fs::path path;
@@ -164,14 +164,14 @@ namespace battery::fs {
             }
         }
 
-        battery::string::osstring create_dir_return_path(const battery::fs::path& path, bool createDirectory) const {
+        b::osstring create_dir_return_path(const battery::fs::path& path, bool createDirectory) const {
             if (path.has_parent_path() && createDirectory) {
                 auto parent = path.parent_path();
                 if (!fs::exists(parent)) {
                     fs::create_directories(fs::path(path).parent_path());
                 }
             }
-            return battery::string::utf8_to_osstring(path.to_string());
+            return b::to_osstring(path.to_string());
         }
     };
 

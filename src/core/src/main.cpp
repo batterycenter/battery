@@ -6,8 +6,9 @@
 #include "battery/core/string.h"
 #include "battery/core/log.h"
 #include "battery/core/platform.h"
-#include "battery/core/exception.h"
+#include "battery/core/messages.h"
 #include "battery/core/time.h"
+#include "battery/core/thread.h"
 
 #include "battery/core/internal/windows.h"
 
@@ -24,7 +25,7 @@ namespace battery {
         }
         std::vector<std::string> args;
         for (int i = 0; i < _argc; i++) {
-            args.push_back(battery::string::osstring_to_utf8(_args[i]));
+            args.push_back(b::from_osstring(_args[i]));
         }
         ::LocalFree(_args);
 
@@ -52,10 +53,10 @@ namespace battery {
     }
 
     int run_main(int argc, const char** argv) {
-        internal::reset_time();
+        b::internal::reset_time();
         int result = -1;
         setup_windows_console();
-        catch_common_exceptions([&result, argc, argv]() {
+        b::catch_common_exceptions([&result, argc, argv]() {
             result = battery_main(parse_cli(argc, argv));
         });
         return result;

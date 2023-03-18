@@ -25,12 +25,12 @@ namespace battery {
                 nullptr, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR) & messageBuffer, 0,
                 nullptr);
 
-        auto buffer = battery::string::osstring_to_utf8(messageBuffer);
+        auto buffer = b::from_osstring(messageBuffer);
         LocalFree(messageBuffer);
         return buffer;
     }
     static void win32_message_box(const std::string& message, UINT options) {
-        auto text = battery::string::utf8_to_osstring(message);
+        auto text = b::to_osstring(message);
         ::MessageBoxW(nullptr, std::bit_cast<const wchar_t*>(text.c_str()), L"Error", options);
     }
 #else

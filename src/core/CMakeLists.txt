@@ -24,7 +24,6 @@ battery_add_library(battery_core STATIC ALIAS battery::core
         src/tray/core/entry.cpp
         src/tray/core/traybase.cpp
         src/constants.cpp
-        src/exception.cpp
         src/fs.cpp
         src/log.cpp
         src/main.cpp

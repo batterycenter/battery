@@ -1,6 +1,5 @@
 
 #include "battery/core/process.h"
-#include "battery/core/exception.h"
 #include "battery/core/time.h"
 
 #include "reproc++/drain.hpp"
@@ -47,7 +46,7 @@ namespace battery {
     }
 
     void process::stdin_write(const char* buffer, size_t length) {
-        battery::sleep_ms(options.wait_ms_before_every_stdin_write);
+        b::sleep_ms(options.wait_ms_before_every_stdin_write);
         _process.write(std::bit_cast<const uint8_t *>(buffer), length);
     }
 
@@ -55,7 +54,7 @@ namespace battery {
         if (length == 0) return {};
         auto buffer = std::string(std::bit_cast<const char*>(_buffer), length);
         if (options.suppress_carriage_return) {
-            buffer = battery::string::replace(buffer, "\r", "");
+            buffer = b::replace(buffer, "\r", "");
         }
         output_stdout += buffer;
         output_combined += buffer;
@@ -68,7 +67,7 @@ namespace battery {
         if (length == 0) return {};
         auto buffer = std::string(std::bit_cast<const char*>(_buffer), length);
         if (options.suppress_carriage_return) {
-            buffer = battery::string::replace(buffer, "\r", "");
+            buffer = b::replace(buffer, "\r", "");
         }
         output_stderr += buffer;
         output_combined += buffer;
@@ -77,7 +76,7 @@ namespace battery {
         return {};
     }
 
-    void process::run_process() {   // TODO !!!!! : Process stdout and stdin has no unicode support!!!
+    void process::run_process() {
         std::vector<const char*> cmd_cstr{ options.executable.c_str() };
         for (const auto& c : options.arguments) {
             cmd_cstr.emplace_back(c.c_str());
@@ -91,9 +90,7 @@ namespace battery {
         if (options.working_directory.has_value()) {
             auto dir = options.working_directory.value();
             if (!fs::is_directory(dir)) {
-                throw battery::exception(
-                        std::string("Cannot run process in working directory ") + workdir +
-                        ": Directory does not exist");
+                throw std::invalid_argument(fmt::format("Cannot run process in working directory '{}': Directory does not exist", workdir));
             }
         }
 
