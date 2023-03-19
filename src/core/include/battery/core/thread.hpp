@@ -19,7 +19,7 @@
 #include <future>
 #include <string>
 #include <thread>
-#include "battery/core/platform.hpp"
+#include "battery/core/folders.hpp"
 #include "battery/core/messages.hpp"
 #include "battery/core/log.hpp"
 #include "battery/core/time.hpp"

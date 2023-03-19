@@ -13,7 +13,7 @@
 #include "battery/core/log.hpp"
 #include "battery/core/main.hpp"
 #include "battery/core/messages.hpp"
-#include "battery/core/platform.hpp"
+#include "battery/core/folders.hpp"
 #include "battery/core/process.hpp"
 #include "battery/core/resource.hpp"
 #include "battery/core/string.hpp"

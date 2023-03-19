@@ -5,7 +5,7 @@
 #include "battery/core/main.hpp"
 #include "battery/core/string.hpp"
 #include "battery/core/log.hpp"
-#include "battery/core/platform.hpp"
+#include "battery/core/folders.hpp"
 #include "battery/core/messages.hpp"
 #include "battery/core/time.hpp"
 #include "battery/core/thread.hpp"

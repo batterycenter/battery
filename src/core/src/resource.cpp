@@ -5,7 +5,7 @@
 #include "battery/core/log.hpp"
 #include "battery/core/fs.hpp"
 #include "battery/core/uuid.hpp"
-#include "battery/core/platform.hpp"
+#include "battery/core/folders.hpp"
 
 #include "utf8.h"
 

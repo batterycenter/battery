@@ -1,8 +1,28 @@
 
-#include "battery/core/platform.hpp"
+#include "battery/core/environment.hpp"
+#include "battery/core/folders.hpp"
 #include "battery/core/extern/platform_folders.h"
+#include "battery/core/internal/windows.hpp"
 
 namespace b {
+
+    fs::path get_executable_path() {
+#ifdef BATTERY_ARCH_WINDOWS
+        wchar_t buffer[MAX_PATH * 5];
+        if (GetModuleFileNameW(nullptr, buffer, sizeof(buffer)) == 0) {
+            return {};
+        }
+        return b::from_osstring(buffer);
+#else
+#endif
+    }
+
+    fs::path get_executable_dir() {
+        auto exe = get_executable_path();
+        return exe.parent_path();
+    }
+
+
 
     fs::path folders::get_global_config_home() {
         return sago::getConfigHome();

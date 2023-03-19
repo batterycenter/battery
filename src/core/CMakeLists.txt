@@ -7,7 +7,7 @@ battery_add_library(battery_core STATIC ALIAS battery::core
         src/extern/platform_folders.cpp
         src/extern/utf8proc.c
         src/extern/utf8proc_data.c
-        src/internal/platform.cpp
+        src/internal/folders.cpp
 
         src/tray/components/button.cpp
         src/tray/components/label.cpp
@@ -25,7 +25,7 @@ battery_add_library(battery_core STATIC ALIAS battery::core
         src/log.cpp
         src/main.cpp
         src/messages.cpp
-        src/platform.cpp
+        src/folders.cpp
         src/process.cpp
         src/resource.cpp
         src/string.cpp

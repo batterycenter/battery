@@ -7,6 +7,8 @@
 namespace b {
 
     struct folders {
+        static fs::path get_executable_path();
+        static fs::path get_executable_dir();
 
         static fs::path get_global_config_home();
         static fs::path get_global_data_home();
