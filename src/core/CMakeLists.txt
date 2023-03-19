@@ -46,19 +46,6 @@ if (NOT BATTERY_CORE_NO_MAIN)
     target_link_libraries(battery_core battery::core::main)
 endif()
 
-# Tray module
-if (UNIX AND NOT BATTERY_CORE_NO_TRAY)
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
-    pkg_check_modules(APPINDICATOR REQUIRED appindicator3-0.1)
-
-    target_include_directories(battery_core SYSTEM PUBLIC ${GTK3_INCLUDE_DIRS} ${APPINDICATOR_INCLUDE_DIRS})
-    target_link_libraries(battery_core ${GTK3_LIBRARIES} ${APPINDICATOR_LIBRARIES})
-endif()
-if (BATTERY_CORE_NO_TRAY)
-    target_compile_definitions(battery_core PUBLIC BATTERY_CORE_NO_TRAY)
-endif()
-
 # Download dependencies
 set(REPROC++ ON)
 battery_add_package("gh:DaanDeMeyer/reproc#v14.2.4")    # Library for running processes
@@ -77,4 +64,20 @@ target_link_libraries(battery_core
 # Unit-testing
 if (BUILD_TESTS)
     add_subdirectory(tests)
+endif()
+
+# Tray icon dependencies
+if (UNIX AND NOT BATTERY_CORE_NO_TRAY)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(GTK3 gtk+-3.0)
+    if (NOT GTK3_FOUND)
+        message(FATAL_ERROR "GTK3 development libraries not found! Please install them using your package manager \n(Hint: probably 'sudo apt install libgtk-3-dev')")
+    endif()
+    pkg_check_modules(LIBAPPINDICATOR ayatana-appindicator3-0.1)
+    if (NOT LIBAPPINDICATOR_FOUND)
+        message(FATAL_ERROR "Appindicator development libraries not found! \nEither install them using your package manager \n(Hint: probably 'sudo apt install libayatana-appindicator3-dev'), or use -DBATTERY_CORE_NO_TRAY to compile without tray icon support.")
+    endif()
+endif()
+if (BATTERY_CORE_NO_TRAY)
+    target_compile_definitions(battery_core PUBLIC BATTERY_CORE_NO_TRAY)
 endif()

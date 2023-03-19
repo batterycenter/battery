@@ -1,5 +1,6 @@
 
 include(cmake/CPM.cmake)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 
 function(BATTERY_TEST_IF_COMPILES RESULT_VAR OUTPUT_VAR STD_VERSION SOURCE_CONTENT)
     message(STATUS "Checking for compiler feature ${RESULT_VAR}")
