@@ -1,11 +1,12 @@
 #pragma once
 
-#include "battery/core/string.hpp"
-#include <filesystem>
+#include <bit>
 #include <string>
 #include <fstream>
+#include <filesystem>
 #include <functional>
-#include <bit>
+#include <spdlog/fmt/bundled/format.h>
+#include "battery/core/string.hpp"
 
 namespace battery::fs {
 
@@ -93,7 +94,7 @@ namespace battery::fs {
             else {				// Text mode: read the entire file into memory to compensate line-endings
                 std::string temp;	// Buffer is as large as the file on-disk -> Reading will make it smaller, but not larger
                 auto filesize_temp = std::filesystem::file_size(convert(path));
-                temp.resize(static_cast<size_t>(filesize_temp));
+                temp.resize(filesize_temp);
 
                 // Read file
                 fs::ifstream file(path, Mode::TEXT);
@@ -186,7 +187,6 @@ namespace battery::fs {
 
 }
 
-#include <spdlog/fmt/bundled/format.h>
 template<> struct fmt::formatter<battery::fs::path> {
     constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {
         return ctx.end();

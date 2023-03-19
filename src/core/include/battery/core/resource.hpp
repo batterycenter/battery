@@ -1,16 +1,16 @@
 #pragma once
 
-#include "battery/core/fs.h"
+#include "battery/core/fs.hpp"
 #include <string>
 
-namespace battery {
+namespace b {
 
     class resource {
     public:
         resource() = default;
 
-        static resource from_text_file(const fs::path& filepath);
-        static resource from_binary_file(const fs::path& filepath);
+        static resource from_text_file(const battery::fs::path& filepath);
+        static resource from_binary_file(const battery::fs::path& filepath);
         static resource from_byte_string(const std::string& data, const std::string& filetype = "");
         static resource from_buffer(const void* buffer, size_t length, const std::string& filetype = "");
         static resource from_base64(const std::string& base64, const std::string& filetype = "");

@@ -1,7 +1,7 @@
 
 #include "Battery/Core/Exception.h"
 #include "Battery/Core/Config.h"
-#include "Battery/Core/log.h"
+#include "Battery/Core/log.hpp"
 #include "Battery/Utils/FileUtils.h"
 #include "Battery/Platform/Platform.h"
 

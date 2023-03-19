@@ -1,6 +1,6 @@
 
-#include "battery/core/process.h"
-#include "battery/core/time.h"
+#include "battery/core/process.hpp"
+#include "battery/core/time.hpp"
 
 #include "reproc++/drain.hpp"
 
@@ -22,7 +22,7 @@ namespace battery {
 
     std::string process::remove_trailing_whitespace(std::string buffer) {
         if (buffer.empty()) return buffer;
-        for (int i = buffer.length() - 1; i >= 0; i--) {
+        for (size_t i = buffer.length() - 1; i >= 0; i--) {
             switch (buffer.back()) {
                 case '\r':
                 case '\n':

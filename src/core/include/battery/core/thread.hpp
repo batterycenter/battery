@@ -19,11 +19,11 @@
 #include <future>
 #include <string>
 #include <thread>
-#include "battery/core/platform.h"
-#include "battery/core/messages.h"
-#include "battery/core/log.h"
-#include "battery/core/time.h"
-#include "battery/core/constants.h"
+#include "battery/core/platform.hpp"
+#include "battery/core/messages.hpp"
+#include "battery/core/log.hpp"
+#include "battery/core/time.hpp"
+#include "battery/core/constants.hpp"
 
 ///
 /// \brief Battery functions related to multithreading

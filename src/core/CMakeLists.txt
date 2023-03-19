@@ -8,21 +8,18 @@ battery_add_library(battery_core STATIC ALIAS battery::core
         src/extern/utf8proc.c
         src/extern/utf8proc_data.c
         src/internal/platform.cpp
+
         src/tray/components/button.cpp
-        src/tray/components/imagebutton.cpp
         src/tray/components/label.cpp
         src/tray/components/separator.cpp
         src/tray/components/submenu.cpp
         src/tray/components/syncedtoggle.cpp
         src/tray/components/toggle.cpp
-        src/tray/core/linux/icon.cpp
-        src/tray/core/linux/image.cpp
         src/tray/core/linux/tray.cpp
-        src/tray/core/windows/icon.cpp
-        src/tray/core/windows/image.cpp
         src/tray/core/windows/tray.cpp
         src/tray/core/entry.cpp
         src/tray/core/traybase.cpp
+
         src/constants.cpp
         src/fs.cpp
         src/log.cpp

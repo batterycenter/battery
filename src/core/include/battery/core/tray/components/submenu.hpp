@@ -19,21 +19,21 @@
 //
 
 #pragma once
-#include <battery/core/tray/core/entry.hpp>
-#include <battery/core/tray/core/traybase.hpp>
 #include <memory>
-#include <type_traits>
 #include <vector>
+#include <type_traits>
+#include "battery/core/tray/core/entry.hpp"
+#include "battery/core/tray/core/traybase.hpp"
 
-namespace Tray {
+namespace b::tray {
 
-    class Submenu : public TrayEntry {
+    class submenu : public tray_entry {
     public:
-        explicit Submenu(std::string text);
-        ~Submenu() override = default;
+        explicit submenu(std::string text);
+        ~submenu() override = default;
 
         template <typename... T>
-        explicit Submenu(std::string text, const T &... entries) : Submenu(text) {
+        explicit submenu(std::string text, const T &... entries) : submenu(text) {
             addEntries(entries...);
         }
 
@@ -42,7 +42,7 @@ namespace Tray {
             (addEntry(_entries), ...);
         }
 
-        template <typename T, std::enable_if_t<std::is_base_of_v<TrayEntry, T>> * = nullptr>
+        template <typename T, std::enable_if_t<std::is_base_of_v<tray_entry, T>> * = nullptr>
         auto addEntry(const T &entry) {
             entries.emplace_back(std::make_shared<T>(entry));
             auto back = entries.back();
@@ -56,10 +56,10 @@ namespace Tray {
         }
 
         void update();
-        std::vector<std::shared_ptr<TrayEntry>> getEntries();
+        std::vector<std::shared_ptr<tray_entry>> getEntries();
 
     private:
-        std::vector<std::shared_ptr<TrayEntry>> entries;
+        std::vector<std::shared_ptr<tray_entry>> entries;
     };
 
 } // namespace Tray

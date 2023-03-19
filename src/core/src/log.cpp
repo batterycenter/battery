@@ -1,5 +1,5 @@
 
-#include "battery/core/log.h"
+#include "battery/core/log.hpp"
 
 namespace battery::log {
 

@@ -1,14 +1,14 @@
 
-#include "battery/core/resource.h"
-#include "battery/core/log.h"
+#include "battery/core/resource.hpp"
+#include "battery/core/log.hpp"
 #include <ios>
 #include <iostream>
 
 #include "utf8.h"
 
-namespace battery {
+namespace b {
 
-    resource resource::from_text_file(const fs::path& filepath) {
+    resource resource::from_text_file(const battery::fs::path& filepath) {
         battery::fs::ifstream file(filepath, battery::fs::Mode::TEXT);
         if (file.fail())
             throw std::ios::failure("battery::resource: Failed to open file '" + filepath.to_string() + "' for reading: " + strerror(errno));
@@ -23,7 +23,7 @@ namespace battery {
         return res;
     }
 
-    resource resource::from_binary_file(const fs::path& filepath) {
+    resource resource::from_binary_file(const battery::fs::path& filepath) {
         battery::fs::ifstream file(filepath, battery::fs::Mode::BINARY);
         if (file.fail())
             throw std::ios::failure("battery::resource: Failed to open file '" + filepath.to_string() + "' for reading: " + strerror(errno));

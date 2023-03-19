@@ -1,5 +1,5 @@
 
-#include "battery/core/all.h"
+#include "battery/core/all.hpp"
 #include <gtest/gtest.h>
 
 TEST(BatteryCore_Time, Time_S) {

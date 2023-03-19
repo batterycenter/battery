@@ -22,7 +22,7 @@
 #include <optional>
 #include <functional>
 
-#include "battery/core/environment.h"
+#include "battery/core/environment.hpp"
 
 ///
 /// \brief Battery functions related to string manipulation and encoding

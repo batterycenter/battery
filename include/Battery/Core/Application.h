@@ -2,7 +2,7 @@
 
 #include "Battery/common.h"
 #include "Battery/Core/Config.h"
-#include "Battery/Core/log.h"
+#include "Battery/Core/log.hpp"
 #include "Battery/Core/Layer.h"
 #include "Battery/Core/LayerStack.h"
 #include "Battery/Core/Config.h"

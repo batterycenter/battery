@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Battery/Core/Main.h"
-#include "Battery/Core/log.h"
+#include "Battery/Core/main.hpp"
+#include "Battery/Core/log.hpp"
 #include "Battery/Core/exception.h"
 #include "Battery/Utils/FileUtils.h"
 #include "Battery/Utils/MathUtils.h"

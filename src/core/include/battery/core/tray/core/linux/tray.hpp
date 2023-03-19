@@ -23,8 +23,8 @@
 #include "battery/core/environment.hpp"
 #ifndef BATTERY_ARCH_WINDOWS
 
-#include "battery/core/tray/core/traybase.hpp"
 #include <libappindicator/app-indicator.h>
+#include "battery/core/tray/core/traybase.hpp"
 
 namespace b::tray {
 

@@ -47,4 +47,4 @@
     #include "imgui-SFML.h"
 #endif
 
-#include "Battery/Core/log.h"       // Almost everything needs logging
+#include "Battery/Core/log.hpp"       // Almost everything needs logging

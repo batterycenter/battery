@@ -12,3 +12,4 @@ Testing/
 
 # Battery configuration file (to be removed from this list)
 battery.toml
+/cmake-build-release/_deps/googletest-src/sh.exe.stackdump

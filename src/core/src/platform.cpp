@@ -1,5 +1,5 @@
 
-#include "battery/core/platform.h"
+#include "battery/core/platform.hpp"
 #include "battery/core/extern/platform_folders.h"
 
 namespace battery {

@@ -1,5 +1,5 @@
 
-#include "battery/core/all.h"
+#include "battery/core/all.hpp"
 using namespace battery;
 
 // TODO: Print version (add option)

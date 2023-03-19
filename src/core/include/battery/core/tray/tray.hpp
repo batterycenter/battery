@@ -20,7 +20,6 @@
 
 #pragma once
 #include "battery/core/tray/components/button.hpp"
-#include "battery/core/tray/components/imagebutton.hpp"
 #include "battery/core/tray/components/label.hpp"
 #include "battery/core/tray/components/separator.hpp"
 #include "battery/core/tray/components/submenu.hpp"

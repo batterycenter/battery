@@ -19,15 +19,15 @@
 //
 
 #pragma once
-#include <battery/core/tray/core/entry.hpp>
 #include <functional>
+#include "battery/core/tray/core/entry.hpp"
 
-namespace Tray {
+namespace b::tray {
 
-    class Label : public TrayEntry {
+    class label : public tray_entry {
     public:
-        explicit Label(std::string text);
-        ~Label() override = default;
+        explicit label(std::string text);
+        ~label() override = default;
     };
 
 } // namespace Tray

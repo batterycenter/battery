@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Battery/common.h"
-#include "Battery/Core/log.h"
+#include "Battery/Core/log.hpp"
 #include "Battery/Core/Layer.h"
 
 namespace Battery {

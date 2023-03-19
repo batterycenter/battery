@@ -1,6 +1,6 @@
 
-#include "battery/core/string.h"
-#include "battery/core/log.h"
+#include "battery/core/string.hpp"
+#include "battery/core/log.hpp"
 #include "battery/core/extern/utf8proc.h"
 #include "utf8.h"
 

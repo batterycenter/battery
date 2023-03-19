@@ -40,8 +40,8 @@
 
 #pragma once
 
-#include "battery/core/fs.h"                                            // BATTERY MODIFIED
-#include "battery/core/string.h"                                        // BATTERY MODIFIED
+#include "battery/core/fs.hpp"                                            // BATTERY MODIFIED
+#include "battery/core/string.hpp"                                        // BATTERY MODIFIED
 
 // Standard combined includes:
 #include <functional>

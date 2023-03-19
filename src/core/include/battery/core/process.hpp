@@ -1,7 +1,7 @@
 #pragma once
 
-#include "battery/core/fs.h"
-#include "battery/core/async_worker.h"
+#include "battery/core/fs.hpp"
+#include "battery/core/async_worker.hpp"
 
 #include "reproc++/reproc.hpp"
 

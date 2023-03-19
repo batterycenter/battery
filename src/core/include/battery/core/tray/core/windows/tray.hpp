@@ -23,24 +23,19 @@
 #include "battery/core/environment.hpp"
 #ifdef BATTERY_ARCH_WINDOWS
 
-#include <Windows.h>
-#include <battery/core/tray/core/traybase.hpp>
 #include <map>
+#include <Windows.h>
 #include <shellapi.h>
+#include <battery/core/tray/core/traybase.hpp>
 
 namespace b::tray {
 
     class tray : public basetray {
       public:
         tray(std::string identifier, std::string tooltip, MouseButton clickAction = MouseButton::RIGHT);
-        ~tray() = default;
+        ~tray() override = default;
 
-        template <typename... T>
-        tray(std::string identifier, const T &... _entries) : tray(identifier) {
-            addEntries(_entries...);
-        }
-
-        virtual void setIcon(const b::resource& icon) override;
+        void setIcon(const b::resource& icon) override;
         void run() override;
         [[nodiscard]] bool run_nonblocking() override;
         void exit() override;

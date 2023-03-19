@@ -19,15 +19,15 @@
 //
 
 #pragma once
-#include <battery/core/tray/core/entry.hpp>
 #include <functional>
+#include "battery/core/tray/core/entry.hpp"
 
-namespace Tray {
+namespace b::tray {
 
-    class Separator : public TrayEntry {
+    class separator : public tray_entry {
     public:
-        Separator();
-        ~Separator() override = default;
+        separator();
+        ~separator() override = default;
     };
 
 } // namespace Tray

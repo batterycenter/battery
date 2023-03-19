@@ -19,13 +19,12 @@
 //
 
 #pragma once
-
 #include <memory>
 #include <string>
-#include <type_traits>
 #include <vector>
 #include <functional>
-
+#include <type_traits>
+#include "battery/core/resource.hpp"
 #include "battery/core/tray/core/entry.hpp"
 
 namespace b::tray {

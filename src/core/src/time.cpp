@@ -1,5 +1,5 @@
 
-#include "battery/core/time.h"
+#include "battery/core/time.hpp"
 
 #include <thread>
 #include <chrono>
@@ -7,7 +7,9 @@
 namespace b {
 
     double time() {
-        if (internal::launch_time_us == 0) internal::reset_time();
+        if (internal::launch_time_us == 0) {
+            internal::reset_time();
+        }
         return static_cast<double>(epoch_time_us() - internal::launch_time_us) / 1000000.0;
     }
 

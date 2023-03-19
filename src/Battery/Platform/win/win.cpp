@@ -1,7 +1,7 @@
 
 #ifdef _WIN32
 
-#include "Battery/Core/log.h"
+#include "Battery/Core/log.hpp"
 #include "Battery/Platform/Platform.h"
 #include "Battery/Utils/StringUtils.h"
 #include "Battery/Utils/FileUtils.h"

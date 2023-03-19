@@ -1,8 +1,8 @@
 
-#include "battery/core/environment.h"
-#include "battery/core/messages.h"
-#include "battery/core/string.h"
-#include "battery/core/process.h"
+#include "battery/core/environment.hpp"
+#include "battery/core/messages.hpp"
+#include "battery/core/string.hpp"
+#include "battery/core/process.hpp"
 
 #ifdef BATTERY_ARCH_WINDOWS
 #include <windows.h>

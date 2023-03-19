@@ -19,18 +19,18 @@
 //
 
 #pragma once
-#include <battery/core/tray/core/entry.hpp>
 #include <functional>
+#include "battery/core/tray/core/entry.hpp"
 
-namespace Tray {
+namespace b::tray {
 
-    class SyncedToggle : public TrayEntry {
+    class synced_toggle : public tray_entry {
     public:
-        SyncedToggle(std::string text, bool &state, std::function<void(bool&)> callback);
-        ~SyncedToggle() override = default;
+        synced_toggle(std::string text, bool &state, std::function<void(bool&)> callback = [](const bool&){/**/});
+        ~synced_toggle() override = default;
 
         void onToggled();
-        bool isToggled() const;
+        [[nodiscard]] bool isToggled() const;
 
     private:
         bool &toggled;

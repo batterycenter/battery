@@ -33,7 +33,7 @@ namespace b::tray {
         basetray *getParent();
         void setParent(basetray *);
 
-        std::string getText();
+        std::string getText() const;
         void setText(std::string);
 
         void setDisabled(bool);

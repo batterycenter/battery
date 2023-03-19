@@ -1,6 +1,6 @@
 #pragma once
 
-#include "battery/core/environment.h"
+#include "battery/core/environment.hpp"
 #include <string>
 
 namespace battery {
