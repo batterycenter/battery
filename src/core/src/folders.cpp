@@ -6,7 +6,7 @@
 
 namespace b {
 
-    fs::path get_executable_path() {
+    fs::path folders::get_executable_path() {
 #ifdef BATTERY_ARCH_WINDOWS
         wchar_t buffer[MAX_PATH * 5];
         if (GetModuleFileNameW(nullptr, buffer, sizeof(buffer)) == 0) {
@@ -14,10 +14,16 @@ namespace b {
         }
         return b::from_osstring(buffer);
 #else
+        char buffer[PATH_MAX];
+        auto count = readlink("/proc/self/exe", buffer, sizeof(buffer));
+        if (count == -1) {
+            return {};
+        }
+        return std::string(buffer, count);
 #endif
     }
 
-    fs::path get_executable_dir() {
+    fs::path folders::get_executable_dir() {
         auto exe = get_executable_path();
         return exe.parent_path();
     }
