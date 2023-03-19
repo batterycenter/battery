@@ -55,7 +55,7 @@ TEST(BatteryCore_Process, ProcessRedirectStdin) {
     b::process proc;
 #ifdef BATTERY_ARCH_WINDOWS
     auto filename = "battery-core-unit-test-process-redirect.bat";
-    battery::fs::ofstream file(filename);
+    b::fs::ofstream file(filename);
     file <<
         "@echo off\n"
         "set /p test=\n"

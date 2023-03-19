@@ -9,12 +9,7 @@
 #include "battery/core/messages.hpp"
 #include "battery/core/time.hpp"
 #include "battery/core/thread.hpp"
-
-#ifndef BATTERY_CORE_NO_MAIN
-int main(int argc, const char** argv) {     // This is the global entry point, the program starts here
-    return b::run_main(argc, argv);
-}
-#endif
+#include "battery/core/internal/windows.hpp"
 
 namespace b {
 
@@ -66,3 +61,11 @@ namespace b {
         return result;
     }
 }
+
+#ifndef BATTERY_CORE_NO_MAIN
+
+int main(int argc, const char** argv) {     // This is the global entry point, the program starts here
+    return b::run_main(argc, argv);
+}
+
+#endif

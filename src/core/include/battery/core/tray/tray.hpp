@@ -18,6 +18,8 @@
 // It has been heavily modified and modernized to work with battery.
 //
 
+// TODO: The left and right mouse button callbacks are still not implemented on linux!!!
+
 #pragma once
 #include "battery/core/tray/components/button.hpp"
 #include "battery/core/tray/components/label.hpp"

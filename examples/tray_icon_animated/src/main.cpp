@@ -21,7 +21,7 @@ int b::main(const std::vector<std::string>& args) {
     // You can easily dispatch this to a background thread using battery::async_worker,
     // but the class instantiation and event loop must be in the same worker.
 
-    bool animate = true;                           // Here, the MouseButton is which button opens the context menu (optional)
+    bool animate = false;                           // Here, the MouseButton is which button opens the context menu (optional)
     b::tray::tray tray("MyTray", "Example Tray Icon Animated", b::tray::MouseButton::RIGHT);
     tray.addClickCallback(b::tray::MouseButton::LEFT, [] {
         battery::log::info("Left mouse button");
@@ -35,7 +35,7 @@ int b::main(const std::vector<std::string>& args) {
     tray.addEntry(b::tray::button("Disabled button"))->setDisabled(true);
     tray.addEntry(b::tray::separator());
     tray.addEntry(b::tray::label("Just a label"));
-    tray.addEntry(b::tray::toggle("Animate", true, [&animate](bool state) {
+    tray.addEntry(b::tray::toggle("Animate", false, [&animate](bool state) {
         if (state && !animate) {
             battery::log::info("Start animation");
             animate = true;

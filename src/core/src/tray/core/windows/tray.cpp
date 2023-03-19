@@ -80,7 +80,7 @@ namespace b::tray {
         lstrcpyW(notifyData.szTip, b::to_osstring(getTooltip()).c_str());
         notifyData.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
         notifyData.uCallbackMessage = WM_TRAY;
-        notifyData.hIcon = loadIcon(b::resource::from_base64(b::constants::battery_icon_base64));
+        notifyData.hIcon = loadIcon(b::resource::from_base64(b::constants::battery_icon_base64()));
 
         if (Shell_NotifyIcon(NIM_ADD, &notifyData) == FALSE) {
             throw std::runtime_error("Failed to register tray icon");
