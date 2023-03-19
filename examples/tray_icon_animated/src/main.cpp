@@ -35,13 +35,14 @@ int b::main(const std::vector<std::string>& args) {
     tray.addEntry(b::tray::button("Disabled button"))->setDisabled(true);
     tray.addEntry(b::tray::separator());
     tray.addEntry(b::tray::label("Just a label"));
-    tray.addEntry(b::tray::toggle("Animate", false, [&animate](bool state) {
+    tray.addEntry(b::tray::toggle("Animate", false, [&animate,&tray,&defaultIcon](bool state) {
         if (state && !animate) {
             battery::log::info("Start animation");
             animate = true;
         }
         if (!state && animate) {
             battery::log::info("Stop animation");
+            tray.setIcon(defaultIcon);
             animate = false;
         }
     }));
@@ -59,7 +60,9 @@ int b::main(const std::vector<std::string>& args) {
     int i = 0;
     while (tray.run_nonblocking()) {
         b::sleep_ms(30);
-        tray.setIcon(animate ? frames[i++] : defaultIcon);
+        if (animate) {
+            tray.setIcon(frames[i++]);
+        }
         i %= frames.size();
         //battery::log::warn("Synced: {}", synced);
     }

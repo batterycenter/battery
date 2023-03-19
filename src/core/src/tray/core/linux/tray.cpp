@@ -110,11 +110,10 @@ namespace b::tray {
             return;
         }
 
-        auto icon = b::resource::from_base64(b::constants::battery_icon_base64(), "png");
-        auto iconfile = icon.as_temporary_on_disk_resource();
-        data->appIndicator = app_indicator_new(getIdentifier().c_str(), data->iconfile.str().c_str(),
+        data->appIndicator = app_indicator_new(getIdentifier().c_str(), "",
                                          APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
         app_indicator_set_status(data->appIndicator, APP_INDICATOR_STATUS_ACTIVE);
+        setIcon(b::resource::from_base64(b::constants::battery_icon_base64()));
     }
 
     tray::~tray() {}    // Must be defined in this file (unique_ptr incomplete type)
