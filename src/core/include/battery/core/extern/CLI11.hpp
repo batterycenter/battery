@@ -2686,7 +2686,7 @@ class Config {
 
     /// Parse a config file, throw an error (ParseError:ConfigParseError or FileError) on failure
     CLI11_NODISCARD std::vector<ConfigItem> from_file(const std::string &name) const {
-        battery::fs::ifstream input(name);                                                      // BATTERY MODIFIED
+        b::fs::ifstream input(name);                                                      // BATTERY MODIFIED
         if(!input.good())
             throw FileError::Missing(name);
 

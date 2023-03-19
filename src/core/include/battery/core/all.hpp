@@ -19,6 +19,7 @@
 #include "battery/core/string.hpp"
 #include "battery/core/thread.hpp"
 #include "battery/core/time.hpp"
+#include "battery/core/uuid.hpp"
 #include "battery/core/tray/tray.hpp"
 
 #include "toml.hpp"

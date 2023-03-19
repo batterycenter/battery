@@ -23,19 +23,15 @@
 #include "battery/core/environment.hpp"
 #ifndef BATTERY_ARCH_WINDOWS
 
-#include <libappindicator/app-indicator.h>
+#include <string>
 #include "battery/core/tray/core/traybase.hpp"
 
 namespace b::tray {
 
     class tray : public basetray {
     public:
-        tray(std::string identifier, std::string::tooltip, MouseButton clickAction = MouseButton::BOTH);
-
-        template <typename... T>
-        tray(std::string identifier, Icon icon, const T &...entries) : tray(identifier, icon) {
-            addEntries(entries...);
-        }
+        tray(std::string identifier, std::string tooltip, MouseButton clickAction = MouseButton::BOTH);
+        ~tray();
 
         virtual void setIcon(const b::resource& icon) override;
         void run() override;
@@ -44,10 +40,8 @@ namespace b::tray {
         void update() override;
 
     private:
-        AppIndicator *appIndicator;
-        static void callback(GtkWidget *, gpointer);
-        std::vector<std::pair<GtkContainer *, GtkWidget *>> imageWidgets;
-        static GtkMenuShell *construct(const std::vector<std::shared_ptr<TrayEntry>> &, Tray *parent);
+        struct tray_data;
+        std::unique_ptr<tray_data> data;
     };
 
 } // namespace Tray

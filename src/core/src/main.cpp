@@ -10,9 +10,13 @@
 #include "battery/core/time.hpp"
 #include "battery/core/thread.hpp"
 
-#include "battery/core/internal/windows.hpp"
+#ifndef BATTERY_CORE_NO_MAIN
+int main(int argc, const char** argv) {     // This is the global entry point, the program starts here
+    return b::run_main(argc, argv);
+}
+#endif
 
-namespace battery {
+namespace b {
 
     static std::vector<std::string> parse_cli([[maybe_unused]] int argc, [[maybe_unused]] const char** argv) {
 #ifdef BATTERY_ARCH_WINDOWS                 // On Windows, parse CLI arguments from WinAPI and convert to UTF-8
@@ -42,8 +46,8 @@ namespace battery {
 #endif
     }
 	
-    const char** args_to_cstr(const std::vector<std::string>& args) {
-        static auto args_raw = args;     // Do this so the data will stay in memory forever (needed by c_str())
+    const char** args_to_argv(const std::vector<std::string>& args) {
+        static auto args_raw = args;     // Static, so the data will stay in memory forever (needed by c_str())
         static std::vector<const char*> arguments;
         
 		for (const auto& arg : args_raw) {
@@ -57,7 +61,7 @@ namespace battery {
         int result = -1;
         setup_windows_console();
         b::thread::catch_common_exceptions([&result, argc, argv]() {
-            result = battery_main(parse_cli(argc, argv));
+            result = b::main(parse_cli(argc, argv));
         });
         return result;
     }

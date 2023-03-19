@@ -2,56 +2,105 @@
 #include "battery/core/platform.hpp"
 #include "battery/core/extern/platform_folders.h"
 
-namespace battery {
+namespace b {
 
-    // TODO: Add feature to set the application name and concatenate it to the paths
-
-    std::string get_config_home_folder() {
+    fs::path folders::get_global_config_home() {
         return sago::getConfigHome();
     }
 
-    std::string get_data_home_folder() {
+    fs::path folders::get_global_data_home() {
         return sago::getDataHome();
     }
 
-    std::string get_state_folder() {
+    fs::path folders::get_global_state() {
         return sago::getStateDir();
     }
 
-    std::string get_cache_folder() {
+    fs::path folders::get_global_cache() {
         return sago::getCacheDir();
     }
 
-    std::string get_documents_folder() {
+    fs::path folders::get_global_documents() {
         return sago::getDocumentsFolder();
     }
 
-    std::string get_desktop_folder() {
+    fs::path folders::get_global_desktop() {
         return sago::getDesktopFolder();
     }
 
-    std::string get_pictures_folder() {
+    fs::path folders::get_global_pictures() {
         return sago::getPicturesFolder();
     }
 
-    std::string get_music_folder() {
+    fs::path folders::get_global_music() {
         return sago::getMusicFolder();
     }
 
-    std::string get_video_folder() {
+    fs::path folders::get_global_video() {
         return sago::getVideoFolder();
     }
 
-    std::string get_download_folder() {
+    fs::path folders::get_global_downloads() {
         return sago::getDownloadFolder();
     }
 
-    std::string get_save_games1_folder() {
+    fs::path folders::get_global_save_games1() {
         return sago::getSaveGamesFolder1();
     }
 
-    std::string get_save_games2_folder() {
+    fs::path folders::get_global_save_games2() {
         return sago::getSaveGamesFolder2();
     }
 
-}
+
+
+
+    fs::path folders::get_config_home() {
+        return get_global_config_home() + appname;
+    }
+
+    fs::path folders::get_data_home() {
+        return get_global_data_home() + appname;
+    }
+
+    fs::path folders::get_state() {
+        return get_global_state() + appname;
+    }
+
+    fs::path folders::get_cache() {
+        return get_global_cache() + appname;
+    }
+
+    fs::path folders::get_documents() {
+        return get_global_documents() + appname;
+    }
+
+    fs::path folders::get_desktop() {
+        return get_global_desktop() + appname;
+    }
+
+    fs::path folders::get_pictures() {
+        return get_global_pictures() + appname;
+    }
+
+    fs::path folders::get_music() {
+        return get_global_music() + appname;
+    }
+
+    fs::path folders::get_video() {
+        return get_global_video() + appname;
+    }
+
+    fs::path folders::get_downloads() {
+        return get_global_downloads() + appname;
+    }
+
+    fs::path folders::get_save_games1() {
+        return get_global_save_games1() + appname;
+    }
+
+    fs::path folders::get_save_games2() {
+        return get_global_save_games2() + appname;
+    }
+
+} // namespace b

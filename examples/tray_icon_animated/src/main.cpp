@@ -5,17 +5,17 @@
 #error EXAMPLE_ROOT is not defined, the build system is probably not set up correctly
 #endif
 
-int battery_main(const std::vector<std::string>& args) {
+int b::main(const std::vector<std::string>& args) {
     battery::log::info("Running battery example tray-icon-animated. Have fun!");
 
     // First load the frames into memory
     std::vector<b::resource> frames;
     for (int i = 1; i <= 32; i++) {
-        battery::fs::path path = EXAMPLE_ROOT;
+        b::fs::path path = EXAMPLE_ROOT;
         path += fmt::format("resources/fire{}.png", i);
         frames.emplace_back(b::resource::from_binary_file(path));
     }
-    auto defaultIcon = b::resource::from_base64(b::constants::battery_icon_base64, "png");
+    auto defaultIcon = b::resource::from_base64(b::constants::battery_icon_base64(), "png");
 
     // Everything related to one Tray class must be called from the same thread.
     // You can easily dispatch this to a background thread using battery::async_worker,
@@ -48,15 +48,20 @@ int battery_main(const std::vector<std::string>& args) {
     tray.addEntry(b::tray::separator());
     bool synced = false;
     auto sub = tray.addEntry(b::tray::submenu("Test Submenu"));
-    sub->addEntry(b::tray::synced_toggle("Synced toggle 1", synced));
-    sub->addEntry(b::tray::synced_toggle("Synced toggle 2", synced));
+    sub->addEntry(b::tray::synced_toggle("Synced toggle 1", synced, [] (bool b) {
+        battery::log::warn("Synced toggle 1: {}", b);
+    }));
+    sub->addEntry(b::tray::synced_toggle("Synced toggle 2", synced, [] (bool b) {
+        battery::log::warn("Synced toggle 2: {}", b);
+    }));
 
     // And start the loop :)
     int i = 0;
     while (tray.run_nonblocking()) {
+        b::sleep_ms(30);
         tray.setIcon(animate ? frames[i++] : defaultIcon);
         i %= frames.size();
-        b::sleep_ms(20);
+        //battery::log::warn("Synced: {}", synced);
     }
 
     return 0;

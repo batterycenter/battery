@@ -29,7 +29,8 @@ battery_add_library(battery_core STATIC ALIAS battery::core
         src/process.cpp
         src/resource.cpp
         src/string.cpp
-        src/time.cpp)
+        src/time.cpp
+        src/uuid.cpp)
 
 if (MSVC)               # For Visual Studio we add all header files as sources so they're listed in the IDE
     file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_LIST_DIR}/include/**)
@@ -40,10 +41,8 @@ endif()
 target_include_directories(battery_core PUBLIC include)
 target_compile_definitions(battery_core PUBLIC UTF8PROC_STATIC)
 
-# The core::main module contains the main() function
-add_subdirectory(main)
-if (NOT BATTERY_CORE_NO_MAIN)
-    target_link_libraries(battery_core battery::core::main)
+if (BATTERY_CORE_NO_MAIN)
+    target_compile_definitions(battery_core BATTERY_CORE_NO_MAIN)
 endif()
 
 # Download dependencies
@@ -77,6 +76,8 @@ if (UNIX AND NOT BATTERY_CORE_NO_TRAY)
     if (NOT LIBAPPINDICATOR_FOUND)
         message(FATAL_ERROR "Appindicator development libraries not found! \nEither install them using your package manager \n(Hint: probably 'sudo apt install libayatana-appindicator3-dev'), or use -DBATTERY_CORE_NO_TRAY to compile without tray icon support.")
     endif()
+    target_include_directories(battery_core PRIVATE ${LIBAPPINDICATOR_INCLUDE_DIRS})
+    target_link_libraries(battery_core ${LIBAPPINDICATOR_LIBRARIES})
 endif()
 if (BATTERY_CORE_NO_TRAY)
     target_compile_definitions(battery_core PUBLIC BATTERY_CORE_NO_TRAY)

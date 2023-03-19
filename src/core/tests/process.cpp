@@ -30,9 +30,6 @@ TEST(BatteryCore_Process, ProcessRunsSuccessfullyAsync) {
 }
 
 TEST(BatteryCore_Process, ProcessRedirectStdoutUtf8) {
-    const char* p = "gtest.exe";
-    battery::run_main(1, &p);   // Run the battery main function to set up the Unicode codepage
-
     battery::process proc;
 #ifdef BATTERY_ARCH_WINDOWS
     proc.options.executable = "cmd.exe";
@@ -42,6 +39,7 @@ TEST(BatteryCore_Process, ProcessRedirectStdoutUtf8) {
     proc.options.arguments = { "-c", "echo unit test works: Süßölgefäß 国 分 高" };
 #endif
     proc.options.suppress_carriage_return = true;
+    proc.options.silent = true;
     proc.options.strip_trailing_whitespace_after_join = true;
     std::string output;
     proc.stdout_callback = [&output] (const auto& str) {
@@ -81,6 +79,7 @@ TEST(BatteryCore_Process, ProcessRedirectStdin) {
     proc.options.executable = "bash";
     proc.options.arguments.emplace_back(filename);
 #endif
+    proc.options.silent = true;
     proc.execute_async();
     proc.stdin_write("unit test works\n");
     proc.join();

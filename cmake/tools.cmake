@@ -136,7 +136,7 @@ function(BATTERY_ADD_TEST TARGET)
         set(BATTERY_GTEST_INCLUDED ON PARENT_SCOPE)
     endif()
     battery_add_executable(${TARGET} ${ARGN})
-    target_link_libraries(${TARGET} gtest_main)
+    target_link_libraries(${TARGET} gtest)
     gtest_discover_tests(${TARGET})
 endfunction()
 

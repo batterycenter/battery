@@ -1,40 +1,33 @@
 
-#include "battery/core/resource.hpp"
-#include "battery/core/log.hpp"
 #include <ios>
 #include <iostream>
+#include "battery/core/resource.hpp"
+#include "battery/core/log.hpp"
+#include "battery/core/fs.hpp"
+#include "battery/core/uuid.hpp"
+#include "battery/core/platform.hpp"
 
 #include "utf8.h"
 
 namespace b {
 
-    resource resource::from_text_file(const battery::fs::path& filepath) {
-        battery::fs::ifstream file(filepath, battery::fs::Mode::TEXT);
+    resource resource::from_text_file(const fs::path& filepath) {
+        fs::ifstream file(filepath, fs::Mode::TEXT);
         if (file.fail())
             throw std::ios::failure("battery::resource: Failed to open file '" + filepath.to_string() + "' for reading: " + strerror(errno));
         resource res;
         res._data = file.to_string();
-        res._filetype = b::to_lower(filepath.extension().to_string());
-        if (!res._filetype.empty()) {
-            if (res._filetype[0] == '.') {
-                res._filetype.erase(res._filetype.begin());
-            }
-        }
+        res._filetype = b::to_lower(filepath.raw_extension().to_string());
         return res;
     }
 
-    resource resource::from_binary_file(const battery::fs::path& filepath) {
-        battery::fs::ifstream file(filepath, battery::fs::Mode::BINARY);
+    resource resource::from_binary_file(const fs::path& filepath) {
+        fs::ifstream file(filepath, fs::Mode::BINARY);
         if (file.fail())
             throw std::ios::failure("battery::resource: Failed to open file '" + filepath.to_string() + "' for reading: " + strerror(errno));
         resource res;
         res._data = file.to_string();
-        res._filetype = b::to_lower(filepath.extension().to_string());
-        if (!res._filetype.empty()) {
-            if (res._filetype[0] == '.') {
-                res._filetype.erase(res._filetype.begin());
-            }
-        }
+        res._filetype = b::to_lower(filepath.raw_extension().to_string());
         return res;
     }
 
@@ -80,5 +73,43 @@ namespace b {
     std::string resource::as_base64() const {
         return b::encode_base64(as_string());
     }
+
+    bool resource::to_text_file(const b::fs::path& filepath) const {
+        b::fs::ofstream file(filepath, b::fs::Mode::TEXT);
+        if (file.fail())
+            return false;
+        file << _data;
+        return true;
+    }
+
+    bool resource::to_binary_file(const b::fs::path& filepath) const {
+        b::fs::ofstream file(filepath, b::fs::Mode::BINARY);
+        if (file.fail())
+            return false;
+        file << _data;
+        return true;
+    }
+
+    resource::on_disk_resource::on_disk_resource(const b::fs::path &path, const std::string& data) : path(path) {
+        b::fs::ofstream file(path, b::fs::Mode::BINARY);
+        file << data;
+    }
+
+    resource::on_disk_resource::~on_disk_resource() {
+        reset();
+    }
+
+    resource::on_disk_resource resource::as_temporary_on_disk_resource() const {
+        auto path = b::folders::get_cache();
+        path += b::uuid::v4() + (_filetype.empty() ? "" : "." + _filetype);
+        return on_disk_resource(path, _data);
+    };
+
+    void resource::on_disk_resource::reset() {
+        if (!path.empty()) {
+            b::fs::remove(path);
+            path.clear();
+        }
+    };
 
 }

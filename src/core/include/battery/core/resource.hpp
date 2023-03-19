@@ -9,8 +9,8 @@ namespace b {
     public:
         resource() = default;
 
-        static resource from_text_file(const battery::fs::path& filepath);
-        static resource from_binary_file(const battery::fs::path& filepath);
+        static resource from_text_file(const fs::path& filepath);
+        static resource from_binary_file(const fs::path& filepath);
         static resource from_byte_string(const std::string& data, const std::string& filetype = "");
         static resource from_buffer(const void* buffer, size_t length, const std::string& filetype = "");
         static resource from_base64(const std::string& base64, const std::string& filetype = "");
@@ -24,6 +24,48 @@ namespace b {
         [[nodiscard]] std::string as_string() const;
         [[nodiscard]] std::vector<uint8_t> as_vector() const;
         [[nodiscard]] std::string as_base64() const;
+        [[nodiscard]] bool to_text_file(const fs::path& filepath) const;
+        [[nodiscard]] bool to_binary_file(const fs::path& filepath) const;
+
+        class on_disk_resource {
+        public:
+            on_disk_resource() = default;
+            explicit on_disk_resource(const b::fs::path& path, const std::string& data);
+            ~on_disk_resource();
+
+            on_disk_resource(const on_disk_resource&) = delete;     // We cannot allow a copy. A move is allowed
+            on_disk_resource& operator=(const on_disk_resource&) = delete;
+            on_disk_resource(on_disk_resource&& other) {
+                reset();
+                path = std::move(other.path);
+                other.path.clear();
+            }
+            on_disk_resource& operator=(on_disk_resource&& other) noexcept {
+                reset();
+                path = std::move(other.path);
+                other.path.clear();
+                return *this;
+            }
+
+            std::string str() {
+                return path.to_string();
+            }
+
+            operator b::fs::path() {
+                return path;
+            }
+
+            operator std::string() {
+                return path.to_string();
+            }
+
+            void reset();
+
+        private:
+            b::fs::path path;
+        };
+
+        [[nodiscard]] on_disk_resource as_temporary_on_disk_resource() const;
 
     private:
         std::string _data;

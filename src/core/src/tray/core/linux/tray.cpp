@@ -19,10 +19,12 @@
 //
 
 #ifndef BATTERY_CORE_NO_TRAY
-#ifdef __linux__
+
+#include "battery/core/environment.hpp"
+#ifndef BATTERY_ARCH_WINDOWS
 
 #include <stdexcept>
-#include <libappindicator/app-indicator.h>
+#include <libayatana-appindicator/app-indicator.h>
 
 #include "battery/core/tray/core/linux/tray.hpp"
 #include "battery/core/tray/components/label.hpp"
@@ -30,141 +32,128 @@
 #include "battery/core/tray/components/toggle.hpp"
 #include "battery/core/tray/components/submenu.hpp"
 #include "battery/core/tray/components/separator.hpp"
-#include "battery/core/tray/components/imagebutton.hpp"
 #include "battery/core/tray/components/syncedtoggle.hpp"
 
-Tray::Tray::Tray(std::string identifier, std::string tooltip, MouseButton clickAction)
-    : BaseTray(std::move(identifier), std::move(tooltip), std::move(clickAction))
-{
-    if (gtk_init_check(nullptr, nullptr) != TRUE) {
-        throw std::runtime_error("Gtk init check failed");
-        return;
+#include "battery/core/fs.hpp"
+#include "battery/core/time.hpp"
+#include "battery/core/constants.hpp"
+
+namespace b::tray {
+
+    struct tray::tray_data {
+        AppIndicator *appIndicator;
+        std::vector<std::pair<GtkContainer *, GtkWidget *>> imageWidgets;
+        b::resource::on_disk_resource iconfile;     // Apparently the icon is loaded at a later time, so we have to keep
+                                                    // the resource alive (The file on disk must not be deleted too early)
+        static void callback(GtkWidget *, gpointer);
+        static GtkMenuShell *construct(const std::vector<std::shared_ptr<tray_entry>> &entries, tray *parent);
+    };
+
+    void tray::tray_data::callback([[maybe_unused]] GtkWidget *widget, gpointer data) {
+        auto *item = reinterpret_cast<tray_entry*>(data);
+
+        if (auto *button = dynamic_cast<class button*>(item); button) {
+            button->clicked();
+        } else if (auto *toggle = dynamic_cast<class toggle*>(item); toggle) {
+            toggle->onToggled();
+        } else if (auto *syncedToggle = dynamic_cast<class synced_toggle*>(item); syncedToggle) {
+            syncedToggle->onToggled();
+        }
     }
 
-    appIndicator = app_indicator_new(this->identifier.c_str(), this->icon, APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
-    app_indicator_set_status(appIndicator, APP_INDICATOR_STATUS_ACTIVE);
-}
+    GtkMenuShell *tray::tray_data::construct(const std::vector<std::shared_ptr<tray_entry>> &entries, tray *parent) {
+        auto *menu = reinterpret_cast<GtkMenuShell *>(gtk_menu_new());
 
-void Tray::Tray::exit() {
-    g_idle_add(
-        [](gpointer data) -> gboolean {
-            auto *tray = reinterpret_cast<Tray *>(data);
-            g_object_unref(tray->appIndicator);
-            tray->appIndicator = nullptr;
-            return FALSE;
-        },
-        this);
-}
+        for (const auto &entry: entries) {
+            auto *item = entry.get();
+            GtkWidget *gtkItem = nullptr;
 
-void Tray::Tray::update() {
-    if (appIndicator) {
-        app_indicator_set_menu(appIndicator, reinterpret_cast<GtkMenu *>(construct(entries, this)));
-    }
-}
-
-GtkMenuShell *Tray::Tray::construct(const std::vector<std::shared_ptr<TrayEntry>> &entries, Tray *parent) {
-    auto *menu = reinterpret_cast<GtkMenuShell *>(gtk_menu_new());
-
-    for (const auto &entry : entries) {
-        auto *item = entry.get();
-        GtkWidget *gtkItem = nullptr;
-
-        if (auto *toggle = dynamic_cast<Toggle *>(item); toggle) {
-            gtkItem = gtk_check_menu_item_new_with_label(toggle->getText().c_str());
-            gtk_check_menu_item_set_active(reinterpret_cast<GtkCheckMenuItem *>(gtkItem), toggle->isToggled());
-        }
-        else if (auto *syncedToggle = dynamic_cast<SyncedToggle *>(item); syncedToggle) {
-            gtkItem = gtk_check_menu_item_new_with_label(syncedToggle->getText().c_str());
-            gtk_check_menu_item_set_active(reinterpret_cast<GtkCheckMenuItem *>(gtkItem), syncedToggle->isToggled());
-        }
-        else if (auto *submenu = dynamic_cast<Submenu *>(item); submenu) {
-            gtkItem = gtk_menu_item_new_with_label(submenu->getText().c_str());
-            gtk_menu_item_set_submenu(reinterpret_cast<GtkMenuItem *>(gtkItem),
-                                      reinterpret_cast<GtkWidget *>(construct(submenu->getEntries(), parent)));
-        }
-        else if (auto *iconButton = dynamic_cast<ImageButton *>(item); iconButton) {
-            gtkItem = gtk_menu_item_new();
-
-            GtkWidget *image = iconButton->getImage();
-            auto *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
-            auto *label = gtk_label_new(iconButton->getText().c_str());
-
-            bool handled = false;
-            if (parent) {
-                for (std::size_t i = 0; parent->imageWidgets.size() > i; i++) {
-                    const auto &[container, widget] = parent->imageWidgets.at(i);
-
-                    if (widget == image) {
-                        g_object_ref(widget); // NOLINT
-
-                        gtk_container_remove(container, widget);
-                        gtk_container_add(reinterpret_cast<GtkContainer *>(box),
-                                          widget); // TODO(performance): This takes ages - find a way to improve it.
-
-                        parent->imageWidgets.erase(parent->imageWidgets.begin() + i);
-                        handled = true;
-                        break;
-                    }
-                }
+            if (auto *toggle = dynamic_cast<class toggle*>(item); toggle) {
+                gtkItem = gtk_check_menu_item_new_with_label(toggle->getText().c_str());
+                gtk_check_menu_item_set_active(reinterpret_cast<GtkCheckMenuItem *>(gtkItem), toggle->isToggled());
+            } else if (auto *syncedToggle = dynamic_cast<class synced_toggle*>(item); syncedToggle) {
+                gtkItem = gtk_check_menu_item_new_with_label(syncedToggle->getText().c_str());
+                gtk_check_menu_item_set_active(reinterpret_cast<GtkCheckMenuItem *>(gtkItem),
+                                               syncedToggle->isToggled());
+            } else if (auto *submenu = dynamic_cast<class submenu*>(item); submenu) {
+                gtkItem = gtk_menu_item_new_with_label(submenu->getText().c_str());
+                gtk_menu_item_set_submenu(reinterpret_cast<GtkMenuItem *>(gtkItem),
+                                          reinterpret_cast<GtkWidget *>(construct(submenu->getEntries(), parent)));
+            } else if (dynamic_cast<class button*>(item)) {
+                gtkItem = gtk_menu_item_new_with_label(item->getText().c_str());
+            } else if (dynamic_cast<class label*>(item)) {
+                gtkItem = gtk_menu_item_new_with_label(item->getText().c_str());
+                gtk_widget_set_sensitive(gtkItem, FALSE);
+            } else if (dynamic_cast<class separator*>(item)) {
+                gtkItem = gtk_separator_menu_item_new();
             }
 
-            if (!handled) {
-                gtk_container_add(reinterpret_cast<GtkContainer *>(box), image);
+            if (!dynamic_cast<class label*>(item)) {
+                gtk_widget_set_sensitive(gtkItem, !item->isDisabled());
             }
 
-            gtk_label_set_xalign(reinterpret_cast<GtkLabel *>(label), 0.0);
-            gtk_box_pack_end(reinterpret_cast<GtkBox *>(box), label, TRUE, TRUE, 0);
+            g_signal_connect(gtkItem, "activate", reinterpret_cast<GCallback>(callback), item);
 
-            gtk_container_add(reinterpret_cast<GtkContainer *>(gtkItem), box);
-
-            if (parent) {
-                parent->imageWidgets.emplace_back(reinterpret_cast<GtkContainer *>(box),
-                                                  reinterpret_cast<GtkWidget *>(image));
-            }
-        }
-        else if (dynamic_cast<Button *>(item)) {
-            gtkItem = gtk_menu_item_new_with_label(item->getText().c_str());
-        }
-        else if (dynamic_cast<Label *>(item)) {
-            gtkItem = gtk_menu_item_new_with_label(item->getText().c_str());
-            gtk_widget_set_sensitive(gtkItem, FALSE);
-        }
-        else if (dynamic_cast<Separator *>(item)) {
-            gtkItem = gtk_separator_menu_item_new();
+            gtk_widget_show(gtkItem);
+            gtk_menu_shell_append(menu, gtkItem);
         }
 
-        if (!dynamic_cast<Label *>(item)) {
-            gtk_widget_set_sensitive(gtkItem, !item->isDisabled());
-        }
-
-        g_signal_connect(gtkItem, "activate", reinterpret_cast<GCallback>(callback), item);
-
-        gtk_widget_show(gtkItem);
-        gtk_menu_shell_append(menu, gtkItem);
+        return menu;
     }
 
-    return menu;
+    tray::tray(std::string identifier, std::string tooltip, MouseButton clickAction)
+            : basetray(std::move(identifier), std::move(tooltip), clickAction),
+              data(std::make_unique<tray_data>())
+    {
+        if (gtk_init_check(nullptr, nullptr) != TRUE) {
+            throw std::runtime_error("Gtk init check failed");
+            return;
+        }
+
+        auto icon = b::resource::from_base64(b::constants::battery_icon_base64(), "png");
+        auto iconfile = icon.as_temporary_on_disk_resource();
+        data->appIndicator = app_indicator_new(getIdentifier().c_str(), data->iconfile.str().c_str(),
+                                         APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
+        app_indicator_set_status(data->appIndicator, APP_INDICATOR_STATUS_ACTIVE);
+    }
+
+    tray::~tray() {}    // Must be defined in this file (unique_ptr incomplete type)
+
+    void tray::exit() {
+        g_idle_add(
+                [](gpointer data) -> gboolean {
+                    auto *tray = reinterpret_cast<class tray*>(data);
+                    g_object_unref(tray->data->appIndicator);
+                    tray->data->appIndicator = nullptr;
+                    return FALSE;
+                },this);
+    }
+
+    void tray::update() {
+        if (data->appIndicator) {
+            app_indicator_set_menu(data->appIndicator, reinterpret_cast<GtkMenu*>(data->construct(getEntries(), this)));
+        }
+    }
+
+    void tray::setIcon(const b::resource& icon) {
+        data->iconfile = icon.as_temporary_on_disk_resource();
+        app_indicator_set_icon(data->appIndicator, data->iconfile.str().c_str());
+    };
+
+    void tray::run() {
+        while (data->appIndicator) {
+            gtk_main_iteration_do(true);
+        }
+    }
+
+    bool tray::run_nonblocking() {
+        for(int i = 0; i < 5; i++) {        // We might have multiple events in a single iteration
+            gtk_main_iteration_do(false);
+        }
+        return data->appIndicator;
+    };
+
 }
 
-void Tray::Tray::callback([[maybe_unused]] GtkWidget *widget, gpointer data) {
-    auto *item = reinterpret_cast<TrayEntry *>(data);
-
-    if (auto *button = dynamic_cast<Button *>(item); button) {
-        button->clicked();
-    }
-    else if (auto *toggle = dynamic_cast<Toggle *>(item); toggle) {
-        toggle->onToggled();
-    }
-    else if (auto *syncedToggle = dynamic_cast<SyncedToggle *>(item); syncedToggle) {
-        syncedToggle->onToggled();
-    }
-}
-
-void Tray::Tray::run() {
-    while (appIndicator) {
-        gtk_main_iteration_do(true);
-    }
-}
-
-#endif // __linux__
+#endif // !BATTERY_ARCH_WINDOWS
 #endif // BATTERY_CORE_NO_TRAY

@@ -5,11 +5,7 @@
 
 #include "reproc++/reproc.hpp"
 
-namespace reproc {
-    class process;
-}
-
-namespace battery {
+namespace b {
 
     class process {
     public:

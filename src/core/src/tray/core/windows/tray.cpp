@@ -232,13 +232,15 @@ namespace b::tray {
     }
 
     bool tray::run_nonblocking() {
-        MSG msg;
-        PeekMessage(&msg, hwnd, 0, 0, PM_REMOVE);
-        if (msg.message == WM_QUIT) {
-            return false;
+        for(int i = 0; i < 5; i++) {        // We might have multiple events in a single iteration
+            MSG msg;
+            PeekMessage(&msg, hwnd, 0, 0, PM_REMOVE);
+            if (msg.message == WM_QUIT) {
+                return false;
+            }
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
         }
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
         return true;
     }
 

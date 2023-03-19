@@ -8,7 +8,7 @@
 #include <spdlog/fmt/bundled/format.h>
 #include "battery/core/string.hpp"
 
-namespace battery::fs {
+namespace b::fs {
 
     using std::filesystem::exists;					// Checks if a path exists on-disk (file or directory)
     using std::filesystem::create_directory;		// Creates a single directory
@@ -45,6 +45,18 @@ namespace battery::fs {
             return std::filesystem::path::extension();
         }
 
+        // This function returns the extension, but without the dot.
+        // Thus, this either returns the extension like "png" or "txt", or nothing ("")
+        path raw_extension() const {
+            std::string ext = extension().to_string();
+            if (!ext.empty()) {
+                if (ext[0] == '.') {
+                    ext.erase(ext.begin());
+                }
+            }
+            return ext;
+        }
+
         fs::path& operator+=(const std::string& path) {
             this->append(path);
             return *this;
@@ -70,14 +82,14 @@ namespace battery::fs {
 
     class ifstream : public std::ifstream {
     public:
-        ifstream(const battery::fs::path& path, enum Mode filemode = Mode::TEXT)
+        ifstream(const fs::path& path, enum Mode filemode = Mode::TEXT)
                 : std::ifstream(convert(path), (filemode == Mode::TEXT) ? std::ios::in : (std::ios::in | std::ios::binary)),
                   path(path)
         {
             binary = (filemode == Mode::BINARY);	// remember for later
         }
 
-        ifstream(const battery::fs::path& path, std::ios_base::openmode mode) : std::ifstream(convert(path), mode), path(path)  {
+        ifstream(const fs::path& path, std::ios_base::openmode mode) : std::ifstream(convert(path), mode), path(path)  {
             binary = (mode & std::ios::binary);		// remember for later
         }
 
@@ -137,20 +149,20 @@ namespace battery::fs {
         }
 
     private:
-        b::osstring convert(const battery::fs::path& _path) const {
+        b::osstring convert(const fs::path& _path) const {
             return b::to_osstring(_path.to_string());
         }
 
-        battery::fs::path path;
+        fs::path path;
         bool binary = false;
     };
 
     class ofstream : public std::ofstream {
     public:
-        ofstream(const battery::fs::path& path, enum Mode filemode = Mode::TEXT, bool createDirectory = true)
+        ofstream(const fs::path& path, enum Mode filemode = Mode::TEXT, bool createDirectory = true)
                 : std::ofstream(create_dir_return_path(path, createDirectory), parse_mode(filemode)) {}
 
-        ofstream(const battery::fs::path& path, std::ios_base::openmode filemode, bool createDirectory = true)
+        ofstream(const fs::path& path, std::ios_base::openmode filemode, bool createDirectory = true)
                 : std::ofstream(create_dir_return_path(path, createDirectory), filemode) {}
 
         ~ofstream() override = default;
@@ -165,7 +177,7 @@ namespace battery::fs {
             }
         }
 
-        b::osstring create_dir_return_path(const battery::fs::path& path, bool createDirectory) const {
+        b::osstring create_dir_return_path(const fs::path& path, bool createDirectory) const {
             if (path.has_parent_path() && createDirectory) {
                 auto parent = path.parent_path();
                 if (!fs::exists(parent)) {
@@ -187,12 +199,12 @@ namespace battery::fs {
 
 }
 
-template<> struct fmt::formatter<battery::fs::path> {
+template<> struct fmt::formatter<b::fs::path> {
     constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {
         return ctx.end();
     }
     template <typename FormatContext>
-    auto format(const battery::fs::path& input, FormatContext& ctx) -> decltype(ctx.out()) {
+    auto format(const b::fs::path& input, FormatContext& ctx) -> decltype(ctx.out()) {
         return format_to(ctx.out(), "{}", input.to_string());
     }
 };

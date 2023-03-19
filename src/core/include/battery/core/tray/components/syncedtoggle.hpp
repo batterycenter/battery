@@ -22,6 +22,8 @@
 #include <functional>
 #include "battery/core/tray/core/entry.hpp"
 
+// TODO: The synced toggle is known not to be working (At least on Linux)
+
 namespace b::tray {
 
     class synced_toggle : public tray_entry {

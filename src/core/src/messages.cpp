@@ -35,7 +35,7 @@ namespace battery {
     }
 #else
     static void linux_run_zenity(const std::vector<std::string>& commands) {
-        battery::process zenity;
+        b::process zenity;
         zenity.options.executable = "zenity";
         zenity.options.arguments = commands;
         zenity.execute_sync();

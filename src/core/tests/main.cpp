@@ -3,6 +3,9 @@
 #include "battery/core/all.hpp"
 #include <gtest/gtest.h>
 
-int battery_main(const std::vector<std::string>& args) {
-    return 0;
+int b::main(const std::vector<std::string>& args) {
+    int argc = args.size();
+    auto argv = b::args_to_argv(args);
+    ::testing::InitGoogleTest(&argc, const_cast<char**>(argv));
+    return RUN_ALL_TESTS();
 }

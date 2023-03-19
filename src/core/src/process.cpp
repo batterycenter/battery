@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-namespace battery {
+namespace b {
 
     void process::execute_sync() {
         worker.execute_sync([this] { process::run_process(); });
@@ -22,7 +22,7 @@ namespace battery {
 
     std::string process::remove_trailing_whitespace(std::string buffer) {
         if (buffer.empty()) return buffer;
-        for (size_t i = buffer.length() - 1; i >= 0; i--) {
+        for (int64_t i = static_cast<int>(buffer.length() - 1); i >= 0; i--) {
             switch (buffer.back()) {
                 case '\r':
                 case '\n':
