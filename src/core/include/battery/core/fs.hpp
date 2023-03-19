@@ -1,6 +1,6 @@
 #pragma once
 
-#include "battery/core/string.h"
+#include "battery/core/string.hpp"
 #include <filesystem>
 #include <string>
 #include <fstream>

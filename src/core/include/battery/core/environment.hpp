@@ -3,17 +3,22 @@
 #define BATTERY_CORE_ENVIRONMENT_H_
 
 #ifndef UNICODE
-#define UNICODE
+#error UNICODE is not defined. Please check your build system!
 #endif
 #ifndef _UNICODE
-#define _UNICODE
+#error _UNICODE is not defined. Please check your build system!
 #endif
 
 //#define PRINT_PLATFORMS
+#ifndef NDEBUG
+#define BATTERY_DEBUG
+#else
+#define BATTERY_RELEASE
+#endif
 
 // Platform & Compiler definitions
 #if defined(__clang__)
-#define BATTERY_COMPILER_CLANG
+    #define BATTERY_COMPILER_CLANG
     #ifdef PRINT_PLATFORMS
         #pragma message ("[Battery] Detected clang compiler")
     #endif
@@ -40,7 +45,7 @@
 // Platform definitions
 #if _WIN32 || _WIN64
     #define BATTERY_ARCH_WINDOWS     // Target platform is Windows
-    #ifdef _WIN64                       // TODO: It thinks it's 32 bits
+    #ifdef _WIN64
         #define BATTERY_ARCH_64
         #ifdef PRINT_PLATFORMS
             #pragma message ("[Battery] Compiling for Windows/x64")
@@ -58,7 +63,7 @@
     #define BATTERY_ARCH_MACOS
 
 #elif __linux__
-#define BATTERY_ARCH_LINUX       // Target platform is a variation of Linux
+    #define BATTERY_ARCH_LINUX       // Target platform is a variation of Linux
 
     // First check if it's ARM
     #if defined(__aarch64__) || defined(_M_ARM64)

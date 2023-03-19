@@ -1,6 +1,6 @@
 #pragma once
 
-#include "battery/core/thread.h"
+#include "battery/core/thread.hpp"
 #include <mutex>
 #include <future>
 

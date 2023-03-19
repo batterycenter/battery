@@ -16,9 +16,9 @@
 #include "battery/core/platform.h"
 #include "battery/core/process.h"
 #include "battery/core/resource.h"
-#include "battery/core/string.h"
-#include "battery/core/thread.h"
-#include "battery/core/time.h"
+#include "battery/core/string.hpp"
+#include "battery/core/thread.hpp"
+#include "battery/core/time.hpp"
 #include "battery/core/tray/tray.hpp"
 
 #include "toml.hpp"
