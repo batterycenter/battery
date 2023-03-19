@@ -85,11 +85,8 @@ function(__APPLY_COMMON_TARGET_OPTIONS TARGET)  # For all libraries and executab
                 NOMINMAX                 # Prevents Windows.h from defining min/max as macros
                 _CRT_SECURE_NO_WARNINGS
                 )
-        target_compile_definitions(${TARGET} PRIVATE
-                UNICODE
-                _UNICODE
-                )
     endif()
+    target_compile_definitions(${TARGET} PUBLIC UNICODE _UNICODE)
 
     # Set common folders for the IDE
     battery_set_ide_folder("${CMAKE_CURRENT_LIST_DIR}/src" "Source Files")
