@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 
 TEST(BatteryCore_Process, ProcessRunsSuccessfully) {
-    battery::process proc;
+    b::process proc;
 #ifdef BATTERY_ARCH_WINDOWS
     proc.options.executable = "cmd.exe";
     proc.options.arguments = { "/c", "exit", "100" };
@@ -16,7 +16,7 @@ TEST(BatteryCore_Process, ProcessRunsSuccessfully) {
 }
 
 TEST(BatteryCore_Process, ProcessRunsSuccessfullyAsync) {
-    battery::process proc;
+    b::process proc;
 #ifdef BATTERY_ARCH_WINDOWS
     proc.options.executable = "cmd.exe";
     proc.options.arguments = { "/c", "exit", "100" };
@@ -30,7 +30,7 @@ TEST(BatteryCore_Process, ProcessRunsSuccessfullyAsync) {
 }
 
 TEST(BatteryCore_Process, ProcessRedirectStdoutUtf8) {
-    battery::process proc;
+    b::process proc;
 #ifdef BATTERY_ARCH_WINDOWS
     proc.options.executable = "cmd.exe";
     proc.options.arguments = { "/c", "echo unit test works: Süßölgefäß 国 分 高" };
@@ -52,7 +52,7 @@ TEST(BatteryCore_Process, ProcessRedirectStdoutUtf8) {
 }
 
 TEST(BatteryCore_Process, ProcessRedirectStdin) {
-    battery::process proc;
+    b::process proc;
 #ifdef BATTERY_ARCH_WINDOWS
     auto filename = "battery-core-unit-test-process-redirect.bat";
     battery::fs::ofstream file(filename);
@@ -68,7 +68,7 @@ TEST(BatteryCore_Process, ProcessRedirectStdin) {
     proc.options.arguments.emplace_back(filename);
 #else
     auto filename = "battery-core-unit-test-process-redirect.bat";
-    battery::fs::ofstream file(filename);
+    b::fs::ofstream file(filename);
     file <<
         "#!/bin/bash\n"
         "read -p \"Input: \" test\n"
@@ -85,5 +85,5 @@ TEST(BatteryCore_Process, ProcessRedirectStdin) {
     proc.join();
     EXPECT_EQ(proc.output_combined, "unit test works");
     EXPECT_EQ(proc.exit_code, 100);
-    battery::fs::remove(filename);
+    b::fs::remove(filename);
 }

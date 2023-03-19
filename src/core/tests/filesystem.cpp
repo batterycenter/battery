@@ -16,7 +16,7 @@ TEST(BatteryCore_Filesystem, ReadFileWithSpacesAndKanji) {
     // The filename from above written in unicode codepoints
     std::string filename = TESTDATA_FOLDER "/\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8";
 
-    battery::fs::ifstream file(filename);
+    b::fs::ifstream file(filename);
     ASSERT_FALSE(file.fail());
 
     auto content = (std::string)file;
@@ -40,27 +40,27 @@ TEST(BatteryCore_Filesystem, ReadWriteFileContent_UTF8) {
 
     std::string content = "\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8";
 
-    auto test = [&content](battery::fs::Mode mode) {
-        battery::fs::ofstream outfile("filesystem-test.txt", mode);
+    auto test = [&content](b::fs::Mode mode) {
+        b::fs::ofstream outfile("filesystem-test.txt", mode);
         ASSERT_FALSE(outfile.fail());
         outfile << content;
         outfile.close();
 
-        battery::fs::ifstream infile("filesystem-test.txt", mode);
+        b::fs::ifstream infile("filesystem-test.txt", mode);
         ASSERT_EQ(infile.to_string(), content);
     };
 
-    test(battery::fs::Mode::TEXT);
-    test(battery::fs::Mode::BINARY);
+    test(b::fs::Mode::TEXT);
+    test(b::fs::Mode::BINARY);
 }
 
-void CreateDirectoryOnFileWrite_RunTest(const battery::fs::path& path, bool create_directories, bool expected_to_exist) {
-    if (battery::fs::exists(path)) {
-        battery::fs::remove(path);
-        EXPECT_FALSE(battery::fs::exists(path));
+void CreateDirectoryOnFileWrite_RunTest(const b::fs::path& path, bool create_directories, bool expected_to_exist) {
+    if (b::fs::exists(path)) {
+        b::fs::remove(path);
+        EXPECT_FALSE(b::fs::exists(path));
     }
 
-    battery::fs::ofstream outfile(path, battery::fs::Mode::TEXT, create_directories);
+    b::fs::ofstream outfile(path, b::fs::Mode::TEXT, create_directories);
     if (create_directories) {
         ASSERT_FALSE(outfile.fail());
     }
@@ -71,19 +71,19 @@ void CreateDirectoryOnFileWrite_RunTest(const battery::fs::path& path, bool crea
     outfile << "Test";
     outfile.close();
 
-    EXPECT_EQ(battery::fs::exists(path), expected_to_exist);
-    battery::fs::remove(path);
-    EXPECT_FALSE(battery::fs::exists(path));
+    EXPECT_EQ(b::fs::exists(path), expected_to_exist);
+    b::fs::remove(path);
+    EXPECT_FALSE(b::fs::exists(path));
 
-    if (battery::fs::exists("test")) {
-        battery::fs::remove_all("test");
+    if (b::fs::exists("test")) {
+        b::fs::remove_all("test");
     }
 }
 
 TEST(BatteryCore_Filesystem, CreateDirectoryOnFileWrite) {
 
-    if (battery::fs::exists("test")) {
-        battery::fs::remove_all("test");
+    if (b::fs::exists("test")) {
+        b::fs::remove_all("test");
     }
 
     CreateDirectoryOnFileWrite_RunTest("filesystem-test.txt", true, true);
@@ -95,9 +95,9 @@ TEST(BatteryCore_Filesystem, CreateDirectoryOnFileWrite) {
 }
 
 TEST(BatteryCore_Filesystem, FS_PathOperators) {
-    battery::fs::path p1("../test/");
+    b::fs::path p1("../test/");
     p1.append("more/folders");
-    battery::fs::path p2(p1);
+    b::fs::path p2(p1);
     p2 += "file.txt";
     auto p3 = p1 + "test";
 
@@ -109,19 +109,19 @@ TEST(BatteryCore_Filesystem, FS_PathOperators) {
     EXPECT_EQ(b::replace(p2.to_string(), "\\", "/"), "../test/more/folders/file.txt");
     EXPECT_EQ(b::replace(p3.to_string(), "\\", "/"), "../test/more/folders/test");
 
-    battery::fs::path p4("C:/some/directory");
+    b::fs::path p4("C:/some/directory");
     p4 += "more/directories";
     auto p5 = p4 + "one more";
     EXPECT_EQ(b::replace(p5.to_string(), "\\", "/"), "C:/some/directory/more/directories/one more");
 }
 
 TEST(BatteryCore_Filesystem, FS_Path_UTF8) {
-    battery::fs::path p1("files/年 本/");
+    b::fs::path p1("files/年 本/");
     EXPECT_EQ(p1.to_string(), "files/年 本/");
 
-    battery::fs::path p2(u8"files/年 本/");
+    b::fs::path p2(u8"files/年 本/");
     EXPECT_EQ(p2.to_string(), "files/年 本/");
 
-    battery::fs::path p3("ölfile.süß年");
+    b::fs::path p3("ölfile.süß年");
     EXPECT_EQ(p3.extension().to_string(), ".süß年");
 }
