@@ -1,27 +1,12 @@
 #pragma once
 
+#include <memory>
 #include "battery/core/environment.hpp"
 
 namespace b::console {
 
-    enum class key {
+    enum class keycode : int64_t {
         NONE = 0,
-        BACKSPACE = 8,
-        TAB = 9,
-        LINEFEED = 10,
-        ENTER = 13,
-        CANCEL = 24,
-        ESCAPE = 27,
-        SPACE = ' ',
-        PLUS = '+',
-        MINUS = '-',
-        DOT = '.',
-        COLON = ':',
-        COMMA = ',',
-        SEMICOLON = ';',
-        ASTERISK = '*',
-        PERCENT = '%',
-        DIVIDE = '/',
         A = 'a',
         B = 'b',
         C = 'c',
@@ -48,20 +33,39 @@ namespace b::console {
         X = 'x',
         Y = 'y',
         Z = 'z',
+        BACKSPACE,
+        TAB,
+        ESCAPE,
+        SPACE,
+        PLUS,
+        MINUS,
+        DOT,
+        COLON,
+        COMMA,
+        SEMICOLON,
+        ASTERISK,
+        PERCENT,
+        DIVIDE,
         LEFT,
         RIGHT,
         DOWN,
         UP,
-        DELETE
+        INSERT,
+        DELETE,
+        ENTER
     };
 
-    struct keycode {
-        key key;
+    class terminal {
+    public:
+        struct terminal_data;
 
+        terminal();
+        ~terminal();
+
+        keycode get_control_key();
+
+    private:
+        std::unique_ptr<terminal_data> data;
     };
-
-    key get_control_key();
-
-    int raw_getch();
 
 }

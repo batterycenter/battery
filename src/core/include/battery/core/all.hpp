@@ -31,7 +31,7 @@
 #endif
 
 #include "battery/core/extern/CLI11.hpp"
-#include "battery/core/extern/expected.hpp"
+//#include "battery/core/extern/expected.hpp"
 #include "battery/core/extern/inja.hpp"
 #include "battery/core/extern/json.hpp"
 #include "battery/core/extern/magic_enum.hpp"
@@ -39,7 +39,7 @@
 #include "battery/core/extern/semver.hpp"
 
 namespace b {
-    using namespace tl;     // So we can use b::expected<> instead of tl::expected<>
+    //using namespace tl;     // So we can use b::expected<> instead of tl::expected<>
     namespace toml {
         using namespace ::toml;     // So we can write b::toml::something instead of just toml::something
     }
