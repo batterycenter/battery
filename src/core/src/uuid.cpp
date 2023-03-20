@@ -20,9 +20,9 @@ namespace b::uuid {
         uuid_data& operator=(uuid_data&&) = delete;
 
     private:
-        inline static std::random_device rd;
-        inline static std::mt19937 generator;
-        inline static std::shared_ptr<uuids::uuid_random_generator> gen;
+        std::random_device rd;
+        std::mt19937 generator;
+        std::shared_ptr<uuids::uuid_random_generator> gen;
 
         uuid_data() {
             auto seed_data = std::array<int, std::mt19937::state_size> {};
@@ -40,7 +40,8 @@ namespace b::uuid {
     }
 
     bool is_valid(const std::string& uuid) {
-        return uuid::is_valid(uuid);
+        auto opt = uuids::uuid::from_string(uuid);
+        return opt.has_value();
     }
 
 } // namespace b

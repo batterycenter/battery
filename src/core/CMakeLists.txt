@@ -3,7 +3,9 @@ option(BATTERY_CORE_NO_MAIN "Prevent battery from defining the main() function i
 option(BATTERY_CORE_NO_TRAY "Compile without support for system tray icons (without libappindicator dependency)" OFF)
 
 # Battery core library
-battery_add_library(battery_core STATIC ALIAS battery::core
+battery_add_library(battery_core STATIC ALIAS battery::core)
+
+set(SOURCES
         src/extern/platform_folders.cpp
         src/extern/utf8proc.c
         src/extern/utf8proc_data.c
@@ -32,9 +34,13 @@ battery_add_library(battery_core STATIC ALIAS battery::core
         src/time.cpp
         src/uuid.cpp)
 
+target_sources(battery_core PRIVATE ${SOURCES})
+source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/src" PREFIX "Source Files" FILES ${SOURCES})
+
 if (MSVC)               # For Visual Studio we add all header files as sources so they're listed in the IDE
     file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_LIST_DIR}/include/**)
-    target_sources(battery_core PUBLIC ${HEADERS})
+    target_sources(battery_core PRIVATE ${HEADERS})
+    source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include" PREFIX "Header Files" FILES ${HEADERS})
 endif()
 
 # Properties
@@ -82,3 +88,8 @@ endif()
 if (BATTERY_CORE_NO_TRAY)
     target_compile_definitions(battery_core PUBLIC BATTERY_CORE_NO_TRAY)
 endif()
+
+set_target_properties(battery_core PROPERTIES FOLDER "battery")
+set_target_properties(reproc PROPERTIES FOLDER "battery/deps")
+set_target_properties(spdlog PROPERTIES FOLDER "battery/deps")
+set_target_properties(reproc++ PROPERTIES FOLDER "battery/deps")

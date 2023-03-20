@@ -2,12 +2,11 @@
 
 #include "pch.hpp"
 //#include "resources/version_txt.h"
-using namespace battery;
 
 #include "config.h"
 
 struct ProjectData {
-    fs::path project_root;
+    b::fs::path project_root;
     std::string project_name;
     semver::version project_version;
     std::string cmake_path;
@@ -52,9 +51,3 @@ std::string rangToString(T color) {
 
     return ss.str();
 }*/
-
-class App : public battery::Application {
-public:
-    App();
-    ~App();
-};

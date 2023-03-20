@@ -41,9 +41,15 @@ namespace b::fs {
             return std::bit_cast<const char*>(this->u8string().c_str());
         }
 
-        path extension() const {
-            return std::filesystem::path::extension();
-        }
+        fs::path extension() const { return std::filesystem::path::extension(); }
+        fs::path filename() const { return std::filesystem::path::filename(); }
+        fs::path parent_path() const { return std::filesystem::path::parent_path(); }
+        fs::path make_preferred() { return std::filesystem::path::make_preferred(); }
+        fs::path relative_path() const { return std::filesystem::path::relative_path(); }
+        fs::path remove_filename() { return std::filesystem::path::remove_filename(); }
+        fs::path replace_extension() { return std::filesystem::path::replace_extension(); }
+        fs::path replace_extension(const fs::path& p) { return std::filesystem::path::replace_extension(p); }
+        fs::path replace_filename(const fs::path& p) { return std::filesystem::path::replace_filename(p); }
 
         // This function returns the extension, but without the dot.
         // Thus, this either returns the extension like "png" or "txt", or nothing ("")

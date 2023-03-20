@@ -124,4 +124,7 @@ TEST(BatteryCore_Filesystem, FS_Path_UTF8) {
 
     b::fs::path p3("ölfile.süß年");
     EXPECT_EQ(p3.extension().to_string(), ".süß年");
+
+    b::fs::path p4("Ölgefäß/ölfile.süß年");
+    EXPECT_EQ(p4.filename().to_string(), "ölfile.süß年");
 }

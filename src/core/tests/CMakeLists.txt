@@ -11,3 +11,6 @@ target_sources(battery_core_tests PRIVATE
     thread.cpp
     time.cpp
     tray_icon.cpp)
+
+set_target_properties(battery_core_tests PROPERTIES FOLDER "battery/tests")
+set_target_properties(gtest PROPERTIES FOLDER "battery/tests")

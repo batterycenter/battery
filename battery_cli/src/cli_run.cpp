@@ -2,13 +2,14 @@
 #include "tools.h"
 
 Err cmake_run(const ProjectData& project) {
-    battery::process cmake;
-    cmake.in.command = { "cmake", "--build", "." };
-    cmake.in.working_directory = project.project_root + project.cmake_path;
-    cmake.execute();
+    b::process cmake;
+    cmake.options.executable = "cmake";
+    cmake.options.executable = { "--build", "." };
+    cmake.options.working_directory = project.project_root + project.cmake_path;
+    cmake.execute_sync();
 
-    if (cmake.out.status != 0) {
-        log::error("The CMake subprocess failed with error code {}: {}", cmake.out.status, cmake.out.error_message);
+    if (cmake.exit_code != 0) {
+        battery::log::error("The CMake subprocess failed with error code {}: {}", cmake.exit_code, cmake.error_message);
         return { Result::SUBPROCESS_FAILED, "" };
     }
     return { Result::SUCCESS, "" };
@@ -21,7 +22,7 @@ Err cli_run(const ProjectData& project) {     // TODO: Add a cache entry and run
         return err;
     }
 
-    log::info("Project built successfully. Use 'battery run' to execute it");
+    battery::log::info("Project built successfully. Use 'battery run' to execute it");
 
     return { Result::SUCCESS, "" };
 }

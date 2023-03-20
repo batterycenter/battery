@@ -3,7 +3,7 @@
 #include "tools.h"
 #include "scripts.h"
 
-Err parse_cli(const Args_t& args) {
+Err parse_cli(const std::vector<std::string>& args) {
 
     std::string version_message = CLI_PRODUCT_NAME + " version ";// + resources::version_txt.str();     // TODO !!!!
     std::string message = version_message + "\n"
@@ -20,47 +20,48 @@ Err parse_cli(const Args_t& args) {
     batterycli.require_subcommand(1);  // need exactly 1 subcommand
 
     try {
-        batterycli.parse(args.size(), args_to_cstr(args));
+        batterycli.parse(args.size(), b::args_to_argv(args));
     } catch(const CLI::ParseError &e) {
         batterycli.exit(e);     // Simply print the error. We are not interested in the error code
         return { Result::CLI_INVALID_ARGUMENTS, "Invalid arguments were given, CLI failed to parse" };
     }
 
-    auto project_data_opt = fetch_project_data();
-    if (!project_data_opt) return project_data_opt.error();
-    ProjectData project = project_data_opt.value();
+    //auto project_data_opt = fetch_project_data();
+    //if (!project_data_opt) return project_data_opt.error();
+    //ProjectData project = project_data_opt.value();
 
-    log::info("Battery project file found at {}:", project.project_root.to_string());
-    log::info("Project: {}", project.project_name);
-    log::info("Version: {}.{}.{}", project.project_version.major, project.project_version.minor, project.project_version.patch);
+    //battery::log::info("Battery project file found at {}:", project.project_root.to_string());
+    //battery::log::info("Project: {}", project.project_name);
+    //battery::log::info("Version: {}.{}.{}", project.project_version.major, project.project_version.minor, project.project_version.patch);
 
-    if (batterycli_new->parsed()) {               // battery new ...
-        return cli_new(project);
-    }
-    else if(batterycli_configure->parsed()) {     // battery configure ...
-        return run_script(project, "configure");
-    }
-    else if(batterycli_build->parsed()) {         // battery build ...
-        return run_script(project, "build");
-    }
-    else if(batterycli_run->parsed()) {           // battery start ...
-        return run_script(project, "start");
-    }
+    //if (batterycli_new->parsed()) {               // battery new ...
+    //    return cli_new(project);
+    //}
+    //else if(batterycli_configure->parsed()) {     // battery configure ...
+    //    return run_script(project, "configure");
+    //}
+    //else if(batterycli_build->parsed()) {         // battery build ...
+    //    return run_script(project, "build");
+    //}
+    //else if(batterycli_run->parsed()) {           // battery start ...
+    //    return run_script(project, "start");
+    //}
 
     return { Result::INTERNAL_ERROR, "Unreachable Code: Somehow the subcommand check got bypassed, this should be impossible..." };
 }
 
-int main(int argc, const char** argv) {
+#include "resources/version.txt.h"
 
-    App app;
-    app.run(argc, argv, "battery_cli");
+int b::main(const std::vector<std::string>& args) {
 
-    //log::pattern("%^>> %v%$");  // Output format of log messages
-//
-    //auto [errorcode, errormessage] = parse_cli(args);
-    //if ((int)errorcode > 0) {                               // Only error codes greater than 0 are printed
-    //    log::error("Error {} {}: {}", (int)errorcode, magic_enum::enum_name(errorcode), errormessage);
-    //}
-//
-    //return (int)errorcode;
+    std::cout << resources::version_txt << std::endl;
+
+    battery::log::pattern("%^>> %v%$");  // Output format of log messages
+
+    auto [errorcode, errormessage] = parse_cli(args);
+    if ((int)errorcode > 0) {                               // Only error codes greater than 0 are printed
+        battery::log::error("Error {} {}: {}", (int)errorcode, magic_enum::enum_name(errorcode), errormessage);
+    }
+
+    return (int)errorcode;
 }

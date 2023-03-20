@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(battery VERSION 0.1.1)
 
-#set(BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR} PARENT_SCOPE)
+set(BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR} PARENT_SCOPE)
 set(BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -14,11 +14,17 @@ battery_check_required_compiler_features()
 
 # Options
 option(BUILD_TESTS "Build all unit tests" ON)
+option(BUILD_EXAMPLES "Build examples" ON)
 
 enable_testing()
 
 add_subdirectory(src/core)
-add_subdirectory(examples)
+
+if (BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
+add_subdirectory(battery_embed)
 
 #option(BATTERY_BUILD_EXAMPLES "Build examples" on)
 #option(BATTERY_SHARED_LIB "Build shared library instead of static" off)
