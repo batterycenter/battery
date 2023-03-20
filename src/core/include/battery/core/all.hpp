@@ -6,6 +6,7 @@
 #include <source_location>
 
 #include "battery/core/async_worker.hpp"
+#include "battery/core/console.hpp"
 #include "battery/core/constants.hpp"
 #include "battery/core/environment.hpp"
 #include "battery/core/error.hpp"
@@ -30,11 +31,25 @@
 #endif
 
 #include "battery/core/extern/CLI11.hpp"
+#include "battery/core/extern/expected.hpp"
 #include "battery/core/extern/inja.hpp"
 #include "battery/core/extern/json.hpp"
 #include "battery/core/extern/magic_enum.hpp"
 #include "battery/core/extern/rang.hpp"
 #include "battery/core/extern/semver.hpp"
+
+namespace b {
+    using namespace tl;     // So we can use b::expected<> instead of tl::expected<>
+    namespace toml {
+        using namespace ::toml;     // So we can write b::toml::something instead of just toml::something
+    }
+    namespace semver {
+        using namespace ::semver;     // So we can write b::semver::something instead of just semver::something
+    }
+    namespace inja {
+        using namespace ::inja;      // So we can write b::inja::something instead of just inja::something
+    }
+}
 
 #ifdef BATTERY_COMPILER_MSVC
 #pragma warning( pop )

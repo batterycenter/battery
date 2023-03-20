@@ -22,6 +22,7 @@ set(SOURCES
         src/tray/core/entry.cpp
         src/tray/core/traybase.cpp
 
+        src/console.cpp
         src/constants.cpp
         src/fs.cpp
         src/log.cpp
@@ -87,6 +88,16 @@ if (UNIX AND NOT BATTERY_CORE_NO_TRAY)
 endif()
 if (BATTERY_CORE_NO_TRAY)
     target_compile_definitions(battery_core PUBLIC BATTERY_CORE_NO_TRAY)
+endif()
+
+# ncurses dependencies
+if (UNIX)
+    find_package(Curses)
+    if (NOT CURSES_FOUND)
+        message(FATAL_ERROR "Curses development libraries not found! \nPlease install them using your package manager \n(Hint: probably 'sudo apt install libncurses-dev')")
+    endif()
+    target_include_directories(battery_core PRIVATE ${CURSES_INCLUDE_DIRS})
+    target_link_libraries(battery_core ${CURSES_LIBRARIES})
 endif()
 
 set_target_properties(battery_core PROPERTIES FOLDER "battery")
