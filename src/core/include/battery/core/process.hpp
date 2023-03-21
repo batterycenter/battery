@@ -20,6 +20,22 @@ namespace b {
             bool strip_trailing_whitespace_after_join = true;
             uint64_t wait_ms_before_every_stdin_write = 100;
             reproc::options reproc_options;
+            options_t() = default;
+            options_t(const options_t& other) {
+                this->operator=(other);
+            }
+            options_t& operator=(const options_t& other) {
+                this->executable = other.executable;
+                this->arguments = other.arguments;
+                this->working_directory = other.working_directory;
+                this->silent = other.silent;
+                this->passthrough_to_parent = other.passthrough_to_parent;
+                this->suppress_carriage_return = other.suppress_carriage_return;
+                this->strip_trailing_whitespace_after_join = other.strip_trailing_whitespace_after_join;
+                this->wait_ms_before_every_stdin_write = other.wait_ms_before_every_stdin_write;
+                this->reproc_options = reproc::options::clone(other.reproc_options);
+                return *this;
+            }
         };
 
         options_t options;
@@ -51,5 +67,7 @@ namespace b {
         battery::async_worker<void> worker;
         reproc::process _process;
     };
+
+    process execute(const std::string& command, process::options_t options = process::options_t());
 
 }

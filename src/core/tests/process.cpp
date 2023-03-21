@@ -67,7 +67,7 @@ TEST(BatteryCore_Process, ProcessRedirectStdin) {
     proc.options.arguments.emplace_back("/c");
     proc.options.arguments.emplace_back(filename);
 #else
-    auto filename = "battery-core-unit-test-process-redirect.bat";
+    auto filename = "battery-core-unit-test-process-redirect.sh";
     b::fs::ofstream file(filename);
     file <<
         "#!/bin/bash\n"
@@ -86,4 +86,9 @@ TEST(BatteryCore_Process, ProcessRedirectStdin) {
     EXPECT_EQ(proc.output_combined, "unit test works");
     EXPECT_EQ(proc.exit_code, 100);
     b::fs::remove(filename);
+}
+
+TEST(BatteryCore_Process, ProcessExecuteDirect) {
+    auto proc = b::execute("echo unit test works");
+    EXPECT_EQ(proc.output_combined, "unit test works");
 }

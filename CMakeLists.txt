@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
 project(battery VERSION 0.1.1)
 
-set(BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR} PARENT_SCOPE)
+get_directory_property(hasParent PARENT_DIRECTORY)
+if(hasParent)
+    set(BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR} PARENT_SCOPE)
+endif()
 set(BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 

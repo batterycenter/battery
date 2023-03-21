@@ -133,4 +133,18 @@ namespace b {
         error_message = _ec.message();
     }
 
+    process execute(const std::string& command, process::options_t options) {
+        b::process process;
+        process.options = options;
+#ifdef BATTERY_ARCH_WINDOWS
+        process.options.executable = "cmd.exe";
+        process.options.arguments = { "/c", command };
+#else
+        process.options.executable = "bash";
+        process.options.arguments = { "-c", command };
+#endif
+        process.execute_sync();
+        return process;
+    }
+
 }

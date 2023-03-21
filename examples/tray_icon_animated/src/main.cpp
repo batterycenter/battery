@@ -6,7 +6,7 @@
 #endif
 
 int b::main(const std::vector<std::string>& args) {
-    battery::log::info("Running battery example tray-icon-animated. Have fun!");
+    b::log::info("Running battery example tray-icon-animated. Have fun!");
 
     // First load the frames into memory
     std::vector<b::resource> frames;
@@ -24,10 +24,10 @@ int b::main(const std::vector<std::string>& args) {
     bool animate = false;                           // Here, the MouseButton is which button opens the context menu (optional)
     b::tray::tray tray("MyTray", "Example Tray Icon Animated", b::tray::MouseButton::RIGHT);
     tray.addClickCallback(b::tray::MouseButton::LEFT, [] {
-        battery::log::info("Left mouse button");
+        b::log::info("Left mouse button");
     });
     tray.addClickCallback(b::tray::MouseButton::RIGHT, [] {
-        battery::log::info("Right mouse button");
+        b::log::info("Right mouse button");
     });
 
     // Here define the options for the context menu. You don't have to define anything.
@@ -37,11 +37,11 @@ int b::main(const std::vector<std::string>& args) {
     tray.addEntry(b::tray::label("Just a label"));
     tray.addEntry(b::tray::toggle("Animate", false, [&animate,&tray,&defaultIcon](bool state) {
         if (state && !animate) {
-            battery::log::info("Start animation");
+            b::log::info("Start animation");
             animate = true;
         }
         if (!state && animate) {
-            battery::log::info("Stop animation");
+            b::log::info("Stop animation");
             tray.setIcon(defaultIcon);
             animate = false;
         }
@@ -50,10 +50,10 @@ int b::main(const std::vector<std::string>& args) {
     bool synced = false;
     auto sub = tray.addEntry(b::tray::submenu("Test Submenu"));
     sub->addEntry(b::tray::synced_toggle("Synced toggle 1", synced, [] (bool b) {
-        battery::log::warn("Synced toggle 1: {}", b);
+        b::log::warn("Synced toggle 1: {}", b);
     }));
     sub->addEntry(b::tray::synced_toggle("Synced toggle 2", synced, [] (bool b) {
-        battery::log::warn("Synced toggle 2: {}", b);
+        b::log::warn("Synced toggle 2: {}", b);
     }));
 
     // And start the loop :)
@@ -64,7 +64,6 @@ int b::main(const std::vector<std::string>& args) {
             tray.setIcon(frames[i++]);
         }
         i %= frames.size();
-        //battery::log::warn("Synced: {}", synced);
     }
 
     return 0;
