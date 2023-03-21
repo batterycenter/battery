@@ -3,7 +3,8 @@ version_file = "version.txt"
 cmake_path = "battery_cli/build"
 
 [scripts]
-#build = ["cmake", "--build", "."]
+build = "cmake --build . && cmake -B {{build_directory}} {{cmake_flags}}"
 #test = "gtest"
 #run = "./battery"
 #configure = ["cmake",  "..", "-DCONFIG=Release"]
+test = "echo Hello this is a test"

@@ -18,8 +18,8 @@ namespace b {
         int _argc = 0;
         LPWSTR* _args = ::CommandLineToArgvW((LPCWSTR)GetCommandLineW(), &_argc);
         if (_args == nullptr) {
-            battery::log::core::critical("CommandLineToArgvW failed: {}", battery::get_last_win32_error());
-            battery::message_box_error(std::string("[Battery->WinAPI]: CommandLineToArgvW failed: ") + battery::get_last_win32_error());
+            b::log::core::critical("CommandLineToArgvW failed: {}", b::get_last_win32_error());
+            b::message_box_error(std::string("[Battery->WinAPI]: CommandLineToArgvW failed: ") + b::get_last_win32_error());
             return {};
         }
         std::vector<std::string> args;
@@ -37,7 +37,7 @@ namespace b {
     static void setup_windows_console() {
 #ifdef BATTERY_ARCH_WINDOWS
         SetConsoleOutputCP(CP_UTF8);
-        battery::log::core::trace("Switched terminal codepage to Unicode (UTF-8)");
+        b::log::core::trace("Switched terminal codepage to Unicode (UTF-8)");
 #endif
     }
 	

@@ -20,6 +20,15 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     auto batterycli_run = batterycli.add_subcommand("run", "Run a (custom) script (b run --help for more)");
     batterycli.require_subcommand(1);  // need exactly 1 subcommand
 
+    std::string script;
+    batterycli_run->add_option("script", script);
+    std::string cmake_flags;
+    batterycli_new->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
+    batterycli_configure->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
+    batterycli_build->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
+    batterycli_start->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
+    batterycli_run->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
+
     try {
         batterycli.parse(static_cast<int>(args.size()), b::args_to_argv(args));
     } catch(const CLI::ParseError &e) {
@@ -32,6 +41,7 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     if (!result) {
         return b::unexpected(result.error());
     }
+    project.cmakeFlags = cmake_flags;
 
     if (batterycli_new->parsed()) {               // b new ...
         return project.generateNewProject();
@@ -46,20 +56,20 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
         return project.runScript("start");
     }
     else if(batterycli_run->parsed()) {            // b run ...
-        return project.runScript("");
+        return project.runScript(script);
     }
 
-    battery::log::error("Unreachable Code: Somehow the subcommand switch got bypassed, this should be impossible...");
+    b::log::error("Unreachable Code: Somehow the subcommand switch got bypassed, this should be impossible...");
     return b::unexpected(Error::INTERNAL_ERROR);
 }
 
 int b::main(const std::vector<std::string>& args) {
 
-    battery::log::pattern("%^>> %v%$");  // Output format of log messages
+    b::print_pattern("%^>> %v%$");  // Output format of log messages
 
     auto result = parse_cli(args);
     if (!result) {                               // Only error codes greater than 0 are printed
-        battery::log::error("Battery stopped with error code {}: {}", (int)result.error(), magic_enum::enum_name(result.error()));
+        b::log::error("Battery stopped with error code {}: {}", (int)result.error(), magic_enum::enum_name(result.error()));
         return (int)result.error();
     }
 

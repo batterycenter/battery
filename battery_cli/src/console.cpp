@@ -15,21 +15,8 @@ static std::unique_ptr<indicators::ProgressBar> make_option(const std::string& l
     });
 }
 
-void ShowConsoleCursor(bool showFlag) {
-    HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
-
-    CONSOLE_CURSOR_INFO     cursorInfo;
-
-    GetConsoleCursorInfo(out, &cursorInfo);
-    cursorInfo.bVisible = showFlag; // set the cursor visibility
-    SetConsoleCursorInfo(out, &cursorInfo);
-}
-
-int show_options(const std::vector<std::string>& options) {
+int ask_user_options(const std::vector<std::string>& options) {
     namespace i = ::indicators;
-    std::cout << std::endl;
-    ShowConsoleCursor(false);
-
     std::vector<std::unique_ptr<i::ProgressBar>> progressBars;
     i::DynamicProgress<i::ProgressBar> bars;
 
@@ -55,7 +42,7 @@ int show_options(const std::vector<std::string>& options) {
                     bars[i].set_option(i::option::Fill {" "});
                 }
             }
-            b::sleep(0.1);
+            b::sleep_ms(50);
         }
     });
 
@@ -66,7 +53,7 @@ int show_options(const std::vector<std::string>& options) {
         }
         if (action == b::console::keycode::UP) {
             item--;
-            if (item < 0) item = options.size() - 1;
+            if (item < 0) item = static_cast<int>(options.size()) - 1;
         }
         if (action == b::console::keycode::DOWN) {
             item++;
@@ -75,7 +62,6 @@ int show_options(const std::vector<std::string>& options) {
     }
 
     thread.join();
-    ShowConsoleCursor(true);
 
-    return 0;
+    return item;
 }

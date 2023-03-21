@@ -222,7 +222,7 @@ int b::main(const std::vector<std::string>& args) {             // NOLINT NOSONA
     CLI11_PARSE(app, args.size(), b::args_to_argv(args));
 
     if (header && cpp || !header && !cpp) {
-        battery::log::error("Error {} (INVALID_ARGUMENTS): You must specify exactly one of --header or --cpp!", (int)ErrorCode::INVALID_ARGUMENTS);
+        b::log::error("Error {} (INVALID_ARGUMENTS): You must specify exactly one of --header or --cpp!", (int)ErrorCode::INVALID_ARGUMENTS);
         return (int)ErrorCode::INVALID_ARGUMENTS;
     }
 
@@ -240,19 +240,19 @@ int b::main(const std::vector<std::string>& args) {             // NOLINT NOSONA
             break;  // Success
 
         case INPUT_FILE_FAILED:
-            battery::log::error("Failed to open input file for reading (error code {}): {}", (int)status, error);
+            b::log::error("Failed to open input file for reading (error code {}): {}", (int)status, error);
             break;
 
         case OUTPUT_HEADER_FILE_FAILED:
-            battery::log::error("Failed to open header output file for writing (error code {}): {}", (int)status, error);
+            b::log::error("Failed to open header output file for writing (error code {}): {}", (int)status, error);
             break;
 
         case OUTPUT_FILE_FAILED:
-            battery::log::error("Failed to open source output file for writing (error code {}): {}", (int)status, error);
+            b::log::error("Failed to open source output file for writing (error code {}): {}", (int)status, error);
             break;
 
         default:
-            battery::log::error("Unknown error (error code {}): {}", (int)status, error);
+            b::log::error("Unknown error (error code {}): {}", (int)status, error);
             break;
     }
     return (int)status;

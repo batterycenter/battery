@@ -15,6 +15,7 @@ public:
     semver::version projectVersion;
     std::string buildDirectory = "build";
     std::string sourceDirectory = ".";
+    std::string cmakeFlags = "";
 
     std::unordered_map<std::string, std::string> scripts;
 
@@ -26,6 +27,6 @@ public:
 
     b::expected<std::nullopt_t, Error> generateNewProject();
 
-    b::expected<std::nullopt_t, Error> runScript(const std::string& script);
+    b::expected<std::nullopt_t, Error> runScript(std::string script);
 
 };

@@ -86,15 +86,15 @@ namespace b {
                 std::invoke(std::forward<Args>(args)...);
             }
             catch (const std::exception& e) {
-                battery::log::core::critical("Unhandled exception in b::thread: [std::exception]: {}", e.what());
+                b::log::core::critical("Unhandled exception in b::thread: [std::exception]: {}", e.what());
                 if (_message_box_on_exception) {
-                    battery::message_box_error(fmt::format("Unhandled exception in b::thread: [std::exception]: {}", e.what()));
+                    b::message_box_error(fmt::format("Unhandled exception in b::thread: [std::exception]: {}", e.what()));
                 }
             }
             catch (...) {
-                battery::log::core::critical("Unidentifiable exception caught in b::thread, no further information");
+                b::log::core::critical("Unidentifiable exception caught in b::thread, no further information");
                 if (_message_box_on_exception) {
-                    battery::message_box_error("Unidentifiable exception caught in b::thread, no further information");
+                    b::message_box_error("Unidentifiable exception caught in b::thread, no further information");
                 }
             }
         }

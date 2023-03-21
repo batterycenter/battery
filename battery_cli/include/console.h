@@ -3,4 +3,4 @@
 #include <string>
 #include <vector>
 
-int show_options(const std::vector<std::string>& options);
+int ask_user_options(const std::vector<std::string>& options);

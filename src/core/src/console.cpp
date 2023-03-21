@@ -5,6 +5,7 @@
 
 #ifdef BATTERY_ARCH_WINDOWS
 #include <conio.h>
+#include <Windows.h>
 #else
 #include <termios.h>
 #include <sys/ioctl.h>
@@ -13,6 +14,10 @@
 
 #include <cstdio>
 
+#ifdef DELETE   // Stupid windows api
+#undef DELETE
+#endif
+
 //#include <ncurses.h>
 
 namespace b::console {
@@ -20,6 +25,8 @@ namespace b::console {
     struct terminal::terminal_data {
 #ifndef BATTERY_ARCH_WINDOWS
         struct termios previous_terminal_state;
+#else
+        CONSOLE_CURSOR_INFO previousCursorInfo;
 #endif
     };
 
@@ -32,12 +39,22 @@ namespace b::console {
         newtio.c_lflag &= ~ECHO;
         tcsetattr(0, TCSANOW, &newtio);
         fflush(stdout);
+#else
+        HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+        CONSOLE_CURSOR_INFO cursorInfo;
+        GetConsoleCursorInfo(out, &data->previousCursorInfo);
+        GetConsoleCursorInfo(out, &cursorInfo);
+        cursorInfo.bVisible = false;
+        SetConsoleCursorInfo(out, &cursorInfo);
 #endif
     }
 
     terminal::~terminal() {
 #ifndef BATTERY_ARCH_WINDOWS
         tcsetattr(0, TCSANOW, &data->previous_terminal_state);
+#else
+        HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleCursorInfo(out, &data->previousCursorInfo);
 #endif
     }
 
@@ -70,36 +87,35 @@ namespace b::console {
 
     static keycode make_special_key(int ch) {
         switch (ch) {
-            using enum keycode;
 #ifdef BATTERY_ARCH_WINDOWS
             case 75:
-                return LEFT;
+                return keycode::LEFT;
             case 77:
-                return RIGHT;
+                return keycode::RIGHT;
             case 72:
-                return UP;
+                return keycode::UP;
             case 80:
-                return DOWN;
+                return keycode::DOWN;
             case 83:
-                return DELETE;
+                return keycode::DELETE;
             case 82:
-                return INSERT;
+                return keycode::INSERT;
 #else
             case 68:
-                return LEFT;
+                return keycode::LEFT;
             case 67:
-                return RIGHT;
+                return keycode::RIGHT;
             case 65:
-                return UP;
+                return keycode::UP;
             case 66:
-                return DOWN;
+                return keycode::DOWN;
             case 51:
-                return DELETE;
+                return keycode::DELETE;
             case 50:
-                return INSERT;
+                return keycode::INSERT;
 #endif
             default:
-                return NONE;
+                return keycode::NONE;
         }
     }
 

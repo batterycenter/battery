@@ -10,7 +10,7 @@
 
 // TODO: Check if zenity is available at program startup
 
-namespace battery {
+namespace b {
 
 #ifdef BATTERY_ARCH_WINDOWS
     std::string get_last_win32_error() {
