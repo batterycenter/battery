@@ -23,7 +23,7 @@ TEST(BatteryCore_Filesystem, ReadFileWithSpacesAndKanji) {
     EXPECT_EQ(content, "utf-8 filenames work");
 
     file.return_to_beginning();
-    content = file.to_string();
+    content = file.read_string().value();
     EXPECT_EQ(content, "utf-8 filenames work");
 
     content.clear();
@@ -47,7 +47,7 @@ TEST(BatteryCore_Filesystem, ReadWriteFileContent_UTF8) {
         outfile.close();
 
         b::fs::ifstream infile("filesystem-test.txt", mode);
-        ASSERT_EQ(infile.to_string(), content);
+        ASSERT_EQ(infile.read_string().value(), content);
     };
 
     test(b::fs::Mode::TEXT);

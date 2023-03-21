@@ -10,11 +10,11 @@
 #include "battery/core/constants.hpp"
 #include "battery/core/environment.hpp"
 #include "battery/core/error.hpp"
+#include "battery/core/folders.hpp"
 #include "battery/core/fs.hpp"
 #include "battery/core/log.hpp"
 #include "battery/core/main.hpp"
 #include "battery/core/messages.hpp"
-#include "battery/core/folders.hpp"
 #include "battery/core/process.hpp"
 #include "battery/core/resource.hpp"
 #include "battery/core/string.hpp"
@@ -31,7 +31,8 @@
 #endif
 
 #include "battery/core/extern/CLI11.hpp"
-//#include "battery/core/extern/expected.hpp"
+#include "battery/core/extern/expected.hpp"
+#include "battery/core/extern/indicators.hpp"
 #include "battery/core/extern/inja.hpp"
 #include "battery/core/extern/json.hpp"
 #include "battery/core/extern/magic_enum.hpp"
@@ -39,7 +40,7 @@
 #include "battery/core/extern/semver.hpp"
 
 namespace b {
-    //using namespace tl;     // So we can use b::expected<> instead of tl::expected<>
+    using namespace tl;     // So we can use b::expected<> instead of tl::expected<>
     namespace toml {
         using namespace ::toml;     // So we can write b::toml::something instead of just toml::something
     }

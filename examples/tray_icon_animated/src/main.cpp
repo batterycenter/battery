@@ -1,5 +1,4 @@
 
-#define MAGIC_ENUM_RANGE_MAX 256
 #include "battery/core/all.hpp"
 
 #ifndef EXAMPLE_ROOT
@@ -8,17 +7,6 @@
 
 int b::main(const std::vector<std::string>& args) {
     battery::log::info("Running battery example tray-icon-animated. Have fun!");
-
-    {
-        b::console::terminal t;
-        while (b::time() < 1000) {
-            b::console::keycode e = t.get_control_key();
-            if (e != b::console::keycode::NONE) {
-                battery::log::info("Key: {}", magic_enum::enum_name(e));
-            }
-        }
-        return 0;
-    }
 
     // First load the frames into memory
     std::vector<b::resource> frames;

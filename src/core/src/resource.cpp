@@ -16,7 +16,7 @@ namespace b {
         if (file.fail())
             throw std::ios::failure("battery::resource: Failed to open file '" + filepath.to_string() + "' for reading: " + strerror(errno));
         resource res;
-        res._data = file.to_string();
+        res._data = file.read_string().value();
         res._filetype = b::to_lower(filepath.raw_extension().to_string());
         return res;
     }
@@ -26,7 +26,7 @@ namespace b {
         if (file.fail())
             throw std::ios::failure("battery::resource: Failed to open file '" + filepath.to_string() + "' for reading: " + strerror(errno));
         resource res;
-        res._data = file.to_string();
+        res._data = file.read_string().value();
         res._filetype = b::to_lower(filepath.raw_extension().to_string());
         return res;
     }

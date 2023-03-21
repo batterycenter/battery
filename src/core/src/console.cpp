@@ -48,6 +48,7 @@ namespace b::console {
         if (ch >= 'A' && ch <= 'Z') {
             return (keycode)(ch + ('a' - 'A'));
         }
+        if (ch == 8) return keycode::BACKSPACE;
         if (ch == 127) return keycode::BACKSPACE;
         if (ch == 9) return keycode::TAB;
         if (ch == 27) return keycode::ESCAPE;
@@ -81,6 +82,8 @@ namespace b::console {
                 return DOWN;
             case 83:
                 return DELETE;
+            case 82:
+                return INSERT;
 #else
             case 68:
                 return LEFT;

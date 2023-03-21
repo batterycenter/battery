@@ -1,5 +1,5 @@
 project_name = "Battery"
-project_version = "0.1.2"
+version_file = "version.txt"
 cmake_path = "battery_cli/build"
 
 [scripts]

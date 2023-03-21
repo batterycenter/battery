@@ -8,6 +8,8 @@ sudo apt install git cmake build-essential libx11-dev
 
 https://google.github.io/styleguide/cppguide.html
 
+https://github.com/TartanLlama/expected -> CC0 1.0 License
+
 https://github.com/zserge/tray -> modified for use with modern C++
 
 https://github.com/CLIUtils/CLI11 -> BSD-Clause, modified to use Battery::FS::ifstream instead of std::ifstream

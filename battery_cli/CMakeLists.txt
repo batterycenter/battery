@@ -12,9 +12,11 @@ battery_add_executable(battery_cli ALIAS battery::cli ${HEADERS}
 	src/cli_configure.cpp
 	src/cli_new.cpp
 	src/cli_run.cpp
+	src/console.cpp
 	src/main.cpp
-	src/scripts.cpp
-	src/tools.cpp)
+	src/Project.cpp
+	src/ProjectGenerator.cpp
+	src/scripts.cpp)
 
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include" PREFIX "Header Files" FILES ${HEADERS})
 

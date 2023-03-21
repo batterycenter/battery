@@ -139,7 +139,8 @@ namespace b::fs {
             return total_bytes;
         }
 
-        std::string to_string() {
+        std::optional<std::string> read_string() {
+            if (!is_open()) return {};
             std::stringstream buffer;
             buffer << this->rdbuf();
             return buffer.str();
@@ -151,7 +152,13 @@ namespace b::fs {
         }
 
         explicit operator std::string() {
-            return to_string();
+            auto str = read_string();
+            if (str) {
+                return str.value();
+            }
+            else {
+                throw std::runtime_error("Cannot read file as std::string: File is not open");
+            }
         }
 
     private:
