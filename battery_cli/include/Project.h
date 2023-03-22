@@ -13,20 +13,20 @@ public:
     std::string projectName;
     b::fs::path projectRoot;
     semver::version projectVersion;
-    std::string buildDirectory = "build";
-    std::string sourceDirectory = ".";
-    std::string cmakeFlags = "";
 
+    nlohmann::json data;
     std::unordered_map<std::string, std::string> scripts;
+    b::cachefile projectCache;
 
     Project();
 
-    b::expected<std::nullopt_t, Error> findProjectRoot();
+    bool isProjectConfigured();
 
-    b::expected<std::nullopt_t, Error> fetchProjectData();
+    [[nodiscard]] b::expected<std::nullopt_t, Error> init(const std::string& cmake_flags, const std::string& args);
 
-    b::expected<std::nullopt_t, Error> generateNewProject();
+    [[nodiscard]] b::expected<std::nullopt_t, Error> findProjectRoot();
+    [[nodiscard]] b::expected<std::nullopt_t, Error> fetchProjectData();
 
-    b::expected<std::nullopt_t, Error> runScript(std::string script);
+    [[nodiscard]] b::expected<std::nullopt_t, Error> runScript(std::string script);
 
 };

@@ -8,10 +8,6 @@ add_subdirectory(.. battery)
 file(GLOB_RECURSE HEADERS "${CMAKE_CURRENT_LIST_DIR}/include/**")
 battery_add_executable(battery_cli ALIAS battery::cli ${HEADERS}
 	src/app.cpp
-	src/cli_build.cpp
-	src/cli_configure.cpp
-	src/cli_new.cpp
-	src/cli_run.cpp
 	src/console.cpp
 	src/main.cpp
 	src/Project.cpp
@@ -21,6 +17,7 @@ battery_add_executable(battery_cli ALIAS battery::cli ${HEADERS}
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include" PREFIX "Header Files" FILES ${HEADERS})
 
 battery_set_output_name(battery_cli "b")
+battery_set_exe_output_folder(battery_cli ${CMAKE_BINARY_DIR}/bin)
 target_include_directories(battery_cli PUBLIC include)
 target_link_libraries(battery_cli battery::core)
 

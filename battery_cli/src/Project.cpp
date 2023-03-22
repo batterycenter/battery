@@ -1,14 +1,45 @@
 
-#include "console.h"
 #include "messages.h"
 #include "Project.h"
+#include "ProjectGenerator.h"
 
-#include <conio.h>
+Project::Project() {}
 
-Project::Project() {
-    scripts["configure"] = "cmake -B {{build_directory}} -S {{source_directory}} {{cmake_flags}}";
-    scripts["build"] = "cmake --build -B {{build_directory}} {{cmake_flags}}";
-    scripts["start"] = "echo Program running :)";
+bool Project::isProjectConfigured() {
+    try {
+        return projectCache["configured"];
+    }
+    catch (...) {
+        return false;
+    }
+}
+
+b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags, const std::string& args) {
+
+    scripts["configure"] = "cmake -B {{build_directory}} -S {{project_root}} -DCMAKE_BUILD_TYPE={{config}} {{cmake_flags}}";
+    scripts["build"] = "cmake --build {{build_directory}} --config={{config}} {{cmake_flags}}";
+    scripts["start"] = "b execute {{project_root}}/{{executable}} --args=\"{{args}}\"";
+
+    data["build_directory"] = "build";
+    data["binary_directory"] = "{{build_directory}}/bin/{{config}}";
+    data["executable_name"] = "{{project_name}}";
+    data["executable"] = "{{binary_directory}}/{{executable_name}}";
+    data["config"] = "debug";
+    data["config_package"] = "release";
+
+    auto result = fetchProjectData();
+    if (!result) {
+        return b::unexpected(result.error());
+    }
+
+    data["project_name"] = projectName;
+    data["project_root"] = projectRoot.to_string();
+    data["project_version"] = projectVersion.to_string();
+    data["cmake_flags"] = cmake_flags;
+    data["args"] = args;
+
+    projectCache = b::cachefile(projectRoot + data["build_directory"] + "battery.cache");
+    return std::nullopt;
 }
 
 b::expected<std::nullopt_t, Error> Project::findProjectRoot() {
@@ -31,7 +62,7 @@ b::expected<std::nullopt_t, Error> Project::findProjectRoot() {
         }
     }
 
-    b::log::error(MESSAGES_TOML_NOT_FOUND, BATTERY_PROJECT_FILE_NAME);
+    b::log::warn(MESSAGES_TOML_NOT_FOUND, BATTERY_PROJECT_FILE_NAME);
     return b::unexpected(Error::PROJECT_FILE_NOT_FOUND);
 }
 
@@ -45,12 +76,11 @@ b::expected<std::nullopt_t, Error> Project::fetchProjectData() {
         auto toml = b::toml::parse(projectRoot + BATTERY_PROJECT_FILE_NAME);
         this->projectName = b::toml::find<std::string>(toml, "project_name");
 
-        // Read a few directories
-        if (toml.contains("build_directory")) {
-            this->buildDirectory = b::toml::find<std::string>(toml, "build_directory");
-        }
-        if (toml.contains("source_directory")) {
-            this->sourceDirectory = b::toml::find<std::string>(toml, "source_directory");
+        // Overrides from the toml file -> All json values are directly overridable
+        for (auto& entry : data.items()) {
+            if (toml.contains(entry.key())) {
+                data[entry.key()] = b::toml::find<std::string>(toml, entry.key());
+            }
         }
 
         // Parse the version
@@ -79,22 +109,6 @@ b::expected<std::nullopt_t, Error> Project::fetchProjectData() {
         return b::unexpected(Error::TOML_PARSE_ERROR);
     }
 
-    b::print(b::print_color::GREEN, "Project {} v{}", projectName, projectVersion.to_string());
-
-    return std::nullopt;
-}
-
-b::expected<std::nullopt_t, Error> Project::generateNewProject() {
-
-    std::cout <<"What type of project do you want to generate?" << std::endl << std::endl;
-    bool library = ask_user_options({ "Application (One or more executables)", "Library (For use in other applications)" }) == 1;
-    std::cout << std::endl;
-    b::log::info("Library: {}", library);
-
-//    while (b::time() < 10) {
-//        //battery::log::warn("Info: {}", magic_enum::enum_name(b::console::get_control_key()));
-//    }
-
     return std::nullopt;
 }
 
@@ -104,22 +118,31 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
         script = "start";
     }
 
-    nlohmann::json data;
-    data["project_name"] = projectName;
-    data["project_version"] = projectVersion.to_string();
-    data["build_directory"] = "\"" + (projectRoot + buildDirectory).to_string() + "\"";
-    data["source_directory"] = "\"" + (projectRoot + sourceDirectory).to_string() + "\"";
-    data["cmake_flags"] = cmakeFlags;
+    if (script == "build" && !isProjectConfigured()) {  // 'build' is also special, it calls 'configure' before itself, if project is not configured yet
+        auto result = runScript("configure");
+        if (!result) {
+            return b::unexpected(result.error());
+        }
+    }
+
+    if (script == "configure") {
+        projectCache["configured"] = false;
+    }
 
     if (!scripts.contains(script)) {
         b::log::warn("'{}' is neither a default script, nor is it defined in {}", script, BATTERY_PROJECT_FILE_NAME);
         return b::unexpected(Error::SCRIPT_NOT_FOUND);
     }
 
-    b::print("Running script '{}'", script);
-    std::string command;
+    b::print(b::print_color::GREEN, "{} v{} {}", projectName, projectVersion.to_string(), script);
+
+    std::string old;
+    std::string command = scripts[script];
     try {
-        command = b::inja::render(scripts[script], data);
+        while (old != command) {
+            old = command;
+            command = b::inja::render(command, data);
+        }
     }
     catch (const std::exception& e) {
         b::log::warn("The command '{}' failed to parse. Reason:", scripts[script]);
@@ -127,7 +150,21 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
         return b::unexpected(Error::SCRIPT_PARSE_ERROR);
     }
 
-    b::print("{}", command);
-    b::log::error("{}", command);
+    b::print("{}\n", command);
+    b::process::options_t options;
+    options.passthrough_to_parent = true;
+    options.working_directory = projectRoot;
+    b::process result = b::execute(command, options);
+    std::cout << std::endl;
+
+    if (result.exit_code != 0) {
+        b::log::warn("Script failed with error code {}", result.exit_code); // We no longer print the error message since it's always the same
+        return b::unexpected(Error::SCRIPT_FAILED);                           // We call bash or cmd underneath which practically never fail themselves
+    }
+
+    if (script == "configure") {    // If the script was 'configure', we write to the cache that the project is configured
+        projectCache["configured"] = true;
+    }
+
     return std::nullopt;
 }

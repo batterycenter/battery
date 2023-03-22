@@ -129,6 +129,12 @@ function(battery_set_output_name TARGET NAME)
     set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME ${NAME})
 endfunction()
 
+function(battery_set_exe_output_folder TARGET FOLDER)
+    set_target_properties(${TARGET} PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY "${FOLDER}"
+    )
+endfunction()
+
 function(battery_set_ide_folder DIRECTORY LABEL)
     file(GLOB_RECURSE FILES "${DIRECTORY}/**")
     source_group(TREE "${DIRECTORY}" PREFIX ${LABEL} FILES ${FILES})

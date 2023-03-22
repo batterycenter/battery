@@ -50,13 +50,13 @@ public:
 
     void async_int(int i) {
         if (i != 187)
-            throw std::invalid_argument("The value is not what was expected");
+            throw std::invalid_argument("Expected value 187, but got value " + std::to_string(i) + ": Thread is broken");
         success = true;
     }
 
     static void static_async_int(int i) {
         if (i != 187)
-            throw std::invalid_argument("The value is not what was expected");
+            throw std::invalid_argument("Expected value 187, but got value " + std::to_string(i) + ": Thread is broken");
         success = true;
     }
 

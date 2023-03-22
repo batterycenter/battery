@@ -19,6 +19,8 @@ namespace b {
             bool suppress_carriage_return = true;
             bool strip_trailing_whitespace_after_join = true;
             uint64_t wait_ms_before_every_stdin_write = 100;
+            std::function<void(const std::string& str)> stdout_callback;
+            std::function<void(const std::string& str)> stderr_callback;
             reproc::options reproc_options;
             options_t() = default;
             options_t(const options_t& other) {
@@ -33,14 +35,14 @@ namespace b {
                 this->suppress_carriage_return = other.suppress_carriage_return;
                 this->strip_trailing_whitespace_after_join = other.strip_trailing_whitespace_after_join;
                 this->wait_ms_before_every_stdin_write = other.wait_ms_before_every_stdin_write;
+                this->stdout_callback = other.stdout_callback;
+                this->stderr_callback = other.stderr_callback;
                 this->reproc_options = reproc::options::clone(other.reproc_options);
                 return *this;
             }
         };
 
         options_t options;
-        std::function<void(const std::string& str)> stdout_callback;
-        std::function<void(const std::string& str)> stderr_callback;
 
         int exit_code = 0;
         std::string error_message;

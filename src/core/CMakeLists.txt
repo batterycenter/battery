@@ -22,6 +22,7 @@ set(SOURCES
         src/tray/core/entry.cpp
         src/tray/core/traybase.cpp
 
+        src/cache.cpp
         src/console.cpp
         src/constants.cpp
         src/fs.cpp

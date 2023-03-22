@@ -58,7 +58,7 @@ namespace b {
         }
         output_stdout += buffer;
         output_combined += buffer;
-        if (stdout_callback) { stdout_callback(buffer); }
+        if (options.stdout_callback) { options.stdout_callback(buffer); }
         if (!options.silent) { std::cout << buffer; }
         return {};
     }
@@ -71,7 +71,7 @@ namespace b {
         }
         output_stderr += buffer;
         output_combined += buffer;
-        if (stderr_callback) { stderr_callback(buffer); }
+        if (options.stderr_callback) { options.stderr_callback(buffer); }
         if (!options.silent) { std::cout << buffer; }
         return {};
     }
@@ -86,6 +86,7 @@ namespace b {
         options.reproc_options.redirect.parent = options.passthrough_to_parent;
         std::string workdir = options.working_directory.has_value() ? options.working_directory->to_string() : "";
         options.reproc_options.working_directory = !workdir.empty() ? workdir.c_str() : nullptr;
+        options.reproc_options.redirect.err.type = reproc::redirect::type::pipe;
 
         if (options.working_directory.has_value()) {
             auto dir = options.working_directory.value();

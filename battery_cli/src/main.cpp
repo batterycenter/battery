@@ -1,7 +1,15 @@
 
 #include "Error.h"
 #include "Project.h"
+#include "ProjectGenerator.h"
 #include "resources/version.txt.h"
+
+static void executeProgram(const std::string& executable, const std::string& args) {
+    auto exe = b::fs::path(executable).make_preferred();
+    auto result = b::execute(exe.to_string() + " " + args);
+    std::cout << std::endl;
+    b::print("{} terminated with exit code {}", b::fs::path(executable).filename(), result.exit_code);
+}
 
 b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args) {
 
@@ -22,12 +30,21 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
 
     std::string script;
     batterycli_run->add_option("script", script);
+    std::string run_args;
+    batterycli_run->add_flag("--args", run_args, "Any arguments to pass to the executable when running");
+
     std::string cmake_flags;
     batterycli_new->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
     batterycli_configure->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
     batterycli_build->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
     batterycli_start->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
     batterycli_run->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
+
+    std::string executable;
+    auto batterycli_execute = batterycli.add_subcommand("execute", "Execute a program specified by path");
+    batterycli_execute->add_option("executable", executable);
+    std::string executable_args;
+    batterycli_execute->add_flag("--args", executable_args, "Any arguments to pass to the executable");
 
     try {
         batterycli.parse(static_cast<int>(args.size()), b::args_to_argv(args));
@@ -36,20 +53,25 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
         return b::unexpected(Error::CLI_FAILED_TO_PARSE);
     }
 
+    if (batterycli_execute->parsed()) {           // b execute ...
+        executeProgram(executable, executable_args);
+        return std::nullopt;
+    }
+    else if (batterycli_new->parsed()) {          // b new ...
+        ProjectGenerator generator;
+        return generator.run();
+    }
+
     Project project;
-    auto result = project.fetchProjectData();
+    auto result = project.init(cmake_flags, run_args);
     if (!result) {
         return b::unexpected(result.error());
     }
-    project.cmakeFlags = cmake_flags;
 
-    if (batterycli_new->parsed()) {               // b new ...
-        return project.generateNewProject();
-    }
-    else if(batterycli_configure->parsed()) {     // b configure ...
+    if(batterycli_configure->parsed()) {           // b configure ...
         return project.runScript("configure");
     }
-    else if(batterycli_build->parsed()) {         // b build ...
+    else if(batterycli_build->parsed()) {          // b build ...
         return project.runScript("build");
     }
     else if(batterycli_start->parsed()) {          // b start ...

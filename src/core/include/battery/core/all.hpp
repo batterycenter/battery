@@ -6,6 +6,7 @@
 #include <source_location>
 
 #include "battery/core/async_worker.hpp"
+#include "battery/core/cache.hpp"
 #include "battery/core/console.hpp"
 #include "battery/core/constants.hpp"
 #include "battery/core/environment.hpp"
