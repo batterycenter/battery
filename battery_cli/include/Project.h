@@ -24,10 +24,10 @@ public:
 
     bool isProjectConfigured();
 
-    [[nodiscard]] b::expected<std::nullopt_t, Error> init(const std::string& cmake_flags, const std::string& args);
+    [[nodiscard]] b::expected<std::nullopt_t, Error> init(const std::string& cmake_flags, const std::string& root, const std::string& args);
 
-    [[nodiscard]] b::expected<std::nullopt_t, Error> findProjectRoot();
-    [[nodiscard]] b::expected<std::nullopt_t, Error> fetchProjectData();
+    [[nodiscard]] b::expected<std::nullopt_t, Error> findProjectRoot(const std::string& root);
+    [[nodiscard]] b::expected<std::nullopt_t, Error> fetchProjectData(const std::string& root);
 
     void printScriptLabel(const std::string& script);
     [[nodiscard]] b::expected<std::nullopt_t, Error> runScript(std::string script);

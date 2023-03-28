@@ -14,7 +14,7 @@ bool Project::isProjectConfigured() {
     }
 }
 
-b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags, const std::string& args) {
+b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags, const std::string& root, const std::string& args) {
 
     scripts["configure"] = "cmake -B {{build_directory}} -S {{project_root}} -DCMAKE_BUILD_TYPE={{config}} {{cmake_flags}}";
     scripts["build"] = "b configure --cache && cmake --build {{build_directory}} --config={{config}} {{cmake_flags}}";
@@ -27,7 +27,7 @@ b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags,
     data["config"] = "debug";
     data["config_package"] = "release";
 
-    auto result = fetchProjectData();
+    auto result = fetchProjectData(root);
     if (!result) {
         return b::unexpected(result.error());
     }
@@ -42,8 +42,12 @@ b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags,
     return std::nullopt;
 }
 
-b::expected<std::nullopt_t, Error> Project::findProjectRoot() {
+b::expected<std::nullopt_t, Error> Project::findProjectRoot(const std::string& root) {
     b::fs::path path = b::fs::current_path();       // TODO: This type is still wrong (b::fs todo)
+
+    if (!root.empty()) {
+        path = root;
+    }
 
     if (b::fs::is_regular_file(path + BATTERY_PROJECT_FILE_NAME)) {
         this->projectRoot = path;
@@ -66,9 +70,9 @@ b::expected<std::nullopt_t, Error> Project::findProjectRoot() {
     return b::unexpected(Error::PROJECT_FILE_NOT_FOUND);
 }
 
-b::expected<std::nullopt_t, Error> Project::fetchProjectData() {
+b::expected<std::nullopt_t, Error> Project::fetchProjectData(const std::string& root) {
 
-    auto success = findProjectRoot();
+    auto success = findProjectRoot(root);
     if (!success) { return b::unexpected(success.error()); }
 
     try {

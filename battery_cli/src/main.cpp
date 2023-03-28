@@ -26,27 +26,35 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     auto batterycli_build = batterycli.add_subcommand("build", "Build an existing Battery project (b build --help for more)");
     auto batterycli_start = batterycli.add_subcommand("start", "Build and run an existing Battery project (b start --help for more)");
     auto batterycli_run = batterycli.add_subcommand("run", "Run a (custom) script (b run --help for more)");
+    auto batterycli_execute = batterycli.add_subcommand("execute", "Execute a program specified by path (b execute --help for more)");
     batterycli.require_subcommand(1);  // need exactly 1 subcommand
 
     std::string script;
-    std::vector<std::string> additional_args;
     batterycli_run->add_option("script", script);
+
+    std::vector<std::string> additional_args;
     batterycli_run->add_option("--args", additional_args, "Any arguments to pass to the executable when running");
     batterycli_start->add_option("--args", additional_args, "Any arguments to pass to the executable when running");
+    batterycli_execute->add_option("--args", additional_args, "Any arguments to pass to the executable");
 
     bool configure_cache = false;
+    batterycli_configure->add_flag("--cache", configure_cache, "Only configure if the project hasn't been configured yet");
+
     std::string cmake_flags;
     batterycli_new->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
-    batterycli_configure->add_flag("--cache", configure_cache, "Only configure if the project hasn't been configured yet");
     batterycli_configure->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
     batterycli_build->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
     batterycli_start->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
     batterycli_run->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
 
+    std::string root_dir;
+    batterycli_configure->add_option("--root", root_dir, "The root directory to look for battery.toml in");
+    batterycli_build->add_option("--root", root_dir, "The root directory to look for battery.toml in");
+    batterycli_start->add_option("--root", root_dir, "The root directory to look for battery.toml in");
+    batterycli_run->add_option("--root", root_dir, "The root directory to look for battery.toml in");
+
     std::string executable;
-    auto batterycli_execute = batterycli.add_subcommand("execute", "Execute a program specified by path");
-    batterycli_execute->add_option("executable", executable);
-    batterycli_execute->add_option("--args", additional_args, "Any arguments to pass to the executable");
+    batterycli_execute->add_option("executable", executable, "The full path of the executable to run");
 
     try {
         batterycli.parse(static_cast<int>(args.size()), b::args_to_argv(args));
@@ -65,7 +73,7 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     }
 
     Project project;
-    auto result = project.init(cmake_flags, b::join(additional_args, " "));
+    auto result = project.init(cmake_flags, root_dir, b::join(additional_args, " "));
     if (!result) {
         return b::unexpected(result.error());
     }
