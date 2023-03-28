@@ -31,7 +31,7 @@ int ask_user_options(const std::vector<std::string>& options) {
     b::console::terminal terminal;
     b::thread thread([&done,&bars,&options,&item]{
         while (!done) {
-            for (int i = 0; i < options.size(); i++) {
+            for (int i = 0; i < static_cast<int>(options.size()); i++) {
                 bars[i].set_progress(100);
                 if (i == item) {
                     bars[i].set_option(i::option::ForegroundColor {i::Color::cyan});
@@ -57,7 +57,7 @@ int ask_user_options(const std::vector<std::string>& options) {
         }
         if (action == b::console::keycode::DOWN) {
             item++;
-            if (item >= options.size()) item = 0;
+            if (item >= static_cast<int>(options.size())) item = 0;
         }
     }
 

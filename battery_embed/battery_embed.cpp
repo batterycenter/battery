@@ -101,7 +101,7 @@ std::pair<ErrorCode, std::string> generate_cpp(
     infile.read_in_chunks(chunk_size, [&outbuffer,&outfile] (std::string_view chunk) {
         // Parse each chunk of the file
         size_t index = 0;
-        for (int i = 0; i < chunk.size(); i++) {
+        for (size_t i = 0; i < chunk.size(); i++) {
             index += write_hex_comma(outbuffer.data() + index, chunk[i]);
 
             if (i % 20 == 19) {
@@ -221,7 +221,7 @@ int b::main(const std::vector<std::string>& args) {             // NOLINT NOSONA
     // Parse the CLI options
     CLI11_PARSE(app, args.size(), b::args_to_argv(args));
 
-    if (header && cpp || !header && !cpp) {
+    if ((header && cpp) || (!header && !cpp)) {
         b::log::error("Error {} (INVALID_ARGUMENTS): You must specify exactly one of --header or --cpp!", (int)ErrorCode::INVALID_ARGUMENTS);
         return (int)ErrorCode::INVALID_ARGUMENTS;
     }
