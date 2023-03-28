@@ -19,6 +19,7 @@
 #include <future>
 #include <string>
 #include <thread>
+#include <future>
 #include "battery/core/folders.hpp"
 #include "battery/core/messages.hpp"
 #include "battery/core/log.hpp"
@@ -50,15 +51,12 @@ namespace b {
         /// \param[in] function The function to execute in the thread
         /// \param[in] args Any number of parameters to pass to the function when calling it
         ///
-        template<typename Fn, typename... Args>
-            requires (!std::same_as<thread, std::remove_cvref_t<Fn>>)
-        explicit thread(Fn&& function, Args&&... args)
-            : std::jthread([&function,&args...,this] {
-                thread::_jthread(std::forward<Fn>(function), std::forward<Args>(args)...);
-            })
-        {                                   // Wait until the thread has properly started. This caused some very weird
-            promise.get_future().get();     // issues with spurious segmentation faults because of broken references.
-        }                                   // This seems to fix it.
+
+        template <class _Fn, class... _Args>
+        explicit thread(_Fn&& _Fx, _Args&&... _Ax)
+          : std::jthread([_Fx = std::forward<_Fn>(_Fx), ...args = std::forward<_Args>(_Ax)]() mutable {
+                catch_common_exceptions(std::move(_Fx), std::move(args)...);
+            }) {}
 
         ///
         /// \brief Run a function and catch all exceptions with nice error messages.
@@ -82,7 +80,7 @@ namespace b {
                 return;
             }
 
-            try {                                       // Otherwise catch it properly
+            try {                                       // Otherwise catch exceptions properly
                 std::invoke(std::forward<Args>(args)...);
             }
             catch (const std::exception& e) {
@@ -120,17 +118,13 @@ namespace b {
         }
 
     private:
-        template<typename Fn, typename... Args>
-        void _jthread(Fn&& function, Args&&... args) {
-            catch_common_exceptions([&function,&args...,this] {
-                promise.set_value(true);                                // Signalize the thread is ready
-                std::invoke(std::forward<Fn>(function), std::forward<Args>(args)...);
-            });
-        }
-
-        std::promise<bool> promise;
         inline static std::atomic<bool> _message_box_on_exception { b::constants::message_box_on_exception_default() };
         inline static std::atomic<bool> _catch_common_exceptions { b::constants::catch_common_exceptions_default() };
     };
+
+    template<typename... T>
+    auto async(T&&... args) {
+        return std::async(std::launch::async, std::forward<T>(args)...);
+    }
 
 }

@@ -11,12 +11,14 @@ public:
     void run1() {
         thread = b::thread([this]() {
             async();
+            bool_data = !bool_data;
         });
     }
 
     void run1_int() {
         thread = b::thread([this](int c) {
             async_int(c);
+            bool_data = !bool_data;
         }, 187);
     }
 
@@ -70,6 +72,7 @@ public:
 private:
     std::string data;
     b::thread thread;
+    std::atomic<bool> bool_data = false;
 };
 
 TEST(BatteryCore_Thread, MemberFunc) {

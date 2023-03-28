@@ -4,7 +4,6 @@
 
 TEST(BatteryCore_Cache, Cache) {
     auto path = b::folders::get_cache() + "unit_test.cache";
-    b::log::error("{}", path);
     if (b::fs::exists(path)) {
         b::fs::remove(path);
     }

@@ -111,6 +111,7 @@ public:
 };
 
 foo global("global");
+b::thread t1;
 
 int b::main(const std::vector<std::string>& args) {
 
@@ -118,10 +119,19 @@ int b::main(const std::vector<std::string>& args) {
 
     foo foo("local");
 
-    for (int i = 0; i < 50; i++) {
+    t1 = b::thread([]() {
+        for (int i = 0; i < 20; i++) {
+            b::print(b::print_color::GREEN, "Thread working...");
+            b::sleep(0.3);
+        }
+        b::log::error("Thread end");
+    });
+
+    for (int i = 0; i < 10; i++) {
         b::print(b::print_color::GREEN, "Main thread working...");
-        b::sleep(0.1);
+        b::sleep(0.3);
     }
+    b::log::error("Main end");
     return 0;
 
     auto result = parse_cli(args);
