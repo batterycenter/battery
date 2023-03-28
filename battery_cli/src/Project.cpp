@@ -18,7 +18,7 @@ b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags,
 
     scripts["configure"] = "cmake -B {{build_directory}} -S {{project_root}} -DCMAKE_BUILD_TYPE={{config}} {{cmake_flags}}";
     scripts["build"] = "b configure --cache && cmake --build {{build_directory}} --config={{config}} {{cmake_flags}}";
-    scripts["start"] = "b build && b execute {{project_root}}/{{executable}} --args=\"{{args}}\"";
+    scripts["start"] = "b build && b execute {{project_root}}/{{executable}} --args {{args}}";
 
     data["build_directory"] = "build";
     data["binary_directory"] = "{{build_directory}}/bin/{{config}}";
@@ -149,14 +149,19 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
 
     b::print("{}\n", command);
 
-    b::process::options_t options;
-    options.passthrough_to_parent = true;
-    options.working_directory = projectRoot;
-    b::process result = b::execute(command, options);
+    b::process process;
+    process.options.passthrough_to_parent = true;
+    process.options.working_directory = projectRoot;
+    process.options.execute_as_shell_command = true;
+    process.options.arguments = { command };
+
+    terminateCallback = [&process]() { process.terminate(); };
+    process.execute_sync();
+    terminateCallback = {};
     std::cout << std::endl;
 
-    if (result.exit_code != 0) {
-        b::log::warn("Script failed with error code {}", result.exit_code);   // We no longer print the 'error message' since it's always the same
+    if (process.exit_code != 0) {
+        b::log::warn("Script failed with error code {}", process.exit_code);   // We no longer print the 'error message' since it's always the same
         return b::unexpected(Error::SCRIPT_FAILED);                           // We call bash or cmd underneath which practically never fail themselves
     }
 

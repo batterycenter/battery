@@ -8,13 +8,6 @@
 
 namespace b {
 
-    process::process() {
-        b::print("Create process");
-    }
-    process::~process() {
-        b::print("Destroy process");
-    }
-
     process::process(const process& other) :
          options(other.options),
          exit_code(other.exit_code),
@@ -75,6 +68,14 @@ namespace b {
         _process.write(std::bit_cast<const uint8_t *>(buffer), length);
     }
 
+    void process::kill() {
+        _process.kill();
+    }
+
+    void process::terminate() {
+        _process.terminate();
+    }
+
     std::error_code process::stdout_sink(const uint8_t* _buffer, size_t length) {
         if (length == 0) return {};
         auto buffer = std::string(std::bit_cast<const char*>(_buffer), length);
@@ -102,8 +103,25 @@ namespace b {
     }
 
     void process::run_process() {
-        std::vector<const char*> cmd_cstr{ options.executable.c_str() };
+        std::vector<const char*> cmd_cstr;
+
+#ifdef BATTERY_ARCH_WINDOWS
+        if (options.execute_as_shell_command) {
+            cmd_cstr.emplace_back("cmd.exe");
+            cmd_cstr.emplace_back("/c");
+        }
+#else
+        if (options.execute_as_shell_command) {
+            cmd_cstr.emplace_back("bash");
+            cmd_cstr.emplace_back("-c");
+        }
+#endif
+
+        if (!options.executable.empty()) {
+            cmd_cstr.emplace_back(options.executable.c_str());
+        }
         for (const auto& c : options.arguments) {
+            if (c.empty()) continue;
             cmd_cstr.emplace_back(c.c_str());
         }
         cmd_cstr.emplace_back(nullptr);
@@ -159,16 +177,11 @@ namespace b {
         error_message = _ec.message();
     }
 
-    process execute(const std::string& command, process::options_t options) {
+    process execute(const std::string& command, const process::options_t& options) {
         b::process process;
         process.options = options;
-#ifdef BATTERY_ARCH_WINDOWS
-        process.options.executable = "cmd.exe";
-        process.options.arguments = { "/c", command };
-#else
-        process.options.executable = "bash";
-        process.options.arguments = { "-c", command };
-#endif
+        process.options.execute_as_shell_command = true;
+        process.options.arguments = { command };
         process.execute_sync();
         return process;
     }

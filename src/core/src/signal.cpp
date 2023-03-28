@@ -78,7 +78,6 @@ namespace b {
 
     void internal::init_ctrl_c_handler() {
 #ifdef BATTERY_ARCH_WINDOWS
-        SetConsoleCtrlHandler(nullptr, FALSE);          // Remove any previous handlers
         SetConsoleCtrlHandler([](DWORD dwCtrlType) {
             switch (dwCtrlType) {
                 case CTRL_C_EVENT:

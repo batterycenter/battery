@@ -10,22 +10,34 @@ namespace b {
     class async_worker {
     public:
         async_worker() = default;
+        ~async_worker() {
+            wait();
+        };
 
-        template<typename _Fn, typename... _Args>
-        T execute_sync(_Fn&& function, _Args&&... args) const {
+        async_worker(const async_worker& other) = delete;
+        async_worker& operator=(const async_worker& other) = delete;
+        async_worker(async_worker&& other) noexcept = default;
+        async_worker& operator=(async_worker&& other) noexcept = default;
+
+        template<typename Fn, typename... Args>
+        T execute_sync(Fn&& function, Args&&... args) const {
             return function(args...);
         }
 
-        template<typename _Fn, typename... _Args>
-        void execute_async(_Fn&& function, _Args&&... args) {
-            if (worker.valid()) {
-                worker.wait();
-            }
-            worker = std::async(std::launch::async, std::forward<_Fn>(function), args...);
+        template<typename Fn, typename... Args>
+        void execute_async(Fn&& function, Args&&... args) {
+            wait();
+            worker = b::async(std::forward<Fn>(function), args...);
         }
 
         T join() {
             worker.get();
+        }
+
+        void wait() {
+            if (worker.valid()) {
+                worker.wait();
+            }
         }
 
     private:

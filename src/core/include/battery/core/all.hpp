@@ -18,6 +18,7 @@
 #include "battery/core/messages.hpp"
 #include "battery/core/process.hpp"
 #include "battery/core/resource.hpp"
+#include "battery/core/signal.hpp"
 #include "battery/core/string.hpp"
 #include "battery/core/thread.hpp"
 #include "battery/core/time.hpp"

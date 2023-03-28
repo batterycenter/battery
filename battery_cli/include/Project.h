@@ -17,6 +17,8 @@ public:
     nlohmann::json data;
     std::unordered_map<std::string, std::string> scripts;
     b::cachefile projectCache;
+    inline static std::atomic<bool> terminateApplication = false;
+    inline static std::function<void()> terminateCallback;
 
     Project();
 

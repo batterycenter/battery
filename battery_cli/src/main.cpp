@@ -6,7 +6,6 @@
 
 static void executeProgram(const std::string& executable, const std::string& args) {
     auto exe = b::fs::path(executable).make_preferred();
-    b::log::warn("{}", exe.to_string() + " " + args);
     auto result = b::execute(exe.to_string() + " " + args);
     std::cout << std::endl;
     b::print("{} terminated with exit code {}", b::fs::path(executable).filename(), result.exit_code);
@@ -30,9 +29,10 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     batterycli.require_subcommand(1);  // need exactly 1 subcommand
 
     std::string script;
+    std::vector<std::string> additional_args;
     batterycli_run->add_option("script", script);
-    std::string run_args;
-    batterycli_run->add_flag("--args", run_args, "Any arguments to pass to the executable when running");
+    batterycli_run->add_option("--args", additional_args, "Any arguments to pass to the executable when running");
+    batterycli_start->add_option("--args", additional_args, "Any arguments to pass to the executable when running");
 
     bool configure_cache = false;
     std::string cmake_flags;
@@ -46,8 +46,7 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     std::string executable;
     auto batterycli_execute = batterycli.add_subcommand("execute", "Execute a program specified by path");
     batterycli_execute->add_option("executable", executable);
-    std::string executable_args;
-    batterycli_execute->add_flag("--args", executable_args, "Any arguments to pass to the executable");
+    batterycli_execute->add_option("--args", additional_args, "Any arguments to pass to the executable");
 
     try {
         batterycli.parse(static_cast<int>(args.size()), b::args_to_argv(args));
@@ -57,7 +56,7 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     }
 
     if (batterycli_execute->parsed()) {           // b execute ...
-        executeProgram(executable, executable_args);
+        executeProgram(executable, b::join(additional_args, " "));
         return std::nullopt;
     }
     else if (batterycli_new->parsed()) {          // b new ...
@@ -66,7 +65,7 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     }
 
     Project project;
-    auto result = project.init(cmake_flags, run_args);
+    auto result = project.init(cmake_flags, b::join(additional_args, " "));
     if (!result) {
         return b::unexpected(result.error());
     }
@@ -110,33 +109,21 @@ public:
     }
 };
 
-foo global("global");
-b::thread t1;
-
 int b::main(const std::vector<std::string>& args) {
+
+    b::set_ctrl_c_handler([]() {
+        Project::terminateApplication = true;
+        if (Project::terminateCallback) {
+            Project::terminateCallback();
+        }
+        std::cout << "Ctrl-C\n";
+    });
 
     b::print_pattern("%^>> %v%$");  // Output format of log messages
 
-    foo foo("local");
-
-    t1 = b::thread([]() {
-        for (int i = 0; i < 20; i++) {
-            b::print(b::print_color::GREEN, "Thread working...");
-            b::sleep(0.3);
-        }
-        b::log::error("Thread end");
-    });
-
-    for (int i = 0; i < 10; i++) {
-        b::print(b::print_color::GREEN, "Main thread working...");
-        b::sleep(0.3);
-    }
-    b::log::error("Main end");
-    return 0;
-
     auto result = parse_cli(args);
     if (!result) {                               // Only error codes greater than 0 are printed
-        b::log::error("Battery stopped with error code {}: {}", (int)result.error(), magic_enum::enum_name(result.error()));
+        b::log::error("battery terminated with exit code {}: {}", (int)result.error(), magic_enum::enum_name(result.error()));
         return (int)result.error();
     }
 

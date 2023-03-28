@@ -14,6 +14,7 @@ namespace b {
             std::string executable;
             std::vector<std::string> arguments;
             std::optional<fs::path> working_directory;
+            bool execute_as_shell_command = false;
             bool silent = false;
             bool passthrough_to_parent = false;
             bool suppress_carriage_return = true;
@@ -50,8 +51,7 @@ namespace b {
         std::string output_stderr;
         std::string output_combined;
 
-        process();
-        ~process();
+        process() = default;
 
         process(const process& other);
         process& operator=(const process& other);
@@ -66,6 +66,9 @@ namespace b {
         void stdin_write(const char* str);
         void stdin_write(const char* buffer, size_t length);
 
+        void kill();
+        void terminate();
+
     private:
         static std::string remove_trailing_whitespace(std::string buffer);
         std::error_code stdout_sink(const uint8_t* _buffer, size_t length);
@@ -76,6 +79,6 @@ namespace b {
         reproc::process _process;
     };
 
-    process execute(const std::string& command, process::options_t options = process::options_t());
+    process execute(const std::string& command, const process::options_t& options = process::options_t());
 
 }
