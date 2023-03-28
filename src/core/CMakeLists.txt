@@ -31,6 +31,7 @@ set(SOURCES
         src/folders.cpp
         src/process.cpp
         src/resource.cpp
+        src/signal.cpp
         src/string.cpp
         src/time.cpp
         src/uuid.cpp)

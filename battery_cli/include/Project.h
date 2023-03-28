@@ -27,6 +27,7 @@ public:
     [[nodiscard]] b::expected<std::nullopt_t, Error> findProjectRoot();
     [[nodiscard]] b::expected<std::nullopt_t, Error> fetchProjectData();
 
+    void printScriptLabel(const std::string& script);
     [[nodiscard]] b::expected<std::nullopt_t, Error> runScript(std::string script);
 
 };

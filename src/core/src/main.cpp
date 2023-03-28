@@ -4,6 +4,7 @@
 
 #include "battery/core/main.hpp"
 #include "battery/core/string.hpp"
+#include "battery/core/signal.hpp"
 #include "battery/core/log.hpp"
 #include "battery/core/folders.hpp"
 #include "battery/core/messages.hpp"
@@ -53,8 +54,10 @@ namespace b {
 
     int run_main(int argc, const char** argv) {
         b::internal::reset_time();
-        int result = -1;
         setup_windows_console();
+        b::internal::init_ctrl_c_handler();
+
+        int result = -1;
         b::thread::catch_common_exceptions([&result, argc, argv]() {
             result = b::main(parse_cli(argc, argv));
         });

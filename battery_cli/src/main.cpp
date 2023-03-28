@@ -6,6 +6,7 @@
 
 static void executeProgram(const std::string& executable, const std::string& args) {
     auto exe = b::fs::path(executable).make_preferred();
+    b::log::warn("{}", exe.to_string() + " " + args);
     auto result = b::execute(exe.to_string() + " " + args);
     std::cout << std::endl;
     b::print("{} terminated with exit code {}", b::fs::path(executable).filename(), result.exit_code);
@@ -33,8 +34,10 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     std::string run_args;
     batterycli_run->add_flag("--args", run_args, "Any arguments to pass to the executable when running");
 
+    bool configure_cache = false;
     std::string cmake_flags;
     batterycli_new->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
+    batterycli_configure->add_flag("--cache", configure_cache, "Only configure if the project hasn't been configured yet");
     batterycli_configure->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
     batterycli_build->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
     batterycli_start->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
@@ -69,7 +72,19 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     }
 
     if(batterycli_configure->parsed()) {           // b configure ...
-        return project.runScript("configure");
+        if (configure_cache) {
+            if (!project.isProjectConfigured()) {
+                return project.runScript("configure");
+            }
+            else {
+                project.printScriptLabel("configure --cache");
+                b::print(b::print_color::YELLOW, "Skipping configure stage, as the project has already been configured once\n");
+                return std::nullopt;
+            }
+        }
+        else {
+            return project.runScript("configure");
+        }
     }
     else if(batterycli_build->parsed()) {          // b build ...
         return project.runScript("build");
@@ -85,9 +100,29 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     return b::unexpected(Error::INTERNAL_ERROR);
 }
 
+class foo {
+public:
+    foo(const std::string& str) {
+        b::print(b::print_color::GREEN, "foo constructor {}", str);
+    }
+    ~foo() {
+        b::print(b::print_color::GREEN, "foo destructor");
+    }
+};
+
+foo global("global");
+
 int b::main(const std::vector<std::string>& args) {
 
     b::print_pattern("%^>> %v%$");  // Output format of log messages
+
+    foo foo("local");
+
+    for (int i = 0; i < 50; i++) {
+        b::print(b::print_color::GREEN, "Main thread working...");
+        b::sleep(0.1);
+    }
+    return 0;
 
     auto result = parse_cli(args);
     if (!result) {                               // Only error codes greater than 0 are printed

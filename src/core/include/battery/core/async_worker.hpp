@@ -4,7 +4,7 @@
 #include <mutex>
 #include <future>
 
-namespace battery {
+namespace b {
 
     template<typename T>
     class async_worker {

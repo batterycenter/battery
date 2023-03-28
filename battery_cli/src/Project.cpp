@@ -17,8 +17,8 @@ bool Project::isProjectConfigured() {
 b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags, const std::string& args) {
 
     scripts["configure"] = "cmake -B {{build_directory}} -S {{project_root}} -DCMAKE_BUILD_TYPE={{config}} {{cmake_flags}}";
-    scripts["build"] = "cmake --build {{build_directory}} --config={{config}} {{cmake_flags}}";
-    scripts["start"] = "b execute {{project_root}}/{{executable}} --args=\"{{args}}\"";
+    scripts["build"] = "b configure --cache && cmake --build {{build_directory}} --config={{config}} {{cmake_flags}}";
+    scripts["start"] = "b build && b execute {{project_root}}/{{executable}} --args=\"{{args}}\"";
 
     data["build_directory"] = "build";
     data["binary_directory"] = "{{build_directory}}/bin/{{config}}";
@@ -112,17 +112,14 @@ b::expected<std::nullopt_t, Error> Project::fetchProjectData() {
     return std::nullopt;
 }
 
+void Project::printScriptLabel(const std::string& script) {
+    b::print(b::print_color::GREEN, "{} v{} {}", projectName, projectVersion.to_string(), script);
+}
+
 b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
 
     if (script.empty()) {   // 'b run' is equivalent to 'b run start' or 'b start'
         script = "start";
-    }
-
-    if (script == "build" && !isProjectConfigured()) {  // 'build' is also special, it calls 'configure' before itself, if project is not configured yet
-        auto result = runScript("configure");
-        if (!result) {
-            return b::unexpected(result.error());
-        }
     }
 
     if (script == "configure") {
@@ -134,7 +131,7 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
         return b::unexpected(Error::SCRIPT_NOT_FOUND);
     }
 
-    b::print(b::print_color::GREEN, "{} v{} {}", projectName, projectVersion.to_string(), script);
+    printScriptLabel(script);
 
     std::string old;
     std::string command = scripts[script];
@@ -146,11 +143,12 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
     }
     catch (const std::exception& e) {
         b::log::warn("The command '{}' failed to parse. Reason:", scripts[script]);
-        std::cout << rang::fgB::blue << e.what() << rang::fg::reset << std::endl;
+        b::print(b::print_color::BLUE, "{}", e.what());
         return b::unexpected(Error::SCRIPT_PARSE_ERROR);
     }
 
     b::print("{}\n", command);
+
     b::process::options_t options;
     options.passthrough_to_parent = true;
     options.working_directory = projectRoot;
@@ -158,7 +156,7 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
     std::cout << std::endl;
 
     if (result.exit_code != 0) {
-        b::log::warn("Script failed with error code {}", result.exit_code); // We no longer print the error message since it's always the same
+        b::log::warn("Script failed with error code {}", result.exit_code);   // We no longer print the 'error message' since it's always the same
         return b::unexpected(Error::SCRIPT_FAILED);                           // We call bash or cmd underneath which practically never fail themselves
     }
 

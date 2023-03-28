@@ -8,6 +8,31 @@
 
 namespace b {
 
+    process::process() {
+        b::print("Create process");
+    }
+    process::~process() {
+        b::print("Destroy process");
+    }
+
+    process::process(const process& other) :
+         options(other.options),
+         exit_code(other.exit_code),
+         error_message(other.error_message),
+         output_stdout(other.output_stdout),
+         output_stderr(other.output_stderr),
+         output_combined(other.output_combined) {}
+
+    process& process::operator=(const process& other) {
+        this->options = other.options;
+        this->exit_code = other.exit_code;
+        this->error_message = other.error_message;
+        this->output_stdout = other.output_stdout;
+        this->output_stderr = other.output_stderr;
+        this->output_combined = other.output_combined;
+        return *this;
+    }
+
     void process::execute_sync() {
         worker.execute_sync([this] { process::run_process(); });
     }

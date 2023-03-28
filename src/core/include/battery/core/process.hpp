@@ -50,7 +50,13 @@ namespace b {
         std::string output_stderr;
         std::string output_combined;
 
-        process() = default;
+        process();
+        ~process();
+
+        process(const process& other);
+        process& operator=(const process& other);
+        process(process&& other) = default;
+        process& operator=(process&& other) = default;
 
         void execute_sync();
         void execute_async();
@@ -66,7 +72,7 @@ namespace b {
         std::error_code stderr_sink(const uint8_t* _buffer, size_t length);
         void run_process();
 
-        battery::async_worker<void> worker;
+        b::async_worker<void> worker;
         reproc::process _process;
     };
 

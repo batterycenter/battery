@@ -64,7 +64,7 @@ namespace b::log {
 
     namespace core {
 
-        inline void level(enum Level level) {
+        inline void level(enum level level) {
             internal::core_logger->set_level((spdlog::level::level_enum)level);
         }
 
