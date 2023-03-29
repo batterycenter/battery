@@ -37,6 +37,7 @@ namespace b {
 
     static void setup_windows_console() {
 #ifdef BATTERY_ARCH_WINDOWS
+        SetConsoleCP(CP_UTF8);
         SetConsoleOutputCP(CP_UTF8);
         b::log::core::trace("Switched terminal codepage to Unicode (UTF-8)");
 #endif

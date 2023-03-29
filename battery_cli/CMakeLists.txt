@@ -17,10 +17,17 @@ battery_add_executable(battery_cli ALIAS battery::cli ${HEADERS}
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include" PREFIX "Header Files" FILES ${HEADERS})
 
 battery_set_output_name(battery_cli "b")
-battery_set_exe_output_folder(battery_cli ${CMAKE_BINARY_DIR}/bin)
 target_include_directories(battery_cli PUBLIC include)
 target_link_libraries(battery_cli battery::core)
 
 battery_precompile_headers(battery_cli "${CMAKE_CURRENT_LIST_DIR}/include/pch.hpp")
 
 battery_embed(battery_cli "${CMAKE_CURRENT_LIST_DIR}/../version.txt" TEXT)
+
+battery_embed(battery_cli "${CMAKE_CURRENT_LIST_DIR}/resources/templates/gitignore.txt" TEXT)
+battery_embed(battery_cli "${CMAKE_CURRENT_LIST_DIR}/resources/templates/battery.toml" TEXT)
+battery_embed(battery_cli "${CMAKE_CURRENT_LIST_DIR}/resources/templates/_version.txt" TEXT)
+battery_embed(battery_cli "${CMAKE_CURRENT_LIST_DIR}/resources/templates/CMakeLists.txt" TEXT)
+battery_embed(battery_cli "${CMAKE_CURRENT_LIST_DIR}/resources/templates/cmake/CPM.cmake" TEXT)
+battery_embed(battery_cli "${CMAKE_CURRENT_LIST_DIR}/resources/templates/src/main.cpp" TEXT)
+battery_embed(battery_cli "${CMAKE_CURRENT_LIST_DIR}/resources/templates/include/pch.hpp" TEXT)

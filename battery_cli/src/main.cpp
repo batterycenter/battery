@@ -8,7 +8,7 @@ static void executeProgram(const std::string& executable, const std::string& arg
     auto exe = b::fs::path(executable).make_preferred();
     auto result = b::execute(exe.to_string() + " " + args);
     std::cout << std::endl;
-    b::print("{} terminated with exit code {}", b::fs::path(executable).filename(), result.exit_code);
+    b::print(">> {} terminated with exit code {}", b::fs::path(executable).filename(), result.exit_code);
 }
 
 b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args) {
@@ -40,6 +40,9 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     bool configure_cache = false;
     batterycli_configure->add_flag("--cache", configure_cache, "Only configure if the project hasn't been configured yet");
 
+    std::string new_dir;
+    batterycli_new->add_option("root_directory", new_dir, "Where to generate the new project (optional)");
+
     std::string cmake_flags;
     batterycli_new->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
     batterycli_configure->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
@@ -69,7 +72,7 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     }
     else if (batterycli_new->parsed()) {          // b new ...
         ProjectGenerator generator;
-        return generator.run();
+        return generator.run(new_dir);
     }
 
     Project project;
@@ -85,7 +88,7 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
             }
             else {
                 project.printScriptLabel("configure --cache");
-                b::print(b::print_color::YELLOW, "Skipping configure stage, as the project has already been configured once\n");
+                b::print(b::print_color::YELLOW, ">> Skipping configure stage, as the project has already been configured once\n");
                 return std::nullopt;
             }
         }
@@ -107,16 +110,6 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     return b::unexpected(Error::INTERNAL_ERROR);
 }
 
-class foo {
-public:
-    foo(const std::string& str) {
-        b::print(b::print_color::GREEN, "foo constructor {}", str);
-    }
-    ~foo() {
-        b::print(b::print_color::GREEN, "foo destructor");
-    }
-};
-
 int b::main(const std::vector<std::string>& args) {
 
     b::set_ctrl_c_handler([]() {
@@ -126,8 +119,6 @@ int b::main(const std::vector<std::string>& args) {
         }
         std::cout << "Ctrl-C\n";
     });
-
-    b::print_pattern("%^>> %v%$");  // Output format of log messages
 
     auto result = parse_cli(args);
     if (!result) {                               // Only error codes greater than 0 are printed

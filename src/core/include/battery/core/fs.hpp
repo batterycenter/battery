@@ -20,7 +20,6 @@ namespace b::fs {
     using std::filesystem::status;					// Get filesystem status: what type of entry it is
     using std::filesystem::is_regular_file;
     using std::filesystem::is_directory;
-    using std::filesystem::current_path;
 
 
 
@@ -75,16 +74,27 @@ namespace b::fs {
         return stream;
     }
 
-    inline fs::path operator+(const fs::path& a, const std::string& b) {
-        fs::path path = a;
-        path.append(b);
+    inline fs::path operator+(const fs::path& a, const fs::path& b) {
+        auto path = a;
+        path.append(b.to_string());
         return path;
+    }
+
+    inline fs::path operator/(const fs::path& a, const fs::path& b) {
+        return a + b;
     }
 
     enum class Mode {
         TEXT,
         BINARY
     };
+
+    template<typename... T> fs::path current_path(T&&... args) { return std::filesystem::current_path(std::forward<T>(args)...); }
+
+
+
+
+
 
     class ifstream : public std::ifstream {
     public:

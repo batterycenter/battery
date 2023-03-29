@@ -102,6 +102,12 @@ function(battery_add_executable TARGET)
     else()
         add_executable(${TARGET}::${TARGET} ALIAS ${TARGET})
     endif()
+
+    file(GLOB_RECURSE HEADERS "${CMAKE_CURRENT_LIST_DIR}/include/**")
+    target_sources(${TARGET} PRIVATE ${HEADERS})
+    source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include" PREFIX "Header Files" FILES ${HEADERS})
+
+    battery_set_exe_output_folder(${TARGET} ${CMAKE_BINARY_DIR}/bin)
     __apply_common_target_options(${TARGET})   # Apply things like C++ Standard, preprocessor defines, etc.
 endfunction()
 
@@ -195,9 +201,13 @@ function(battery_embed TARGET RESOURCE_FILE TYPE)
             OUTPUT ${TARGET_SOURCE})
 
     # Imitate files so cmake can configure successfully
-    target_sources(${TARGET} PUBLIC ${RESOURCE_FILE} ${TARGET_HEADER} ${TARGET_SOURCE})
+    target_sources(${TARGET} PUBLIC ${TARGET_HEADER} ${TARGET_SOURCE})
     source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/" PREFIX "Resource Files" FILES ${TARGET_HEADER} ${TARGET_SOURCE})
     source_group(TREE "${RESOURCE_DIRECTORY}/" PREFIX "Resource Files" FILES ${RESOURCE_FILE})
+    if (MSVC)
+        #target_sources(${TARGET} PUBLIC ${RESOURCE_FILE})
+        #set_property(SOURCE ${RESOURCE_FILE} PROPERTY VS_SETTINGS "ExcludedFromBuild=true")     # TODO: This is CMake 3.18+ only
+    endif()
 
     add_custom_target(${TARGET}-embed-${RESOURCE_FILENAME} DEPENDS battery::embed ${TARGET_HEADER} ${TARGET_SOURCE})
     add_dependencies(${TARGET} ${TARGET}-embed-${RESOURCE_FILENAME})

@@ -127,8 +127,4 @@ namespace b {
         }
     }
 
-    inline void print_pattern(const std::string& pattern) {
-        b::log::internal::print_logger->set_pattern(pattern);
-    }
-
 }

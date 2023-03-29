@@ -117,7 +117,7 @@ b::expected<std::nullopt_t, Error> Project::fetchProjectData(const std::string& 
 }
 
 void Project::printScriptLabel(const std::string& script) {
-    b::print(b::print_color::GREEN, "{} v{} {}", projectName, projectVersion.to_string(), script);
+    b::print(b::print_color::GREEN, ">> {} v{} {}", projectName, projectVersion.to_string(), script);
 }
 
 b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
@@ -151,7 +151,7 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
         return b::unexpected(Error::SCRIPT_PARSE_ERROR);
     }
 
-    b::print("{}\n", command);
+    b::print(">> {}\n", command);
 
     b::process process;
     process.options.passthrough_to_parent = true;
