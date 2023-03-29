@@ -18,7 +18,7 @@ b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags,
 
     scripts["configure"] = "cmake -B {{build_directory}} -S {{project_root}} -DCMAKE_BUILD_TYPE={{config}} {{cmake_flags}}";
     scripts["build"] = "b configure --cache && cmake --build {{build_directory}} --config={{config}} {{cmake_flags}}";
-    scripts["start"] = "b build && b execute {{project_root}}/{{executable}} --args {{args}}";
+    scripts["start"] = "b build && b execute {{project_root}}/{{executable}} {% if length(args) > 0 %} --args {{args}} {% endif %}";
 
     data["build_directory"] = "build";
     data["binary_directory"] = "{{build_directory}}/bin/{{config}}";
