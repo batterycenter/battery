@@ -4,11 +4,19 @@
 #include "ProjectGenerator.h"
 #include "resources/version.txt.h"
 
-static void executeProgram(const std::string& executable, const std::string& args) {
+[[nodiscard]] static b::expected<std::nullopt_t,Error> executeProgram(const std::string& executable, const std::string& args) {
     auto exe = b::fs::path(executable).make_preferred();
+
+    if (!b::fs::is_regular_file(exe)) {
+        b::print("");
+        b::log::warn("Could not find executable '{}': Script failed", exe);
+        return b::unexpected(Error::EXECUTABLE_NOT_FOUND);
+    }
+
     b::print("");
     auto result = b::execute(exe.to_string() + " " + args);
     b::print("\n>> {} terminated with exit code {}", b::fs::path(executable).filename(), result.exit_code);
+    return std::nullopt;
 }
 
 b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args) {
@@ -67,8 +75,7 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     }
 
     if (batterycli_execute->parsed()) {           // b execute ...
-        executeProgram(executable, b::join(additional_args, " "));
-        return std::nullopt;
+        return executeProgram(executable, b::join(additional_args, " "));
     }
     else if (batterycli_new->parsed()) {          // b new ...
         ProjectGenerator generator;

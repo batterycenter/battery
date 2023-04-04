@@ -175,6 +175,7 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
     terminateCallback = {};
 
     if (process.exit_code != 0) {
+        b::print("");
         b::log::warn("Script failed with error code {}", process.exit_code);   // We no longer print the 'error message' since it's always the same
         return b::unexpected(Error::SCRIPT_FAILED);                           // We call bash or cmd underneath which practically never fail themselves
     }

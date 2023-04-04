@@ -1,0 +1,4 @@
+project_name = "battery"
+version_file = "version.txt"
+
+[scripts]
