@@ -59,8 +59,8 @@ function(__apply_common_target_options TARGET)  # For all libraries and executab
     set_target_properties(${TARGET} PROPERTIES CXX_EXTENSIONS OFF)
 
     # Link against pthreads if applicable
-    find_package (Threads)
-    target_link_libraries(${TARGET} PRIVATE Threads::Threads)
+    find_package (Threads REQUIRED)
+    target_link_libraries(${TARGET} Threads::Threads)
 
     # Set common Preprocessor Flags
     if(MSVC)
