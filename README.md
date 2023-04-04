@@ -52,7 +52,7 @@ You ARE allowed to:
  - Use the library and all provided tools for any purpose personally or commercially ✅
  - Modify them, as long as the license remains unchanged and all modifications are clearly marked ✅
  - Distribute any software freely that depends upon battery as a dependency or is statically linked ✅
- - Distribute battery in source or binary form while retaining the license ✅
+ - Redistribute battery in source or binary form as part of another project, while retaining the license ✅
  - Use battery for developing closed source applications commercially ✅
 
 But you are NOT allowed to:
