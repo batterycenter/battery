@@ -7,4 +7,4 @@ DO NOT DO ANYTHING ON THIS BRANCH!!!
 
 Documentation: https://batterycenter.github.io/battery/
 
-Please navigate to the main branch: https://github.com/batterycenter/battery
+Please navigate to the [main branch](https://github.com/batterycenter/battery)
