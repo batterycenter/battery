@@ -18,12 +18,16 @@ battery_check_required_compiler_features()
 # Options
 option(BUILD_TESTS "Build all unit tests" ON)
 option(BUILD_EXAMPLES "Build examples" ON)
+option(BUILD_CLI "Build the Battery cli 'b'" ON)
 option(BUILD_DOCS "Define the targets for building the documentation (not built automatically)" ON)
 
 enable_testing()
 
 add_subdirectory(src/core)
 
+if (BUILD_CLI)
+    add_subdirectory(battery_cli)
+endif()
 if (BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()

@@ -34,6 +34,7 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     auto batterycli_build = batterycli.add_subcommand("build", "Build an existing Battery project (b build --help for more)");
     auto batterycli_start = batterycli.add_subcommand("start", "Build and run an existing Battery project (b start --help for more)");
     auto batterycli_run = batterycli.add_subcommand("run", "Run a (custom) script (b run --help for more)");
+    auto batterycli_generate = batterycli.add_subcommand("generate", "Generate a file and replace keywords using the template engine (b generate --help for more)");
     auto batterycli_docs = batterycli.add_subcommand("docs", "Build the doxygen documentation for your project (b docs --help for more)");
     auto batterycli_execute = batterycli.add_subcommand("execute", "Execute a program specified by path (b execute --help for more)");
     batterycli.require_subcommand(1);  // need exactly 1 subcommand
@@ -46,7 +47,11 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     batterycli_start->add_option("--args", additional_args, "Any arguments to pass to the executable when running");
     batterycli_execute->add_option("--args", additional_args, "Any arguments to pass to the executable");
 
-    // TODO: Add a feature that takes an input file, templates it, and writes it (for use in scripts)
+    std::string input_file;
+    batterycli_generate->add_option("input_file", input_file, "Which file to process")->required();
+    std::string output_file;
+    batterycli_generate->add_option("output_file", output_file, "Where to write the processed file")->required();
+
     // TODO: Add scripts --list option
     bool configure_cache = false;
     batterycli_configure->add_flag("--cache", configure_cache, "Only configure if the project hasn't been configured yet");
@@ -115,6 +120,9 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     }
     else if(batterycli_run->parsed()) {            // b run ...
         return project.runScript(script);
+    }
+    else if(batterycli_generate->parsed()) {       // b generate ...
+        return project.generateFile(input_file, output_file);
     }
     else if(batterycli_docs->parsed()) {           // b docs ...
         return project.runScript("build_docs");

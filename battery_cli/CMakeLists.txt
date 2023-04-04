@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(battery_cli VERSION 0.1.1 LANGUAGES C CXX)
 
-set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-add_subdirectory(.. battery)
-
 file(GLOB_RECURSE HEADERS "${CMAKE_CURRENT_LIST_DIR}/include/**")
 battery_add_executable(battery_cli ALIAS battery::cli ${HEADERS}
 	src/console.cpp

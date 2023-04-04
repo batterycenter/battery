@@ -30,6 +30,9 @@ public:
     [[nodiscard]] b::expected<std::nullopt_t, Error> fetchProjectData(const std::string& root);
 
     void printScriptLabel(const std::string& script);
+    [[nodiscard]] b::expected<std::string, Error> renderString(std::string string);
     [[nodiscard]] b::expected<std::nullopt_t, Error> runScript(std::string script);
+
+    [[nodiscard]] b::expected<std::nullopt_t, Error> generateFile(const b::fs::path& input_path, const b::fs::path& output_path);
 
 };

@@ -130,6 +130,22 @@ void Project::printScriptLabel(const std::string& script) {
     b::print(b::colors::fg::green, ">> {} v{} {}\n", projectName, projectVersion.to_string(), script);
 }
 
+b::expected<std::string, Error> Project::renderString(std::string string) {
+    std::string old;
+    try {
+        while (old != string) {
+            old = string;
+            string = b::inja::render(string, this->data);
+        }
+        return string;
+    }
+    catch (const std::exception& e) {
+        b::log::warn("The command '{}' failed to parse. Reason:", string);
+        b::print(b::colors::fg::blue, "{}\n", e.what());
+        return b::unexpected(Error::SCRIPT_PARSE_ERROR);
+    }
+}
+
 b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
 
     if (script.empty()) {   // 'b run' is equivalent to 'b run start' or 'b start'
@@ -152,19 +168,11 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
     b::print("\n");
     printScriptLabel(script);
 
-    std::string old;
-    std::string command = scripts[script];
-    try {
-        while (old != command) {
-            old = command;
-            command = b::inja::render(command, data);
-        }
+    auto command_result = renderString(scripts[script]);
+    if (!command_result) {
+        return b::unexpected(command_result.error());
     }
-    catch (const std::exception& e) {
-        b::log::warn("The command '{}' failed to parse. Reason:", scripts[script]);
-        b::print(b::colors::fg::blue, "{}\n", e.what());
-        return b::unexpected(Error::SCRIPT_PARSE_ERROR);
-    }
+    std::string command = command_result.value();
 
     b::print(">> {}\n", command);
 
@@ -187,6 +195,32 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
     if (script == "configure") {    // If the script was 'configure', we write to the cache that the project is configured
         projectCache["configured"] = true;
     }
+
+    return std::nullopt;
+}
+
+b::expected<std::nullopt_t, Error> Project::generateFile(const b::fs::path& input_path, const b::fs::path& output_path) {
+    b::print(">> Generating {}\n", output_path);
+
+    auto input = b::fs::ifstream(input_path).read_string();
+    if (!input) {
+        b::log::warn(MESSAGES_CANNOT_READ_FILE, input_path);
+        return b::unexpected(Error::FILE_NOT_FOUND_ERROR);
+    }
+
+    auto result = renderString(input.value());
+    if (!result) {
+        return b::unexpected(result.error());
+    }
+
+    auto out = b::fs::ofstream(output_path);
+    if (out.fail()) {
+        b::log::warn(MESSAGES_CANNOT_WRITE_FILE, output_path);
+        return b::unexpected(Error::FILE_WRITE_ERROR);
+    }
+
+    out << result.value();
+    b::print(">> Done\n");
 
     return std::nullopt;
 }
