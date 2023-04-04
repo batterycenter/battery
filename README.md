@@ -63,3 +63,4 @@ But you are NOT allowed to:
 Battery is striving to become a healthy community of developers. Everything is allowed that contributes
 to the goal of supporting teams in creating, developing and distributing modern, free software.  
 We love open source solutions that just work ❤️ 
+
