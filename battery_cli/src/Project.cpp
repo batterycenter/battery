@@ -115,7 +115,7 @@ b::expected<std::nullopt_t, Error> Project::fetchProjectData(const std::string& 
         }
     }
     catch (const std::exception& e) {
-        std::cout << rang::fgB::blue << e.what() << rang::fg::reset << std::endl;
+        b::print(b::colors::fg::blue, "{}\n", e.what());
         return b::unexpected(Error::TOML_PARSE_ERROR);
     }
 
@@ -123,7 +123,7 @@ b::expected<std::nullopt_t, Error> Project::fetchProjectData(const std::string& 
 }
 
 void Project::printScriptLabel(const std::string& script) {
-    b::print(b::print_color::GREEN, ">> {} v{} {}", projectName, projectVersion.to_string(), script);
+    b::print(b::colors::fg::green, ">> {} v{} {}\n", projectName, projectVersion.to_string(), script);
 }
 
 b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
@@ -145,7 +145,7 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
         projectCache["configured"] = false;
     }
 
-    b::print("");
+    b::print("\n");
     printScriptLabel(script);
 
     std::string old;
@@ -158,11 +158,11 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
     }
     catch (const std::exception& e) {
         b::log::warn("The command '{}' failed to parse. Reason:", scripts[script]);
-        b::print(b::print_color::BLUE, "{}", e.what());
+        b::print(b::colors::fg::blue, "{}\n", e.what());
         return b::unexpected(Error::SCRIPT_PARSE_ERROR);
     }
 
-    b::print(">> {}", command);
+    b::print(">> {}\n", command);
 
     b::process process;
     process.options.passthrough_to_parent = true;
@@ -175,7 +175,7 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
     terminateCallback = {};
 
     if (process.exit_code != 0) {
-        b::print("");
+        b::print("\n");
         b::log::warn("Script failed with error code {}", process.exit_code);   // We no longer print the 'error message' since it's always the same
         return b::unexpected(Error::SCRIPT_FAILED);                           // We call bash or cmd underneath which practically never fail themselves
     }

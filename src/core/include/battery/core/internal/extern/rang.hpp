@@ -1,50 +1,15 @@
-#ifndef RANG_DOT_HPP
-#define RANG_DOT_HPP
+// =========================================================================================
+// === This library is being used as part of https://github.com/batterycenter/battery    ===
+// === Parts of this library were modified to work with Battery.                         ===
+// === The original library (https://github.com/agauniyal/rang) was released unlicensed. ===
+// === Any credit goes to the original author of the library.                            ===
+// =========================================================================================
 
-#if defined(__unix__) || defined(__unix) || defined(__linux__)
-#define OS_LINUX
-#elif defined(WIN32) || defined(_WIN32) || defined(_WIN64)
-#define OS_WIN
-#elif defined(__APPLE__) || defined(__MACH__)
-#define OS_MAC
-#else
-#error Unknown Platform
-#endif
-
-#if defined(OS_LINUX) || defined(OS_MAC)
-#include <unistd.h>
-
-#elif defined(OS_WIN)
-
-#if defined(_WIN32_WINNT) && (_WIN32_WINNT < 0x0600)
-#error                                                                         \
-  "Please include rang.hpp before any windows system headers or set _WIN32_WINNT at least to _WIN32_WINNT_VISTA"
-#elif !defined(_WIN32_WINNT)
-#define _WIN32_WINNT _WIN32_WINNT_VISTA
-#endif
-
-#include <windows.h>
-#include <io.h>
-#include <memory>
-
-// Only defined in windows 10 onwards, redefining in lower windows since it
-// doesn't gets used in lower versions
-// https://docs.microsoft.com/en-us/windows/console/getconsolemode
-#ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
-#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
-#endif
-
-#endif
-
-#include <algorithm>
-#include <atomic>
-#include <cstdlib>
-#include <cstring>
-#include <iostream>
+#ifndef RANG_DOT_HPP_ENUMS_DECLARED
+#define RANG_DOT_HPP_ENUMS_DECLARED
 
 namespace rang {
-
-/* For better compability with most of terminals do not use any style settings
+    /* For better compability with most of terminals do not use any style settings
  * except of reset, bold and reversed.
  * Note that on Windows terminals bold style is same as fgB color.
  */
@@ -106,6 +71,62 @@ namespace rang {
         cyan    = 106,
         gray    = 107
     };
+}
+
+#endif // RANG_DOT_HPP_ENUMS_DECLARED
+
+
+
+
+
+
+#ifdef RANG_IMPLEMENTATION         // If this is not set, this header only declares the enums and nothing else
+
+#ifndef RANG_DOT_HPP
+#define RANG_DOT_HPP
+
+#if defined(__unix__) || defined(__unix) || defined(__linux__)
+#define OS_LINUX
+#elif defined(WIN32) || defined(_WIN32) || defined(_WIN64)
+#define OS_WIN
+#elif defined(__APPLE__) || defined(__MACH__)
+#define OS_MAC
+#else
+#error Unknown Platform
+#endif
+
+#if defined(OS_LINUX) || defined(OS_MAC)
+#include <unistd.h>
+
+#elif defined(OS_WIN)
+
+#if defined(_WIN32_WINNT) && (_WIN32_WINNT < 0x0600)
+#error                                                                         \
+  "Please include rang.hpp before any windows system headers or set _WIN32_WINNT at least to _WIN32_WINNT_VISTA"
+#elif !defined(_WIN32_WINNT)
+#define _WIN32_WINNT _WIN32_WINNT_VISTA
+#endif
+
+#include <windows.h>
+#include <io.h>
+#include <memory>
+
+// Only defined in windows 10 onwards, redefining in lower windows since it
+// doesn't gets used in lower versions
+// https://docs.microsoft.com/en-us/windows/console/getconsolemode
+#ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
+#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
+#endif
+
+#endif
+
+#include <algorithm>
+#include <atomic>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+
+namespace rang {
 
     enum class control {  // Behaviour of rang function calls
         Off   = 0,  // toggle off rang style/color calls
@@ -500,3 +521,5 @@ namespace rang {
 #undef OS_MAC
 
 #endif /* ifndef RANG_DOT_HPP */
+
+#endif // ifdef RANG_IMPLEMENTATION

@@ -13,37 +13,38 @@
 static int getSelectionInput(const std::string& question, const std::vector<std::string>& options) {
     b::print("{}\n", question);
     auto result = ask_user_options(options);
-    b::print("");
+    b::print("\n");
     return result;
 }
 
 static std::string getSimpleInput(const std::string& question, const std::string& error_message) {
-    b::print("{}", question);
+    b::print("{}\n", question);
     auto input = b::cin_getline();
     input = "Test";
 
     if (!input.empty()) {
-        b::print("");
+        b::print("\n");
         return input;
     }
 
-    b::print(b::print_color::RED, "{}", error_message);
+    b::print(b::colors::fg::red, "{}\n", error_message);
     return getSimpleInput(question, error_message);
 }
 
 static auto getConvertableInput(const std::string& question, fmt::format_string<std::string> error_message, auto&& converter) {
-    b::print("{}", question);
+    b::print("{}\n", question);
     auto input = b::cin_getline();
 
     try {
         auto result = converter(input);
         if (!input.empty()) {
-            b::print("");
+            b::print("\n");
         }
         return result;
     }
     catch (const std::invalid_argument&) {
-        b::print(b::print_color::RED, error_message, std::forward<decltype(input)>(input));
+        b::print(b::colors::fg::red, error_message, std::forward<decltype(input)>(input));
+        b::print("\n");
         return getConvertableInput(question, error_message, converter);
     }
 }
@@ -58,7 +59,7 @@ b::expected<std::nullopt_t, Error> ProjectGenerator::run(const std::string& new_
         });
 
     if (library) {
-        b::print(b::print_color::RED, "Library generation is not yet implemented!");
+        b::print(b::colors::fg::red, "Library generation is not yet implemented!\n");
         return b::unexpected(Error::NOT_YET_IMPLEMENTED);
     }
 
@@ -78,11 +79,11 @@ b::expected<std::nullopt_t, Error> ProjectGenerator::run(const std::string& new_
     auto path = b::fs::path(new_dir.empty() ? project_name : new_dir);
     project_dir = path.is_absolute() ? path : b::fs::current_path() + path;
 
-    b::print("Project generation summary:");
-    b::print("name = {}", project_name);
-    b::print("version = {}", project_version.to_string());
-    b::print("project_dir = {}", project_dir);
-    b::print("");
+    b::print("Project generation summary:\n");
+    b::print("name = {}\n", project_name);
+    b::print("version = {}\n", project_version.to_string());
+    b::print("project_dir = {}\n", project_dir);
+    b::print("\n");
 
     auto confirm = getConvertableInput(
             "Do you want to generate the project? [Y/n]",
@@ -99,13 +100,13 @@ b::expected<std::nullopt_t, Error> ProjectGenerator::run(const std::string& new_
     );
 
     if (confirm) {
-        b::print("Generating project...");
+        b::print("Generating project...\n");
         auto result = generate();
         if (!result) return b::unexpected(result.error());
-        b::print("Project files generated in {}", project_dir);
+        b::print("Project files generated in {}\n", project_dir);
     }
     else {
-        b::print(b::print_color::YELLOW, "Project generation cancelled. No files were generated.");
+        b::print(b::colors::fg::yellow, "Project generation cancelled. No files were generated.\n");
     }
 
     return std::nullopt;
@@ -131,7 +132,7 @@ b::expected<std::string, Error> ProjectGenerator::generateSourceFile(const std::
     }
     catch (const std::exception& e) {
         b::log::warn("Internal Error: The template '{}' failed to parse. Reason:", name);
-        b::print(b::print_color::BLUE, "{}", e.what());
+        b::print(b::colors::fg::blue, "{}\n", e.what());
         return b::unexpected(Error::INTERNAL_ERROR);
     }
     return content;

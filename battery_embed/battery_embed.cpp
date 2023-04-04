@@ -81,7 +81,7 @@ std::pair<ErrorCode, std::string> generate_cpp(
     }
 
     // Generate the source file
-    outfile << "// File generated using battery_embed. https://github.com/HerrNamenlos123/Battery\n";
+    outfile << "// File generated using battery_embed. https://github.com/batterycenter/battery\n";
     outfile << "// Embedded file: " << resource_file.filename().to_string() << " | filesize: "
             << filesize << " bytes | was embedded as binary: " << (binary ? "true" : "false") << "\n";
     outfile << "// Header file containing the declaration for retrieving the data: " + resource_file.filename().to_string() + ".h\n";
@@ -136,7 +136,7 @@ std::pair<ErrorCode, std::string> generate_header(
     }
 
     // Generate the header file
-    file << "// File generated using battery_embed. https://github.com/HerrNamenlos123/Battery\n";
+    file << "// File generated using battery_embed. https://github.com/batterycenter/battery\n";
     file << "// Embedded file: " << resource_file.filename().to_string() << " | filesize: "
          << filesize << " bytes | was embedded as binary: " << (binary ? "true" : "false") << "\n";
     file << "// Source file containing the data: " + resource_file.filename().to_string() + ".cpp\n";
@@ -198,7 +198,7 @@ std::pair<ErrorCode, std::string> generate_files(
 int b::main(const std::vector<std::string>& args) {             // NOLINT NOSONAR
     
     CLI::App app{"Utility for converting Text and Binary files to C++ source files.\n"
-                 "This is part of the battery software stack: https://github.com/HerrNamenlos123/Battery\n"};
+                 "This is part of the battery software stack: https://github.com/batterycenter/battery\n"};
 
     std::string resource_file;
     app.add_option("resource file", resource_file, "The file to be embedded")->required()->check(CLI::ExistingFile);

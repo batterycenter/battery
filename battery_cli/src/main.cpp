@@ -8,14 +8,14 @@
     auto exe = b::fs::path(executable).make_preferred();
 
     if (!b::fs::is_regular_file(exe)) {
-        b::print("");
+        b::print("\n");
         b::log::warn("Could not find executable '{}': Script failed", exe);
         return b::unexpected(Error::EXECUTABLE_NOT_FOUND);
     }
 
-    b::print("");
+    b::print("\n");
     auto result = b::execute(exe.to_string() + " " + args);
-    b::print("\n>> {} terminated with exit code {}", b::fs::path(executable).filename(), result.exit_code);
+    b::print("\n>> {} terminated with exit code {}\n", b::fs::path(executable).filename(), result.exit_code);
     return std::nullopt;
 }
 
@@ -23,7 +23,7 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
 
     std::string version_message = CLI_PRODUCT_NAME + " version " + resources::version_txt.str();
     std::string message = version_message + "\n"
-        "Your main tool for working with https://github.com/HerrNamenlos123/Battery\n"
+        "Your main tool for working with https://github.com/batterycenter/battery\n"
         "Supports you with project generation, building, deploying to your cloud and more!\n";
 
     CLI::App batterycli(message);
@@ -94,9 +94,9 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
                 return project.runScript("configure");
             }
             else {
-                b::print("");
+                b::print("\n");
                 project.printScriptLabel("configure --cache");
-                b::print(b::print_color::YELLOW, ">> Skipping configure stage, as the project has already been configured once");
+                b::print(b::colors::fg::yellow, ">> Skipping configure stage, as the project has already been configured once\n");
                 return std::nullopt;
             }
         }

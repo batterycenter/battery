@@ -5,7 +5,7 @@ project({{project_name}} LANGUAGES C CXX)
 include(cmake/CPM.cmake)
 
 # Download the battery library
-CPMAddPackage("gh:HerrNamenlos123/Battery#master")
+CPMAddPackage("gh:batterycenter/battery#master")
 
 # Define the executable and all the source files
 battery_add_executable(${PROJECT_NAME}

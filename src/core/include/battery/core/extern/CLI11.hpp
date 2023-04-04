@@ -3,7 +3,7 @@
 // https://github.com/CLIUtils/CLI11
 //
 // =========================================================================================
-// === This library is being used as part of https://github.com/HerrNamenlos123/Battery  ===
+// === This library is being used as part of https://github.com/batterycenter/battery    ===
 // === Parts of this library were modified to work with Battery.                         ===
 // === Modified parts are marked with a comment '// BATTERY MODIFIED'                    ===
 // === Any credit goes to the original author of the library.                            ===

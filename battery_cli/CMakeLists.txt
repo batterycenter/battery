@@ -7,12 +7,10 @@ add_subdirectory(.. battery)
 
 file(GLOB_RECURSE HEADERS "${CMAKE_CURRENT_LIST_DIR}/include/**")
 battery_add_executable(battery_cli ALIAS battery::cli ${HEADERS}
-	src/app.cpp
 	src/console.cpp
 	src/main.cpp
 	src/Project.cpp
-	src/ProjectGenerator.cpp
-	src/scripts.cpp)
+	src/ProjectGenerator.cpp)
 
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include" PREFIX "Header Files" FILES ${HEADERS})
 

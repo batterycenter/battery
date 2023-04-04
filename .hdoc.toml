@@ -1,10 +1,10 @@
 [project]
-name = "Battery"
+name = "battery"
 version = "0.0.0"
 
 # Optional, adding this will enable direct links from the documentation
 # to your source code.
-git_repo_url = "https://github.com/HerrNamenlos123/Battery/"
+git_repo_url = "https://github.com/batterycenter/battery/"
 git_default_branch = "master"
 
 [ignore]

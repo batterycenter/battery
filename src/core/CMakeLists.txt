@@ -26,6 +26,7 @@ set(SOURCES
         src/console.cpp
         src/constants.cpp
         src/fs.cpp
+        src/log.cpp
         src/main.cpp
         src/messages.cpp
         src/folders.cpp
