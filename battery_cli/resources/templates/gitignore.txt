@@ -1,7 +1,0 @@
-
-# Build artifacts
-cmake-build-*/
-bin/
-build/
-build*/
-Testing/

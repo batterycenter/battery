@@ -1,5 +1,0 @@
-project_name = "{{ project_name }}"
-version_file = "version.txt"
-
-[scripts]
-# test = "echo Hello world"
