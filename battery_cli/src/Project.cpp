@@ -26,6 +26,10 @@ b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags,
     scripts["start"] = "b build && b run pre_start && b execute {{project_root}}/{{executable}} {% if length(args) > 0 %} --args {{args}} {% endif %} && b run post_start";
     scripts["post_start"] = "exit 0";
 
+    scripts["pre_build_docs"] = "exit 0";
+    scripts["build_docs"] = "b run pre_build_docs && cmake --build {{build_directory}} --target docs && b run post_build_docs";
+    scripts["post_build_docs"] = "exit 0";
+
     data["build_directory"] = "build";
     data["binary_directory"] = "{{build_directory}}/bin/{{config}}";
     data["executable_name"] = "{{project_name}}";

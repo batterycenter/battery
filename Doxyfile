@@ -1315,9 +1315,9 @@ HTML_STYLESHEET        =
 # list). For an example see the documentation.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_STYLESHEET  = doxygen-awesome-css/doxygen-awesome.css \
-                         doxygen-awesome-css/doxygen-awesome-sidebar-only.css \
-                         doxygen-awesome-css/doxygen-awesome-sidebar-only-darkmode-toggle.css
+HTML_EXTRA_STYLESHEET  = build/_deps/doxygen-awesome-css-src/doxygen-awesome.css \
+                         build/_deps/doxygen-awesome-css-src/doxygen-awesome-sidebar-only.css \
+                         build/_deps/doxygen-awesome-css-src/doxygen-awesome-sidebar-only-darkmode-toggle.css
 
 # The HTML_EXTRA_FILES tag can be used to specify one or more extra images or
 # other source files which should be copied to the HTML output directory. Note
@@ -1327,11 +1327,11 @@ HTML_EXTRA_STYLESHEET  = doxygen-awesome-css/doxygen-awesome.css \
 # files will be copied as-is; there are no commands or markers available.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_FILES       = doxygen-awesome-css/doxygen-awesome-fragment-copy-button.js \
-                         doxygen-awesome-css/doxygen-awesome-darkmode-toggle.js \
-                         doxygen-awesome-css/doxygen-awesome-paragraph-link.js \
-                         doxygen-awesome-css/doxygen-awesome-interactive-toc.js \
-                         doxygen-awesome-css/doxygen-custom/toggle-alternative-theme.js \
+HTML_EXTRA_FILES       = build/_deps/doxygen-awesome-css-src/doxygen-awesome-fragment-copy-button.js \
+                         build/_deps/doxygen-awesome-css-src/doxygen-awesome-darkmode-toggle.js \
+                         build/_deps/doxygen-awesome-css-src/doxygen-awesome-paragraph-link.js \
+                         build/_deps/doxygen-awesome-css-src/doxygen-awesome-interactive-toc.js \
+                         build/_deps/doxygen-awesome-css-src/doxygen-custom/toggle-alternative-theme.js \
                          docs/assets/battery.png
 
 # The HTML_COLORSTYLE tag can be used to specify if the generated HTML output
