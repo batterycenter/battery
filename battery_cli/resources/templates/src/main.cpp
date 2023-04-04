@@ -3,11 +3,11 @@
 
 int b::main(const std::vector<std::string>& args) {
 
-    b::print(b::print_color::GREEN, "Hello World!");
+    b::print(b::colors::fg::green, "Hello World!\n");
 
-    b::print("Args: ");
+    b::print("Args: \n");
     for (const auto& arg : args) {
-        b::print(" - {}", arg);
+        b::print(" - {}\n", arg);
     }
 
     return 0;

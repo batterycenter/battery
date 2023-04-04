@@ -56,10 +56,10 @@ endif()
 
 # Download dependencies
 set(REPROC++ ON)
-battery_add_package("gh:DaanDeMeyer/reproc#v14.2.4")    # Library for running processes
-battery_add_package("gh:gabime/spdlog#v1.11.0")         # Logging library
-battery_add_package("gh:ToruNiina/toml11#v3.7.1")       # Toml fileformat parsing
-battery_add_package("gh:nemtrif/utfcpp#v3.2.3")         # UTF-8 conversions
+battery_add_package("gh:DaanDeMeyer/reproc#v14.2.4")            # Library for running processes
+battery_add_package("gh:gabime/spdlog#v1.11.0")                 # Logging library
+battery_add_package("gh:ToruNiina/toml11#v3.7.1")               # Toml fileformat parsing
+battery_add_package("gh:nemtrif/utfcpp#v3.2.3")                 # UTF-8 conversions
 
 # Link dependencies
 target_link_libraries(battery_core
