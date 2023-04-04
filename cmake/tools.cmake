@@ -6,11 +6,15 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 function(battery_test_if_compiles RESULT_VAR OUTPUT_VAR STD_VERSION SOURCE_CONTENT)
     message(STATUS "Checking for compiler feature ${RESULT_VAR}")
     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/try_compile/main.cpp ${SOURCE_CONTENT})
+    if (NOT MSVC)
+        set(pthread pthread)
+    endif()
     try_compile(
         ${RESULT_VAR} 
         ${CMAKE_CURRENT_BINARY_DIR}/try_compile/
         ${CMAKE_CURRENT_BINARY_DIR}/try_compile/main.cpp
         CXX_STANDARD ${STD_VERSION}
+        LINK_LIBRARIES ${pthread}
         OUTPUT_VARIABLE _OUTPUT_VAR
     )
     set(${OUTPUT_VAR} ${_OUTPUT_VAR} PARENT_SCOPE)
@@ -53,6 +57,10 @@ function(__apply_common_target_options TARGET)  # For all libraries and executab
     # Set the C++ Standard
     target_compile_features(${TARGET} PRIVATE cxx_std_20)
     set_target_properties(${TARGET} PROPERTIES CXX_EXTENSIONS OFF)
+
+    # Link against pthreads if applicable
+    find_package (Threads)
+    target_link_libraries(${TARGET} PRIVATE Threads::Threads)
 
     # Set common Preprocessor Flags
     if(MSVC)
