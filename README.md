@@ -47,7 +47,7 @@ Inspiration:
 # License
 
 Battery is licensed under the Apache License 2.0.  
-Here is the original author's interpretation.  
+Here is the author's interpretation.  
 You ARE allowed to:
  - Use the library and all provided tools for any purpose personally or commercially ✅
  - Modify them, as long as the license remains unchanged and all modifications are clearly marked ✅
