@@ -57,6 +57,7 @@ You ARE allowed to:
 
 But you are NOT allowed to:
  - Redistribute battery itself or large portions of it, claiming you are the original author ❌
+ - Redistribute battery itself without major modifications, with the goal of making money with my work ❌
  - Battery is distributed without any warranty whatsoever ❌
 
 Battery is striving to become a healthy community of developers. Everything is allowed that contributes
