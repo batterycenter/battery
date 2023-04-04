@@ -20,7 +20,7 @@ public:
     inline static std::atomic<bool> terminateApplication = false;
     inline static std::function<void()> terminateCallback;
 
-    Project();
+    Project() = default;
 
     bool isProjectConfigured();
 

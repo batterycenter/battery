@@ -3,8 +3,6 @@
 #include "Project.h"
 #include "ProjectGenerator.h"
 
-Project::Project() {}
-
 bool Project::isProjectConfigured() {
     try {
         return projectCache["configured"];
@@ -16,9 +14,17 @@ bool Project::isProjectConfigured() {
 
 b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags, const std::string& root, const std::string& args) {
 
-    scripts["configure"] = "cmake -B {{build_directory}} -S {{project_root}} -DCMAKE_BUILD_TYPE={{config}} {{cmake_flags}}";
-    scripts["build"] = "b configure --cache && cmake --build {{build_directory}} --config={{config}} {{cmake_flags}}";
-    scripts["start"] = "b build && b execute {{project_root}}/{{executable}} {% if length(args) > 0 %} --args {{args}} {% endif %}";
+    scripts["pre_configure"] = "exit 0";
+    scripts["configure"] = "b run pre_configure && cmake -B {{build_directory}} -S {{project_root}} -DCMAKE_BUILD_TYPE={{config}} {{cmake_flags}} && b run post_configure";
+    scripts["post_configure"] = "exit 0";
+
+    scripts["pre_build"] = "exit 0";
+    scripts["build"] = "b configure --cache && b run pre_build && cmake --build {{build_directory}} --config={{config}} {{cmake_flags}} && b run post_build";
+    scripts["post_build"] = "exit 0";
+
+    scripts["pre_start"] = "exit 0";
+    scripts["start"] = "b build && b run pre_start && b execute {{project_root}}/{{executable}} {% if length(args) > 0 %} --args {{args}} {% endif %} && b run post_start";
+    scripts["post_start"] = "exit 0";
 
     data["build_directory"] = "build";
     data["binary_directory"] = "{{build_directory}}/bin/{{config}}";
@@ -81,7 +87,7 @@ b::expected<std::nullopt_t, Error> Project::fetchProjectData(const std::string& 
         this->projectName = b::toml::find<std::string>(toml, "project_name");
 
         // Overrides from the toml file -> All json values are directly overridable
-        for (auto& entry : data.items()) {
+        for (const auto& entry : data.items()) {
             if (toml.contains(entry.key())) {
                 data[entry.key()] = b::toml::find<std::string>(toml, entry.key());
             }
@@ -126,15 +132,20 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
         script = "start";
     }
 
-    if (script == "configure") {
-        projectCache["configured"] = false;
-    }
-
     if (!scripts.contains(script)) {
         b::log::warn("'{}' is neither a default script, nor is it defined in {}", script, BATTERY_PROJECT_FILE_NAME);
         return b::unexpected(Error::SCRIPT_NOT_FOUND);
     }
 
+    if (scripts[script] == "exit 0") {   // Do not run the script if it does not do anything (default)
+        return std::nullopt;
+    }
+
+    if (script == "configure") {
+        projectCache["configured"] = false;
+    }
+
+    b::print("");
     printScriptLabel(script);
 
     std::string old;
@@ -151,7 +162,7 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
         return b::unexpected(Error::SCRIPT_PARSE_ERROR);
     }
 
-    b::print(">> {}\n", command);
+    b::print(">> {}", command);
 
     b::process process;
     process.options.passthrough_to_parent = true;
@@ -162,7 +173,6 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
     terminateCallback = [&process]() { process.terminate(); };
     process.execute_sync();
     terminateCallback = {};
-    std::cout << std::endl;
 
     if (process.exit_code != 0) {
         b::log::warn("Script failed with error code {}", process.exit_code);   // We no longer print the 'error message' since it's always the same

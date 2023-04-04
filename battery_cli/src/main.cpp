@@ -6,9 +6,9 @@
 
 static void executeProgram(const std::string& executable, const std::string& args) {
     auto exe = b::fs::path(executable).make_preferred();
+    b::print("");
     auto result = b::execute(exe.to_string() + " " + args);
-    std::cout << std::endl;
-    b::print(">> {} terminated with exit code {}", b::fs::path(executable).filename(), result.exit_code);
+    b::print("\n>> {} terminated with exit code {}", b::fs::path(executable).filename(), result.exit_code);
 }
 
 b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args) {
@@ -87,8 +87,9 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
                 return project.runScript("configure");
             }
             else {
+                b::print("");
                 project.printScriptLabel("configure --cache");
-                b::print(b::print_color::YELLOW, ">> Skipping configure stage, as the project has already been configured once\n");
+                b::print(b::print_color::YELLOW, ">> Skipping configure stage, as the project has already been configured once");
                 return std::nullopt;
             }
         }
