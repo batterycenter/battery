@@ -1,7 +1,7 @@
 
 find_package(Doxygen)
 if (NOT DOXYGEN_FOUND)
-    message(FATAL_ERROR "Doxygen executable not found. Either install it or use -DBUILD_DOCS=false to build without documentation.")
+    message(FATAL_ERROR "Doxygen executable not found. Either install it (Hint: 'sudo apt install doxygen'), or use -DBUILD_DOCS=false to build without documentation.")
 endif ()
 
 battery_add_package("gh:jothepro/doxygen-awesome-css#v2.2.0")   # Modern Doxygen CSS theme
