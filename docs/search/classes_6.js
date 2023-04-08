@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['gen_1326',['Gen',['../structnlohmann_1_1detail_1_1utility__internal_1_1Gen.html',1,'nlohmann::detail::utility_internal']]],
-  ['gen_3c_20t_2c_200_20_3e_1327',['Gen&lt; T, 0 &gt;',['../structnlohmann_1_1detail_1_1utility__internal_1_1Gen_3_01T_00_010_01_4.html',1,'nlohmann::detail::utility_internal']]]
+  ['label_47',['label',['../classb_1_1tray_1_1label.html',1,'b::tray']]],
+  ['lockfile_48',['Lockfile',['../classb_1_1fs_1_1Lockfile.html',1,'b::fs']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['errors_2438',['Errors',['../group__error__group.html',1,'']]]
+  ['ctrl_2dc_20handling_67',['Ctrl-C handling',['../group__signal.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['deprecated_20list_2445',['Deprecated List',['../deprecated.html',1,'']]]
+  ['getting_20started_74',['Getting Started',['../md_docs_getting_started.html',1,'']]]
 ];

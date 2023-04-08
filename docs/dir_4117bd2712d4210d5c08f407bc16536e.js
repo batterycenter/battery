@@ -1,7 +1,5 @@
 var dir_4117bd2712d4210d5c08f407bc16536e =
 [
-    [ "extern", "dir_79cd601fe70a3b4863ae6bd3c4c9a938.html", "dir_79cd601fe70a3b4863ae6bd3c4c9a938" ],
-    [ "internal", "dir_7e8370369a51987d4226dab56398f38b.html", "dir_7e8370369a51987d4226dab56398f38b" ],
     [ "tray", "dir_ee38df1b32bf5d9ced820d919da85e0e.html", "dir_ee38df1b32bf5d9ced820d919da85e0e" ],
     [ "all.hpp", "all_8hpp_source.html", null ],
     [ "async_worker.hpp", "async__worker_8hpp_source.html", null ],
