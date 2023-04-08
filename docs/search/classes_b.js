@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['make_5fvoid_1470',['make_void',['../d5/dd8/structCLI_1_1make__void.html',1,'CLI::make_void&lt; Ts &gt;'],['../d3/d72/structnlohmann_1_1detail_1_1make__void.html',1,'nlohmann::detail::make_void&lt; Ts &gt;']]],
-  ['monostate_1471',['monostate',['../d4/d2d/classtl_1_1monostate.html',1,'tl']]]
+  ['make_5fvoid_1470',['make_void',['../structCLI_1_1make__void.html',1,'CLI::make_void&lt; Ts &gt;'],['../structnlohmann_1_1detail_1_1make__void.html',1,'nlohmann::detail::make_void&lt; Ts &gt;']]],
+  ['monostate_1471',['monostate',['../classtl_1_1monostate.html',1,'tl']]]
 ];

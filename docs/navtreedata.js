@@ -25,29 +25,29 @@
 var NAVTREE =
 [
   [ "Battery", "index.html", [
-    [ "Battery Concepts", "d5/df0/concepts.html", [
-      [ "Unicode", "d5/df0/concepts.html#autotoc_md0", [
-        [ "Unicode (UTF-8)", "d5/df0/concepts.html#autotoc_md1", [
-          [ "What is Unicode?", "d5/df0/concepts.html#autotoc_md2", null ],
-          [ "The Problem", "d5/df0/concepts.html#autotoc_md3", null ]
+    [ "Battery Concepts", "concepts.html", [
+      [ "Unicode", "concepts.html#autotoc_md0", [
+        [ "Unicode (UTF-8)", "concepts.html#autotoc_md1", [
+          [ "What is Unicode?", "concepts.html#autotoc_md2", null ],
+          [ "The Problem", "concepts.html#autotoc_md3", null ]
         ] ],
-        [ "Terminology", "d5/df0/concepts.html#autotoc_md4", null ],
-        [ "Working with Unicode", "d5/df0/concepts.html#autotoc_md5", null ],
-        [ "Source files", "d5/df0/concepts.html#autotoc_md6", null ],
-        [ "WinAPI / Linux API", "d5/df0/concepts.html#WIN_LINUX_API", [
-          [ "WinAPI: Do not use ANSI functions!", "d5/df0/concepts.html#autotoc_md7", null ],
-          [ "Use OsString whenever applicable", "d5/df0/concepts.html#OsString", null ],
-          [ "Using high-level containers", "d5/df0/concepts.html#autotoc_md8", null ],
-          [ "Keeping WinAPI / Linux API cross-platform", "d5/df0/concepts.html#autotoc_md9", null ]
+        [ "Terminology", "concepts.html#autotoc_md4", null ],
+        [ "Working with Unicode", "concepts.html#autotoc_md5", null ],
+        [ "Source files", "concepts.html#autotoc_md6", null ],
+        [ "WinAPI / Linux API", "concepts.html#WIN_LINUX_API", [
+          [ "WinAPI: Do not use ANSI functions!", "concepts.html#autotoc_md7", null ],
+          [ "Use OsString whenever applicable", "concepts.html#OsString", null ],
+          [ "Using high-level containers", "concepts.html#autotoc_md8", null ],
+          [ "Keeping WinAPI / Linux API cross-platform", "concepts.html#autotoc_md9", null ]
         ] ]
       ] ],
-      [ "Lockfiles", "d5/df0/concepts.html#autotoc_md10", [
-        [ "Different types", "d5/df0/concepts.html#autotoc_md11", null ]
+      [ "Lockfiles", "concepts.html#autotoc_md10", [
+        [ "Different types", "concepts.html#autotoc_md11", null ]
       ] ],
-      [ "OsString -> Always terminates at '\\0'", "d5/df0/concepts.html#autotoc_md12", null ]
+      [ "OsString -> Always terminates at '\\0'", "concepts.html#autotoc_md12", null ]
     ] ],
-    [ "Getting Started", "d0/d50/md_docs_getting_started.html", null ],
-    [ "Deprecated List", "da/d58/deprecated.html", null ],
+    [ "Getting Started", "md_docs_getting_started.html", null ],
+    [ "Deprecated List", "deprecated.html", null ],
     [ "Modules", "modules.html", "modules" ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -89,20 +89,20 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "",
-"d1/d69/namespacesemver.html#a9f1a356aab88eee6baada7580ad9f5dc",
-"d1/dec/utf8proc_8h.html#afd214a8f81d60f276898266058908aa8adc48511682a7996e6dc845f99d31bc50",
-"d3/d77/expected_8hpp.html#a67cc914b6034955de9bc4bf20654103f",
-"d5/d49/classb_1_1resource.html#a888844e1f65362bc8c564749db0907f9",
-"d5/df0/concepts.html#OsString",
-"d6/dc0/classinja_1_1NodeVisitor.html#a9b6e298e4f9bf472b5546642695ccc2b",
-"d8/dd3/classCLI_1_1ConfigBase.html#aa6b5e3e232cd4db2384f8f5fdfd55e1d",
-"d9/dcc/classnlohmann_1_1basic__json.html#af72b1c9d1502b02a49a0cb9db9f980ea",
-"da/da8/classCLI_1_1App.html#a61fe9472ef81b1503159511bb8e76430",
-"db/d47/magic__enum_8hpp.html#a18c0b01da8522c85c3607f4370eb80d3",
-"dc/db0/group__string.html#ga8c0d689a4f54058882aa4dcbeb348e41",
-"dd/d45/structtl_1_1detail_1_1expected__delete__assign__base_3_01T_00_01E_00_01false_00_01true_01_4.html#a82a00e0caa574a4fc03b4651e2faa984",
-"de/d75/classtl_1_1expected.html#aad2576427943543085e5b28cb18126d7",
-"dir_aebb8dcc11953d78e620bbef0b9e2183.html"
+"classCLI_1_1App.html#ac9cdd21ae370d0d7957f2418f04ed96f",
+"classtl_1_1expected.html#ac2c00d2ad0d0948760228c902c57ca31",
+"classCLI_1_1ConfigBase.html#a7245cefabbffb0bce2f2b48d35e24039",
+"classCLI_1_1detail_1_1ExistingPathValidator.html#afe5780be5846a77b34248f837fb61180",
+"classnlohmann_1_1basic__json.html#a8ac83750e267e37d5d47591eb44cce42",
+"classnlohmann_1_1detail_1_1json__sax__dom__callback__parser.html#ab7d8db672189164a8c0731e65ada1b45",
+"functions_c.html",
+"magic__enum_8hpp.html#ac933ae023181c7811229d7c5f20136dd",
+"semver_8hpp.html#aeca6f41cc05c3ae83e46d0f2c9e1f385",
+"structnlohmann_1_1detail_1_1is__compatible__string__type.html",
+"structinja_1_1FunctionStorage_1_1FunctionData.html#ae2d14e43851b7fa49b675f57dad0d5dd",
+"structnlohmann_1_1detail_1_1utility__internal_1_1Extend_3_01integer__sequence_3_01T_00_01Ints_8_453fbce128d545e87778192b2e607842.html",
+"namespacenlohmann_1_1detail.html#a5440d650150d01e8015133521351b459",
+"structtl_1_1detail_1_1expected__storage__base_3_01void_00_01E_00_01false_00_01true_01_4.html#aef03580af511fb104adbaeb9fce3131b"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
