@@ -20,7 +20,7 @@
 #include <ctime>
 
 ///
-/// \brief Battery functions related to timing
+/// \brief Everything related to timing
 /// \addtogroup time
 /// @{
 ///

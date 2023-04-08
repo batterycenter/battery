@@ -27,7 +27,7 @@
 #include "battery/core/constants.hpp"
 
 ///
-/// \brief Battery functions related to multithreading
+/// \brief Everything related to multithreading
 /// \addtogroup thread
 /// @{
 ///
