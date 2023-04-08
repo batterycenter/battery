@@ -27,7 +27,7 @@ b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags,
     scripts["post_start"] = "exit 0";
 
     scripts["pre_build_docs"] = "exit 0";
-    scripts["build_docs"] = "b run pre_build_docs && cmake --build {{build_directory}} --target docs && b run post_build_docs";
+    scripts["build_docs"] = "b configure --cache && b run pre_build_docs && cmake --build {{build_directory}} --target docs && b run post_build_docs";
     scripts["post_build_docs"] = "exit 0";
 
     data["build_directory"] = "build";

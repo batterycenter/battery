@@ -145,7 +145,10 @@ endfunction()
 
 function(battery_set_exe_output_folder TARGET FOLDER)
     set_target_properties(${TARGET} PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY "${FOLDER}"
+            RUNTIME_OUTPUT_DIRECTORY_DEBUG "${FOLDER}"
+            RUNTIME_OUTPUT_DIRECTORY_RELEASE "${FOLDER}"
+            RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${FOLDER}"
+            RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL "${FOLDER}"
     )
 endfunction()
 

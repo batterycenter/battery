@@ -13,7 +13,7 @@ add_custom_command(
     COMMAND ${CMAKE_BINARY_DIR}/bin/b generate ${CMAKE_CURRENT_LIST_DIR}/Doxyfile_template ${CMAKE_CURRENT_LIST_DIR}/build/Doxyfile
     WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/..
     COMMENT "Generating Doxyfile"
-    DEPENDS battery::cli
+    DEPENDS battery::cli ${CMAKE_CURRENT_LIST_DIR}/Doxyfile_template
     VERBATIM)
 
 # Define a target that builds the documentation using Doxygen.
