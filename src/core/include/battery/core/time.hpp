@@ -21,7 +21,7 @@
 
 ///
 /// \brief Everything related to timing
-/// \addtogroup time
+/// \addtogroup Time
 /// @{
 ///
 namespace b {
@@ -94,8 +94,11 @@ namespace b {
     void sleep_us(uint64_t microseconds);
 
     namespace internal {
+        /// @private
         void reset_time();
+        /// @private
         extern std::time_t launch_time_us;
     }
 
-}
+} // namespace b
+/// @}

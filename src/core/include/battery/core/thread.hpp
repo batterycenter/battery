@@ -28,7 +28,7 @@
 
 ///
 /// \brief Everything related to multithreading
-/// \addtogroup thread
+/// \addtogroup Thread
 /// @{
 ///
 namespace b {
@@ -122,9 +122,17 @@ namespace b {
         inline static std::atomic<bool> _catch_common_exceptions { b::constants::catch_common_exceptions_default() };
     };
 
+    ///
+    /// \brief Run a function asynchronously in another thread. This is a wrapper around `std::async()`.
+    /// \details The advantage of this function over b::thread is that it is more concise and not a class with a dedicated lifetime.
+    ///          Use this function if you only want to run a short function with a return value in another thread, returning a `std::future`.
+    /// \param[in] args anything that is callable (a function, lambda function or class member function including a 'this' pointer)
+    /// \return a `std::future` that can be used to await the return value of the function
+    ///
     template<typename... T>
     auto async(T&&... args) {
         return std::async(std::launch::async, std::forward<T>(args)...);
     }
 
-}
+} // namespace b
+/// @}

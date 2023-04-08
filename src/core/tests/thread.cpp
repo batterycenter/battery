@@ -108,5 +108,5 @@ TEST(BatteryCore_Thread, MemberFunc) {
 
     S s7;
     s7.run2();
-    // And we're not joining the last one, it should join automatically
+    // And we're not joining the last one, it must join automatically
 }

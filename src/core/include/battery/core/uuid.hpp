@@ -20,7 +20,7 @@
 
 ///
 /// \brief Everything related to uuids
-/// \addtogroup uuid
+/// \addtogroup Uuid
 /// @{
 ///
 namespace b::uuid {
@@ -42,4 +42,5 @@ namespace b::uuid {
     ///
     bool is_valid(const std::string& uuid);
 
-} // namespace b
+} // namespace b::uuid
+/// @}

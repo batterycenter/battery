@@ -26,7 +26,7 @@
 
 ///
 /// \brief Everything related to string manipulation and encoding
-/// \addtogroup string
+/// \addtogroup String
 /// @{
 ///
 namespace b {
@@ -231,8 +231,6 @@ namespace b {
 
     // TODO: Support REGEX
 
-    // TODO: Test base-64
-
     ///
     /// \brief Encode a string or a binary resource as Base-64.
     /// \details This string can either be a text or a binary-like byte-series (loaded from a file).
@@ -254,4 +252,5 @@ namespace b {
     ///
     std::string decode_base64(const std::string& str);
 
-}
+} // namespace b
+/// @}
