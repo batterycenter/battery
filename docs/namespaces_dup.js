@@ -123,8 +123,8 @@ var namespaces_dup =
         ] ]
       ] ],
       [ "uuid", null, [
-        [ "is_valid", "d7/db4/uuid_8hpp.html#a7454f7247f3a4aadf8475bea98c6c691", null ],
-        [ "v4", "d7/db4/uuid_8hpp.html#ad19d0d1197db54e95defb938ab9b75a8", null ]
+        [ "is_valid", "d1/d07/group__uuid.html#ga7454f7247f3a4aadf8475bea98c6c691", null ],
+        [ "v4", "d1/d07/group__uuid.html#gad19d0d1197db54e95defb938ab9b75a8", null ]
       ] ],
       [ "async_worker", "d2/d10/classb_1_1async__worker.html", "d2/d10/classb_1_1async__worker" ],
       [ "cachefile", "de/d16/classb_1_1cachefile.html", "de/d16/classb_1_1cachefile" ],

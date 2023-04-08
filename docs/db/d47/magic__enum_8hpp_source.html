@@ -482,7 +482,7 @@ $(document).ready(function(){initNavTree('db/d47/magic__enum_8hpp_source.html','
 <div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;        <span class="keyword">inline</span> constexpr <span class="keyword">auto</span> enum_name_v = n&lt;E, V&gt;();</div>
 <div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160; </div>
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> E, auto V&gt;</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;        constexpr <span class="keywordtype">bool</span> is_valid() noexcept {</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;        constexpr <span class="keywordtype">bool</span> <a class="code" href="../../d1/d07/group__uuid.html#ga7454f7247f3a4aadf8475bea98c6c691">is_valid</a>() noexcept {</div>
 <div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;            static_assert(is_enum_v&lt;E&gt;, <span class="stringliteral">&quot;magic_enum::detail::is_valid requires enum type.&quot;</span>);</div>
 <div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160; </div>
 <div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;            <span class="keywordflow">return</span> n&lt;E, static_cast&lt;E&gt;(V)&gt;().size() != 0;</div>
@@ -513,7 +513,7 @@ $(document).ready(function(){initNavTree('db/d47/magic__enum_8hpp_source.html','
 <div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;                constexpr <span class="keyword">auto</span> rhs = (std::numeric_limits&lt;U&gt;::min)();</div>
 <div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160; </div>
 <div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;                <span class="keywordflow">if</span> constexpr (cmp_less(rhs, lhs)) {</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;                    static_assert(!is_valid&lt;E, value&lt;E, lhs - 1, IsFlags&gt;(0)&gt;(), <span class="stringliteral">&quot;magic_enum::enum_range detects enum value smaller than min range size.&quot;</span>);</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;                    static_assert(!<a class="code" href="../../d1/d07/group__uuid.html#ga7454f7247f3a4aadf8475bea98c6c691">is_valid</a>&lt;E, value&lt;E, lhs - 1, IsFlags&gt;(0)&gt;(), <span class="stringliteral">&quot;magic_enum::enum_range detects enum value smaller than min range size.&quot;</span>);</div>
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;                    <span class="keywordflow">return</span> lhs;</div>
 <div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;                }</div>
 <div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;                <span class="keywordflow">else</span> {</div>
@@ -535,7 +535,7 @@ $(document).ready(function(){initNavTree('db/d47/magic__enum_8hpp_source.html','
 <div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;                constexpr <span class="keyword">auto</span> rhs = (std::numeric_limits&lt;U&gt;::max)();</div>
 <div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160; </div>
 <div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;                <span class="keywordflow">if</span> constexpr (cmp_less(lhs, rhs)) {</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;                    static_assert(!is_valid&lt;E, value&lt;E, lhs + 1, IsFlags&gt;(0)&gt;(), <span class="stringliteral">&quot;magic_enum::enum_range detects enum value larger than max range size.&quot;</span>);</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;                    static_assert(!<a class="code" href="../../d1/d07/group__uuid.html#ga7454f7247f3a4aadf8475bea98c6c691">is_valid</a>&lt;E, value&lt;E, lhs + 1, IsFlags&gt;(0)&gt;(), <span class="stringliteral">&quot;magic_enum::enum_range detects enum value larger than max range size.&quot;</span>);</div>
 <div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;                    <span class="keywordflow">return</span> lhs;</div>
 <div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;                }</div>
 <div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;                <span class="keywordflow">else</span> {</div>
@@ -1276,6 +1276,7 @@ $(document).ready(function(){initNavTree('db/d47/magic__enum_8hpp_source.html','
 <div class="line"><a name="l01168"></a><span class="lineno"> 1168</span>&#160; </div>
 <div class="line"><a name="l01169"></a><span class="lineno"> 1169</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// NEARGYE_MAGIC_ENUM_HPP</span></div>
 <div class="ttc" id="aclassmagic__enum_1_1detail_1_1static__string_html"><div class="ttname"><a href="../../dc/dc9/classmagic__enum_1_1detail_1_1static__string.html">magic_enum::detail::static_string</a></div><div class="ttdef"><b>Definition:</b> magic_enum.hpp:169</div></div>
+<div class="ttc" id="agroup__uuid_html_ga7454f7247f3a4aadf8475bea98c6c691"><div class="ttname"><a href="../../d1/d07/group__uuid.html#ga7454f7247f3a4aadf8475bea98c6c691">b::uuid::is_valid</a></div><div class="ttdeci">bool is_valid(const std::string &amp;uuid)</div><div class="ttdoc">Test if a string is in the correct format to be interpreted as a uuid.</div></div>
 <div class="ttc" id="anamespaceCLI_1_1enums_html_ae003a81acc15a5663212f27ab3624e33"><div class="ttname"><a href="../../d2/dc6/namespaceCLI_1_1enums.html#ae003a81acc15a5663212f27ab3624e33">CLI::enums::operator&lt;&lt;</a></div><div class="ttdeci">std::ostream &amp; operator&lt;&lt;(std::ostream &amp;in, const T &amp;item)</div><div class="ttdoc">output streaming for enumerations</div><div class="ttdef"><b>Definition:</b> CLI11.hpp:192</div></div>
 <div class="ttc" id="astructmagic__enum_1_1customize_1_1enum__range_html"><div class="ttname"><a href="../../d8/dae/structmagic__enum_1_1customize_1_1enum__range.html">magic_enum::customize::enum_range</a></div><div class="ttdef"><b>Definition:</b> magic_enum.hpp:127</div></div>
 <div class="ttc" id="astructmagic__enum_1_1detail_1_1char__equal__to_html"><div class="ttname"><a href="../../d3/da0/structmagic__enum_1_1detail_1_1char__equal__to.html">magic_enum::detail::char_equal_to</a></div><div class="ttdef"><b>Definition:</b> magic_enum.hpp:162</div></div>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Battery: src/core/include/battery/core/uuid.hpp Source File</title>
+<title>Battery: Uuid</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -83,7 +83,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('d7/db4/uuid_8hpp_source.html','../../'); initResizable(); });
+$(document).ready(function(){initNavTree('d1/d07/group__uuid.html','../../'); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -102,45 +102,83 @@ $(document).ready(function(){initNavTree('d7/db4/uuid_8hpp_source.html','../../'
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">uuid.hpp</div>  </div>
+<div class="title">Uuid</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// Copyright 2022 Florian Zachs (HerrNamenlos123)</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// you may not use this file except in compliance with the License.</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// You may obtain a copy of the License at</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//         http://www.apache.org/licenses/LICENSE-2.0</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// Unless required by applicable law or agreed to in writing, software</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// See the License for the specific language governing permissions and</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// limitations under the License.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span>b::uuid {</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="../../d1/d07/group__uuid.html#gad19d0d1197db54e95defb938ab9b75a8">   35</a></span>&#160;    std::string <a class="code" href="../../d1/d07/group__uuid.html#gad19d0d1197db54e95defb938ab9b75a8">v4</a>();</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="../../d1/d07/group__uuid.html#ga7454f7247f3a4aadf8475bea98c6c691">   43</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="../../d1/d07/group__uuid.html#ga7454f7247f3a4aadf8475bea98c6c691">is_valid</a>(<span class="keyword">const</span> std::string&amp; uuid);</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;} <span class="comment">// namespace b</span></div>
-<div class="ttc" id="agroup__uuid_html_ga7454f7247f3a4aadf8475bea98c6c691"><div class="ttname"><a href="../../d1/d07/group__uuid.html#ga7454f7247f3a4aadf8475bea98c6c691">b::uuid::is_valid</a></div><div class="ttdeci">bool is_valid(const std::string &amp;uuid)</div><div class="ttdoc">Test if a string is in the correct format to be interpreted as a uuid.</div></div>
-<div class="ttc" id="agroup__uuid_html_gad19d0d1197db54e95defb938ab9b75a8"><div class="ttname"><a href="../../d1/d07/group__uuid.html#gad19d0d1197db54e95defb938ab9b75a8">b::uuid::v4</a></div><div class="ttdeci">std::string v4()</div><div class="ttdoc">Generate a new uuid in the form of a string.</div></div>
-</div><!-- fragment --></div><!-- contents -->
+
+<p>Everything related to uuids.  
+<a href="#details">More...</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:gad19d0d1197db54e95defb938ab9b75a8"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d07/group__uuid.html#gad19d0d1197db54e95defb938ab9b75a8">b::uuid::v4</a> ()</td></tr>
+<tr class="memdesc:gad19d0d1197db54e95defb938ab9b75a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a new uuid in the form of a string.  <a href="../../d1/d07/group__uuid.html#gad19d0d1197db54e95defb938ab9b75a8">More...</a><br /></td></tr>
+<tr class="separator:gad19d0d1197db54e95defb938ab9b75a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7454f7247f3a4aadf8475bea98c6c691"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d07/group__uuid.html#ga7454f7247f3a4aadf8475bea98c6c691">b::uuid::is_valid</a> (const std::string &amp;uuid)</td></tr>
+<tr class="memdesc:ga7454f7247f3a4aadf8475bea98c6c691"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if a string is in the correct format to be interpreted as a uuid.  <a href="../../d1/d07/group__uuid.html#ga7454f7247f3a4aadf8475bea98c6c691">More...</a><br /></td></tr>
+<tr class="separator:ga7454f7247f3a4aadf8475bea98c6c691"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<p>Everything related to uuids. </p>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ga7454f7247f3a4aadf8475bea98c6c691"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7454f7247f3a4aadf8475bea98c6c691">&#9670;&nbsp;</a></span>is_valid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool b::uuid::is_valid </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>uuid</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Test if a string is in the correct format to be interpreted as a uuid. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">uuid</td><td>The string to test </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the string is a valid uuid, false otherwise </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="../../d1/d07/group__uuid.html#gad19d0d1197db54e95defb938ab9b75a8" title="Generate a new uuid in the form of a string.">b::uuid::v4()</a> </dd></dl>
+
+</div>
+</div>
+<a id="gad19d0d1197db54e95defb938ab9b75a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad19d0d1197db54e95defb938ab9b75a8">&#9670;&nbsp;</a></span>v4()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string b::uuid::v4 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Generate a new uuid in the form of a string. </p>
+<dl class="section warning"><dt>Warning</dt><dd>This function is not crypthographically secure. It is only meant to be used for internal ids. Do not use it for anything security related. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A new, unique uuid in the form of an std::string </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="../../d1/d07/group__uuid.html#ga7454f7247f3a4aadf8475bea98c6c691" title="Test if a string is in the correct format to be interpreted as a uuid.">b::uuid::is_valid()</a> </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="../../dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="../../dir_aebb8dcc11953d78e620bbef0b9e2183.html">core</a></li><li class="navelem"><a class="el" href="../../dir_8f49dd062eda24395df599c5385a3cb1.html">include</a></li><li class="navelem"><a class="el" href="../../dir_04335060e4b26c54fae4ee6ee05fef7d.html">battery</a></li><li class="navelem"><a class="el" href="../../dir_4117bd2712d4210d5c08f407bc16536e.html">core</a></li><li class="navelem"><b>uuid.hpp</b></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
