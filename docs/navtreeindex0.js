@@ -79,6 +79,7 @@ var NAVTREEINDEX0 =
 "classb_1_1process.html#a7e71dfa04fd9a179e915b373d0791c58":[4,0,0,7,15],
 "classb_1_1process.html#a84a01ea68c0b4767c6ccf638dec03baf":[4,0,0,7,9],
 "classb_1_1process.html#a8b3e8e51b9a34f93ecaff20d8466f4f1":[4,0,0,7,19],
+"classb_1_1process.html#a997aba8b5d1dbdb88fc2ffea418c7e8e":[4,0,0,7,20],
 "classb_1_1process.html#a9a115f825016dba6fbba164b300fb9d1":[4,0,0,7,13],
 "classb_1_1process.html#aa467f6c82d5f283bf458e5761961fa7c":[4,0,0,7,4],
 "classb_1_1process.html#abafc259b42ecf7a2d4181717598d9267":[4,0,0,7,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "string_8hpp_source.html":[5,0,0,0,0,0,0,16],
 "structb_1_1constants.html":[4,0,0,5],
 "structb_1_1folders.html":[4,0,0,6],
-"structb_1_1process_1_1options__t.html":[4,0,0,7,0],
-"structb_1_1process_1_1options__t.html#a10c65b76c061c4c718540063c1d1665f":[4,0,0,7,0,8]
+"structb_1_1process_1_1options__t.html":[4,0,0,7,0]
 };

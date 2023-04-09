@@ -19,5 +19,6 @@ var classb_1_1process =
     [ "options", "classb_1_1process.html#aeb61d676cb783a57f7e1c59ef1e3b201", null ],
     [ "output_combined", "classb_1_1process.html#a3ba5f3aadc01cdeece69909adb0b4091", null ],
     [ "output_stderr", "classb_1_1process.html#a12fc4620489aba1181cad772ab43089b", null ],
-    [ "output_stdout", "classb_1_1process.html#a8b3e8e51b9a34f93ecaff20d8466f4f1", null ]
+    [ "output_stdout", "classb_1_1process.html#a8b3e8e51b9a34f93ecaff20d8466f4f1", null ],
+    [ "was_terminated", "classb_1_1process.html#a997aba8b5d1dbdb88fc2ffea418c7e8e", null ]
 ];

@@ -6,6 +6,7 @@ var structb_1_1process_1_1options__t =
     [ "arguments", "structb_1_1process_1_1options__t.html#a817ff0555f42f909d8f7a281f5b5b889", null ],
     [ "executable", "structb_1_1process_1_1options__t.html#aa04be7f4a4c6cbf0330e04940a5d5fb6", null ],
     [ "execute_as_shell_command", "structb_1_1process_1_1options__t.html#a7e8622d502030180758159b123275f9e", null ],
+    [ "forward_ctrl_c", "structb_1_1process_1_1options__t.html#a023879dbc92bac1876f760bacf533d6d", null ],
     [ "passthrough_to_parent", "structb_1_1process_1_1options__t.html#a3ad4d16aa0ad37bdc781483c25822430", null ],
     [ "reproc_options", "structb_1_1process_1_1options__t.html#acbb25151e05021dc55ad45e6be9fdec7", null ],
     [ "silent", "structb_1_1process_1_1options__t.html#a10c65b76c061c4c718540063c1d1665f", null ],
