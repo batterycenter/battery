@@ -1,5 +1,5 @@
 
-#define PRINT_PLATFORMS
+//#define PRINT_PLATFORMS
 #include "battery/core/environment.hpp"
 
 #include "battery/core/main.hpp"
