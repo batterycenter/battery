@@ -23,7 +23,7 @@ b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags,
     scripts["post_build"] = "exit 0";
 
     scripts["pre_start"] = "exit 0";
-    scripts["start"] = "b build && b run pre_start && b execute {{project_root}}/{{executable}} {% if length(args) > 0 %} --args {{args}} {% endif %} && b run post_start";
+    scripts["start"] = "b build && b run pre_start && b execute {{project_root}}/{{executable_path}} {% if length(args) > 0 %} --args {{args}} {% endif %} && b run post_start";
     scripts["post_start"] = "exit 0";
 
     scripts["pre_build_docs"] = "exit 0";
@@ -31,9 +31,10 @@ b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags,
     scripts["post_build_docs"] = "exit 0";
 
     data["build_directory"] = "build";
-    data["binary_directory"] = "{{build_directory}}/bin/{{config}}";
-    data["executable_name"] = "{{project_name}}";
-    data["executable"] = "{{binary_directory}}/{{executable_name}}";
+    data["binary_directory"] = "{{build_directory}}/bin";
+    data["executable"] = "{{project_name}}";
+    data["executable_path"] = "{{binary_directory}}/{{executable}}{{executable_extension}}";
+    data["executable_extension"] = b::constants::platform() == b::platform_t::windows ? ".exe" : "";
     data["config"] = "debug";
     data["config_package"] = "release";
 
@@ -181,10 +182,11 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
     process.options.working_directory = projectRoot;
     process.options.execute_as_shell_command = true;
     process.options.arguments = { command };
-
-    terminateCallback = [&process]() { process.terminate(); };
     process.execute_sync();
-    terminateCallback = {};
+
+    if (process.was_terminated || process.exit_code == static_cast<int>(Error::TERMINATED_BY_USER)) {
+        return b::unexpected(Error::TERMINATED_BY_USER);
+    }
 
     if (process.exit_code != 0) {
         b::print("\n");

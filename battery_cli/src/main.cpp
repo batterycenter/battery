@@ -13,7 +13,7 @@
         return b::unexpected(Error::EXECUTABLE_NOT_FOUND);
     }
 
-    b::print("\n");
+    b::print("\n{}\n", exe.to_string());
     auto result = b::execute(exe.to_string() + " " + args);
     b::print("\n>> {} terminated with exit code {}\n", b::fs::path(executable).filename(), result.exit_code);
     return std::nullopt;
@@ -134,16 +134,13 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
 
 int b::main(const std::vector<std::string>& args) {
 
-    b::push_ctrl_c_handler([]() {
-        Project::terminateApplication = true;
-        if (Project::terminateCallback) {
-            Project::terminateCallback();
-        }
-        std::cout << "Ctrl-C\n";
-    });
+    b::push_ctrl_c_handler([]{});   // Ignore Ctrl+C, we push another handler later
 
     auto result = parse_cli(args);
-    if (!result) {                               // Only error codes greater than 0 are printed
+    if (!result) {
+        if (result.error() == Error::TERMINATED_BY_USER) {  // Silent error pass-on
+            return (int)result.error();
+        }
         b::log::error("battery terminated with exit code {}: {}", (int)result.error(), magic_enum::enum_name(result.error()));
         return (int)result.error();
     }

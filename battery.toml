@@ -1,4 +1,5 @@
 project_name = "battery"
 version_file = "version.txt"
+executable = "Example_BatteryApp"
 
 [scripts]

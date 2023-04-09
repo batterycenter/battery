@@ -1,6 +1,7 @@
 
 #include "battery/core/process.hpp"
 #include "battery/core/time.hpp"
+#include "battery/core/signal.hpp"
 
 #include "reproc++/drain.hpp"
 
@@ -138,10 +139,23 @@ namespace b {
             }
         }
 
+        bool ctrl_c_handler = options.passthrough_to_parent;
+        if (options.forward_ctrl_c.has_value()) {
+            ctrl_c_handler = options.forward_ctrl_c.value();
+        }
+
+        if (ctrl_c_handler) {
+            b::push_ctrl_c_handler([this]() {
+                this->was_terminated = true;
+                this->terminate();
+            });
+        }
+
         std::error_code ec = _process.start(cmd_cstr.data(), options.reproc_options);
         if (ec) {
             exit_code = ec.value();
             error_message = ec.message();
+            if (ctrl_c_handler) b::pop_ctrl_c_handler();
             return;
         }
 
@@ -157,6 +171,7 @@ namespace b {
         if (ec) {
             exit_code = ec.value();
             error_message = ec.message();
+            if (ctrl_c_handler) b::pop_ctrl_c_handler();
             return;
         }
 
@@ -164,6 +179,7 @@ namespace b {
         if (_ec) {
             exit_code = status;
             error_message = _ec.message();
+            if (ctrl_c_handler) b::pop_ctrl_c_handler();
             return;
         }
 
@@ -175,11 +191,13 @@ namespace b {
 
         exit_code = status;
         error_message = _ec.message();
+        if (ctrl_c_handler) b::pop_ctrl_c_handler();
     }
 
     process execute(const std::string& command, const process::options_t& options) {
         b::process process;
         process.options = options;
+        process.options.passthrough_to_parent = true;
         process.options.execute_as_shell_command = true;
         process.options.arguments = { command };
         process.execute_sync();

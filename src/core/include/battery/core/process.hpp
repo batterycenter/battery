@@ -19,6 +19,7 @@ namespace b {
             bool passthrough_to_parent = false;
             bool suppress_carriage_return = true;
             bool strip_trailing_whitespace_after_join = true;
+            std::optional<bool> forward_ctrl_c = std::nullopt;  // Defaults to the value of passthrough_to_parent
             uint64_t wait_ms_before_every_stdin_write = 100;
             std::function<void(const std::string& str)> stdout_callback;
             std::function<void(const std::string& str)> stderr_callback;
@@ -46,6 +47,7 @@ namespace b {
         options_t options;
 
         int exit_code = 0;
+        bool was_terminated = false;
         std::string error_message;
         std::string output_stdout;
         std::string output_stderr;

@@ -12,6 +12,28 @@ namespace b {
         return "Battery Application";
     }
 
+    platform_t constants::platform() {
+#ifdef BATTERY_ARCH_WINDOWS
+        return platform_t::windows;
+#elif defined(BATTERY_ARCH_LINUX)
+        return platform_t::linux;
+#elif defined(BATTERY_ARCH_MACOS)
+        return platform_t::macos;
+#else
+        #error "Unknown platform"
+#endif
+    }
+
+    arch_t constants::architecture() {
+#ifdef BATTERY_ARCH_64
+        return arch_t::x64;
+#elif defined(BATTERY_ARCH_32)
+        return arch_t::x86;
+#else
+        #error "Invalid architecure configuration!"
+#endif
+    }
+
 #ifdef BATTERY_DEBUG
     bool constants::message_box_on_exception_default() { return true; }
     bool constants::catch_common_exceptions_default() { return true; }
