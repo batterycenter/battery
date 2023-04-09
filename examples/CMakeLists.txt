@@ -1,4 +1,7 @@
 
 add_subdirectory(BatteryApp)
 add_subdirectory(BatteryEmbed)
-add_subdirectory(TrayIconAnimated)
+
+if (NOT BATTERY_CORE_NO_TRAY)
+    add_subdirectory(TrayIconAnimated)
+endif ()
