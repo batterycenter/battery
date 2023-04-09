@@ -6,6 +6,7 @@
 #include "battery/core/thread.hpp"
 
 #include <queue>
+#include <stack>
 
 #ifdef BATTERY_ARCH_WINDOWS
 #include <Windows.h>
@@ -15,91 +16,148 @@
 
 namespace b {
 
-    namespace internal {
+    static void enable_native_signal_handler();
+    static void disable_native_signal_handler();
 
-        class signal_dispatcher {
-        public:
-            signal_dispatcher() = default;
-            ~signal_dispatcher() {
-                terminate = true;
-                if (worker.joinable()) {
-                    worker.join();
+    class SignalHandler {
+    public:
+        static SignalHandler& getInstance() {
+            static SignalHandler instance;
+            return instance;
+        }
+
+        void push(const std::function<void()>& func) {
+            std::scoped_lock lock(stackMutex);
+            handlerStack.push(func);
+            applyHandler();
+        }
+
+        void pop() {
+            std::scoped_lock lock(stackMutex);
+            if (!handlerStack.empty()) {
+                handlerStack.pop();
+            }
+            applyHandler();
+        }
+
+        void applyHandler() {
+            if (!handlerStack.empty()) {
+                if (!nativeHandlerEnabled) {
+                    enable_native_signal_handler();
+                    nativeHandlerEnabled = true;
                 }
-            };
-
-            signal_dispatcher(const signal_dispatcher&) = delete;
-            signal_dispatcher& operator=(const signal_dispatcher&) = delete;
-            signal_dispatcher(signal_dispatcher&& other) = delete;
-            signal_dispatcher& operator=(signal_dispatcher&& other) = delete;
-
-            void push(const std::function<void()>& func) {
-                std::scoped_lock lock(mutex);
-                queue.push(func);
-            }
-
-            void start_dispatcher_thread() {
-                worker = b::thread([this]() {
-                    while (!terminate) {
-                        if (auto func = pop_function(); func) {
-                            func();
-                        }
-                        b::sleep(0.1);
-                    }
-                });
-            }
-
-        private:
-            std::function<void()> pop_function() {
-                std::scoped_lock lock(mutex);
-                if (queue.empty()) {
-                    return {};
+            } else {
+                if (nativeHandlerEnabled) {
+                    disable_native_signal_handler();
+                    nativeHandlerEnabled = false;
                 }
-                auto func = queue.front();
-                queue.pop();
-                return func;
             }
+        }
 
-            std::mutex mutex;
-            b::thread worker;
-            std::atomic<bool> terminate = false;
-            std::queue<std::function<void()>> queue;
-        };
+        static void pushCtrlCEvent() {      // This is called in the platform native handler. But it must be called
+            auto& instance = getInstance();                     // from a thread, not an interrupt!!!!
+            std::scoped_lock stackLock(instance.stackMutex, instance.eventMutex);
+            if (!instance.handlerStack.empty()) {
+                instance.eventQueue.push(instance.handlerStack.top());
+            }
+        }
 
-        inline static signal_dispatcher dispatcher;
-        inline static std::function<void()> ctrl_c_handler_callback = []() {
-            b::log::core::error("Ctrl+C caught. Please use b::set_ctrl_c_handler() to define a callback that causes b::main() to return");
-            std::exit(EXIT_FAILURE);
-        };
-    }
+        SignalHandler(const SignalHandler&) = delete;
+        SignalHandler& operator=(const SignalHandler&) = delete;
+        SignalHandler(SignalHandler&& other) = delete;
+        SignalHandler& operator=(SignalHandler&& other) = delete;
 
-    void set_ctrl_c_handler(const std::function<void()>& handler) {
-        internal::ctrl_c_handler_callback = handler;
-    }
+    private:
+        SignalHandler() {
+            eventHandlerThread = b::thread(&SignalHandler::eventHandler, this);
+        }
 
-    void internal::init_ctrl_c_handler() {
+        std::function<void()> popEvent() {
+            std::scoped_lock lock(eventMutex);
+            if (eventQueue.empty()) {
+                return {};
+            }
+            auto function = eventQueue.front();
+            eventQueue.pop();
+            return function;
+        }
+
+        void eventHandler() {
+            while (!eventHandlerThread.get_stop_token().stop_requested()) {
+                std::function<void()> callback = popEvent();
+                if (callback) {
+                    callback();
+                } else {
+                    b::sleep(0.1);
+                }
+            }
+        }
+
+        std::mutex stackMutex;
+        std::mutex eventMutex;
+        std::stack<std::function<void()>> handlerStack;
+        std::queue<std::function<void()>> eventQueue;
+        std::atomic<bool> nativeHandlerEnabled = false;
+        b::thread eventHandlerThread;
+    };
+
 #ifdef BATTERY_ARCH_WINDOWS
-        SetConsoleCtrlHandler([](DWORD dwCtrlType) {
-            switch (dwCtrlType) {
-                case CTRL_C_EVENT:
-                case CTRL_BREAK_EVENT:
-                    dispatcher.push(internal::ctrl_c_handler_callback);
-                    return TRUE;
-                default:
-                    return FALSE;
-            }
-        }, TRUE);
+    static int windows_handler(DWORD dwCtrlType) {  // Separate function instead of lambda: We need the function pointer twice
+        switch (dwCtrlType) {
+            case CTRL_C_EVENT:
+            case CTRL_BREAK_EVENT:
+                SignalHandler::pushCtrlCEvent();
+                return TRUE;
+            default:
+                return FALSE;
+        }
+    }
+
+    static void enable_native_signal_handler() {
+        SetConsoleCtrlHandler(windows_handler, TRUE);
+    }
+
+    static void disable_native_signal_handler() {
+        SetConsoleCtrlHandler(windows_handler, FALSE);
+    }
 #else
-        struct sigaction sigIntHandler;                     // We need to call dispatcher.push from a different thread,
-        sigIntHandler.sa_handler = [](int) {                // because signals on Unix are interrupts, which can cause
+    static void enable_native_signal_handler() {
+        struct sigaction sigIntHandler;                     // We need to call push from a different thread,
+        sigIntHandler.sa_handler = [](int) {                // because signals on Unix are interrupts, which will cause
             b::thread([]() {                                // a deadlock in mutexes.
-                dispatcher.push(internal::ctrl_c_handler_callback);
+                SignalHandler::pushCtrlCEvent();
             }).detach();
         };
         sigemptyset(&sigIntHandler.sa_mask);
         sigIntHandler.sa_flags = 0;
         sigaction(SIGINT, &sigIntHandler, nullptr);
+    }
+
+    static void disable_native_signal_handler() {
+        struct sigaction sigIntHandler;
+        sigIntHandler.sa_handler = SIG_DFL;
+        sigemptyset(&sigIntHandler.sa_mask);
+        sigIntHandler.sa_flags = 0;
+        sigaction(SIGINT, &sigIntHandler, nullptr);
+    }
 #endif
-        dispatcher.start_dispatcher_thread();
+
+    void push_ctrl_c_handler(const std::function<void()>& handler) {
+        auto& signalhandler = SignalHandler::getInstance();
+        signalhandler.push(handler);
+    }
+
+    void pop_ctrl_c_handler() {
+        auto& signalhandler = SignalHandler::getInstance();
+        signalhandler.pop();
+    }
+
+    void generate_ctrl_c_event() {
+#ifdef BATTERY_ARCH_WINDOWS
+        GenerateConsoleCtrlEvent(CTRL_C_EVENT, 0);
+#else
+        raise(SIGINT);
+#endif
     }
 
 }

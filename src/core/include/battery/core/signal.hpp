@@ -27,19 +27,32 @@ namespace b {
 
     ///
     /// \brief Set a handler to be executed when the user presses Ctrl+C during execution
-    /// \details This function replaces any previously set handler. Only a single handler can be set globally.
-    ///          You are highly encouraged to implement a custom handler that terminates your program gracefully.
-    ///          Multiple consecutive CTRL+C presses will call the handler once for each press, one after another. 
-    ///          They are called from a dedicated background thread, but always from the same one.
-    /// \warning The callback is called from a background thread. Be aware when accessing shared resources!
+    /// \details The callback function is pushed onto a stack and when a Ctrl+C event is received, the topmost function is called.
+    ///          This can be used to handle Ctrl+C events in various stages in your application.
+    ///          Multiple consecutive CTRL+C presses will call the handler once for each press, one after another.
+    ///          All callbacks are called one after another from one dedicated background thread.
+    /// \warning The callbacks are called from a background thread. Be aware when accessing shared resources!
     /// \param[in] handler Any callable to be called from another thread when the user presses Ctrl+C
+    /// \see pop_ctrl_c_handler()
+    /// \see generate_ctrl_c_handler()
     ///
-    void set_ctrl_c_handler(const std::function<void()>& handler);
+    void push_ctrl_c_handler(const std::function<void()>& handler);
 
-    namespace internal {
-        /// @private
-        void init_ctrl_c_handler();
-    }
+    ///
+    /// \brief Pop the latest Ctrl+C handler set by push_ctrl_c_handler()
+    /// \details Nothing happens when the function is called but no more handler is registered.
+    /// \see push_ctrl_c_handler()
+    /// \see generate_ctrl_c_handler()
+    ///
+    void pop_ctrl_c_handler();
+
+    ///
+    /// \brief Generate a Ctrl+C event for the application itself
+    /// \warning This function is only for rough testing and has intricate details that are not easily cross-platform! Do not use it for anything serious!
+    /// \see push_ctrl_c_handler()
+    /// \see pop_ctrl_c_handler()
+    ///
+    void generate_ctrl_c_event();
 
 } // namespace b
 /// @}

@@ -134,7 +134,7 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
 
 int b::main(const std::vector<std::string>& args) {
 
-    b::set_ctrl_c_handler([]() {
+    b::push_ctrl_c_handler([]() {
         Project::terminateApplication = true;
         if (Project::terminateCallback) {
             Project::terminateCallback();

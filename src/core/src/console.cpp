@@ -23,7 +23,7 @@
 
 namespace b {
 
-    std::string cin_getline(int buffer_size) {
+    std::string cin_getline(int buffer_size) {          // We must do this so complicated because std::cin does not have UTF-8 support
 #ifdef BATTERY_ARCH_WINDOWS
         DWORD read = 0;
         std::wstring buffer;
@@ -38,7 +38,7 @@ namespace b {
         auto line = b::from_osstring(buffer.substr(0, read));
 #else
         std::string line;
-        std::getline(std::cin, line);
+        std::getline(std::cin, line);           // TODO: buffer size is not used
 #endif
         line = b::replace(line, "\n", "");
         line = b::replace(line, "\r", "");

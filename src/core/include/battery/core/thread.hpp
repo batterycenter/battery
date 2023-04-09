@@ -54,8 +54,12 @@ namespace b {
 
         template <class _Fn, class... _Args>
         explicit thread(_Fn&& _Fx, _Args&&... _Ax)
-          : std::jthread([_Fx = std::forward<_Fn>(_Fx), ...args = std::forward<_Args>(_Ax)]() mutable {
-                catch_common_exceptions(std::move(_Fx), std::move(args)...);
+          : std::jthread([_Fx = std::forward<_Fn>(_Fx), ...args = std::forward<_Args>(_Ax), this]() mutable {
+                if constexpr (std::is_invocable_v<std::decay_t<_Fn>, std::stop_token, std::decay_t<_Args>...>) {
+                    catch_common_exceptions(std::move(_Fx), get_stop_token(), std::move(args)...);
+                } else {
+                    catch_common_exceptions(std::move(_Fx), std::move(args)...);
+                }
             }) {}
 
         ///

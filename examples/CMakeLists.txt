@@ -1,2 +1,4 @@
 
-add_subdirectory(tray_icon_animated)
+add_subdirectory(BatteryApp)
+add_subdirectory(BatteryEmbed)
+add_subdirectory(TrayIconAnimated)
