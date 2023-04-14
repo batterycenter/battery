@@ -126,6 +126,7 @@ function(battery_add_test TARGET)
         battery_add_package("gh:google/googletest#main")      # Live at head: main branch recommended
         include(GoogleTest)
         set(BATTERY_GTEST_INCLUDED ON PARENT_SCOPE)
+        set_target_properties(gtest PROPERTIES FOLDER "battery/tests")
     endif()
     battery_add_executable(${TARGET} ${ARGN})
     target_link_libraries(${TARGET} gtest)

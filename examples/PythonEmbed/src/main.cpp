@@ -52,6 +52,17 @@ int b::main([[maybe_unused]] const std::vector<std::string>& args) {
             py_callback(i);
         }
 
+        b::print("\n");
+        int number = b::py::eval("5**3").cast<int>();
+        b::log::debug("5**3 = {}", number);
+
+        b::print("\n");
+        std::vector<std::string> array = b::py::eval("['a', 'b', 'c']").cast<std::vector<std::string>>();
+        b::log::debug("['a', 'b', 'c'] in python is in C++:");
+        for (int i = 0; i < array.size(); i++) {
+            b::log::debug("  [{}] = {}", i, array[i]);
+        }
+
     } catch (const std::exception& e) {               
         b::log::error("Python error: {}", e.what());
     }
