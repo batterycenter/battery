@@ -1,6 +1,5 @@
 
-// This file only defines an empty main function, so battery can initialize itself
-#include "battery/core/all.hpp"
+#include "battery/core/main.hpp"
 #include <gtest/gtest.h>
 
 int b::main(const std::vector<std::string>& args) {

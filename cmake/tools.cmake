@@ -76,7 +76,8 @@ function(__apply_common_target_options TARGET)  # For all libraries and executab
                 _CRT_SECURE_NO_WARNINGS
                 )
     endif()
-    target_compile_definitions(${TARGET} PUBLIC UNICODE _UNICODE)
+    target_include_directories(${TARGET} PUBLIC include)
+    target_compile_definitions(${TARGET} PUBLIC UNICODE _UNICODE UTF8PROC_STATIC )
 
 endfunction()
 
@@ -115,7 +116,7 @@ function(battery_add_executable TARGET)
     target_sources(${TARGET} PRIVATE ${HEADERS})
     source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include" PREFIX "Header Files" FILES ${HEADERS})
 
-    battery_set_exe_output_folder(${TARGET} ${CMAKE_BINARY_DIR}/bin)
+    battery_set_exe_output_folder(${TARGET} ${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE}/${TARGET})
     __apply_common_target_options(${TARGET})   # Apply things like C++ Standard, preprocessor defines, etc.
 endfunction()
 

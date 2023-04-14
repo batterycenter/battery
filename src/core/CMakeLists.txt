@@ -46,10 +46,6 @@ if (MSVC)               # For Visual Studio we add all header files as sources s
     source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include" PREFIX "Header Files" FILES ${HEADERS})
 endif()
 
-# Properties
-target_include_directories(battery_core PUBLIC include)
-target_compile_definitions(battery_core PUBLIC UTF8PROC_STATIC)
-
 if (BATTERY_CORE_NO_MAIN)
     target_compile_definitions(battery_core BATTERY_CORE_NO_MAIN)
 endif()

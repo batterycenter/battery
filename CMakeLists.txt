@@ -24,6 +24,7 @@ option(BUILD_DOCS "Define the targets for building the documentation (not built 
 enable_testing()
 
 add_subdirectory(src/core)
+add_subdirectory(src/python)
 
 if (BUILD_CLI)
     add_subdirectory(battery_cli)
