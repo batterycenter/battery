@@ -27,7 +27,7 @@
 namespace b {
 
     ///
-    /// \brief Get the time the program has been running (since battery was initialized).
+    /// \brief Get the time the program has been running in seconds (since battery was initialized).
     /// \details Can be used for all sorts of
     ///          high-level timing and measurements. Units is seconds, but the precision is dependent on the platform,
     ///          going down in the microseconds range.

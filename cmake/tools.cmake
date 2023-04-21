@@ -123,6 +123,7 @@ endfunction()
 function(battery_add_test TARGET)
     if (NOT BATTERY_GTEST_INCLUDED)
         set(gtest_force_shared_crt "Use shared (DLL) run-time lib even when Google Test is built as static lib." ON FORCE)
+        set(CMAKE_DISABLE_FIND_PACKAGE_Python TRUE)
         battery_add_package("gh:google/googletest#main")      # Live at head: main branch recommended
         include(GoogleTest)
         set(BATTERY_GTEST_INCLUDED ON PARENT_SCOPE)
@@ -143,6 +144,10 @@ endmacro()
 
 function(battery_set_output_name TARGET NAME)
     set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME ${NAME})
+endfunction()
+
+function(battery_set_target_ide_folder TARGET FOLDER)
+    set_target_properties(${TARGET} PROPERTIES FOLDER `${FOLDER})
 endfunction()
 
 function(battery_set_exe_output_folder TARGET FOLDER)

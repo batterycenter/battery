@@ -211,15 +211,6 @@ namespace b::fs {
         }
     };
 
-    class Lockfile {
-    public:
-        Lockfile(const std::string& filename, bool createDirectories = false);
-        ~Lockfile();
-
-    private:
-        void* fileDescriptor = nullptr;
-    };
-
 }
 
 template<> struct fmt::formatter<b::fs::path> {

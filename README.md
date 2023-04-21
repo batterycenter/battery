@@ -28,6 +28,8 @@ https://www.reichwein.it/unicode/ -> CC0 1.0 Universal (Like MIT)
 
 https://github.com/JuliaStrings/utf8proc -> MIT "expat"
 
+https://github.com/reunanen/cpp-exclusive-lock-file -> MIT License
+
 TODO: Add unit testing
 
 TODO: Add pipelines and automate testing

@@ -1,5 +1,6 @@
-cmake_minimum_required(VERSION 3.16)
-project(battery VERSION 0.1.1)
+cmake_minimum_required(VERSION 3.18)
+project(battery)
+enable_testing()
 
 get_directory_property(hasParent PARENT_DIRECTORY)
 if(hasParent)
@@ -11,17 +12,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(cmake/tools.cmake)
 battery_check_required_compiler_features()
 
-##################################
-# Options: Library configuration #
-##################################
-
-# Options
 option(BUILD_TESTS "Build all unit tests" ON)
 option(BUILD_EXAMPLES "Build examples" ON)
 option(BUILD_CLI "Build the Battery cli 'b'" ON)
 option(BUILD_DOCS "Define the targets for building the documentation (not built automatically)" ON)
-
-enable_testing()
 
 add_subdirectory(src/core)
 add_subdirectory(src/python)
@@ -37,55 +31,6 @@ if (BUILD_DOCS)
 endif()
 
 add_subdirectory(battery_embed)
-
-#option(BATTERY_BUILD_EXAMPLES "Build examples" on)
-#option(BATTERY_SHARED_LIB "Build shared library instead of static" off)
-#
-#if (MSVC)
-#    option(BATTERY_USE_PRECOMPILED_HEADER "Using a precompiled header to speed up compile time" on)
-#else()
-#    option(BATTERY_USE_PRECOMPILED_HEADER "Using a precompiled header to speed up compile time" off)
-#endif()
-
-
-################
-# Dependencies #
-################
-
-#battery_set_cache_variable(BUILD_SHARED_LIBS off)
-#
-#if (NOT WIN32 AND BATTERY_FEATURES_GRAPHICS)
-#    find_package(PkgConfig REQUIRED)
-#
-#    battery_require_find_package(X11 X11_FOUND "Please install them using your system's equivalent to 'sudo apt install libx11-dev'")
-#    battery_require_find_package(OpenGL OpenGL_FOUND "Please install them using your system's equivalent to 'sudo apt install libgl1-mesa-dev'")
-#    battery_require_find_package(OpenAL OpenAL_FOUND "Please install them using your system's equivalent to 'sudo apt install libopenal-dev'")
-#
-#    include(cmake/FindUDev.cmake)
-#    if (NOT UDEV_FOUND)
-#        message(FATAL_ERROR "UDEV development libraries not found! Please install them using your system's equivalent to 'sudo apt install libudev-dev'")
-#    endif()
-#
-#    include(cmake/FindVORBIS.cmake)
-#    if (NOT VORBIS_FOUND)
-#        message(FATAL_ERROR "VORBIS development libraries not found! Please install them using your system's equivalent to 'sudo apt install libvorbis-dev'")
-#    endif()
-#
-#    include(cmake/FindFLAC.cmake)
-#    if (NOT FLAC_FOUND)
-#        message(FATAL_ERROR "FLAC development libraries not found! Please install them using your system's equivalent to 'sudo apt install libflac-dev'")
-#    endif()
-#
-#    pkg_check_modules(GTK3 gtk+-3.0)
-#    if (NOT GTK3_FOUND)
-#        message(FATAL_ERROR "GTK3 development libraries not found! Please install them using your system's equivalent to 'sudo apt install libgtk-3-dev'")
-#    endif()
-#
-#    pkg_check_modules(LIBAPPINDICATOR appindicator3-0.1)
-#    if (NOT LIBAPPINDICATOR_FOUND)
-#        message(FATAL_ERROR "libappindicator development libraries not found! Please install them using your system's equivalent to 'sudo apt install libappindicator3-dev'")
-#    endif()
-#endif()
 
 #if (BATTERY_FEATURES_GRAPHICS)
 #    battery_add_dependency(imgui)
