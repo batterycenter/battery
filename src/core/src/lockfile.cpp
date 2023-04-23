@@ -32,7 +32,7 @@
 
 namespace b {
 
-    lockfile::lockfile(const b::fs::path& filename) : filename(filename) {
+    lockfile::lockfile(const b::fs::path& filename) : filename(filename), mutex(std::make_unique<std::mutex>()) {
         if (filename.has_parent_path()) {
             b::fs::create_directories(filename.parent_path());
         }
@@ -98,8 +98,9 @@ namespace b {
     }
 
     void lockfile::unlock() {
+        std::scoped_lock lock(*this->mutex.get());
         if (!this->locked) {
-            throw std::runtime_error(fmt::format("Failed to unlock lockfile '{}': File is not locked", filename));
+            return;
         }
 #ifdef BATTERY_ARCH_WINDOWS
         OVERLAPPED overlapped = {0};
@@ -119,6 +120,7 @@ namespace b {
     }
 
     void lockfile::lock_impl(bool blocking) {
+        std::scoped_lock lock(*this->mutex.get());
         if (this->locked) {
             throw std::runtime_error(fmt::format("Failed to aquire lockfile '{}': Lock already in use", filename));
         }

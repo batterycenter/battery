@@ -105,6 +105,7 @@ namespace b {
 
         const b::fs::path filename;
         void* fileHandle = nullptr;
+        std::unique_ptr<std::mutex> mutex;
         bool locked = false;
     };
 
