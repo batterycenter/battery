@@ -10,6 +10,7 @@ var dir_4117bd2712d4210d5c08f407bc16536e =
     [ "error.hpp", "error_8hpp_source.html", null ],
     [ "folders.hpp", "folders_8hpp_source.html", null ],
     [ "fs.hpp", "fs_8hpp_source.html", null ],
+    [ "lockfile.hpp", "lockfile_8hpp_source.html", null ],
     [ "log.hpp", "log_8hpp_source.html", null ],
     [ "main.hpp", "main_8hpp_source.html", null ],
     [ "messages.hpp", "messages_8hpp_source.html", null ],

@@ -31,7 +31,7 @@ var hierarchy =
     [ "std::jthread", null, [
       [ "b::thread", "classb_1_1thread.html", null ]
     ] ],
-    [ "b::fs::Lockfile", "classb_1_1fs_1_1Lockfile.html", null ],
+    [ "b::lockfile", "classb_1_1lockfile.html", null ],
     [ "b::resource::on_disk_resource", "classb_1_1resource_1_1on__disk__resource.html", null ],
     [ "b::process::options_t", "structb_1_1process_1_1options__t.html", null ],
     [ "std::filesystem::path", null, [
@@ -39,6 +39,8 @@ var hierarchy =
     ] ],
     [ "b::process", "classb_1_1process.html", null ],
     [ "b::resource", "classb_1_1resource.html", null ],
+    [ "b::scoped_lockfile", "classb_1_1scoped__lockfile.html", null ],
+    [ "b::scoped_lockfile_nothrow", "classb_1_1scoped__lockfile__nothrow.html", null ],
     [ "b::console::terminal", "classb_1_1console_1_1terminal.html", null ],
     [ "b::tray::tray_entry", "classb_1_1tray_1_1tray__entry.html", [
       [ "b::tray::button", "classb_1_1tray_1_1button.html", null ],

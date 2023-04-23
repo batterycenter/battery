@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['thread_69',['Thread',['../group__Thread.html',1,'']]],
-  ['time_70',['Time',['../group__Time.html',1,'']]]
+  ['string_93',['String',['../group__String.html',1,'']]]
 ];

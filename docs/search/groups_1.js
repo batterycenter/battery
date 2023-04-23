@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['string_68',['String',['../group__String.html',1,'']]]
+  ['lockfile_92',['Lockfile',['../group__Lockfile.html',1,'']]]
 ];

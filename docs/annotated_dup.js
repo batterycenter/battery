@@ -7,8 +7,7 @@ var annotated_dup =
       [ "fs", null, [
         [ "path", "classb_1_1fs_1_1path.html", "classb_1_1fs_1_1path" ],
         [ "ifstream", "classb_1_1fs_1_1ifstream.html", "classb_1_1fs_1_1ifstream" ],
-        [ "ofstream", "classb_1_1fs_1_1ofstream.html", "classb_1_1fs_1_1ofstream" ],
-        [ "Lockfile", "classb_1_1fs_1_1Lockfile.html", "classb_1_1fs_1_1Lockfile" ]
+        [ "ofstream", "classb_1_1fs_1_1ofstream.html", "classb_1_1fs_1_1ofstream" ]
       ] ],
       [ "tray", null, [
         [ "button", "classb_1_1tray_1_1button.html", "classb_1_1tray_1_1button" ],
@@ -25,6 +24,9 @@ var annotated_dup =
       [ "cachefile", "classb_1_1cachefile.html", "classb_1_1cachefile" ],
       [ "constants", "structb_1_1constants.html", null ],
       [ "folders", "structb_1_1folders.html", null ],
+      [ "lockfile", "classb_1_1lockfile.html", "classb_1_1lockfile" ],
+      [ "scoped_lockfile", "classb_1_1scoped__lockfile.html", "classb_1_1scoped__lockfile" ],
+      [ "scoped_lockfile_nothrow", "classb_1_1scoped__lockfile__nothrow.html", "classb_1_1scoped__lockfile__nothrow" ],
       [ "process", "classb_1_1process.html", "classb_1_1process" ],
       [ "resource", "classb_1_1resource.html", "classb_1_1resource" ],
       [ "thread", "classb_1_1thread.html", "classb_1_1thread" ]
