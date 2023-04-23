@@ -156,36 +156,37 @@ $(document).ready(function(){initNavTree('lockfile_8hpp_source.html',''); initRe
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a> filename;</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordtype">void</span>* fileHandle = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordtype">bool</span> locked = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    };</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00125"></a><span class="lineno"><a class="line" href="classb_1_1scoped__lockfile.html">  125</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classb_1_1scoped__lockfile.html">scoped_lockfile</a> {</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00133"></a><span class="lineno"><a class="line" href="group__Lockfile.html#gabfe5089d91a9c598daf6f7e5033d6cce">  133</a></span>&#160;        <a class="code" href="group__Lockfile.html#gabfe5089d91a9c598daf6f7e5033d6cce">scoped_lockfile</a>(<span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a>&amp; filename, <span class="keywordtype">bool</span> blocking = <span class="keyword">true</span>, std::optional&lt;double&gt; timeout = std::nullopt);</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <span class="keywordtype">bool</span> blocking = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <a class="code" href="classb_1_1lockfile.html">b::lockfile</a> _lockfile;</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    };</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
-<div class="line"><a name="l00151"></a><span class="lineno"><a class="line" href="classb_1_1scoped__lockfile__nothrow.html">  151</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classb_1_1scoped__lockfile__nothrow.html">scoped_lockfile_nothrow</a> {</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00159"></a><span class="lineno"><a class="line" href="group__Lockfile.html#ga4c631e0b3e56c90b1f7e3091c08d8cc4">  159</a></span>&#160;        <a class="code" href="group__Lockfile.html#ga4c631e0b3e56c90b1f7e3091c08d8cc4">scoped_lockfile_nothrow</a>(<span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a>&amp; filename, <span class="keywordtype">bool</span> blocking = <span class="keyword">true</span>, std::optional&lt;double&gt; timeout = std::nullopt);</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
-<div class="line"><a name="l00165"></a><span class="lineno"><a class="line" href="group__Lockfile.html#ga3f0c0176a3a77cd814a1b4606656e4bb">  165</a></span>&#160;        <span class="keyword">operator</span> bool() {</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;            <span class="keywordflow">return</span> _lockfile;</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        }</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <span class="keywordtype">bool</span> blocking = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <a class="code" href="classb_1_1lockfile.html">b::lockfile</a> _lockfile;</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    };</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;}</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        std::unique_ptr&lt;std::mutex&gt; mutex;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="keywordtype">bool</span> locked = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    };</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno"><a class="line" href="classb_1_1scoped__lockfile.html">  126</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classb_1_1scoped__lockfile.html">scoped_lockfile</a> {</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00134"></a><span class="lineno"><a class="line" href="group__Lockfile.html#gabfe5089d91a9c598daf6f7e5033d6cce">  134</a></span>&#160;        <a class="code" href="group__Lockfile.html#gabfe5089d91a9c598daf6f7e5033d6cce">scoped_lockfile</a>(<span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a>&amp; filename, <span class="keywordtype">bool</span> blocking = <span class="keyword">true</span>, std::optional&lt;double&gt; timeout = std::nullopt);</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <span class="keywordtype">bool</span> blocking = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        <a class="code" href="classb_1_1lockfile.html">b::lockfile</a> _lockfile;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    };</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
+<div class="line"><a name="l00152"></a><span class="lineno"><a class="line" href="classb_1_1scoped__lockfile__nothrow.html">  152</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classb_1_1scoped__lockfile__nothrow.html">scoped_lockfile_nothrow</a> {</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00160"></a><span class="lineno"><a class="line" href="group__Lockfile.html#ga4c631e0b3e56c90b1f7e3091c08d8cc4">  160</a></span>&#160;        <a class="code" href="group__Lockfile.html#ga4c631e0b3e56c90b1f7e3091c08d8cc4">scoped_lockfile_nothrow</a>(<span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a>&amp; filename, <span class="keywordtype">bool</span> blocking = <span class="keyword">true</span>, std::optional&lt;double&gt; timeout = std::nullopt);</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
+<div class="line"><a name="l00166"></a><span class="lineno"><a class="line" href="group__Lockfile.html#ga3f0c0176a3a77cd814a1b4606656e4bb">  166</a></span>&#160;        <span class="keyword">operator</span> bool() {</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;            <span class="keywordflow">return</span> _lockfile;</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        }</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keywordtype">bool</span> blocking = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <a class="code" href="classb_1_1lockfile.html">b::lockfile</a> _lockfile;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    };</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;}</div>
 <div class="ttc" id="aclassb_1_1fs_1_1path_html"><div class="ttname"><a href="classb_1_1fs_1_1path.html">b::fs::path</a></div><div class="ttdef"><b>Definition:</b> fs.hpp:27</div></div>
 <div class="ttc" id="aclassb_1_1lockfile_html"><div class="ttname"><a href="classb_1_1lockfile.html">b::lockfile</a></div><div class="ttdoc">A lockfile class that can be used to synchronize processes by the use of atomic filesystem operations...</div><div class="ttdef"><b>Definition:</b> lockfile.hpp:45</div></div>
-<div class="ttc" id="aclassb_1_1scoped__lockfile__nothrow_html"><div class="ttname"><a href="classb_1_1scoped__lockfile__nothrow.html">b::scoped_lockfile_nothrow</a></div><div class="ttdoc">RAII convenience wrapper for b::lockfile that does not throw.</div><div class="ttdef"><b>Definition:</b> lockfile.hpp:151</div></div>
-<div class="ttc" id="aclassb_1_1scoped__lockfile_html"><div class="ttname"><a href="classb_1_1scoped__lockfile.html">b::scoped_lockfile</a></div><div class="ttdoc">RAII convenience wrapper for b::lockfile</div><div class="ttdef"><b>Definition:</b> lockfile.hpp:125</div></div>
+<div class="ttc" id="aclassb_1_1scoped__lockfile__nothrow_html"><div class="ttname"><a href="classb_1_1scoped__lockfile__nothrow.html">b::scoped_lockfile_nothrow</a></div><div class="ttdoc">RAII convenience wrapper for b::lockfile that does not throw.</div><div class="ttdef"><b>Definition:</b> lockfile.hpp:152</div></div>
+<div class="ttc" id="aclassb_1_1scoped__lockfile_html"><div class="ttname"><a href="classb_1_1scoped__lockfile.html">b::scoped_lockfile</a></div><div class="ttdoc">RAII convenience wrapper for b::lockfile</div><div class="ttdef"><b>Definition:</b> lockfile.hpp:126</div></div>
 <div class="ttc" id="agroup__Lockfile_html_ga238f952b89fde5c57c7cc40c26ea50f9"><div class="ttname"><a href="group__Lockfile.html#ga238f952b89fde5c57c7cc40c26ea50f9">b::lockfile::lockfile</a></div><div class="ttdeci">lockfile(const b::fs::path &amp;filename)</div><div class="ttdoc">b::lockfile constructor</div></div>
 <div class="ttc" id="agroup__Lockfile_html_ga48a13fddd51961cd7ce1188b90c0294f"><div class="ttname"><a href="group__Lockfile.html#ga48a13fddd51961cd7ce1188b90c0294f">b::lockfile::~lockfile</a></div><div class="ttdeci">~lockfile()</div><div class="ttdoc">b::lockfile destructor</div></div>
 <div class="ttc" id="agroup__Lockfile_html_ga4c631e0b3e56c90b1f7e3091c08d8cc4"><div class="ttname"><a href="group__Lockfile.html#ga4c631e0b3e56c90b1f7e3091c08d8cc4">b::scoped_lockfile_nothrow::scoped_lockfile_nothrow</a></div><div class="ttdeci">scoped_lockfile_nothrow(const b::fs::path &amp;filename, bool blocking=true, std::optional&lt; double &gt; timeout=std::nullopt)</div><div class="ttdoc">b::scoped_lockfile_nothrow constructor</div></div>
