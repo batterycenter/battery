@@ -31,7 +31,9 @@
 namespace b {
 
     lockfile::lockfile(const b::fs::path& filename) : filename(filename) {
-        b::fs::create_directories(filename.parent_path());
+        if (filename.has_parent_path()) {
+            b::fs::create_directories(filename.parent_path());
+        }
         // In Windows, we create the file as non-exclusive and then lock it separately using LockFile(),
         // because this is apparently more robust than just opening the file in exclusive write mode.
 #ifdef BATTERY_ARCH_WINDOWS
@@ -157,7 +159,9 @@ namespace b {
             try {
                 try_lock();
                 return;
-            } catch (...) {}
+            } catch (...) {
+                // No action
+            }
             b::sleep(poll_interval);
         }
         throw std::runtime_error(fmt::format("Failed to aquire lockfile '{}': Timeout expired", filename));
@@ -166,7 +170,7 @@ namespace b {
 
 
     scoped_lockfile::scoped_lockfile(const b::fs::path& filename, bool blocking, std::optional<double> timeout)
-            : lockfile(filename), blocking(blocking) {
+            : blocking(blocking), lockfile(filename) {
         lockfile.timeout = timeout;
         if (blocking) {
             lockfile.lock();
@@ -177,7 +181,7 @@ namespace b {
     }
 
     scoped_lockfile_nothrow::scoped_lockfile_nothrow(const b::fs::path& filename, bool blocking, std::optional<double> timeout)
-            : lockfile(filename), blocking(blocking) {
+            : blocking(blocking), lockfile(filename) {
         lockfile.timeout = timeout;
         if (blocking) {
             lockfile.lock(true);

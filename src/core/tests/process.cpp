@@ -89,6 +89,6 @@ TEST(BatteryCore_Process, ProcessRedirectStdin) {
 }
 
 TEST(BatteryCore_Process, ProcessExecuteDirect) {
-    auto proc = b::execute("echo unit test works");
-    EXPECT_EQ(proc.output_combined, "unit test works");
+    auto proc = b::execute("echo unit test works && exit 187");
+    EXPECT_EQ(proc.exit_code, 187);
 }

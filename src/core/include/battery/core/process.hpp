@@ -5,6 +5,8 @@
 
 #include "reproc++/reproc.hpp"
 
+// TODO b::execute should have a way to directly retrieve the output of the process -> Overload 'capture_output' parameter
+
 namespace b {
 
     class process {

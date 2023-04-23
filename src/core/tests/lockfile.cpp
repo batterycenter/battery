@@ -6,6 +6,19 @@
 #include "battery/core/lockfile.hpp"
 #include <gtest/gtest.h>
 
+TEST(BatteryCore_Lockfile, basic_lockfile) {
+    auto path = "unit_test.lock";
+    if (b::fs::exists(path)) {
+        b::fs::remove(path);
+    }
+
+    {
+        b::scoped_lockfile lock1(path);
+    }
+
+    b::fs::remove(path);
+}
+
 TEST(BatteryCore_Lockfile, lockfile) {
     auto parent = b::folders::get_cache() + "unit_test_folder";
     auto path = parent + "unit_test.lock";
@@ -30,7 +43,7 @@ TEST(BatteryCore_Lockfile, lockfile) {
         EXPECT_TRUE(lock1.is_locked());
         EXPECT_TRUE(lock1);
 
-        lock1.timeout = 1.0;
+        lock1.timeout = 0.5;
         EXPECT_ANY_THROW(lock1.lock());
         EXPECT_FALSE(lock1.lock(true));
         lock1.timeout = {};
@@ -67,12 +80,12 @@ TEST(BatteryCore_Lockfile, ScopedLockfile) {
 
     EXPECT_ANY_THROW({
         b::scoped_lockfile lock3(path);
-        b::scoped_lockfile lock4(path);        // Now it should throw
+        b::scoped_lockfile lock4(path, false);         // Now it should throw (nonblocking mode)
     });
 
     EXPECT_ANY_THROW({
          b::scoped_lockfile lock5(path);
-         b::scoped_lockfile lock6(path);        // Now it should throw
+         b::scoped_lockfile lock6(path, false);        // Now it should throw (nonblocking mode)
     });
 
     EXPECT_NO_THROW({ b::scoped_lockfile lock7(path); });
@@ -99,14 +112,14 @@ TEST(BatteryCore_Lockfile, ScopedNoThrowLockfile) {
 
     {
          b::scoped_lockfile_nothrow lock3(path);
-         b::scoped_lockfile_nothrow lock4(path);
+         b::scoped_lockfile_nothrow lock4(path, false);     // (nonblocking mode)
          EXPECT_TRUE(static_cast<bool>(lock3));
          EXPECT_FALSE(static_cast<bool>(lock4));
     }
 
     {
          b::scoped_lockfile_nothrow lock5(path);
-         b::scoped_lockfile_nothrow lock6(path);
+         b::scoped_lockfile_nothrow lock6(path, false);     // (nonblocking mode)
          EXPECT_TRUE(static_cast<bool>(lock5));
          EXPECT_FALSE(static_cast<bool>(lock6));
     }
