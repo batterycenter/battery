@@ -10,7 +10,7 @@ int b::main([[maybe_unused]] const std::vector<std::string>& args) {
 
     b::log::debug("Trying to lock 'lockfile.lock'");
     try {
-        b::scoped_lockfile lock("lockfile.lock", false);
+        b::scoped_lockfile lock("lockfile.lock", b::lockfile_mode::non_blocking);
 
         b::log::debug("Locked 'lockfile.lock' successfully. We have exclusive access now!");
         for (int i = 0; i < 10; i++) {

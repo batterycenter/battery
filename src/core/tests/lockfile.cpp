@@ -13,7 +13,7 @@ TEST(BatteryCore_Lockfile, basic_lockfile) {
     }
 
     {
-        b::scoped_lockfile lock1(path, false);
+        b::scoped_lockfile lock1(path, b::lockfile_mode::non_blocking);
     }
 
     b::fs::remove(path);
@@ -82,12 +82,12 @@ TEST(BatteryCore_Lockfile, ScopedLockfile) {
 
     EXPECT_ANY_THROW({
         b::scoped_lockfile lock3(path);
-        b::scoped_lockfile lock4(path, false);         // Now it should throw (nonblocking mode)
+        b::scoped_lockfile lock4(path, b::lockfile_mode::non_blocking);         // Now it should throw (nonblocking mode)
     });
 
     EXPECT_ANY_THROW({
          b::scoped_lockfile lock5(path);
-         b::scoped_lockfile lock6(path, false);        // Now it should throw (nonblocking mode)
+         b::scoped_lockfile lock6(path, b::lockfile_mode::non_blocking);        // Now it should throw (nonblocking mode)
     });
 
     EXPECT_NO_THROW({ b::scoped_lockfile lock7(path); });
@@ -115,14 +115,14 @@ TEST(BatteryCore_Lockfile, ScopedNoThrowLockfile) {
 
     {
          b::scoped_lockfile_nothrow lock3(path);
-         b::scoped_lockfile_nothrow lock4(path, false);     // (nonblocking mode)
+         b::scoped_lockfile_nothrow lock4(path, b::lockfile_mode::non_blocking);     // (nonblocking mode)
          EXPECT_TRUE(static_cast<bool>(lock3));
          EXPECT_FALSE(static_cast<bool>(lock4));
     }
 
     {
          b::scoped_lockfile_nothrow lock5(path);
-         b::scoped_lockfile_nothrow lock6(path, false);     // (nonblocking mode)
+         b::scoped_lockfile_nothrow lock6(path, b::lockfile_mode::non_blocking);     // (nonblocking mode)
          EXPECT_TRUE(static_cast<bool>(lock5));
          EXPECT_FALSE(static_cast<bool>(lock6));
     }
