@@ -80,7 +80,6 @@ namespace b {
                 return false;
             }
         }
-        locked = true;
         return true;
     }
 
@@ -95,7 +94,6 @@ namespace b {
                 return false;
             }
         }
-        locked = true;
         return true;
     }
 
@@ -107,7 +105,7 @@ namespace b {
         OVERLAPPED overlapped = {0};
         UnlockFileEx(fileHandle, 0, 0xFFFFFFFF, 0xFFFFFFFF, &overlapped);
 #else
-        flock((size_t)this->fileHandle, LOCK_UN);
+        flock(static_cast<int>((size_t)this->fileHandle), LOCK_UN);
 #endif
         locked = false;
     }
@@ -140,10 +138,11 @@ namespace b {
         fl.l_len = 0;
 
         // Attempt to acquire the lock using F_SETLKW
-        int ret = fcntl((size_t)this->fileHandle, blocking ? F_SETLKW : F_SETLK, &fl);
+        int ret = fcntl(static_cast<int>((size_t)this->fileHandle), blocking ? F_SETLKW : F_SETLK, &fl);
         if (ret == -1) {
             throw std::runtime_error(fmt::format("Failed to aquire lockfile '{}': Lock already in use", filename));
         }
+        this->locked = true;
 #endif
     }
 
