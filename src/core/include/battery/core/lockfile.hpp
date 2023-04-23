@@ -100,8 +100,7 @@ namespace b {
         operator bool() const;
 
     private:
-        void lock_blocking();
-        void lock_immediate();
+        void lock_impl(bool blocking);
         void lock_polling();
 
         const b::fs::path filename;

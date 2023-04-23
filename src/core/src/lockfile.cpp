@@ -21,6 +21,8 @@
 #include "battery/core/messages.hpp"
 #include "battery/core/environment.hpp"
 
+#include "battery/core/log.hpp"
+
 #ifdef BATTERY_ARCH_WINDOWS
 #include <Windows.h>
 #else
@@ -49,23 +51,31 @@ namespace b {
             throw std::runtime_error(fmt::format("Failed to create lockfile '{}': Failed to open file for writing: {}", filename, b::get_last_win32_error()));
         }
 #else
+        this->fileHandle = reinterpret_cast<void *>(open(filename.c_str(), O_CREAT | O_RDWR, 0666));
+        if (reinterpret_cast<int64_t>(this->fileHandle) <= -1) {
+            throw std::runtime_error(fmt::format("Failed to create lockfile '{}': Failed to open file for writing: {}", filename, strerror(errno)));
+        }
 #endif
     }
 
     lockfile::~lockfile() {
         unlock();
+#ifdef BATTERY_ARCH_WINDOWS
         CloseHandle(this->fileHandle);
+#else
+        close((size_t)this->fileHandle);
+#endif
     }
 
     bool lockfile::lock(bool return_instead_of_throw) {
         if (!return_instead_of_throw) {
             if (timeout.has_value()) lock_polling();
-            else lock_blocking();
+            else lock_impl(true);
         }
         else {
             try {
                 if (timeout.has_value()) lock_polling();
-                else lock_blocking();
+                else lock_impl(true);
             } catch (...) {
                 return false;
             }
@@ -76,11 +86,11 @@ namespace b {
 
     bool lockfile::try_lock(bool return_instead_of_throw) {
         if (!return_instead_of_throw) {
-            lock_immediate();
+            lock_impl(false);
         }
         else {
             try {
-                lock_immediate();
+                lock_impl(false);
             } catch (...) {
                 return false;
             }
@@ -90,13 +100,14 @@ namespace b {
     }
 
     void lockfile::unlock() {
+        if (!this->locked) {
+            throw std::runtime_error(fmt::format("Failed to unlock lockfile '{}': File is not locked", filename));
+        }
 #ifdef BATTERY_ARCH_WINDOWS
         OVERLAPPED overlapped = {0};
         UnlockFileEx(fileHandle, 0, 0xFFFFFFFF, 0xFFFFFFFF, &overlapped);
 #else
-        flock((size_t)fileDescriptor, LOCK_UN);
-		close((size_t)fileDescriptor);
-        #error "Not implemented"
+        flock((size_t)this->fileHandle, LOCK_UN);
 #endif
         locked = false;
     }
@@ -109,47 +120,30 @@ namespace b {
         return is_locked();
     }
 
-    void lockfile::lock_blocking() {
+    void lockfile::lock_impl(bool blocking) {
+        if (this->locked) {
+            throw std::runtime_error(fmt::format("Failed to aquire lockfile '{}': Lock already in use", filename));
+        }
 #ifdef BATTERY_ARCH_WINDOWS
         OVERLAPPED overlapped = { 0 };
         overlapped.Offset = 0;
         overlapped.OffsetHigh = 0;
-        DWORD flags = LOCKFILE_EXCLUSIVE_LOCK;
+        DWORD flags = blocking ? (LOCKFILE_EXCLUSIVE_LOCK | LOCKFILE_FAIL_IMMEDIATELY) : LOCKFILE_EXCLUSIVE_LOCK;
         if (!LockFileEx(this->fileHandle, flags, 0, 0xFFFFFFFF, 0xFFFFFFFF, &overlapped)) {
             throw std::runtime_error(fmt::format("Failed to aquire lockfile '{}': Lock already in use", filename));
         }
 #else
-        fileDescriptor = open(file.c_str(), O_CREAT | O_RDWR, 0666);
-        if (fileDescriptor <= 0) {
-            throw std::runtime_error(fmt::format("Failed to aquire lockfile '{}': No such file or directory", filename));
-        }
-        if (flock(fileDescriptor, LOCK_EX) != 0) {
-            flock((size_t)fileDescriptor, LOCK_UN);
-            close((size_t)fileDescriptor);
-            throw std::runtime_error(fmt::format("Failed to aquire lockfile '{}': Lock already in use", filename));
-        }
-#endif
-    }
+        struct flock fl = {};
+        fl.l_type = F_WRLCK;    // Write lock
+        fl.l_whence = SEEK_SET; // Start at beginning of file
+        fl.l_start = 0;         // Lock entire file
+        fl.l_len = 0;
 
-    void lockfile::lock_immediate() {
-#ifdef BATTERY_ARCH_WINDOWS
-        OVERLAPPED overlapped = { 0 };
-        overlapped.Offset = 0;
-        overlapped.OffsetHigh = 0;
-        DWORD flags = LOCKFILE_EXCLUSIVE_LOCK | LOCKFILE_FAIL_IMMEDIATELY;
-        if (!LockFileEx(this->fileHandle, flags, 0, 0xFFFFFFFF, 0xFFFFFFFF, &overlapped)) {
+        // Attempt to acquire the lock using F_SETLKW
+        int ret = fcntl((size_t)this->fileHandle, blocking ? F_SETLKW : F_SETLK, &fl);
+        if (ret == -1) {
             throw std::runtime_error(fmt::format("Failed to aquire lockfile '{}': Lock already in use", filename));
         }
-#else
-        fileDescriptor = open(file.c_str(), O_CREAT | O_RDWR, 0666);
-		if (fileDescriptor <= 0) {
-            throw std::runtime_error(fmt::format("Failed to aquire lockfile '{}': No such file or directory", filename));
-		}
-		if (flock(fileDescriptor, LOCK_EX | LOCK_NB) != 0) {
-            flock((size_t)fileDescriptor, LOCK_UN);
-            close((size_t)fileDescriptor);
-            throw std::runtime_error(fmt::format("Failed to aquire lockfile '{}': Lockfile unavailable", filename));
-		}
 #endif
     }
 
@@ -157,8 +151,9 @@ namespace b {
         auto start = b::time();
         while (b::time() < start + timeout.value()) {
             try {
-                try_lock();
-                return;
+                if (try_lock()) {
+                    return;
+                }
             } catch (...) {
                 // No action
             }
