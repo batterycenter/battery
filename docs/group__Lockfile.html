@@ -104,6 +104,7 @@ $(document).ready(function(){initNavTree('group__Lockfile.html',''); initResizab
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
@@ -123,13 +124,21 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">RAII convenience wrapper for <code><a class="el" href="classb_1_1lockfile.html" title="A lockfile class that can be used to synchronize processes by the use of atomic filesystem operations...">b::lockfile</a></code>  <a href="classb_1_1scoped__lockfile.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classb_1_1scoped__lockfile__nothrow.html">b::scoped_lockfile_nothrow</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">RAII convenience wrapper for <code><a class="el" href="classb_1_1lockfile.html" title="A lockfile class that can be used to synchronize processes by the use of atomic filesystem operations...">b::lockfile</a></code> that does not throw.  <a href="classb_1_1scoped__lockfile__nothrow.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><code><a class="el" href="classb_1_1scoped__lockfile.html" title="RAII convenience wrapper for b::lockfile">b::scoped_lockfile</a></code>, but it returns false instead of throwing  <a href="classb_1_1scoped__lockfile__nothrow.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:gac8c29eb933f46e4cafcefa7cc9c22367"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Lockfile.html#gac8c29eb933f46e4cafcefa7cc9c22367">b::lockfile_mode</a> { <a class="el" href="group__Lockfile.html#ggac8c29eb933f46e4cafcefa7cc9c22367a14343966a1d7dce7526e57cf2206d19d">blocking</a>
+, <a class="el" href="group__Lockfile.html#ggac8c29eb933f46e4cafcefa7cc9c22367aacc1dd5e3a4019590a9bcc5639a49236">non_blocking</a>
+ }</td></tr>
+<tr class="memdesc:gac8c29eb933f46e4cafcefa7cc9c22367"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lockfile mode for <code><a class="el" href="classb_1_1scoped__lockfile.html" title="RAII convenience wrapper for b::lockfile">b::scoped_lockfile</a></code> and <code><a class="el" href="classb_1_1scoped__lockfile__nothrow.html" title="b::scoped_lockfile, but it returns false instead of throwing">b::scoped_lockfile_nothrow</a></code>  <a href="group__Lockfile.html#gac8c29eb933f46e4cafcefa7cc9c22367">More...</a><br /></td></tr>
+<tr class="separator:gac8c29eb933f46e4cafcefa7cc9c22367"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ga238f952b89fde5c57c7cc40c26ea50f9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Lockfile.html#ga238f952b89fde5c57c7cc40c26ea50f9">b::lockfile::lockfile</a> (const <a class="el" href="classb_1_1fs_1_1path.html">b::fs::path</a> &amp;filename)</td></tr>
-<tr class="memdesc:ga238f952b89fde5c57c7cc40c26ea50f9"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1lockfile.html" title="A lockfile class that can be used to synchronize processes by the use of atomic filesystem operations...">b::lockfile</a> constructor  <a href="group__Lockfile.html#ga238f952b89fde5c57c7cc40c26ea50f9">More...</a><br /></td></tr>
+<tr class="memdesc:ga238f952b89fde5c57c7cc40c26ea50f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="group__Lockfile.html#ga238f952b89fde5c57c7cc40c26ea50f9">More...</a><br /></td></tr>
 <tr class="separator:ga238f952b89fde5c57c7cc40c26ea50f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga48a13fddd51961cd7ce1188b90c0294f"><td class="memItemLeft" align="right" valign="top"><a id="ga48a13fddd51961cd7ce1188b90c0294f"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Lockfile.html#ga48a13fddd51961cd7ce1188b90c0294f">b::lockfile::~lockfile</a> ()</td></tr>
@@ -151,12 +160,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="grou
 <tr class="memitem:ga5e8eb65b9e8b4d43caf3483e4829bb62"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Lockfile.html#ga5e8eb65b9e8b4d43caf3483e4829bb62">b::lockfile::operator bool</a> () const</td></tr>
 <tr class="memdesc:ga5e8eb65b9e8b4d43caf3483e4829bb62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the lockfile is locked.  <a href="group__Lockfile.html#ga5e8eb65b9e8b4d43caf3483e4829bb62">More...</a><br /></td></tr>
 <tr class="separator:ga5e8eb65b9e8b4d43caf3483e4829bb62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gabfe5089d91a9c598daf6f7e5033d6cce"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Lockfile.html#gabfe5089d91a9c598daf6f7e5033d6cce">b::scoped_lockfile::scoped_lockfile</a> (const <a class="el" href="classb_1_1fs_1_1path.html">b::fs::path</a> &amp;filename, bool blocking=true, std::optional&lt; double &gt; timeout=std::nullopt)</td></tr>
-<tr class="memdesc:gabfe5089d91a9c598daf6f7e5033d6cce"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1scoped__lockfile.html" title="RAII convenience wrapper for b::lockfile">b::scoped_lockfile</a> constructor  <a href="group__Lockfile.html#gabfe5089d91a9c598daf6f7e5033d6cce">More...</a><br /></td></tr>
-<tr class="separator:gabfe5089d91a9c598daf6f7e5033d6cce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga4c631e0b3e56c90b1f7e3091c08d8cc4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Lockfile.html#ga4c631e0b3e56c90b1f7e3091c08d8cc4">b::scoped_lockfile_nothrow::scoped_lockfile_nothrow</a> (const <a class="el" href="classb_1_1fs_1_1path.html">b::fs::path</a> &amp;filename, bool blocking=true, std::optional&lt; double &gt; timeout=std::nullopt)</td></tr>
-<tr class="memdesc:ga4c631e0b3e56c90b1f7e3091c08d8cc4"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1scoped__lockfile__nothrow.html" title="RAII convenience wrapper for b::lockfile that does not throw.">b::scoped_lockfile_nothrow</a> constructor  <a href="group__Lockfile.html#ga4c631e0b3e56c90b1f7e3091c08d8cc4">More...</a><br /></td></tr>
-<tr class="separator:ga4c631e0b3e56c90b1f7e3091c08d8cc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacb93bd48431953b20e06d8afc670e2a2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Lockfile.html#gacb93bd48431953b20e06d8afc670e2a2">b::scoped_lockfile::scoped_lockfile</a> (const <a class="el" href="classb_1_1fs_1_1path.html">b::fs::path</a> &amp;filename, <a class="el" href="group__Lockfile.html#gac8c29eb933f46e4cafcefa7cc9c22367">lockfile_mode</a> mode=<a class="el" href="group__Lockfile.html#ggac8c29eb933f46e4cafcefa7cc9c22367a14343966a1d7dce7526e57cf2206d19d">lockfile_mode::blocking</a>, std::optional&lt; double &gt; timeout=std::nullopt)</td></tr>
+<tr class="memdesc:gacb93bd48431953b20e06d8afc670e2a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="group__Lockfile.html#gacb93bd48431953b20e06d8afc670e2a2">More...</a><br /></td></tr>
+<tr class="separator:gacb93bd48431953b20e06d8afc670e2a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0fcd83f04700b94a71a8dec4231bc642"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Lockfile.html#ga0fcd83f04700b94a71a8dec4231bc642">b::scoped_lockfile_nothrow::scoped_lockfile_nothrow</a> (const <a class="el" href="classb_1_1fs_1_1path.html">b::fs::path</a> &amp;filename, <a class="el" href="group__Lockfile.html#gac8c29eb933f46e4cafcefa7cc9c22367">lockfile_mode</a> mode=<a class="el" href="group__Lockfile.html#ggac8c29eb933f46e4cafcefa7cc9c22367a14343966a1d7dce7526e57cf2206d19d">lockfile_mode::blocking</a>, std::optional&lt; double &gt; timeout=std::nullopt)</td></tr>
+<tr class="memdesc:ga0fcd83f04700b94a71a8dec4231bc642"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="group__Lockfile.html#ga0fcd83f04700b94a71a8dec4231bc642">More...</a><br /></td></tr>
+<tr class="separator:ga0fcd83f04700b94a71a8dec4231bc642"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga3f0c0176a3a77cd814a1b4606656e4bb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Lockfile.html#ga3f0c0176a3a77cd814a1b4606656e4bb">b::scoped_lockfile_nothrow::operator bool</a> ()</td></tr>
 <tr class="memdesc:ga3f0c0176a3a77cd814a1b4606656e4bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the lock has been acquired successfully.  <a href="group__Lockfile.html#ga3f0c0176a3a77cd814a1b4606656e4bb">More...</a><br /></td></tr>
 <tr class="separator:ga3f0c0176a3a77cd814a1b4606656e4bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -174,6 +183,82 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gr
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Lockfile utilities. </p>
+<p>Lockfiles are a way to synchronize processes by the use of atomic filesystem operations. The most common use case is to create a lockfile and prevent other processes from doing file system operations in a given directory. Because battery's lockfiles are based on operating system locks, rather than primitive file operations like create and delete, they are never undefined even if the process crashes.</p>
+<p>A crashing process also unlocks the lockfile, which prevents infinite blocking.</p>
+<p>As a result, these lockfiles only work on a local filesystem, they cannot be used on network drives. In this case, a soft-lockfile must be used, which does the locking by creating and deleting a file, instead of locking it on the OS level. The disadvantage is that the file still exists after a crash, resulting in possible infinite blocking.</p>
+<p>If you are in need of such a soft-lockfile, please file a feature request on GitHub.</p>
+<p>Example for a blocking lockfile: </p><div class="fragment"><div class="line"><span class="keywordtype">void</span> critical() {</div>
+<div class="line">    <a class="code" href="classb_1_1scoped__lockfile.html">b::scoped_lockfile</a> lockfile(b::folders::get_cache() + <span class="stringliteral">&quot;file.lock&quot;</span>);</div>
+<div class="line">    b::print(<span class="stringliteral">&quot;File is locked, performing critical operations...\n&quot;</span>);</div>
+<div class="line">}</div>
+<div class="ttc" id="aclassb_1_1scoped__lockfile_html"><div class="ttname"><a href="classb_1_1scoped__lockfile.html">b::scoped_lockfile</a></div><div class="ttdoc">RAII convenience wrapper for b::lockfile</div><div class="ttdef"><b>Definition:</b> lockfile.hpp:202</div></div>
+</div><!-- fragment --><p> If the example above is run from multiple processes at a time, only one will get the lock and the others wait until the lock is released. One process after the other can do critical operations.</p>
+<p>Example for a non-blocking lockfile: </p><div class="fragment"><div class="line"><span class="keywordtype">void</span> critical() {</div>
+<div class="line">    <span class="keywordflow">try</span> {</div>
+<div class="line">        <a class="code" href="classb_1_1scoped__lockfile.html">b::scoped_lockfile</a> lockfile(b::folders::get_cache() + <span class="stringliteral">&quot;file.lock&quot;</span>, <a class="code" href="group__Lockfile.html#ggac8c29eb933f46e4cafcefa7cc9c22367aacc1dd5e3a4019590a9bcc5639a49236">b::lockfile_mode::non_blocking</a>);</div>
+<div class="line">        b::print(<span class="stringliteral">&quot;File is locked, performing critical operations...\n&quot;</span>);</div>
+<div class="line">    }</div>
+<div class="line">    <span class="keywordflow">catch</span> (...) {</div>
+<div class="line">        b::print(<span class="stringliteral">&quot;ERROR: Failed to acquire lock, it is already in use by another process\n&quot;</span>);</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+<div class="ttc" id="agroup__Lockfile_html_ggac8c29eb933f46e4cafcefa7cc9c22367aacc1dd5e3a4019590a9bcc5639a49236"><div class="ttname"><a href="group__Lockfile.html#ggac8c29eb933f46e4cafcefa7cc9c22367aacc1dd5e3a4019590a9bcc5639a49236">b::lockfile_mode::non_blocking</a></div><div class="ttdeci">@ non_blocking</div><div class="ttdoc">Non-blocking mode, will fail immediately if the lock is already occupied.</div></div>
+</div><!-- fragment --><p> One instance of the program will get the lock and the others will throw an exception.</p>
+<p>Example for a non-blocking lockfile that does not throw: </p><div class="fragment"><div class="line"><span class="keywordtype">void</span> critical() {</div>
+<div class="line">    <a class="code" href="classb_1_1scoped__lockfile__nothrow.html">b::scoped_lockfile_nothrow</a> lockfile(b::folders::get_cache() + <span class="stringliteral">&quot;file.lock&quot;</span>, <a class="code" href="group__Lockfile.html#ggac8c29eb933f46e4cafcefa7cc9c22367aacc1dd5e3a4019590a9bcc5639a49236">b::lockfile_mode::non_blocking</a>);</div>
+<div class="line">    <span class="keywordflow">if</span> (lockfile) {</div>
+<div class="line">        b::print(<span class="stringliteral">&quot;File is locked, performing critical operations...\n&quot;</span>);</div>
+<div class="line">    }</div>
+<div class="line">    <span class="keywordflow">else</span> {</div>
+<div class="line">        b::print(<span class="stringliteral">&quot;ERROR: Failed to acquire lock, it is already in use by another process\n&quot;</span>);</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+<div class="ttc" id="aclassb_1_1scoped__lockfile__nothrow_html"><div class="ttname"><a href="classb_1_1scoped__lockfile__nothrow.html">b::scoped_lockfile_nothrow</a></div><div class="ttdoc">b::scoped_lockfile, but it returns false instead of throwing</div><div class="ttdef"><b>Definition:</b> lockfile.hpp:227</div></div>
+</div><!-- fragment --><p>Example for a blocking lockfile with a timeout: </p><div class="fragment"><div class="line"><span class="keywordtype">void</span> critical() {</div>
+<div class="line">    <span class="keywordflow">try</span> {</div>
+<div class="line">        <a class="code" href="classb_1_1scoped__lockfile.html">b::scoped_lockfile</a> lockfile(b::folders::get_cache() + <span class="stringliteral">&quot;file.lock&quot;</span>, <a class="code" href="group__Lockfile.html#ggac8c29eb933f46e4cafcefa7cc9c22367a14343966a1d7dce7526e57cf2206d19d">b::lockfile_mode::blocking</a>, 5.0);</div>
+<div class="line">        b::print(<span class="stringliteral">&quot;File is locked, performing critical operations...\n&quot;</span>);</div>
+<div class="line">    }</div>
+<div class="line">    <span class="keywordflow">catch</span> (...) {</div>
+<div class="line">        b::print(<span class="stringliteral">&quot;ERROR: Failed to acquire lock, timeout expired\n&quot;</span>);</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+<div class="ttc" id="agroup__Lockfile_html_ggac8c29eb933f46e4cafcefa7cc9c22367a14343966a1d7dce7526e57cf2206d19d"><div class="ttname"><a href="group__Lockfile.html#ggac8c29eb933f46e4cafcefa7cc9c22367a14343966a1d7dce7526e57cf2206d19d">b::lockfile_mode::blocking</a></div><div class="ttdeci">@ blocking</div><div class="ttdoc">Blocking mode, will wait until the lock is released.</div></div>
+</div><!-- fragment --><p> This example will wait for up to 5 seconds for the lock to become available, after that it throws. </p>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="gac8c29eb933f46e4cafcefa7cc9c22367"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac8c29eb933f46e4cafcefa7cc9c22367">&#9670;&nbsp;</a></span>lockfile_mode</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="group__Lockfile.html#gac8c29eb933f46e4cafcefa7cc9c22367">b::lockfile_mode</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Lockfile mode for <code><a class="el" href="classb_1_1scoped__lockfile.html" title="RAII convenience wrapper for b::lockfile">b::scoped_lockfile</a></code> and <code><a class="el" href="classb_1_1scoped__lockfile__nothrow.html" title="b::scoped_lockfile, but it returns false instead of throwing">b::scoped_lockfile_nothrow</a></code> </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classb_1_1scoped__lockfile.html" title="RAII convenience wrapper for b::lockfile">b::scoped_lockfile</a> </dd>
+<dd>
+<a class="el" href="classb_1_1scoped__lockfile__nothrow.html" title="b::scoped_lockfile, but it returns false instead of throwing">b::scoped_lockfile_nothrow</a> </dd></dl>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ggac8c29eb933f46e4cafcefa7cc9c22367a14343966a1d7dce7526e57cf2206d19d"></a>blocking&#160;</td><td class="fielddoc"><p>Blocking mode, will wait until the lock is released. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggac8c29eb933f46e4cafcefa7cc9c22367aacc1dd5e3a4019590a9bcc5639a49236"></a>non_blocking&#160;</td><td class="fielddoc"><p>Non-blocking mode, will fail immediately if the lock is already occupied. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ga6a2ce98e0d031a1c028ca210246b0060"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga6a2ce98e0d031a1c028ca210246b0060">&#9670;&nbsp;</a></span>is_locked()</h2>
@@ -191,7 +276,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gr
 </div><div class="memdoc">
 
 <p>Check if the lockfile is locked. </p>
-<dl class="section return"><dt>Returns</dt><dd>True if the lockfile is locked, and false otherwise </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the lockfile is locked, false otherwise </dd></dl>
 
 </div>
 </div>
@@ -218,10 +303,10 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gr
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the lock was acquired, and false otherwise, given that <code>return_instead_of_throw</code> is true </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the lock was acquired, false otherwise, given that <code>return_instead_of_throw=true</code> </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::runtime_error</td><td>if the lockfile could not be acquired and <code>return_instead_of_throw</code> is false </td></tr>
+    <tr><td class="paramname">std::runtime_error</td><td>if the lockfile could not be acquired and <code>return_instead_of_throw=false</code> </td></tr>
   </table>
   </dd>
 </dl>
@@ -244,7 +329,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gr
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classb_1_1lockfile.html" title="A lockfile class that can be used to synchronize processes by the use of atomic filesystem operations...">b::lockfile</a> constructor </p>
+<p>Constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>The path at which the lockfile should be created </td></tr>
@@ -298,12 +383,12 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gr
 </div><div class="memdoc">
 
 <p>Check if the lockfile is locked. </p>
-<dl class="section return"><dt>Returns</dt><dd>True if the lockfile is locked, and false otherwise </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the lockfile is locked, false otherwise </dd></dl>
 
 </div>
 </div>
-<a id="gabfe5089d91a9c598daf6f7e5033d6cce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gabfe5089d91a9c598daf6f7e5033d6cce">&#9670;&nbsp;</a></span>scoped_lockfile()</h2>
+<a id="gacb93bd48431953b20e06d8afc670e2a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gacb93bd48431953b20e06d8afc670e2a2">&#9670;&nbsp;</a></span>scoped_lockfile()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -317,8 +402,8 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gr
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>blocking</em> = <code>true</code>, </td>
+          <td class="paramtype"><a class="el" href="group__Lockfile.html#gac8c29eb933f46e4cafcefa7cc9c22367">lockfile_mode</a>&#160;</td>
+          <td class="paramname"><em>mode</em> = <code><a class="el" href="group__Lockfile.html#ggac8c29eb933f46e4cafcefa7cc9c22367a14343966a1d7dce7526e57cf2206d19d">lockfile_mode::blocking</a></code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -334,20 +419,20 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gr
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classb_1_1scoped__lockfile.html" title="RAII convenience wrapper for b::lockfile">b::scoped_lockfile</a> constructor </p>
+<p>Constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>The path at which the lockfile should be created </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">blocking</td><td>If the lock should wait until it gets freed, or fail immediately [default: true] </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">timeout</td><td>If <code>blocking</code> is true, this is the maximum time in seconds to wait for the lock to be freed [default: no timeout] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">blocking</td><td>If the lock should wait until it gets available, or fail immediately [default: true] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">timeout</td><td>If <code>blocking</code> is true, this is the maximum time in seconds to wait for the lock to become available [default: no timeout] </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="ga4c631e0b3e56c90b1f7e3091c08d8cc4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga4c631e0b3e56c90b1f7e3091c08d8cc4">&#9670;&nbsp;</a></span>scoped_lockfile_nothrow()</h2>
+<a id="ga0fcd83f04700b94a71a8dec4231bc642"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0fcd83f04700b94a71a8dec4231bc642">&#9670;&nbsp;</a></span>scoped_lockfile_nothrow()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -361,8 +446,8 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gr
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>blocking</em> = <code>true</code>, </td>
+          <td class="paramtype"><a class="el" href="group__Lockfile.html#gac8c29eb933f46e4cafcefa7cc9c22367">lockfile_mode</a>&#160;</td>
+          <td class="paramname"><em>mode</em> = <code><a class="el" href="group__Lockfile.html#ggac8c29eb933f46e4cafcefa7cc9c22367a14343966a1d7dce7526e57cf2206d19d">lockfile_mode::blocking</a></code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -378,12 +463,12 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gr
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classb_1_1scoped__lockfile__nothrow.html" title="RAII convenience wrapper for b::lockfile that does not throw.">b::scoped_lockfile_nothrow</a> constructor </p>
+<p>Constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>The path at which the lockfile should be created </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">blocking</td><td>If the lock should wait until it gets freed, or fail immediately [default: true] </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">timeout</td><td>If <code>blocking</code> is true, this is the maximum time in seconds to wait for the lock to be freed [default: no timeout] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">blocking</td><td>If the lock should wait until it gets available, or fail immediately [default: true] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">timeout</td><td>If <code>blocking</code> is true, this is the maximum time in seconds to wait for the lock to be become available [default: no timeout] </td></tr>
   </table>
   </dd>
 </dl>
@@ -413,10 +498,10 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gr
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the lock was acquired, and false otherwise, given that <code>return_instead_of_throw</code> is true </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the lock was acquired, false otherwise, given that <code>return_instead_of_throw=true</code> </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::runtime_error</td><td>if the lockfile could not be acquired and <code>return_instead_of_throw</code> is false </td></tr>
+    <tr><td class="paramname">std::runtime_error</td><td>if the lockfile could not be acquired and <code>return_instead_of_throw=false</code> </td></tr>
   </table>
   </dd>
 </dl>
