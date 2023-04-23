@@ -170,24 +170,24 @@ namespace b {
 
 
     scoped_lockfile::scoped_lockfile(const b::fs::path& filename, bool blocking, std::optional<double> timeout)
-            : blocking(blocking), lockfile(filename) {
-        lockfile.timeout = timeout;
+            : blocking(blocking), _lockfile(filename) {
+        _lockfile.timeout = timeout;
         if (blocking) {
-            lockfile.lock();
+            _lockfile.lock();
         }
         else {
-            lockfile.try_lock();
+            _lockfile.try_lock();
         }
     }
 
     scoped_lockfile_nothrow::scoped_lockfile_nothrow(const b::fs::path& filename, bool blocking, std::optional<double> timeout)
-            : blocking(blocking), lockfile(filename) {
-        lockfile.timeout = timeout;
+            : blocking(blocking), _lockfile(filename) {
+        _lockfile.timeout = timeout;
         if (blocking) {
-            lockfile.lock(true);
+            _lockfile.lock(true);
         }
         else {
-            lockfile.try_lock(true);
+            _lockfile.try_lock(true);
         }
     }
 

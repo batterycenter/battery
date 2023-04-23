@@ -135,7 +135,7 @@ namespace b {
 
     private:
         bool blocking = false;
-        lockfile lockfile;
+        b::lockfile _lockfile;
     };
 
     ///
@@ -164,12 +164,12 @@ namespace b {
         /// \return `true` if the lock has been acquired successfully, `false` otherwise
         ///
         operator bool() {
-            return lockfile;
+            return _lockfile;
         }
 
     private:
         bool blocking = false;
-        lockfile lockfile;
+        b::lockfile _lockfile;
     };
 
 }
