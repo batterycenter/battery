@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['scoped_5flockfile_33',['scoped_lockfile',['../classb_1_1scoped__lockfile.html',1,'b::scoped_lockfile'],['../group__Lockfile.html#gacb93bd48431953b20e06d8afc670e2a2',1,'b::scoped_lockfile::scoped_lockfile()']]],
-  ['scoped_5flockfile_5fnothrow_34',['scoped_lockfile_nothrow',['../classb_1_1scoped__lockfile__nothrow.html',1,'b::scoped_lockfile_nothrow'],['../group__Lockfile.html#ga0fcd83f04700b94a71a8dec4231bc642',1,'b::scoped_lockfile_nothrow::scoped_lockfile_nothrow()']]],
-  ['separator_35',['separator',['../classb_1_1tray_1_1separator.html',1,'b::tray']]],
-  ['string_36',['String',['../group__String.html',1,'']]],
-  ['submenu_37',['submenu',['../classb_1_1tray_1_1submenu.html',1,'b::tray']]],
-  ['synced_5ftoggle_38',['synced_toggle',['../classb_1_1tray_1_1synced__toggle.html',1,'b::tray']]]
+  ['path_41',['path',['../classb_1_1fs_1_1path.html',1,'b::fs']]],
+  ['poll_5finterval_42',['poll_interval',['../group__Lockfile.html#gab1beab2c0b17a246da6241353cd292dd',1,'b::lockfile']]],
+  ['pop_5fctrl_5fc_5fhandler_43',['pop_ctrl_c_handler',['../group__signal.html#ga5c4bbd9de357b2ce6a27fba5af2a3306',1,'b']]],
+  ['process_44',['process',['../classb_1_1process.html',1,'b']]],
+  ['push_5fctrl_5fc_5fhandler_45',['push_ctrl_c_handler',['../group__signal.html#ga8cbe51d08e05a042a69bb97f794d01d6',1,'b']]]
 ];

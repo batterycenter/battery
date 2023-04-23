@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['ofstream_25',['ofstream',['../classb_1_1fs_1_1ofstream.html',1,'b::fs']]],
-  ['on_5fdisk_5fresource_26',['on_disk_resource',['../classb_1_1resource_1_1on__disk__resource.html',1,'b::resource']]],
-  ['operator_20bool_27',['operator bool',['../group__Lockfile.html#ga5e8eb65b9e8b4d43caf3483e4829bb62',1,'b::lockfile::operator bool()'],['../group__Lockfile.html#ga3f0c0176a3a77cd814a1b4606656e4bb',1,'b::scoped_lockfile_nothrow::operator bool()']]],
-  ['options_5ft_28',['options_t',['../structb_1_1process_1_1options__t.html',1,'b::process']]]
+  ['label_30',['label',['../classb_1_1tray_1_1label.html',1,'b::tray']]],
+  ['lock_31',['lock',['../group__Lockfile.html#ga57a99437c491cabe160f577f94ff3b2a',1,'b::lockfile']]],
+  ['lockfile_32',['lockfile',['../classb_1_1lockfile.html',1,'b::lockfile'],['../group__Lockfile.html#ga238f952b89fde5c57c7cc40c26ea50f9',1,'b::lockfile::lockfile()']]],
+  ['lockfile_33',['Lockfile',['../group__Lockfile.html',1,'']]],
+  ['lockfile_5fmode_34',['lockfile_mode',['../group__Lockfile.html#gac8c29eb933f46e4cafcefa7cc9c22367',1,'b']]]
 ];

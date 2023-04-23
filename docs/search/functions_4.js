@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['operator_20bool_85',['operator bool',['../group__Lockfile.html#ga5e8eb65b9e8b4d43caf3483e4829bb62',1,'b::lockfile::operator bool()'],['../group__Lockfile.html#ga3f0c0176a3a77cd814a1b4606656e4bb',1,'b::scoped_lockfile_nothrow::operator bool()']]]
+  ['from_5fosstring_120',['from_osstring',['../group__String.html#ga20793a985603bef8f8f2a772f427c1b0',1,'b']]],
+  ['from_5fu8string_121',['from_u8string',['../group__String.html#ga20b0197a9e4ed6b0bebb0a91d8826061',1,'b']]]
 ];

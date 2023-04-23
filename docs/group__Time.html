@@ -102,14 +102,226 @@ $(document).ready(function(){initNavTree('group__Time.html',''); initResizable()
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Time</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p>Everything related to timing.  
-</p>
+<a href="#details">More...</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ga878d81512dbbfd652b659c1304e5a120"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Time.html#ga878d81512dbbfd652b659c1304e5a120">b::time</a> ()</td></tr>
+<tr class="memdesc:ga878d81512dbbfd652b659c1304e5a120"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the time the program has been running in seconds (since battery was initialized).  <a href="group__Time.html#ga878d81512dbbfd652b659c1304e5a120">More...</a><br /></td></tr>
+<tr class="separator:ga878d81512dbbfd652b659c1304e5a120"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7c03e65c471e97621c9a616b7cb2278d"><td class="memItemLeft" align="right" valign="top">std::time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Time.html#ga7c03e65c471e97621c9a616b7cb2278d">b::epoch_time</a> ()</td></tr>
+<tr class="memdesc:ga7c03e65c471e97621c9a616b7cb2278d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the epoch time in whole seconds (UNIX time).  <a href="group__Time.html#ga7c03e65c471e97621c9a616b7cb2278d">More...</a><br /></td></tr>
+<tr class="separator:ga7c03e65c471e97621c9a616b7cb2278d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae1f8548eef8a61e8c814d3cfed032c30"><td class="memItemLeft" align="right" valign="top">std::time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Time.html#gae1f8548eef8a61e8c814d3cfed032c30">b::epoch_time_ms</a> ()</td></tr>
+<tr class="memdesc:gae1f8548eef8a61e8c814d3cfed032c30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the epoch time in milliseconds (UNIX time).  <a href="group__Time.html#gae1f8548eef8a61e8c814d3cfed032c30">More...</a><br /></td></tr>
+<tr class="separator:gae1f8548eef8a61e8c814d3cfed032c30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaacf6aad2037ef3fc79cfe92c04ec3c2f"><td class="memItemLeft" align="right" valign="top">std::time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Time.html#gaacf6aad2037ef3fc79cfe92c04ec3c2f">b::epoch_time_us</a> ()</td></tr>
+<tr class="memdesc:gaacf6aad2037ef3fc79cfe92c04ec3c2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the epoch time in microseconds (UNIX time).  <a href="group__Time.html#gaacf6aad2037ef3fc79cfe92c04ec3c2f">More...</a><br /></td></tr>
+<tr class="separator:gaacf6aad2037ef3fc79cfe92c04ec3c2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga680b05f8ca38128e0a273b5a89519492"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Time.html#ga680b05f8ca38128e0a273b5a89519492">b::sleep</a> (double seconds)</td></tr>
+<tr class="memdesc:ga680b05f8ca38128e0a273b5a89519492"><td class="mdescLeft">&#160;</td><td class="mdescRight">Put the current thread to sleep for said seconds (microsecond precision).  <a href="group__Time.html#ga680b05f8ca38128e0a273b5a89519492">More...</a><br /></td></tr>
+<tr class="separator:ga680b05f8ca38128e0a273b5a89519492"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab465e0a580781c5fc6caffe6cbac3716"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Time.html#gab465e0a580781c5fc6caffe6cbac3716">b::sleep_ms</a> (uint64_t milliseconds)</td></tr>
+<tr class="memdesc:gab465e0a580781c5fc6caffe6cbac3716"><td class="mdescLeft">&#160;</td><td class="mdescRight">Put the current thread to sleep for said milliseconds.  <a href="group__Time.html#gab465e0a580781c5fc6caffe6cbac3716">More...</a><br /></td></tr>
+<tr class="separator:gab465e0a580781c5fc6caffe6cbac3716"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga806357b3cea5aec94cfacfc64a9876c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Time.html#ga806357b3cea5aec94cfacfc64a9876c4">b::sleep_us</a> (uint64_t microseconds)</td></tr>
+<tr class="memdesc:ga806357b3cea5aec94cfacfc64a9876c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Put the current thread to sleep for said microseconds.  <a href="group__Time.html#ga806357b3cea5aec94cfacfc64a9876c4">More...</a><br /></td></tr>
+<tr class="separator:ga806357b3cea5aec94cfacfc64a9876c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Everything related to timing. </p>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ga7c03e65c471e97621c9a616b7cb2278d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7c03e65c471e97621c9a616b7cb2278d">&#9670;&nbsp;</a></span>epoch_time()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::time_t b::epoch_time </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the epoch time in whole seconds (UNIX time). </p>
+<p>Use this for any further date or calendar calculations. </p><dl class="section return"><dt>Returns</dt><dd>UNIX time or time since epoch in seconds </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Time.html#ga878d81512dbbfd652b659c1304e5a120" title="Get the time the program has been running in seconds (since battery was initialized).">b::time()</a> </dd>
+<dd>
+<a class="el" href="group__Time.html#gae1f8548eef8a61e8c814d3cfed032c30" title="Get the epoch time in milliseconds (UNIX time).">b::epoch_time_ms()</a> </dd>
+<dd>
+<a class="el" href="group__Time.html#gaacf6aad2037ef3fc79cfe92c04ec3c2f" title="Get the epoch time in microseconds (UNIX time).">b::epoch_time_us()</a> </dd></dl>
+
+</div>
+</div>
+<a id="gae1f8548eef8a61e8c814d3cfed032c30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae1f8548eef8a61e8c814d3cfed032c30">&#9670;&nbsp;</a></span>epoch_time_ms()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::time_t b::epoch_time_ms </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the epoch time in milliseconds (UNIX time). </p>
+<p>Use this for any precise time calculations. </p><dl class="section return"><dt>Returns</dt><dd>UNIX time or time since epoch in milliseconds </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Time.html#ga878d81512dbbfd652b659c1304e5a120" title="Get the time the program has been running in seconds (since battery was initialized).">b::time()</a> </dd>
+<dd>
+<a class="el" href="group__Time.html#ga7c03e65c471e97621c9a616b7cb2278d" title="Get the epoch time in whole seconds (UNIX time).">b::epoch_time()</a> </dd>
+<dd>
+<a class="el" href="group__Time.html#gaacf6aad2037ef3fc79cfe92c04ec3c2f" title="Get the epoch time in microseconds (UNIX time).">b::epoch_time_us()</a> </dd></dl>
+
+</div>
+</div>
+<a id="gaacf6aad2037ef3fc79cfe92c04ec3c2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaacf6aad2037ef3fc79cfe92c04ec3c2f">&#9670;&nbsp;</a></span>epoch_time_us()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::time_t b::epoch_time_us </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the epoch time in microseconds (UNIX time). </p>
+<p>Use this for any precise time calculations. </p><dl class="section return"><dt>Returns</dt><dd>UNIX time or time since epoch in microseconds </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Time.html#ga878d81512dbbfd652b659c1304e5a120" title="Get the time the program has been running in seconds (since battery was initialized).">b::time()</a> </dd>
+<dd>
+<a class="el" href="group__Time.html#ga7c03e65c471e97621c9a616b7cb2278d" title="Get the epoch time in whole seconds (UNIX time).">b::epoch_time()</a> </dd>
+<dd>
+<a class="el" href="group__Time.html#gae1f8548eef8a61e8c814d3cfed032c30" title="Get the epoch time in milliseconds (UNIX time).">b::epoch_time_ms()</a> </dd></dl>
+
+</div>
+</div>
+<a id="ga680b05f8ca38128e0a273b5a89519492"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga680b05f8ca38128e0a273b5a89519492">&#9670;&nbsp;</a></span>sleep()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void b::sleep </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>seconds</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Put the current thread to sleep for said seconds (microsecond precision). </p>
+<p>Contrary to a busy-wait loop, this function minimizes CPU usage. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">seconds</td><td>time to sleep </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Time.html#gab465e0a580781c5fc6caffe6cbac3716" title="Put the current thread to sleep for said milliseconds.">b::sleep_ms()</a> </dd>
+<dd>
+<a class="el" href="group__Time.html#ga806357b3cea5aec94cfacfc64a9876c4" title="Put the current thread to sleep for said microseconds.">b::sleep_us()</a> </dd></dl>
+
+</div>
+</div>
+<a id="gab465e0a580781c5fc6caffe6cbac3716"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab465e0a580781c5fc6caffe6cbac3716">&#9670;&nbsp;</a></span>sleep_ms()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void b::sleep_ms </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>milliseconds</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Put the current thread to sleep for said milliseconds. </p>
+<p>Contrary to a busy-wait loop, this function minimizes CPU usage. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">seconds</td><td>time to sleep </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Time.html#ga680b05f8ca38128e0a273b5a89519492" title="Put the current thread to sleep for said seconds (microsecond precision).">b::sleep()</a> </dd>
+<dd>
+<a class="el" href="group__Time.html#ga806357b3cea5aec94cfacfc64a9876c4" title="Put the current thread to sleep for said microseconds.">b::sleep_us()</a> </dd></dl>
+
+</div>
+</div>
+<a id="ga806357b3cea5aec94cfacfc64a9876c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga806357b3cea5aec94cfacfc64a9876c4">&#9670;&nbsp;</a></span>sleep_us()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void b::sleep_us </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>microseconds</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Put the current thread to sleep for said microseconds. </p>
+<p>Contrary to a busy-wait loop, this function minimizes CPU usage. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">seconds</td><td>time to sleep </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Time.html#ga680b05f8ca38128e0a273b5a89519492" title="Put the current thread to sleep for said seconds (microsecond precision).">b::sleep()</a> </dd>
+<dd>
+<a class="el" href="group__Time.html#gab465e0a580781c5fc6caffe6cbac3716" title="Put the current thread to sleep for said milliseconds.">b::sleep_ms()</a> </dd></dl>
+
+</div>
+</div>
+<a id="ga878d81512dbbfd652b659c1304e5a120"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga878d81512dbbfd652b659c1304e5a120">&#9670;&nbsp;</a></span>time()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double b::time </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the time the program has been running in seconds (since battery was initialized). </p>
+<p>Can be used for all sorts of high-level timing and measurements. Units is seconds, but the precision is dependent on the platform, going down in the microseconds range. </p><dl class="section return"><dt>Returns</dt><dd>How many seconds the program has been running </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Time.html#ga7c03e65c471e97621c9a616b7cb2278d" title="Get the epoch time in whole seconds (UNIX time).">b::epoch_time()</a> </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

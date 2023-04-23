@@ -1,5 +1,10 @@
 var searchData=
 [
-  ['folders_14',['folders',['../structb_1_1folders.html',1,'b']]],
-  ['formatter_3c_20b_3a_3afs_3a_3apath_20_3e_15',['formatter&lt; b::fs::path &gt;',['../structfmt_1_1formatter_3_01b_1_1fs_1_1path_01_4.html',1,'fmt']]]
+  ['enable_5fcatch_5fcommon_5fexceptions_13',['enable_catch_common_exceptions',['../group__Thread.html#ga211861a81c214671423b4c4327b1c4c2',1,'b::thread']]],
+  ['enable_5fmessage_5fbox_5fon_5fexception_14',['enable_message_box_on_exception',['../group__Thread.html#gae5427c2b3c0f620fc334d82bd47c4d86',1,'b::thread']]],
+  ['encode_5fbase64_15',['encode_base64',['../group__String.html#gade7c5a7f45c7e461f5599b17ce657a8a',1,'b']]],
+  ['entry_16',['entry',['../classb_1_1cachefile_1_1entry.html',1,'b::cachefile']]],
+  ['epoch_5ftime_17',['epoch_time',['../group__Time.html#ga7c03e65c471e97621c9a616b7cb2278d',1,'b']]],
+  ['epoch_5ftime_5fms_18',['epoch_time_ms',['../group__Time.html#gae1f8548eef8a61e8c814d3cfed032c30',1,'b']]],
+  ['epoch_5ftime_5fus_19',['epoch_time_us',['../group__Time.html#gaacf6aad2037ef3fc79cfe92c04ec3c2f',1,'b']]]
 ];

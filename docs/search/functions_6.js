@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['thread_88',['thread',['../classb_1_1thread.html#a04ed9b750513f665718b85facf4b0ec9',1,'b::thread']]],
-  ['try_5flock_89',['try_lock',['../group__Lockfile.html#gab3d5620da722529ff060c5a10a506780',1,'b::lockfile']]]
+  ['is_5flocked_123',['is_locked',['../group__Lockfile.html#ga6a2ce98e0d031a1c028ca210246b0060',1,'b::lockfile']]],
+  ['is_5fvalid_124',['is_valid',['../group__Uuid.html#ga7454f7247f3a4aadf8475bea98c6c691',1,'b::uuid']]]
 ];

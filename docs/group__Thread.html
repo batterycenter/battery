@@ -102,14 +102,233 @@ $(document).ready(function(){initNavTree('group__Thread.html',''); initResizable
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Thread</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p>Everything related to multithreading.  
-</p>
+<a href="#details">More...</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classb_1_1thread.html">b::thread</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A threading class just like good old <code>std::thread</code>, but better.  <a href="classb_1_1thread.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ga04ed9b750513f665718b85facf4b0ec9"><td class="memTemplParams" colspan="2">template&lt;class _Fn , class... _Args&gt; </td></tr>
+<tr class="memitem:ga04ed9b750513f665718b85facf4b0ec9"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__Thread.html#ga04ed9b750513f665718b85facf4b0ec9">b::thread::thread</a> (_Fn &amp;&amp;_Fx, _Args &amp;&amp;... _Ax)</td></tr>
+<tr class="memdesc:ga04ed9b750513f665718b85facf4b0ec9"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1thread.html" title="A threading class just like good old std::thread, but better.">b::thread</a> constructor  <a href="group__Thread.html#ga04ed9b750513f665718b85facf4b0ec9">More...</a><br /></td></tr>
+<tr class="separator:ga04ed9b750513f665718b85facf4b0ec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa45fae9821f099cd9189f3f44c9b9886"><td class="memTemplParams" colspan="2">template&lt;class... Args&gt; </td></tr>
+<tr class="memitem:gaa45fae9821f099cd9189f3f44c9b9886"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__Thread.html#gaa45fae9821f099cd9189f3f44c9b9886">b::thread::catch_common_exceptions</a> (Args &amp;&amp;... args)</td></tr>
+<tr class="memdesc:gaa45fae9821f099cd9189f3f44c9b9886"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run a function and catch all exceptions with nice error messages.  <a href="group__Thread.html#gaa45fae9821f099cd9189f3f44c9b9886">More...</a><br /></td></tr>
+<tr class="separator:gaa45fae9821f099cd9189f3f44c9b9886"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae5427c2b3c0f620fc334d82bd47c4d86"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Thread.html#gae5427c2b3c0f620fc334d82bd47c4d86">b::thread::enable_message_box_on_exception</a> (bool enable)</td></tr>
+<tr class="memdesc:gae5427c2b3c0f620fc334d82bd47c4d86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specify the behaviour for <code><a class="el" href="group__Thread.html#gaa45fae9821f099cd9189f3f44c9b9886" title="Run a function and catch all exceptions with nice error messages.">b::thread::catch_common_exceptions()</a></code>.  <a href="group__Thread.html#gae5427c2b3c0f620fc334d82bd47c4d86">More...</a><br /></td></tr>
+<tr class="separator:gae5427c2b3c0f620fc334d82bd47c4d86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga211861a81c214671423b4c4327b1c4c2"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Thread.html#ga211861a81c214671423b4c4327b1c4c2">b::thread::enable_catch_common_exceptions</a> (bool enable)</td></tr>
+<tr class="memdesc:ga211861a81c214671423b4c4327b1c4c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specify the behaviour for <code><a class="el" href="group__Thread.html#gaa45fae9821f099cd9189f3f44c9b9886" title="Run a function and catch all exceptions with nice error messages.">b::thread::catch_common_exceptions()</a></code>.  <a href="group__Thread.html#ga211861a81c214671423b4c4327b1c4c2">More...</a><br /></td></tr>
+<tr class="separator:ga211861a81c214671423b4c4327b1c4c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga15525de49c8e66a16d8210cb6ade756c"><td class="memTemplParams" colspan="2">template&lt;typename... T&gt; </td></tr>
+<tr class="memitem:ga15525de49c8e66a16d8210cb6ade756c"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__Thread.html#ga15525de49c8e66a16d8210cb6ade756c">b::async</a> (T &amp;&amp;... args)</td></tr>
+<tr class="memdesc:ga15525de49c8e66a16d8210cb6ade756c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run a function asynchronously in another thread. This is a wrapper around <code><a class="el" href="group__Thread.html#ga15525de49c8e66a16d8210cb6ade756c" title="Run a function asynchronously in another thread. This is a wrapper around std::async().">std::async()</a></code>.  <a href="group__Thread.html#ga15525de49c8e66a16d8210cb6ade756c">More...</a><br /></td></tr>
+<tr class="separator:ga15525de49c8e66a16d8210cb6ade756c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Everything related to multithreading. </p>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ga15525de49c8e66a16d8210cb6ade756c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga15525de49c8e66a16d8210cb6ade756c">&#9670;&nbsp;</a></span>async()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename... T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">auto b::async </td>
+          <td>(</td>
+          <td class="paramtype">T &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Run a function asynchronously in another thread. This is a wrapper around <code><a class="el" href="group__Thread.html#ga15525de49c8e66a16d8210cb6ade756c" title="Run a function asynchronously in another thread. This is a wrapper around std::async().">std::async()</a></code>. </p>
+<p>The advantage of this function over <a class="el" href="classb_1_1thread.html" title="A threading class just like good old std::thread, but better.">b::thread</a> is that it is more concise and not a class with a dedicated lifetime. Use this function if you only want to run a short function with a return value in another thread, returning a <code>std::future</code>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">args</td><td>anything that is callable (a function, lambda function or class member function including a 'this' pointer) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a <code>std::future</code> that can be used to await the return value of the function </dd></dl>
+
+</div>
+</div>
+<a id="gaa45fae9821f099cd9189f3f44c9b9886"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa45fae9821f099cd9189f3f44c9b9886">&#9670;&nbsp;</a></span>catch_common_exceptions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void b::thread::catch_common_exceptions </td>
+          <td>(</td>
+          <td class="paramtype">Args &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Run a function and catch all exceptions with nice error messages. </p>
+<p>Just specify a large lambda, containing everything to execute. When any exception is not handled and caught, an error is printed with an optional error message box. See <code><a class="el" href="group__Thread.html#gae5427c2b3c0f620fc334d82bd47c4d86" title="Specify the behaviour for b::thread::catch_common_exceptions().">b::thread::enable_message_box_on_exception()</a></code> and <code><a class="el" href="group__Thread.html#ga211861a81c214671423b4c4327b1c4c2" title="Specify the behaviour for b::thread::catch_common_exceptions().">b::thread::enable_catch_common_exceptions()</a></code> to set this behaviour. If the message box is disabled, only the error message is printed to the console, if catch_common_exceptions is disabled, no exception is caught at all. Even though the main thread is not a <code><a class="el" href="classb_1_1thread.html" title="A threading class just like good old std::thread, but better.">b::thread</a></code>, the main thread is also impacted by these settings. Although this function is used mainly internally, you could also use this function to create your own safe thread.</p>
+<p>Defaults: In Debug mode, both settings are enabled, in Release mode only the message box is disabled. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">func</td><td>The lambda function to execute safely </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Thread.html#gae5427c2b3c0f620fc334d82bd47c4d86" title="Specify the behaviour for b::thread::catch_common_exceptions().">b::thread::enable_message_box_on_exception()</a> </dd>
+<dd>
+<a class="el" href="group__Thread.html#ga211861a81c214671423b4c4327b1c4c2" title="Specify the behaviour for b::thread::catch_common_exceptions().">b::thread::enable_catch_common_exceptions()</a> </dd></dl>
+
+</div>
+</div>
+<a id="ga211861a81c214671423b4c4327b1c4c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga211861a81c214671423b4c4327b1c4c2">&#9670;&nbsp;</a></span>enable_catch_common_exceptions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void b::thread::enable_catch_common_exceptions </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Specify the behaviour for <code><a class="el" href="group__Thread.html#gaa45fae9821f099cd9189f3f44c9b9886" title="Run a function and catch all exceptions with nice error messages.">b::thread::catch_common_exceptions()</a></code>. </p>
+<p>Please check <code><a class="el" href="group__Thread.html#gaa45fae9821f099cd9189f3f44c9b9886" title="Run a function and catch all exceptions with nice error messages.">b::thread::catch_common_exceptions()</a></code> for an explanation. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>if exceptions should be caught at all </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Thread.html#gaa45fae9821f099cd9189f3f44c9b9886" title="Run a function and catch all exceptions with nice error messages.">b::thread::catch_common_exceptions()</a> </dd></dl>
+
+</div>
+</div>
+<a id="gae5427c2b3c0f620fc334d82bd47c4d86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae5427c2b3c0f620fc334d82bd47c4d86">&#9670;&nbsp;</a></span>enable_message_box_on_exception()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void b::thread::enable_message_box_on_exception </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Specify the behaviour for <code><a class="el" href="group__Thread.html#gaa45fae9821f099cd9189f3f44c9b9886" title="Run a function and catch all exceptions with nice error messages.">b::thread::catch_common_exceptions()</a></code>. </p>
+<p>Please check <code><a class="el" href="group__Thread.html#gaa45fae9821f099cd9189f3f44c9b9886" title="Run a function and catch all exceptions with nice error messages.">b::thread::catch_common_exceptions()</a></code> for an explanation. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>if a message box should appear when an exception is caught </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Thread.html#gaa45fae9821f099cd9189f3f44c9b9886" title="Run a function and catch all exceptions with nice error messages.">b::thread::catch_common_exceptions()</a> </dd></dl>
+
+</div>
+</div>
+<a id="ga04ed9b750513f665718b85facf4b0ec9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga04ed9b750513f665718b85facf4b0ec9">&#9670;&nbsp;</a></span>thread()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _Fn , class... _Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::thread::thread </td>
+          <td>(</td>
+          <td class="paramtype">_Fn &amp;&amp;&#160;</td>
+          <td class="paramname"><em>_Fx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">_Args &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>_Ax</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classb_1_1thread.html" title="A threading class just like good old std::thread, but better.">b::thread</a> constructor </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">function</td><td>The function to execute in the thread </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">args</td><td>Any number of parameters to pass to the function when calling it </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

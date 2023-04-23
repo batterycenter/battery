@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['non_5fblocking_24',['non_blocking',['../group__Lockfile.html#ggac8c29eb933f46e4cafcefa7cc9c22367aacc1dd5e3a4019590a9bcc5639a49236',1,'b']]]
+  ['join_29',['join',['../group__String.html#ga7e95ddc224e06adbcdc28b997c9184ce',1,'b']]]
 ];

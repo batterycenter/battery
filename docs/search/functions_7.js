@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['unlock_90',['unlock',['../group__Lockfile.html#ga624bd42ba47412230cf3fb0a6dca93c8',1,'b::lockfile']]]
+  ['join_125',['join',['../group__String.html#ga7e95ddc224e06adbcdc28b997c9184ce',1,'b']]]
 ];

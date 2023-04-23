@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['label_19',['label',['../classb_1_1tray_1_1label.html',1,'b::tray']]],
-  ['lock_20',['lock',['../group__Lockfile.html#ga57a99437c491cabe160f577f94ff3b2a',1,'b::lockfile']]],
-  ['lockfile_21',['lockfile',['../classb_1_1lockfile.html',1,'b::lockfile'],['../group__Lockfile.html#ga238f952b89fde5c57c7cc40c26ea50f9',1,'b::lockfile::lockfile()']]],
-  ['lockfile_22',['Lockfile',['../group__Lockfile.html',1,'']]],
-  ['lockfile_5fmode_23',['lockfile_mode',['../group__Lockfile.html#gac8c29eb933f46e4cafcefa7cc9c22367',1,'b']]]
+  ['ifstream_26',['ifstream',['../classb_1_1fs_1_1ifstream.html',1,'b::fs']]],
+  ['is_5flocked_27',['is_locked',['../group__Lockfile.html#ga6a2ce98e0d031a1c028ca210246b0060',1,'b::lockfile']]],
+  ['is_5fvalid_28',['is_valid',['../group__Uuid.html#ga7454f7247f3a4aadf8475bea98c6c691',1,'b::uuid']]]
 ];

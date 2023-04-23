@@ -102,14 +102,106 @@ $(document).ready(function(){initNavTree('group__signal.html',''); initResizable
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Ctrl-C handling</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p>Signal handling and program termination.  
-</p>
+<a href="#details">More...</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ga8cbe51d08e05a042a69bb97f794d01d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__signal.html#ga8cbe51d08e05a042a69bb97f794d01d6">b::push_ctrl_c_handler</a> (const std::function&lt; void()&gt; &amp;handler)</td></tr>
+<tr class="memdesc:ga8cbe51d08e05a042a69bb97f794d01d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a handler to be executed when the user presses Ctrl+C during execution.  <a href="group__signal.html#ga8cbe51d08e05a042a69bb97f794d01d6">More...</a><br /></td></tr>
+<tr class="separator:ga8cbe51d08e05a042a69bb97f794d01d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5c4bbd9de357b2ce6a27fba5af2a3306"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__signal.html#ga5c4bbd9de357b2ce6a27fba5af2a3306">b::pop_ctrl_c_handler</a> ()</td></tr>
+<tr class="memdesc:ga5c4bbd9de357b2ce6a27fba5af2a3306"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pop the latest Ctrl+C handler set by <a class="el" href="group__signal.html#ga8cbe51d08e05a042a69bb97f794d01d6" title="Set a handler to be executed when the user presses Ctrl+C during execution.">push_ctrl_c_handler()</a>  <a href="group__signal.html#ga5c4bbd9de357b2ce6a27fba5af2a3306">More...</a><br /></td></tr>
+<tr class="separator:ga5c4bbd9de357b2ce6a27fba5af2a3306"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8e6e17fecb8d1abeb629312499248adb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__signal.html#ga8e6e17fecb8d1abeb629312499248adb">b::generate_ctrl_c_event</a> ()</td></tr>
+<tr class="memdesc:ga8e6e17fecb8d1abeb629312499248adb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a Ctrl+C event for the application itself.  <a href="group__signal.html#ga8e6e17fecb8d1abeb629312499248adb">More...</a><br /></td></tr>
+<tr class="separator:ga8e6e17fecb8d1abeb629312499248adb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Signal handling and program termination. </p>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ga8e6e17fecb8d1abeb629312499248adb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8e6e17fecb8d1abeb629312499248adb">&#9670;&nbsp;</a></span>generate_ctrl_c_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void b::generate_ctrl_c_event </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Generate a Ctrl+C event for the application itself. </p>
+<dl class="section warning"><dt>Warning</dt><dd>This function is only for rough testing and does not have 100% the same behaviour on all platforms! Do not use it for anything serious! </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__signal.html#ga8cbe51d08e05a042a69bb97f794d01d6" title="Set a handler to be executed when the user presses Ctrl+C during execution.">push_ctrl_c_handler()</a> </dd>
+<dd>
+<a class="el" href="group__signal.html#ga5c4bbd9de357b2ce6a27fba5af2a3306" title="Pop the latest Ctrl+C handler set by push_ctrl_c_handler()">pop_ctrl_c_handler()</a> </dd></dl>
+
+</div>
+</div>
+<a id="ga5c4bbd9de357b2ce6a27fba5af2a3306"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga5c4bbd9de357b2ce6a27fba5af2a3306">&#9670;&nbsp;</a></span>pop_ctrl_c_handler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void b::pop_ctrl_c_handler </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Pop the latest Ctrl+C handler set by <a class="el" href="group__signal.html#ga8cbe51d08e05a042a69bb97f794d01d6" title="Set a handler to be executed when the user presses Ctrl+C during execution.">push_ctrl_c_handler()</a> </p>
+<p>Nothing happens when the function is called but no more handler is registered. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="group__signal.html#ga8cbe51d08e05a042a69bb97f794d01d6" title="Set a handler to be executed when the user presses Ctrl+C during execution.">push_ctrl_c_handler()</a> </dd>
+<dd>
+<a class="el" href="group__signal.html#ga8e6e17fecb8d1abeb629312499248adb" title="Generate a Ctrl+C event for the application itself.">generate_ctrl_c_event()</a> </dd></dl>
+
+</div>
+</div>
+<a id="ga8cbe51d08e05a042a69bb97f794d01d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8cbe51d08e05a042a69bb97f794d01d6">&#9670;&nbsp;</a></span>push_ctrl_c_handler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void b::push_ctrl_c_handler </td>
+          <td>(</td>
+          <td class="paramtype">const std::function&lt; void()&gt; &amp;&#160;</td>
+          <td class="paramname"><em>handler</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set a handler to be executed when the user presses Ctrl+C during execution. </p>
+<p>The callback function is pushed onto a stack and when a Ctrl+C event is received, the topmost function is called. This can be used to handle Ctrl+C events in various stages in your application. Multiple consecutive CTRL+C presses will call the handler once for each press, one after another. All callbacks are called one after another from one dedicated background thread. </p><dl class="section warning"><dt>Warning</dt><dd>The callbacks are called from a background thread. Be aware when accessing shared resources! </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">handler</td><td>Any callable to be called from another thread when the user presses Ctrl+C </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__signal.html#ga5c4bbd9de357b2ce6a27fba5af2a3306" title="Pop the latest Ctrl+C handler set by push_ctrl_c_handler()">pop_ctrl_c_handler()</a> </dd>
+<dd>
+generate_ctrl_c_handler() </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

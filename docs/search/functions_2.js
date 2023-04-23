@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['is_5flocked_82',['is_locked',['../group__Lockfile.html#ga6a2ce98e0d031a1c028ca210246b0060',1,'b::lockfile']]]
+  ['decode_5fbase64_113',['decode_base64',['../group__String.html#ga9b3508d763f1f1e50d76f741bef96570',1,'b']]]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['enable_5fcatch_5fcommon_5fexceptions_80',['enable_catch_common_exceptions',['../classb_1_1thread.html#a211861a81c214671423b4c4327b1c4c2',1,'b::thread']]],
-  ['enable_5fmessage_5fbox_5fon_5fexception_81',['enable_message_box_on_exception',['../classb_1_1thread.html#ae5427c2b3c0f620fc334d82bd47c4d86',1,'b::thread']]]
+  ['catch_5fcommon_5fexceptions_112',['catch_common_exceptions',['../group__Thread.html#gaa45fae9821f099cd9189f3f44c9b9886',1,'b::thread']]]
 ];
