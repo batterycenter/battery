@@ -15,7 +15,7 @@ battery_add_package("gh:jothepro/doxygen-awesome-css#v2.2.0")   # Modern Doxygen
 
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_LIST_DIR}/build/Doxyfile
-    COMMAND ${CMAKE_BINARY_DIR}/bin/b generate ${CMAKE_CURRENT_LIST_DIR}/Doxyfile_template ${CMAKE_CURRENT_LIST_DIR}/build/Doxyfile
+    COMMAND ${CMAKE_BINARY_DIR}/bin/$<IF:$<CONFIG:Debug>,debug,release>/battery_cli/b generate ${CMAKE_CURRENT_LIST_DIR}/Doxyfile_template ${CMAKE_CURRENT_LIST_DIR}/build/Doxyfile
     WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/..
     COMMENT "Generating Doxyfile"
     DEPENDS battery::cli ${CMAKE_CURRENT_LIST_DIR}/Doxyfile_template

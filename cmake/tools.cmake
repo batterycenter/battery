@@ -116,7 +116,7 @@ function(battery_add_executable TARGET)
     target_sources(${TARGET} PRIVATE ${HEADERS})
     source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include" PREFIX "Header Files" FILES ${HEADERS})
 
-    battery_set_exe_output_folder(${TARGET} ${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE}/${TARGET})
+    battery_set_exe_output_folder(${TARGET} ${CMAKE_BINARY_DIR}/bin/$<IF:$<CONFIG:Debug>,debug,release>/${TARGET})
     __apply_common_target_options(${TARGET})   # Apply things like C++ Standard, preprocessor defines, etc.
 endfunction()
 
