@@ -42,17 +42,16 @@ namespace b {
     /// \brief Pop the latest Ctrl+C handler set by push_ctrl_c_handler()
     /// \details Nothing happens when the function is called but no more handler is registered.
     /// \see push_ctrl_c_handler()
-    /// \see generate_ctrl_c_handler()
+    /// \see generate_ctrl_c_event()
     ///
     void pop_ctrl_c_handler();
 
     ///
     /// \brief Generate a Ctrl+C event for the application itself
-    /// \warning This function is only for rough testing and has intricate details that are not easily cross-platform! Do not use it for anything serious!
+    /// \warning This function is only for rough testing and does not have 100% the same behaviour on all platforms! Do not use it for anything serious!
     /// \see push_ctrl_c_handler()
     /// \see pop_ctrl_c_handler()
     ///
     void generate_ctrl_c_event();
 
 } // namespace b
-/// @}

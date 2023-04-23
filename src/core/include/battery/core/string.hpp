@@ -253,4 +253,3 @@ namespace b {
     std::string decode_base64(const std::string& str);
 
 } // namespace b
-/// @}

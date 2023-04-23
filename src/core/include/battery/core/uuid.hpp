@@ -43,4 +43,3 @@ namespace b::uuid {
     bool is_valid(const std::string& uuid);
 
 } // namespace b::uuid
-/// @}

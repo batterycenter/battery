@@ -139,4 +139,3 @@ namespace b {
     }
 
 } // namespace b
-/// @}
