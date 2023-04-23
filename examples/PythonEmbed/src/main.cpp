@@ -59,7 +59,7 @@ int b::main([[maybe_unused]] const std::vector<std::string>& args) {
         b::print("\n");
         std::vector<std::string> array = b::py::eval("['a', 'b', 'c']").cast<std::vector<std::string>>();
         b::log::debug("['a', 'b', 'c'] in python is in C++:");
-        for (int i = 0; i < array.size(); i++) {
+        for (size_t i = 0; i < array.size(); i++) {
             b::log::debug("  [{}] = {}", i, array[i]);
         }
 
