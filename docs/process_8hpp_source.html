@@ -130,7 +130,7 @@ $(document).ready(function(){initNavTree('process_8hpp_source.html',''); initRes
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <span class="keywordtype">bool</span> suppress_carriage_return = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            <span class="keywordtype">bool</span> strip_trailing_whitespace_after_join = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            std::optional&lt;bool&gt; forward_ctrl_c = std::nullopt;  <span class="comment">// Defaults to the value of passthrough_to_parent</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;            uint64_t wait_ms_before_every_stdin_write = 100;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;            <span class="keywordtype">double</span> wait_ms_before_every_stdin_write = 100.0;</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            std::function&lt;void(<span class="keyword">const</span> std::string&amp; str)&gt; stdout_callback;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            std::function&lt;void(<span class="keyword">const</span> std::string&amp; str)&gt; stderr_callback;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;            reproc::options reproc_options;</div>

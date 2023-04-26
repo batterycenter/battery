@@ -127,14 +127,14 @@ Functions</h2></td></tr>
 <tr class="memdesc:gaacf6aad2037ef3fc79cfe92c04ec3c2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the epoch time in microseconds (UNIX time).  <a href="group__Time.html#gaacf6aad2037ef3fc79cfe92c04ec3c2f">More...</a><br /></td></tr>
 <tr class="separator:gaacf6aad2037ef3fc79cfe92c04ec3c2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga680b05f8ca38128e0a273b5a89519492"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Time.html#ga680b05f8ca38128e0a273b5a89519492">b::sleep</a> (double seconds)</td></tr>
-<tr class="memdesc:ga680b05f8ca38128e0a273b5a89519492"><td class="mdescLeft">&#160;</td><td class="mdescRight">Put the current thread to sleep for said seconds (microsecond precision).  <a href="group__Time.html#ga680b05f8ca38128e0a273b5a89519492">More...</a><br /></td></tr>
+<tr class="memdesc:ga680b05f8ca38128e0a273b5a89519492"><td class="mdescLeft">&#160;</td><td class="mdescRight">Put the current thread to sleep for said seconds.  <a href="group__Time.html#ga680b05f8ca38128e0a273b5a89519492">More...</a><br /></td></tr>
 <tr class="separator:ga680b05f8ca38128e0a273b5a89519492"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gab465e0a580781c5fc6caffe6cbac3716"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Time.html#gab465e0a580781c5fc6caffe6cbac3716">b::sleep_ms</a> (uint64_t milliseconds)</td></tr>
-<tr class="memdesc:gab465e0a580781c5fc6caffe6cbac3716"><td class="mdescLeft">&#160;</td><td class="mdescRight">Put the current thread to sleep for said milliseconds.  <a href="group__Time.html#gab465e0a580781c5fc6caffe6cbac3716">More...</a><br /></td></tr>
-<tr class="separator:gab465e0a580781c5fc6caffe6cbac3716"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga806357b3cea5aec94cfacfc64a9876c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Time.html#ga806357b3cea5aec94cfacfc64a9876c4">b::sleep_us</a> (uint64_t microseconds)</td></tr>
-<tr class="memdesc:ga806357b3cea5aec94cfacfc64a9876c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Put the current thread to sleep for said microseconds.  <a href="group__Time.html#ga806357b3cea5aec94cfacfc64a9876c4">More...</a><br /></td></tr>
-<tr class="separator:ga806357b3cea5aec94cfacfc64a9876c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab47f0f4461f636f015b2353e20669523"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Time.html#gab47f0f4461f636f015b2353e20669523">b::sleep_precise</a> (double seconds)</td></tr>
+<tr class="memdesc:gab47f0f4461f636f015b2353e20669523"><td class="mdescLeft">&#160;</td><td class="mdescRight">Busy-wait for said seconds (highest possible accuracy).  <a href="group__Time.html#gab47f0f4461f636f015b2353e20669523">More...</a><br /></td></tr>
+<tr class="separator:gab47f0f4461f636f015b2353e20669523"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8772061768d9a949d15bd15bb3e8b02b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Time.html#ga8772061768d9a949d15bd15bb3e8b02b">b::sleep_ms</a> (double milliseconds)</td></tr>
+<tr class="memdesc:ga8772061768d9a949d15bd15bb3e8b02b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Put the current thread to sleep for said milliseconds.  <a href="group__Time.html#ga8772061768d9a949d15bd15bb3e8b02b">More...</a><br /></td></tr>
+<tr class="separator:ga8772061768d9a949d15bd15bb3e8b02b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Everything related to timing. </p>
@@ -230,21 +230,21 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Put the current thread to sleep for said seconds (microsecond precision). </p>
+<p>Put the current thread to sleep for said seconds. </p>
 <p>Contrary to a busy-wait loop, this function minimizes CPU usage. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">seconds</td><td>time to sleep </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Time.html#gab465e0a580781c5fc6caffe6cbac3716" title="Put the current thread to sleep for said milliseconds.">b::sleep_ms()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Time.html#ga8772061768d9a949d15bd15bb3e8b02b" title="Put the current thread to sleep for said milliseconds.">b::sleep_ms()</a> </dd>
 <dd>
-<a class="el" href="group__Time.html#ga806357b3cea5aec94cfacfc64a9876c4" title="Put the current thread to sleep for said microseconds.">b::sleep_us()</a> </dd></dl>
+<a class="el" href="group__Time.html#gab47f0f4461f636f015b2353e20669523" title="Busy-wait for said seconds (highest possible accuracy).">b::sleep_precise()</a> </dd></dl>
 
 </div>
 </div>
-<a id="gab465e0a580781c5fc6caffe6cbac3716"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gab465e0a580781c5fc6caffe6cbac3716">&#9670;&nbsp;</a></span>sleep_ms()</h2>
+<a id="ga8772061768d9a949d15bd15bb3e8b02b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8772061768d9a949d15bd15bb3e8b02b">&#9670;&nbsp;</a></span>sleep_ms()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -252,7 +252,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void b::sleep_ms </td>
           <td>(</td>
-          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>milliseconds</em></td><td>)</td>
           <td></td>
         </tr>
@@ -262,42 +262,43 @@ Functions</h2></td></tr>
 <p>Put the current thread to sleep for said milliseconds. </p>
 <p>Contrary to a busy-wait loop, this function minimizes CPU usage. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">seconds</td><td>time to sleep </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">milliseconds</td><td>time to sleep </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Time.html#ga680b05f8ca38128e0a273b5a89519492" title="Put the current thread to sleep for said seconds (microsecond precision).">b::sleep()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Time.html#ga680b05f8ca38128e0a273b5a89519492" title="Put the current thread to sleep for said seconds.">b::sleep()</a> </dd>
 <dd>
-<a class="el" href="group__Time.html#ga806357b3cea5aec94cfacfc64a9876c4" title="Put the current thread to sleep for said microseconds.">b::sleep_us()</a> </dd></dl>
+<a class="el" href="group__Time.html#gab47f0f4461f636f015b2353e20669523" title="Busy-wait for said seconds (highest possible accuracy).">b::sleep_precise()</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga806357b3cea5aec94cfacfc64a9876c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga806357b3cea5aec94cfacfc64a9876c4">&#9670;&nbsp;</a></span>sleep_us()</h2>
+<a id="gab47f0f4461f636f015b2353e20669523"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab47f0f4461f636f015b2353e20669523">&#9670;&nbsp;</a></span>sleep_precise()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void b::sleep_us </td>
+          <td class="memname">void b::sleep_precise </td>
           <td>(</td>
-          <td class="paramtype">uint64_t&#160;</td>
-          <td class="paramname"><em>microseconds</em></td><td>)</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>seconds</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Put the current thread to sleep for said microseconds. </p>
-<p>Contrary to a busy-wait loop, this function minimizes CPU usage. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Busy-wait for said seconds (highest possible accuracy). </p>
+<p>Use this function only if you need very precise timing. </p><dl class="section warning"><dt>Warning</dt><dd>This function does not suspend the thread. Instead it busy-waits and thus causes full CPU usage while doing nothing. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">seconds</td><td>time to sleep </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Time.html#ga680b05f8ca38128e0a273b5a89519492" title="Put the current thread to sleep for said seconds (microsecond precision).">b::sleep()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Time.html#ga680b05f8ca38128e0a273b5a89519492" title="Put the current thread to sleep for said seconds.">b::sleep()</a> </dd>
 <dd>
-<a class="el" href="group__Time.html#gab465e0a580781c5fc6caffe6cbac3716" title="Put the current thread to sleep for said milliseconds.">b::sleep_ms()</a> </dd></dl>
+<a class="el" href="group__Time.html#ga8772061768d9a949d15bd15bb3e8b02b" title="Put the current thread to sleep for said milliseconds.">b::sleep_ms()</a> </dd></dl>
 
 </div>
 </div>

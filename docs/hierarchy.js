@@ -1,5 +1,6 @@
 var hierarchy =
 [
+    [ "b::application", "classb_1_1application.html", null ],
     [ "b::async_worker< T >", "classb_1_1async__worker.html", null ],
     [ "b::async_worker< void >", "classb_1_1async__worker.html", null ],
     [ "b::tray::basetray", "classb_1_1tray_1_1basetray.html", [

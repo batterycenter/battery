@@ -20,6 +20,7 @@ var annotated_dup =
         [ "tray", "classb_1_1tray_1_1tray.html", "classb_1_1tray_1_1tray" ],
         [ "basetray", "classb_1_1tray_1_1basetray.html", "classb_1_1tray_1_1basetray" ]
       ] ],
+      [ "application", "classb_1_1application.html", "classb_1_1application" ],
       [ "async_worker", "classb_1_1async__worker.html", "classb_1_1async__worker" ],
       [ "cachefile", "classb_1_1cachefile.html", "classb_1_1cachefile" ],
       [ "constants", "structb_1_1constants.html", null ],

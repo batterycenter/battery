@@ -14,6 +14,6 @@ var structb_1_1process_1_1options__t =
     [ "stdout_callback", "structb_1_1process_1_1options__t.html#a4c4728d7123490962b39cccdf3e07abc", null ],
     [ "strip_trailing_whitespace_after_join", "structb_1_1process_1_1options__t.html#aba6b42394dc5d52506fbeb1ef3b134b9", null ],
     [ "suppress_carriage_return", "structb_1_1process_1_1options__t.html#afc2fe24c81d2fc748fc7c7179d1c1953", null ],
-    [ "wait_ms_before_every_stdin_write", "structb_1_1process_1_1options__t.html#a1dbdffa19ea884de15fe8e710b881714", null ],
+    [ "wait_ms_before_every_stdin_write", "structb_1_1process_1_1options__t.html#aa7232edf98739cccf9ee173a219422fa", null ],
     [ "working_directory", "structb_1_1process_1_1options__t.html#a25e8e591b421947fd9e8d3d4a2e0370e", null ]
 ];
