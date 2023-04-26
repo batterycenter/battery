@@ -22,7 +22,7 @@ namespace b {
             bool suppress_carriage_return = true;
             bool strip_trailing_whitespace_after_join = true;
             std::optional<bool> forward_ctrl_c = std::nullopt;  // Defaults to the value of passthrough_to_parent
-            uint64_t wait_ms_before_every_stdin_write = 100;
+            double wait_ms_before_every_stdin_write = 100.0;
             std::function<void(const std::string& str)> stdout_callback;
             std::function<void(const std::string& str)> stderr_callback;
             reproc::options reproc_options;

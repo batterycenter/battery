@@ -22,6 +22,7 @@ set(SOURCES
         src/tray/core/entry.cpp
         src/tray/core/traybase.cpp
 
+        src/application.cpp
         src/cache.cpp
         src/console.cpp
         src/constants.cpp
@@ -53,10 +54,12 @@ endif()
 
 # Download dependencies
 set(REPROC++ ON)
+set(ENABLE_TEST OFF)
 battery_add_package("gh:DaanDeMeyer/reproc#v14.2.4")            # Library for running processes
 battery_add_package("gh:gabime/spdlog#v1.11.0")                 # Logging library
 battery_add_package("gh:ToruNiina/toml11#v3.7.1")               # Toml fileformat parsing
 battery_add_package("gh:nemtrif/utfcpp#v3.2.3")                 # UTF-8 conversions
+battery_add_package("gh:gelldur/EventBus#v3.0.3")               # Event system
 
 # Link dependencies
 target_link_libraries(battery_core
@@ -64,7 +67,12 @@ target_link_libraries(battery_core
         toml11::toml11
         utf8::cpp
         reproc++
+        Dexode::EventBus
     )
+
+if (WIN32)
+    target_link_libraries(battery_core Winmm.lib)
+endif ()
 
 # Unit-testing
 if (BUILD_TESTS)

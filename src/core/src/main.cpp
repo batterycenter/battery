@@ -53,7 +53,7 @@ namespace b {
     }
 
     int run_main(int argc, const char** argv) {
-        b::internal::reset_time();
+        b::time();                  // First call sets zero-time to now
         setup_windows_console();
 
         int result = -1;

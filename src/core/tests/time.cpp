@@ -4,10 +4,18 @@
 
 TEST(BatteryCore_Time, Time_S) {
     auto start = b::time();
-    b::sleep(0.3);
+    b::sleep(0.05);
     auto elapsed = b::time() - start;
-    EXPECT_GT(elapsed, 0.2);
-    EXPECT_LT(elapsed, 0.4);
+    EXPECT_GT(elapsed, 0.04);
+    EXPECT_LT(elapsed, 0.06);
+}
+
+TEST(BatteryCore_Time, Time_Precise) {
+    auto start = b::time();
+    b::sleep_precise(0.005);
+    auto elapsed = b::time() - start;
+    EXPECT_GT(elapsed, 0.004);
+    EXPECT_LT(elapsed, 0.006);
 }
 
 TEST(BatteryCore_Time, Time_Epoch) {
@@ -28,7 +36,7 @@ TEST(BatteryCore_Time, Time_EpochMS) {
 
 TEST(BatteryCore_Time, Time_EpochUS) {
     auto start = b::epoch_time_us();
-    b::sleep_us(300000);
+    b::sleep_ms(300);
     auto elapsed = b::epoch_time_us() - start;
     EXPECT_GT(elapsed, 200000);
     EXPECT_LT(elapsed, 400000);

@@ -13,18 +13,7 @@
 
 #include "imgui-SFML.h"
 
-namespace Battery {
-
-	Application* appPointer = nullptr;
-
-	Application& GetApp() {
-		if (!appPointer)
-			throw Battery::Exception("Not Initialized");
-
-		return *appPointer;
-	}
-
-	bool SetWindowIcon(sf::RenderWindow& window, uint8_t iconSize, void* data, size_t dataSize) {
+bool SetWindowIcon(sf::RenderWindow& window, uint8_t iconSize, void* data, size_t dataSize) {
 		sf::Image image;
 		if (!image.loadFromMemory(data, dataSize)) {
             Log::Core::Error("Cannot load window icon: Unsupported image format, cannot load sf::Image from memory!");
@@ -68,6 +57,26 @@ namespace Battery {
 
 
 
+
+
+
+
+
+
+namespace Battery {
+
+	Application* appPointer = nullptr;
+
+	Application& GetApp() {
+		if (!appPointer)
+			throw Battery::Exception("Not Initialized");
+
+		return *appPointer;
+	}
+
+
+
+
 	Application::Application() {
         Log::Core::Trace("Creating Application");
 		appPointer = this;
@@ -77,10 +86,9 @@ namespace Battery {
         Log::Core::Trace("Application stopped, destroying");
 	}
 
-	void Application::OnStartup() {}
-	void Application::OnUpdate() {}
-	void Application::OnRender() {}
-	void Application::OnShutdown() {}
+
+
+
 
 	void Application::OnEvent(sf::Event event, bool& handled) {
 		if (event.type == sf::Event::EventType::Closed) {
@@ -126,118 +134,72 @@ namespace Battery {
 
 
 	void Application::Run(int width, int height, int argc, const char** argv, int windowStyle) {
-		try {
-            Log::Core::Info("Loading Application");
-			
-			// Auto-fit window size
-			if (width < 0) width = GetPrimaryMonitorSize().x;
-			if (height < 0) height = GetPrimaryMonitorSize().y;
 
-			// Create window
-			window.create(sf::VideoMode({ (uint32_t)width, (uint32_t)height }), BATTERY_DEFAULT_TITLE, windowStyle);
-			if (!window.isOpen())
-				throw Battery::Exception("Could not create SFML window! Please check the graphics drivers!");
+        // Auto-fit window size
+        if (width < 0) width = GetPrimaryMonitorSize().x;
+        if (height < 0) height = GetPrimaryMonitorSize().y;
 
-			// Parse command line arguments
-            Log::Core::Trace("Command line arguments:");
-			for (int i = 0; i < argc; i++) {
-				args.emplace_back(argv[i]);
-                Log::Core::Trace("[{}]: {}", i, args[i]);
-			}
+        // Create window
+        window.create(sf::VideoMode({ (uint32_t)width, (uint32_t)height }), BATTERY_DEFAULT_TITLE, windowStyle);
+        if (!window.isOpen())
+            throw Battery::Exception("Could not create SFML window! Please check the graphics drivers!");
 
-			// Load the default window icon
-			SetWindowIconBase64(window, (uint8_t)BATTERY_DEFAULT_WINDOW_ICON_SIZE, BATTERY_DEFAULT_WINDOW_ICON_BASE64);
+        // Parse command line arguments
+        Log::Core::Trace("Command line arguments:");
+        for (int i = 0; i < argc; i++) {
+            args.emplace_back(argv[i]);
+            Log::Core::Trace("[{}]: {}", i, args[i]);
+        }
 
-			// Load ImGui
-			IMGUI_CHECKVERSION();
-			ImGui::SFML::Init(window);
+        // Load the default window icon
+        SetWindowIconBase64(window, (uint8_t)BATTERY_DEFAULT_WINDOW_ICON_SIZE, BATTERY_DEFAULT_WINDOW_ICON_BASE64);
 
-            SetFramerate(60);
+        // Load ImGui
+        IMGUI_CHECKVERSION();
+        ImGui::SFML::Init(window);
 
-			ImGui::StyleColorsDark();
-			CaptureCurrentColorSchemeAsDefault();
-			LoadBatteryColorScheme();
+        SetFramerate(60);
 
-			ImPlot::CreateContext();
-			window.clear(BATTERY_DEFAULT_BACKGROUND_COLOR);
-			window.display();
+        ImGui::StyleColorsDark();
+        CaptureCurrentColorSchemeAsDefault();
+        LoadBatteryColorScheme();
 
-			ClearRuntime();
+        ImPlot::CreateContext();
+        window.clear(BATTERY_DEFAULT_BACKGROUND_COLOR);
+        window.display();
 
-            //ui = BatteryUI::Setup<UI>([&] {
-            //    glfwPostEmptyEvent();
-            //});
-            //BatteryUI::theme = BatteryUI::Theme_Modern();
+        ClearRuntime();
 
-            OnStartup();    // This is the user's startup function
+        //ui = BatteryUI::Setup<UI>([&] {
+        //    glfwPostEmptyEvent();
+        //});
+        //BatteryUI::theme = BatteryUI::Theme_Modern();
 
-			defaultFont = ADD_FONT(RobotoMedium, DEFAULT_FONT_SIZE);
-			ImGui::SFML::UpdateFontTexture();
+        OnStartup();    // This is the user's startup function
 
-			if (!shutdownRequested) {
-                Log::Core::Info("Application running");
-				RunMainloop();
-			}
-			else {
-                Log::Core::Warn("OnStartup requested shutdown, skipping main loop entirely and shutting down immediately");
-			}
+        defaultFont = ADD_FONT(RobotoMedium, DEFAULT_FONT_SIZE);
+        ImGui::SFML::UpdateFontTexture();
 
-            Log::Core::Info("Stopping Application");
-			OnShutdown();
-            layers.ClearStack();
+        if (!shutdownRequested) {
+            Log::Core::Info("Application running");
+            RunMainloop();
+        }
+        else {
+            Log::Core::Warn("OnStartup requested shutdown, skipping main loop entirely and shutting down immediately");
+        }
 
-            window.setVisible(false);
+        Log::Core::Info("Stopping Application");
+        OnShutdown();
+        layers.ClearStack();
 
-			ImPlot::DestroyContext();
-			ImGui::SFML::Shutdown();
-			window.close();
+        window.setVisible(false);
 
-            Log::Core::Info("Application stopped");
-		}
-		catch (const Battery::Exception& e) {
-            Log::Core::Critical("Unhandled Battery::Exception: '{}'", e.what());
-		}
-		catch (const std::exception& e) {
-            Log::Core::Critical("Unhandled std::exception: '{}'", e.what());
-		}
-		catch (...) {
-            Log::Core::Critical("Unhandled exception: Unknown exception type, make sure to catch it correctly!");
-		}
-	}
-
-	void Application::RunMainloop() {
-
-		while (!shutdownRequested) {
-
-			// Update everything
-			PreUpdate();
-			UpdateApp();
-			PostUpdate();
-
-			// Render everything
-			PreRender();
-			RenderApp();
-			PostRender();
-
-			// Show rendered image (and sleep)
-			if (!windowStandby) {
-				window.display();
-			}
-			else {
-				Sleep(1.f / (float)framerateLimit);    // Standby
-			}
-		}
+        ImPlot::DestroyContext();
+        ImGui::SFML::Shutdown();
+        window.close();
 	}
 
 	void Application::PreUpdate() {
-
-		sf::Time dt = frametime_clock.restart();
-		frametime = dt.asSeconds();
-				
-		if (frametime != 0.f) {
-			framerate = 1.f / frametime;
-		}
-
 		HandleEvents();
 		if (!windowStandby) {
 			ImGui::SFML::Update(window, dt);
@@ -257,27 +219,10 @@ namespace Battery {
 		}
 	}
 
-	void Application::PostUpdate() {
-		framecount++;
-	}
-
 	void Application::PreRender() {
 		if (!windowStandby) {
 			window.clear(BATTERY_DEFAULT_BACKGROUND_COLOR);
 			ImGui::PushFont(defaultFont);
-		}
-	}
-
-	void Application::RenderApp() {
-
-		// First render the base application
-        Log::Core::Trace("Application::OnRender()");
-		OnRender();
-
-		// Then propagate through the stack and render all layers sequentially
-		for (auto& layer : layers.GetLayers()) {
-            Log::Core::Trace("Layer OnRender()");
-			layer->OnRender();
 		}
 	}
 
@@ -307,15 +252,6 @@ namespace Battery {
                     Log::Core::Trace("Event was handled by Layer #{}", i);
 					break;
 				}
-			}
-
-			// Give the event to the base application
-            Log::Core::Trace("Application::OnEvent()");
-			OnEvent(event, handled);
-
-			if (handled) {
-                Log::Core::Trace("Event was handled by the base application");
-				continue;
 			}
         }
 	}

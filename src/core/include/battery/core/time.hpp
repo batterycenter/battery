@@ -67,37 +67,32 @@ namespace b {
     std::time_t epoch_time_us();
 
     ///
-    /// \brief Put the current thread to sleep for said seconds (microsecond precision).
+    /// \brief Put the current thread to sleep for said seconds.
     /// \details Contrary to a busy-wait loop, this function minimizes CPU usage.
     /// \param[in] seconds time to sleep
     /// \see b::sleep_ms()
-    /// \see b::sleep_us()
+    /// \see b::sleep_precise()
     ///
     void sleep(double seconds);
 
     ///
-    /// \brief Put the current thread to sleep for said milliseconds.
-    /// \details Contrary to a busy-wait loop, this function minimizes CPU usage.
-    /// \param[in] seconds time to sleep
-    /// \see b::sleep()
-    /// \see b::sleep_us()
-    ///
-    void sleep_ms(uint64_t milliseconds);
-
-    ///
-    /// \brief Put the current thread to sleep for said microseconds.
-    /// \details Contrary to a busy-wait loop, this function minimizes CPU usage.
+    /// \brief Busy-wait for said seconds (highest possible accuracy).
+    /// \details Use this function only if you need very precise timing.
+    /// \warning This function does not suspend the thread. Instead it busy-waits
+    ///          and thus causes full CPU usage while doing nothing.
     /// \param[in] seconds time to sleep
     /// \see b::sleep()
     /// \see b::sleep_ms()
     ///
-    void sleep_us(uint64_t microseconds);
+    void sleep_precise(double seconds);
 
-    namespace internal {
-        /// @private
-        void reset_time();
-        /// @private
-        extern std::time_t launch_time_us;
-    }
+    ///
+    /// \brief Put the current thread to sleep for said milliseconds.
+    /// \details Contrary to a busy-wait loop, this function minimizes CPU usage.
+    /// \param[in] milliseconds time to sleep
+    /// \see b::sleep()
+    /// \see b::sleep_precise()
+    ///
+    void sleep_ms(double milliseconds);
 
 } // namespace b

@@ -1,16 +1,19 @@
 
+#include "battery/core/environment.hpp"
 #include "battery/core/time.hpp"
 
 #include <thread>
 #include <chrono>
+#include <Windows.h>
+#include <timeapi.h>
 
 namespace b {
 
     double time() {
-        if (internal::launch_time_us == 0) {
-            internal::reset_time();
-        }
-        return static_cast<double>(epoch_time_us() - internal::launch_time_us) / 1000000.0;
+        using namespace std::chrono;
+        static auto program_start = high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<microseconds>(high_resolution_clock::now() - program_start);
+        return static_cast<double>(duration.count()) / 1000000.0;
     }
 
     std::time_t epoch_time() {
@@ -29,21 +32,37 @@ namespace b {
     }
 
     void sleep(double seconds) {
-        sleep_us(static_cast<uint64_t>(seconds * 1000000.0));
+        sleep_ms(std::max(seconds * 1000.0, 0.0));
     }
 
-    void sleep_ms(uint64_t milliseconds) {
-        sleep_us(milliseconds * 1000);
-    }
-
-    void sleep_us(uint64_t microseconds) {
-        std::this_thread::sleep_for(std::chrono::microseconds(microseconds));
-    }
-
-    namespace internal {
-        void reset_time() {
-            internal::launch_time_us = epoch_time_us();
+    void sleep_precise(double seconds) {
+        auto start = b::time();
+        while (b::time() - start < seconds) {
+            ; // Busy-wait
         }
-        std::time_t launch_time_us = 0;
+    }
+
+    void sleep_ms(double milliseconds) {
+#ifdef BATTERY_ARCH_WINDOWS
+        TIMECAPS tc;                        // Choose the minimum timer resolution
+        timeGetDevCaps(&tc, sizeof(TIMECAPS));
+        timeBeginPeriod(tc.wPeriodMin);
+
+        ::Sleep(static_cast<DWORD>(std::max(milliseconds, 0.0)));
+
+        timeEndPeriod(tc.wPeriodMin);       // And back to default
+#else
+        timespec ti;
+        ti.tv_sec  = static_cast<time_t>(std::max(milliseconds, 0.0) / 1000);
+        ti.tv_nsec = static_cast<long>((std::max(milliseconds, 0.0) % 1000) * 1000);
+
+        // If nanosleep returns -1, we check errno. If it is EINTR
+        // nanosleep was interrupted and has set ti to the remaining
+        // duration. We continue sleeping until the complete duration
+        // has passed. We stop sleeping if it was due to an error.
+        while ((nanosleep(&ti, &ti) == -1) && (errno == EINTR)) {
+            std::this_thread::yield();
+        }
+#endif
     }
 }
