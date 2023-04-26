@@ -60,7 +60,7 @@ namespace b {
 #else
         timespec ti;
         ti.tv_sec  = static_cast<time_t>(std::max(milliseconds, 0.0) / 1000);
-        ti.tv_nsec = static_cast<long>((std::max(milliseconds, 0.0) % 1000) * 1000);
+        ti.tv_nsec = static_cast<long>((milliseconds - (ti.tv_sec * 1000)) * 1000000);
 
         // If nanosleep returns -1, we check errno. If it is EINTR
         // nanosleep was interrupted and has set ti to the remaining
