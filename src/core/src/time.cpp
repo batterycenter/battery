@@ -4,8 +4,14 @@
 
 #include <thread>
 #include <chrono>
+
+#ifdef BATTERY_ARCH_WINDOWS
 #include <Windows.h>
 #include <timeapi.h>
+#else
+#include <time.h>
+#include <errno.h>
+#endif
 
 namespace b {
 
