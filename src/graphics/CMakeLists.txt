@@ -19,7 +19,6 @@ battery_add_package("gh:SFML/SFML#cbfa9cbb65c0974ade5c52b182e8c57975d4d693")    
 
 # Link dependencies
 target_link_libraries(battery_graphics
-        SFML::Main
         SFML::Graphics
         SFML::Window
         SFML::System
@@ -33,7 +32,6 @@ if (BUILD_TESTS)
 endif()
 
 set_target_properties(battery_graphics PROPERTIES FOLDER "battery")
-set_target_properties(sfml-main PROPERTIES FOLDER "battery/deps")
 set_target_properties(sfml-audio PROPERTIES FOLDER "battery/deps")
 set_target_properties(sfml-graphics PROPERTIES FOLDER "battery/deps")
 set_target_properties(sfml-network PROPERTIES FOLDER "battery/deps")
