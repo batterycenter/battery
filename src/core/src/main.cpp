@@ -52,7 +52,7 @@ namespace b {
         return arguments.data();
     }
 
-    int run_main(int argc, const char** argv) {
+    int invoke_main(int argc, const char** argv) {
         b::time();                  // First call sets zero-time to now
         setup_windows_console();
 
@@ -67,7 +67,7 @@ namespace b {
 #ifndef BATTERY_CORE_NO_MAIN
 
 int main(int argc, const char** argv) {     // This is the global entry point, the program starts here
-    return b::run_main(argc, argv);
+    return b::invoke_main(argc, argv);
 }
 
 #endif
