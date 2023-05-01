@@ -58,7 +58,7 @@ public:
 
 TEST(BatteryCore_Application, Application) {
     App app;
-    app.run({ "ABC", "DEF", "GHI" });
+    app.run("BatteryCore_UnitTest", { "ABC", "DEF", "GHI" });
     EXPECT_TRUE(app.setup_called);
     EXPECT_TRUE(app.cleaned_called);
     EXPECT_EQ(app.updated, app.max_frames);

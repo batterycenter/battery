@@ -4,6 +4,7 @@
 #include "battery/core/application.hpp"
 #include "battery/core/time.hpp"
 #include "battery/core/log.hpp"
+#include "battery/core/folders.hpp"
 
 namespace b {
 
@@ -41,8 +42,10 @@ namespace b {
 
 
 
-    void application::run(const std::vector<std::string>& args) {
+    void application::run(const std::string& appname, const std::vector<std::string>& args) {
         this->args = args;
+        b::folders::set_application_name(appname);
+
         this->_setup();
 
         this->frametime = 0.0;

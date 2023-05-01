@@ -27,7 +27,7 @@ namespace b {
         void stop_application();
         void set_stop_requested(bool stop_requested);
 
-        void run(const std::vector<std::string>& args);
+        void run(const std::string& appname, const std::vector<std::string>& args);
 
     private:
 

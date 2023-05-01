@@ -12,12 +12,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(cmake/tools.cmake)
 battery_check_required_compiler_features()
 
+option(BUILD_SHARED_LIBS "Build shared libraries instead of static ones" OFF)
 option(BUILD_TESTS "Build all unit tests" ON)
 option(BUILD_EXAMPLES "Build examples" ON)
 option(BUILD_CLI "Build the Battery cli 'b'" ON)
 option(BUILD_DOCS "Define the targets for building the documentation (not built automatically)" ON)
 
 add_subdirectory(src/core)
+add_subdirectory(src/graphics)
 add_subdirectory(src/python)
 
 if (BUILD_CLI)
