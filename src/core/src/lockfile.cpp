@@ -40,7 +40,7 @@ namespace b {
         // because this is apparently more robust than just opening the file in exclusive write mode.
 #ifdef BATTERY_ARCH_WINDOWS
         this->fileHandle = CreateFileW(
-                b::to_osstring(filename.to_string()).c_str(),
+                b::to_osstring(filename.u8string()).c_str(),
                 GENERIC_READ | GENERIC_WRITE,
                 FILE_SHARE_READ | FILE_SHARE_WRITE,
                 nullptr,
@@ -48,12 +48,12 @@ namespace b {
                 FILE_ATTRIBUTE_NORMAL,
                 nullptr);
         if (this->fileHandle == INVALID_HANDLE_VALUE) {
-            throw std::runtime_error(fmt::format("Failed to create lockfile '{}': Failed to open file for writing: {}", filename, b::get_last_win32_error()));
+            throw std::runtime_error(fmt::format("Failed to create lockfile '{}': Failed to open file for writing: {}", b::u8_as_str(filename.u8string()), b::get_last_win32_error()));
         }
 #else
         this->fileHandle = reinterpret_cast<void *>(open(filename.c_str(), O_CREAT | O_RDWR, 0666));
         if (reinterpret_cast<int64_t>(this->fileHandle) <= -1) {
-            throw std::runtime_error(fmt::format("Failed to create lockfile '{}': Failed to open file for writing: {}", filename, strerror(errno)));
+            throw std::runtime_error(fmt::format("Failed to create lockfile '{}': Failed to open file for writing: {}", b::u8_as_str(filename.u8string()), strerror(errno)));
         }
 #endif
     }

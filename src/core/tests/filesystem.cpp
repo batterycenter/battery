@@ -105,26 +105,26 @@ TEST(BatteryCore_Filesystem, FS_PathOperators) {
     p2.make_preferred();
     p3.make_preferred();
 
-    EXPECT_EQ(b::replace(p1.to_string(), "\\", "/"), "../test/more/folders");
-    EXPECT_EQ(b::replace(p2.to_string(), "\\", "/"), "../test/more/folders/file.txt");
-    EXPECT_EQ(b::replace(p3.to_string(), "\\", "/"), "../test/more/folders/test");
+    EXPECT_EQ(b::replace(p1.u8string(), u8"\\", u8"/"), u8"../test/more/folders");
+    EXPECT_EQ(b::replace(p2.u8string(), u8"\\", u8"/"), u8"../test/more/folders/file.txt");
+    EXPECT_EQ(b::replace(p3.u8string(), u8"\\", u8"/"), u8"../test/more/folders/test");
 
     b::fs::path p4("C:/some/directory");
     p4 += "more/directories";
     auto p5 = p4 + "one more";
-    EXPECT_EQ(b::replace(p5.to_string(), "\\", "/"), "C:/some/directory/more/directories/one more");
+    EXPECT_EQ(b::replace(p5.u8string(), u8"\\", u8"/"), u8"C:/some/directory/more/directories/one more");
 }
 
 TEST(BatteryCore_Filesystem, FS_Path_UTF8) {
     b::fs::path p1("files/年 本/");
-    EXPECT_EQ(p1.to_string(), "files/年 本/");
+    EXPECT_EQ(p1.u8string(), u8"files/年 本/");
 
     b::fs::path p2(u8"files/年 本/");
-    EXPECT_EQ(p2.to_string(), "files/年 本/");
+    EXPECT_EQ(p2.u8string(), u8"files/年 本/");
 
     b::fs::path p3("ölfile.süß年");
-    EXPECT_EQ(p3.extension().to_string(), ".süß年");
+    EXPECT_EQ(p3.extension().u8string(), u8".süß年");
 
     b::fs::path p4("Ölgefäß/ölfile.süß年");
-    EXPECT_EQ(p4.filename().to_string(), "ölfile.süß年");
+    EXPECT_EQ(p4.filename().u8string(), u8"ölfile.süß年");
 }

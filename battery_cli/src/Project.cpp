@@ -44,7 +44,7 @@ b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags,
     }
 
     data["project_name"] = projectName;
-    data["project_root"] = projectRoot.to_string();
+    data["project_root"] = projectRoot.u8string();
     data["project_version"] = projectVersion.to_string();
     data["cmake_flags"] = cmake_flags;
     data["args"] = args;

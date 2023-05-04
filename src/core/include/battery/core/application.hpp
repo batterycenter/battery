@@ -12,7 +12,7 @@ namespace b {
         application() = default;
         virtual ~application() = default;
 
-        std::vector<std::string> args;
+        std::vector<std::u8string> args;
         double framerate { 0.0 };
         double frametime { 0.0 };
         uint64_t framecount { 0 };
@@ -27,7 +27,7 @@ namespace b {
         void stop_application();
         void set_stop_requested(bool stop_requested);
 
-        void run(const std::string& appname, const std::vector<std::string>& args);
+        void run(const std::u8string& appname, const std::vector<std::u8string>& args);
 
     private:
 

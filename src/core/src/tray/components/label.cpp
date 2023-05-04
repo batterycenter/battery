@@ -22,7 +22,7 @@
 
 namespace b::tray {
 
-    label::label(std::string text)
+    label::label(std::u8string text)
             : tray_entry(std::move(text)) {}
 
 }

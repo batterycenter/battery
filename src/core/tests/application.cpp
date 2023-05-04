@@ -21,7 +21,7 @@ public:
     void update() override {
         EXPECT_EQ(this->framerate, this->frametime > 0.0 ? 1.0 / this->frametime : 0.0);
 
-        std::vector<std::string> expected_args = {"ABC", "DEF", "GHI"};
+        std::vector<std::u8string> expected_args = {u8"ABC", u8"DEF", u8"GHI"};
         EXPECT_EQ(this->args, expected_args);
 
         auto elapsed = b::time() - last_time;
@@ -58,7 +58,7 @@ public:
 
 TEST(BatteryCore_Application, Application) {
     App app;
-    app.run("BatteryCore_UnitTest", { "ABC", "DEF", "GHI" });
+    app.run(u8"BatteryCore_UnitTest", { u8"ABC", u8"DEF", u8"GHI" });
     EXPECT_TRUE(app.setup_called);
     EXPECT_TRUE(app.cleaned_called);
     EXPECT_EQ(app.updated, app.max_frames);

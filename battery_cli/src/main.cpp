@@ -13,13 +13,13 @@
         return b::unexpected(Error::EXECUTABLE_NOT_FOUND);
     }
 
-    b::print("\n{}\n", exe.to_string());
-    auto result = b::execute(exe.to_string() + " " + args);
+    b::print("\n{}\n", b::u8_as_str(exe.u8string()));
+    auto result = b::execute(b::u8_as_str(exe.u8string()) + " " + args);
     b::print("\n>> {} terminated with exit code {}\n", b::fs::path(executable).filename(), result.exit_code);
     return std::nullopt;
 }
 
-b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args) {
+b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::u8string>& args) {
 
     std::string version_message = CLI_PRODUCT_NAME + " version " + resources::version_txt.str();
     std::string message = version_message + "\n"
@@ -132,7 +132,7 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::string>& args
     return b::unexpected(Error::INTERNAL_ERROR);
 }
 
-int b::main(const std::vector<std::string>& args) {
+int b::main(const std::vector<std::u8string>& args) {
 
     b::push_ctrl_c_handler([]{});   // Ignore Ctrl+C, we push another handler later
 

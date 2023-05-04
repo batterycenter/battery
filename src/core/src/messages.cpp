@@ -25,11 +25,11 @@ namespace b {
                 nullptr, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR) & messageBuffer, 0,
                 nullptr);
 
-        auto buffer = b::from_osstring(messageBuffer);
+        auto buffer = b::osstring_to_u8(messageBuffer);
         LocalFree(messageBuffer);
-        return buffer;
+        return b::u8_as_str(buffer);
     }
-    static void win32_message_box(const std::string& message, UINT options) {
+    static void win32_message_box(const std::u8string& message, UINT options) {
         auto text = b::to_osstring(message);
         ::MessageBoxW(nullptr, std::bit_cast<const wchar_t*>(text.c_str()), L"Error", options);
     }
@@ -43,27 +43,58 @@ namespace b {
 #endif  // BATTERY_ARCH_WINDOWS
 
     void message_box_info(const std::string& message) {
+        return message_box_info(b::u8_from_std_string(message));
+    }
+
+    void message_box_info(const std::u8string& message) {
 #ifdef BATTERY_ARCH_WINDOWS
         win32_message_box(message, MB_ICONINFORMATION | MB_OK);
 #else
-        linux_run_zenity({ "--info", "--text=" + message });
+        linux_run_zenity({ "--info", "--text=" + b::u8_as_str(message) });
 #endif
     }
 
+    void message_box_info(const std::u32string& message) {
+        return message_box_info(b::to_u8(message));
+    }
+
+
+
+
     void message_box_warning(const std::string& message) {
+        return message_box_warning(b::u8_from_std_string(message));
+    }
+
+    void message_box_warning(const std::u8string& message) {
 #ifdef BATTERY_ARCH_WINDOWS
         win32_message_box(message, MB_ICONWARNING | MB_OK);
 #else
-        linux_run_zenity({ "--warning", "--text=" + message });
+        linux_run_zenity({ "--warning", "--text=" + b::u8_as_str(message) });
 #endif
     }
 
+    void message_box_warning(const std::u32string& message) {
+        return message_box_warning(b::to_u8(message));
+    }
+
+
+
+
+
     void message_box_error(const std::string& message) {
+        return message_box_error(b::u8_from_std_string(message));
+    }
+
+    void message_box_error(const std::u8string& message) {
 #ifdef BATTERY_ARCH_WINDOWS
         win32_message_box(message, MB_ICONERROR | MB_OK);
 #else
-        linux_run_zenity({ "--error", "--text=" + message });
+        linux_run_zenity({ "--error", "--text=" + b::u8_as_str(message) });
 #endif
+    }
+
+    void message_box_error(const std::u32string& message) {
+        return message_box_error(b::to_u8(message));
     }
 
 }

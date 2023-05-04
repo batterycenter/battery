@@ -35,7 +35,7 @@
 
 #include <battery/core/main.hpp>
 
-int b::main([[maybe_unused]] const std::vector<std::string>& args) {
+int b::main([[maybe_unused]] const std::vector<std::u8string>& args) {
 
     //test();
 

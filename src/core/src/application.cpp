@@ -42,7 +42,7 @@ namespace b {
 
 
 
-    void application::run(const std::string& appname, const std::vector<std::string>& args) {
+    void application::run(const std::u8string& appname, const std::vector<std::u8string>& args) {
         this->args = args;
         b::folders::set_application_name(appname);
 

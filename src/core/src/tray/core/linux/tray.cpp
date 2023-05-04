@@ -101,7 +101,7 @@ namespace b::tray {
         return menu;
     }
 
-    tray::tray(std::string identifier, std::string tooltip, MouseButton clickAction)
+    tray::tray(std::u8string identifier, std::u8string tooltip, MouseButton clickAction)
             : basetray(std::move(identifier), std::move(tooltip), clickAction),
               data(std::make_unique<tray_data>())
     {

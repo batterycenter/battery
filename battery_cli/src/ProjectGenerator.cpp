@@ -20,11 +20,11 @@ static int getSelectionInput(const std::string& question, const std::vector<std:
 static std::string getSimpleInput(const std::string& question, const std::string& error_message) {
     b::print("{}\n", question);
     auto input = b::cin_getline();
-    input = "Test";
+    input = u8"Test";
 
     if (!input.empty()) {
         b::print("\n");
-        return input;
+        return b::u8_as_str(input);
     }
 
     b::print(b::colors::fg::red, "{}\n", error_message);
@@ -33,7 +33,7 @@ static std::string getSimpleInput(const std::string& question, const std::string
 
 static auto getConvertableInput(const std::string& question, fmt::format_string<std::string> error_message, auto&& converter) {
     b::print("{}\n", question);
-    auto input = b::cin_getline();
+    auto input = b::u8_as_str(b::cin_getline());
 
     try {
         auto result = converter(input);

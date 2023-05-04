@@ -40,7 +40,11 @@ void App::update() {
     float x = std::cos(angle) * radius;
     float y = std::sin(angle) * radius;
 
-    sf::Text text(font, b::to_osstring("Hello \uf004 world!").c_str(), 36);
+
+    sf::Text text(font, U"Hello \uf004 world!", 36);
+
+
+
     text.setFillColor(sf::Color::Red);
 
     // Create a text object

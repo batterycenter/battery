@@ -30,7 +30,7 @@ namespace b::tray {
 
     class tray : public basetray {
     public:
-        tray(std::string identifier, std::string tooltip, MouseButton clickAction = MouseButton::BOTH);
+        tray(std::u8string identifier, std::u8string tooltip, MouseButton clickAction = MouseButton::BOTH);
         ~tray();
 
         virtual void setIcon(const b::resource& icon) override;

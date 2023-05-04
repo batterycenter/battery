@@ -4,7 +4,7 @@
 #include "resources/message.txt.h"
 #include "resources/banner.txt.h"
 
-int b::main(const std::vector<std::string>& args) {
+int b::main(const std::vector<std::u8string>& args) {
 
     b::log::info("BatteryEmbed example");
 

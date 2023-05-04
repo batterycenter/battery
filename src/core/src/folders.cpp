@@ -12,14 +12,14 @@ namespace b {
         if (GetModuleFileNameW(nullptr, buffer, sizeof(buffer)) == 0) {
             return {};
         }
-        return b::from_osstring(buffer);
+        return b::osstring_to_u8(buffer);
 #else
         char buffer[PATH_MAX];
         auto count = readlink("/proc/self/exe", buffer, sizeof(buffer));
         if (count == -1) {
             return {};
         }
-        return std::string(buffer, count);
+        return std::u8string(buffer, count);
 #endif
     }
 

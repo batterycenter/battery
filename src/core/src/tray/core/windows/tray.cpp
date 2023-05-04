@@ -21,9 +21,6 @@
 #ifndef BATTERY_CORE_NO_TRAY
 #ifdef _WIN32
 
-#include <stdexcept>
-#include <Windows.h>
-
 #include "battery/core/string.hpp"
 #include "battery/core/resource.hpp"
 #include "battery/core/constants.hpp"
@@ -36,6 +33,9 @@
 #include "battery/core/tray/components/submenu.hpp"
 #include "battery/core/tray/components/syncedtoggle.hpp"
 #include "battery/core/tray/components/toggle.hpp"
+
+#include <stdexcept>
+#include <Windows.h>
 
 namespace b::tray {
 
@@ -60,7 +60,7 @@ namespace b::tray {
         return windowClass.hInstance;
     }
 
-    tray::tray(std::string identifier, std::string tooltip, MouseButton clickAction)
+    tray::tray(std::u8string identifier, std::u8string tooltip, MouseButton clickAction)
             : basetray(std::move(identifier), std::move(tooltip), clickAction) {
         auto windowClass = registerClass(wndProc, b::to_osstring(getIdentifier()));
 

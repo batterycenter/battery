@@ -37,7 +37,7 @@ PYBIND11_EMBEDDED_MODULE(python_example, m) {   // This packs the C++ functions 
     m.def("set_callback", &set_callback);
 }
 
-int b::main([[maybe_unused]] const std::vector<std::string>& args) {
+int b::main([[maybe_unused]] const std::vector<std::u8string>& args) {
 
     b::log::info("Running Example PythonEmbed. Have fun!");
 

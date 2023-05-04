@@ -23,7 +23,7 @@
 
 namespace b::tray {
 
-    button::button(std::string text, std::function<void()> callback)
+    button::button(std::u8string text, std::function<void()> callback)
             : tray_entry(std::move(text)), callback(std::move(callback)) {}
 
     void button::clicked() const {

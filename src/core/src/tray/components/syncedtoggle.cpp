@@ -22,7 +22,7 @@
 
 namespace b::tray {
 
-    synced_toggle::synced_toggle(std::string text, bool &state, std::function<void(bool &)> callback)
+    synced_toggle::synced_toggle(std::u8string text, bool &state, std::function<void(bool &)> callback)
             : tray_entry(std::move(text)), toggled(state), callback(std::move(callback)) {}
 
     bool synced_toggle::isToggled() const {

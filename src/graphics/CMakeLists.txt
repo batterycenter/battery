@@ -25,6 +25,7 @@ target_link_libraries(battery_graphics
         SFML::System
         SFML::Audio
         SFML::Network
+        battery::core
     )
 
 # Unit-testing

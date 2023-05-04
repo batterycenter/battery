@@ -128,7 +128,7 @@ namespace b {
         cmd_cstr.emplace_back(nullptr);
 
         options.reproc_options.redirect.parent = options.passthrough_to_parent;
-        std::string workdir = options.working_directory.has_value() ? options.working_directory->to_string() : "";
+        std::string workdir = b::u8_as_str(options.working_directory.has_value() ? options.working_directory->u8string() : u8"");
         options.reproc_options.working_directory = !workdir.empty() ? workdir.c_str() : nullptr;
         options.reproc_options.redirect.err.type = reproc::redirect::type::pipe;
 

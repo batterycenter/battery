@@ -26,7 +26,7 @@ namespace b::tray {
 
     class button : public tray_entry {
     public:
-        explicit button(std::string text, std::function<void()> callback = []{/**/});
+        explicit button(std::u8string text, std::function<void()> callback = []{/**/});
         ~button() override = default;
 
         void clicked() const;

@@ -10,7 +10,15 @@ namespace b {
 #endif
 
     void message_box_info(const std::string& message);
+    void message_box_info(const std::u8string& message);
+    void message_box_info(const std::u32string& message);
+
     void message_box_warning(const std::string& message);
+    void message_box_warning(const std::u8string& message);
+    void message_box_warning(const std::u32string& message);
+
     void message_box_error(const std::string& message);
+    void message_box_error(const std::u8string& message);
+    void message_box_error(const std::u32string& message);
 
 }

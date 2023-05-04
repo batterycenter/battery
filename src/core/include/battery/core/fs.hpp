@@ -28,17 +28,14 @@ namespace b::fs {
     public:
         path() = default;
         path(const std::filesystem::path& path) : std::filesystem::path(path.u8string()) {}
-        path(const char* path) : std::filesystem::path(b::to_u8string(path)) {}
+        path(const char* path) : std::filesystem::path(b::u8_from_std_string(path)) {}
         path(const char8_t* path) : std::filesystem::path(path) {}
-        path(const std::string& path) : std::filesystem::path(b::to_u8string(path)) {}
+        path(const std::string& path) : std::filesystem::path(b::u8_from_std_string(path)) {}
         path(const std::u8string& path) : std::filesystem::path(path) {}
 
         ~path() = default;
 
-        std::string string() const = delete;
-        std::string to_string() const {
-            return std::bit_cast<const char*>(this->u8string().c_str());
-        }
+        std::u8string string() const = delete;
 
         fs::path extension() const { return std::filesystem::path::extension(); }
         fs::path filename() const { return std::filesystem::path::filename(); }
@@ -53,7 +50,7 @@ namespace b::fs {
         // This function returns the extension, but without the dot.
         // Thus, this either returns the extension like "png" or "txt", or nothing ("")
         path raw_extension() const {
-            std::string ext = extension().to_string();
+            auto ext = extension().u8string();
             if (!ext.empty()) {
                 if (ext[0] == '.') {
                     ext.erase(ext.begin());
@@ -67,16 +64,26 @@ namespace b::fs {
             return *this;
         }
 
+        fs::path& operator+=(const std::u8string& path) {
+            this->append(path);
+            return *this;
+        }
+
+        fs::path& operator+=(const std::u32string& path) {
+            this->append(path);
+            return *this;
+        }
+
     };
 
     inline std::ostream& operator<<(std::ostream& stream, const fs::path& path) {
-        stream << path.to_string();
+        stream << path.u8string();
         return stream;
     }
 
     inline fs::path operator+(const fs::path& a, const fs::path& b) {
         auto path = a;
-        path.append(b.to_string());
+        path.append(b.u8string());
         return path;
     }
 
@@ -173,7 +180,7 @@ namespace b::fs {
 
     private:
         b::osstring convert(const fs::path& _path) const {
-            return b::to_osstring(_path.to_string());
+            return b::to_osstring(_path.u8string());
         }
 
         fs::path path;
@@ -207,10 +214,15 @@ namespace b::fs {
                     fs::create_directories(fs::path(path).parent_path());
                 }
             }
-            return b::to_osstring(path.to_string());
+            return b::to_osstring(path.u8string());
         }
     };
 
+}
+
+inline std::ostream& operator<<(std::ostream& os, const b::fs::path& path) {
+    os << path.u8string();
+    return os;
 }
 
 template<> struct fmt::formatter<b::fs::path> {
@@ -219,6 +231,6 @@ template<> struct fmt::formatter<b::fs::path> {
     }
     template <typename FormatContext>
     auto format(const b::fs::path& input, FormatContext& ctx) -> decltype(ctx.out()) {
-        return format_to(ctx.out(), "{}", input.to_string());
+        return format_to(ctx.out(), "{}", b::u8_as_str(input.u8string()));
     }
 };

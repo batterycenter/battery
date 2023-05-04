@@ -6,7 +6,7 @@
 
 namespace b {
 
-    std::string cin_getline(int buffer_size = 1024);
+    std::u8string cin_getline(int buffer_size = 1024);
 
     namespace console {
 

@@ -27,20 +27,20 @@ namespace b::tray {
 
     class tray_entry {
     public:
-        explicit tray_entry(std::string text);
+        explicit tray_entry(std::u8string text);        // TODO: Rework entire tray module to also take UTF-32
         virtual ~tray_entry() = default;
 
         basetray *getParent();
         void setParent(basetray *);
 
-        std::string getText() const;
-        void setText(std::string);
+        [[nodiscard]] std::u8string getText() const;
+        void setText(std::u8string);
 
         void setDisabled(bool);
         [[nodiscard]] bool isDisabled() const;
 
     protected:
-        std::string text;
+        std::u8string text;
         bool disabled = false;
         basetray *parent = nullptr;
     };

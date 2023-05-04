@@ -4,7 +4,7 @@
 #include <battery/core/lockfile.hpp>
 #include <battery/core/time.hpp>
 
-int b::main([[maybe_unused]] const std::vector<std::string>& args) {
+int b::main([[maybe_unused]] const std::vector<std::u8string>& args) {
 
     b::log::info("Running Example Lockfile. To test it, start this example multiple times. Have fun!");
 

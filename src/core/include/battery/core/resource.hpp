@@ -11,16 +11,16 @@ namespace b {
 
         static resource from_text_file(const fs::path& filepath);
         static resource from_binary_file(const fs::path& filepath);
-        static resource from_byte_string(const std::string& data, const std::string& filetype = "");
-        static resource from_buffer(const void* buffer, size_t length, const std::string& filetype = "");
-        static resource from_base64(const std::string& base64, const std::string& filetype = "");
+        static resource from_byte_string(const std::string& data, const std::u8string& filetype = u8"");
+        static resource from_buffer(const void* buffer, size_t length, const std::u8string& filetype = u8"");
+        static resource from_base64(const std::string& base64, const std::u8string& filetype = u8"");
 
         [[nodiscard]] const char* data() const;
         [[nodiscard]] size_t size() const;
         // If specified correctly, the filetype will be a string hinting the encoding of the data. Empty is unknown,
         // it's parsed from the file path or specified manually. Guaranteed to be lowercase. Example: "" or "png" or "txt".
         // Can be used in the receiving function to parse the data differently based on the file type
-        [[nodiscard]] std::string filetype() const;
+        [[nodiscard]] std::u8string filetype() const;
         [[nodiscard]] std::string as_string() const;
         [[nodiscard]] std::vector<uint8_t> as_vector() const;
         [[nodiscard]] std::string as_base64() const;
@@ -47,16 +47,16 @@ namespace b {
                 return *this;
             }
 
-            std::string str() {
-                return path.to_string();
+            std::u8string str() {
+                return path.u8string();
             }
 
             operator b::fs::path() {
                 return path;
             }
 
-            operator std::string() {
-                return path.to_string();
+            operator std::u8string() {
+                return path.u8string();
             }
 
             void reset();
@@ -69,7 +69,7 @@ namespace b {
 
     private:
         std::string _data;
-        std::string _filetype;
+        std::u8string _filetype;
     };
 
 }
