@@ -16,8 +16,12 @@ public:
     App() = default;
     ~App() = default;
 
+    sf::Font font;
+    sf::Texture battery;
     sf::RenderWindow window;
-    float angle = 0.0f;
+
+    sf::Vector2<float> position = { 100.0f, 100.0f };
+    sf::Vector2<float> velocity = { 1.0f, 1.0f };
 
     void setup() override;
     void update() override;

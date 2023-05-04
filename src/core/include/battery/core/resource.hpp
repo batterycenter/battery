@@ -11,9 +11,12 @@ namespace b {
 
         static resource from_text_file(const fs::path& filepath);
         static resource from_binary_file(const fs::path& filepath);
-        static resource from_byte_string(const std::string& data, const std::u8string& filetype = u8"");
-        static resource from_buffer(const void* buffer, size_t length, const std::u8string& filetype = u8"");
-        static resource from_base64(const std::string& base64, const std::u8string& filetype = u8"");
+        static resource from_byte_string(const std::string& data, const std::string& filetype = "");
+        static resource from_byte_string(const std::string& data, const std::u8string& filetype);
+        static resource from_buffer(const void* buffer, size_t length, const std::string& filetype = "");
+        static resource from_buffer(const void* buffer, size_t length, const std::u8string& filetype);
+        static resource from_base64(const std::string& base64, const std::string& filetype = "");
+        static resource from_base64(const std::string& base64, const std::u8string& filetype);
 
         [[nodiscard]] const char* data() const;
         [[nodiscard]] size_t size() const;

@@ -3,15 +3,15 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-const int windowWidth = 800;
-const int windowHeight = 600;
-sf::Font font;
-
 void App::setup() {
 
-    window.create(sf::VideoMode({ windowWidth, windowHeight }), "Hello, world!");
-
+    window.create(sf::VideoMode({ 800, 600 }), "Hello, world!");
     if (!font.loadFromFile("C:\\Users\\zachs\\Downloads\\fontawesome-free-6.4.0-web\\fontawesome-free-6.4.0-web\\webfonts\\fa-solid-900.ttf")) {
+        return;
+    }
+
+    auto img = b::resource::from_base64(b::constants::battery_icon_base64(), "png");
+    if (!battery.loadFromMemory(img.data(), img.size())) {
         return;
     }
 
@@ -19,10 +19,10 @@ void App::setup() {
 
 void App::update() {
 
-    const float angleIncrement = 0.0003f;
-    const float radius = 0.0f;
-    const float centerPosX = windowWidth / 2;
-    const float centerPosY = windowHeight / 2;
+    float speed = 50.0f;
+    uint32_t fontSize = 36;
+    float padding = 10.0f;
+    sf::Vector2 batteryOffset = { 15.0f, 10.0f };
 
     if (!window.isOpen()) {
         this->stop_application();
@@ -35,35 +35,47 @@ void App::update() {
         }
     }
 
-    angle += angleIncrement;
+    sf::Text t1(font, "I", fontSize);
+    t1.setFillColor(sf::Color::Green);
 
-    float x = std::cos(angle) * radius;
-    float y = std::sin(angle) * radius;
+    sf::Text t2(font, U"\uf004", fontSize);
+    t2.setFillColor(sf::Color::Red);
 
+    sf::Sprite t3(battery);
+    t3.setScale({ 0.5f, 0.5f });
 
-    sf::Text text(font, U"Hello \uf004 world!", 36);
+    t2.setOrigin({ t2.getLocalBounds().width / 2.0f, t2.getLocalBounds().height / 2.0f });
+    t1.setOrigin({ t1.getLocalBounds().width + t2.getLocalBounds().width / 2.0f + padding, t1.getLocalBounds().height / 2.0f });
+    t3.setOrigin({ -t2.getLocalBounds().width / 2.0f - padding - batteryOffset.x, t3.getLocalBounds().height / 2.0f - batteryOffset.y });
 
+    sf::Vector2 totalBounds = {
+            t1.getLocalBounds().width + t2.getLocalBounds().width + t3.getLocalBounds().width + padding + batteryOffset.x,
+            std::max(t1.getLocalBounds().height, std::max(t2.getLocalBounds().height, t3.getLocalBounds().height))
+    };
 
+    position += velocity * speed * (float)frametime;
 
-    text.setFillColor(sf::Color::Red);
+    sf::Vector2 minimum = { position.x - totalBounds.x / 2.0f, position.y - totalBounds.y / 2.0f };
+    sf::Vector2 maximum = { position.x + totalBounds.x / 2.0f, position.y + totalBounds.y / 2.0f };
 
-    // Create a text object
-    sf::Text text1(font, "\uf007", 36);
-    text1.setFillColor(sf::Color::White);
-    text1.setStyle(sf::Text::Bold);
+    if (minimum.x < 0 || maximum.x > window.getSize().x) {
+        position -= velocity * speed * (float)frametime;
+        velocity.x *= -1;
+    }
+    if (minimum.y < 0 || maximum.y > window.getSize().y) {
+        position -= velocity * speed * (float)frametime;
+        velocity.y *= -1;
+    }
 
-    // Center the text in the window
-    sf::FloatRect textRect = text1.getLocalBounds();
-    text1.setOrigin({ textRect.left + textRect.width/2.0f, textRect.top + textRect.height/2.0f });
-    text1.setPosition({ window.getSize().x / 2.0f, window.getSize().y / 2.0f });
-
-
-    text.setPosition({ centerPosX + x, centerPosY + y });
-    text.setRotation(sf::radians(angle));
+    t1.setPosition(position);
+    t2.setPosition(position);
+    t3.setPosition(position);
 
     window.clear(sf::Color::Black);
-    window.draw(text);
-    window.draw(text1);
+    window.draw(t1);
+    window.draw(t2);
+    window.draw(t3);
+
     window.display();
 }
 

@@ -31,11 +31,19 @@ namespace b {
         return res;
     }
 
+    resource resource::from_byte_string(const std::string& data, const std::string& filetype) {
+        return from_byte_string(data, b::u8_from_std_string(filetype));
+    }
+
     resource resource::from_byte_string(const std::string& data, const std::u8string& filetype) {
         resource res;
         res._data = data;
         res._filetype = filetype;
         return res;
+    }
+
+    resource resource::from_buffer(const void* buffer, size_t length, const std::string& filetype) {
+        return from_buffer(buffer, length, b::u8_from_std_string(filetype));
     }
 
     resource resource::from_buffer(const void* buffer, size_t length, const std::u8string& filetype) {
@@ -44,6 +52,10 @@ namespace b {
         res._filetype = filetype;
         std::memcpy(res._data.data(), buffer, length);
         return res;
+    }
+
+    resource resource::from_base64(const std::string& base64, const std::string& filetype) {
+        return from_base64(base64, b::u8_from_std_string(filetype));
     }
 
     resource resource::from_base64(const std::string& base64, const std::u8string& filetype) {
