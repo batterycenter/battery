@@ -1,0 +1,8 @@
+
+add_subdirectory(BatteryApp)
+add_subdirectory(BatteryCore_HelloWorld)
+add_subdirectory(BatteryEmbed)
+add_subdirectory(CustomMain)
+add_subdirectory(LockfileBlocking)
+add_subdirectory(LockfileNonBlocking)
+add_subdirectory(TrayIconAnimated)

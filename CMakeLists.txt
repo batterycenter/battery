@@ -22,9 +22,7 @@ option(BUILD_EXAMPLES "Build examples" ON)
 option(BUILD_CLI "Build the Battery cli 'b'" ON)
 option(BUILD_DOCS "Define the targets for building the documentation (not built automatically)" ON)
 
-add_subdirectory(src/core)
-add_subdirectory(src/graphics)
-add_subdirectory(src/python)
+add_subdirectory(src)
 
 if (BUILD_CLI)
     add_subdirectory(battery_cli)

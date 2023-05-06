@@ -83,6 +83,21 @@ endfunction()
 
 
 
+function(battery_add_alias_library target_name original_target)
+    add_library(${target_name} ALIAS ${original_target})
+endfunction()
+
+function(battery_add_alias_executable target_name original_target)
+    add_executable(${target_name} ALIAS ${original_target})
+endfunction()
+
+function(battery_add_msvc_header_files target_name)
+    if (MSVC)
+        file(GLOB_RECURSE headers ${CMAKE_CURRENT_LIST_DIR}/include/**)
+        target_sources(${target_name} PRIVATE ${headers})
+        source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include" PREFIX "include" FILES ${headers})
+    endif()
+endfunction()
 
 function(battery_add_library TARGET TYPE)
     set(booleanArguments)
@@ -97,6 +112,7 @@ function(battery_add_library TARGET TYPE)
         add_library(${TARGET}::${TARGET} ALIAS ${TARGET})
     endif()
     __apply_common_target_options(${TARGET})       # Apply things like C++ Standard, preprocessor defines, etc.
+    battery_add_msvc_header_files(${TARGET})
 endfunction()
 
 function(battery_add_executable TARGET)
@@ -118,6 +134,7 @@ function(battery_add_executable TARGET)
 
     battery_set_exe_output_folder(${TARGET} ${CMAKE_BINARY_DIR}/bin/$<IF:$<CONFIG:Debug>,debug,release>/${TARGET})
     __apply_common_target_options(${TARGET})   # Apply things like C++ Standard, preprocessor defines, etc.
+    battery_add_msvc_header_files(${TARGET})
 endfunction()
 
 function(battery_add_test TARGET)
@@ -132,6 +149,7 @@ function(battery_add_test TARGET)
     battery_add_executable(${TARGET} ${ARGN})
     target_link_libraries(${TARGET} gtest)
     gtest_discover_tests(${TARGET})
+    battery_add_msvc_header_files(${TARGET})
 endfunction()
 
 
@@ -162,6 +180,11 @@ endfunction()
 function(battery_set_ide_folder DIRECTORY LABEL)
     file(GLOB_RECURSE FILES "${DIRECTORY}/**")
     source_group(TREE "${DIRECTORY}" PREFIX ${LABEL} FILES ${FILES})
+endfunction()
+
+function(battery_add_source_files TARGET)
+    target_sources(${TARGET} PRIVATE ${ARGN})
+    source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/src" PREFIX "src" FILES ${SOURCES})
 endfunction()
 
 function(battery_precompile_headers TARGET FILE)
@@ -236,3 +259,4 @@ function(battery_embed TARGET RESOURCE_FILE TYPE)
 
 endfunction()
 
+include(${CMAKE_CURRENT_LIST_DIR}/modules.cmake)    # This defines the module helper functions

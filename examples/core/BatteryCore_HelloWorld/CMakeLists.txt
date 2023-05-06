@@ -1,0 +1,3 @@
+
+battery_add_executable(Example_BatteryCore_HelloWorld src/main.cpp)
+target_link_libraries(Example_BatteryCore_HelloWorld battery::core)
