@@ -8,15 +8,15 @@
 
 namespace b {
 
-    void application::setup() {
+    void application::app_setup() {
         // No action
     }
 
-    void application::update() {
+    void application::app_update() {
         // No action
     }
 
-    void application::cleanup() {
+    void application::app_cleanup() {
         // No action
     }
 
@@ -46,7 +46,9 @@ namespace b {
         this->args = args;
         b::folders::set_application_name(appname);
 
-        this->_setup();
+        if (!this->_setup()) {
+            return;
+        }
 
         this->frametime = 0.0;
         this->framerate = 0.0;
@@ -54,7 +56,9 @@ namespace b {
         auto last_frame = b::time();
         while (!this->stop_requested) {
 
-            this->_update();
+            if (!this->_update()) {
+                stop_application();
+            }
             sleep(1.0 / this->requested_framerate - (b::time() - last_frame));
 
             this->framecount++;
@@ -71,9 +75,10 @@ namespace b {
 
 
     template<typename Fn, typename... Args>
-    void catch_exceptions(const std::string& funcname, Fn&& fn, Args&&... args) {
+    bool catch_exceptions(const std::string& funcname, Fn&& fn, Args&&... args) {
         try {
             std::invoke(std::forward<Fn>(fn), std::forward<Args>(args)...);
+            return true;
         }
         catch (const std::exception& e) {
             b::log::critical("Unhandled exception caught in {}: {}", funcname, e.what());
@@ -81,18 +86,19 @@ namespace b {
         catch (...) {
             b::log::critical("Unknown exception caught in {}! No more information available", funcname);
         }
+        return false;
     }
 
-    void application::_setup() {
-        catch_exceptions("b::application::setup()", &application::setup, this);
+    bool application::_setup() {
+        return catch_exceptions("b::application::setup()", &application::app_setup, this);
     }
 
-    void application::_update() {
-        catch_exceptions("b::application::update()", &application::update, this);
+    bool application::_update() {
+        return catch_exceptions("b::application::update()", &application::app_update, this);
     }
 
-    void application::_cleanup() {
-        catch_exceptions("b::application::cleanup()", &application::cleanup, this);
+    bool application::_cleanup() {
+        return catch_exceptions("b::application::cleanup()", &application::app_cleanup, this);
     }
 
 }

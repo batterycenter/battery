@@ -17,9 +17,9 @@ namespace b {
         double frametime { 0.0 };
         uint64_t framecount { 0 };
 
-        virtual void setup();
-        virtual void update();
-        virtual void cleanup();
+        virtual void app_setup();
+        virtual void app_update();
+        virtual void app_cleanup();
 
         void set_requested_framerate(double requested_framerate);
         void set_requested_frametime(double requested_frametime);
@@ -31,9 +31,9 @@ namespace b {
 
     private:
 
-        void _setup();
-        void _update();
-        void _cleanup();
+        bool _setup();
+        bool _update();
+        bool _cleanup();
 
         bool stop_requested { false };
         double requested_framerate { 0.0 };

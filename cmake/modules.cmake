@@ -16,6 +16,9 @@ function(battery_make_module_available module_name module_path)
     list(APPEND AVAILABLE_MODULE_PATHS_TEMP ${module_path})
     set(BATTERY_AVAILABLE_MODULE_PATHS ${AVAILABLE_MODULE_PATHS_TEMP} CACHE STRING "List of available battery module paths" FORCE)
 
+    # And finally set the module as not loaded
+    set(BATTERY_MODULE_LOADED_${module_name} OFF CACHE INTERNAL "" FORCE)
+
 endfunction()
 
 function(battery_add_module module_name)
@@ -45,6 +48,9 @@ function(battery_add_module module_name)
     endif()
 
     # And now process the actual module
-    add_subdirectory(${module_path} ${CMAKE_CURRENT_BINARY_DIR}/battery_modules/${module_name})
+    if (NOT ${BATTERY_MODULE_LOADED_${module_name}})
+        add_subdirectory(${module_path} ${CMAKE_CURRENT_BINARY_DIR}/battery_modules/${module_name})
+        set(BATTERY_MODULE_LOADED_${module_name} ON CACHE INTERNAL "" FORCE)
+    endif()
 
 endfunction()

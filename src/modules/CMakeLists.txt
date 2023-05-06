@@ -3,6 +3,8 @@
 battery_clear_available_modules()
 battery_make_module_available(eventbus ${CMAKE_CURRENT_LIST_DIR}/eventbus)
 battery_make_module_available(graphics ${CMAKE_CURRENT_LIST_DIR}/graphics)
+battery_make_module_available(imgui ${CMAKE_CURRENT_LIST_DIR}/imgui)
+battery_make_module_available(imgui_sfml ${CMAKE_CURRENT_LIST_DIR}/imgui_sfml)
 battery_make_module_available(python ${CMAKE_CURRENT_LIST_DIR}/python)
 battery_make_module_available(reproc++ ${CMAKE_CURRENT_LIST_DIR}/reproc++)
 battery_make_module_available(sfml ${CMAKE_CURRENT_LIST_DIR}/sfml)
