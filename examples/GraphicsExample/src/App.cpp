@@ -3,6 +3,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+// TODO: Resizing the window destroys everything
+
 void App::setup() {
 
     window.create(sf::VideoMode({ 800, 600 }), "Hello, world!");
