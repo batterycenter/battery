@@ -15,8 +15,8 @@ namespace b {
         x86,
     };
 
-    // These constants are defined as static getter functions to avoid a 'static initialization order fiasco'
-    // https://isocpp.org/wiki/faq/ctors#static-init-order
+    // These constants are defined as static getter functions instead of variables,
+    // to avoid a 'static initialization order fiasco' https://isocpp.org/wiki/faq/ctors#static-init-order
     struct constants {
         static std::string battery_icon_base64();
         static std::u8string default_application_name();

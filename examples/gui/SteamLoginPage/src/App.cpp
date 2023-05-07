@@ -1,21 +1,21 @@
 
 #include "App.hpp"
-#define _USE_MATH_DEFINES
-#include <math.h>
 
-// TODO: Resizing the window destroys everything
+void MainWindow::ui() {
+    window([this]() {
+        button();
+    });
+}
 
-void App::setup() {
-
+void MainWindow::setup() {
     if (!font.loadFromFile("C:\\Users\\zachs\\Downloads\\fontawesome-free-6.4.0-web\\fontawesome-free-6.4.0-web\\webfonts\\fa-solid-900.ttf")) {
-        return;
+        throw std::runtime_error("Failed to load font");
     }
 
     auto img = b::resource::from_base64(b::constants::battery_icon_base64(), "png");
     if (!battery.loadFromMemory(img.data(), img.size())) {
-        return;
+        throw std::runtime_error("Failed to load battery icon");
     }
-
 }
 
 template<typename T>
@@ -30,7 +30,7 @@ void drawBounds(sf::RenderWindow& window, T obj) {
     window.draw(rect);
 }
 
-void App::update() {
+void MainWindow::update() {
 
     float speed = 50.0f;
     uint32_t fontSize = 36;
@@ -60,11 +60,11 @@ void App::update() {
     sf::Vector2 minimum = { position.x - totalBounds.x / 2.0f, position.y - totalBounds.y / 2.0f };
     sf::Vector2 maximum = { position.x + totalBounds.x / 2.0f, position.y + totalBounds.y / 2.0f };
 
-    if (minimum.x < 0 || maximum.x > window.getSize().x) {
+    if (minimum.x < 0 || maximum.x > this->getSize().x) {
         position -= velocity * speed * (float)frametime;
         velocity.x *= -1;
     }
-    if (minimum.y < 0 || maximum.y > window.getSize().y) {
+    if (minimum.y < 0 || maximum.y > this->getSize().y) {
         position -= velocity * speed * (float)frametime;
         velocity.y *= -1;
     }
@@ -73,14 +73,15 @@ void App::update() {
     t2.setPosition(position);
     t3.setPosition(position);
 
-    window.draw(t1);
-    window.draw(t2);
-    window.draw(t3);
+    this->draw(t1);
+    this->draw(t2);
+    this->draw(t3);
+
+    ui();
 
     ImGui::ShowDemoWindow();
-
 }
 
-void App::cleanup() {
+void MainWindow::cleanup() {
 
 }

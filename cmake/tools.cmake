@@ -241,7 +241,6 @@ function(battery_embed TARGET RESOURCE_FILE TYPE)
             DEPENDS ${RESOURCE_FILE} battery::embed
             OUTPUT ${TARGET_SOURCE})
 
-    # Imitate files so cmake can configure successfully
     target_sources(${TARGET} PUBLIC ${TARGET_HEADER} ${TARGET_SOURCE})
     source_group(TREE "${CMAKE_CURRENT_BINARY_DIR}/" PREFIX "Resource Files" FILES ${TARGET_HEADER} ${TARGET_SOURCE})
     source_group(TREE "${RESOURCE_DIRECTORY}/" PREFIX "Resource Files" FILES ${RESOURCE_FILE})
