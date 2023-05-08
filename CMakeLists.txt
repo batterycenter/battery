@@ -2,16 +2,10 @@ cmake_minimum_required(VERSION 3.18)
 project(battery)
 enable_testing()
 
-get_directory_property(hasParent PARENT_DIRECTORY)
-if(hasParent)
-    set(BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR} PARENT_SCOPE)
-endif()
-set(BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
 set(OLD_CMAKE_CXX_STANDARD ${CMAKE_CXX_STANDARD})   # Set the default C++ version for any non-specified targets
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(cmake/tools.cmake)
 battery_check_required_compiler_features()

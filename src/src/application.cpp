@@ -47,6 +47,7 @@ namespace b {
         b::folders::set_application_name(appname);
 
         if (!this->_setup()) {
+            this->_cleanup();
             return;
         }
 

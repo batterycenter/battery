@@ -4,7 +4,6 @@
 # target_link_libraries(... battery::python)
 
 battery_add_library(battery_python STATIC ALIAS battery::python)
-set_target_properties(battery_python PROPERTIES FOLDER "battery")
 target_link_libraries(battery_python battery::core)
 
 set(SOURCES
@@ -24,6 +23,8 @@ battery_find_python()
 battery_download_python_embedded_distro()
 
 target_link_libraries(battery_python Python::Python pybind11::embed)
+
+battery_set_target_ide_folder(gtest "battery/modules")
 
 # Unit-testing
 if (BUILD_TESTS)

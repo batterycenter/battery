@@ -9,7 +9,9 @@ battery_add_source_files(battery_graphics
         src/widgets/button.cpp
         src/widgets/window.cpp
 
-        src/constants.cpp
+        src/color_hex.cpp
+        src/graphics_constants.cpp
+        src/font_stack.cpp
         src/property_stack.cpp
         src/styles.cpp
         src/unit_property.cpp
@@ -24,6 +26,8 @@ battery_add_module(sfml)
 battery_add_module(imgui)
 battery_add_module(imgui_sfml)
 battery_add_module(magic_enum)
+battery_add_module(json)
+
 target_link_libraries(battery_graphics
         battery::sfml::graphics
         battery::sfml::window
@@ -33,8 +37,20 @@ target_link_libraries(battery_graphics
         battery::imgui
         battery::imgui_sfml
         battery::magic_enum
+        battery::json
         battery::core
     )
+
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/default_style.json default_style_json TEXT)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/inter-regular.ttf fonts_inter_regular_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/inter-medium.ttf fonts_inter_medium_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/inter-bold.ttf fonts_inter_bold_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/roboto-regular.ttf fonts_roboto_regular_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/roboto-medium.ttf fonts_roboto_medium_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/roboto-bold.ttf fonts_roboto_bold_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/montserrat-regular.ttf fonts_montserrat_regular_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/montserrat-medium.ttf fonts_montserrat_medium_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/montserrat-bold.ttf fonts_montserrat_bold_ttf BINARY)
 
 if (BUILD_TESTS)
     add_subdirectory(tests)

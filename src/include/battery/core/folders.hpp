@@ -45,7 +45,7 @@ namespace b {
         }
 
     private:
-        inline static std::u8string appname = b::constants::default_application_name();
+        inline static std::u8string appname = b::graphics_constants::default_application_name();
     };
 
 }

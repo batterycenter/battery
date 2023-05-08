@@ -7,5 +7,5 @@ target_sources(battery_python_tests PRIVATE
     python.cpp
     main.cpp)
 
-set_target_properties(battery_python_tests PROPERTIES FOLDER "battery/tests")
+battery_set_target_ide_folder(battery_python_tests "battery/tests")
 battery_copy_python_runtime_files_after_build(battery_python_tests)

@@ -1,7 +1,7 @@
 
 #include "battery/graphics/windowed_application.hpp"
 #include "battery/graphics/window.hpp"
-#include "battery/graphics/constants.hpp"
+#include "battery/graphics/graphics_constants.hpp"
 #include "battery/graphics/styles.hpp"
 #include "battery/core/string.hpp"
 
@@ -14,11 +14,9 @@ namespace b {
             throw std::runtime_error("Failed to initialize ImGui-SFML");
         }
 
-        b::push_default_style(style);
-    }
-
-    window::~window() {
-        ImGui::SFML::Shutdown();
+        b::load_default_imgui_style();
+        b::push_default_battery_style(style);
+        b::load_default_fonts();
     }
 
     void window::_update() {
@@ -35,13 +33,14 @@ namespace b {
             }
         }
 
+        getWindow().clear(b::graphics_constants::battery_default_background_color());
         ImGui::SFML::Update(getWindow(), deltaClock.restart());
 
-        getWindow().clear(b::graphics_constants::battery_default_background_color());
-
+        b::push_font("default");
         style.push();
         update();
         style.pop();
+        b::pop_font();
 
         //python();
 

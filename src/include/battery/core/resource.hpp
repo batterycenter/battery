@@ -18,7 +18,7 @@ namespace b {
         static resource from_base64(const std::string& base64, const std::string& filetype = "");
         static resource from_base64(const std::string& base64, const std::u8string& filetype);
 
-        [[nodiscard]] const char* data() const;
+        [[nodiscard]] void* data() const;
         [[nodiscard]] size_t size() const;
         // If specified correctly, the filetype will be a string hinting the encoding of the data. Empty is unknown,
         // it's parsed from the file path or specified manually. Guaranteed to be lowercase. Example: "" or "png" or "txt".

@@ -2,6 +2,7 @@
 
 #include "battery/graphics/sfml.hpp"
 #include "battery/graphics/widget_style.hpp"
+#include "battery/graphics/font_stack.hpp"
 
 namespace b {
 
@@ -14,7 +15,7 @@ namespace b {
         widget_style style;
 
         window(const std::u8string& title, sf::Vector2u size);
-        virtual ~window();
+        virtual ~window() = default;
 
         sf::RenderWindow& getWindow() { return *this; }
 

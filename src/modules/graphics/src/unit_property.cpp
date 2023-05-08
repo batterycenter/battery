@@ -1,5 +1,6 @@
 
 #include "battery/graphics/unit_property.hpp"
+#include "battery/graphics/color_hex.hpp"
 
 namespace b {
 
@@ -84,7 +85,7 @@ namespace b {
             case unit::PERCENT: return fmt::format("{:.06}%", m_float);
             case unit::PIXEL: return fmt::format("{:.06}px", m_float);
             case unit::VEC2: return fmt::format("[{:.06}, {:.06}]", m_vec2.x, m_vec2.y);
-            case unit::COLOR_HEX: return fmt::format(fmt::runtime("#{:02X}{:02X}{:02X}{:02X}"), m_vec4.x, m_vec4.y, m_vec4.z, m_vec4.w);
+            case unit::COLOR_HEX: return color_hex(m_vec4);
             default: return {};
         }
     }
@@ -123,18 +124,9 @@ namespace b {
     }
 
     void unit_property::parse_color(const std::string& str) {
-        std::stringstream ss;
-        if (str.length() == 7 || str.length() == 9) {    // Parse #RRGGBB or #RRGGBBAA format
-            m_vec4.x = (float)std::stoi(str.substr(1, 2), nullptr, 16);
-            m_vec4.y = (float)std::stoi(str.substr(3, 2), nullptr, 16);
-            m_vec4.z = (float)std::stoi(str.substr(5, 2), nullptr, 16);
-            m_vec4.w = str.size() == 9 ? (float)std::stoi(str.substr(7, 2), nullptr, 16) : 255;
-            m_unit = unit::COLOR_HEX;
-        }
-        else {
-            m_unit = unit::NONE;
-            throw std::invalid_argument(fmt::format("Cannot load value '{}' as an HTML color code: Unexpected length!", str));
-        }
+        m_unit = unit::NONE;
+        m_vec4 = color_hex(str);    // Throws if invalid
+        m_unit = unit::COLOR_HEX;
     }
 
     void unit_property::clear() {

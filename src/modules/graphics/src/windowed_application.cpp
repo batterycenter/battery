@@ -1,6 +1,7 @@
 
 #include "battery/core/string.hpp"
 #include "battery/graphics/windowed_application.hpp"
+#include "battery/graphics/font_stack.hpp"
 
 namespace b {
 
@@ -50,6 +51,8 @@ namespace b {
         }
 
         windows.clear();
+
+        ImGui::SFML::Shutdown();
     }
 
     void windowed_application::register_window(std::shared_ptr<b::window> window) {

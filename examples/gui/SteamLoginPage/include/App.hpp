@@ -33,7 +33,7 @@ public:
     ~App() = default;
 
     void setup() override {
-        register_window(std::make_shared<MainWindow>(u8"Battery_SimpleGraphicsExample", sf::Vector2u(800, 600)));
+        register_window(std::make_shared<MainWindow>(u8"Battery_SimpleGraphicsExample", sf::Vector2u(1280, 720)));
     }
 
     void update() override {}

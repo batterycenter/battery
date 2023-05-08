@@ -2,6 +2,7 @@
 function(battery_clear_available_modules)
     set(BATTERY_AVAILABLE_MODULES "" CACHE STRING "List of available battery modules" FORCE)
     set(BATTERY_AVAILABLE_MODULE_PATHS "" CACHE STRING "List of available battery module paths" FORCE)
+    set(BATTERY_AVAILABLE_MODULE_BINARY_DIRS "" CACHE STRING "List of available battery module binary dirs" FORCE)
 endfunction()
 
 function(battery_make_module_available module_name module_path)
@@ -16,6 +17,11 @@ function(battery_make_module_available module_name module_path)
     list(APPEND AVAILABLE_MODULE_PATHS_TEMP ${module_path})
     set(BATTERY_AVAILABLE_MODULE_PATHS ${AVAILABLE_MODULE_PATHS_TEMP} CACHE STRING "List of available battery module paths" FORCE)
 
+    # And to the list of module binary dirs
+    set(AVAILABLE_MODULE_BINARY_DIRS_TEMP ${BATTERY_AVAILABLE_MODULE_BINARY_DIRS})
+    list(APPEND AVAILABLE_MODULE_BINARY_DIRS_TEMP ${CMAKE_CURRENT_BINARY_DIR}/battery_modules/${module_name})
+    set(BATTERY_AVAILABLE_MODULE_BINARY_DIRS ${AVAILABLE_MODULE_BINARY_DIRS_TEMP} CACHE STRING "List of available battery module binary dirs" FORCE)
+
     # And finally set the module as not loaded
     set(BATTERY_MODULE_LOADED_${module_name} OFF CACHE INTERNAL "" FORCE)
 
@@ -26,6 +32,7 @@ function(battery_add_module module_name)
     # First we need to find the module path
     set(module_found FALSE)
     set(module_path "")
+    set(module_binary_dir "")
     foreach(name IN LISTS BATTERY_AVAILABLE_MODULES)
         list(FIND BATTERY_AVAILABLE_MODULES ${name} index)
         if(index EQUAL -1)
@@ -35,6 +42,7 @@ function(battery_add_module module_name)
         # If the module name is found, save its path from the second list
         if(name STREQUAL module_name)
             list(GET BATTERY_AVAILABLE_MODULE_PATHS ${index} module_path)
+            list(GET BATTERY_AVAILABLE_MODULE_BINARY_DIRS ${index} module_binary_dir)
             set(module_found TRUE)
             break()
         endif()
@@ -49,7 +57,7 @@ function(battery_add_module module_name)
 
     # And now process the actual module
     if (NOT ${BATTERY_MODULE_LOADED_${module_name}})
-        add_subdirectory(${module_path} ${CMAKE_CURRENT_BINARY_DIR}/battery_modules/${module_name})
+        add_subdirectory(${module_path} ${module_binary_dir})
         set(BATTERY_MODULE_LOADED_${module_name} ON CACHE INTERNAL "" FORCE)
     endif()
 

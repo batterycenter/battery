@@ -62,8 +62,8 @@ namespace b {
         return resource::from_byte_string(b::decode_base64(base64), filetype);
     }
 
-    const char* resource::data() const {
-        return _data.data();
+    void* resource::data() const {
+        return (void*)_data.data();
     }
 
     size_t resource::size() const {

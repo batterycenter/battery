@@ -122,8 +122,8 @@ namespace b {
         }
 
     private:
-        inline static std::atomic<bool> _message_box_on_exception { b::constants::message_box_on_exception_default() };
-        inline static std::atomic<bool> _catch_common_exceptions { b::constants::catch_common_exceptions_default() };
+        inline static std::atomic<bool> _message_box_on_exception { b::graphics_constants::message_box_on_exception_default() };
+        inline static std::atomic<bool> _catch_common_exceptions { b::graphics_constants::catch_common_exceptions_default() };
     };
 
     ///

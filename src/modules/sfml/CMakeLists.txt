@@ -9,6 +9,8 @@
 #        battery::sfml::network
 #    )
 
+set(WARNINGS_AS_ERRORS OFF CACHE BOOL "" FORCE)
+
 # Download the SFML Framework from Github: Latest commit from Apr 25, 2023
 battery_add_package("gh:SFML/SFML#cbfa9cbb65c0974ade5c52b182e8c57975d4d693")
 
@@ -18,8 +20,8 @@ battery_add_alias_library(battery::sfml::system sfml-system)
 battery_add_alias_library(battery::sfml::audio sfml-audio)
 battery_add_alias_library(battery::sfml::network sfml-network)
 
-battery_set_target_ide_folder(sfml-audio "battery/modules")
-battery_set_target_ide_folder(sfml-graphics "battery/modules")
-battery_set_target_ide_folder(sfml-network "battery/modules")
-battery_set_target_ide_folder(sfml-system "battery/modules")
-battery_set_target_ide_folder(sfml-window "battery/modules")
+battery_set_target_ide_folder(sfml-audio "battery/modules/sfml")
+battery_set_target_ide_folder(sfml-graphics "battery/modules/sfml")
+battery_set_target_ide_folder(sfml-network "battery/modules/sfml")
+battery_set_target_ide_folder(sfml-system "battery/modules/sfml")
+battery_set_target_ide_folder(sfml-window "battery/modules/sfml")

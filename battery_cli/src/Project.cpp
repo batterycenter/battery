@@ -34,7 +34,7 @@ b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags,
     data["binary_directory"] = "{{build_directory}}/bin";
     data["executable"] = "{{project_name}}";
     data["executable_path"] = "{{binary_directory}}/{{executable}}{{executable_extension}}";
-    data["executable_extension"] = b::constants::platform() == b::platform_t::windows ? ".exe" : "";
+    data["executable_extension"] = b::graphics_constants::platform() == b::platform_t::windows ? ".exe" : "";
     data["config"] = "debug";
     data["config_package"] = "release";
 

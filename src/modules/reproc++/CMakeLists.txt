@@ -8,5 +8,5 @@ set(REPROC++ ON)
 battery_add_package("gh:DaanDeMeyer/reproc#v14.2.4")
 battery_add_alias_library(battery::reproc++ reproc++)
 
-battery_set_target_ide_folder(reproc "battery/modules")
-battery_set_target_ide_folder(reproc++ "battery/modules")
+battery_set_target_ide_folder(reproc "battery/modules/reproc++")
+battery_set_target_ide_folder(reproc++ "battery/modules/reproc++")
