@@ -1,40 +1,54 @@
 #pragma once
 
 #include "battery/graphics/widgets/button.hpp"
+#include "battery/graphics/widget_builder.hpp"
 #include "battery/graphics/sfml.hpp"
+#include "battery/graphics/font_stack.hpp"
 
 namespace b::widgets {
 
     void button::operator()(const std::function<void()>& callback) {
+        widget_builder builder(style);
+
+        builder.add_numeric_rule("button-border-radius")
+                .add_case(b::unit::UNITLESS, [this](auto value) { return value; })
+                .add_case(b::unit::PIXEL, [this](auto value) { return value; })
+                .add_case(b::unit::PERCENT, [this](auto value) { return value / 100.f * actual_size.y; })
+                .add_case(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
+                .push(ImGuiStyleVar_FrameRounding);
+
+        builder.add_numeric_rule("button-border-width")
+                .add_case(b::unit::UNITLESS, [this](auto value) { return value; })
+                .add_case(b::unit::PIXEL, [this](auto value) { return value; })
+                .add_case(b::unit::PERCENT, [this](auto value) { return value / 100.f * actual_size.y; })
+                .add_case(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
+                .push(ImGuiStyleVar_FrameBorderSize);
+
+        builder.add_vec2_rule("button-padding")
+                .add_case_x(b::unit::UNITLESS, [this](auto value) { return value; })
+                .add_case_x(b::unit::PIXEL, [this](auto value) { return value; })
+                .add_case_x(b::unit::PERCENT, [this](auto value) { return value / 100.f * actual_size.x; })
+                .add_case_x(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
+                .add_case_y(b::unit::UNITLESS, [this](auto value) { return value; })
+                .add_case_y(b::unit::PIXEL, [this](auto value) { return value; })
+                .add_case_y(b::unit::PERCENT, [this](auto value) { return value / 100.f * actual_size.y; })
+                .add_case_y(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
+                .push(ImGuiStyleVar_FramePadding);
+
+        builder.add_color_rule("button-border-color").push(ImGuiCol_Border);
+        builder.add_color_rule("button-background-color").push(ImGuiCol_Button);
+        builder.add_color_rule("button-hover-color").push(ImGuiCol_ButtonHovered);
+        builder.add_color_rule("button-active-color").push(ImGuiCol_ButtonActive);
 
         if (sameline) {
             ImGui::SameLine();
         }
 
-        style.push();
-        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, b::property_stack::get("button-border-radius", 0.f));
-        ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, b::property_stack::get("button-border-width", 1.f));
-        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, b::property_stack::get("button-padding", ImVec2()));
-        ImGui::PushStyleColor(ImGuiCol_Border, b::property_stack::get("button-border-color", ImVec4()) / 255);
-        ImGui::PushStyleColor(ImGuiCol_Button, b::property_stack::get("button-background-color", ImVec4()) / 255);
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, b::property_stack::get("button-hover-color", ImVec4()) / 255);
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, b::property_stack::get("button-active-color", ImVec4()) / 255);
-
-        float width = b::property_stack::get("button-width", 0.f);
-        float height = b::property_stack::get("button-height", 0.f);
-
-        clicked = ImGui::Button(get_identifier().c_str(), { width, height });
+        clicked = ImGui::Button(get_identifier().c_str(), { size.x, size.y });
         held = ImGui::IsItemActive();
         hovered = ImGui::IsItemHovered();
-
-        ImGui::PopStyleColor();
-        ImGui::PopStyleColor();
-        ImGui::PopStyleColor();
-        ImGui::PopStyleColor();
-        ImGui::PopStyleVar();
-        ImGui::PopStyleVar();
-        ImGui::PopStyleVar();
-        style.pop();
+        actual_size = ImGui::GetItemRectSize();
+        builder.pop();
 
         if (callback && clicked) {
             callback();

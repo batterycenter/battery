@@ -10,12 +10,13 @@ battery_add_source_files(battery_graphics
         src/widgets/window.cpp
 
         src/color_hex.cpp
-        src/graphics_constants.cpp
         src/font_stack.cpp
+        src/graphics_constants.cpp
+        src/property_pack.cpp
         src/property_stack.cpp
         src/styles.cpp
         src/unit_property.cpp
-        src/widget_style.cpp
+        src/widget_builder.cpp
         src/window.cpp
         src/windowed_application.cpp
         )
@@ -27,8 +28,10 @@ battery_add_module(imgui)
 battery_add_module(imgui_sfml)
 battery_add_module(magic_enum)
 battery_add_module(json)
+battery_add_module(python)
 
 target_link_libraries(battery_graphics
+        battery::core
         battery::sfml::graphics
         battery::sfml::window
         battery::sfml::system
@@ -38,10 +41,11 @@ target_link_libraries(battery_graphics
         battery::imgui_sfml
         battery::magic_enum
         battery::json
-        battery::core
+        battery::python
     )
 
-battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/default_style.json default_style_json TEXT)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/default_themes.json default_themes_json TEXT)
+
 battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/inter-regular.ttf fonts_inter_regular_ttf BINARY)
 battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/inter-medium.ttf fonts_inter_medium_ttf BINARY)
 battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/inter-bold.ttf fonts_inter_bold_ttf BINARY)

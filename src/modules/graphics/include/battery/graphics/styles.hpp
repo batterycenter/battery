@@ -5,9 +5,12 @@
 
 namespace b {
 
-    void load_default_imgui_style();
-    void load_default_imgui_style(const nlohmann::json& style);
+    void make_theme_available(const std::string& name, const nlohmann::json& data);
 
-    void push_default_battery_style(widget_style& style);
+    void make_default_themes_available();
+
+    void load_theme(const std::string& name);
+
+    void apply_theme(const nlohmann::json& data);
 
 }

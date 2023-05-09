@@ -6,7 +6,6 @@ namespace b {
 
     unit_property::unit_property(const std::string& value) { operator=(value); }
     unit_property::unit_property(float value) { operator=(value); }
-    unit_property::unit_property(ImVec2 value) { operator=(value); }
     unit_property::unit_property(ImVec4 color) { operator=(color); }
 
     unit_property::unit_property(float value, enum unit unit) {
@@ -33,13 +32,6 @@ namespace b {
         return *this;
     }
 
-    unit_property& unit_property::operator=(ImVec2 value) {
-        clear();
-        m_vec2 = value;
-        m_unit = unit::VEC2;
-        return *this;
-    }
-
     unit_property& unit_property::operator=(ImVec4 color) {
         clear();
         m_vec4 = color;
@@ -48,7 +40,19 @@ namespace b {
     }
 
     unit_property::operator float() const {
-        if (m_unit == unit::UNITLESS || m_unit == unit::PERCENT || m_unit == unit::PIXEL) {
+        return numeric();
+    }
+
+    unit_property::operator ImVec4() const {
+        return color();
+    }
+
+    unit_property::operator std::string() const {
+        return string();
+    }
+
+    float unit_property::numeric() const {
+        if (m_unit == unit::UNITLESS || m_unit == unit::PERCENT || m_unit == unit::PIXEL || m_unit == unit::EM) {
             return m_float;
         }
         else {
@@ -56,16 +60,7 @@ namespace b {
         }
     }
 
-    unit_property::operator ImVec2() const {
-        if (m_unit == unit::VEC2) {
-            return m_vec2;
-        }
-        else {
-            throw std::runtime_error("Cannot convert b::unit_property to ImVec2: property hold a non-ImVec2 value!");
-        }
-    }
-
-    unit_property::operator ImVec4() const {
+    ImVec4 unit_property::color() const {
         if (m_unit == unit::COLOR_HEX) {
             return m_vec4;
         }
@@ -74,25 +69,20 @@ namespace b {
         }
     }
 
-    unit_property::operator std::string() const {
-        return this->str();
-    }
-
-    std::string unit_property::str() const {
-        std::stringstream str;
+    std::string unit_property::string() const {
         switch (m_unit) {
             case unit::UNITLESS: return fmt::format("{:.06}", m_float);
             case unit::PERCENT: return fmt::format("{:.06}%", m_float);
             case unit::PIXEL: return fmt::format("{:.06}px", m_float);
-            case unit::VEC2: return fmt::format("[{:.06}, {:.06}]", m_vec2.x, m_vec2.y);
             case unit::COLOR_HEX: return color_hex(m_vec4);
+            case unit::EM: return fmt::format("{:.06}em", m_float);
             default: return {};
         }
     }
 
     void unit_property::parse_numeric_property(const std::string& str) {
-        float tempValue = 0.f;
-        enum unit tempUnit = unit::NONE;
+        float tempValue {};
+        enum unit tempUnit {};
 
         if (std::string("0123456789.-").find(str[0]) == std::string::npos)       // Doesn't start with a digit
             throw std::invalid_argument(fmt::format("Cannot load value '{}' into b::unit_property: Expected a digit!", str));
@@ -112,11 +102,10 @@ namespace b {
         }
         else {
             std::string unit = str.substr(numberDigits, str.length() - numberDigits);
-            switch(unit[0]) {
-                case '%': tempUnit = unit::PERCENT; break;
-                case 'p': tempUnit = unit::PIXEL; break;
-                default: throw std::invalid_argument(fmt::format("Cannot load value '{}' into b::unit_property: Unexpected unit!", str));
-            }
+            if (unit == "%") tempUnit = unit::PERCENT;
+            else if (unit == "px") tempUnit = unit::PIXEL;
+            else if (unit == "em") tempUnit = unit::EM;
+            else throw std::invalid_argument(fmt::format("Cannot load value '{}' into b::unit_property: Unexpected unit!", str));
         }
 
         m_float = tempValue;
@@ -131,7 +120,6 @@ namespace b {
 
     void unit_property::clear() {
         m_float = 0.f;
-        m_vec2 = ImVec2(0.f, 0.f);
         m_vec4 = ImVec4(0.f, 0.f, 0.f, 0.f);
         m_unit = unit::NONE;
     }

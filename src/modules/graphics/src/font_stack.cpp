@@ -58,6 +58,10 @@ namespace b {
         ImGui::PopFont();
     }
 
+    float get_current_font_size() {
+        return ImGui::GetFontSize();
+    }
+
     std::vector<std::string> get_available_fonts() {
         std::vector<std::string> fonts;
         for (auto& [font, _] : font_stack::available_fonts) {

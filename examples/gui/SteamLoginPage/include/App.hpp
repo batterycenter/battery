@@ -8,7 +8,8 @@
 
 class MainWindow : public b::window {
 public:
-    MainWindow(const std::u8string& title, sf::Vector2u size) : b::window(title, size) {}
+    template<typename... Args>
+    MainWindow(Args... args) : b::window(args...) {}
     ~MainWindow() = default;
 
     sf::Font font;
@@ -34,6 +35,7 @@ public:
 
     void setup() override {
         register_window(std::make_shared<MainWindow>(u8"Battery_SimpleGraphicsExample", sf::Vector2u(1280, 720)));
+        // , sf::Style::None
     }
 
     void update() override {}

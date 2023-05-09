@@ -35,7 +35,7 @@ battery_add_module(utfcpp)
 target_link_libraries(battery_core_no_main battery::spdlog battery::reproc++ battery::utfcpp)
 
 if (WIN32)
-    target_link_libraries(battery_core_no_main Winmm.lib)   # for b::sleep_ms timer resolution
+    target_link_libraries(battery_core_no_main Winmm.lib dwmapi.lib)   # for b::sleep_ms timer resolution and immersive dark mode
 endif ()
 
 battery_add_library(battery_core STATIC ALIAS battery::core)

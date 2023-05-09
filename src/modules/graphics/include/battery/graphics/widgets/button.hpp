@@ -12,8 +12,10 @@ class button : public b::widgets::base_widget {
         bool held = false;
         bool hovered = false;
 
+        ImVec2 size;
+        ImVec2 actual_size;
+
         bool sameline = false;
-        widget_style style {};
 
         button() : base_widget("Button") {}
         explicit button(const std::string& name) : base_widget(name) {}

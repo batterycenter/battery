@@ -2,8 +2,12 @@
 #include "App.hpp"
 
 void MainWindow::ui() {
+//    window.position = { 0, 0 };
+//    window.size = { (float)getWindow().getSize().x, (float)getWindow().getSize().y };
+//    window.flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
+
     window([this]() {
-        button();
+        button([]() { b::log::info("Button pressed"); });
     });
 }
 

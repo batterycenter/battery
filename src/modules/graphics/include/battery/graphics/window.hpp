@@ -13,8 +13,9 @@ namespace b {
         double frametime { 0.0 };
         uint64_t framecount { 0 };
         widget_style style;
+        bool win32_use_immersive_dark_mode = true;
 
-        window(const std::u8string& title, sf::Vector2u size);
+        window(const std::u8string& title, sf::Vector2u size, uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
         virtual ~window() = default;
 
         sf::RenderWindow& getWindow() { return *this; }
@@ -27,6 +28,7 @@ namespace b {
         void _update();
 
         sf::Clock deltaClock;
+        bool win32_idm_used = !win32_use_immersive_dark_mode;
         friend class windowed_application;
     };
 
