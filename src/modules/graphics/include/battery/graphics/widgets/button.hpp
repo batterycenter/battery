@@ -14,6 +14,7 @@ class button : public b::widgets::base_widget {
 
         ImVec2 size;
         ImVec2 actual_size;
+        widget_style style;
 
         bool sameline = false;
 
@@ -21,6 +22,9 @@ class button : public b::widgets::base_widget {
         explicit button(const std::string& name) : base_widget(name) {}
 
         void operator()(const std::function<void()>& callback = nullptr) override;
+
+    protected:
+        std::function<std::tuple<bool, bool, bool>()> custom_implementation {};
     };
 
 }

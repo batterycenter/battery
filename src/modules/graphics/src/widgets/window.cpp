@@ -4,7 +4,7 @@
 namespace b::widgets {
 
     void window::operator()(const std::function<void()>& callback) {
-        style.push();
+        widget_builder builder(style);
 
         if (position.has_value()) {
             ImGui::SetNextWindowPos(*position);
@@ -14,14 +14,29 @@ namespace b::widgets {
             ImGui::SetNextWindowSize(*size);
         }
 
-        ImGui::Begin(get_identifier().c_str(), nullptr, flags);
-        callback();
-        ImGui::End();
+        if (border_width.has_value()) { ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, border_width.value()); }
+        builder.add_color_rule("window-titlebar-color").push(ImGuiCol_TitleBg);
+        builder.add_color_rule("window-titlebar-color-active").push(ImGuiCol_TitleBgActive);
+        builder.add_color_rule("window-titlebar-color-collapsed").push(ImGuiCol_TitleBgCollapsed);
+        builder.add_color_rule("window-background-color").push(ImGuiCol_WindowBg);
 
+        if (!always_open) {
+            ImGui::Begin(get_identifier().c_str(), &is_open, flags);
+        } else {
+            ImGui::Begin(get_identifier().c_str(), nullptr, flags);
+        }
+        titlebar_hovered = ImGui::IsItemHovered();
         actual_position = ImGui::GetWindowPos();
         actual_size = ImGui::GetWindowSize();
 
-        style.pop();
+        if (border_width.has_value()) { ImGui::PopStyleVar(); }
+
+        children_style.push();
+        callback();
+        children_style.pop();
+
+        ImGui::End();
+        builder.pop();
 
     }
 

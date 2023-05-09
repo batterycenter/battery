@@ -7,6 +7,7 @@ namespace b {
     unit_property::unit_property(const std::string& value) { operator=(value); }
     unit_property::unit_property(float value) { operator=(value); }
     unit_property::unit_property(ImVec4 color) { operator=(color); }
+    unit_property::unit_property(sf::Color color) { operator=(color); }
 
     unit_property::unit_property(float value, enum unit unit) {
         this->m_unit = unit;
@@ -39,6 +40,13 @@ namespace b {
         return *this;
     }
 
+    unit_property& unit_property::operator=(sf::Color color) {
+        clear();
+        m_vec4 = color;
+        m_unit = unit::COLOR_HEX;
+        return *this;
+    }
+
     unit_property::operator float() const {
         return numeric();
     }
@@ -56,7 +64,7 @@ namespace b {
             return m_float;
         }
         else {
-            throw std::runtime_error("Cannot convert b::unit_property to float: property hold a non-float value!");
+            throw std::runtime_error("Cannot convert b::unit_property to float: property holds a non-float value!");
         }
     }
 
@@ -65,7 +73,7 @@ namespace b {
             return m_vec4;
         }
         else {
-            throw std::runtime_error("Cannot convert b::unit_property to ImVec4/Color: property hold a non-color value!");
+            throw std::runtime_error("Cannot convert b::unit_property to ImVec4/Color: property holds a non-color value!");
         }
     }
 

@@ -10,7 +10,7 @@ namespace b {
     public:
         widget_style() = default;
 
-        inline unit_property& operator[](const std::string& str) {
+        inline property_pack& operator[](const std::string& str) {
             return properties[str];
         }
 
@@ -33,8 +33,8 @@ namespace b {
 
     private:
         bool pushed = false;
-        std::unordered_map<std::string, unit_property> properties;
-        std::unordered_map<std::string, unit_property> pushed_properties;
+        std::unordered_map<std::string, property_pack> properties;
+        std::unordered_map<std::string, property_pack> pushed_properties;
     };
 
 }

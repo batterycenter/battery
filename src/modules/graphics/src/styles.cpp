@@ -83,10 +83,10 @@ namespace b {
 
             // Else we assume it is a custom property
             if (value.is_array()) {
-                property_stack::push(key, { value[0].get<std::string>(), value[1].get<std::string>() });
+                property_stack::push(key, b::property_pack({ value[0].get<std::string>(), value[1].get<std::string>() }));
             }
             else {
-                property_stack::push(key, value.get<std::string>());
+                property_stack::push(key, b::unit_property(value.get<std::string>()));
             }
         }
     }

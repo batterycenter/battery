@@ -8,7 +8,6 @@ namespace b {
     public:
 
         static void push(const std::string& property_name, const property_pack& property_value);
-        static void push(const std::string& property_name, const unit_property& property_value);
         static void pop();
         static void clear();
 

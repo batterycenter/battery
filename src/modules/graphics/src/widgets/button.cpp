@@ -36,15 +36,22 @@ namespace b::widgets {
                 .push(ImGuiStyleVar_FramePadding);
 
         builder.add_color_rule("button-border-color").push(ImGuiCol_Border);
-        builder.add_color_rule("button-background-color").push(ImGuiCol_Button);
-        builder.add_color_rule("button-hover-color").push(ImGuiCol_ButtonHovered);
-        builder.add_color_rule("button-active-color").push(ImGuiCol_ButtonActive);
+        builder.add_color_rule("button-text-color").push(ImGuiCol_Text);
+        builder.add_color_rule("button-color").push(ImGuiCol_Button);
+        builder.add_color_rule("button-color-hover").push(ImGuiCol_ButtonHovered);
+        builder.add_color_rule("button-color-active").push(ImGuiCol_ButtonActive);
 
         if (sameline) {
             ImGui::SameLine();
         }
 
-        clicked = ImGui::Button(get_identifier().c_str(), { size.x, size.y });
+        if (custom_implementation) {
+            std::tie(clicked, hovered, held) = custom_implementation();
+        }
+        else {
+            clicked = ImGui::Button(get_identifier().c_str(), { size.x, size.y });
+        }
+
         held = ImGui::IsItemActive();
         hovered = ImGui::IsItemHovered();
         actual_size = ImGui::GetItemRectSize();

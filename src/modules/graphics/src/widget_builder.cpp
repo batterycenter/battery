@@ -35,6 +35,13 @@ namespace b::widgets {
         return {};
     }
 
+    float widget_builder::numeric_rule::get_result(float default_value) {
+        if (auto result = get_result()) {
+            return result.value();
+        }
+        return default_value;
+    }
+
     void widget_builder::numeric_rule::push(ImGuiStyleVar_ style_var) {
         if (auto result = get_result()) {
             ImGui::PushStyleVar(style_var, result.value());
@@ -88,6 +95,13 @@ namespace b::widgets {
         return {};
     }
 
+    ImVec2 widget_builder::vec2_rule::get_result(ImVec2 default_value) {
+        if (auto result = get_result()) {
+            return result.value();
+        }
+        return default_value;
+    }
+
     void widget_builder::vec2_rule::push(ImGuiStyleVar_ style_var) {
         if (auto result = get_result()) {
             ImGui::PushStyleVar(style_var, result.value());
@@ -126,9 +140,16 @@ namespace b::widgets {
         return {};
     }
 
+    ImVec4 widget_builder::color_rule::get_result(ImVec4 default_value) {
+        if (auto result = get_result()) {
+            return result.value();
+        }
+        return default_value;
+    }
+
     void widget_builder::color_rule::push(ImGuiCol_ style_var) {
         if (auto result = get_result()) {
-            ImGui::PushStyleColor(style_var, result.value());
+            ImGui::PushStyleColor(style_var, result.value() / 255.f);
             pushed++;
         }
     }

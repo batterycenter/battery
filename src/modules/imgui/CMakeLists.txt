@@ -3,7 +3,8 @@
 # battery_add_module(imgui)
 # target_link_libraries(... battery::imgui)
 
-battery_add_package("gh:ocornut/imgui#v1.89.5")
+# Pull latest commit from GitHub from May 9, 2923 -> docking branch
+battery_add_package("gh:ocornut/imgui#031148dc56d70158b3ad84d9be95b04bb3f5baaf")
 
 # ImGui does not have CMake support
 battery_add_library(battery_imgui STATIC ALIAS battery::imgui)

@@ -16,7 +16,6 @@ namespace b::widgets {
     class base_widget {
     public:
         std::string name;
-        widget_style style;
 
         explicit base_widget(std::string name) ;
         virtual ~base_widget() = default;

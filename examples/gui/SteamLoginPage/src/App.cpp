@@ -1,87 +1,58 @@
 
 #include "App.hpp"
 
-void MainWindow::ui() {
-//    window.position = { 0, 0 };
-//    window.size = { (float)getWindow().getSize().x, (float)getWindow().getSize().y };
-//    window.flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
+// Move the parent SFML window if the user is dragging the title bar
+void MainWindow::drag_window() {
+    static bool dragWindow = false;
+    static bool wasMouseDragging = false;
+    bool mouseDragging = ImGui::IsMouseDragging(ImGuiMouseButton_Left, 0.0f);
 
-    window([this]() {
-        button([]() { b::log::info("Button pressed"); });
-    });
+    if (mouseDragging && !wasMouseDragging && window.titlebar_hovered) {   // Start dragging
+        dragWindow = true;
+    }
+    if (!mouseDragging) {  // Stop dragging
+        dragWindow = false;
+    }
+
+    if (dragWindow) {
+        ImVec2 delta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Left);
+        getWindow().setPosition(getWindow().getPosition() + sf::Vector2i((int)delta.x, (int)delta.y));
+    }
+
+    wasMouseDragging = mouseDragging;
 }
 
 void MainWindow::setup() {
-    if (!font.loadFromFile("C:\\Users\\zachs\\Downloads\\fontawesome-free-6.4.0-web\\fontawesome-free-6.4.0-web\\webfonts\\fa-solid-900.ttf")) {
-        throw std::runtime_error("Failed to load font");
-    }
+    window.border_width = 0.f;
+    window.position = {0, 0};
+    window.name = "";
+    window.flags =
+            ImGuiWindowFlags_NoResize |
+            ImGuiWindowFlags_NoMove |
+            ImGuiWindowFlags_NoCollapse |
+            ImGuiWindowFlags_NoBringToFrontOnFocus;
 
-    auto img = b::resource::from_base64(b::graphics_constants::battery_icon_base64(), "png");
-    if (!battery.loadFromMemory(img.data(), img.size())) {
-        throw std::runtime_error("Failed to load battery icon");
-    }
-}
+    window.style["window-titlebar-color"] = "#202227"_u;
+    window.style["window-titlebar-color-active"] = "#202227"_u;
+    window.style["window-titlebar-color-collapsed"] = "#202227"_u;
+    window.style["window-background-color"] = "#191a1e"_u;
+    window.style["ImGuiStyleVar_FramePadding"] = { "10px"_u, "10px"_u };
 
-template<typename T>
-void drawBounds(sf::RenderWindow& window, T obj) {
-    sf::RectangleShape rect;
-    rect.setFillColor(sf::Color::Transparent);
-    rect.setOutlineColor(sf::Color::Red);
-    rect.setOutlineThickness(1.0f);
-    rect.setOrigin(obj.getOrigin());
-    rect.setSize({ 50, 50 });
-    rect.setPosition(obj.getPosition());
-    window.draw(rect);
+    login_button.style["button-gradient-color-left"] = "#06bfff"_u;
+    login_button.style["button-gradient-color-right"] = "#2d73ff"_u;
 }
 
 void MainWindow::update() {
 
-    float speed = 50.0f;
-    uint32_t fontSize = 36;
-    float padding = 10.0f;
-    sf::Vector2 batteryOffset = { 15.0f, 10.0f };
-
-    sf::Text t1(font, "I", fontSize);
-    t1.setFillColor(sf::Color::Green);
-
-    sf::Text t2(font, U"\uf004", fontSize);
-    t2.setFillColor(sf::Color::Red);
-
-    sf::Sprite t3(battery);
-    t3.setScale({ 0.5f, 0.5f });
-
-    t2.setOrigin({ t2.getLocalBounds().width / 2.0f, t2.getLocalBounds().height / 2.0f });
-    t1.setOrigin({ t1.getLocalBounds().width + t2.getLocalBounds().width / 2.0f + padding, t1.getLocalBounds().height / 2.0f });
-    t3.setOrigin({ -t2.getLocalBounds().width / 2.0f - padding - batteryOffset.x, t3.getLocalBounds().height / 2.0f - batteryOffset.y });
-
-    sf::Vector2 totalBounds = {
-            t1.getLocalBounds().width + t2.getLocalBounds().width + t3.getLocalBounds().width - padding,
-            std::max(t1.getLocalBounds().height, std::max(t2.getLocalBounds().height, t3.getLocalBounds().height) - padding)
-    };
-
-    position += velocity * speed * (float)frametime;
-
-    sf::Vector2 minimum = { position.x - totalBounds.x / 2.0f, position.y - totalBounds.y / 2.0f };
-    sf::Vector2 maximum = { position.x + totalBounds.x / 2.0f, position.y + totalBounds.y / 2.0f };
-
-    if (minimum.x < 0 || maximum.x > this->getSize().x) {
-        position -= velocity * speed * (float)frametime;
-        velocity.x *= -1;
+    window.size = {(float) getWindow().getSize().x, (float) getWindow().getSize().y};
+    window([this]() {
+        drag_window();
+        button([]() { b::log::info("Button pressed"); });
+        login_button();
+    });
+    if (!window.is_open) {
+        getWindow().close();
     }
-    if (minimum.y < 0 || maximum.y > this->getSize().y) {
-        position -= velocity * speed * (float)frametime;
-        velocity.y *= -1;
-    }
-
-    t1.setPosition(position);
-    t2.setPosition(position);
-    t3.setPosition(position);
-
-    this->draw(t1);
-    this->draw(t2);
-    this->draw(t3);
-
-    ui();
 
     ImGui::ShowDemoWindow();
 }

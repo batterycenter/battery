@@ -14,6 +14,7 @@ namespace b::widgets {
 
             numeric_rule& add_case(enum b::unit unit, const std::function<float(float)>& transformer);
             std::optional<float> get_result();
+            float get_result(float default_value);
             void push(ImGuiStyleVar_ style_var);
 
             numeric_rule& operator=(const numeric_rule&) = delete;
@@ -44,6 +45,7 @@ namespace b::widgets {
             vec2_rule& add_case_x(enum b::unit unit, const std::function<float(float)>& transformer);
             vec2_rule& add_case_y(enum b::unit unit, const std::function<float(float)>& transformer);
             std::optional<ImVec2> get_result();
+            ImVec2 get_result(ImVec2 default_value);
             void push(ImGuiStyleVar_ style_var);
 
             vec2_rule& operator=(const vec2_rule&) = delete;
@@ -74,6 +76,7 @@ namespace b::widgets {
             ~color_rule();
 
             std::optional<ImVec4> get_result();
+            ImVec4 get_result(ImVec4 default_value);
             void push(ImGuiCol_ style_var);
 
             color_rule& operator=(const color_rule&) = delete;

@@ -22,10 +22,12 @@ namespace b {
         unit_property(float value, unit unit);
         unit_property(float value);
         unit_property(ImVec4 color);
+        unit_property(sf::Color color);
 
         unit_property& operator=(const std::string& value);
         unit_property& operator=(float value);
         unit_property& operator=(ImVec4 color);
+        unit_property& operator=(sf::Color color);
 
         explicit operator float() const;
         explicit operator ImVec4() const;
@@ -50,9 +52,13 @@ namespace b {
         enum unit m_unit = unit::NONE;
     };
 
-    inline std::ostream& operator<<(std::ostream& os, const unit_property& value) {
-        os << value.string();
-        return os;
-    }
+}
 
+inline std::ostream& operator<<(std::ostream& os, const b::unit_property& value) {
+    os << value.string();
+    return os;
+}
+
+inline b::unit_property operator "" _u(const char* str, std::size_t len) {
+    return b::unit_property(std::string(str, len));
 }

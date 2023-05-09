@@ -37,10 +37,6 @@ namespace b {
         // Otherwise, nothing is pushed to ImGui
     }
 
-    void property_stack::push(const std::string& property_name, const unit_property& property_value) {
-        push(property_name, property_pack(property_value));
-    }
-
     void property_stack::pop() {
         if (properties.empty()) throw std::logic_error("Cannot pop property from property_stack: Stack is empty! Probably a style push/pop mismatch!");
         auto [property_name, property_value] = properties.back();
@@ -96,14 +92,14 @@ namespace b {
             if (property_value.get_properties()[0].unit() == b::unit::COLOR_HEX)
                 throw std::invalid_argument(fmt::format("Cannot push/pop style var {}: Property value is not of type float!", property_name));
 
-            if (push) ImGui::PushStyleVar(stylevar_enum, (float)property_value.get_properties()[0]);
+            if (push) ImGui::PushStyleVar(stylevar_enum, property_value.get_properties()[0].numeric());
             else ImGui::PopStyleVar();
         }
         else if (property_value.get_properties().size() == 2) {  // ImVec2
             if (property_value.get_properties()[0].unit() == b::unit::COLOR_HEX)
                 throw std::invalid_argument(fmt::format("Cannot push/pop style var {}: Either nested property value is not of type float!", property_name));
 
-            if (push) ImGui::PushStyleVar(stylevar_enum, ImVec2((float)property_value.get_properties()[0], (float)property_value.get_properties()[1]));
+            if (push) ImGui::PushStyleVar(stylevar_enum, ImVec2(property_value.get_properties()[0].numeric(), property_value.get_properties()[1].numeric()));
             else ImGui::PopStyleVar();
         }
         else {
@@ -116,7 +112,7 @@ namespace b {
             if (property_value.get_properties()[0].unit() != b::unit::COLOR_HEX)
                 throw std::invalid_argument(fmt::format("Cannot push/pop style color {}: Property value is not a color!", property_name));
 
-            if (push) ImGui::PushStyleColor(color_enum, (ImVec4)property_value.get_properties()[0] / 255.f);
+            if (push) ImGui::PushStyleColor(color_enum, property_value.get_properties()[0].color() / 255.f);
             else ImGui::PopStyleColor();
         }
         else {
