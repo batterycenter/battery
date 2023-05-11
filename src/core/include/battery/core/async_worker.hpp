@@ -4,6 +4,8 @@
 #include <mutex>
 #include <future>
 
+//TODO: Implement a way to stop an async worker using a stop token
+
 namespace b {
 
     template<typename T>

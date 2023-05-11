@@ -1,5 +1,9 @@
 
 #include "App.hpp"
+#include "resources/ui_main_py.hpp"
+
+
+
 
 // Move the parent SFML window if the user is dragging the title bar
 void MainWindow::drag_window() {

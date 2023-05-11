@@ -11,6 +11,7 @@ battery_add_source_files(battery_core_no_main
         src/cache.cpp
         src/console.cpp
         src/constants.cpp
+        src/file_watcher.cpp
         src/fs.cpp
         src/lockfile.cpp
         src/log.cpp
@@ -25,6 +26,10 @@ battery_add_source_files(battery_core_no_main
         src/uuid.cpp)
 
 battery_set_ide_folder(battery_core_no_main "battery/modules")
+
+if (PRODUCTION_MODE)
+    target_compile_definitions(battery_core_no_main PUBLIC BATTERY_PRODUCTION_MODE)
+endif ()
 
 battery_add_module(spdlog)
 battery_add_module(reproc++)

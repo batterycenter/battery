@@ -22,13 +22,30 @@ function(battery_embed TARGET RESOURCE_FILE SYMBOL_NAME TYPE)
     set(TARGET_HEADER ${CMAKE_CURRENT_BINARY_DIR}/resources_include/resources/${SYMBOL_NAME}.hpp)
     set(TARGET_SOURCE ${CMAKE_CURRENT_BINARY_DIR}/resources_include/resources/${SYMBOL_NAME}.cpp)
 
+    # We call the tool in a nested cmake command, to be able to silence its output
     add_custom_command(
-            COMMAND ${TOOL_EXE} ${RESOURCE_FILE} ${TARGET_HEADER} --symbol_name ${SYMBOL_NAME} --header ${BINARY}
+            COMMAND
+                ${CMAKE_COMMAND}
+                -DTOOL_EXE=${TOOL_EXE}
+                -DRESOURCE_FILE=${RESOURCE_FILE}
+                -DTARGET_FILE=${TARGET_HEADER}
+                -DSYMBOL_NAME=${SYMBOL_NAME}
+                -DTYPE=--header
+                -DBINARY=${BINARY}
+                -P ${BATTERY_ROOT_DIR}/cmake/execute_silent_battery_embed.cmake
             DEPENDS ${RESOURCE_FILE} battery::embed
             OUTPUT ${TARGET_HEADER})
 
     add_custom_command(
-            COMMAND ${TOOL_EXE} ${RESOURCE_FILE} ${TARGET_SOURCE} --symbol_name ${SYMBOL_NAME} --cpp ${BINARY}
+            COMMAND
+            ${CMAKE_COMMAND}
+                -DTOOL_EXE=${TOOL_EXE}
+                -DRESOURCE_FILE=${RESOURCE_FILE}
+                -DTARGET_FILE=${TARGET_SOURCE}
+                -DSYMBOL_NAME=${SYMBOL_NAME}
+                -DTYPE=--cpp
+                -DBINARY=${BINARY}
+                -P ${BATTERY_ROOT_DIR}/cmake/execute_silent_battery_embed.cmake
             DEPENDS ${RESOURCE_FILE} battery::embed
             OUTPUT ${TARGET_SOURCE})
 

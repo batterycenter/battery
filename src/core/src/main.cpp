@@ -41,6 +41,12 @@ namespace b {
         b::log::core::trace("Switched terminal codepage to Unicode (UTF-8)");
 #endif
     }
+
+    static void print_production_warning() {
+#ifndef BATTERY_PRODUCTION_MODE
+        b::log::core::warn("Battery is running in non-production mode, enabling live-reloaded resources. Make sure to enable production mode before releasing your app!");
+#endif
+    }
 	
     const char** args_to_argv(const std::vector<std::u8string>& args) {
         static auto args_raw = args;     // Static, so the data will stay in memory forever (needed by c_str())
@@ -56,6 +62,7 @@ namespace b {
     int invoke_main(int argc, const char** argv) {
         b::time();                  // First call sets zero-time to now
         setup_windows_console();
+        print_production_warning();
 
         int result = -1;
         b::thread::catch_common_exceptions([&result, argc, argv]() {

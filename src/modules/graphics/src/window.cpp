@@ -53,7 +53,7 @@ namespace b {
             }
         }
 
-        getWindow().clear(b::graphics_constants::battery_default_background_color());
+        getWindow().clear(b::constants::battery_default_background_color());
         ImGui::SFML::Update(getWindow(), deltaClock.restart());
 
         b::push_font("default");

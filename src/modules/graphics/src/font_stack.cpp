@@ -84,7 +84,7 @@ namespace b {
         make_font_available("montserrat-medium", resources::fonts_montserrat_medium_ttf);
         make_font_available("montserrat-bold", resources::fonts_montserrat_bold_ttf);
 
-        auto [default_font, default_font_size] = b::graphics_constants::battery_default_font();
+        auto [default_font, default_font_size] = b::constants::battery_default_font();
         b::load_font("default", default_font, default_font_size);
     }
 

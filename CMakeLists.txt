@@ -15,6 +15,7 @@ option(BUILD_TESTS "Build all unit tests" ON)
 option(BUILD_EXAMPLES "Build examples" ON)
 option(BUILD_CLI "Build the Battery cli 'b'" ON)
 option(BUILD_DOCS "Define the targets for building the documentation (not built automatically)" ON)
+option(PRODUCTION_MODE "Build the project in production mode" OFF)
 
 add_subdirectory(src)
 

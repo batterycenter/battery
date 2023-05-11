@@ -16,7 +16,7 @@ int b::main(const std::vector<std::u8string>& args) {
         path += fmt::format("resources/fire{}.png", i);
         frames.emplace_back(b::resource::from_binary_file(path));
     }
-    auto defaultIcon = b::resource::from_base64(b::graphics_constants::battery_icon_base64(), u8"png");
+    auto defaultIcon = b::resource::from_base64(b::constants::battery_icon_base64(), u8"png");
 
     // Everything related to one Tray class must be called from the same thread.
     // You can easily dispatch this to a background thread using battery::async_worker,

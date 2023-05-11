@@ -3,6 +3,8 @@ include(cmake/CPM.cmake)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+set(BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR}/.. CACHE INTERNAL "Root directory of the battery project")
+
 function(battery_test_if_compiles RESULT_VAR OUTPUT_VAR STD_VERSION SOURCE_CONTENT)
     message(STATUS "Checking for compiler feature ${RESULT_VAR}")
     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/try_compile/main.cpp ${SOURCE_CONTENT})

@@ -55,12 +55,15 @@ namespace b {
         template <class _Fn, class... _Args>
         explicit thread(_Fn&& _Fx, _Args&&... _Ax)
           : std::jthread([_Fx = std::forward<_Fn>(_Fx), ...args = std::forward<_Args>(_Ax), this]() mutable {
+                _promise.set_value();
                 if constexpr (std::is_invocable_v<std::decay_t<_Fn>, std::stop_token, std::decay_t<_Args>...>) {
                     catch_common_exceptions(std::move(_Fx), get_stop_token(), std::move(args)...);
                 } else {
                     catch_common_exceptions(std::move(_Fx), std::move(args)...);
                 }
-            }) {}
+            }) {
+              _promise.get_future().get();
+          }
 
         ///
         /// \brief Run a function and catch all exceptions with nice error messages.
@@ -122,8 +125,9 @@ namespace b {
         }
 
     private:
-        inline static std::atomic<bool> _message_box_on_exception { b::graphics_constants::message_box_on_exception_default() };
-        inline static std::atomic<bool> _catch_common_exceptions { b::graphics_constants::catch_common_exceptions_default() };
+        inline static std::atomic<bool> _message_box_on_exception { b::constants::message_box_on_exception_default() };
+        inline static std::atomic<bool> _catch_common_exceptions { b::constants::catch_common_exceptions_default() };
+        std::promise<void> _promise;
     };
 
     ///

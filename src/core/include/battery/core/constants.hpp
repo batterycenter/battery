@@ -17,7 +17,7 @@ namespace b {
 
     // These constants are defined as static getter functions instead of variables,
     // to avoid a 'static initialization order fiasco' https://isocpp.org/wiki/faq/ctors#static-init-order
-    struct graphics_constants {
+    struct constants {
         static std::string battery_icon_base64();
         static std::u8string default_application_name();
 
@@ -25,6 +25,8 @@ namespace b {
         static bool catch_common_exceptions_default();
         static platform_t platform();
         static arch_t architecture();
+
+        static bool is_production_mode();
     };
 
 }

@@ -12,7 +12,7 @@ void App::setup() {
         return;
     }
 
-    auto img = b::resource::from_base64(b::graphics_constants::battery_icon_base64(), "png");
+    auto img = b::resource::from_base64(b::constants::battery_icon_base64(), "png");
     if (!battery.loadFromMemory(img.data(), img.size())) {
         return;
     }

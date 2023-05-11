@@ -16,6 +16,7 @@ namespace b::fs {
     using std::filesystem::copy;					// Copy either a file or a directory
     using std::filesystem::remove;                  // Delete a file (symlinks not followed)
     using std::filesystem::remove_all;              // Recursively delete a directory (symlinks not followed)
+    using std::filesystem::last_write_time;
 
     using std::filesystem::status;					// Get filesystem status: what type of entry it is
     using std::filesystem::is_regular_file;
