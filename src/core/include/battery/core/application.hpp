@@ -9,8 +9,10 @@ namespace b {
 
     class application {
     public:
-        application() = default;
+        application();
         virtual ~application() = default;
+
+        static application* get();
 
         std::vector<std::u8string> args;
         double framerate { 0.0 };
@@ -29,6 +31,11 @@ namespace b {
 
         void run(const std::u8string& appname, const std::vector<std::u8string>& args);
 
+        application& operator=(const application&) = delete;
+        application& operator=(application&&) = delete;
+        application(const application&) = delete;
+        application(application&&) = delete;
+
     private:
 
         bool _setup();
@@ -37,6 +44,7 @@ namespace b {
 
         bool stop_requested { false };
         double requested_framerate { 0.0 };
+        inline static application* instance { nullptr };
     };
 
 }

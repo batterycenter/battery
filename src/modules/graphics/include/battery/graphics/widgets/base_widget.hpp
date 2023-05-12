@@ -3,9 +3,12 @@
 #include <string>
 #include <functional>
 #include <utility>
+#include "battery/python/python.hpp"
 #include "battery/graphics/widget_builder.hpp"
 #include "battery/graphics/unit_property.hpp"
 #include "battery/graphics/property_stack.hpp"
+#include "battery/graphics/widget_style.hpp"
+#include "battery/graphics/font_stack.hpp"
 #include "magic_enum.hpp"
 
 namespace b::widgets {
@@ -26,7 +29,7 @@ namespace b::widgets {
         base_widget(base_widget&& other) = default;	        // Moving is allowed as the other object is then invalid
         base_widget& operator=(base_widget&& other) = default;
 
-        virtual void operator()(const std::function<void()>& callback = nullptr) = 0;
+        virtual void operator()() = 0;
 
     protected:
         [[nodiscard]] std::string get_identifier() const;

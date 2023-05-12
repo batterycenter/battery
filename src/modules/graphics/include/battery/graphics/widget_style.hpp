@@ -31,6 +31,14 @@ namespace b {
             pushed = false;
         }
 
+        inline property_pack& get(const std::string& str) {
+            return properties[str];
+        }
+
+        inline void set(const std::string& str, const std::string& pack) {
+            properties[str] = pack;
+        }
+
     private:
         bool pushed = false;
         std::unordered_map<std::string, property_pack> properties;

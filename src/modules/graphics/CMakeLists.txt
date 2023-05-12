@@ -7,7 +7,11 @@ battery_add_library(battery_graphics STATIC ALIAS battery::graphics)
 battery_add_source_files(battery_graphics
         src/widgets/base_widget.cpp
         src/widgets/button.cpp
+        src/widgets/dummy.cpp
         src/widgets/fancy_button.cpp
+        src/widgets/image.cpp
+        src/widgets/input.cpp
+        src/widgets/text.cpp
         src/widgets/window.cpp
 
         src/color_hex.cpp

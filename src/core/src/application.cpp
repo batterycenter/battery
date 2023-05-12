@@ -8,6 +8,20 @@
 
 namespace b {
 
+    application::application() {
+        if (instance != nullptr) {
+            throw std::runtime_error("Only one instance of b::application is allowed!");
+        }
+        instance = this;
+    }
+
+    application* application::get() {
+        if (instance == nullptr) {
+            throw std::runtime_error("No instance of b::application exists!");
+        }
+        return instance;
+    }
+
     void application::app_setup() {
         // No action
     }

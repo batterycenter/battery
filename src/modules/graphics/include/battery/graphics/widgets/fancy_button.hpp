@@ -9,7 +9,7 @@ namespace b::widgets {
         fancy_button();
         explicit fancy_button(const std::string& name);
 
-        void operator()(const std::function<void()>& callback = nullptr);
+        void operator()();  // NOT OVERRIDE
     };
 
 }

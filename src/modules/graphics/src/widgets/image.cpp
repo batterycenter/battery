@@ -1,12 +1,15 @@
-#pragma once
 
-#include "battery/graphics/widgets/button.hpp"
-#include "battery/graphics/sfml.hpp"
+#include "battery/graphics/widgets/image.hpp"
 
 namespace b::widgets {
 
-    void button::operator()() {
+    void image::operator()() {
         widget_builder builder(style);
+
+        builder.add_color_rule("text-color").push(ImGuiCol_Text);
+        builder.add_color_rule("text-color-disabled").push(ImGuiCol_TextDisabled);
+        builder.add_color_rule("text-color-selected").push(ImGuiCol_TextSelectedBg);
+        builder.add_color_rule("border-color").push(ImGuiCol_Border);
 
         builder.add_numeric_rule("border-radius")
                 .add_case(b::unit::UNITLESS, [this](auto value) { return value; })
@@ -33,25 +36,11 @@ namespace b::widgets {
                 .add_case_y(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
                 .push(ImGuiStyleVar_FramePadding);
 
-        builder.add_color_rule("border-color").push(ImGuiCol_Border);
-        builder.add_color_rule("text-color").push(ImGuiCol_Text);
-        builder.add_color_rule("button-color").push(ImGuiCol_Button);
-        builder.add_color_rule("button-color-hover").push(ImGuiCol_ButtonHovered);
-        builder.add_color_rule("button-color-active").push(ImGuiCol_ButtonActive);
-
         if (sameline) {
             ImGui::SameLine();
         }
 
-        if (custom_implementation) {
-            std::tie(clicked, hovered, held) = custom_implementation();
-        }
-        else {
-            clicked = ImGui::Button(get_identifier().c_str(), { size.x, size.y });
-        }
-
-        held = ImGui::IsItemActive();
-        hovered = ImGui::IsItemHovered();
+        ImGui::Image(img, size);
         actual_size = ImGui::GetItemRectSize();
     }
 

@@ -9,6 +9,10 @@ namespace b {
         set_requested_framerate(60.0);
     }
 
+    windowed_application* windowed_application::get() {
+        return dynamic_cast<windowed_application*>(b::application::get());
+    }
+
     void windowed_application::app_setup() {
 
         setup();

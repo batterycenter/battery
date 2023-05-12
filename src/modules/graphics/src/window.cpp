@@ -4,6 +4,7 @@
 #include "battery/graphics/graphics_constants.hpp"
 #include "battery/graphics/styles.hpp"
 #include "battery/core/string.hpp"
+#include "battery/core/constants.hpp"
 
 #include "battery/core/environment.hpp"
 #ifdef BATTERY_ARCH_WINDOWS
@@ -15,6 +16,12 @@ namespace b {
 
     window::window(const std::u8string& title, sf::Vector2u size, uint32_t style, const sf::ContextSettings& settings) {
         this->create(sf::VideoMode(size), b::to_u32(title), style, settings);
+
+        auto icon = b::resource::from_base64(b::constants::battery_icon_base64());
+        sf::Image image;
+        if (image.loadFromMemory(icon.data(), icon.size())) {
+            (void)getWindow().setIcon(image);
+        }
 
         if (!ImGui::SFML::Init(getWindow())) {
             throw std::runtime_error("Failed to initialize ImGui-SFML");
@@ -53,7 +60,7 @@ namespace b {
             }
         }
 
-        getWindow().clear(b::constants::battery_default_background_color());
+        getWindow().clear(b::graphics_constants::battery_default_background_color());
         ImGui::SFML::Update(getWindow(), deltaClock.restart());
 
         b::push_font("default");

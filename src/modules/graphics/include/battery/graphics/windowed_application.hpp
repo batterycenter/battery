@@ -2,6 +2,7 @@
 
 #include "battery/core/application.hpp"
 #include "battery/graphics/window.hpp"
+#include "battery/python/python.hpp"
 
 namespace b {
 
@@ -9,6 +10,8 @@ namespace b {
     public:
         windowed_application();
         virtual ~windowed_application() = default;
+
+        static windowed_application* get();
 
         void app_setup() final override;
         void app_update() final override;
@@ -23,6 +26,7 @@ namespace b {
         virtual void cleanup() = 0;
 
     private:
+        b::py::scoped_interpreter guard{};
         std::vector<std::shared_ptr<b::window>> windows;
     };
 

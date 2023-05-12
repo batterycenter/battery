@@ -12,6 +12,7 @@ namespace b {
         static void clear();
 
         static std::optional<property_pack> get(const std::string& property_name);
+        static std::optional<ImVec4> get_color(const std::string& property_name);
 
         template<typename T>
         static T get(const std::string& prop, T defaultValue) {

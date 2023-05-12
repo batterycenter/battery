@@ -82,8 +82,8 @@ namespace b::widgets {
         };
     }
 
-    void fancy_button::operator()(const std::function<void()> &callback) {
-        b::widgets::button::operator()(callback);
+    void fancy_button::operator()() {
+        b::widgets::button::operator()();
     }
 
 }

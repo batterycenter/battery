@@ -1,6 +1,7 @@
 
 #include "battery/graphics/property_stack.hpp"
 #include "battery/graphics/sfml.hpp"
+#include "battery/graphics/color_hex.hpp"
 #include "magic_enum.hpp"
 
 #define IMGUI_DEFINE_MATH_OPERATORS
@@ -85,6 +86,14 @@ namespace b {
             }
         }
         return std::nullopt;
+    }
+
+    std::optional<ImVec4> property_stack::get_color(const std::string& property_name) {
+        auto color = get(property_name);
+        if (!color.has_value()) return std::nullopt;
+        if (color.value().get_properties().size() != 1) return std::nullopt;
+        if (color.value().get_properties()[0].unit() != b::unit::COLOR_HEX) return std::nullopt;
+        return b::color_hex(color.value().get_properties()[0].string());
     }
 
     void property_stack::pushpop_stylevar(ImGuiStyleVar_ stylevar_enum, const std::string& property_name, const property_pack& property_value, bool push) {
