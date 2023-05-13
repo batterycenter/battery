@@ -12,15 +12,14 @@ namespace b::widgets {
 
         bool sameline = false;
 
-        text() : base_widget("Text") {}
-        explicit text(const std::string& label) : base_widget("Text"), label(label) {}
+        text(py::object context = py::object()) : base_widget(context, "##Text") {}
 
         void operator()() override;
 
-        inline static void define_python_class(py::module& module) {
-            b::py::class_<b::widgets::text>(module, "text")
+        inline static void define_python_types(py::module& module) {
+            b::py::class_<b::widgets::text, b::widgets::base_widget>(module, "text")
                     .def(b::py::init<>())
-                    .def(b::py::init<const std::string&>())
+                    .def(b::py::init<py::object>())
                     .def_readwrite("label", &b::widgets::text::label)
                     .def_readwrite("style", &b::widgets::text::style)
                     .def_readwrite("sameline", &b::widgets::text::sameline)

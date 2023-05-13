@@ -18,15 +18,14 @@ namespace b::widgets {
         bool active = false;
         ImVec2 actual_size;
 
-        input() : base_widget("Input") {}
-        explicit input(const std::string& name) : base_widget(name) {}
+        input(py::object context = py::object()) : base_widget(context, "Input") {}
 
         void operator()() override;
 
-        inline static void define_python_class(py::module& module) {
-            b::py::class_<b::widgets::input>(module, "input")
+        inline static void define_python_types(py::module& module) {
+            b::py::class_<b::widgets::input, b::widgets::base_widget>(module, "input")
                     .def(b::py::init<>())
-                    .def(b::py::init<const std::string&>())
+                    .def(b::py::init<py::object>())
                     .def_readwrite("content", &b::widgets::input::content)
                     .def_readwrite("hint", &b::widgets::input::hint)
                     .def_readwrite("flags", &b::widgets::input::flags)

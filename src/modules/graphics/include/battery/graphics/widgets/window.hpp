@@ -20,32 +20,28 @@ namespace b::widgets {
         bool titlebar_hovered = false;
         bool is_open = true;
 
-        window() : base_widget("Battery Window") {}
-        explicit window(int flags) : base_widget("Battery Window"), flags(flags) {}
-        explicit window(const std::string& name) : base_widget(name) {}
-        explicit window(const std::string& name, int flags) : base_widget(name), flags(flags) {}
+        window(py::object context = py::object()) : base_widget(std::move(context), "Battery Window") {}
 
-        void operator()() override {}
+        void operator()() override { this->operator()({}); }
         void operator()(const std::function<void()>& callback);
 
-        inline static void define_python_class(py::module& module) {
-            b::py::class_<b::widgets::window>(module, "window")
-                .def(b::py::init<>())
-                .def(b::py::init<int>())
-                .def(b::py::init<const std::string&>())
-                .def(b::py::init<const std::string&, int>())
-                .def_readwrite("flags", &b::widgets::window::flags)
-                .def_readwrite("border_width", &b::widgets::window::border_width)
-                .def_readwrite("position", &b::widgets::window::position)
-                .def_readwrite("size", &b::widgets::window::size)
-                .def_readwrite("always_open", &b::widgets::window::always_open)
-                .def_readwrite("style", &b::widgets::window::style)
-                .def_readwrite("children_style", &b::widgets::window::children_style)
-                .def_readwrite("actual_position", &b::widgets::window::actual_position)
-                .def_readwrite("actual_size", &b::widgets::window::actual_size)
-                .def_readwrite("titlebar_hovered", &b::widgets::window::titlebar_hovered)
-                .def_readwrite("is_open", &b::widgets::window::is_open)
-                .def("__call__", [](b::widgets::window& self) { self(); });
+        inline static void define_python_types(py::module& module) {
+            b::py::class_<b::widgets::window, b::widgets::base_widget>(module, "window")
+                    .def(b::py::init<>())
+                    .def(b::py::init<py::object>())
+                    .def_readwrite("flags", &b::widgets::window::flags)
+                    .def_readwrite("border_width", &b::widgets::window::border_width)
+                    .def_readwrite("position", &b::widgets::window::position)
+                    .def_readwrite("size", &b::widgets::window::size)
+                    .def_readwrite("always_open", &b::widgets::window::always_open)
+                    .def_readwrite("style", &b::widgets::window::style)
+                    .def_readwrite("children_style", &b::widgets::window::children_style)
+                    .def_readwrite("actual_position", &b::widgets::window::actual_position)
+                    .def_readwrite("actual_size", &b::widgets::window::actual_size)
+                    .def_readwrite("titlebar_hovered", &b::widgets::window::titlebar_hovered)
+                    .def_readwrite("is_open", &b::widgets::window::is_open)
+                    .def("__call__", [](b::widgets::window& self) { self({}); })
+                    .def("__call__", [](b::widgets::window& self, const std::function<void()>& callback) { self(callback); });
         }
     };
 

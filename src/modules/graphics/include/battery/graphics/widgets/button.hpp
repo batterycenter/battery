@@ -17,15 +17,14 @@ namespace b::widgets {
 
         bool sameline = false;
 
-        button() : base_widget("Button") {}
-        explicit button(const std::string& name) : base_widget(name) {}
+        button(py::object context = py::object()) : base_widget(context, "Button") {}
 
         void operator()() override;
 
-        inline static void define_python_class(py::module& module) {
-            b::py::class_<b::widgets::button>(module, "button")
+        inline static void define_python_types(py::module& module) {
+            b::py::class_<b::widgets::button, b::widgets::base_widget>(module, "button")
                 .def(b::py::init<>())
-                .def(b::py::init<const std::string &>())
+                    .def(b::py::init<py::object>())
                 .def_readwrite("clicked", &b::widgets::button::clicked)
                 .def_readwrite("held", &b::widgets::button::held)
                 .def_readwrite("hovered", &b::widgets::button::hovered)

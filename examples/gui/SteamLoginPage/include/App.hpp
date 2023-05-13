@@ -2,16 +2,23 @@
 
 #include "battery/core/all.hpp"
 #include "battery/graphics/windowed_application.hpp"
-
-#include "battery/graphics/widgets/fancy_button.hpp"
-#include "battery/graphics/widgets/window.hpp"
-#include "battery/graphics/widgets/dummy.hpp"
-#include "battery/graphics/widgets/text.hpp"
-#include "battery/graphics/widgets/input.hpp"
-#include "battery/graphics/widgets/image.hpp"
+#include "battery/graphics/widgets/all.hpp"
 
 class MainWindow : public b::window {
 public:
+    struct Context {
+
+        std::function<void()> handle_window_dragging;
+        bool titlebar_hovered = false;
+
+        inline static void define_python_types(b::py::module& module) {
+            auto submodule = module.def_submodule("MainWindow");
+            b::py::class_<Context>(submodule, "Context")
+                    .def("handle_window_dragging", [](Context& self) { self.handle_window_dragging(); })
+                    .def_readwrite("titlebar_hovered", &Context::titlebar_hovered);
+        }
+    } context;
+
     template<typename... Args>
     MainWindow(Args... args) : b::window(args...) {}
     ~MainWindow() = default;
@@ -25,12 +32,7 @@ public:
     bool main_py_loaded = false;
     b::resource main_py;
 
-    b::widgets::window window;
-    b::widgets::button button;
-    b::widgets::fancy_button login_button;
-    b::widgets::image img;
-
-    void drag_window();
+    void handle_window_dragging();
     void ui();
 
     void setup() override;
@@ -40,14 +42,31 @@ public:
 
 class App : public b::windowed_application {
 public:
+    struct Context {
+
+        std::function<void()> stop_application;
+
+        inline static void define_python_types(b::py::module& module) {
+            auto submodule = module.def_submodule("App");
+            b::py::class_<Context>(submodule, "Context")
+                    .def("stop_application", [](Context& self) { self.stop_application(); });
+        }
+    } context;
+
     App() = default;
     ~App() = default;
+
+    inline static App* get() {
+        return dynamic_cast<App*>(b::windowed_application::get());
+    }
 
     void setup() override {
         register_window(std::make_shared<MainWindow>(
                 u8"Battery SteamLoginPage Example",
                 sf::Vector2u(1280, 720),
                 sf::Style::None));
+
+        context.stop_application = [this]() { stop_application(); };
     }
 
     void update() override {}

@@ -32,7 +32,9 @@ namespace b::widgets {
         if (border_width.has_value()) { ImGui::PopStyleVar(); }
 
         children_style.push();
-        callback();
+        if (callback) {
+            callback();
+        }
         children_style.pop();
 
         ImGui::End();

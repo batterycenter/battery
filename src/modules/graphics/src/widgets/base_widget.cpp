@@ -3,7 +3,7 @@
 
 namespace b::widgets {
 
-    base_widget::base_widget(std::string name) : name(std::move(name)) {
+    base_widget::base_widget(py::object context, std::string name) : context(std::move(context)), name(std::move(name)) {
         new_id();
     }
 

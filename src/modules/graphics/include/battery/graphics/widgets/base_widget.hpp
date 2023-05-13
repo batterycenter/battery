@@ -19,8 +19,9 @@ namespace b::widgets {
     class base_widget {
     public:
         std::string name;
+        py::object context;
 
-        explicit base_widget(std::string name) ;
+        explicit base_widget(py::object context, std::string name);
         virtual ~base_widget() = default;
 
         base_widget(base_widget const& other) = delete;     // Copying is NOT allowed due to the unique ID
@@ -30,6 +31,13 @@ namespace b::widgets {
         base_widget& operator=(base_widget&& other) = default;
 
         virtual void operator()() = 0;
+
+        inline static void define_python_types(py::module& module) {
+            b::py::class_<b::widgets::base_widget>(module, "base_widget")
+                    .def_readwrite("name", &b::widgets::base_widget::name)
+                    .def_readwrite("context", &b::widgets::base_widget::context)
+                    .def("__call__", &b::widgets::base_widget::operator());
+        }
 
     protected:
         [[nodiscard]] std::string get_identifier() const;

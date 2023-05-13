@@ -13,15 +13,14 @@ namespace b::widgets {
         ImVec2 actual_size;
         bool sameline = false;
 
-        image() : base_widget("Image") {}
-        explicit image(const std::string& name) : base_widget(name) {}
+        image(py::object context = py::object()) : base_widget(context, "Image") {}
 
         void operator()() override;
 
-        inline static void define_python_class(py::module& module) {
-            b::py::class_<b::widgets::image>(module, "image")
+        inline static void define_python_types(py::module& module) {
+            b::py::class_<b::widgets::image, b::widgets::base_widget>(module, "image")
                     .def(b::py::init<>())
-                    .def(b::py::init<const std::string&>())
+                    .def(b::py::init<py::object>())
                     .def_readwrite("style", &b::widgets::image::style)
                     .def_readwrite("size", &b::widgets::image::size)
                     .def_readwrite("actual_size", &b::widgets::image::actual_size)

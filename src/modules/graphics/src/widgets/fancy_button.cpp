@@ -74,7 +74,7 @@ namespace b::widgets {
         return { clicked, held, hovered };
     }
 
-    fancy_button::fancy_button() : button("Fancy Button") {
+    fancy_button::fancy_button(py::object context) : button(context) {
         this->custom_implementation = [this]() {
             auto color_left = b::property_stack::get("button-gradient-color-left", "#000000"_u.color());
             auto color_right = b::property_stack::get("button-gradient-color-right", "#FFFFFF"_u.color());
