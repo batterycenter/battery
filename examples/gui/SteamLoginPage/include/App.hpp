@@ -11,13 +11,15 @@ public:
         std::function<void()> handle_window_dragging;
         bool titlebar_hovered = false;
         ImVec2 window_size;
+        sf::Texture steam_logo;
 
         inline static void define_python_types(b::py::module& module) {
             auto submodule = module.def_submodule("MainWindow");
             b::py::class_<Context>(submodule, "Context")
                     .def("handle_window_dragging", [](Context& self) { self.handle_window_dragging(); })
                     .def_readwrite("titlebar_hovered", &Context::titlebar_hovered)
-                    .def_readwrite("window_size", &Context::window_size);
+                    .def_readwrite("window_size", &Context::window_size)
+                    .def_readwrite("steam_logo", &Context::steam_logo);
         }
     } context;
 
@@ -29,15 +31,9 @@ public:
         return dynamic_cast<MainWindow*>(b::windowed_application::get()->get_window(0).get());
     }
 
-    inline static b::py::function ui_loop;
-    std::unique_ptr<b::resource_loader> main_py_loader;
-    bool main_py_loaded = false;
-    std::optional<std::string> init_error;
-    std::optional<std::string> loop_error;
-    b::resource main_py;
+    std::unique_ptr<b::resource_loader> ui;
 
     void handle_window_dragging();
-    void ui();
 
     void setup() override;
     void update() override;

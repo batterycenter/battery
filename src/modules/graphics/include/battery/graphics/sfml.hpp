@@ -36,5 +36,5 @@ inline bool operator!=(const ImVec4& lhs, const ImVec4& rhs) {
 }
 
 namespace b {
-    void define_imgui_python_types(b::py::module& module);
+    void define_python_types(b::py::module& module);
 }

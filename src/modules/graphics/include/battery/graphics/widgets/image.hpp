@@ -8,7 +8,7 @@ namespace b::widgets {
     public:
 
         widget_style style;
-        sf::Texture img;
+        sf::Texture src;
         ImVec2 size;
         ImVec2 actual_size;
         bool sameline = false;
@@ -22,6 +22,7 @@ namespace b::widgets {
                     .def(b::py::init<>())
                     .def(b::py::init<py::object>())
                     .def_readwrite("style", &b::widgets::image::style)
+                    .def_readwrite("src", &b::widgets::image::src)
                     .def_readwrite("size", &b::widgets::image::size)
                     .def_readwrite("actual_size", &b::widgets::image::actual_size)
                     .def_readwrite("sameline", &b::widgets::image::sameline)

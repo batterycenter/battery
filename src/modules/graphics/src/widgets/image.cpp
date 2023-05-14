@@ -40,7 +40,10 @@ namespace b::widgets {
             ImGui::SameLine();
         }
 
-        ImGui::Image(img, size);
+        ImVec2 _size = size;
+        if (_size.x == 0) _size.x = (float)src.getSize().x;
+        if (_size.y == 0) _size.y = (float)src.getSize().y;
+        ImGui::Image(src, _size);
         actual_size = ImGui::GetItemRectSize();
     }
 

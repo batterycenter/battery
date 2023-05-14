@@ -13,7 +13,7 @@ main_window.flags = \
     b.ImGuiWindowFlags.NoResize | \
     b.ImGuiWindowFlags.NoMove | \
     b.ImGuiWindowFlags.NoCollapse | \
-    b.ImGuiWindowFlags.NoBringToFrontOnFocus;
+    b.ImGuiWindowFlags.NoBringToFrontOnFocus
 main_window.style["ImGuiStyleVar_FramePadding"] = ("10px", "10px")
 
 button = b.widgets.button()
@@ -34,6 +34,10 @@ input.style["text-color"] = "#06bfff"
 input.style["text-color-disabled"] = "#aaaaaa"
 input.style["input-color"] = "#32353c"
 
+image = b.widgets.image()
+image.src = main_window.context.steam_logo
+image.size = b.ImVec2(64, 64)
+
 def ui_loop():
 
     def main_ui():
@@ -52,7 +56,9 @@ def ui_loop():
         text()
         b.widgets.vspace(50)
         input()
+        b.widgets.vspace(50)
+        image()
 
     main_window(main_ui)
 
-b.init(ui_loop)
+b.init_main_window(ui_loop)

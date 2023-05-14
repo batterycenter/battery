@@ -5,6 +5,7 @@
 #include "battery/graphics/styles.hpp"
 #include "battery/core/string.hpp"
 #include "battery/core/constants.hpp"
+#include "imgui_internal.h"
 
 #include "battery/core/environment.hpp"
 #ifdef BATTERY_ARCH_WINDOWS
@@ -32,6 +33,23 @@ namespace b {
         b::load_theme("default");
     }
 
+    void window::init(py::function python_ui_loop) {
+        this->python_ui_loop = python_ui_loop;
+    }
+
+    void window::load_py_script(const b::resource& script) {
+        ui_script = script;
+        ui_script_loaded = false;
+    }
+
+    static void recover_imgui_font_stack() {
+        ImGuiContext& g = *GImGui;
+        ImGuiStackSizes* stack_sizes = &g.CurrentWindowStack.back().StackSizesOnBegin;
+        while (g.FontStack.Size > stack_sizes->SizeOfFontStack) {
+            ImGui::PopFont();
+        }
+    }
+
     void window::_update() {
 
 #ifdef BATTERY_ARCH_WINDOWS
@@ -47,7 +65,7 @@ namespace b {
         }
 #endif
 
-        sf::Event event;
+        sf::Event event {};
         while (getWindow().pollEvent(event)) {
             ImGui::SFML::ProcessEvent(getWindow(), event);
 
@@ -61,18 +79,70 @@ namespace b {
         }
 
         getWindow().clear(b::graphics_constants::battery_default_background_color());
-        ImGui::SFML::Update(getWindow(), deltaClock.restart());
+        ImGui::SFML::Update(getWindow(), delta_clock.restart());
 
-        b::push_font("default");
-        style.push();
-        update();
-        style.pop();
-        b::pop_font();
+        // Load python if not loaded already
+        if (!ui_script.as_string().empty() && !ui_script_loaded) {
+            ui_script_loaded = true;
+            error = {};
+#ifndef BATTERY_PRODUCTION_MODE
+            b::log::info("Loading b::window python ui script");
+#endif
+            try {
+                b::py::exec(ui_script.as_string());
+            }
+            catch (const std::exception &e) {
+                ImGui::ErrorCheckEndFrameRecover(nullptr);
+                recover_imgui_font_stack();
+                error = e.what();
+                b::log::error("Unhandled exception:\n{}", e.what());
+            }
+        }
 
-        //python();
+        // And then render
+        if (error.has_value()) {
+            render_error_message(error.value());    // Py init error
+        }
+        else {
+            try {
+                b::push_font("default");
+                style.push();
+
+                update();
+
+                if (python_ui_loop) {
+                    python_ui_loop();
+                }
+
+                style.pop();
+                b::pop_font();
+            }
+            catch (const std::exception &e) {
+                ImGui::ErrorCheckEndFrameRecover(nullptr);
+                recover_imgui_font_stack();
+                render_error_message(e.what());     // Py ui loop error
+                b::log::error("Unhandled exception:\n{}", e.what());
+            }
+        }
 
         ImGui::SFML::Render(getWindow());
         getWindow().display();
+    }
+
+    void window::render_error_message(const std::string& error) {
+        b::push_font("default");
+        error_window.position = { 0, 0 };
+        error_window.size = { (float)getSize().x, (float)getSize().y };
+        error_window.flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
+        error_window.border_width = 0.f;
+        error_window.style["window-background-color"] = "#333333"_u;
+        error_text.label = fmt::format("Unhandled exception:\n{}", error);
+        error_text.style["text-color"] = "#D34040"_u;
+
+        error_window([this]() {
+            error_text();
+        });
+        b::pop_font();
     }
 
 }

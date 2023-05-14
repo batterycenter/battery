@@ -3,7 +3,7 @@
 
 namespace b {
 
-    void define_imgui_python_types(b::py::module& module) {
+    void define_python_types(b::py::module& module) {
         py::class_<ImVec2>(module, "ImVec2")
             .def(b::py::init<>())
             .def(b::py::init<float, float>())
@@ -24,6 +24,7 @@ namespace b {
             });
 
         py::enum_<ImGuiWindowFlags_>(module, "ImGuiWindowFlags", py::arithmetic())
+            .value("None", ImGuiWindowFlags_None)
             .value("NoTitleBar", ImGuiWindowFlags_NoTitleBar)
             .value("NoResize", ImGuiWindowFlags_NoResize)
             .value("NoMove", ImGuiWindowFlags_NoMove)
@@ -48,6 +49,24 @@ namespace b {
             .value("NoNav", ImGuiWindowFlags_NoNav)
             .value("NoDecoration", ImGuiWindowFlags_NoDecoration)
             .value("NoInputs", ImGuiWindowFlags_NoInputs);
+
+        py::enum_<ImDrawFlags_>(module, "ImDrawFlags", py::arithmetic())
+            .value("None", ImDrawFlags_None)
+            .value("Closed", ImDrawFlags_Closed)
+            .value("RoundCornersTopLeft", ImDrawFlags_RoundCornersTopLeft)
+            .value("RoundCornersTopRight", ImDrawFlags_RoundCornersTopRight)
+            .value("RoundCornersBottomLeft", ImDrawFlags_RoundCornersBottomLeft)
+            .value("RoundCornersBottomRight", ImDrawFlags_RoundCornersBottomRight)
+            .value("RoundCornersNone", ImDrawFlags_RoundCornersNone)
+            .value("RoundCornersTop", ImDrawFlags_RoundCornersTop)
+            .value("RoundCornersBottom", ImDrawFlags_RoundCornersBottom)
+            .value("RoundCornersLeft", ImDrawFlags_RoundCornersLeft)
+            .value("RoundCornersRight", ImDrawFlags_RoundCornersRight)
+            .value("RoundCornersAll", ImDrawFlags_RoundCornersAll)
+            .value("RoundCornersDefault_", ImDrawFlags_RoundCornersDefault_)
+            .value("RoundCornersMask_", ImDrawFlags_RoundCornersMask_);
+
+        py::class_<sf::Texture>(module, "sfTexture");
     }
 
 }
