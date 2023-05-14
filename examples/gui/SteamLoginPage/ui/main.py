@@ -38,6 +38,12 @@ image = b.widgets.image()
 image.src = main_window.context.steam_logo
 image.size = b.ImVec2(64, 64)
 
+grid = b.widgets.grid()
+grid.width = b.unit_property(300)
+grid.height = b.unit_property(300)
+grid.cell_widths = [ b.unit_property(1), b.unit_property(2), b.unit_property(3) ]
+grid.cell_heights = [ b.unit_property(1), b.unit_property(2), b.unit_property(3) ]
+
 def ui_loop():
 
     def main_ui():
@@ -49,16 +55,36 @@ def ui_loop():
         if not main_window.is_open:
             b.app_context.stop_application()
 
-        button()
-        b.widgets.vspace(50)
+        # button()
+        # b.widgets.vspace(50)
         fancy_button()
-        b.widgets.vspace(50)
+        # b.widgets.vspace(50)
         text()
-        b.widgets.vspace(50)
+        # b.widgets.vspace(50)
         input()
-        b.widgets.vspace(50)
+        # b.widgets.vspace(50)
         image()
+        # b.widgets.vspace(50)
+
+        grid.frame_border = True
+        grid.cell_border = True
+        button.width.set("100%")
+        button.height.set("100%")
+
+        def render_grid(cell):
+            cell(0, 0, lambda: button())
+            cell(1, 0, lambda: button())
+            cell(2, 0, lambda: button())
+            cell(0, 1, lambda: button())
+            cell(1, 1, lambda: button())
+            cell(2, 1, lambda: button())
+            cell(0, 2, lambda: button())
+            cell(1, 2, lambda: button())
+            cell(2, 2, lambda: button())
+
+        grid(render_grid)
 
     main_window(main_ui)
+    b.show_demo_window()
 
 b.init_main_window(ui_loop)

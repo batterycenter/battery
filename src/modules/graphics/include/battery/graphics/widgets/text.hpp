@@ -12,7 +12,7 @@ namespace b::widgets {
 
         bool sameline = false;
 
-        text(py::object context = py::object()) : base_widget(context, "##Text") {}
+        text(py::object context = py::object()) : base_widget(context, "##text") {}
 
         void operator()() override;
 

@@ -1,5 +1,7 @@
 
+#include "battery/graphics/unit_property.hpp"
 #include "battery/graphics/sfml.hpp"
+#include "battery/graphics/font_stack.hpp"
 
 namespace b {
 
@@ -67,6 +69,13 @@ namespace b {
             .value("RoundCornersMask_", ImDrawFlags_RoundCornersMask_);
 
         py::class_<sf::Texture>(module, "sfTexture");
+        b::unit_property::define_python_types(module);
+
+        module.def("sameline", &ImGui::SameLine);
+        module.def("push_font", &b::push_font);
+        module.def("pop_font", &b::pop_font);
+        module.def("show_demo_window", &ImGui::ShowDemoWindow);
+        module.def("show_demo_window", []() { ImGui::ShowDemoWindow(nullptr); });
     }
 
 }

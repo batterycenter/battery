@@ -2,6 +2,7 @@
 
 #include "battery/core/string.hpp"
 #include "battery/graphics/sfml.hpp"
+#include "battery/python/python.hpp"
 
 namespace b {
 
@@ -41,6 +42,24 @@ namespace b {
 
         bool operator==(const unit_property& other) { return this->string() == other.string(); }
         bool operator!=(const unit_property& other) { return !this->operator==(other); }
+
+        inline static void define_python_types(b::py::module& module) {
+            b::py::class_<b::unit_property>(module, "unit_property")
+                .def(b::py::init<>())
+                .def(b::py::init<const std::string&>())
+                .def(b::py::init<float, b::unit>())
+                .def(b::py::init<float>())
+                .def(b::py::init<ImVec4>())
+                .def("string", &b::unit_property::string)
+                .def("numeric", &b::unit_property::numeric)
+                .def("color", &b::unit_property::color)
+                .def("unit", &b::unit_property::unit)
+                .def("set", [](b::unit_property& self, const std::string& value) { self = value; })
+                .def("set", [](b::unit_property& self, float value) { self = value; })
+                .def("set", [](b::unit_property& self, ImVec4 value) { self = value; })
+                .def("__eq__", &b::unit_property::operator==)
+                .def("__ne__", &b::unit_property::operator!=);
+        }
 
     private:
         void parse_numeric_property(const std::string& str);

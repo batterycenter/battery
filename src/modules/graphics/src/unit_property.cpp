@@ -10,8 +10,8 @@ namespace b {
     unit_property::unit_property(sf::Color color) { operator=(color); }
 
     unit_property::unit_property(float value, enum unit unit) {
-        this->m_unit = unit;
-        operator=(value);
+        m_float = value;
+        m_unit = unit;
     }
 
     unit_property& unit_property::operator=(const std::string& value) {
@@ -30,6 +30,7 @@ namespace b {
     unit_property& unit_property::operator=(float value) {
         clear();
         m_float = value;
+        m_unit = unit::UNITLESS;
         return *this;
     }
 

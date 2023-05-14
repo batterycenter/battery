@@ -15,25 +15,25 @@ namespace b::widgets {
                 .add_case(b::unit::UNITLESS, [this](auto value) { return value; })
                 .add_case(b::unit::PIXEL, [this](auto value) { return value; })
                 .add_case(b::unit::PERCENT, [this](auto value) { return value / 100.f * actual_size.y; })
-                .add_case(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
+//                .add_case(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
                 .push(ImGuiStyleVar_FrameRounding);
 
         builder.add_numeric_rule("border-width")
                 .add_case(b::unit::UNITLESS, [this](auto value) { return value; })
                 .add_case(b::unit::PIXEL, [this](auto value) { return value; })
                 .add_case(b::unit::PERCENT, [this](auto value) { return value / 100.f * actual_size.y; })
-                .add_case(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
+//                .add_case(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
                 .push(ImGuiStyleVar_FrameBorderSize);
 
         builder.add_vec2_rule("padding")
                 .add_case_x(b::unit::UNITLESS, [this](auto value) { return value; })
                 .add_case_x(b::unit::PIXEL, [this](auto value) { return value; })
                 .add_case_x(b::unit::PERCENT, [this](auto value) { return value / 100.f * actual_size.x; })
-                .add_case_x(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
+//                .add_case_x(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
                 .add_case_y(b::unit::UNITLESS, [this](auto value) { return value; })
                 .add_case_y(b::unit::PIXEL, [this](auto value) { return value; })
                 .add_case_y(b::unit::PERCENT, [this](auto value) { return value / 100.f * actual_size.y; })
-                .add_case_y(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
+//                .add_case_y(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
                 .push(ImGuiStyleVar_FramePadding);
 
         if (sameline) {

@@ -18,7 +18,7 @@ namespace b::widgets {
         bool active = false;
         ImVec2 actual_size;
 
-        input(py::object context = py::object()) : base_widget(context, "Input") {}
+        input(py::object context = py::object()) : base_widget(context, "input") {}
 
         void operator()() override;
 

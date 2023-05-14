@@ -20,7 +20,7 @@ namespace b::widgets {
         bool titlebar_hovered = false;
         bool is_open = true;
 
-        window(py::object context = py::object()) : base_widget(std::move(context), "Battery Window") {}
+        window(py::object context = py::object()) : base_widget(std::move(context), "battery window") {}
 
         void operator()() override { this->operator()({}); }
         void operator()(const std::function<void()>& callback);

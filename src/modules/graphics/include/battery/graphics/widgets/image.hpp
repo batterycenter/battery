@@ -13,7 +13,7 @@ namespace b::widgets {
         ImVec2 actual_size;
         bool sameline = false;
 
-        image(py::object context = py::object()) : base_widget(context, "Image") {}
+        image(py::object context = py::object()) : base_widget(context, "image") {}
 
         void operator()() override;
 
