@@ -11,11 +11,7 @@ namespace b::widgets {
         bool held = false;
         bool hovered = false;
 
-        ImVec2 size;
-        ImVec2 actual_size;
         widget_style style;
-
-        bool sameline = false;
 
         button(py::object context = py::object()) : base_widget(context, "button") {}
 
@@ -28,10 +24,7 @@ namespace b::widgets {
                 .def_readwrite("clicked", &b::widgets::button::clicked)
                 .def_readwrite("held", &b::widgets::button::held)
                 .def_readwrite("hovered", &b::widgets::button::hovered)
-                .def_readwrite("size", &b::widgets::button::size)
-                .def_readwrite("actual_size", &b::widgets::button::actual_size)
                 .def_readwrite("style", &b::widgets::button::style)
-                .def_readwrite("sameline", &b::widgets::button::sameline)
                 .def("__call__", &b::widgets::button::operator());
         }
 

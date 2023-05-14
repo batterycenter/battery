@@ -20,6 +20,7 @@ namespace b::widgets {
         builder.add_color_rule("window-titlebar-color-collapsed").push(ImGuiCol_TitleBgCollapsed);
         builder.add_color_rule("window-background-color").push(ImGuiCol_WindowBg);
 
+        set_cursor_position();
         if (!always_open) {
             ImGui::Begin(get_identifier().c_str(), &is_open, flags);
         } else {

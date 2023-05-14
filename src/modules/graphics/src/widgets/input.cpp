@@ -37,13 +37,11 @@ namespace b::widgets {
 //                .add_case_y(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
                 .push(ImGuiStyleVar_FramePadding);
 
-        if (sameline) {
-            ImGui::SameLine();
-        }
-
         buffer = content;
         buffer.resize(buffer_size);
+        set_cursor_position();
         changed = ImGui::InputTextWithHint(get_identifier().c_str(), hint.c_str(), buffer.data(), buffer.size(), flags);
+        actual_position = ImGui::GetItemRectMin();
         actual_size = ImGui::GetItemRectSize();
         active = ImGui::IsItemActive();
         content = buffer.data();    // Re-parse as a C-String

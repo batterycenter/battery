@@ -15,8 +15,6 @@ namespace b::widgets {
         widget_style style;
         widget_style children_style;
 
-        ImVec2 actual_position;
-        ImVec2 actual_size;
         bool titlebar_hovered = false;
         bool is_open = true;
 
@@ -36,8 +34,6 @@ namespace b::widgets {
                     .def_readwrite("always_open", &b::widgets::window::always_open)
                     .def_readwrite("style", &b::widgets::window::style)
                     .def_readwrite("children_style", &b::widgets::window::children_style)
-                    .def_readwrite("actual_position", &b::widgets::window::actual_position)
-                    .def_readwrite("actual_size", &b::widgets::window::actual_size)
                     .def_readwrite("titlebar_hovered", &b::widgets::window::titlebar_hovered)
                     .def_readwrite("is_open", &b::widgets::window::is_open)
                     .def("__call__", [](b::widgets::window& self) { self({}); })

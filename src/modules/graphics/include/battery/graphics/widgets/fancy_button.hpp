@@ -8,7 +8,7 @@ namespace b::widgets {
     public:
         fancy_button(py::object context = py::object());
 
-        void operator()();  // NOT OVERRIDE
+        void operator()();  // NOT OVERRIDE, we need both the base class operator and this one
 
         inline static void define_python_types(py::module& module) {
             b::py::class_<b::widgets::fancy_button, b::widgets::button>(module, "fancy_button")

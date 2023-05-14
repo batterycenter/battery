@@ -36,14 +36,12 @@ namespace b::widgets {
 //                .add_case_y(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
                 .push(ImGuiStyleVar_FramePadding);
 
-        if (sameline) {
-            ImGui::SameLine();
-        }
-
-        ImVec2 _size = size;
+        ImVec2 _size = desired_size();          // If size is not set, use the size of the image in pixels
         if (_size.x == 0) _size.x = (float)src.getSize().x;
         if (_size.y == 0) _size.y = (float)src.getSize().y;
+        set_cursor_position();
         ImGui::Image(src, _size);
+        actual_position = ImGui::GetItemRectMin();
         actual_size = ImGui::GetItemRectSize();
     }
 

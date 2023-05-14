@@ -39,16 +39,17 @@ namespace b::widgets {
 //        builder.add_color_rule("button-color-hover").push(ImGuiCol_ButtonHovered);
 //        builder.add_color_rule("button-color-active").push(ImGuiCol_ButtonActive);
 
+        set_cursor_position();
         if (custom_implementation) {
             std::tie(clicked, hovered, held) = custom_implementation();
         }
         else {
-            set_cursor_position();
             clicked = ImGui::Button(get_identifier().c_str(), desired_size());
         }
 
         held = ImGui::IsItemActive();
         hovered = ImGui::IsItemHovered();
+        actual_position = ImGui::GetItemRectMin();
         actual_size = ImGui::GetItemRectSize();
     }
 

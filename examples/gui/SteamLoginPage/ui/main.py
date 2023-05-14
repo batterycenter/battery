@@ -36,13 +36,17 @@ input.style["input-color"] = "#32353c"
 
 image = b.widgets.image()
 image.src = main_window.context.steam_logo
-image.size = b.ImVec2(64, 64)
+image.width.set(64)
+image.height.set(64)
 
 grid = b.widgets.grid()
 grid.width = b.unit_property(300)
 grid.height = b.unit_property(300)
 grid.cell_widths = [ b.unit_property(1), b.unit_property(2), b.unit_property(3) ]
 grid.cell_heights = [ b.unit_property(1), b.unit_property(2), b.unit_property(3) ]
+
+checkbox = b.widgets.checkbox()
+checkbox.name = "My Checkbox"
 
 def ui_loop():
 
@@ -83,6 +87,7 @@ def ui_loop():
             cell(2, 2, lambda: button())
 
         grid(render_grid)
+        checkbox()
 
     main_window(main_ui)
     b.show_demo_window()

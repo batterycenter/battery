@@ -17,6 +17,7 @@ namespace b::widgets {
 
         // This callback is the actual container of the grid itself
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+        set_cursor_position();
         grid_container([this, &grid_callback]() {
             ImGui::PopStyleVar();
 
