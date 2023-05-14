@@ -2,34 +2,60 @@
 #include "battery/graphics/styles.hpp"
 #include "battery/graphics/color_hex.hpp"
 #include "battery/graphics/property_stack.hpp"
+#include "battery/core/resource_loader.hpp"
 #include "resources/default_themes_json.hpp"
 #include "magic_enum.hpp"
 
 namespace b {
 
     struct themes {
+        inline static std::mutex theme_mutex;
         inline static std::unordered_map<std::string, nlohmann::json> available_themes;
+        inline static std::string current_theme = "default";
+        inline static bool theme_reloading_requested = false;
     };
 
     void make_theme_available(const std::string& name, const nlohmann::json& data) {
-        if (themes::available_themes.contains(name))
-            throw std::invalid_argument(fmt::format("Cannot make theme '{}' available: Identifier already exists", name));
-
         themes::available_themes[name] = data;
     }
 
     void make_default_themes_available() {
-        auto style = nlohmann::json::parse(resources::default_themes_json.str());
-        for (auto& [name, theme] : style.items()) {
-            make_theme_available(name, theme);
-        }
+        static b::resource_loader loader(resources::default_themes_json, [&] (auto resource) {  // Must be & to capture themes::theme_mutex
+            try {
+                std::scoped_lock lock(themes::theme_mutex);
+                auto style = nlohmann::json::parse(resource.as_string());
+                for (auto &[name, theme]: style.items()) {
+                    make_theme_available(name, theme);
+                }
+                themes::theme_reloading_requested = true;
+            }
+            catch (const std::exception& e) {
+                b::log::error("Failed to make default_themes.json available: {}", e.what());
+            }
+        });
     }
 
     void load_theme(const std::string& name) {
         if (!themes::available_themes.contains(name))
             throw std::invalid_argument(fmt::format("Cannot load theme '{}': Theme does not exist", name));
 
+        themes::current_theme = name;
         apply_theme(themes::available_themes[name]);
+    }
+
+    void update_themes() {
+        std::scoped_lock lock(themes::theme_mutex);
+
+        try {
+            if (!themes::theme_reloading_requested)
+                return;
+
+            load_theme(themes::current_theme);
+            themes::theme_reloading_requested = false;
+        }
+        catch (const std::exception& e) {
+            b::log::error("Failed to load default_themes.json: {}", e.what());
+        }
     }
 
     void apply_theme(const nlohmann::json& data) {

@@ -2,12 +2,12 @@
     "default": {
         "ImGuiCol_Text": "#FFFFFF",
         "ImGuiCol_TextDisabled": "#7F7F7F",
-        "ImGuiCol_WindowBg": "#262626EE",
+        "ImGuiCol_WindowBg": "#202020EE",
         "ImGuiCol_ChildBg": "#00000000",
         "ImGuiCol_PopupBg": "#222222EF",
         "ImGuiCol_Border": "#6D6D7F7F",
         "ImGuiCol_BorderShadow": "#00000000",
-        "ImGuiCol_FrameBg": "#8787877A",
+        "ImGuiCol_FrameBg": "#6060607A",
         "ImGuiCol_FrameBgHovered": "#969696CC",
         "ImGuiCol_FrameBgActive": "#A0A0A0",
         "ImGuiCol_TitleBg": "#0A0A0A",
@@ -49,6 +49,13 @@
         "ImGuiCol_NavWindowingDimBg": "#CCCCCC33",
         "ImGuiCol_ModalWindowDimBg": "#CCCCCC59",
         "button-padding": [ "20px", "10px" ],
-        "button-border-radius": "8px"
+        "button-border-radius": "8px",
+        "ImGuiStyleVar_FramePadding": [ 5, 5 ],
+        "ImGuiStyleVar_WindowRounding": 8,
+        "ImGuiStyleVar_FrameRounding": 6,
+        "ImGuiStyleVar_PopupRounding": 6,
+        "ImGuiStyleVar_GrabRounding": 6,
+        "ImGuiStyleVar_ChildRounding": 6,
+        "ImGuiStyleVar_ItemSpacing": [ 10, 4 ]
     }
 }

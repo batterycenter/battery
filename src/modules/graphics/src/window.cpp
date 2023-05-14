@@ -30,7 +30,6 @@ namespace b {
 
         b::make_default_themes_available();
         b::load_default_fonts();
-        b::load_theme("default");
     }
 
     void window::init(py::function python_ui_loop) {
@@ -80,6 +79,8 @@ namespace b {
 
         getWindow().clear(b::graphics_constants::battery_default_background_color());
         ImGui::SFML::Update(getWindow(), delta_clock.restart());
+
+        b::update_themes();
 
         // Load python if not loaded already
         if (!ui_script.as_string().empty() && !ui_script_loaded) {

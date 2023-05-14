@@ -11,6 +11,8 @@ namespace b {
 
     void load_theme(const std::string& name);
 
+    void update_themes();   // Call this for hotreload
+
     void apply_theme(const nlohmann::json& data);
 
 }

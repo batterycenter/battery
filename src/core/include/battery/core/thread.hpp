@@ -25,6 +25,7 @@
 #include "battery/core/log.hpp"
 #include "battery/core/time.hpp"
 #include "battery/core/constants.hpp"
+#include "battery/core/application.hpp"
 
 ///
 /// \brief Everything related to multithreading
@@ -57,9 +58,13 @@ namespace b {
           : std::jthread([_Fx = std::forward<_Fn>(_Fx), ...args = std::forward<_Args>(_Ax), this]() mutable {
                 _promise.set_value();
                 if constexpr (std::is_invocable_v<std::decay_t<_Fn>, std::stop_token, std::decay_t<_Args>...>) {
-                    catch_common_exceptions(std::move(_Fx), get_stop_token(), std::move(args)...);
+                    if (!catch_common_exceptions(std::move(_Fx), get_stop_token(), std::move(args)...)) {
+                        b::application::get()->stop_application();
+                    }
                 } else {
-                    catch_common_exceptions(std::move(_Fx), std::move(args)...);
+                    if (!catch_common_exceptions(std::move(_Fx), std::move(args)...)) {
+                        b::application::get()->stop_application();
+                    }
                 }
             }) {
               _promise.get_future().get();
@@ -81,14 +86,15 @@ namespace b {
         /// \see b::thread::enable_catch_common_exceptions()
         ///
         template<class... Args>
-        inline static void catch_common_exceptions(Args&&... args) {
+        inline static bool catch_common_exceptions(Args&&... args) {
             if (!_catch_common_exceptions) {            // Catching is disabled: Call and return
                 std::invoke(std::forward<Args>(args)...);
-                return;
+                return true;
             }
 
             try {                                       // Otherwise catch exceptions properly
                 std::invoke(std::forward<Args>(args)...);
+                return true;
             }
             catch (const std::exception& e) {
                 b::log::core::critical("Unhandled exception in b::thread: [std::exception]: {}", e.what());
@@ -102,6 +108,7 @@ namespace b {
                     b::message_box_error("Unidentifiable exception caught in b::thread, no further information");
                 }
             }
+            return false;
         }
 
         ///

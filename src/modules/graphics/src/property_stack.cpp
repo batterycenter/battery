@@ -39,7 +39,7 @@ namespace b {
     }
 
     void property_stack::pop() {
-        if (properties.empty()) throw std::logic_error("Cannot pop property from property_stack: Stack is empty! Probably a style push/pop mismatch!");
+        if (properties.empty()) return;
         auto [property_name, property_value] = properties.back();
         properties.pop_back();
 
