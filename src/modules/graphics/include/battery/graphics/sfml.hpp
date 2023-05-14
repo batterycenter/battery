@@ -36,27 +36,5 @@ inline bool operator!=(const ImVec4& lhs, const ImVec4& rhs) {
 }
 
 namespace b {
-
-    inline void define_imgui_python_types(b::py::module& module) {
-        py::class_<ImVec2>(module, "ImVec2")
-                .def(b::py::init<>())
-                .def(b::py::init<float, float>())
-                .def_readwrite("x", &ImVec2::x)
-                .def_readwrite("y", &ImVec2::y)
-                .def("__repr__", [](const ImVec2& v) {
-                    return "(" + std::to_string(v.x) + ", " + std::to_string(v.y) + ")";
-                })
-                .def("__setattr__", [](ImVec2& self, b::py::tuple t) {
-                    if (t.size() != 2) {
-                        throw std::runtime_error("Invalid tuple size for ImVec2 initialization");
-                    }
-                    self.x = t[0].cast<float>();
-                    self.y = t[1].cast<float>();
-                })
-                .def("__getattr__", [](const ImVec2& self) {
-                    return b::py::make_tuple(self.x, self.y);
-                });
-
-    }
-
+    void define_imgui_python_types(b::py::module& module);
 }

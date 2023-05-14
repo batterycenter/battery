@@ -9,7 +9,12 @@ main_window.style["window-titlebar-color"] = "#202227"
 main_window.style["window-titlebar-color-active"] = "#202227"
 main_window.style["window-titlebar-color-collapsed"] = "#202227"
 main_window.style["window-background-color"] = "#191a1e"
-# main_window.style["ImGuiStyleVar_FramePadding"] = { "10px", "10px" }
+main_window.flags = \
+    b.ImGuiWindowFlags.NoResize | \
+    b.ImGuiWindowFlags.NoMove | \
+    b.ImGuiWindowFlags.NoCollapse | \
+    b.ImGuiWindowFlags.NoBringToFrontOnFocus;
+main_window.style["ImGuiStyleVar_FramePadding"] = ("10px", "10px")
 
 button = b.widgets.button()
 button.style["border-radius"] = "5px"
@@ -32,6 +37,14 @@ input.style["input-color"] = "#32353c"
 def ui_loop():
 
     def main_ui():
+
+        main_window.context.titlebar_hovered = main_window.titlebar_hovered
+        main_window.context.handle_window_dragging()
+        main_window.size = main_window.context.window_size
+
+        if not main_window.is_open:
+            b.app_context.stop_application()
+
         button()
         b.widgets.vspace(50)
         fancy_button()

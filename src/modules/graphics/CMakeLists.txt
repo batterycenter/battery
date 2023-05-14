@@ -19,6 +19,7 @@ battery_add_source_files(battery_graphics
         src/graphics_constants.cpp
         src/property_pack.cpp
         src/property_stack.cpp
+        src/sfml.cpp
         src/styles.cpp
         src/unit_property.cpp
         src/widget_builder.cpp
