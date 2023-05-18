@@ -24,9 +24,11 @@ namespace b {
             (void)getWindow().setIcon(image);
         }
 
+        b::log::warn("SFML init");
         if (!ImGui::SFML::Init(getWindow())) {
             throw std::runtime_error("Failed to initialize ImGui-SFML");
         }
+        b::log::warn("SFML init done");
 
         b::make_default_themes_available();
         b::load_default_fonts();
@@ -43,6 +45,11 @@ namespace b {
 
     static void recover_imgui_font_stack() {
         ImGuiContext& g = *GImGui;
+
+        if (g.CurrentWindowStack.empty()) {
+            return;
+        }
+
         ImGuiStackSizes* stack_sizes = &g.CurrentWindowStack.back().StackSizesOnBegin;
         while (g.FontStack.Size > stack_sizes->SizeOfFontStack) {
             ImGui::PopFont();
@@ -77,9 +84,6 @@ namespace b {
             }
         }
 
-        getWindow().clear(b::graphics_constants::battery_default_background_color());
-        ImGui::SFML::Update(getWindow(), delta_clock.restart());
-
         b::update_themes();
 
         // Load python if not loaded already
@@ -99,6 +103,10 @@ namespace b {
                 b::log::error("Unhandled exception:\n{}", e.what());
             }
         }
+
+        getWindow().clear(b::graphics_constants::battery_default_background_color());
+        ImGui::SFML::Update(getWindow(), delta_clock.restart());
+        b::lock_font_stack();
 
         // And then render
         if (error.has_value()) {
@@ -126,6 +134,7 @@ namespace b {
             }
         }
 
+        b::unlock_font_stack();
         ImGui::SFML::Render(getWindow());
         getWindow().display();
     }

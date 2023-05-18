@@ -11,6 +11,9 @@ namespace b {
     void push_font(const std::string& font);
     void pop_font();
 
+    void lock_font_stack();
+    void unlock_font_stack();
+
     std::vector<std::string> get_available_fonts();
     void load_default_fonts();
 

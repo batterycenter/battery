@@ -3,7 +3,9 @@
 
 namespace b::widgets {
 
-    void grid::operator()() {}
+    void grid::operator()() {
+        b::log::warn("Warning: The operator() without arguments is not implemented for b::widgets::grid! Make sure to pass an argument when rendering a grid!");
+    }
 
     void grid::operator()(const std::function<void(std::function<void(int, int, std::function<void()>)>)>& grid_callback) {
 

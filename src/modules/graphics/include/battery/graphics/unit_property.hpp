@@ -44,6 +44,16 @@ namespace b {
         bool operator!=(const unit_property& other) { return !this->operator==(other); }
 
         inline static void define_python_types(b::py::module& module) {
+
+            b::py::enum_<b::unit>(module, "unit")
+                .value("NONE", b::unit::NONE)
+                .value("UNITLESS", b::unit::UNITLESS)
+                .value("PIXEL", b::unit::PIXEL)
+                .value("PERCENT", b::unit::PERCENT)
+                .value("COLOR_HEX", b::unit::COLOR_HEX)
+                .value("EM", b::unit::EM)
+                .export_values();
+
             b::py::class_<b::unit_property>(module, "unit_property")
                 .def(b::py::init<>())
                 .def(b::py::init<const std::string&>())

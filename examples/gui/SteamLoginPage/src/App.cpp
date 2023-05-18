@@ -49,8 +49,6 @@ void MainWindow::setup() {
     ui = std::make_unique<b::resource_loader>(resources::ui_main_py, [this](auto resource) {
         load_py_script(resource);
     });
-
-    b::load_font("roboto-medium-20", "roboto-medium", 20.f);
 }
 
 void MainWindow::update() {

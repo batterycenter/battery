@@ -63,7 +63,7 @@ public:
     void setup() override {
         register_window(std::make_shared<MainWindow>(
                 u8"Battery SteamLoginPage Example",
-                sf::Vector2u(1280, 720),
+                sf::Vector2u(1180, 720),
                 sf::Style::None));
 
         context.stop_application = [this]() { stop_application(); };

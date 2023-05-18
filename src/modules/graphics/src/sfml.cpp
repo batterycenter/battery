@@ -69,9 +69,12 @@ namespace b {
             .value("RoundCornersMask_", ImDrawFlags_RoundCornersMask_);
 
         py::class_<sf::Texture>(module, "sfTexture");
+        py::class_<ImFont>(module, "ImFont");
         b::unit_property::define_python_types(module);
 
         module.def("sameline", &ImGui::SameLine);
+        module.def("sameline", []() { ImGui::SameLine(); });
+        module.def("load_font", &b::load_font, py::return_value_policy::reference);
         module.def("push_font", &b::push_font);
         module.def("pop_font", &b::pop_font);
         module.def("show_demo_window", &ImGui::ShowDemoWindow);

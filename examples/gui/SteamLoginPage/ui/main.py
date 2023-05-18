@@ -1,95 +1,146 @@
 import b
 
-main_window = b.widgets.window(b.main_window_context)
-main_window.name = "Steam Login Page"
-main_window.size = b.ImVec2(400, 600)
-main_window.border_width = 0
-main_window.position = b.ImVec2(0, 0)
-main_window.style["window-titlebar-color"] = "#202227"
-main_window.style["window-titlebar-color-active"] = "#202227"
-main_window.style["window-titlebar-color-collapsed"] = "#202227"
-main_window.style["window-background-color"] = "#191a1e"
-main_window.flags = \
-    b.ImGuiWindowFlags.NoResize | \
-    b.ImGuiWindowFlags.NoMove | \
-    b.ImGuiWindowFlags.NoCollapse | \
-    b.ImGuiWindowFlags.NoBringToFrontOnFocus
-main_window.style["ImGuiStyleVar_FramePadding"] = ("10px", "10px")
+class MainWindow:
+    main_window = b.widgets.window(b.main_window_context)
+    main_window.name = "Steam Login Page"
+    main_window.border_width = 0
+    main_window.position = b.ImVec2(0, 0)
+    main_window.style["window-titlebar-color"] = "#202227"
+    main_window.style["window-titlebar-color-active"] = "#202227"
+    main_window.style["window-titlebar-color-collapsed"] = "#202227"
+    main_window.style["window-background-color"] = "#191a1e"
+    main_window.style["ImGuiStyleVar_FramePadding"] = ("10px", "10px")
+    main_window.style["ImGuiStyleVar_WindowRounding"] = "0px"
+    main_window.flags = \
+        b.ImGuiWindowFlags.NoResize | \
+        b.ImGuiWindowFlags.NoMove | \
+        b.ImGuiWindowFlags.NoCollapse | \
+        b.ImGuiWindowFlags.NoBringToFrontOnFocus
 
-button = b.widgets.button()
-button.style["border-radius"] = "5px"
+    main_vertical_grid = b.widgets.grid()
+    main_vertical_grid.cell_widths = [ b.unit_property(1) ]
+    main_vertical_grid.cell_heights = [ b.unit_property("100"), b.unit_property("10") ]
+    main_vertical_grid.left.set("5%")
+    main_vertical_grid.top.set("12%")
+    main_vertical_grid.width.set("92%")
+    main_vertical_grid.height.set("92%")
+    main_vertical_grid.frame_border = True
+    main_vertical_grid.cell_border = True
 
-fancy_button = b.widgets.fancy_button()
-fancy_button.style["button-gradient-color-left"] = "#06bfff"
-fancy_button.style["button-gradient-color-right"] = "#2d73ff"
+    upper_grid = b.widgets.grid()
+    upper_grid.cell_widths = [ b.unit_property(1), b.unit_property(1) ]
+    upper_grid.cell_heights = [ b.unit_property(1) ]
+    upper_grid.left.set("0")
+    upper_grid.top.set("0")
+    upper_grid.width.set("100%")
+    upper_grid.height.set("100%")
+    upper_grid.frame_border = True
+    upper_grid.cell_border = True
 
-text = b.widgets.text()
-text.label = "Click me!"
-text.style["text-color"] = "#06bfff"
+    steam_logo = b.widgets.image()
+    steam_logo.left.set("0")
+    steam_logo.top.set("0")
+    steam_logo.src = main_window.context.steam_logo
 
-input = b.widgets.input("##")
-input.hint = "Enter your username"
-input.style["border-radius"] = "10px"
-input.style["text-color"] = "#06bfff"
-input.style["text-color-disabled"] = "#aaaaaa"
-input.style["input-color"] = "#32353c"
+    steam_text = b.widgets.text()
+    steam_text.label = "STEAM"
+    steam_text_trademark = b.widgets.text()
+    steam_text_trademark.label = "®"
 
-image = b.widgets.image()
-image.src = main_window.context.steam_logo
-image.width.set(64)
-image.height.set(64)
+    sign_in_label = b.widgets.text()
+    sign_in_label.label = "SIGN IN WITH ACCOUNT NAME"
+    password_label = b.widgets.text()
+    password_label.label = "PASSWORD"
+    username_input = b.widgets.input()
+    username_input.name = "##"
+    password_input = b.widgets.input()
+    password_input.name = "##"
 
-grid = b.widgets.grid()
-grid.width = b.unit_property(300)
-grid.height = b.unit_property(300)
-grid.cell_widths = [ b.unit_property(1), b.unit_property(2), b.unit_property(3) ]
-grid.cell_heights = [ b.unit_property(1), b.unit_property(2), b.unit_property(3) ]
+    remember_me_checkbox = b.widgets.checkbox()
+    remember_me_checkbox.name = "Remember me"
 
-checkbox = b.widgets.checkbox()
-checkbox.name = "My Checkbox"
+    login_button = b.widgets.fancy_button()
+    login_button.name = "Sign in"
+    login_button.style["button-gradient-color-left"] = "#07bfff"
+    login_button.style["button-gradient-color-right"] = "#2d73ff"
 
-def ui_loop():
+    def __init__(self):
+        b.load_font("SteamText", "roboto-bold", 70)
+        b.load_font("SteamTextTrademark", "roboto-bold", 25)
+        b.load_font("InputLabel", "roboto-bold", 20)
+        b.load_font("InputText", "roboto-bold", 20)
+        pass
 
-    def main_ui():
+    def left_upper_region(self):
 
-        main_window.context.titlebar_hovered = main_window.titlebar_hovered
-        main_window.context.handle_window_dragging()
-        main_window.size = main_window.context.window_size
+        # Render the title Steam logo and label
+        self.steam_logo()
+        b.sameline()
+        b.push_font("SteamText")
+        self.steam_text()
+        b.pop_font()
+        b.sameline()
+        b.push_font("SteamTextTrademark")
+        self.steam_text_trademark()
+        b.pop_font()
 
-        if not main_window.is_open:
+        b.widgets.vspace(20)
+
+        # Render the username and password fields
+        b.push_font("InputLabel")
+        self.sign_in_label()
+        b.pop_font()
+        b.push_font("InputText")
+        self.username_input()
+        b.pop_font()
+
+        b.widgets.vspace(20)
+
+        b.push_font("InputLabel")
+        self.password_label()
+        b.pop_font()
+        b.push_font("InputText")
+        self.password_input()
+        b.pop_font()
+
+        b.widgets.vspace(20)
+
+        # Render the remember me checkbox
+        self.remember_me_checkbox()
+
+        b.widgets.vspace(20)
+
+        # Render the login button
+        self.login_button()
+
+        #b.show_demo_window()
+
+    def right_upper_region(self):
+        pass
+
+    def upper_content_region(self):
+        def upper_grid(call):
+            call(0, 0, self.left_upper_region)
+            call(1, 0, self.right_upper_region)
+        self.upper_grid(upper_grid)
+
+    def lower_content_region(self):
+        pass
+
+    def render(self):
+        def main_vertical_grid(cell):
+            cell(0, 0, self.upper_content_region)
+            cell(0, 1, self.lower_content_region)
+        self.main_vertical_grid(main_vertical_grid)
+        pass
+
+    def __call__(self):
+        self.main_window.size = b.main_window_context.window_size
+        self.main_window.context.titlebar_hovered = self.main_window.titlebar_hovered
+        self.main_window.context.handle_window_dragging()
+        if not self.main_window.is_open:
             b.app_context.stop_application()
+        self.main_window(self.render)
 
-        # button()
-        # b.widgets.vspace(50)
-        fancy_button()
-        # b.widgets.vspace(50)
-        text()
-        # b.widgets.vspace(50)
-        input()
-        # b.widgets.vspace(50)
-        image()
-        # b.widgets.vspace(50)
-
-        grid.frame_border = True
-        grid.cell_border = True
-        button.width.set("100%")
-        button.height.set("100%")
-
-        def render_grid(cell):
-            cell(0, 0, lambda: button())
-            cell(1, 0, lambda: button())
-            cell(2, 0, lambda: button())
-            cell(0, 1, lambda: button())
-            cell(1, 1, lambda: button())
-            cell(2, 1, lambda: button())
-            cell(0, 2, lambda: button())
-            cell(1, 2, lambda: button())
-            cell(2, 2, lambda: button())
-
-        grid(render_grid)
-        checkbox()
-
-    main_window(main_ui)
-    b.show_demo_window()
-
-b.init_main_window(ui_loop)
+main_window = MainWindow()
+b.init_main_window(main_window)
