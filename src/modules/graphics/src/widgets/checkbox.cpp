@@ -4,10 +4,14 @@
 namespace b::widgets {
 
     void checkbox::operator()() {
-        set_cursor_position();
-        ImGui::Checkbox(get_identifier().c_str(), &state);
+        base_push_style();
+
+        base_set_cursor_position_to_min_bb();
+        ImGui::Checkbox(base_get_identifier().c_str(), &state);
         actual_position = ImGui::GetItemRectMin();
         actual_size = ImGui::GetItemRectSize();
+
+        base_pop_style();
     }
 
 }

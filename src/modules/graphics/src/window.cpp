@@ -140,19 +140,20 @@ namespace b {
     }
 
     void window::render_error_message(const std::string& error) {
-        b::push_font("default");
-        error_window.position = { 0, 0 };
-        error_window.size = { (float)getSize().x, (float)getSize().y };
+        error_window.children_style.font = "default";  // Ask it to explicitly push the default font, in case it wasn't cleaned up properly
+        error_window.left = 0;
+        error_window.top = 0;
+        error_window.width = static_cast<float>(getSize().x);
+        error_window.height = static_cast<float>(getSize().y);
         error_window.flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
-        error_window.border_width = 0.f;
-        error_window.style["window-background-color"] = "#333333"_u;
+        error_window.style["ImGuiCol_WindowBg"] = "#333333"_u;
+        error_window.style["ImGuiStyleVar_WindowRounding"] = 0;
         error_text.label = fmt::format("Unhandled exception:\n{}", error);
-        error_text.style["text-color"] = "#D34040"_u;
+        error_text.style["ImGuiCol_Text"] = "#D34040"_u;
 
         error_window([this]() {
             error_text();
         });
-        b::pop_font();
     }
 
 }

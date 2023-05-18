@@ -103,7 +103,7 @@ namespace b {
             auto color_enum = magic_enum::enum_cast<ImGuiCol_>(key);
             if (color_enum.has_value()) {
                 auto colors = ImGui::GetStyle().Colors;
-                colors[color_enum.value()] = color_hex(value) / 255;
+                colors[color_enum.value()] = color_hex(value).Value / 255;
                 continue;
             }
 

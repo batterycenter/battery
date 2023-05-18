@@ -11,8 +11,6 @@ namespace b::widgets {
         bool held = false;
         bool hovered = false;
 
-        widget_style style;
-
         button(py::object context = py::object()) : base_widget(context, "button") {}
 
         void operator()() override;
@@ -24,7 +22,6 @@ namespace b::widgets {
                 .def_readwrite("clicked", &b::widgets::button::clicked)
                 .def_readwrite("held", &b::widgets::button::held)
                 .def_readwrite("hovered", &b::widgets::button::hovered)
-                .def_readwrite("style", &b::widgets::button::style)
                 .def("__call__", &b::widgets::button::operator());
         }
 

@@ -88,7 +88,7 @@ namespace b {
         return std::nullopt;
     }
 
-    std::optional<ImVec4> property_stack::get_color(const std::string& property_name) {
+    std::optional<ImColor> property_stack::get_color(const std::string& property_name) {
         auto color = get(property_name);
         if (!color.has_value()) return std::nullopt;
         if (color.value().get_properties().size() != 1) return std::nullopt;
@@ -121,7 +121,7 @@ namespace b {
             if (property_value.get_properties()[0].unit() != b::unit::COLOR_HEX)
                 throw std::invalid_argument(fmt::format("Cannot push/pop style color {}: Property value is not a color!", property_name));
 
-            if (push) ImGui::PushStyleColor(color_enum, property_value.get_properties()[0].color() / 255.f);
+            if (push) ImGui::PushStyleColor(color_enum, property_value.get_properties()[0].color().Value / 255.f);
             else ImGui::PopStyleColor();
         }
         else {

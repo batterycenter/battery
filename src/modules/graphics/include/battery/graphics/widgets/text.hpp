@@ -6,12 +6,9 @@ namespace b::widgets {
 
     class text : public b::widgets::base_widget {
     public:
-
         std::string label = "Label";
-        widget_style style;
 
         text(py::object context = py::object()) : base_widget(context, "##text") {}
-
         void operator()() override;
 
         inline static void define_python_types(py::module& module) {
@@ -19,7 +16,6 @@ namespace b::widgets {
                     .def(b::py::init<>())
                     .def(b::py::init<py::object>())
                     .def_readwrite("label", &b::widgets::text::label)
-                    .def_readwrite("style", &b::widgets::text::style)
                     .def("__call__", [](b::widgets::text& self) { self(); });
         }
 

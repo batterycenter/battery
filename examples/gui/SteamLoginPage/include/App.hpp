@@ -12,6 +12,7 @@ public:
         bool titlebar_hovered = false;
         ImVec2 window_size;
         sf::Texture steam_logo;
+        sf::Texture qrcode_texture;
 
         inline static void define_python_types(b::py::module& module) {
             auto submodule = module.def_submodule("MainWindow");
@@ -19,7 +20,8 @@ public:
                     .def("handle_window_dragging", [](Context& self) { self.handle_window_dragging(); })
                     .def_readwrite("titlebar_hovered", &Context::titlebar_hovered)
                     .def_readwrite("window_size", &Context::window_size)
-                    .def_readwrite("steam_logo", &Context::steam_logo);
+                    .def_readwrite("steam_logo", &Context::steam_logo)
+                    .def_readwrite("qrcode_texture", &Context::qrcode_texture);
         }
     } context;
 

@@ -3,7 +3,6 @@
 # battery_add_module(tray)
 # target_link_libraries(... battery::tray)
 
-# Battery core library
 battery_add_library(battery_tray STATIC ALIAS battery::tray)
 battery_add_source_files(battery_tray   # This function also groups the files in the IDE
         src/components/button.cpp

@@ -12,6 +12,8 @@ namespace b::widgets {
         std::vector<unit_property> cell_heights;
         std::vector<unit_property> cell_widths;
 
+        widget_style children_style;
+
         grid(py::object context = py::object()) : base_widget(context, "grid") {}
 
         void operator()() override;
@@ -25,6 +27,7 @@ namespace b::widgets {
                 .def_readwrite("cell_border", &b::widgets::grid::cell_border)
                 .def_readwrite("cell_heights", &b::widgets::grid::cell_heights)
                 .def_readwrite("cell_widths", &b::widgets::grid::cell_widths)
+                .def_readwrite("children_style", &b::widgets::grid::children_style)
                 .def("__call__", [](b::widgets::grid& self) { self(); })
                 .def("__call__", [](b::widgets::grid& self, const std::function<void(std::function<void(int, int, std::function<void()>)>)>& callback) { self(callback); });
         }

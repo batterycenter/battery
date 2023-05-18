@@ -1,5 +1,6 @@
 
 #include "App.hpp"
+#include "battery/qrcode/qrcode.hpp"
 #include "resources/ui_main_py.hpp"
 
 // Resources can be embedded like this, or with battery_embed()
@@ -49,6 +50,9 @@ void MainWindow::setup() {
     ui = std::make_unique<b::resource_loader>(resources::ui_main_py, [this](auto resource) {
         load_py_script(resource);
     });
+
+    auto qrcode = b::qrcode::QrCode::encodeText("https://youtu.be/dQw4w9WgXcQ", b::qrcode::QrCode::Ecc::HIGH);
+    context.qrcode_texture = b::qrcode::to_texture(qrcode);
 }
 
 void MainWindow::update() {

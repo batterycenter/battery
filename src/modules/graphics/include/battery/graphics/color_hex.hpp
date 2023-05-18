@@ -4,8 +4,8 @@
 
 namespace b {
 
-    ImVec4 color_hex(const std::string& hex);
+    ImColor color_hex(const std::string& hex);
 
-    std::string color_hex(ImVec4 color);
+    std::string color_hex(ImColor color);
 
 }

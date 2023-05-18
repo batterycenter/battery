@@ -75,8 +75,8 @@ namespace b::widgets {
             color_rule(const char* tag) : tag(tag) {}
             ~color_rule();
 
-            std::optional<ImVec4> get_result();
-            ImVec4 get_result(ImVec4 default_value);
+            std::optional<ImColor> get_result();
+            ImColor get_result(ImColor default_value);
             void push(ImGuiCol_ style_var);
 
             color_rule& operator=(const color_rule&) = delete;
@@ -96,7 +96,7 @@ namespace b::widgets {
         private:
             const char* tag;
             int pushed = 0;
-            std::vector<std::pair<enum b::unit, std::function<ImVec4(ImVec4)>>> cases;
+            std::vector<std::pair<enum b::unit, std::function<ImColor(ImColor)>>> cases;
         };
 
     public:

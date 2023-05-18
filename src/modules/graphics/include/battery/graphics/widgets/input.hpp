@@ -6,18 +6,15 @@ namespace b::widgets {
 
     class input : public b::widgets::base_widget {
     public:
-
         std::string content;
         std::string hint;
         int flags = ImGuiInputTextFlags_None;
-        widget_style style;
         size_t buffer_size = 256;
 
         bool changed = false;
         bool active = false;
 
         input(py::object context = py::object()) : base_widget(context, "input") {}
-
         void operator()() override;
 
         inline static void define_python_types(py::module& module) {
@@ -27,7 +24,7 @@ namespace b::widgets {
                     .def_readwrite("content", &b::widgets::input::content)
                     .def_readwrite("hint", &b::widgets::input::hint)
                     .def_readwrite("flags", &b::widgets::input::flags)
-                    .def_readwrite("style", &b::widgets::input::style)
+                    .def_readwrite("buffer_size", &b::widgets::input::buffer_size)
                     .def_readonly("changed", &b::widgets::input::changed)
                     .def_readonly("active", &b::widgets::input::active)
                     .def("__call__", [](b::widgets::input& self) { self(); });

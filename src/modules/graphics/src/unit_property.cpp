@@ -6,7 +6,7 @@ namespace b {
 
     unit_property::unit_property(const std::string& value) { operator=(value); }
     unit_property::unit_property(float value) { operator=(value); }
-    unit_property::unit_property(ImVec4 color) { operator=(color); }
+    unit_property::unit_property(ImColor color) { operator=(color); }
     unit_property::unit_property(sf::Color color) { operator=(color); }
 
     unit_property::unit_property(float value, enum unit unit) {
@@ -34,16 +34,16 @@ namespace b {
         return *this;
     }
 
-    unit_property& unit_property::operator=(ImVec4 color) {
+    unit_property& unit_property::operator=(ImColor color) {
         clear();
-        m_vec4 = color;
+        m_color = color;
         m_unit = unit::COLOR_HEX;
         return *this;
     }
 
     unit_property& unit_property::operator=(sf::Color color) {
         clear();
-        m_vec4 = color;
+        m_color = color.toInteger();
         m_unit = unit::COLOR_HEX;
         return *this;
     }
@@ -52,7 +52,7 @@ namespace b {
         return numeric();
     }
 
-    unit_property::operator ImVec4() const {
+    unit_property::operator ImColor() const {
         return color();
     }
 
@@ -69,12 +69,12 @@ namespace b {
         }
     }
 
-    ImVec4 unit_property::color() const {
+    ImColor unit_property::color() const {
         if (m_unit == unit::COLOR_HEX) {
-            return m_vec4;
+            return m_color;
         }
         else {
-            throw std::runtime_error("Cannot convert b::unit_property to ImVec4/Color: property holds a non-color value!");
+            throw std::runtime_error("Cannot convert b::unit_property to ImColor: property holds a non-color value!");
         }
     }
 
@@ -83,7 +83,7 @@ namespace b {
             case unit::UNITLESS: return fmt::format("{:.06}", m_float);
             case unit::PERCENT: return fmt::format("{:.06}%", m_float);
             case unit::PIXEL: return fmt::format("{:.06}px", m_float);
-            case unit::COLOR_HEX: return color_hex(m_vec4);
+            case unit::COLOR_HEX: return color_hex(m_color);
             case unit::EM: return fmt::format("{:.06}em", m_float);
             default: return {};
         }
@@ -123,13 +123,13 @@ namespace b {
 
     void unit_property::parse_color(const std::string& str) {
         m_unit = unit::NONE;
-        m_vec4 = color_hex(str);    // Throws if invalid
+        m_color = color_hex(str);    // Throws if invalid
         m_unit = unit::COLOR_HEX;
     }
 
     void unit_property::clear() {
         m_float = 0.f;
-        m_vec4 = ImVec4(0.f, 0.f, 0.f, 0.f);
+        m_color = ImColor(0.f, 0.f, 0.f, 0.f);
         m_unit = unit::NONE;
     }
 }

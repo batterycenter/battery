@@ -78,7 +78,7 @@ namespace b::widgets {
         this->custom_implementation = [this]() {
             auto color_left = b::property_stack::get("button-gradient-color-left", "#000000"_u.color());
             auto color_right = b::property_stack::get("button-gradient-color-right", "#FFFFFF"_u.color());
-            return draw(get_identifier().c_str(), this->desired_size(), color_left, color_right);
+            return draw(base_get_identifier().c_str(), this->base_get_bb_size(), color_left, color_right);
         };
     }
 

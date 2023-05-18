@@ -23,10 +23,15 @@ namespace b::widgets {
 
         unit_property left;
         unit_property top;
-        unit_property width;
+        unit_property width;        // width and height have priority over right and bottom
         unit_property height;
+        unit_property right;
+        unit_property bottom;
+
         ImVec2 actual_position;
         ImVec2 actual_size;
+
+        widget_style style;
 
         explicit base_widget(py::object context, std::string name);
         virtual ~base_widget() = default;
@@ -47,13 +52,22 @@ namespace b::widgets {
                     .def_readwrite("top", &b::widgets::base_widget::top)
                     .def_readwrite("width", &b::widgets::base_widget::width)
                     .def_readwrite("height", &b::widgets::base_widget::height)
+                    .def_readwrite("right", &b::widgets::base_widget::right)
+                    .def_readwrite("bottom", &b::widgets::base_widget::bottom)
+                    .def_readwrite("actual_position", &b::widgets::base_widget::actual_position)
+                    .def_readwrite("actual_size", &b::widgets::base_widget::actual_size)
+                    .def_readwrite("style", &b::widgets::base_widget::style)
                     .def("__call__", &b::widgets::base_widget::operator());
         }
 
     protected:
-        [[nodiscard]] std::string get_identifier() const;
-        [[nodiscard]] void set_cursor_position() const;
-        [[nodiscard]] ImVec2 desired_size() const;
+        [[nodiscard]] std::string base_get_identifier() const;
+        [[nodiscard]] void base_set_cursor_position_to_min_bb() const;
+        [[nodiscard]] ImVec2 base_get_bb_min() const;
+        [[nodiscard]] ImVec2 base_get_bb_max() const;
+        [[nodiscard]] ImVec2 base_get_bb_size() const;
+        void base_push_style();
+        void base_pop_style();
 
         size_t id = 0;
 

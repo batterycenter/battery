@@ -14,6 +14,7 @@ battery_add_source_files(battery_graphics
         src/widgets/grid.cpp
         src/widgets/image.cpp
         src/widgets/input.cpp
+        src/widgets/rect.cpp
         src/widgets/text.cpp
         src/widgets/window.cpp
 

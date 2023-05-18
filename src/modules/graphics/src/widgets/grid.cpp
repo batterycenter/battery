@@ -8,20 +8,24 @@ namespace b::widgets {
     }
 
     void grid::operator()(const std::function<void(std::function<void(int, int, std::function<void()>)>)>& grid_callback) {
+        base_push_style();
 
         calc_widths();
         calc_heights();
 
         grid_container.native_window_border = frame_border;
-        grid_container.width = desired_size().x;
-        grid_container.height = desired_size().y;
+        grid_container.width = base_get_bb_size().x;
+        grid_container.height = base_get_bb_size().y;
         grid_container.flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
         // This callback is the actual container of the grid itself
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-        set_cursor_position();
+        base_set_cursor_position_to_min_bb();
         grid_container([this, &grid_callback]() {
             ImGui::PopStyleVar();
+
+            base_pop_style();
+            children_style.push();
 
             // This callback runs once for the grid and runs the user code, which then calls the inner callback
             grid_callback([this] (int column, int row, const std::function<void()>& cell_content) {
@@ -37,7 +41,7 @@ namespace b::widgets {
                     return;
                 }
 
-                ImGui::PushID(get_identifier().c_str());
+                ImGui::PushID(base_get_identifier().c_str());
                 ImGui::PushID(column);
                 ImGui::PushID(row);
 
@@ -57,6 +61,8 @@ namespace b::widgets {
                 ImGui::PopID();
                 ImGui::PopID();
             });
+
+            children_style.pop();
         });
         actual_position = grid_container.actual_position;
         actual_size = grid_container.actual_size;

@@ -9,6 +9,8 @@ namespace b::widgets {
         int flags = ImGuiWindowFlags_None;
         bool native_window_border = true;
 
+        widget_style children_style;
+
         container(py::object context = py::object()) : base_widget(context, "container") {}
 
         void operator()() override;
@@ -20,6 +22,7 @@ namespace b::widgets {
                 .def(b::py::init<py::object>())
                 .def_readwrite("flags", &b::widgets::container::flags)
                 .def_readwrite("native_window_border", &b::widgets::container::native_window_border)
+                .def_readwrite("children_style", &b::widgets::container::children_style)
                 .def("__call__", [](b::widgets::container& self) { self(); })
                 .def("__call__", [](b::widgets::container& self, const std::function<void()>& callback) { self(callback); });
         }

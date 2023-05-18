@@ -4,47 +4,23 @@
 namespace b::widgets {
 
     void input::operator()() {
-        widget_builder builder(style);
-
-        builder.add_color_rule("text-color").push(ImGuiCol_Text);
-        builder.add_color_rule("text-color-disabled").push(ImGuiCol_TextDisabled);
-        builder.add_color_rule("text-color-selected").push(ImGuiCol_TextSelectedBg);
-        builder.add_color_rule("border-color").push(ImGuiCol_Border);
-        builder.add_color_rule("input-color").push(ImGuiCol_FrameBg);
-
-        builder.add_numeric_rule("border-radius")
-                .add_case(b::unit::UNITLESS, [this](auto value) { return value; })
-                .add_case(b::unit::PIXEL, [this](auto value) { return value; })
-                .add_case(b::unit::PERCENT, [this](auto value) { return value / 100.f * actual_size.y; })
-//                .add_case(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
-                .push(ImGuiStyleVar_FrameRounding);
-
-        builder.add_numeric_rule("border-width")
-                .add_case(b::unit::UNITLESS, [this](auto value) { return value; })
-                .add_case(b::unit::PIXEL, [this](auto value) { return value; })
-                .add_case(b::unit::PERCENT, [this](auto value) { return value / 100.f * actual_size.y; })
-//                .add_case(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
-                .push(ImGuiStyleVar_FrameBorderSize);
-
-        builder.add_vec2_rule("padding")
-                .add_case_x(b::unit::UNITLESS, [this](auto value) { return value; })
-                .add_case_x(b::unit::PIXEL, [this](auto value) { return value; })
-                .add_case_x(b::unit::PERCENT, [this](auto value) { return value / 100.f * actual_size.x; })
-//                .add_case_x(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
-                .add_case_y(b::unit::UNITLESS, [this](auto value) { return value; })
-                .add_case_y(b::unit::PIXEL, [this](auto value) { return value; })
-                .add_case_y(b::unit::PERCENT, [this](auto value) { return value / 100.f * actual_size.y; })
-//                .add_case_y(b::unit::EM, [this](auto value) { return b::get_current_font_size() * value; })
-                .push(ImGuiStyleVar_FramePadding);
+        base_push_style();
 
         buffer = content;
         buffer.resize(buffer_size);
-        set_cursor_position();
-        changed = ImGui::InputTextWithHint(get_identifier().c_str(), hint.c_str(), buffer.data(), buffer.size(), flags);
+        base_set_cursor_position_to_min_bb();
+
+        if (base_get_bb_size().x != 0) {
+            ImGui::PushItemWidth(base_get_bb_size().x);
+        }
+
+        changed = ImGui::InputTextWithHint(base_get_identifier().c_str(), hint.c_str(), buffer.data(), buffer.size(), flags);
         actual_position = ImGui::GetItemRectMin();
         actual_size = ImGui::GetItemRectSize();
         active = ImGui::IsItemActive();
         content = buffer.data();    // Re-parse as a C-String
+
+        base_pop_style();
     }
 
 }

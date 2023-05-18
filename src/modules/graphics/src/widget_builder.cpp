@@ -120,7 +120,7 @@ namespace b::widgets {
         }
     }
 
-    std::optional<ImVec4> widget_builder::color_rule::get_result() {
+    std::optional<ImColor> widget_builder::color_rule::get_result() {
         auto property = property_stack::get(tag);
         if (property) {
             if (property.value().get_properties().size() != 1) {
@@ -140,7 +140,7 @@ namespace b::widgets {
         return {};
     }
 
-    ImVec4 widget_builder::color_rule::get_result(ImVec4 default_value) {
+    ImColor widget_builder::color_rule::get_result(ImColor default_value) {
         if (auto result = get_result()) {
             return result.value();
         }
@@ -149,7 +149,7 @@ namespace b::widgets {
 
     void widget_builder::color_rule::push(ImGuiCol_ style_var) {
         if (auto result = get_result()) {
-            ImGui::PushStyleColor(style_var, result.value() / 255.f);
+            ImGui::PushStyleColor(style_var, result.value().Value / 255.f);
             pushed++;
         }
     }
