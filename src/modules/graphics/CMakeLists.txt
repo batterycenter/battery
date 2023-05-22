@@ -8,6 +8,7 @@ battery_add_source_files(battery_graphics
         src/widgets/base_widget.cpp
         src/widgets/button.cpp
         src/widgets/checkbox.cpp
+        src/widgets/checkbox_ex.cpp
         src/widgets/container.cpp
         src/widgets/dummy.cpp
         src/widgets/fancy_button.cpp

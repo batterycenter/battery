@@ -2,13 +2,13 @@
 #include "ProjectGenerator.h"
 #include "console.h"
 
-#include "resources/gitignore.txt.h"
-#include "resources/CMakeLists.txt.h"
-#include "resources/CPM.cmake.h"
-#include "resources/battery.toml.h"
-#include "resources/_version.txt.h"
-#include "resources/main.cpp.h"
-#include "resources/pch.hpp.h"
+#include "resources/gitignore_txt.h"
+#include "resources/CMakeLists_txt.h"
+#include "resources/CPM_cmake.h"
+#include "resources/battery_toml.h"
+#include "resources/_version_txt.h"
+#include "resources/main_cpp.h"
+#include "resources/pch_hpp.h"
 
 static int getSelectionInput(const std::string& question, const std::vector<std::string>& options) {
     b::print("{}\n", question);

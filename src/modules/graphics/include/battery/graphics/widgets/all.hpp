@@ -3,6 +3,7 @@
 #include "battery/graphics/widgets/base_widget.hpp"
 #include "battery/graphics/widgets/button.hpp"
 #include "battery/graphics/widgets/checkbox.hpp"
+#include "battery/graphics/widgets/checkbox_ex.hpp"
 #include "battery/graphics/widgets/container.hpp"
 #include "battery/graphics/widgets/dummy.hpp"
 #include "battery/graphics/widgets/fancy_button.hpp"
@@ -22,6 +23,7 @@ namespace b {
         b::widgets::base_widget::define_python_types(widgets);
         b::widgets::button::define_python_types(widgets);
         b::widgets::checkbox::define_python_types(widgets);
+        b::widgets::checkbox_ex::define_python_types(widgets);
         b::widgets::container::define_python_types(widgets);
         b::widgets::dummies::define_python_types(widgets);
         b::widgets::fancy_button::define_python_types(widgets);

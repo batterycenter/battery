@@ -69,10 +69,12 @@ class MainWindow:
     password_input.style.font = "InputText"
     password_input.style["ImGuiStyleVar_FramePadding"] = ("13px", "13px")
 
-    remember_me_checkbox = b.widgets.checkbox()
+    remember_me_checkbox = b.widgets.checkbox_ex()
+    remember_me_checkbox.inner_padding_factor = 1.3
     remember_me_checkbox.name = "Remember me"
     remember_me_checkbox.style["ImGuiCol_Text"] = "#808080"
     remember_me_checkbox.style["ImGuiCol_CheckMark"] = "#FFFFFF"
+    # remember_me_checkbox.style["ImGuiCol_FrameBgHovered"] = remember_me_checkbox.style["ImGuiCol_FrameBg"]
 
     login_button = b.widgets.fancy_button()
     login_button.name = "Sign in"
@@ -114,15 +116,13 @@ class MainWindow:
 
     def render(self):
 
-        def title_content_region():
-            # Render the title Steam logo and label
+        def title_content_region():   # Render the title Steam logo and label
             self.steam_logo()
             b.sameline()
             self.steam_text()
             b.sameline()
             self.steam_text_trademark()
         def left_main_region():
-
             # Render the username and password fields
             self.sign_in_label()
             self.username_input()
@@ -174,7 +174,7 @@ class MainWindow:
             b.app_context.stop_application()
         self.main_window(self.render)
 
-        # b.show_demo_window()
+        b.show_demo_window()
 
 main_window = MainWindow()
 b.init_main_window(main_window)
