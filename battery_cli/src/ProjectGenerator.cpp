@@ -2,13 +2,14 @@
 #include "ProjectGenerator.h"
 #include "console.h"
 
-#include "resources/gitignore_txt.h"
-#include "resources/CMakeLists_txt.h"
-#include "resources/CPM_cmake.h"
-#include "resources/battery_toml.h"
-#include "resources/_version_txt.h"
-#include "resources/main_cpp.h"
-#include "resources/pch_hpp.h"
+#include "resources/version_txt.hpp"
+#include "resources/templates/gitignore.hpp"
+#include "resources/templates/CMakeLists_txt.hpp"
+#include "resources/templates/CPM_cmake.hpp"
+#include "resources/templates/battery_toml.hpp"
+#include "resources/templates/version_txt.hpp"
+#include "resources/templates/main_cpp.hpp"
+#include "resources/templates/pch_hpp.hpp"
 
 static int getSelectionInput(const std::string& question, const std::vector<std::string>& options) {
     b::print("{}\n", question);
@@ -82,7 +83,7 @@ b::expected<std::nullopt_t, Error> ProjectGenerator::run(const std::string& new_
     b::print("Project generation summary:\n");
     b::print("name = {}\n", project_name);
     b::print("version = {}\n", project_version.to_string());
-    b::print("project_dir = {}\n", project_dir);
+    b::print("project_dir = {}\n", b::u8_as_str(project_dir.u8string()));
     b::print("\n");
 
     auto confirm = getConvertableInput(
@@ -103,7 +104,7 @@ b::expected<std::nullopt_t, Error> ProjectGenerator::run(const std::string& new_
         b::print("Generating project...\n");
         auto result = generate();
         if (!result) return b::unexpected(result.error());
-        b::print("Project files generated in {}\n", project_dir);
+        b::print("Project files generated in {}\n", b::u8_as_str(project_dir.u8string()));
     }
     else {
         b::print(b::colors::fg::yellow, "Project generation cancelled. No files were generated.\n");
@@ -145,13 +146,13 @@ b::expected<std::string, Error> ProjectGenerator::generateSourceFile(const std::
     }
 
 b::expected<std::nullopt_t, Error> ProjectGenerator::generate() {     // This function loads every file as a string, and generates them from templates.
-    GENERATE_FILE(this->gitignore, ".gitignore", resources::gitignore_txt);
-    GENERATE_FILE(this->cmakelists, "CMakeLists.txt", resources::CMakeLists_txt);
-    GENERATE_FILE(this->cmake_cpm_cmake, "cmake/CPM.cmake", resources::CPM_cmake);
-    GENERATE_FILE(this->battery_toml, "battery.toml", resources::battery_toml);
-    GENERATE_FILE(this->version_txt, "version.txt", resources::_version_txt);
-    GENERATE_FILE(this->main_cpp, "src/main.cpp", resources::main_cpp);
-    GENERATE_FILE(this->pch_hpp, "include/pch.hpp", resources::pch_hpp);
+    GENERATE_FILE(this->gitignore, ".gitignore", resources::templates::gitignore);
+    GENERATE_FILE(this->cmakelists, "CMakeLists.txt", resources::templates::CMakeLists_txt);
+    GENERATE_FILE(this->cmake_cpm_cmake, "cmake/CPM.cmake", resources::templates::CPM_cmake);
+    GENERATE_FILE(this->battery_toml, "battery.toml", resources::templates::battery_toml);
+    GENERATE_FILE(this->version_txt, "version.txt", resources::templates::version_txt);
+    GENERATE_FILE(this->main_cpp, "src/main.cpp", resources::templates::main_cpp);
+    GENERATE_FILE(this->pch_hpp, "include/pch.hpp", resources::templates::pch_hpp);
     return writeToDisk();
 }
 

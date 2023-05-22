@@ -48,8 +48,6 @@
         "ImGuiCol_NavWindowingHighlight": "#FFFFFFB2",
         "ImGuiCol_NavWindowingDimBg": "#CCCCCC33",
         "ImGuiCol_ModalWindowDimBg": "#CCCCCC59",
-        "button-padding": [ "20px", "10px" ],
-        "button-border-radius": "8px",
         "ImGuiStyleVar_FramePadding": [ 5, 5 ],
         "ImGuiStyleVar_WindowRounding": 8,
         "ImGuiStyleVar_FrameRounding": 6,

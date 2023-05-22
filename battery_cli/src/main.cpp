@@ -2,7 +2,7 @@
 #include "Error.h"
 #include "Project.h"
 #include "ProjectGenerator.h"
-#include "resources/version.txt.h"
+#include "resources/version_txt.hpp"
 
 [[nodiscard]] static b::expected<std::nullopt_t,Error> executeProgram(const std::string& executable, const std::string& args) {
     auto exe = b::fs::path(executable).make_preferred();

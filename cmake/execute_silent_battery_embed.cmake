@@ -6,4 +6,9 @@ execute_process(COMMAND
         ${SYMBOL_NAME}
         ${TYPE}
         ${BINARY}
-        OUTPUT_QUIET)
+        OUTPUT_QUIET
+        RESULT_VARIABLE RESULT)
+
+if (NOT RESULT EQUAL 0)
+    message(FATAL_ERROR "Failed to execute battery_embed: Process returned with error code ${RESULT}")
+endif()

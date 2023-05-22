@@ -2,6 +2,7 @@
 #include "messages.h"
 #include "Project.h"
 #include "ProjectGenerator.h"
+#include "toml.hpp"
 
 bool Project::isProjectConfigured() {
     try {
@@ -88,20 +89,20 @@ b::expected<std::nullopt_t, Error> Project::fetchProjectData(const std::string& 
 
     try {
         // Read toml file and get project name
-        auto toml = b::toml::parse(projectRoot + BATTERY_PROJECT_FILE_NAME);
-        this->projectName = b::toml::find<std::string>(toml, "project_name");
+        auto toml = toml::parse(projectRoot + BATTERY_PROJECT_FILE_NAME);
+        this->projectName = toml::find<std::string>(toml, "project_name");
 
         // Overrides from the toml file -> All json values are directly overridable
         for (const auto& entry : data.items()) {
             if (toml.contains(entry.key())) {
-                data[entry.key()] = b::toml::find<std::string>(toml, entry.key());
+                data[entry.key()] = toml::find<std::string>(toml, entry.key());
             }
         }
 
         // Parse the version
-        auto version = b::fs::ifstream(projectRoot + b::toml::find<std::string>(toml, "version_file")).read_string();
+        auto version = b::fs::ifstream(projectRoot + toml::find<std::string>(toml, "version_file")).read_string();
         if (!version) {
-            b::log::warn(MESSAGES_CANNOT_READ_VERSION_FILE, projectRoot + b::toml::find<std::string>(toml, "version_file"));
+            b::log::warn(MESSAGES_CANNOT_READ_VERSION_FILE, projectRoot + toml::find<std::string>(toml, "version_file"));
             return b::unexpected(Error::VERSION_FILE_NOT_FOUND);
         }
         try {
