@@ -132,6 +132,14 @@ namespace b {
         return degrees * 3.14159265358979323846f / 180.f;
     }
 
+    float length(const ImVec2& v) {
+        return std::sqrt(v.x * v.x + v.y * v.y);
+    }
+
+    float length(const sf::Vector2f& v) {
+        return std::sqrt(v.x * v.x + v.y * v.y);
+    }
+
     float map(const float value, const float min, const float max, const float new_min, const float new_max) {
         return (value - min) / (max - min) * (new_max - new_min) + new_min;
     }
