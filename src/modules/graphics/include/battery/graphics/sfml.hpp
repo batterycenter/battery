@@ -37,4 +37,7 @@ inline bool operator!=(const ImVec4& lhs, const ImVec4& rhs) {
 
 namespace b {
     void define_python_types(b::py::module& module);
+
+    float distance(const ImVec2& p1, const ImVec2& p2);
+    float distance(const sf::Vector2f& p1, const sf::Vector2f& p2);
 }

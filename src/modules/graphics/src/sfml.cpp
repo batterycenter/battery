@@ -116,4 +116,12 @@ namespace b {
         module.def("show_demo_window", []() { ImGui::ShowDemoWindow(nullptr); });
     }
 
+    float distance(const ImVec2& a, const ImVec2& b) {
+        return std::sqrt(std::pow(a.x - b.x, 2) + std::pow(a.y - b.y, 2));
+    }
+
+    float distance(const sf::Vector2f& a, const sf::Vector2f& b) {
+        return std::sqrt(std::pow(a.x - b.x, 2) + std::pow(a.y - b.y, 2));
+    }
+
 }

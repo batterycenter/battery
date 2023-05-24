@@ -24,5 +24,5 @@ battery_precompile_headers(${PROJECT_NAME} "${CMAKE_CURRENT_LIST_DIR}/include/pc
 # What project to start Visual Studio with
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 
-# Embed any resource files at build time
+# Embed any resource files at build time (including hot-reload support)
 # battery_embed(${PROJECT_NAME} "${CMAKE_CURRENT_LIST_DIR}/resources/test.txt" TEXT)
