@@ -40,4 +40,7 @@ namespace b {
 
     float distance(const ImVec2& p1, const ImVec2& p2);
     float distance(const sf::Vector2f& p1, const sf::Vector2f& p2);
+
+    float degrees(float radians);
+    float radians(float degrees);
 }

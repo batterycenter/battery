@@ -124,4 +124,12 @@ namespace b {
         return std::sqrt(std::pow(a.x - b.x, 2) + std::pow(a.y - b.y, 2));
     }
 
+    float degrees(const float radians) {
+        return radians * 180.f / 3.14159265358979323846f;
+    }
+
+    float radians(const float degrees) {
+        return degrees * 3.14159265358979323846f / 180.f;
+    }
+
 }
