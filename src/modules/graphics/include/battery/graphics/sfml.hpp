@@ -11,6 +11,10 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
+inline ImVec2 operator-(const ImVec2& self) {
+    return ImVec2(-self.x, -self.y);
+}
+
 inline ImVec4 operator+(const ImVec4& lhs, float rhs) {
     return ImVec4(lhs.x + rhs, lhs.y + rhs, lhs.z + rhs, lhs.w + rhs);
 }
