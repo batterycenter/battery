@@ -132,4 +132,22 @@ namespace b {
         return degrees * 3.14159265358979323846f / 180.f;
     }
 
+    float map(const float value, const float min, const float max, const float new_min, const float new_max) {
+        return (value - min) / (max - min) * (new_max - new_min) + new_min;
+    }
+
+    ImVec2 map(const ImVec2& value, const ImVec2& min, const ImVec2& max, const ImVec2& new_min, const ImVec2& new_max) {
+        return ImVec2(
+            map(value.x, min.x, max.x, new_min.x, new_max.x),
+            map(value.y, min.y, max.y, new_min.y, new_max.y)
+        );
+    }
+
+    sf::Vector2f map(const sf::Vector2f& value, const sf::Vector2f& min, const sf::Vector2f& max, const sf::Vector2f& new_min, const sf::Vector2f& new_max) {
+        return sf::Vector2f(
+            map(value.x, min.x, max.x, new_min.x, new_max.x),
+            map(value.y, min.y, max.y, new_min.y, new_max.y)
+        );
+    }
+
 }
