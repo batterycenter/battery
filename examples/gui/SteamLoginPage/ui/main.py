@@ -46,7 +46,6 @@ class MainWindow:
     steam_text.label = "STEAM"
     steam_text.style.font = "SteamText"
     steam_text.height.set("64")
-    # steam_text.style["ImGuiStyleVar_FramePadding"] = ("0", "23px")
     steam_text_trademark = b.widgets.text()
     steam_text_trademark.label = "®"
     steam_text_trademark.top.set("10")
@@ -70,6 +69,7 @@ class MainWindow:
     password_input.right.set("10%")
     password_input.style.font = "InputText"
     password_input.style["ImGuiStyleVar_FramePadding"] = ("13px", "13px")
+    password_input.flags = b.ImGuiInputTextFlags.Password
 
     remember_me_checkbox = b.widgets.checkbox_ex()
     remember_me_checkbox.inner_padding_factor = 1.3

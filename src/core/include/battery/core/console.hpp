@@ -8,6 +8,8 @@ namespace b {
 
     std::u8string cin_getline(int buffer_size = 1024);
 
+    bool open_url_in_default_browser(const std::string& url);
+
     namespace console {
 
         enum class keycode : int64_t {

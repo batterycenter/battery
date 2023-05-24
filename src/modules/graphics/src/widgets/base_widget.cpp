@@ -61,6 +61,9 @@ namespace b::widgets {
             cursor_left = left_px.value();
             cursor_width = width_px.value();
         }
+        else if (right_px.has_value()) {
+            cursor_width = ImGui::GetWindowContentRegionMax().x - right_px.value() - cursor_left;
+        }
         else if (left_px.has_value()) {
             cursor_left = left_px.value();
         }
@@ -81,6 +84,9 @@ namespace b::widgets {
         else if (top_px.has_value() && height_px.has_value()) {
             cursor_top = top_px.value();
             cursor_height = height_px.value();
+        }
+        else if (bottom_px.has_value()) {
+            cursor_height = ImGui::GetWindowContentRegionMax().y - bottom_px.value() - cursor_top;
         }
         else if (top_px.has_value()) {
             cursor_top = top_px.value();

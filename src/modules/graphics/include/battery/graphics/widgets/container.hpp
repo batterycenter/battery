@@ -7,7 +7,7 @@ namespace b::widgets {
     class container : public b::widgets::base_widget {
     public:
         int flags = ImGuiWindowFlags_None;
-        bool native_window_border = true;
+        bool native_window_border = false;
 
         widget_style children_style;
 

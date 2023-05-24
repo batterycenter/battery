@@ -3,6 +3,7 @@
 #include "battery/core/string.hpp"
 #include "battery/core/log.hpp"
 #include "battery/core/environment.hpp"
+#include "battery/core/process.hpp"
 #include "battery/core/extern/magic_enum.hpp"
 
 #ifdef BATTERY_ARCH_WINDOWS
@@ -44,6 +45,16 @@ namespace b {
         line = b::replace(line, u8"\n", u8"");
         line = b::replace(line, u8"\r", u8"");
         return line;
+    }
+
+    bool open_url_in_default_browser(const std::string& url) {
+#ifdef BATTERY_ARCH_WINDOWS
+        auto process = b::execute("start " + url);
+        return process.exit_code == 0;
+#else
+        auto process = b::execute("xdg-open " + url);
+        return process.exit_code == 0;
+#endif
     }
 
     namespace console {
