@@ -11,8 +11,8 @@ namespace b::widgets {
         return name + "##batteryui" + std::to_string(id);
     }
 
-    static float get_left_px(const unit_property& property) {
-        float px = ImGui::GetCursorPosX();
+    static std::optional<float> get_horizontal_px(const unit_property& property) {
+        std::optional<float> px;
         switch (property.unit()) {
             case b::unit::UNITLESS: px = property.numeric(); break;
             case b::unit::PIXEL:    px = property.numeric(); break;
@@ -23,8 +23,8 @@ namespace b::widgets {
         return px;
     }
 
-    static float get_top_px(const unit_property& property) {
-        float px = ImGui::GetCursorPosY();
+    static std::optional<float> get_vertical_px(const unit_property& property) {
+        std::optional<float> px;
         switch (property.unit()) {
             case b::unit::UNITLESS: px = property.numeric(); break;
             case b::unit::PIXEL:    px = property.numeric(); break;
@@ -35,70 +35,73 @@ namespace b::widgets {
         return px;
     }
 
-    static float get_width_px(float left_px, const unit_property& width, const unit_property& right) {
-        if (width.unit() != b::unit::NONE) {    // Width is defined: use it
-            float px = 0;
-            switch (width.unit()) {
-                case b::unit::UNITLESS: px = width.numeric(); break;
-                case b::unit::PIXEL:    px = width.numeric(); break;
-                case b::unit::PERCENT:  px = width.numeric() * (ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x) / 100.0f; break;
-                case b::unit::EM:       px = width.numeric() * ImGui::GetFontSize(); break;
-                default: break;
-            }
-            return px;
-        }
-        else {                                      // Otherwise, right is used
-            float _px_from_right = NAN;
-            switch (right.unit()) {
-                case b::unit::UNITLESS: _px_from_right = right.numeric(); break;
-                case b::unit::PIXEL:    _px_from_right = right.numeric(); break;
-                case b::unit::PERCENT:  _px_from_right = right.numeric() * (ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x) / 100.0f; break;
-                case b::unit::EM:       _px_from_right = right.numeric() * ImGui::GetFontSize(); break;
-                default: break;
-            }
-            return !isnan(_px_from_right) ? ImGui::GetWindowContentRegionMax().x - _px_from_right - left_px : 0;
-        }
-    }
-
-    static float get_height_px(float top_px, const unit_property& height, const unit_property& bottom) {
-        if (height.unit() != b::unit::NONE) {    // Height is defined: use it
-            float px = 0;
-            switch (height.unit()) {
-                case b::unit::UNITLESS: px = height.numeric(); break;
-                case b::unit::PIXEL:    px = height.numeric(); break;
-                case b::unit::PERCENT:  px = height.numeric() * (ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y) / 100.0f; break;
-                case b::unit::EM:       px = height.numeric() * ImGui::GetFontSize(); break;
-                default: break;
-            }
-            return px;
-        }
-        else {                                      // Otherwise, bottom is used
-            float _px_from_bottom = NAN;
-            switch (bottom.unit()) {
-                case b::unit::UNITLESS: _px_from_bottom = bottom.numeric(); break;
-                case b::unit::PIXEL:    _px_from_bottom = bottom.numeric(); break;
-                case b::unit::PERCENT:  _px_from_bottom = bottom.numeric() * (ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y) / 100.0f; break;
-                case b::unit::EM:       _px_from_bottom = bottom.numeric() * ImGui::GetFontSize(); break;
-                default: break;
-            }
-            return !isnan(_px_from_bottom) ? ImGui::GetWindowContentRegionMax().y - _px_from_bottom - top_px : 0;
-        }
-    }
-
     void base_widget::base_set_cursor_position_to_min_bb() const {
         ImGui::SetCursorPos(base_get_bb_min());
     }
 
+    std::pair<ImVec2, ImVec2> base_widget::base_get_bb() const {
+        auto left_px = get_horizontal_px(left);
+        auto right_px = get_horizontal_px(right);
+        auto width_px = get_horizontal_px(width);
+        auto top_px = get_vertical_px(top);
+        auto bottom_px = get_vertical_px(bottom);
+        auto height_px = get_vertical_px(height);
+
+        float cursor_left = ImGui::GetCursorPosX();
+        float cursor_width = 0;
+        if (width_px.has_value() && right_px.has_value()) {
+            cursor_left = ImGui::GetWindowContentRegionMax().x - right_px.value() - width_px.value();
+            cursor_width = width_px.value();
+        }
+        else if (left_px.has_value() && right_px.has_value()) {
+            cursor_left = left_px.value();
+            cursor_width = ImGui::GetWindowContentRegionMax().x - right_px.value() - left_px.value();
+        }
+        else if (left_px.has_value() && width_px.has_value()) {
+            cursor_left = left_px.value();
+            cursor_width = width_px.value();
+        }
+        else if (left_px.has_value()) {
+            cursor_left = left_px.value();
+        }
+        else if (width_px.has_value()) {
+            cursor_width = width_px.value();
+        }
+
+        float cursor_top = ImGui::GetCursorPosY();
+        float cursor_height = 0;
+        if (height_px.has_value() && bottom_px.has_value()) {
+            cursor_top = ImGui::GetWindowContentRegionMax().y - bottom_px.value() - height_px.value();
+            cursor_height = height_px.value();
+        }
+        else if (top_px.has_value() && bottom_px.has_value()) {
+            cursor_top = top_px.value();
+            cursor_height = ImGui::GetWindowContentRegionMax().y - bottom_px.value() - top_px.value();
+        }
+        else if (top_px.has_value() && height_px.has_value()) {
+            cursor_top = top_px.value();
+            cursor_height = height_px.value();
+        }
+        else if (top_px.has_value()) {
+            cursor_top = top_px.value();
+        }
+        else if (height_px.has_value()) {
+            cursor_height = height_px.value();
+        }
+
+        return std::make_pair(ImVec2(cursor_left, cursor_top), ImVec2(cursor_left + cursor_width, cursor_top + cursor_height));
+    }
+
     ImVec2 base_widget::base_get_bb_min() const {
-        return ImVec2(get_left_px(left), get_top_px(top));
+        return base_get_bb().first;
     }
 
     ImVec2 base_widget::base_get_bb_max() const {
-        return base_get_bb_min() + base_get_bb_size();
+        return base_get_bb().second;
     }
 
     ImVec2 base_widget::base_get_bb_size() const {
-        return ImVec2(get_width_px(get_left_px(left), width, right), get_height_px(get_top_px(top), height, bottom));
+        return base_get_bb().second - base_get_bb().first;
     }
 
     void base_widget::base_push_style() {

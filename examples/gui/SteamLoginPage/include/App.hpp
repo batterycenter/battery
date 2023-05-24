@@ -14,6 +14,10 @@ public:
         sf::Texture steam_logo;
         sf::Texture qrcode_texture;
 
+        bool steam_hyperlink_clicked = false;
+        bool help_hyperlink_clicked = false;
+        bool create_account_hyperlink_clicked = false;
+
         inline static void define_python_types(b::py::module& module) {
             auto submodule = module.def_submodule("MainWindow");
             b::py::class_<Context>(submodule, "Context")
@@ -21,7 +25,10 @@ public:
                     .def_readwrite("titlebar_hovered", &Context::titlebar_hovered)
                     .def_readwrite("window_size", &Context::window_size)
                     .def_readwrite("steam_logo", &Context::steam_logo)
-                    .def_readwrite("qrcode_texture", &Context::qrcode_texture);
+                    .def_readwrite("qrcode_texture", &Context::qrcode_texture)
+                    .def_readwrite("steam_hyperlink_clicked", &Context::steam_hyperlink_clicked)
+                    .def_readwrite("help_hyperlink_clicked", &Context::help_hyperlink_clicked)
+                    .def_readwrite("create_account_hyperlink_clicked", &Context::create_account_hyperlink_clicked);
         }
     } context;
 

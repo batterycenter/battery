@@ -24,8 +24,8 @@ class MainWindow:
     main_vertical_grid.top.set("12%")
     main_vertical_grid.width.set("92%")
     main_vertical_grid.height.set("92%")
-    main_vertical_grid.frame_border = True
-    main_vertical_grid.cell_border = True
+    # main_vertical_grid.frame_border = True
+    # main_vertical_grid.cell_border = True
 
     upper_grid = b.widgets.grid()
     upper_grid.cell_widths = [ b.unit_property(2), b.unit_property(1) ]
@@ -34,8 +34,8 @@ class MainWindow:
     upper_grid.top.set("0")
     upper_grid.width.set("100%")
     upper_grid.height.set("100%")
-    upper_grid.frame_border = True
-    upper_grid.cell_border = True
+    # upper_grid.frame_border = True
+    # upper_grid.cell_border = True
 
     steam_logo = b.widgets.image()
     steam_logo.left.set("0")
@@ -45,9 +45,11 @@ class MainWindow:
     steam_text = b.widgets.text()
     steam_text.label = "STEAM"
     steam_text.style.font = "SteamText"
+    steam_text.height.set("64")
     # steam_text.style["ImGuiStyleVar_FramePadding"] = ("0", "23px")
     steam_text_trademark = b.widgets.text()
     steam_text_trademark.label = "®"
+    steam_text_trademark.top.set("10")
     steam_text_trademark.style.font = "SteamTextTrademark"
 
     sign_in_label = b.widgets.text()
@@ -107,12 +109,51 @@ class MainWindow:
     qrcode_container.left.set("0%")
     qrcode_container.width.set("100%")
 
+    under_qrcode_text_1 = b.widgets.text()
+    under_qrcode_text_1.label = "Use the"
+    under_qrcode_text_1.style["ImGuiCol_Text"] = "#808080"
+    under_qrcode_text_1.left.set("16%")
+
+    under_qrcode_text_2 = b.widgets.text()
+    under_qrcode_text_2.label = "Steam Mobile App"
+    under_qrcode_text_2.style["ImGuiCol_Text"] = "#808080"
+    under_qrcode_text_2.hyperlink = True;
+    under_qrcode_text_2.underline = True;
+
+    under_qrcode_text_3 = b.widgets.text()
+    under_qrcode_text_3.label = "to sign"
+    under_qrcode_text_3.style["ImGuiCol_Text"] = "#808080"
+
+    under_qrcode_text_4 = b.widgets.text()
+    under_qrcode_text_4.label = "in via QR code"
+    under_qrcode_text_4.style["ImGuiCol_Text"] = "#808080"
+    under_qrcode_text_4.width.set("100%")
+    under_qrcode_text_4.alignh = b.AlignH.Center
+
+    help_text = b.widgets.text()
+    help_text.label = "Help, I can't sign in"
+    help_text.style["ImGuiCol_Text"] = "#808080"
+    help_text.hyperlink = True;
+    help_text.underline = True;
+
+    create_account_text = b.widgets.text()
+    create_account_text.label = "Create a Free Account"
+    create_account_text.style["ImGuiCol_Text"] = "#808080"
+    create_account_text.hyperlink = True;
+    create_account_text.underline = True;
+    create_account_text.right.set("0")
+
+    dont_have_account_text = b.widgets.text()
+    dont_have_account_text.label = "Don't have a Steam account?"
+    dont_have_account_text.style["ImGuiCol_Text"] = "#808080"
+
     def __init__(self):
         b.load_font("SteamText", "roboto-bold", 44)
         b.load_font("SteamTextTrademark", "roboto-bold", 15)
         b.load_font("InputLabel", "roboto-bold", 18)
         b.load_font("InputText", "roboto-regular", 20)
         b.load_font("LoginButton", "roboto-bold", 30)
+        b.load_font("InfoText", "roboto-regular", 18)
 
     def render(self):
 
@@ -150,6 +191,15 @@ class MainWindow:
             self.qrcode_container.height.set(self.qrcode_container.actual_size.x)
             self.qrcode_container(qrcode)
 
+            self.under_qrcode_text_1()
+            b.sameline()
+            self.under_qrcode_text_2()
+            b.sameline()
+            self.under_qrcode_text_3()
+            self.under_qrcode_text_4()
+
+            self.main_window.context.steam_hyperlink_clicked = self.under_qrcode_text_2.hyperlink_clicked
+
         def main_content_region():
             def upper_grid(call):
                 call(0, 0, left_main_region)
@@ -157,7 +207,15 @@ class MainWindow:
             self.upper_grid(upper_grid)
 
         def lower_content_region():
-            pass
+            self.help_text()
+            b.sameline()
+            self.dont_have_account_text.right.set(self.create_account_text.actual_size.x + 10)
+            self.dont_have_account_text()
+            b.sameline()
+            self.create_account_text()
+
+            self.main_window.context.help_hyperlink_clicked = self.help_text.hyperlink_clicked
+            self.main_window.context.create_account_hyperlink_clicked = self.create_account_text.hyperlink_clicked
 
         def main_vertical_grid(cell):
             cell(0, 0, title_content_region)
@@ -174,7 +232,7 @@ class MainWindow:
             b.app_context.stop_application()
         self.main_window(self.render)
 
-        b.show_demo_window()
+        # b.show_demo_window()
 
 main_window = MainWindow()
 b.init_main_window(main_window)

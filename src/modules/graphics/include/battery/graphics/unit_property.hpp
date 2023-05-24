@@ -39,6 +39,7 @@ namespace b {
         [[nodiscard]] std::string string() const;
 
         [[nodiscard]] unit unit() const { return m_unit; }
+        [[nodiscard]] bool defined() const { return m_unit != b::unit::NONE; }
 
         bool operator==(const unit_property& other) { return this->string() == other.string(); }
         bool operator!=(const unit_property& other) { return !this->operator==(other); }

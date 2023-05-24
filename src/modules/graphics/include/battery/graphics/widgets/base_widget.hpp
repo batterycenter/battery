@@ -9,6 +9,7 @@
 #include "battery/graphics/property_stack.hpp"
 #include "battery/graphics/widget_style.hpp"
 #include "battery/graphics/font_stack.hpp"
+#include "battery/graphics/types.hpp"
 #include "magic_enum.hpp"
 
 namespace b::widgets {
@@ -61,11 +62,12 @@ namespace b::widgets {
         }
 
     protected:
-        [[nodiscard]] std::string base_get_identifier() const;
-        [[nodiscard]] void base_set_cursor_position_to_min_bb() const;
-        [[nodiscard]] ImVec2 base_get_bb_min() const;
-        [[nodiscard]] ImVec2 base_get_bb_max() const;
-        [[nodiscard]] ImVec2 base_get_bb_size() const;
+        std::string base_get_identifier() const;
+        void base_set_cursor_position_to_min_bb() const;
+        std::pair<ImVec2, ImVec2> base_get_bb() const;
+        ImVec2 base_get_bb_min() const;
+        ImVec2 base_get_bb_max() const;
+        ImVec2 base_get_bb_size() const;
         void base_push_style();
         void base_pop_style();
 

@@ -1,6 +1,7 @@
 
 #include "battery/graphics/unit_property.hpp"
 #include "battery/graphics/sfml.hpp"
+#include "battery/graphics/types.hpp"
 #include "battery/graphics/font_stack.hpp"
 
 namespace b {
@@ -67,6 +68,16 @@ namespace b {
             .value("RoundCornersAll", ImDrawFlags_RoundCornersAll)
             .value("RoundCornersDefault_", ImDrawFlags_RoundCornersDefault_)
             .value("RoundCornersMask_", ImDrawFlags_RoundCornersMask_);
+
+        py::enum_<b::alignh>(module, "AlignH", py::arithmetic())
+            .value("Left", b::alignh::LEFT)
+            .value("Center", b::alignh::CENTER)
+            .value("Right", b::alignh::RIGHT);
+
+        py::enum_<b::alignv>(module, "AlignV", py::arithmetic())
+            .value("Top", b::alignv::TOP)
+            .value("Center", b::alignv::CENTER)
+            .value("Bottom", b::alignv::BOTTOM);
 
         py::class_<sf::Texture>(module, "sfTexture");
         py::class_<ImFont>(module, "ImFont");
