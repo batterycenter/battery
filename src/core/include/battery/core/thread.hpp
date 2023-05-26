@@ -25,7 +25,7 @@
 #include "battery/core/log.hpp"
 #include "battery/core/time.hpp"
 #include "battery/core/constants.hpp"
-#include "battery/core/application.hpp"
+#include "battery/core/console_application.hpp"
 
 ///
 /// \brief Everything related to multithreading
@@ -59,11 +59,11 @@ namespace b {
                 _promise.set_value();
                 if constexpr (std::is_invocable_v<std::decay_t<_Fn>, std::stop_token, std::decay_t<_Args>...>) {
                     if (!catch_common_exceptions(std::move(_Fx), get_stop_token(), std::move(args)...)) {
-                        b::application::get()->stop_application();
+                        b::console_application::get()->stop_application();
                     }
                 } else {
                     if (!catch_common_exceptions(std::move(_Fx), std::move(args)...)) {
-                        b::application::get()->stop_application();
+                        b::console_application::get()->stop_application();
                     }
                 }
             }) {

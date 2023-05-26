@@ -1,12 +1,12 @@
 #pragma once
 
-#include "battery/core/application.hpp"
+#include "battery/core/console_application.hpp"
 #include "battery/core/log.hpp"
 #include "battery/core/main.hpp"
 #include "battery/core/all.hpp"
-#include "battery/graphics/windowed_application.hpp"
+#include "battery/graphics/application.hpp"
 
-class App : public b::windowed_application {
+class App : public b::application {
 public:
     App() = default;
     ~App() = default;

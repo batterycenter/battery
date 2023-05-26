@@ -1,7 +1,7 @@
 #pragma once
 
 #include "battery/core/all.hpp"
-#include "battery/graphics/windowed_application.hpp"
+#include "battery/graphics/application.hpp"
 #include "battery/graphics/widgets/all.hpp"
 
 class MainWindow : public b::window {
@@ -37,7 +37,7 @@ public:
     ~MainWindow() = default;
 
     inline static MainWindow* get() {
-        return dynamic_cast<MainWindow*>(b::windowed_application::get()->get_window(0).get());
+        return dynamic_cast<MainWindow*>(b::application::get()->get_window(0).get());
     }
 
     std::unique_ptr<b::resource_loader> ui;
@@ -49,7 +49,7 @@ public:
     void cleanup() override;
 };
 
-class App : public b::windowed_application {
+class App : public b::application {
 public:
     struct Context {
 
@@ -66,7 +66,7 @@ public:
     ~App() = default;
 
     inline static App* get() {
-        return dynamic_cast<App*>(b::windowed_application::get());
+        return dynamic_cast<App*>(b::application::get());
     }
 
     void setup() override {

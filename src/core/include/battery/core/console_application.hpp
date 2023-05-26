@@ -7,21 +7,21 @@
 
 namespace b {
 
-    class application {
+    class console_application {
     public:
-        application();
-        virtual ~application() = default;
+        console_application();
+        virtual ~console_application() = default;
 
-        static application* get();
+        static console_application* get();
 
         std::vector<std::u8string> args;
         double framerate { 0.0 };
         double frametime { 0.0 };
         uint64_t framecount { 0 };
 
-        virtual void app_setup();
-        virtual void app_update();
-        virtual void app_cleanup();
+        virtual void console_setup();
+        virtual void console_update();
+        virtual void console_cleanup();
 
         void set_requested_framerate(double requested_framerate);
         void set_requested_frametime(double requested_frametime);
@@ -31,10 +31,10 @@ namespace b {
 
         void run(const std::u8string& appname, const std::vector<std::u8string>& args);
 
-        application& operator=(const application&) = delete;
-        application& operator=(application&&) = delete;
-        application(const application&) = delete;
-        application(application&&) = delete;
+        console_application& operator=(const console_application&) = delete;
+        console_application& operator=(console_application&&) = delete;
+        console_application(const console_application&) = delete;
+        console_application(console_application&&) = delete;
 
     private:
 
@@ -44,7 +44,7 @@ namespace b {
 
         bool stop_requested { false };
         double requested_framerate { 0.0 };
-        inline static application* instance { nullptr };
+        inline static console_application* instance {nullptr };
     };
 
 }

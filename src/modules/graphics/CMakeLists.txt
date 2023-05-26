@@ -29,7 +29,7 @@ battery_add_source_files(battery_graphics
         src/unit_property.cpp
         src/widget_builder.cpp
         src/window.cpp
-        src/windowed_application.cpp
+        src/application.cpp
         )
 
 battery_set_ide_folder(battery_graphics "battery/modules")

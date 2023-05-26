@@ -7,7 +7,7 @@ battery_add_source_files(battery_core_no_main
         src/extern/utf8proc_data.c
         src/internal/folders.cpp
 
-        src/application.cpp
+        src/console_application.cpp
         src/cache.cpp
         src/console.cpp
         src/constants.cpp

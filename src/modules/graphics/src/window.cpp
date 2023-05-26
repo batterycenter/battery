@@ -1,5 +1,5 @@
 
-#include "battery/graphics/windowed_application.hpp"
+#include "battery/graphics/application.hpp"
 #include "battery/graphics/window.hpp"
 #include "battery/graphics/graphics_constants.hpp"
 #include "battery/graphics/styles.hpp"

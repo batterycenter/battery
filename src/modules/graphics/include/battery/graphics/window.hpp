@@ -41,7 +41,7 @@ namespace b {
 
         sf::Clock delta_clock;
         bool win32_idm_used = !win32_use_immersive_dark_mode;
-        friend class windowed_application;
+        friend class application;
     };
 
 }

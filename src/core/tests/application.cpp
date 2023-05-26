@@ -1,10 +1,10 @@
 
-#include "battery/core/application.hpp"
+#include "battery/core/console_application.hpp"
 
 #include "battery/core/all.hpp"
 #include <gtest/gtest.h>
 
-class App : public b::application {
+class App : public b::console_application {
 public:
     App() = default;
 

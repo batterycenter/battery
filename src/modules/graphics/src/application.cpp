@@ -1,19 +1,19 @@
 
 #include "battery/core/string.hpp"
-#include "battery/graphics/windowed_application.hpp"
+#include "battery/graphics/application.hpp"
 #include "battery/graphics/font_stack.hpp"
 
 namespace b {
 
-    windowed_application::windowed_application() {
+    application::application() {
         set_requested_framerate(60.0);
     }
 
-    windowed_application* windowed_application::get() {
-        return dynamic_cast<windowed_application*>(b::application::get());
+    application* application::get() {
+        return dynamic_cast<application*>(b::console_application::get());
     }
 
-    void windowed_application::app_setup() {
+    void application::console_setup() {
 
         setup();
 
@@ -22,7 +22,7 @@ namespace b {
         }
     }
 
-    void windowed_application::app_update() {
+    void application::console_update() {
 
         update();
 
@@ -46,7 +46,7 @@ namespace b {
         }
     }
 
-    void windowed_application::app_cleanup() {
+    void application::console_cleanup() {
 
         cleanup();
 
@@ -59,7 +59,7 @@ namespace b {
         ImGui::SFML::Shutdown();
     }
 
-    void windowed_application::register_window(std::shared_ptr<b::window> window) {
+    void application::register_window(std::shared_ptr<b::window> window) {
         windows.push_back(window);
     }
 

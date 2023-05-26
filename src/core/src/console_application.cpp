@@ -1,62 +1,62 @@
 
 #include <utility>
 
-#include "battery/core/application.hpp"
+#include "battery/core/console_application.hpp"
 #include "battery/core/time.hpp"
 #include "battery/core/log.hpp"
 #include "battery/core/folders.hpp"
 
 namespace b {
 
-    application::application() {
+    console_application::console_application() {
         if (instance != nullptr) {
             throw std::runtime_error("Only one instance of b::application is allowed!");
         }
         instance = this;
     }
 
-    application* application::get() {
+    console_application* console_application::get() {
         if (instance == nullptr) {
             throw std::runtime_error("No instance of b::application exists!");
         }
         return instance;
     }
 
-    void application::app_setup() {
+    void console_application::console_setup() {
         // No action
     }
 
-    void application::app_update() {
+    void console_application::console_update() {
         // No action
     }
 
-    void application::app_cleanup() {
+    void console_application::console_cleanup() {
         // No action
     }
 
 
 
 
-    void application::set_requested_framerate(double requested_framerate) {
+    void console_application::set_requested_framerate(double requested_framerate) {
         this->requested_framerate = requested_framerate;
     }
 
-    void application::set_requested_frametime(double requested_frametime) {
+    void console_application::set_requested_frametime(double requested_frametime) {
         this->requested_framerate = 1.0 / requested_frametime;
     }
 
-    void application::stop_application() {
+    void console_application::stop_application() {
         this->stop_requested = true;
     }
 
-    void application::set_stop_requested(bool stop_requested) {
+    void console_application::set_stop_requested(bool stop_requested) {
         this->stop_requested = stop_requested;
     }
 
 
 
 
-    void application::run(const std::u8string& appname, const std::vector<std::u8string>& args) {
+    void console_application::run(const std::u8string& appname, const std::vector<std::u8string>& args) {
         this->args = args;
         b::folders::set_application_name(appname);
 
@@ -104,16 +104,16 @@ namespace b {
         return false;
     }
 
-    bool application::_setup() {
-        return catch_exceptions("b::application::setup()", &application::app_setup, this);
+    bool console_application::_setup() {
+        return catch_exceptions("b::application::setup()", &console_application::console_setup, this);
     }
 
-    bool application::_update() {
-        return catch_exceptions("b::application::update()", &application::app_update, this);
+    bool console_application::_update() {
+        return catch_exceptions("b::application::update()", &console_application::console_update, this);
     }
 
-    bool application::_cleanup() {
-        return catch_exceptions("b::application::cleanup()", &application::app_cleanup, this);
+    bool console_application::_cleanup() {
+        return catch_exceptions("b::application::cleanup()", &console_application::console_cleanup, this);
     }
 
 }
