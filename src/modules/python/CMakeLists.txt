@@ -24,8 +24,6 @@ battery_download_python_embedded_distro()
 
 target_link_libraries(battery_python Python::Python pybind11::embed)
 
-battery_set_target_ide_folder(gtest "battery/modules")
-
 # Unit-testing
 if (BUILD_TESTS)
     add_subdirectory(tests)
