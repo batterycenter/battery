@@ -196,8 +196,8 @@ public:
         file << fmt::format("            return {{ reinterpret_cast<const char*>(__{}_data), __{}_size }};", m_sanitizedSymbolName, m_sanitizedSymbolName) << std::endl;
         file << fmt::format("        }}") << std::endl;
         file << std::endl;
-        file << fmt::format("        inline static void* data() {{") << std::endl;
-        file << fmt::format("            return reinterpret_cast<void*>(__{}_data);", m_sanitizedSymbolName) << std::endl;
+        file << fmt::format("        inline static const char* data() {{") << std::endl;
+        file << fmt::format("            return reinterpret_cast<const char*>(__{}_data);", m_sanitizedSymbolName) << std::endl;
         file << fmt::format("        }}") << std::endl;
         file << std::endl;
         file << fmt::format("        inline operator std::string() {{") << std::endl;
