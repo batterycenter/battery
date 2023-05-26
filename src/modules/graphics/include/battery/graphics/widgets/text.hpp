@@ -7,7 +7,7 @@ namespace b::widgets {
 
     class text : public b::widgets::base_widget {
     public:
-        std::string label = "Label";
+        b::string label = "Label";
         alignh alignh = alignh::LEFT;
         alignv alignv = alignv::CENTER;
         bool underline = false;

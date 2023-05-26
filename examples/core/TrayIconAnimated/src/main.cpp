@@ -6,14 +6,14 @@
 #error EXAMPLE_ROOT is not defined, the build system is probably not set up correctly
 #endif
 
-int b::main(const std::vector<std::u8string>& args) {
+int b::main(const std::vector<b::string>& args) {
     b::log::info("Running battery example tray-icon-animated. Have fun!");
 
     // First load the frames into memory
     std::vector<b::resource> frames;
     for (int i = 1; i <= 32; i++) {
         b::fs::path path = EXAMPLE_ROOT;
-        path += fmt::format("resources/fire{}.png", i);
+        path += b::format("resources/fire{}.png", i);
         frames.emplace_back(b::resource::from_binary_file(path));
     }
     auto defaultIcon = b::resource::from_base64(b::constants::battery_icon_base64(), u8"png");

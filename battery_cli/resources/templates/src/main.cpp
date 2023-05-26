@@ -1,7 +1,7 @@
 
 #include "battery/core/all.hpp"
 
-int b::main(const std::vector<std::string>& args) {
+int b::main(const std::vector<b::string>& args) {
 
     b::print(b::colors::fg::green, "Hello World!\n");
 

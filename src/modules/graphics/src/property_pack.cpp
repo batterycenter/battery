@@ -3,8 +3,8 @@
 
 namespace b {
 
-    std::string property_pack::string() const {
-        std::string result = "[";
+    b::string property_pack::string() const {
+        b::string result = "[";
         for (auto& property : properties) {
             result += property.string() + ", ";
         }

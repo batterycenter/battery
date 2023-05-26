@@ -26,7 +26,7 @@ namespace b::tray {
 
     class toggle : public tray_entry {
     public:
-        toggle(std::u8string text, bool state, std::function<void(bool)> callback = [](bool){/**/});
+        toggle(b::string text, bool state, std::function<void(bool)> callback = [](bool){/**/});
         ~toggle() override = default;
 
         void onToggled();

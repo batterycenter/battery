@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include "battery/core/string.hpp"
 
 namespace b {
 
@@ -18,8 +18,8 @@ namespace b {
     // These constants are defined as static getter functions instead of variables,
     // to avoid a 'static initialization order fiasco' https://isocpp.org/wiki/faq/ctors#static-init-order
     struct constants {
-        static std::string battery_icon_base64();
-        static std::u8string default_application_name();
+        static b::string battery_icon_base64();
+        static b::string default_application_name();
 
         static bool message_box_on_exception_default();
         static bool catch_common_exceptions_default();

@@ -14,12 +14,12 @@ TEST(BatteryCore_Filesystem, ReadFileWithSpacesAndKanji) {
     // We just try to open it to see if unicode filenames work
 
     // The filename from above written in unicode codepoints
-    std::string filename = TESTDATA_FOLDER "/\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8";
+    b::string filename = TESTDATA_FOLDER "/\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8";
 
     b::fs::ifstream file(filename);
     ASSERT_FALSE(file.fail());
 
-    auto content = (std::string)file;
+    auto content = file.string();
     EXPECT_EQ(content, "utf-8 filenames work");
 
     file.return_to_beginning();
@@ -38,7 +38,7 @@ TEST(BatteryCore_Filesystem, ReadWriteFileContent_UTF8) {
 
     // Here we write UTF-8 encoded binary data to a file and then read it as a regular file and check the content
 
-    std::string content = "\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8";
+    b::string content = "\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8";
 
     auto test = [&content](b::fs::Mode mode) {
         b::fs::ofstream outfile("filesystem-test.txt", mode);
@@ -105,14 +105,14 @@ TEST(BatteryCore_Filesystem, FS_PathOperators) {
     p2.make_preferred();
     p3.make_preferred();
 
-    EXPECT_EQ(b::replace(p1.u8string(), u8"\\", u8"/"), u8"../test/more/folders");
-    EXPECT_EQ(b::replace(p2.u8string(), u8"\\", u8"/"), u8"../test/more/folders/file.txt");
-    EXPECT_EQ(b::replace(p3.u8string(), u8"\\", u8"/"), u8"../test/more/folders/test");
+    EXPECT_EQ(b::string::replace(p1.string(), "\\", "/"), "../test/more/folders");
+    EXPECT_EQ(b::string::replace(p2.string(), "\\", "/"), "../test/more/folders/file.txt");
+    EXPECT_EQ(b::string::replace(p3.string(), "\\", "/"), "../test/more/folders/test");
 
     b::fs::path p4("C:/some/directory");
     p4 += "more/directories";
     auto p5 = p4 + "one more";
-    EXPECT_EQ(b::replace(p5.u8string(), u8"\\", u8"/"), u8"C:/some/directory/more/directories/one more");
+    EXPECT_EQ(b::string::replace(p5.u8string(), "\\", "/"), "C:/some/directory/more/directories/one more");
 }
 
 TEST(BatteryCore_Filesystem, FS_Path_UTF8) {

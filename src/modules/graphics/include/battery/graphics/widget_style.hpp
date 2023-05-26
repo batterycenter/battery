@@ -10,11 +10,11 @@ namespace b {
 
     class widget_style {
     public:
-        std::optional<std::string> font;
+        std::optional<b::string> font;
 
         widget_style() = default;
 
-        inline property_pack& operator[](const std::string& str) {
+        inline property_pack& operator[](const b::string& str) {
             return properties[str];
         }
 
@@ -37,15 +37,15 @@ namespace b {
             }
         }
 
-        inline property_pack& get(const std::string& str) {
+        inline property_pack& get(const b::string& str) {
             return properties[str];
         }
 
-        inline void set(const std::string& str, const std::string& pack) {
+        inline void set(const b::string& str, const b::string& pack) {
             properties[str] = pack;
         }
 
-        inline void set(const std::string& str, const std::pair<std::string, std::string>& pack) {
+        inline void set(const b::string& str, const std::pair<b::string, b::string>& pack) {
             properties[str] = { pack.first, pack.second };
         }
 
@@ -53,16 +53,16 @@ namespace b {
             b::py::class_<b::widget_style>(module, "widget_style")
                     .def(b::py::init<>())
                     .def_readwrite("font", &b::widget_style::font)
-                    .def("__getitem__", &b::widget_style::get)
-                    .def("__setitem__", static_cast<void (widget_style::*)(const std::string&, const std::string&)>(&b::widget_style::set))
-                    .def("__setitem__", static_cast<void (widget_style::*)(const std::string&, const std::pair<std::string, std::string>&)>(&b::widget_style::set))
+                    .def("__getitem__", static_cast<property_pack& (widget_style::*)(const b::string&)>(&b::widget_style::get))
+                    .def("__setitem__", static_cast<void (widget_style::*)(const b::string&, const b::string&)>(&b::widget_style::set))
+                    .def("__setitem__", static_cast<void (widget_style::*)(const b::string&, const std::pair<b::string, b::string>&)>(&b::widget_style::set))
                     .def("push", &b::widget_style::push)
                     .def("pop", &b::widget_style::pop);
         }
 
     private:
-        std::unordered_map<std::string, property_pack> properties;
-        std::unordered_map<std::string, property_pack> pushed_properties;
+        std::unordered_map<b::string, property_pack> properties;
+        std::unordered_map<b::string, property_pack> pushed_properties;
     };
 
 }

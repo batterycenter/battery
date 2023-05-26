@@ -14,39 +14,31 @@ namespace b {
     resource resource::from_text_file(const fs::path& filepath) {
         fs::ifstream file(filepath, fs::Mode::TEXT);
         if (file.fail())
-            throw std::ios::failure("battery::resource: Failed to open file '" + b::u8_as_str(filepath.u8string()) + "' for reading: " + strerror(errno));
+            throw std::ios::failure(b::format("battery::resource: Failed to open file '{}' for reading: ", filepath, strerror(errno)));
         resource res;
         res._data = file.read_string().value();
-        res._filetype = b::to_lower(filepath.raw_extension().u8string());
+        res._filetype = b::string::to_lower(filepath.raw_extension().string());
         return res;
     }
 
     resource resource::from_binary_file(const fs::path& filepath) {
         fs::ifstream file(filepath, fs::Mode::BINARY);
         if (file.fail())
-            throw std::ios::failure("battery::resource: Failed to open file '" + b::u8_as_str(filepath.u8string()) + "' for reading: " + strerror(errno));
+            throw std::ios::failure(b::format("battery::resource: Failed to open file '{}' for reading: ", filepath, strerror(errno)));
         resource res;
         res._data = file.read_string().value();
-        res._filetype = b::to_lower(filepath.raw_extension().u8string());
+        res._filetype = b::string::to_lower(filepath.raw_extension().string());
         return res;
     }
 
-    resource resource::from_byte_string(const std::string& data, const std::string& filetype) {
-        return from_byte_string(data, b::u8_from_std_string(filetype));
-    }
-
-    resource resource::from_byte_string(const std::string& data, const std::u8string& filetype) {
+    resource resource::from_byte_string(const b::string& data, const b::string& filetype) {
         resource res;
         res._data = data;
         res._filetype = filetype;
         return res;
     }
 
-    resource resource::from_buffer(const void* buffer, size_t length, const std::string& filetype) {
-        return from_buffer(buffer, length, b::u8_from_std_string(filetype));
-    }
-
-    resource resource::from_buffer(const void* buffer, size_t length, const std::u8string& filetype) {
+    resource resource::from_buffer(const void* buffer, size_t length, const b::string& filetype) {
         resource res;
         res._data.resize(length);
         res._filetype = filetype;
@@ -54,11 +46,7 @@ namespace b {
         return res;
     }
 
-    resource resource::from_base64(const std::string& base64, const std::string& filetype) {
-        return from_base64(base64, b::u8_from_std_string(filetype));
-    }
-
-    resource resource::from_base64(const std::string& base64, const std::u8string& filetype) {
+    resource resource::from_base64(const b::string& base64, const b::string& filetype) {
         return resource::from_byte_string(b::decode_base64(base64), filetype);
     }
 
@@ -70,11 +58,11 @@ namespace b {
         return _data.size();
     }
 
-    std::u8string resource::filetype() const {
+    b::string resource::filetype() const {
         return _filetype;
     }
 
-    std::string resource::as_string() const {
+    b::string resource::string() const {
         return _data;
     }
 
@@ -82,11 +70,11 @@ namespace b {
         return { _data.begin(), _data.end() };
     }
 
-    std::string resource::as_base64() const {
-        return b::encode_base64(as_string());
+    b::string resource::base64() const {
+        return b::encode_base64(string());
     }
 
-    bool resource::to_text_file(const b::fs::path& filepath) const {
+    bool resource::write_to_text_file(const b::fs::path& filepath) const {
         b::fs::ofstream file(filepath, b::fs::Mode::TEXT);
         if (file.fail())
             return false;
@@ -94,7 +82,7 @@ namespace b {
         return true;
     }
 
-    bool resource::to_binary_file(const b::fs::path& filepath) const {
+    bool resource::write_to_binary_file(const b::fs::path& filepath) const {
         b::fs::ofstream file(filepath, b::fs::Mode::BINARY);
         if (file.fail())
             return false;
@@ -102,7 +90,7 @@ namespace b {
         return true;
     }
 
-    resource::on_disk_resource::on_disk_resource(const b::fs::path &path, const std::string& data) : path(path) {
+    resource::on_disk_resource::on_disk_resource(const b::fs::path &path, const b::string& data) : path(path) {
         b::fs::ofstream file(path, b::fs::Mode::BINARY);
         file << data;
     }
@@ -113,7 +101,7 @@ namespace b {
 
     resource::on_disk_resource resource::as_temporary_on_disk_resource() const {
         auto path = b::folders::get_cache();
-        path += b::u8_from_std_string(b::uuid::v4()) + (_filetype.empty() ? u8"" : u8"." + _filetype);
+        path += b::fs::path(b::uuid::v4()) + b::string(_filetype.empty() ? "" : "." + _filetype);
         return on_disk_resource(path, _data);
     };
 

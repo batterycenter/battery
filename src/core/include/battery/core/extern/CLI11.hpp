@@ -2686,11 +2686,11 @@ class Config {
 
     /// Parse a config file, throw an error (ParseError:ConfigParseError or FileError) on failure
     CLI11_NODISCARD std::vector<ConfigItem> from_file(const std::string &name) const {
-        b::fs::ifstream input(name);                                                      // BATTERY MODIFIED
-        if(!input.good())
+        b::fs::ifstream _input((b::string(name)));                                                  // BATTERY MODIFIED
+        if(!_input.good())
             throw FileError::Missing(name);
 
-        return from_config(input);
+        return from_config(_input);
     }
 
     /// Virtual destructor
@@ -3747,8 +3747,7 @@ namespace detail {
 #if defined CLI11_HAS_FILESYSTEM && CLI11_HAS_FILESYSTEM > 0
 CLI11_INLINE path_type check_path(const char *file) noexcept {
     std::error_code ec;
-    auto filename = b::to_osstring(b::u8_from_std_string(file));       // BATTERY MODIFIED, TODO: Test if it actually works
-    auto stat = std::filesystem::status(filename, ec);                 // BATTERY MODIFIED
+    auto stat = std::filesystem::status(b::fs::path(file), ec);                 // BATTERY MODIFIED
     if(ec) {
         return path_type::nonexistent;
     }

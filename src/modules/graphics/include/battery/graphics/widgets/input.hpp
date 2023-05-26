@@ -6,8 +6,8 @@ namespace b::widgets {
 
     class input : public b::widgets::base_widget {
     public:
-        std::string content;
-        std::string hint;
+        b::string content;
+        b::string hint;
         int flags = ImGuiInputTextFlags_None;
         size_t buffer_size = 256;
 
@@ -31,7 +31,7 @@ namespace b::widgets {
         }
 
     private:
-        std::string buffer;    // This is a buffer filled with zeros
+        b::string buffer;    // This is a buffer filled with zeros
     };
 
 }

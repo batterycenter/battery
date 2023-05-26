@@ -2,7 +2,7 @@
 #include "battery/core/all.hpp"
 #include "console.h"
 
-static std::unique_ptr<indicators::ProgressBar> make_option(const std::string& label) {
+static std::unique_ptr<indicators::ProgressBar> make_option(const b::string& label) {
     namespace i = ::indicators;
     return std::unique_ptr<i::ProgressBar>(new i::ProgressBar{
             i::option::BarWidth{2},
@@ -15,7 +15,7 @@ static std::unique_ptr<indicators::ProgressBar> make_option(const std::string& l
     });
 }
 
-int ask_user_options(const std::vector<std::string>& options) {
+int ask_user_options(const std::vector<b::string>& options) {
     namespace i = ::indicators;
     std::vector<std::unique_ptr<i::ProgressBar>> progressBars;
     i::DynamicProgress<i::ProgressBar> bars;

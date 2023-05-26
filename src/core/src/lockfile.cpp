@@ -40,7 +40,7 @@ namespace b {
         // because this is apparently more robust than just opening the file in exclusive write mode.
 #ifdef BATTERY_ARCH_WINDOWS
         this->fileHandle = CreateFileW(
-                b::to_osstring(filename.u8string()).c_str(),
+                filename.string().wstr().c_str(),
                 GENERIC_READ | GENERIC_WRITE,
                 FILE_SHARE_READ | FILE_SHARE_WRITE,
                 nullptr,
@@ -48,12 +48,12 @@ namespace b {
                 FILE_ATTRIBUTE_NORMAL,
                 nullptr);
         if (this->fileHandle == INVALID_HANDLE_VALUE) {
-            throw std::runtime_error(fmt::format("Failed to create lockfile '{}': Failed to open file for writing: {}", b::u8_as_str(filename.u8string()), b::internal::get_last_win32_error()));
+            throw std::runtime_error(b::format("Failed to create lockfile '{}': Failed to open file for writing: {}", filename, b::internal::get_last_win32_error()));
         }
 #else
         this->fileHandle = reinterpret_cast<void *>(open(filename.c_str(), O_CREAT | O_RDWR, 0666));
         if (reinterpret_cast<int64_t>(this->fileHandle) <= -1) {
-            throw std::runtime_error(fmt::format("Failed to create lockfile '{}': Failed to open file for writing: {}", b::u8_as_str(filename.u8string()), strerror(errno)));
+            throw std::runtime_error(b::format("Failed to create lockfile '{}': Failed to open file for writing: {}", filename, strerror(errno)));
         }
 #endif
     }
@@ -122,7 +122,7 @@ namespace b {
     void lockfile::lock_impl(bool blocking) {
         std::scoped_lock lock(*this->mutex.get());
         if (this->locked) {
-            throw std::runtime_error(fmt::format("Failed to aquire lockfile '{}': Lock already in use", filename));
+            throw std::runtime_error(b::format("Failed to aquire lockfile '{}': Lock already in use", filename));
         }
 #ifdef BATTERY_ARCH_WINDOWS
         OVERLAPPED overlapped = { 0 };
@@ -130,7 +130,7 @@ namespace b {
         overlapped.OffsetHigh = 0;
         DWORD flags = blocking ? (LOCKFILE_EXCLUSIVE_LOCK | LOCKFILE_FAIL_IMMEDIATELY) : LOCKFILE_EXCLUSIVE_LOCK;
         if (!LockFileEx(this->fileHandle, flags, 0, 0xFFFFFFFF, 0xFFFFFFFF, &overlapped)) {
-            throw std::runtime_error(fmt::format("Failed to aquire lockfile '{}': Lock already in use", filename));
+            throw std::runtime_error(b::format("Failed to aquire lockfile '{}': Lock already in use", filename));
         }
 #else
         struct flock fl = {};
@@ -142,7 +142,7 @@ namespace b {
         // Attempt to acquire the lock using F_SETLKW
         int ret = fcntl(static_cast<int>((size_t)this->fileHandle), blocking ? F_SETLKW : F_SETLK, &fl);
         if (ret == -1) {
-            throw std::runtime_error(fmt::format("Failed to aquire lockfile '{}': Lock already in use", filename));
+            throw std::runtime_error(b::format("Failed to aquire lockfile '{}': Lock already in use", filename));
         }
         this->locked = true;
 #endif
@@ -160,7 +160,7 @@ namespace b {
             }
             b::sleep(poll_interval);
         }
-        throw std::runtime_error(fmt::format("Failed to aquire lockfile '{}': Timeout expired", filename));
+        throw std::runtime_error(b::format("Failed to aquire lockfile '{}': Timeout expired", filename));
     }
 
 

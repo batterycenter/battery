@@ -10,7 +10,7 @@ namespace b {
         property_pack(const unit_property& property_value) { operator=(property_value); }
         property_pack(const std::array<unit_property, 2>& property_value) { operator=(property_value); }
 
-        std::string string() const;
+        b::string string() const;
 
         property_pack& operator=(const unit_property& property_value);
         property_pack& operator=(const std::array<unit_property, 2>& property_value);

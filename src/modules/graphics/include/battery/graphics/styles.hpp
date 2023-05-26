@@ -5,11 +5,11 @@
 
 namespace b {
 
-    void make_theme_available(const std::string& name, const nlohmann::json& data);
+    void make_theme_available(const b::string& name, const nlohmann::json& data);
 
     void make_default_themes_available();
 
-    void load_theme(const std::string& name);
+    void load_theme(const b::string& name);
 
     void update_themes();   // Call this for hotreload
 

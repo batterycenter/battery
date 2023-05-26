@@ -4,9 +4,9 @@
 
 namespace b {
 
-    ImColor color_hex(const std::string& hex) {
+    ImColor color_hex(const b::string& hex) {
         if (hex.length() != 7 && hex.length() != 9) {    // Parse #RRGGBB or #RRGGBBAA format
-            throw std::invalid_argument(fmt::format("Cannot parse '{}' as an HTML color code: Unexpected length", hex));
+            throw std::invalid_argument(b::format("Cannot parse '{}' as an HTML color code: Unexpected length", hex));
         }
 
         std::stringstream ss;
@@ -18,8 +18,8 @@ namespace b {
         return color;
     }
 
-    std::string color_hex(ImColor color) {
-        return fmt::format("#{:02X}{:02X}{:02X}{:02X}", (int)color.Value.x, (int)color.Value.y, (int)color.Value.z, (int)color.Value.w);
+    b::string color_hex(ImColor color) {
+        return b::format("#{:02X}{:02X}{:02X}{:02X}", (int)color.Value.x, (int)color.Value.y, (int)color.Value.z, (int)color.Value.w);
     }
 
 }

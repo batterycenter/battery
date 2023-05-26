@@ -1,14 +1,14 @@
 #pragma once
 
 #include <memory>
-#include <string>
 #include "battery/core/environment.hpp"
+#include "battery/core/string.hpp"
 
 namespace b {
 
-    std::u8string cin_getline(int buffer_size = 1024);
+    b::string cin_getline(int buffer_size = 1024);
 
-    bool open_url_in_default_browser(const std::string& url);
+    bool open_url_in_default_browser(const b::string& url);
 
     namespace console {
 

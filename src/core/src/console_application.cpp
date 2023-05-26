@@ -9,17 +9,13 @@
 namespace b {
 
     console_application::console_application() {
-        if (instance != nullptr) {
-            throw std::runtime_error("Only one instance of b::application is allowed!");
-        }
+        if (instance != nullptr) throw std::runtime_error("Only one instance of b::console_application or b::application is ever allowed to exist");
         instance = this;
     }
 
-    console_application* console_application::get() {
-        if (instance == nullptr) {
-            throw std::runtime_error("No instance of b::application exists!");
-        }
-        return instance;
+    console_application & console_application::get() {
+        if (instance == nullptr) throw std::runtime_error("No instance of b::console_application or b::application exists");
+        return *instance;
     }
 
     void console_application::console_setup() {
@@ -56,7 +52,7 @@ namespace b {
 
 
 
-    void console_application::run(const std::u8string& appname, const std::vector<std::u8string>& args) {
+    void console_application::run(const b::string& appname, const std::vector<b::string>& args) {
         this->args = args;
         b::folders::set_application_name(appname);
 
@@ -90,7 +86,7 @@ namespace b {
 
 
     template<typename Fn, typename... Args>
-    bool catch_exceptions(const std::string& funcname, Fn&& fn, Args&&... args) {
+    bool catch_exceptions(const b::string& funcname, Fn&& fn, Args&&... args) {
         try {
             std::invoke(std::forward<Fn>(fn), std::forward<Args>(args)...);
             return true;

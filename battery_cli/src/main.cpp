@@ -4,7 +4,7 @@
 #include "ProjectGenerator.h"
 #include "resources/version_txt.hpp"
 
-[[nodiscard]] static b::expected<std::nullopt_t,Error> executeProgram(const std::string& executable, const std::string& args) {
+[[nodiscard]] static b::expected<std::nullopt_t,Error> executeProgram(const b::string& executable, const b::string& args) {
     auto exe = b::fs::path(executable).make_preferred();
 
     if (!b::fs::is_regular_file(exe)) {
@@ -13,16 +13,16 @@
         return b::unexpected(Error::EXECUTABLE_NOT_FOUND);
     }
 
-    b::print("\n{}\n", b::u8_as_str(exe.u8string()));
-    auto result = b::execute(b::u8_as_str(exe.u8string()) + " " + args);
+    b::print("\n{}\n", exe);
+    auto result = b::execute(exe + " " + args);
     b::print("\n>> {} terminated with exit code {}\n", b::fs::path(executable).filename(), result.exit_code);
     return std::nullopt;
 }
 
-b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::u8string>& args) {
+b::expected<std::nullopt_t,Error> parse_cli(const std::vector<b::string>& args) {
 
-    std::string version_message = CLI_PRODUCT_NAME + " version " + resources::version_txt.str();
-    std::string message = version_message + "\n"
+    b::string version_message = CLI_PRODUCT_NAME + " version " + resources::version_txt.str();
+    b::string message = version_message + "\n"
         "Your main tool for working with https://github.com/batterycenter/battery\n"
         "Supports you with project generation, building, deploying to your cloud and more!\n";
 
@@ -39,40 +39,40 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::u8string>& ar
     auto batterycli_execute = batterycli.add_subcommand("execute", "Execute a program specified by path (b execute --help for more)");
     batterycli.require_subcommand(1);  // need exactly 1 subcommand
 
-    std::string script;
+    b::string script;
     batterycli_run->add_option("script", script);
 
-    std::vector<std::string> additional_args;
+    std::vector<b::string> additional_args;
     batterycli_run->add_option("--args", additional_args, "Any arguments to pass to the executable when running");
     batterycli_start->add_option("--args", additional_args, "Any arguments to pass to the executable when running");
     batterycli_execute->add_option("--args", additional_args, "Any arguments to pass to the executable");
 
-    std::string input_file;
+    b::string input_file;
     batterycli_generate->add_option("input_file", input_file, "Which file to process")->required();
-    std::string output_file;
+    b::string output_file;
     batterycli_generate->add_option("output_file", output_file, "Where to write the processed file")->required();
 
     // TODO: Add scripts --list option
     bool configure_cache = false;
     batterycli_configure->add_flag("--cache", configure_cache, "Only configure if the project hasn't been configured yet");
 
-    std::string new_dir;
+    b::string new_dir;
     batterycli_new->add_option("root_directory", new_dir, "Where to generate the new project (optional)");
 
-    std::string cmake_flags;
+    b::string cmake_flags;
     batterycli_new->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
     batterycli_configure->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
     batterycli_build->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
     batterycli_start->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
     batterycli_run->add_flag("--cmake-flags", cmake_flags, "Any parameters to pass to CMake directly");
 
-    std::string root_dir;
+    b::string root_dir;
     batterycli_configure->add_option("--root", root_dir, "The root directory to look for battery.toml in");
     batterycli_build->add_option("--root", root_dir, "The root directory to look for battery.toml in");
     batterycli_start->add_option("--root", root_dir, "The root directory to look for battery.toml in");
     batterycli_run->add_option("--root", root_dir, "The root directory to look for battery.toml in");
 
-    std::string executable;
+    b::string executable;
     batterycli_execute->add_option("executable", executable, "The full path of the executable to run");
 
     try {
@@ -83,7 +83,7 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::u8string>& ar
     }
 
     if (batterycli_execute->parsed()) {           // b execute ...
-        return executeProgram(executable, b::join(additional_args, " "));
+        return executeProgram(executable, b::string::join(additional_args, " "));
     }
     else if (batterycli_new->parsed()) {          // b new ...
         ProjectGenerator generator;
@@ -91,7 +91,7 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::u8string>& ar
     }
 
     Project project;
-    auto result = project.init(cmake_flags, root_dir, b::join(additional_args, " "));
+    auto result = project.init(cmake_flags, root_dir, b::string::join(additional_args, " "));
     if (!result) {
         return b::unexpected(result.error());
     }
@@ -132,7 +132,7 @@ b::expected<std::nullopt_t,Error> parse_cli(const std::vector<std::u8string>& ar
     return b::unexpected(Error::INTERNAL_ERROR);
 }
 
-int b::main(const std::vector<std::u8string>& args) {
+int b::main(const std::vector<b::string>& args) {
 
     b::push_ctrl_c_handler([]{});   // Ignore Ctrl+C, we push another handler later
 

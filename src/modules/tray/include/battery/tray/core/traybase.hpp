@@ -37,7 +37,7 @@ namespace b::tray {
 
     class basetray {
       public:
-        basetray(std::u8string identifier, std::u8string tooltip, MouseButton clickAction);
+        basetray(b::string identifier, b::string tooltip, MouseButton clickAction);
         virtual ~basetray() = default;
 
         template <typename... T>
@@ -62,14 +62,14 @@ namespace b::tray {
         virtual void exit() = 0;
         virtual void update() = 0;
         [[nodiscard]] std::vector<std::shared_ptr<tray_entry>> getEntries() const;
-        [[nodiscard]] std::u8string getIdentifier() const;
-        [[nodiscard]] std::u8string getTooltip() const;
+        [[nodiscard]] b::string getIdentifier() const;
+        [[nodiscard]] b::string getTooltip() const;
         [[nodiscard]] MouseButton getClickAction() const;
         [[nodiscard]] std::vector<std::pair<MouseButton, std::function<void()>>> getClickCallbacks() const;
 
     private:
-        std::u8string identifier;
-        std::u8string tooltip;
+        b::string identifier;
+        b::string tooltip;
         MouseButton clickAction;
         std::vector<std::shared_ptr<tray_entry>> entries;
         std::vector<std::pair<MouseButton, std::function<void()>>> clickCallbacks;

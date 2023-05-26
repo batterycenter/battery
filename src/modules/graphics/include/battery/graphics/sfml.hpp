@@ -6,6 +6,7 @@
 #include "SFML/Network.hpp"
 #include "SFML/Audio.hpp"
 #include "battery/python/python.hpp"
+#include "battery/core/string.hpp"
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "imgui.h"
@@ -30,6 +31,27 @@ inline bool operator!=(const ImVec2& lhs, const ImVec2& rhs) { return !(lhs == r
 
 inline bool operator==(const ImVec4& lhs, const ImVec4& rhs) { return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z && lhs.w == rhs.w; }
 inline bool operator!=(const ImVec4& lhs, const ImVec4& rhs) { return !(lhs == rhs); }
+
+namespace pybind11::detail {
+    template <> struct type_caster<b::string> : public type_caster_base<b::string> {
+        using base = type_caster_base<b::string>;
+    public:
+        bool load(handle src, bool convert) {
+            if (base::load(src, convert)) {
+                return true;
+            }
+            else if (b::py::isinstance<b::py::str>(src)) {
+                value = new b::string(b::py::cast<std::string>(src));
+                return true;
+            }
+            return false;
+        }
+
+        static handle cast(const b::string& src, return_value_policy policy, handle parent) {
+            return b::py::cast(std::string(src), policy, parent).release();
+        }
+    };
+}
 
 namespace b {
     void define_python_types(b::py::module& module);

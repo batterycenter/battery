@@ -3,6 +3,7 @@
 #include "battery/graphics/sfml.hpp"
 #include "battery/graphics/types.hpp"
 #include "battery/graphics/font_stack.hpp"
+#include "battery/core/log.hpp"
 
 namespace b {
 
@@ -102,6 +103,10 @@ namespace b {
             .value("Top", b::alignv::TOP)
             .value("Center", b::alignv::CENTER)
             .value("Bottom", b::alignv::BOTTOM);
+
+        py::class_<b::string>(module, "string")
+            .def(b::py::init<>())
+            .def(b::py::init<const std::string&>());
 
         py::class_<sf::Texture>(module, "sfTexture");
         py::class_<ImFont>(module, "ImFont");

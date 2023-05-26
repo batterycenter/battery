@@ -12,7 +12,7 @@ TEST(BatteryCore_Uuid, is_not_valid) {
 }
 
 TEST(BatteryCore_Uuid, different) {
-    std::vector<std::string> uuids;
+    std::vector<b::string> uuids;
     for (int i = 0; i < 100; ++i) {
         uuids.push_back(b::uuid::v4());
     }

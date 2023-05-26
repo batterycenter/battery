@@ -12,6 +12,11 @@
 #include "spdlog/sinks/rotating_file_sink.h"
 #include <spdlog/fmt/fmt.h>                     // TODO: Use std::format once it's fully implemented
 
+namespace b {
+    using fmt::format;  // This allows b::format()
+}
+
+#include "battery/core/string.hpp"
 #include "battery/core/internal/extern/rang.hpp"
 
 namespace b::log {
@@ -47,7 +52,7 @@ namespace b::log {
         internal::user_logger->set_level((spdlog::level::level_enum)level);
     }
 
-    inline void pattern(const std::string& pattern) {
+    inline void pattern(const b::string& pattern) {
         internal::user_logger->set_pattern(pattern);
     }
 
@@ -67,7 +72,7 @@ namespace b::log {
             internal::core_logger->set_level((spdlog::level::level_enum)level);
         }
 
-        inline void pattern(const std::string& pattern) {
+        inline void pattern(const b::string& pattern) {
             internal::core_logger->set_pattern(pattern);
         }
 
@@ -89,23 +94,23 @@ namespace b {
     }
 
     using b_color_variants_t = std::variant<b::colors::fg, b::colors::bg, b::colors::bgB, b::colors::bgB, b::colors::style>;
-    void print(const std::string& str);
-    void print(const b_color_variants_t& color, const std::string& str);
-    void print(const std::vector<b_color_variants_t>& color, const std::string& str);
+    void print(const b::string& str);
+    void print(const b_color_variants_t& color, const b::string& str);
+    void print(const std::vector<b_color_variants_t>& color, const b::string& str);
 
     template<typename... T>
     void print(fmt::format_string<T...> fmt, T&&... args) {
-        b::print(fmt::format(fmt, std::forward<T>(args)...));
+        b::print(b::format(fmt, std::forward<T>(args)...));
     }
 
     template<typename... T>
     void print(const b_color_variants_t& color, fmt::format_string<T...> fmt, T&&... args) {
-        b::print(color, fmt::format(fmt, std::forward<T>(args)...));
+        b::print(color, b::format(fmt, std::forward<T>(args)...));
     }
 
     template<typename... T>
     void print(const std::vector<b_color_variants_t>& color, fmt::format_string<T...> fmt, T&&... args) {
-        b::print(color, fmt::format(fmt, std::forward<T>(args)...));
+        b::print(color, b::format(fmt, std::forward<T>(args)...));
     }
 
 }

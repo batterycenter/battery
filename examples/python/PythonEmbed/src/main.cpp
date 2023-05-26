@@ -14,9 +14,9 @@ int add_numbers(int a, int b) {
     return a + b;
 }
 
-std::vector<std::string> reverse_array(const std::vector<std::string>& array) {
+std::vector<b::string> reverse_array(const std::vector<b::string>& array) {
     b::log::debug("Reversing string array in C++ ...");
-    std::vector<std::string> reversed_array(array);
+    std::vector<b::string> reversed_array(array);
     std::reverse(reversed_array.begin(), reversed_array.end());
     return reversed_array;
 }
@@ -37,7 +37,7 @@ PYBIND11_EMBEDDED_MODULE(python_example, m) {   // This packs the C++ functions 
     m.def("set_callback", &set_callback);
 }
 
-int b::main([[maybe_unused]] const std::vector<std::u8string>& args) {
+int b::main([[maybe_unused]] const std::vector<b::string>& args) {
 
     b::log::info("Running Example PythonEmbed. Have fun!");
 
@@ -57,7 +57,7 @@ int b::main([[maybe_unused]] const std::vector<std::u8string>& args) {
         b::log::debug("5**3 = {}", number);
 
         b::print("\n");
-        std::vector<std::string> array = b::py::eval("['a', 'b', 'c']").cast<std::vector<std::string>>();
+        std::vector<b::string> array = b::py::eval("['a', 'b', 'c']").cast<std::vector<b::string>>();
         b::log::debug("['a', 'b', 'c'] in python is in C++:");
         for (size_t i = 0; i < array.size(); i++) {
             b::log::debug("  [{}] = {}", i, array[i]);

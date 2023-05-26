@@ -10,12 +10,12 @@ namespace b {
 
     struct themes {
         inline static std::mutex theme_mutex;
-        inline static std::unordered_map<std::string, nlohmann::json> available_themes;
-        inline static std::string current_theme = "default";
+        inline static std::unordered_map<b::string, nlohmann::json> available_themes;
+        inline static b::string current_theme = "default";
         inline static bool theme_reloading_requested = false;
     };
 
-    void make_theme_available(const std::string& name, const nlohmann::json& data) {
+    void make_theme_available(const b::string& name, const nlohmann::json& data) {
         themes::available_themes[name] = data;
     }
 
@@ -23,7 +23,7 @@ namespace b {
         static b::resource_loader loader(resources::default_themes_json, [&] (auto resource) {  // Must be & to capture themes::theme_mutex
             try {
                 std::scoped_lock lock(themes::theme_mutex);
-                auto style = nlohmann::json::parse(resource.as_string());
+                auto style = nlohmann::json::parse(resource.string());
                 for (auto &[name, theme]: style.items()) {
                     make_theme_available(name, theme);
                 }
@@ -35,9 +35,9 @@ namespace b {
         });
     }
 
-    void load_theme(const std::string& name) {
+    void load_theme(const b::string& name) {
         if (!themes::available_themes.contains(name))
-            throw std::invalid_argument(fmt::format("Cannot load theme '{}': Theme does not exist", name));
+            throw std::invalid_argument(b::format("Cannot load theme '{}': Theme does not exist", name));
 
         themes::current_theme = name;
         apply_theme(themes::available_themes[name]);
@@ -94,7 +94,7 @@ namespace b {
                     case ImGuiStyleVar_SeparatorTextBorderSize: ImGui::GetStyle().SeparatorTextBorderSize = value; break;
                     case ImGuiStyleVar_SeparatorTextAlign: ImGui::GetStyle().SeparatorTextAlign = ImVec2(value[0], value[1]); break;
                     case ImGuiStyleVar_SeparatorTextPadding: ImGui::GetStyle().SeparatorTextPadding = ImVec2(value[0], value[1]); break;
-                    default: throw std::invalid_argument(fmt::format("Cannot apply theme: Unknown ImGuiStyleVar '{}'", key));
+                    default: throw std::invalid_argument(b::format("Cannot apply theme: Unknown ImGuiStyleVar '{}'", key));
                 }
                 continue;
             }
@@ -103,16 +103,16 @@ namespace b {
             auto color_enum = magic_enum::enum_cast<ImGuiCol_>(key);
             if (color_enum.has_value()) {
                 auto colors = ImGui::GetStyle().Colors;
-                colors[color_enum.value()] = color_hex(value).Value / 255;
+                colors[color_enum.value()] = color_hex(std::string(value)).Value / 255;
                 continue;
             }
 
             // Else we assume it is a custom property
             if (value.is_array()) {
-                property_stack::push(key, b::property_pack({ value[0].get<std::string>(), value[1].get<std::string>() }));
+                property_stack::push(key, b::property_pack({ value[0].get<b::string>(), value[1].get<b::string>() }));
             }
             else {
-                property_stack::push(key, b::unit_property(value.get<std::string>()));
+                property_stack::push(key, b::unit_property(value.get<b::string>()));
             }
         }
     }

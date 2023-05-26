@@ -8,172 +8,53 @@
 
 namespace b {
 
-    osstring to_osstring(const std::string& str) {
-        if (!is_valid_u8(str)) throw std::invalid_argument("Invalid utf-8 sequence");
-#ifdef BATTERY_ARCH_WINDOWS
-        auto u16 = utf8::utf8to16(str);
-        return std::wstring(std::bit_cast<wchar_t*>(u16.data()), u16.size());   // construct new from other
-#else
-        return str;
-#endif
-    }
-
-    osstring to_osstring(const std::u8string& str) {
-        if (!is_valid_u8(str)) throw std::invalid_argument("Invalid utf-8 sequence");
-        return b::to_osstring(b::u8_as_str(str));
-    }
-
-    osstring to_osstring(const std::u32string& str) {
-        if (!is_valid_u32(str)) throw std::invalid_argument("Invalid utf-32 character");
-        return b::to_osstring(b::to_u8(str));
-    }
-
-    std::string osstring_to_str(const b::osstring& str) {
-#ifdef BATTERY_ARCH_WINDOWS
-        auto u16 = std::u16string(std::bit_cast<char16_t*>(str.data()), str.size());
-        return utf8::utf16to8(u16);
-#else
-        return str;
-#endif
-    }
-
-    std::u8string osstring_to_u8(const b::osstring& str) {
-        return u8_from_std_string(osstring_to_str(str));
-    }
-
-    std::u32string osstring_to_u32(const b::osstring& str) {
-        return to_u32(osstring_to_u8(str));
-    }
-
-    std::string u8_as_str(const std::u8string& str) {      // Simply copy the bytes as-is
-        std::string target;
-        target.resize(str.length());
-        std::memcpy(target.data(), str.data(), str.length());
-        return target;
-    }
-
-    std::u8string u8_from_std_string(const std::string& str) {  // Check for validity and then copy the bytes as-is
-        if (!is_valid_u8(str)) throw std::invalid_argument("Invalid utf-8 sequence");
-        std::u8string u8target;
-        u8target.resize(str.length());
-        std::memcpy(u8target.data(), str.data(), str.length());
-        return u8target;
-    }
-
-    bool is_valid_u8(const std::string& str) {
+    bool string::is_valid_utf8(const std::string& str) {
         return utf8::is_valid(str);
     }
 
-    bool is_valid_u8(const std::u8string& str) {
-        return is_valid_u8(b::u8_as_str(str));
+    std::u8string string::u8() const {
+        if (!b::string::is_valid_utf8(*this)) throw std::invalid_argument("Invalid utf-8 sequence");
+        return std::u8string(std::bit_cast<char8_t*>(data()), size());
     }
 
-    bool is_valid_u32(const std::u32string& str) {
-        try {
-            return is_valid_u8(u8_from_std_string(utf8::utf32to8(str)));
-        }
-        catch (const std::exception& e) {
-            return false;
-        }
+    std::u16string string::u16() const {
+        if (!b::string::is_valid_utf8(*this)) throw std::invalid_argument("Invalid utf-8 sequence");
+        return utf8::utf8to16(*this);
     }
 
-    std::u8string to_u8(const std::u32string& str) {
-        if (!is_valid_u32(str)) throw std::invalid_argument("Invalid utf-32 character");
-        return u8_from_std_string(utf8::utf32to8(str));
+    std::u32string string::u32() const {
+        if (!b::string::is_valid_utf8(*this)) throw std::invalid_argument("Invalid utf-8 sequence");
+        return utf8::utf8to32(*this);
     }
 
-    std::u8string to_u8(char32_t c) {
-        return to_u8(std::u32string(&c, 1));
+    std::wstring& string::wstr() {
+        std::u16string str_u16 = u16();
+        internal_wide_string = std::wstring(std::bit_cast<wchar_t*>(str_u16.data()), str_u16.size());
+        return internal_wide_string;
     }
 
-    std::u32string to_u32(const std::u8string& str) {
-        if (!is_valid_u8(str)) throw std::invalid_argument("Invalid utf-8 sequence");
-        return utf8::utf8to32(b::u8_as_str(str));
-    }
-
-    std::u32string to_u32(char32_t c) {
-        return std::u32string(&c, 1);
-    }
-
-    std::u8string u8_foreach(const std::u8string& str, const std::function<std::variant<std::u8string,char32_t>(std::u8string)>& function) {
-        if (!is_valid_u8(str)) throw std::invalid_argument("Invalid utf-8 sequence");
-        std::u8string result;
-        for (char32_t c : to_u32(str)) {
-            auto v = function(to_u8(c));
-            std::visit([&result]<typename T>(const T& s) {
-                if constexpr(std::is_same_v<std::decay_t<T>,std::u8string>) {
-                    result += s;
-                }
-                else {
-                    result += to_u8(s);
-                }
-            }, v);
+    b::string string::foreach(const b::string& str, const std::function<b::string(b::string)>& function) {
+        if (!b::string::is_valid_utf8(str)) throw std::invalid_argument("Invalid utf-8 sequence");
+        b::string result;
+        for (char32_t c : str.u32()) {
+            result += function(b::string(c));
         }
         return result;
     }
 
-    std::u8string u8_foreach(const std::u8string& str, const std::function<std::variant<std::u8string,char32_t>(char32_t)>& function) {
-        if (!is_valid_u8(str)) throw std::invalid_argument("Invalid utf-8 sequence");
-        std::u8string result;
-        for (char32_t c : to_u32(str)) {
-            auto v = function(c);
-            std::visit([&result]<typename T>(const T& s) {
-                if constexpr(std::is_same_v<std::decay_t<T>,std::u8string>) {
-                    result += s;
-                }
-                else {
-                    result += to_u8(s);
-                }
-            }, v);
+    b::string string::foreach(const b::string& str, const std::function<b::string(char32_t)>& function) {
+        if (!b::string::is_valid_utf8(str)) throw std::invalid_argument("Invalid utf-8 sequence");
+        b::string result;
+        for (char32_t c : str.u32()) {
+            result += function(c);
         }
         return result;
     }
 
-
-
-    std::u32string u32_foreach(const std::u32string& str, const std::function<std::variant<std::u32string,char32_t>(std::u32string)>& function) {
-        if (!is_valid_u32(str)) throw std::invalid_argument("Invalid utf-32 character");
-        std::u32string result;
-        for (char32_t c : str) {
-            auto v = function(to_u32(c));
-            std::visit([&result]<typename T>(const T& s) {
-                if constexpr(std::is_same_v<std::decay_t<T>,std::u32string>) {
-                    result += s;
-                }
-                else {
-                    result += to_u32(s);
-                }
-            }, v);
-        }
-        return result;
-    }
-
-    std::u32string u32_foreach(const std::u32string& str, const std::function<std::variant<std::u32string,char32_t>(char32_t)>& function) {
-        if (!is_valid_u32(str)) throw std::invalid_argument("Invalid utf-32 character");
-        std::u32string result;
-        for (char32_t c : str) {
-            auto v = function(c);
-            std::visit([&result]<typename T>(const T& s) {
-                if constexpr(std::is_same_v<std::decay_t<T>,std::u32string>) {
-                    result += s;
-                }
-                else {
-                    result += to_u32(s);
-                }
-            }, v);
-        }
-        return result;
-    }
-
-
-
-
-
-    template<typename T>
-    std::vector<T> __split(T str, const T& delimiter) {
-        std::vector<T> result;
+    std::vector<b::string> string::split(b::string str, const b::string& delimiter) {
+        std::vector<b::string> result;
         size_t pos = 0;
-        while ((pos = str.find(delimiter)) != T::npos) {
+        while ((pos = str.find(delimiter)) != b::string::npos) {
             result.emplace_back(str.substr(0, pos));
             str.erase(0, pos + delimiter.length());
         }
@@ -181,24 +62,8 @@ namespace b {
         return result;
     }
 
-    std::vector<std::string> split(std::string str, const std::string& delimiter) {
-        return __split<std::string>(str, delimiter);
-    }
-
-    std::vector<std::u8string> split(std::u8string str, const std::u8string& delimiter) {
-        return __split<std::u8string>(str, delimiter);
-    }
-
-    std::vector<std::u32string> split(std::u32string str, const std::u32string& delimiter) {
-        return __split<std::u32string>(str, delimiter);
-    }
-
-
-
-
-    template<typename T>
-    T __join(const std::vector<T>& strings, const T& spacer) {
-        T result;
+    b::string string::join(const std::vector<b::string>& strings, const b::string& spacer) {
+        b::string result;
         for (size_t i = 0; i < strings.size(); i++) {
             result += strings[i];
             if (i < strings.size() - 1 && !spacer.empty()) {
@@ -208,54 +73,24 @@ namespace b {
         return result;
     }
 
-    std::string join(const std::vector<std::string>& strings, const std::string& spacer) {
-        return __join<std::string>(strings, spacer);
-    }
-
-    std::u8string join(const std::vector<std::u8string>& strings, const std::u8string& spacer) {
-        return __join<std::u8string>(strings, spacer);
-    }
-
-    std::u32string join(const std::vector<std::u32string>& strings, const std::u32string& spacer) {
-        return __join<std::u32string>(strings, spacer);
-    }
-
-
-
-    template<typename T>
-    T __replace(T string, const T& from, const T& to) {
+    b::string string::replace(b::string string, const b::string& from, const b::string& to) {
         if (from.empty())
             return string;
         size_t start_pos = 0;
-        while ((start_pos = string.find(from, start_pos)) != T::npos) {
-            string.replace(start_pos, from.length(), to);
+        while ((start_pos = string.find(from, start_pos)) != b::string::npos) {
+            string.str().replace(start_pos, from.length(), to);
             start_pos += to.length();
         }
         return string;
     }
 
-    std::string replace(std::string string, const std::string& from, const std::string& to) {
-        return __replace(string, from, to);
-    }
-
-    std::u8string replace(std::u8string string, const std::u8string& from, const std::u8string& to) {
-        return __replace(string, from, to);
-    }
-
-    std::u32string replace(std::u32string string, const std::u32string& from, const std::u32string& to) {
-        return __replace(string, from, to);
-    }
-
-
-
-    template<typename T>
-    T __replace_one(T string, const T& from, const T& to, int occurrence) {
+    b::string string::replace_one(b::string string, const b::string& from, const b::string& to, int occurrence) {
         if (from.empty())
             return string;
 
         size_t pos = 0;
         std::vector<size_t> occurrences;
-        while ((pos = string.find(from, pos)) != T::npos) {
+        while ((pos = string.find(from, pos)) != b::string::npos) {
             occurrences.push_back(pos);
             pos += to.length();
         }
@@ -267,101 +102,69 @@ namespace b {
             return string;
         }
         size_t index = occurrence >= 0 ? occurrence : occurrences.size() - abs(occurrence);
-        string.replace(occurrences[index], from.length(), to);
-        return string;
+        return string.str().replace(occurrences[index], from.length(), to.str());
     }
 
-    std::string replace_one(std::string string, const std::string& from, const std::string& to, int occurrence) {
-        return __replace_one(string, from, to, occurrence);
-    }
-
-    std::u8string replace_one(std::u8string string, const std::u8string& from, const std::u8string& to, int occurrence) {
-        return __replace_one(string, from, to, occurrence);
-    }
-
-    std::u32string replace_one(std::u32string string, const std::u32string& from, const std::u32string& to, int occurrence) {
-        return __replace_one(string, from, to, occurrence);
-    }
-
-
-
-
-    std::string replace_first(const std::string& string, const std::string& from, const std::string& to) {
+    b::string string::replace_first(const b::string &string, const b::string &from, const b::string &to) {
         return replace_one(string, from, to, 0);
     }
 
-    std::u8string replace_first(const std::u8string& string, const std::u8string& from, const std::u8string& to) {
-        return replace_one(string, from, to, 0);
-    }
-
-    std::u32string replace_first(const std::u32string& string, const std::u32string& from, const std::u32string& to) {
-        return replace_one(string, from, to, 0);
-    }
-
-
-
-
-    std::string replace_last(const std::string& string, const std::string& from, const std::string& to) {
+    b::string string::replace_last(const b::string &string, const b::string &from, const b::string &to) {
         return replace_one(string, from, to, -1);
     }
 
-    std::u8string replace_last(const std::u8string& string, const std::u8string& from, const std::u8string& to) {
-        return replace_one(string, from, to, -1);
-    }
-
-    std::u32string replace_last(const std::u32string& string, const std::u32string& from, const std::u32string& to) {
-        return replace_one(string, from, to, -1);
-    }
-
-
-
-
-    std::string to_lower(const std::string& str) {
-        auto result = u8_foreach(b::u8_from_std_string(str), [] (char32_t c) {
+    b::string string::to_lower(const b::string& str) {
+        return b::string::foreach(str, [](char32_t c) {
                 return (char32_t)utf8proc_tolower(c);
         });
-        return b::u8_as_str(result);
     }
 
-    std::u8string to_lower(const std::u8string& str) {
-        return u8_foreach(str, [] (char32_t c) {
-            return (char32_t)utf8proc_tolower(c);
-        });
-    }
-
-    std::u32string to_lower(const std::u32string& str) {
-        return u32_foreach(str, [] (char32_t c) {
-            return (char32_t)utf8proc_tolower(c);
-        });
-    }
-
-
-
-
-    std::string to_upper(const std::string& str) {
-        return u8_as_str(to_upper(b::u8_from_std_string(str)));
-    }
-
-    std::u8string to_upper(const std::u8string& str) {
-        return u8_foreach(str, [] (char32_t c) {
-            if (to_u8(c) == u8"ß") {                // Special case which is not handled well in the library (at least not how we want)
-                return std::u8string(u8"SS");
+    b::string string::to_upper(const b::string& str) {
+        return b::string::foreach(str, [](char32_t c) {
+            if (b::string(c) == "ß") {                // This special case which is not handled well in the library (at least not how we want)
+                return b::string("SS");
             }
-            return to_u8(utf8proc_toupper(c));
+            return b::string((char32_t)utf8proc_toupper(c));
         });
     }
 
-    std::u32string to_upper(const std::u32string& str) {
-        return u32_foreach(str, [] (char32_t c) {
-            if (to_u32(c) == U"ß") {                // Special case which is not handled well in the library (at least not how we want)
-                return std::u32string(U"SS");
-            }
-            return to_u32(utf8proc_toupper(c));
-        });
+    std::string string::u8_to_str(const std::u8string& str) const {
+        auto result = std::string(std::bit_cast<char*>(str.data()), str.size());
+        if (!b::string::is_valid_utf8(result)) throw std::invalid_argument("Invalid utf-8 sequence");
+        return result;
+    }
+
+    std::string string::u16_to_str(const std::u16string& str) const {
+        auto result = utf8::utf16to8(str);
+        if (!b::string::is_valid_utf8(result)) throw std::invalid_argument("Invalid utf-8 sequence");
+        return result;
+    }
+
+    std::string string::u32_to_str(const std::u32string& str) const {
+        auto result = utf8::utf32to8(str);
+        if (!b::string::is_valid_utf8(result)) throw std::invalid_argument("Invalid utf-8 sequence");
+        return result;
+    }
+
+    std::string string::wstr_to_str(const std::wstring& str) const {
+        auto u16 = std::u16string(std::bit_cast<char16_t*>(str.data()), str.size());
+        auto result = utf8::utf16to8(u16);
+        if (!b::string::is_valid_utf8(result)) throw std::invalid_argument("Invalid utf-8 sequence");
+        return result;
     }
 
 
 
+
+
+
+
+
+    /// =====================================================================
+    /// =====================================================================
+    /// ========================= BASE64 ENCODING ===========================
+    /// =====================================================================
+    /// =====================================================================
 
     static const std::string base64_chars =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

@@ -41,7 +41,7 @@ TEST(BatteryCore_Process, ProcessRedirectStdoutUtf8) {
     proc.options.suppress_carriage_return = true;
     proc.options.silent = true;
     proc.options.strip_trailing_whitespace_after_join = true;
-    std::string output;
+    b::string output;
     proc.options.stdout_callback = [&output] (const auto& str) {
         output += str;
     };

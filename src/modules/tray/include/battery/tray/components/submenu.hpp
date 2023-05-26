@@ -29,11 +29,11 @@ namespace b::tray {
 
     class submenu : public tray_entry {
     public:
-        explicit submenu(std::u8string text);
+        explicit submenu(b::string text);
         ~submenu() override = default;
 
         template <typename... T>
-        explicit submenu(std::u8string text, const T &... entries) : submenu(text) {
+        explicit submenu(b::string text, const T &... entries) : submenu(text) {
             addEntries(entries...);
         }
 

@@ -19,7 +19,7 @@ namespace b::widgets {
 
     class base_widget {
     public:
-        std::string name;
+        b::string name;
         py::object context;
 
         unit_property left;
@@ -34,7 +34,7 @@ namespace b::widgets {
 
         widget_style style;
 
-        explicit base_widget(py::object context, std::string name);
+        explicit base_widget(py::object context, b::string name);
         virtual ~base_widget() = default;
 
         base_widget(base_widget const& other) = delete;     // Copying is NOT allowed due to the unique ID
@@ -47,7 +47,7 @@ namespace b::widgets {
 
         inline static void define_python_types(py::module& module) {
             b::py::class_<b::widgets::base_widget>(module, "base_widget")
-                    .def_readwrite("name", &b::widgets::base_widget::name)
+                    .def_property("name", [](b::widgets::base_widget& base) { return base.name; }, [](b::widgets::base_widget& base, const std::string& str) { base.name = str; })
                     .def_readwrite("context", &b::widgets::base_widget::context)
                     .def_readwrite("left", &b::widgets::base_widget::left)
                     .def_readwrite("top", &b::widgets::base_widget::top)
@@ -62,7 +62,7 @@ namespace b::widgets {
         }
 
     protected:
-        std::string base_get_identifier() const;
+        b::string base_get_identifier() const;
         void base_set_cursor_position_to_min_bb() const;
         std::pair<ImVec2, ImVec2> base_get_bb() const;
         ImVec2 base_get_bb_min() const;

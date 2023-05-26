@@ -1,7 +1,7 @@
 
 #include "battery/core/all.hpp"
 
-int b::main(const std::vector<std::u8string>& args) {
+int b::main(const std::vector<b::string>& args) {
 
     b::log::info("Running CustomMain example!");
     b::log::info("This feature allows better integration into existing frameworks, "

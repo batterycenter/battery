@@ -22,20 +22,20 @@ enum Options showOptions() {
     b::print("> ");
 
     auto result = b::cin_getline();
-    if (result == u8"open-file") {
+    if (result == "open-file") {
         return Options::OPEN_FILE;
-    } else if (result == u8"open-file-multi") {
+    } else if (result == "open-file-multi") {
         return Options::OPEN_FILE_MULTIPLE;
-    } else if (result == u8"open-folder") {
+    } else if (result == "open-folder") {
         return Options::OPEN_FOLDER;
-    } else if (result == u8"open-folder-multi") {
+    } else if (result == "open-folder-multi") {
         return Options::OPEN_FOLDER_MULTIPLE;
-    } else if (result == u8"save-file") {
+    } else if (result == "save-file") {
         return Options::SAVE_FILE;
-    } else if (result == u8"quit") {
+    } else if (result == "quit") {
         return Options::QUIT;
     } else {
-        b::log::error("Invalid option: {}\n", b::u8_as_str(result));
+        b::log::error("Invalid option: {}\n", result);
         return showOptions();
     }
 }
@@ -48,17 +48,17 @@ void exec(bool save, bool multiple, bool folder) {
         if (multiple) {
             auto result = dialog.sync_open_multiple();
             for (auto& path : result) {
-                b::log::debug("Selected file: {}", b::u8_as_str(path.u8string()));
+                b::log::debug("Selected file: {}", path);
             }
         }
         else {
             auto result = dialog.sync_open();
-            b::log::debug("Selected file: {}", b::u8_as_str(result.u8string()));
+            b::log::debug("Selected file: {}", result);
         }
     }
     else {
         auto result = dialog.sync_save();
-        b::log::debug("Selected file: {}", b::u8_as_str(result.u8string()));
+        b::log::debug("Selected file: {}", result);
     }
 }
 
@@ -74,7 +74,7 @@ void show() {
     show();
 }
 
-int b::main(const std::vector<std::u8string>& args) {
+int b::main(const std::vector<b::string>& args) {
 
     b::log::info("Running FileDialog example. Have fun!");
     show();

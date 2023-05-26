@@ -9,8 +9,8 @@ namespace b {
         set_requested_framerate(60.0);
     }
 
-    application* application::get() {
-        return dynamic_cast<application*>(b::console_application::get());
+    application & application::get() {
+        return dynamic_cast<application&>(b::console_application::get());
     }
 
     void application::console_setup() {
@@ -36,7 +36,7 @@ namespace b {
         bool should_stop = true;
         for (auto& window : windows) {
             window->_update();
-            if (window->getWindow().isOpen()) {
+            if (window->sfml_window.isOpen()) {
                 should_stop = false;
             }
         }
@@ -57,10 +57,6 @@ namespace b {
         windows.clear();
 
         ImGui::SFML::Shutdown();
-    }
-
-    void application::register_window(std::shared_ptr<b::window> window) {
-        windows.push_back(window);
     }
 
 }

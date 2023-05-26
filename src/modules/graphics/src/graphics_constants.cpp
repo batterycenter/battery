@@ -7,7 +7,7 @@ namespace b {
         return sf::Color(20, 20, 20, 255);
     }
 
-    std::pair<std::string, float> graphics_constants::battery_default_font() {
+    std::pair<b::string, float> graphics_constants::battery_default_font() {
         return { "roboto-regular", 18.f };
     }
 

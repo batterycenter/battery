@@ -1,11 +1,12 @@
 #pragma once
 
 #include "battery/graphics/sfml.hpp"
+#include "battery/core/log.hpp"
 
 namespace b {
 
-    ImColor color_hex(const std::string& hex);
+    ImColor color_hex(const b::string& hex);
 
-    std::string color_hex(ImColor color);
+    b::string color_hex(ImColor color);
 
 }

@@ -36,16 +36,16 @@ namespace b {
         static fs::path get_save_games1();
         static fs::path get_save_games2();
 
-        inline static void set_application_name(const std::u8string& name) {
+        inline static void set_application_name(const b::string& name) {
             appname = name;
         }
 
-        inline static std::u8string get_application_name() {
+        inline static b::string get_application_name() {
             return appname;
         }
 
     private:
-        inline static std::u8string appname = b::constants::default_application_name();
+        inline static b::string appname = b::constants::default_application_name();
     };
 
 }

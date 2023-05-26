@@ -23,6 +23,6 @@
 
 namespace b::tray {
 
-    separator::separator() : tray_entry(u8"") {}
+    separator::separator() : tray_entry("") {}
 
 }

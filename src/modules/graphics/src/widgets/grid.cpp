@@ -1,5 +1,6 @@
 
 #include "battery/graphics/widgets/grid.hpp"
+#include "battery/core/log.hpp"
 
 namespace b::widgets {
 

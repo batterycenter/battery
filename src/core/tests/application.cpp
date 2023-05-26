@@ -12,16 +12,16 @@ public:
     double sum_framerate { 0 };
     size_t max_frames { 0 };
 
-    void app_setup() override {
+    void console_setup() override {
         setup_called = true;
         set_requested_framerate(test_framerate);
         max_frames = static_cast<size_t>(test_framerate * 2);
     }
 
-    void app_update() override {
+    void console_update() override {
         EXPECT_EQ(this->framerate, this->frametime > 0.0 ? 1.0 / this->frametime : 0.0);
 
-        std::vector<std::u8string> expected_args = {u8"ABC", u8"DEF", u8"GHI"};
+        std::vector<b::string> expected_args = {u8"ABC", u8"DEF", u8"GHI"};
         EXPECT_EQ(this->args, expected_args);
 
         auto elapsed = b::time() - last_time;
@@ -46,7 +46,7 @@ public:
         }
     }
 
-    void app_cleanup() override {
+    void console_cleanup() override {
         cleaned_called = true;
     }
 

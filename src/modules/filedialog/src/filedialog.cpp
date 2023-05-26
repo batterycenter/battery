@@ -12,13 +12,13 @@ namespace b {
 #ifdef BATTERY_ARCH_WINDOWS
     static void setDefaultFolder(IFileDialog *dialog, const b::fs::path& defaultPath) {
         if (defaultPath.empty()) return;
-        b::log::info("Setting default folder to {}", b::u8_as_str(defaultPath.u8string()));
+        b::log::info("Setting default folder to {}", defaultPath);
 
         IShellItem *folder;
-        HRESULT result = SHCreateItemFromParsingName(b::to_osstring(defaultPath.u8string()).c_str(), NULL, IID_PPV_ARGS(&folder));
+        HRESULT result = SHCreateItemFromParsingName(defaultPath.string().wstr().c_str(), NULL, IID_PPV_ARGS(&folder));
 
         if (!SUCCEEDED(result)) {
-            throw std::runtime_error(fmt::format("{}: Failed to show file dialog: Error creating ShellItem: {}", std::source_location::current().function_name(), internal::get_last_win32_error()));
+            throw std::runtime_error(b::format("{}: Failed to show file dialog: Error creating ShellItem: {}", std::source_location::current().function_name(), internal::get_last_win32_error()));
         }
 
         dialog->SetDefaultFolder(folder);
@@ -29,22 +29,22 @@ namespace b {
         if (path.empty()) return;
 
         IShellItem *folder;
-        HRESULT result = SHCreateItemFromParsingName(b::to_osstring(path.u8string()).c_str(), NULL, IID_PPV_ARGS(&folder));
+        HRESULT result = SHCreateItemFromParsingName(path.string().wstr().c_str(), NULL, IID_PPV_ARGS(&folder));
 
         if (!SUCCEEDED(result)) {
-            throw std::runtime_error(fmt::format("{}: Failed to show file dialog: Error creating ShellItem: {}", std::source_location::current().function_name(), internal::get_last_win32_error()));
+            throw std::runtime_error(b::format("{}: Failed to show file dialog: Error creating ShellItem: {}", std::source_location::current().function_name(), internal::get_last_win32_error()));
         }
 
         dialog->SetFolder(folder);
         folder->Release();
     }
 
-    static void setFilters(IFileDialog *dialog, const std::vector<std::pair<std::string,std::string>>& filters) {
+    static void setFilters(IFileDialog *dialog, std::vector<std::pair<b::string,b::string>> filters) {
         if (filters.empty()) return;
 
-        std::vector<std::pair<b::osstring,b::osstring>> os_filters;
+        std::vector<std::pair<std::wstring,std::wstring>> os_filters;
         for (auto& filter : filters) {
-            os_filters.push_back({b::to_osstring(filter.first), b::to_osstring(filter.second)});
+            os_filters.push_back({filter.first.wstr(), filter.second.wstr()});
         }
 
         std::vector<COMDLG_FILTERSPEC> speclist;
@@ -70,21 +70,21 @@ namespace b {
         dialog->SetOptions(options);
     }
 
-    static std::vector<b::fs::path> win32_open_dialog(const b::filedialog& dialog, bool multiple, const std::string& default_extension) {
+    static std::vector<b::fs::path> win32_open_dialog(const b::filedialog& dialog, bool multiple, b::string default_extension) {
         if (!SUCCEEDED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE))) {
-            throw std::runtime_error(fmt::format("{}: Failed to show file dialog: CoInitializeEx failed", std::source_location::current().function_name()));
+            throw std::runtime_error(b::format("{}: Failed to show file dialog: CoInitializeEx failed", std::source_location::current().function_name()));
         }
 
         IFileOpenDialog *pFileOpen;
         if (!SUCCEEDED(CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL, IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen)))) {
             CoUninitialize();
-            throw std::runtime_error(fmt::format("{}: Failed to show file dialog: CoCreateInstance failed", std::source_location::current().function_name()));
+            throw std::runtime_error(b::format("{}: Failed to show file dialog: CoCreateInstance failed", std::source_location::current().function_name()));
         }
 
         if (b::fs::exists(b::folders::get_global_documents())) setDefaultFolder(pFileOpen, b::folders::get_global_documents());
         if (b::fs::exists(dialog.initial_folder)) setFolder(pFileOpen, dialog.initial_folder);
         if (!dialog.filters.empty()) setFilters(pFileOpen, dialog.filters);
-        if (!default_extension.empty()) pFileOpen->SetDefaultExtension(b::to_osstring(default_extension).c_str());
+        if (!default_extension.empty()) pFileOpen->SetDefaultExtension(default_extension.wstr().c_str());
         setOptions(pFileOpen, dialog.confirm_overwrite, dialog.directory, multiple);
 
         // Now show the dialog
@@ -108,7 +108,7 @@ namespace b {
             PWSTR pszFilePath;
             pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
 
-            paths.push_back(b::osstring_to_u8(pszFilePath));
+            paths.emplace_back(b::string(std::wstring(pszFilePath)));
             CoTaskMemFree(pszFilePath);
 
             pItem->Release();
@@ -121,21 +121,21 @@ namespace b {
         return paths;
     }
 
-    static b::fs::path win32_save_dialog(const b::filedialog& dialog, const std::string& default_extension) {
+    static b::fs::path win32_save_dialog(const b::filedialog& dialog, b::string default_extension) {
         if (!SUCCEEDED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE))) {
-            throw std::runtime_error(fmt::format("{}: Failed to show file dialog: CoInitializeEx failed", std::source_location::current().function_name()));
+            throw std::runtime_error(b::format("{}: Failed to show file dialog: CoInitializeEx failed", std::source_location::current().function_name()));
         }
 
         IFileSaveDialog *pFileSave;
         if (!SUCCEEDED(CoCreateInstance(CLSID_FileSaveDialog, NULL, CLSCTX_ALL, IID_IFileSaveDialog, reinterpret_cast<void**>(&pFileSave)))) {
             CoUninitialize();
-            throw std::runtime_error(fmt::format("{}: Failed to show file dialog: CoCreateInstance failed", std::source_location::current().function_name()));
+            throw std::runtime_error(b::format("{}: Failed to show file dialog: CoCreateInstance failed", std::source_location::current().function_name()));
         }
 
         if (b::fs::exists(b::folders::get_global_documents())) setDefaultFolder(pFileSave, b::folders::get_global_documents());
         if (b::fs::exists(dialog.initial_folder)) setFolder(pFileSave, dialog.initial_folder);
         if (!dialog.filters.empty()) setFilters(pFileSave, dialog.filters);
-        if (!default_extension.empty()) pFileSave->SetDefaultExtension(b::to_osstring(default_extension).c_str());
+        if (!default_extension.empty()) pFileSave->SetDefaultExtension(default_extension.wstr().c_str());
         setOptions(pFileSave, dialog.confirm_overwrite, dialog.directory, false);
 
         // Now show the dialog
@@ -151,7 +151,7 @@ namespace b {
         PWSTR pszFilePath;
         pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
 
-        b::fs::path path = b::osstring_to_u8(pszFilePath);
+        b::fs::path path = b::string(std::wstring(pszFilePath));
         CoTaskMemFree(pszFilePath);
 
         pItem->Release();

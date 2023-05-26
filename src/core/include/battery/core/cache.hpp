@@ -3,6 +3,7 @@
 #include <string>
 #include <utility>
 #include "battery/core/fs.hpp"
+#include "battery/core/log.hpp"
 #include "battery/core/extern/json.hpp"
 
 namespace b {
@@ -16,10 +17,10 @@ namespace b {
 
         class entry {
         public:
-            entry(cachefile& parent, std::string key) : parent(parent), key(std::move(key)) {}
+            entry(cachefile& parent, b::string key) : parent(parent), key(std::move(key)) {}
 
             operator nlohmann::json() { return parent.get<nlohmann::json>(key); }
-            operator std::string() { return parent.get<std::string>(key); }
+            operator b::string() { return parent.get<std::string>(key); }
 
             template<typename T>
             operator T() {
@@ -34,34 +35,34 @@ namespace b {
 
         private:
             cachefile& parent;
-            std::string key;
+            b::string key;
         };
 
-        entry operator[](const std::string& key) {
+        entry operator[](const b::string& key) {
             return entry(*this, key);
         }
 
         template<typename T>
-        T get(const std::string& key) {
+        T get(const b::string& key) {
             b::fs::ifstream file(filename);
             if (file.fail()) {
-                throw std::runtime_error("b::cachefile: Failed to open file '" + b::u8_as_str(filename.u8string()) + "' for reading: " + strerror(errno));
+                throw std::runtime_error(b::format("b::cachefile: Failed to open file '{}' for reading: ", filename, strerror(errno)));
             }
             json = nlohmann::json::parse(file.read_string().value());
-            return json[key];
+            return json[key.str()];
         }
 
         template<typename T>
-        void set(const std::string& key, T value) {
+        void set(const b::string& key, T value) {
             b::fs::ifstream in(filename);
             if (in.fail()) {
-                throw std::runtime_error("b::cachefile: Failed to open file '" + b::u8_as_str(filename.u8string()) + "' for reading: " + strerror(errno));
+                throw std::runtime_error(b::format("b::cachefile: Failed to open file '{}' for reading: ", filename, strerror(errno)));
             }
             json = nlohmann::json::parse(in.read_string().value());
             json[key] = value;
             b::fs::ofstream file(filename);
             if (file.fail()) {
-                throw std::runtime_error("b::cachefile: Failed to open file '" + b::u8_as_str(filename.u8string()) + "' for writing: " + strerror(errno));
+                throw std::runtime_error(b::format("b::cachefile: Failed to open file '{}' for reading: ", filename, strerror(errno)));
             }
             file << json.dump(4);
         }

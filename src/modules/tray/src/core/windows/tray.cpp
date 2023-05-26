@@ -46,12 +46,13 @@ namespace b::tray {
     }
 
     template<typename T>
-    static HINSTANCE registerClass(T wndProc, const b::osstring &identifier) {
+    static HINSTANCE registerClass(T wndProc, b::string identifier) {
+
         WNDCLASSEX windowClass;
         memset(&windowClass, 0, sizeof(windowClass));
         windowClass.cbSize = sizeof(windowClass);
         windowClass.lpfnWndProc = wndProc;
-        windowClass.lpszClassName = identifier.c_str();
+        windowClass.lpszClassName = identifier.wstr().c_str();
         windowClass.hInstance = GetModuleHandle(nullptr);
 
         if (RegisterClassEx(&windowClass) == 0) {
@@ -60,12 +61,12 @@ namespace b::tray {
         return windowClass.hInstance;
     }
 
-    tray::tray(std::u8string identifier, std::u8string tooltip, MouseButton clickAction)
+    tray::tray(b::string identifier, b::string tooltip, MouseButton clickAction)
             : basetray(std::move(identifier), std::move(tooltip), clickAction) {
-        auto windowClass = registerClass(wndProc, b::to_osstring(getIdentifier()));
+        auto windowClass = registerClass(wndProc, getIdentifier());
 
         // NOLINTNEXTLINE
-        hwnd = CreateWindow(b::to_osstring(getIdentifier()).c_str(), nullptr, 0, 0, 0, 0, 0, nullptr, nullptr,
+        hwnd = CreateWindow(getIdentifier().wstr().c_str(), nullptr, 0, 0, 0, 0, 0, nullptr, nullptr,
                             windowClass, nullptr);
         if (hwnd == nullptr) {
             throw std::runtime_error("Failed to create window");
@@ -77,7 +78,7 @@ namespace b::tray {
         std::memset(&notifyData, 0, sizeof(notifyData));
         notifyData.cbSize = sizeof(notifyData);
         notifyData.hWnd = hwnd;
-        lstrcpyW(notifyData.szTip, b::to_osstring(getTooltip()).c_str());
+        lstrcpyW(notifyData.szTip, getTooltip().wstr().c_str());
         notifyData.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
         notifyData.uCallbackMessage = WM_TRAY;
         notifyData.hIcon = loadIcon(b::resource::from_base64(b::constants::battery_icon_base64()));
@@ -93,7 +94,7 @@ namespace b::tray {
         DestroyIcon(notifyData.hIcon);
         DestroyMenu(menu);
 
-        UnregisterClass(b::to_osstring(getIdentifier()).c_str(), GetModuleHandle(nullptr));
+        UnregisterClass(getIdentifier().wstr().c_str(), GetModuleHandle(nullptr));
         PostMessage(hwnd, WM_QUIT, 0, 0);
 
         DestroyIcon(notifyData.hIcon);
@@ -117,11 +118,11 @@ namespace b::tray {
         for (const auto &entry: entries) {
             tray_entry *item = entry.get();
 
-            auto name_osstring = b::to_osstring(item->getText());
+            auto name = item->getText().wstr();
             MENUITEMINFO winItem{0};
 
             winItem.wID = ++id;
-            winItem.dwTypeData = std::bit_cast<LPWSTR>(name_osstring.c_str());
+            winItem.dwTypeData = std::bit_cast<LPWSTR>(name.c_str());
             winItem.cbSize = sizeof(winItem);
             winItem.fMask = MIIM_TYPE | MIIM_STATE | MIIM_DATA | MIIM_ID;
             winItem.dwItemData = std::bit_cast<ULONG_PTR>(item);

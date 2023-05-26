@@ -23,7 +23,6 @@
 #include <functional>
 
 #include "battery/core/environment.hpp"
-#include "battery/core/log.hpp"
 
 ///
 /// \brief Everything related to string manipulation and encoding
@@ -32,432 +31,329 @@
 ///
 namespace b {
 
-#ifdef BATTERY_ARCH_WINDOWS
     ///
-    /// \brief A string type used for interfacing with the corresponding operating system.
-    /// \details This type is defined as `std::wstring` on Windows, designed to hold UTF-16 encoded strings for working
-    ///          with the Win32 API exclusively. On all other platforms it is defined as `std::string`. Thus,
-    ///          `b::to_osstring(str).c_str()` will always give you a c-style char array, UTF-8 on Unix and UTF-16 on Windows.
-    ///          See `b::to_osstring` for possible caveats!
-    /// \see b::to_osstring()
-    ///
-    using osstring = std::wstring;
-#else
-    ///
-    /// \brief A string type used for interfacing with the corresponding operating system.
-    /// \details This type is defined as `std::wstring` on Windows, designed to hold UTF-16 encoded strings for working
-    ///          with the Win32 API exclusively. On all other platforms it is defined as `std::string`. Thus,
-    ///          `b::to_osstring(str).c_str()` will always give you a c-style char array, UTF-8 on Unix and UTF-16 on Windows.
-    ///          See `b::to_osstring` for possible caveats!
-    /// \see b::to_osstring()
-    ///
-    using osstring = std::string;
-#endif
-
-    ///
-    /// \brief Convert a UTF-8 `std::string` to its platform agnostic version.
-    /// \details Converting to UTF-16 on Windows, returning the unchanged string on other platforms.
-    ///          `b::to_osstring(str).c_str()` will always give you a c-style char array, UTF-8 on Unix and UTF-16 on Windows.
-    ///          But beware of the lifetime, in this case the pointer is only valid as long as the osstring object is alive and it
-    ///          only is for the current expression. Thus, if you have a Win32 API or Linux API function that holds onto
-    ///          the pointer or you store the pointer in a struct, then you must save the osstring in a variable, call `.c_str()`
-    ///          on the variable and make sure that the variable outlives the data structure.
-    ///          See `b::osstring_to_u8()` and `b::osstring_to_u32()` for the reverse operation.
-    /// \param[in] str The string to be converted
-    /// \throw std::invalid_argument on an invalid utf-8 sequence
-    /// \return std::wstring on Windows converted to UTF-16, std::string on other platforms with the unchanged string
-    /// \see b::osstring_to_u8()
-    /// \see b::osstring_to_u32()
-    /// \see b::to_u8()
-    /// \see b::to_u32()
-    ///
-    b::osstring to_osstring(const std::string& str);
-
-    ///
-    /// \brief u8 overload of `b::to_osstring()`
-    /// \param[in] str The string to be converted
-    /// \throw std::invalid_argument on an invalid utf-8 sequence
-    /// \return std::wstring on Windows converted to UTF-16, std::string on other platforms with the unchanged string
-    /// \see b::osstring_to_u8()
-    /// \see b::osstring_to_u32()
-    /// \see b::to_u8()
-    /// \see b::to_u32()
-    ///
-    b::osstring to_osstring(const std::u8string& str);
-
-    ///
-    /// \brief u32 overload of `b::to_osstring()`
-    /// \param[in] str The string to be converted
-    /// \throw std::invalid_argument on an invalid utf-32 sequence
-    /// \return std::wstring on Windows converted to UTF-16, std::string on other platforms with the unchanged string
-    /// \see b::osstring_to_u8()
-    /// \see b::osstring_to_u32()
-    /// \see b::to_u8()
-    /// \see b::to_u32()
-    ///
-    b::osstring to_osstring(const std::u32string& str);
-
-    ///
-    /// \brief Convert a platform-native string like Windows UTF-16 wide-strings to standardized UTF-8
-    /// \param[in] str The string to be converted
-    /// \throw std::invalid_argument on an invalid unicode character
-    /// \return std::string the input string converted to UTF-8
-    /// \see b::to_osstring()
-    ///
-    std::string osstring_to_str(const b::osstring& str);
-
-    ///
-    /// \brief Convert a platform-native string like Windows UTF-16 wide-strings to standardized UTF-8
-    /// \param[in] str The string to be converted
-    /// \throw std::invalid_argument on an invalid unicode character
-    /// \return std::u8string the input string converted to UTF-8
-    /// \see b::to_osstring()
-    ///
-    std::u8string osstring_to_u8(const b::osstring& str);
-
-    ///
-    /// \brief Convert a platform-native string like Windows UTF-16 wide-strings to standardized UTF-32
-    /// \param[in] str The string to be converted
-    /// \throw std::invalid_argument on an invalid unicode character
-    /// \return std::u32string the input string converted to UTF-32
-    /// \see b::to_osstring()
-    ///
-    std::u32string osstring_to_u32(const b::osstring& str);
-
-    ///
-    /// \brief Convert an std::u8string to a plain std::string
-    /// \details No conversion is happening in this function call. The bytes of the u8string are transferred
-    ///          to the std::string one by one. This results in an std::string that contains utf-8 encoded bytes.
-    ///          This function cannot fail.
-    /// \param[in] str The string to be converted
-    /// \return std::string containing the same bytes as the input string
-    /// \see b::u8_from_std_string()
-    ///
-    std::string u8_as_str(const std::u8string& str);
-
-    ///
-    /// \brief Interpret an std::string as a utf-8 encoded string and return it as an std::u8string
-    /// \details The input string is parsed as a utf-8 encoded string and checked for errors. If no invalid utf-8
-    ///          sequence is found, the bytes are transferred directly into an std::u8string and returned.
-    ///          Otherwise, an exception is thrown.
-    /// \param[in] str The string to be converted
-    /// \throw std::invalid_argument on an invalid utf-8 sequence
-    /// \return std::u8string containing the same bytes as the input string
-    /// \see b::u8_as_str()
-    ///
-    std::u8string u8_from_std_string(const std::string& str);
-
-    ///
-    /// \brief Check if a string contains valid utf-8 encoding
-    /// \param[in] str The string to be checked
-    /// \return False on an invalid utf-8 sequence, true otherwise
-    ///
-    bool is_valid_u8(const std::string& str);
-
-    ///
-    /// \brief Check if a string contains valid utf-8 encoding
-    /// \param[in] str The string to be checked
-    /// \return False on an invalid utf-8 sequence, true otherwise
-    ///
-    bool is_valid_u8(const std::u8string& str);
-
-    ///
-    /// \brief Check if a string contains valid utf-8 encoding
-    /// \param[in] str The string to be checked
-    /// \return False on an invalid utf-8 sequence, true otherwise
-    ///
-    bool is_valid_u32(const std::u32string& str);
-
-    ///
-    /// \brief Convert a UTF-32 encoded string back to a UTF-8 encoded string.
-    /// \param[in] str The string to be converted
-    /// \throw std::invalid_argument on an invalid UTF-32 character
-    /// \return The converted string
-    /// \see b::to_u32()
-    ///
-    std::u8string to_u8(const std::u32string& str);
-
-    ///
-    /// \brief Convert a single unicode character into its UTF-8 encoded multibyte form
-    /// \param[in] c The character to be converted
-    /// \throw std::invalid_argument on an invalid unicode character
-    /// \return The UTF-8 multibyte string representing the unicode character
-    /// \see b::to_u32()
-    ///
-    std::u8string to_u8(char32_t c);
-
-    ///
-    /// \brief Convert a UTF-8 encoded multibyte string to a UTF-32 encoded string.
-    /// \param[in] str The string to be converted
-    /// \throw std::invalid_argument on an invalid UTF-8 sequence
-    /// \return The converted string
-    /// \see b::to_u8()
-    ///
-    std::u32string to_u32(const std::u8string& str);
-
-    ///
-    /// \brief Convert a single unicode character into a UTF-32 encoded string containing only that character
-    /// \param[in] c The character to be converted
-    /// \return The converted string
-    /// \see b::to_u8()
-    ///
-    std::u32string to_u32(char32_t c);
-
-
-
-
-    ///
-    /// \brief Call a function for every character in a UTF-8 encoded string, not for every byte.
-    /// \details This can be used to do operations on a string
-    ///          whereas the function is called for every character (not for every byte). The return values are appended
-    ///          to one another and returned as another string. Thus, directly returning the character in the callback
-    ///          would make this function return the string unchanged. The callback can return either a char32_t or a UTF-8
-    ///          string, whereas the string can also have more or fewer characters. Returning `""` essentially removes it.
-    ///          Example usage: `auto new = b::u8_foreach(str, [] (std::string c) { return c == "ß" ? "SS" : c; })`
-    /// \param[in] str The string over which to iterate
-    /// \param[in] function A callback which is called for every character or codepoint in the string
-    /// \throw std::invalid_argument on an invalid UTF-8 sequence
-    /// \return All return values from the callbacks appended into a string
-    /// \see b::u32_foreach()
-    ///
-    std::u8string u8_foreach(const std::u8string& str, const std::function<std::variant<std::u8string,char32_t>(std::u8string)>& function);
-
-    ///
-    /// \brief Call a function for every character in a UTF-8 encoded string. Check the overload for more info.
-    /// \details This is an overload that supplies the callback with `char32_t` instead of `std::string`.
-    ///          Please see `b::u8_foreach()` for any other details.
-    /// \see b::u32_foreach()
-    ///
-    std::u8string u8_foreach(const std::u8string& str, const std::function<std::variant<std::u8string,char32_t>(char32_t)>& function);
-
-
-
-
-    ///
-    /// \brief Call a function for every character in a UTF-32 encoded string
-    /// \details Please see `b::u8_foreach()` for any other details. This function is equivalent,
-    ///          but for UTF-32 instead of UTF-8.
-    /// \param[in] str The string over which to iterate
-    /// \param[in] function A callback which is called for every character or codepoint in the string
-    /// \throw std::invalid_argument on an invalid UTF-32 sequence
-    /// \return All return values from the callbacks appended into a string
-    /// \see b::u8_foreach()
-    ///
-    std::u32string u32_foreach(const std::u32string& str, const std::function<std::variant<std::u32string,char32_t>(std::u32string)>& function);
-
-    ///
-    /// \brief Call a function for every character in a UTF-32 encoded string. Check the overload for more info.
-    /// \details This is an overload that supplies the callback with `char32_t` instead of `std::u32string`.
-    ///          Please see `b::u32_foreach()` for any other details.
-    /// \see b::u8_foreach()
-    ///
-    std::u32string u32_foreach(const std::u32string& str, const std::function<std::variant<std::u32string,char32_t>(char32_t)>& function);
-
-
-
-    ///
-    /// \brief Split a string into an array of string pieces by a delimiter.
-    /// \details When no delimiter is found, only the input string is returned. Several delimiters in a row are treated
-    ///          as a single one. The delimeter can be one or more bytes, thus this function is UTF-8 conformant.
-    /// \param[in] str The string to be split
-    /// \param[in] delimiter The characters to split the string at
-    /// \return An array of string tokens
-    /// \see b::join()
-    ///
-    std::vector<std::string> split(std::string str, const std::string& delimiter);
-
-    ///
-    /// \brief Overload for `b::split()` for std::u8string
-    /// \see b::join()
-    ///
-    std::vector<std::u8string> split(std::u8string str, const std::u8string& delimiter);
-
-    ///
-    /// \brief Overload for `b::split()` for std::u32string
-    /// \see b::join()
-    ///
-    std::vector<std::u32string> split(std::u32string str, const std::u32string& delimiter);
-
-
-
-    ///
-    /// \brief Join an array of strings into a single one. To be used with `b::split()`.
-    /// \details The spacer string is inserted between any two string tokens being joined.
-    /// \param[in] strings Array of string tokens to be joined
-    /// \param[in] spacer Spacer string
-    /// \return The combined string
-    /// \see b::split()
-    ///
-    std::string join(const std::vector<std::string>& strings, const std::string& spacer = "");
-
-    ///
-    /// \brief Overload for `b::join()` for std::u8string
-    /// \see b::split()
-    ///
-    std::u8string join(const std::vector<std::u8string>& strings, const std::u8string& spacer = u8"");
-
-    ///
-    /// \brief Overload for `b::join()` for std::u32string
-    /// \see b::split()
-    ///
-    std::u32string join(const std::vector<std::u32string>& strings, const std::u32string& spacer = U"");
-
-
-
-    ///
-    /// \brief Replace parts of a string with another string.
-    /// \details The parameter `string` is iterated over and any occurrences of `from` are replaced by `to`.
-    /// \param[in] string The string to be modified
-    /// \param[in] from A token to be replaced
-    /// \param[in] to What to replace the token with
-    /// \return The modified string
-    /// \see b::replace_one()
-    ///
-    std::string replace(std::string string, const std::string& from, const std::string& to);
-
-    ///
-    /// \brief Overload for `b::replace()` for std::u8string
-    /// \see b::replace_one()
-    ///
-    std::u8string replace(std::u8string string, const std::u8string& from, const std::u8string& to);
-
-    ///
-    /// \brief Overload for `b::replace()` for std::u32string
-    /// \see b::replace_one()
-    ///
-    std::u32string replace(std::u32string string, const std::u32string& from, const std::u32string& to);
-
-
-
-    ///
-    /// \brief Replace one part of a string with another string.
-    /// \details The parameter `string` is iterated over and only one occurrence of the string `from`
-    ///          is replaced with the string `to`.
-    /// \param[in] string The string to be modified
-    /// \param[in] from A token to be replaced
-    /// \param[in] to What to replace the token with
-    /// \param[in] occurrence The index of the occurrence. 0 would mean the first occurrence, 1 the second.
-    ///                       Additionally, -1 would be the last occurrence and -2 the second-to-last.
-    /// \return The modified string
-    /// \see b::replace()
-    /// \see b::replace_first()
-    ///
-    std::string replace_one(std::string string, const std::string& from, const std::string& to, int occurrence);
-
-    ///
-    /// \brief Overload for `b::replace_one()` for std::u8string
-    /// \see b::replace_one()
-    ///
-    std::u8string replace_one(std::u8string string, const std::u8string& from, const std::u8string& to, int occurrence);
-
-    ///
-    /// \brief Overload for `b::replace_one()` for std::u32string
-    /// \see b::replace_one()
-    ///
-    std::u32string replace_one(std::u32string string, const std::u32string& from, const std::u32string& to, int occurrence);
-
-
-
-
-    ///
-    /// \brief Replace the first occurrence of a string with another string.
-    /// \details Please see `b::replace_one()`. This function is just a specialization
-    ///          with the last parameter already set.
-    /// \see b::replace_last()
-    ///
-    std::string replace_first(const std::string& string, const std::string& from, const std::string& to);
-
-    ///
-    /// \brief Overload for `b::replace_first()` for std::u8string
-    /// \see b::replace_last()
-    ///
-    std::u8string replace_first(const std::u8string& string, const std::u8string& from, const std::u8string& to);
-
-    ///
-    /// \brief Overload for `b::replace_first()` for std::u32string
-    /// \see b::replace_last()
-    ///
-    std::u32string replace_first(const std::u32string& string, const std::u32string& from, const std::u32string& to);
-
-
-
-
-    ///
-    /// \brief Replace the last occurrence of a string with another string.
-    /// \details Please see `b::replace_one()`. This function is just a specialization
-    ///          with the last parameter already set.
-    /// \see b::replace_first()
-    ///
-    std::string replace_last(const std::string& string, const std::string& from, const std::string& to);
-
-    ///
-    /// \brief Overload for `b::replace_last()` for std::u8string
-    /// \see b::replace_first()
-    ///
-    std::u8string replace_last(const std::u8string& string, const std::u8string& from, const std::u8string& to);
-
-    ///
-    /// \brief Overload for `b::replace_last()` for std::u32string
-    /// \see b::replace_first()
-    ///
-    std::u32string replace_last(const std::u32string& string, const std::u32string& from, const std::u32string& to);
-
-
-
-
-
-
-    ///
-    /// \brief Make all characters of a UTF-8 string lowercase.
-    /// \details Unicode characters are transformed like expected.
-    /// \param[in] str The UTF-8 string to be converted
-    /// \throw std::invalid_argument on an invalid UTF-8 sequence
-    /// \return The converted UTF-8 string
-    /// \see b::to_upper()
-    ///
-    std::string to_lower(const std::string& str);
-
-    ///
-    /// \brief Overload for `b::to_lower()` for std::u8string
-    /// \see b::to_upper()
-    ///
-    std::u8string to_lower(const std::u8string& str);
-
-    ///
-    /// \brief Overload for `b::to_lower()` for std::u32string
-    /// \see b::to_upper()
-    ///
-    std::u32string to_lower(const std::u32string& str);
-
-
-
-
-    ///
-    /// \brief Make all characters of a UTF-8 string uppercase.
-    /// \details Unicode characters are transformed like expected. "ß" is transformed to "SS".
-    /// \param[in] str The UTF-8 string to be converted
-    /// \throw std::invalid_argument on an invalid UTF-8 sequence
-    /// \return The converted UTF-8 string
-    /// \see b::to_lower()
-    ///
-    std::string to_upper(const std::string& str);
-
-    ///
-    /// \brief Overload for `b::to_upper()` for std::u8string
-    /// \see b::to_lower()
-    ///
-    std::u8string to_upper(const std::u8string& str);
-
-    ///
-    /// \brief Overload for `b::to_upper()` for std::u32string
-    /// \see b::to_lower()
-    ///
-    std::u32string to_upper(const std::u32string& str);
-
-
-
-
-    // TODO: Support REGEX
+    /// \brief Yet another string class, that combines all other. Synonymous to `std::string`, but with more features.
+    /// \details This class is derived from `std::string`, thus all `std::string` features are directly available.
+    ///          You are encouraged to use this class wherever possible. What separates it from `std::string` is that
+    ///          it takes in all other forms of strings (std::u8string, wide strings on windows, sf::String, etc.) and
+    ///          automatically performs Unicode conversions when needed. It is basically a container for everything
+    ///          related to Unicode, using it everywhere makes sure that your program is automatically
+    ///          Unicode aware out of the box.
+    ///
+    ///          Every function that takes a string expects it to be in either UTF-8, UTF-16 or UTF-32.
+    ///          No other encoding is supported as you are discouraged to use anything but Unicode.
+    ///
+    ///          It also provides a few convenience functions for string manipulation and formatting.
+    ///
+    class string : public std::string {
+    public:
+
+        /// \brief static validation function for UTF-8 strings
+        /// \param[in] str The UTF-8 encoded string to validate
+        /// \return false if the string is not valid UTF-8, true otherwise
+        static bool is_valid_utf8(const std::string& str);
+
+        /// \brief b::string default constructor
+        string() = default;
+
+        /// \brief b::string forwarding constructor to forward any other non-implemented parameters to std::string
+        template<typename... TArgs>
+        string(const TArgs&... args) : std::string(args...) {}
+
+        /// \brief b::string constructor taking char
+        /// \param[in] str The character to convert
+        string(char c) : std::string(&c, 1) {}
+
+        /// \brief b::string constructor taking char8_t
+        /// \param[in] str The character to convert
+        string(char8_t c) : std::string(u8_to_str(std::u8string(&c, 1))) {}
+
+        /// \brief b::string constructor taking char16_t
+        /// \param[in] str The character to convert
+        string(char16_t c) : std::string(u16_to_str(std::u16string(&c, 1))) {}
+
+        /// \brief b::string constructor taking char32_t
+        /// \param[in] str The character to convert
+        string(char32_t c) : std::string(u32_to_str(std::u32string(&c, 1))) {}
+
+        /// \brief b::string constructor taking const char*
+        /// \param[in] str The string to convert
+        /// \throw std::invalid_argument if the string is not valid UTF-8
+        string(const char* str) : std::string(str) {}
+
+        /// \brief b::string constructor taking const char8_t*
+        /// \param[in] str The string to convert
+        /// \throw std::invalid_argument if the string is not valid UTF-8
+        string(const char8_t* str) : std::string(u8_to_str(str)) {}
+
+        /// \brief b::string constructor taking const char16_t*
+        /// \param[in] str The string to convert
+        /// \throw std::invalid_argument if the string is not valid UTF-8
+        string(const char16_t* str) : std::string(u16_to_str(str)) {}
+
+        /// \brief b::string constructor taking const char32_t*
+        /// \param[in] str The string to convert
+        /// \throw std::invalid_argument if the string is not valid UTF-8
+        string(const char32_t* str) : std::string(u32_to_str(str)) {}
+
+        /// \brief b::string constructor taking std::string
+        /// \param[in] str The string to convert
+        /// \throw std::invalid_argument if the string is not valid UTF-8
+        string(const std::string& str) : std::string(str) {}
+
+        /// \brief b::string constructor taking std::u8string
+        /// \param[in] str The u8string to convert
+        /// \throw std::invalid_argument if the string is not valid UTF-8
+        string(const std::u8string& str) : std::string(u8_to_str(str)) {}
+
+        /// \brief b::string constructor taking std::u16string
+        /// \param[in] str The u16string to convert
+        /// \throw std::invalid_argument if the string is not valid UTF-16
+        string(const std::u16string& str) : std::string(u16_to_str(str)) {}
+
+        /// \brief b::string constructor taking std::u32string
+        /// \param[in] str The u32string to convert
+        /// \throw std::invalid_argument if the string is not valid UTF-32
+        string(const std::u32string& str) : std::string(u32_to_str(str)) {}
+
+        /// \brief b::string constructor taking std::wstring
+        /// \param[in] str The platform native wide string to convert
+        /// \throw std::invalid_argument if the conversion does not result in valid UTF-8
+        string(const std::wstring& str) : std::string(wstr_to_str(str)) {}
+
+        /// \brief assignment operator taking char
+        /// \param[in] other The string to convert
+        /// \return reference to itself
+        string& operator=(char c) { *static_cast<std::string*>(this) = std::string(c, 1); return *this; }
+
+        /// \brief assignment operator taking char8_t
+        /// \param[in] other The string to convert
+        /// \return reference to itself
+        string& operator=(char8_t c) { *static_cast<std::string*>(this) = std::string(c, 1); return *this; }
+
+        /// \brief assignment operator taking char16_t
+        /// \param[in] other The string to convert
+        /// \return reference to itself
+        string& operator=(char16_t c) { *static_cast<std::string*>(this) = std::string(c, 1); return *this; }
+
+        /// \brief assignment operator taking char32_t
+        /// \param[in] other The string to convert
+        /// \return reference to itself
+        string& operator=(char32_t c) { *static_cast<std::string*>(this) = std::string(c, 1); return *this; }
+
+        /// \brief assignment operator taking const char*
+        /// \param[in] other The string to convert
+        /// \return reference to itself
+        string& operator=(const char* other) { *static_cast<std::string*>(this) = other; return *this; }
+
+        /// \brief assignment operator taking const char8_t*
+        /// \param[in] other The string to convert
+        /// \throw std::invalid_argument if the string is not valid UTF-8
+        /// \return reference to itself
+        string& operator=(const char8_t* other) { *static_cast<std::string*>(this) = u8_to_str(other); return *this; }
+
+        /// \brief assignment operator taking const char16_t*
+        /// \param[in] other The string to convert
+        /// \throw std::invalid_argument if the string is not valid UTF-8
+        /// \return reference to itself
+        string& operator=(const char16_t* other) { *static_cast<std::string*>(this) = u16_to_str(other); return *this; }
+
+        /// \brief assignment operator taking const char32_t*
+        /// \param[in] other The string to convert
+        /// \throw std::invalid_argument if the string is not valid UTF-8
+        /// \return reference to itself
+        string& operator=(const char32_t* other) { *static_cast<std::string*>(this) = u32_to_str(other); return *this; }
+
+        /// \brief assignment operator taking std::string
+        /// \param[in] other The string to convert
+        /// \return reference to itself
+        string& operator=(const std::string& other) { *static_cast<std::string*>(this) = other; return *this; }
+
+        /// \brief assignment operator taking std::u8string
+        /// \param[in] other The u8string to convert
+        /// \throw std::invalid_argument if the string is not valid UTF-8
+        /// \return reference to itself
+        string& operator=(const std::u8string& other) { *static_cast<std::string*>(this) = u8_to_str(other); return *this; }
+
+        /// \brief assignment operator taking std::u16string
+        /// \param[in] other The u16string to convert
+        /// \throw std::invalid_argument if the string is not valid UTF-16
+        /// \return reference to itself
+        string& operator=(const std::u16string& other) { *static_cast<std::string*>(this) = u16_to_str(other); return *this; }
+
+        /// \brief assignment operator taking std::u32string
+        /// \param[in] other The u8string to convert
+        /// \throw std::invalid_argument if the string is not valid UTF-32
+        /// \return reference to itself
+        string& operator=(const std::u32string& other) { *static_cast<std::string*>(this) = u32_to_str(other); return *this; }
+
+        /// \brief assignment operator taking std::wstring
+        /// \param[in] other The platform native wide string to convert
+        /// \throw std::invalid_argument if the conversion does not result in valid UTF-8
+        /// \return reference to itself
+        string& operator=(const std::wstring& other) { *static_cast<std::string*>(this) = wstr_to_str(other); return *this; }
+
+        /// \brief conversion operator to std::u8string
+        /// \throw std::invalid_argument if the string does not contain valid UTF-8
+        /// \return std::u8string containing the UTF-8 representation of the string
+        operator std::u8string() const { return u8(); }
+
+        /// \brief conversion operator to std::u16string
+        /// \throw std::invalid_argument if the string does not contain valid UTF-8
+        /// \return std::u16string containing the UTF-16 representation of the string
+        operator std::u16string() const { return u16(); }
+
+        /// \brief conversion operator to std::u32string
+        /// \throw std::invalid_argument if the string does not contain valid UTF-8
+        /// \return std::u32string containing the UTF-32 representation of the string
+        operator std::u32string() const { return u32(); }
+
+        /// \brief conversion operator to std::wstring
+        /// \warning You are not encouraged to use `std::wstring` anywhere, except for platform specific APIs.
+        /// \throw std::invalid_argument if the string does not contain valid UTF-8
+        /// \return std::wstring containing the UTF-16 wide-string representation of the string
+        operator std::wstring&() { return wstr(); }
+
+        /// \brief conversion function to std::string reference
+        /// \return The raw std::string itself
+        std::string& str() { return *this; }
+
+        /// \brief conversion function to const std::string reference
+        /// \return The raw std::string itself
+        const std::string& str() const { return *this; }
+
+        /// \brief conversion function to std::u8string
+        /// \throw std::invalid_argument if the string does not contain valid UTF-8
+        /// \return std::u8string containing the UTF-8 representation of the string
+        std::u8string u8() const;
+
+        /// \brief conversion function to std::u16string
+        /// \throw std::invalid_argument if the string does not contain valid UTF-8
+        /// \return std::u16string containing the UTF-8 representation of the string
+        std::u16string u16() const;
+
+        /// \brief conversion function to std::u32string
+        /// \throw std::invalid_argument if the string does not contain valid UTF-8
+        /// \return std::u32string containing the UTF-8 representation of the string
+        std::u32string u32() const;
+
+        /// \brief conversion function to std::wstring
+        /// \warning You are not encouraged to use `std::wstring` anywhere, except for platform specific APIs.
+        /// \throw std::invalid_argument if the string does not contain valid UTF-8
+        /// \return std::wstring containing the UTF-16 wide-string representation of the string
+        std::wstring& wstr();
+
+        ///
+        /// \brief Call a function for every character in a UTF-8 encoded string, not for every byte.
+        /// \details This can be used to do operations on a string
+        ///          whereas the function is called for every character (not for every byte). The return values are appended
+        ///          to one another and returned as another string. Thus, directly returning the character in the callback
+        ///          would make this function return the string unchanged. The callback can return either a char32_t or a UTF-8
+        ///          string, whereas the string can also have more or fewer characters. Returning `""` essentially removes it.
+        ///          Example usage: `auto new = b::string::foreach(str, [] (std::string c) { return c == "ß" ? "SS" : c; })`
+        /// \param[in] str The string over which to iterate
+        /// \param[in] function A callback which is called for every character or codepoint in the string
+        /// \throw std::invalid_argument on an invalid UTF-8 sequence
+        /// \return All return values from the callbacks appended into a string
+        static b::string foreach(const b::string& str, const std::function<b::string(b::string)>& function);
+
+        ///
+        /// \brief Call a function for every character in a UTF-8 encoded string. Check the overload for more info.
+        /// \details This is an overload that supplies the callback with `char32_t` instead of `std::string`.
+        ///          Please see `b::string::foreach()` for any other details.
+        static b::string foreach(const b::string& str, const std::function<b::string(char32_t)>& function);
+
+        ///
+        /// \brief Split a string into an array of string pieces by a delimiter.
+        /// \details When no delimiter is found, only the input string is returned. Several delimiters in a row are treated
+        ///          as a single one. The delimeter can be one or more bytes, thus this function is UTF-8 conformant.
+        /// \param[in] str The string to be split
+        /// \param[in] delimiter The characters to split the string at
+        /// \return An array of string tokens
+        /// \see b::string::join()
+        ///
+        static std::vector<b::string> split(b::string str, const b::string& delimiter);
+
+        ///
+        /// \brief Join an array of strings into a single one. To be used with `b::split()`.
+        /// \details The spacer string is inserted between any two string tokens being joined.
+        /// \param[in] strings Array of string tokens to be joined
+        /// \param[in] spacer Spacer string
+        /// \return The combined string
+        /// \see b::string::split()
+        ///
+        static b::string join(const std::vector<b::string>& strings, const b::string& delimiter);
+
+        ///
+        /// \brief Replace parts of a string with another string.
+        /// \details The parameter `string` is iterated over and any occurrences of `from` are replaced by `to`.
+        /// \param[in] string The string to be modified
+        /// \param[in] from A token to be replaced
+        /// \param[in] to What to replace the token with
+        /// \return The modified string
+        /// \see b::string::replace_one()
+        ///
+        static b::string replace(b::string string, const b::string& from, const b::string& to);
+
+        ///
+        /// \brief Replace one part of a string with another string.
+        /// \details The parameter `string` is iterated over and only one occurrence of the string `from`
+        ///          is replaced with the string `to`.
+        /// \param[in] string The string to be modified
+        /// \param[in] from A token to be replaced
+        /// \param[in] to What to replace the token with
+        /// \param[in] occurrence The index of the occurrence. 0 would mean the first occurrence, 1 the second.
+        ///                       Additionally, -1 would be the last occurrence and -2 the second-to-last.
+        /// \return The modified string
+        /// \see b::string::replace()
+        /// \see b::string::replace_first()
+        ///
+        static b::string replace_one(b::string string, const b::string& from, const b::string& to, int occurrence);
+
+        ///
+        /// \brief Replace the first occurrence of a string with another string.
+        /// \details Please see `b::replace_one()`. This function is just a specialization
+        ///          with the last parameter already set.
+        /// \see b::string::replace_last()
+        ///
+        static b::string replace_first(const b::string& string, const b::string& from, const b::string& to);
+
+        ///
+        /// \brief Replace the last occurrence of a string with another string.
+        /// \details Please see `b::replace_one()`. This function is just a specialization
+        ///          with the last parameter already set.
+        /// \see b::string::replace_first()
+        ///
+        static b::string replace_last(const b::string& string, const b::string& from, const b::string& to);
+
+        ///
+        /// \brief Make all characters of a UTF-8 string lowercase.
+        /// \details Unicode characters are transformed like expected.
+        /// \param[in] str The UTF-8 string to be converted
+        /// \throw std::invalid_argument on an invalid UTF-8 sequence
+        /// \return The converted UTF-8 string
+        /// \see b::string::to_upper()
+        ///
+        static b::string to_lower(const b::string& str);
+
+        ///
+        /// \brief Make all characters of a UTF-8 string uppercase.
+        /// \details Unicode characters are transformed like expected. Special case: "ß" is transformed to "SS".
+        /// \param[in] str The UTF-8 string to be converted
+        /// \throw std::invalid_argument on an invalid UTF-8 sequence
+        /// \return The converted UTF-8 string
+        /// \see b::string::to_lower()
+        ///
+        static b::string to_upper(const b::string& str);
+
+    private:
+        std::string u8_to_str(const std::u8string& str) const;
+        std::string u16_to_str(const std::u16string& str) const;
+        std::string u32_to_str(const std::u32string& str) const;
+        std::string wstr_to_str(const std::wstring& str) const;
+
+        std::wstring internal_wide_string;      // This is set when wstr() is called to manage the lifetime of the wide string
+    };
 
     ///
     /// \brief Encode a binary string or a binary resource as Base-64.
@@ -482,13 +378,12 @@ namespace b {
 
 } // namespace b
 
-// Make std::u8string printable in streams
-inline std::ostream& operator<<(std::ostream& os, const std::u8string& str) {
-    os << b::u8_as_str(str);
-    return os;
-}
-
-inline std::ostream& operator<<(std::ostream& os, const std::u32string& str) {
-    os << b::to_u8(str);
-    return os;
+// Hash function that lets b::string be used as a key in std::map and std::unordered_map
+namespace std {
+    template <>
+    struct hash<b::string> {
+        size_t operator()(const b::string& str) const {
+            return std::hash<std::string>()(str);
+        }
+    };
 }

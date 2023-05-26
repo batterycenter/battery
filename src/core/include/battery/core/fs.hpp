@@ -29,14 +29,19 @@ namespace b::fs {
     public:
         path() = default;
         path(const std::filesystem::path& path) : std::filesystem::path(path.u8string()) {}
-        path(const char* path) : std::filesystem::path(b::u8_from_std_string(path)) {}
-        path(const char8_t* path) : std::filesystem::path(path) {}
-        path(const std::string& path) : std::filesystem::path(b::u8_from_std_string(path)) {}
-        path(const std::u8string& path) : std::filesystem::path(path) {}
+        path(const char* path) : std::filesystem::path(b::string(path).u8()) {}
+        path(const char8_t* path) : std::filesystem::path(b::string(path).u8()) {}
+        path(const char16_t* path) : std::filesystem::path(b::string(path).u8()) {}
+        path(const char32_t* path) : std::filesystem::path(b::string(path).u8()) {}
+        path(const std::string& path) : std::filesystem::path(b::string(path).u8()) {}
+        path(const std::u8string& path) : std::filesystem::path(b::string(path).u8()) {}
+        path(const std::u16string& path) : std::filesystem::path(b::string(path).u8()) {}
+        path(const std::u32string& path) : std::filesystem::path(b::string(path).u8()) {}
+        path(const b::string& path) : std::filesystem::path(path.u8()) {}
 
         ~path() = default;
 
-        std::u8string string() const = delete;
+        b::string string() const { return std::filesystem::path::u8string(); }
 
         fs::path extension() const { return std::filesystem::path::extension(); }
         fs::path filename() const { return std::filesystem::path::filename(); }
@@ -50,8 +55,8 @@ namespace b::fs {
 
         // This function returns the extension, but without the dot.
         // Thus, this either returns the extension like "png" or "txt", or nothing ("")
-        path raw_extension() const {
-            auto ext = extension().u8string();
+        fs::path raw_extension() const {
+            auto ext = extension().string();
             if (!ext.empty()) {
                 if (ext[0] == '.') {
                     ext.erase(ext.begin());
@@ -60,27 +65,15 @@ namespace b::fs {
             return ext;
         }
 
-        fs::path& operator+=(const std::string& path) {
-            this->append(path);
-            return *this;
-        }
+        fs::path& operator+=(const char* path) { this->append(b::string(path).str()); return *this; }
+        fs::path& operator+=(const b::string& path) { this->append(path.str()); return *this; }
+        fs::path& operator+=(const std::string& path) { this->append(path); return *this; }
+        fs::path& operator/=(const char* path) { this->append(b::string(path).str()); return *this; }
+        fs::path& operator/(const b::string& path) { this->append(path.str()); return *this; }
+        fs::path& operator/(const std::string& path) { this->append(path); return *this; }
 
-        fs::path& operator+=(const std::u8string& path) {
-            this->append(path);
-            return *this;
-        }
-
-        fs::path& operator+=(const std::u32string& path) {
-            this->append(path);
-            return *this;
-        }
-
+        operator b::string() const { return std::filesystem::path::u8string(); }
     };
-
-    inline std::ostream& operator<<(std::ostream& stream, const fs::path& path) {
-        stream << path.u8string();
-        return stream;
-    }
 
     inline fs::path operator+(const fs::path& a, const fs::path& b) {
         auto path = a;
@@ -107,13 +100,13 @@ namespace b::fs {
     class ifstream : public std::ifstream {
     public:
         ifstream(const fs::path& path, enum Mode filemode = Mode::TEXT)
-                : std::ifstream(convert(path), (filemode == Mode::TEXT) ? std::ios::in : (std::ios::in | std::ios::binary)),
+                : std::ifstream(path.string().wstr(), (filemode == Mode::TEXT) ? std::ios::in : (std::ios::in | std::ios::binary)),
                   path(path)
         {
             binary = (filemode == Mode::BINARY);	// remember for later
         }
 
-        ifstream(const fs::path& path, std::ios_base::openmode mode) : std::ifstream(convert(path), mode), path(path)  {
+        ifstream(const fs::path& path, std::ios_base::openmode mode) : std::ifstream(b::string(path.string()), mode), path(path)  {
             binary = (mode & std::ios::binary);		// remember for later
         }
 
@@ -123,13 +116,13 @@ namespace b::fs {
         // In Text mode this function is expensive, it reads the entire file into memory, just for the filesize.
         // There is no other way to get the filesize in text mode, because the representation on-disk is different
         // from what is read into memory. (Line endings)
-        std::streamsize file_size() const {
+        std::streamsize compensated_file_size() const {
             if (binary) {		// Binary mode
-                return std::filesystem::file_size(convert(path));
+                return std::filesystem::file_size(b::string(path).str());
             }
             else {				// Text mode: read the entire file into memory to compensate line-endings
-                std::string temp;	// Buffer is as large as the file on-disk -> Reading will make it smaller, but not larger
-                auto filesize_temp = std::filesystem::file_size(convert(path));
+                b::string temp;	// Buffer is as large as the file on-disk -> Reading will make it smaller, but not larger
+                auto filesize_temp = std::filesystem::file_size(b::string(path).str());
                 temp.resize(filesize_temp);
 
                 // Read file
@@ -141,7 +134,7 @@ namespace b::fs {
 
         template<typename TFunc>
         size_t read_in_chunks(size_t chunk_size, TFunc callback) {
-            std::string buffer(chunk_size, 0);
+            b::string buffer(chunk_size, 0);
             size_t total_bytes = 0;
 
             while (!this->eof()) {
@@ -157,7 +150,7 @@ namespace b::fs {
             return total_bytes;
         }
 
-        std::optional<std::string> read_string() {
+        std::optional<b::string> read_string() {
             if (!is_open()) return {};
             std::stringstream buffer;
             buffer << this->rdbuf();
@@ -169,21 +162,17 @@ namespace b::fs {
             this->seekg(0, std::ios::beg);   // back to the start!
         }
 
-        explicit operator std::string() {
+        b::string string() {
             auto str = read_string();
             if (str) {
                 return str.value();
             }
             else {
-                throw std::runtime_error("Cannot read file as std::string: File is not open");
+                throw std::runtime_error("Cannot read file as b::string: File is not open");
             }
         }
 
     private:
-        b::osstring convert(const fs::path& _path) const {
-            return b::to_osstring(_path.u8string());
-        }
-
         fs::path path;
         bool binary = false;
     };
@@ -208,30 +197,29 @@ namespace b::fs {
             }
         }
 
-        b::osstring create_dir_return_path(const fs::path& path, bool createDirectory) const {
+        std::wstring create_dir_return_path(const fs::path& path, bool createDirectory) const {
             if (path.has_parent_path() && createDirectory) {
                 auto parent = path.parent_path();
                 if (!fs::exists(parent)) {
                     fs::create_directories(fs::path(path).parent_path());
                 }
             }
-            return b::to_osstring(path.u8string());
+            return path.string().wstr();
         }
     };
 
 }
 
-inline std::ostream& operator<<(std::ostream& os, const b::fs::path& path) {
-    os << path.u8string();
-    return os;
+inline std::ostream& operator<<(std::ostream& stream, const b::fs::path& path) {
+    stream << path.string();
+    return stream;
 }
 
-template<> struct fmt::formatter<b::fs::path> {
-    constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {
-        return ctx.end();
+template <> struct fmt::formatter<b::fs::path> {
+    constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator {
+        return ctx.begin();
     }
-    template <typename FormatContext>
-    auto format(const b::fs::path& input, FormatContext& ctx) -> decltype(ctx.out()) {
-        return format_to(ctx.out(), "{}", b::u8_as_str(input.u8string()));
+    auto format(const b::fs::path& path, format_context& ctx) const -> format_context::iterator {
+        return fmt::format_to(ctx.out(), "{}", path.string());
     }
 };

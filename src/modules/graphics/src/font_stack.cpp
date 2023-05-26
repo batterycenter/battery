@@ -14,24 +14,24 @@
 namespace b {
 
     struct font_stack {
-        inline static std::unordered_map<std::string, b::resource> available_fonts;
-        inline static std::unordered_map<std::string, ImFont*> loaded_fonts;
+        inline static std::unordered_map<b::string, b::resource> available_fonts;
+        inline static std::unordered_map<b::string, ImFont*> loaded_fonts;
         inline static bool locked = false;
     };
 
-    void make_font_available(const std::string& font, const b::resource& ttf_file) {
+    void make_font_available(const b::string& font, const b::resource& ttf_file) {
         if (font_stack::locked)
             throw std::runtime_error("b::load_font() failed: Font loading operations cannot be performed during a render pass!");
 
         font_stack::available_fonts[font] = ttf_file;
     }
 
-    ImFont* load_font(const std::string& identifier, const std::string& font, float size) {
+    ImFont* load_font(const b::string& identifier, const b::string& font, float size) {
         if (font_stack::locked)
             throw std::runtime_error("b::load_font() failed: Font loading operations cannot be performed during a render pass!");
 
         if (!font_stack::available_fonts.contains(font))
-            throw std::invalid_argument(fmt::format("Cannot load font '{}': No such font was made available", font));
+            throw std::invalid_argument(b::format("Cannot load font '{}': No such font was made available", font));
 
         ImFontConfig font_cfg;
         font_cfg.FontDataOwnedByAtlas = false;
@@ -39,21 +39,21 @@ namespace b {
         auto new_font = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(ttf_resource.data(), static_cast<int>(ttf_resource.size()), size, &font_cfg);
 
         if (new_font == nullptr)
-            throw std::runtime_error(fmt::format("Failed to load font '{}'", font));
+            throw std::runtime_error(b::format("Failed to load font '{}'", font));
 
         font_stack::loaded_fonts[identifier] = new_font;
         if (!ImGui::SFML::UpdateFontTexture())
-            throw std::runtime_error(fmt::format("Failed to update font texture for font '{}'", font));
+            throw std::runtime_error(b::format("Failed to update font texture for font '{}'", font));
 
         return new_font;
     }
 
-    void push_font(const std::string& font) {
+    void push_font(const b::string& font) {
         if (!font_stack::locked)
             throw std::runtime_error("b::push_font() failed: Font push/pop operations can only be performed during a render pass!");
 
         if (!font_stack::loaded_fonts.contains(font))
-            throw std::invalid_argument(fmt::format("Cannot push font '{}': No such font was loaded", font));
+            throw std::invalid_argument(b::format("Cannot push font '{}': No such font was loaded", font));
 
         ImGui::PushFont(font_stack::loaded_fonts[font]);
     }
@@ -77,8 +77,8 @@ namespace b {
         font_stack::locked = false;
     }
 
-    std::vector<std::string> get_available_fonts() {
-        std::vector<std::string> fonts;
+    std::vector<b::string> get_available_fonts() {
+        std::vector<b::string> fonts;
         for (auto& [font, _] : font_stack::available_fonts) {
             fonts.push_back(font);
         }

@@ -34,11 +34,11 @@ namespace b {
             auto file = b::fs::ifstream(resource_path, is_binary ? b::fs::Mode::BINARY : b::fs::Mode::TEXT);
             auto str = file.read_string();
             if (str.has_value()) {
-                b::log::info("Hot-reloaded resource '{}'", b::u8_as_str(resource_path.u8string()));
-                callback(b::resource::from_byte_string(str.value(), b::u8_as_str(resource_path.raw_extension().u8string())));
+                b::log::info("Hot-reloaded resource '{}'", resource_path);
+                callback(b::resource::from_byte_string(str.value(), resource_path.raw_extension()));
             }
             else {
-                b::log::error("Failed to hot-reload resource '{}': {}", b::u8_as_str(resource_path.u8string()), strerror(errno));
+                b::log::error("Failed to hot-reload resource '{}': {}", resource_path, strerror(errno));
             }
         }
 

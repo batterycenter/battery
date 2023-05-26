@@ -25,7 +25,7 @@
 
 namespace b::tray {
 
-    tray_entry::tray_entry(std::u8string text) : text(std::move(text)) {}
+    tray_entry::tray_entry(b::string text) : text(std::move(text)) {}
 
     basetray *tray_entry::getParent() {
         return parent;
@@ -35,11 +35,11 @@ namespace b::tray {
         parent = newParent;
     }
 
-    std::u8string tray_entry::getText() const {
+    b::string tray_entry::getText() const {
         return text;
     }
 
-    void tray_entry::setText(std::u8string newText) {
+    void tray_entry::setText(b::string newText) {
         text = std::move(newText);
         if (parent) {
             parent->update();

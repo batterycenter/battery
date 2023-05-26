@@ -19,7 +19,7 @@
 //
 
 #pragma once
-#include <string>
+#include "battery/core/string.hpp"
 
 namespace b::tray {
 
@@ -27,20 +27,20 @@ namespace b::tray {
 
     class tray_entry {
     public:
-        explicit tray_entry(std::u8string text);        // TODO: Rework entire tray module to also take UTF-32
+        explicit tray_entry(b::string text);
         virtual ~tray_entry() = default;
 
         basetray *getParent();
         void setParent(basetray *);
 
-        [[nodiscard]] std::u8string getText() const;
-        void setText(std::u8string);
+        [[nodiscard]] b::string getText() const;
+        void setText(b::string);
 
         void setDisabled(bool);
         [[nodiscard]] bool isDisabled() const;
 
     protected:
-        std::u8string text;
+        b::string text;
         bool disabled = false;
         basetray *parent = nullptr;
     };

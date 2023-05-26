@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include <string>
+#include "battery/core/string.hpp"
 
 ///
 /// \brief Everything related to uuids
@@ -27,12 +27,12 @@ namespace b::uuid {
 
     ///
     /// \brief Generate a new uuid in the form of a string.
-    /// \warning This function is not crypthographically secure. It is only meant to be used for internal ids.
-    ///          Do not use it for anything security related.
-    /// \return A new, unique uuid in the form of an std::string
+    /// \warning This function is not crypthographically secure. It is only meant to be used for local id generation.
+    ///          Do not use it for anything security or network related.
+    /// \return A new, unique uuid in the form of an b::string
     /// \see b::uuid::is_valid()
     ///
-    std::string v4();
+    b::string v4();
 
     ///
     /// \brief Test if a string is in the correct format to be interpreted as a uuid.
@@ -40,6 +40,6 @@ namespace b::uuid {
     /// \return True if the string is a valid uuid, false otherwise
     /// \see b::uuid::v4()
     ///
-    bool is_valid(const std::string& uuid);
+    bool is_valid(const b::string& uuid);
 
 } // namespace b::uuid

@@ -59,11 +59,11 @@ namespace b {
                 _promise.set_value();
                 if constexpr (std::is_invocable_v<std::decay_t<_Fn>, std::stop_token, std::decay_t<_Args>...>) {
                     if (!catch_common_exceptions(std::move(_Fx), get_stop_token(), std::move(args)...)) {
-                        b::console_application::get()->stop_application();
+                        b::console_application::get().stop_application();
                     }
                 } else {
                     if (!catch_common_exceptions(std::move(_Fx), std::move(args)...)) {
-                        b::console_application::get()->stop_application();
+                        b::console_application::get().stop_application();
                     }
                 }
             }) {
@@ -99,7 +99,7 @@ namespace b {
             catch (const std::exception& e) {
                 b::log::core::critical("Unhandled exception in b::thread: [std::exception]: {}", e.what());
                 if (_message_box_on_exception) {
-                    b::message_box_error(fmt::format("Unhandled exception in b::thread: [std::exception]: {}", e.what()));
+                    b::message_box_error(b::format("Unhandled exception in b::thread: [std::exception]: {}", e.what()));
                 }
             }
             catch (...) {

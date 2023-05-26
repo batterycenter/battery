@@ -39,7 +39,7 @@ namespace b {
         worker.join();
     }
 
-    std::string process::remove_trailing_whitespace(std::string buffer) {
+    b::string process::remove_trailing_whitespace(b::string buffer) {
         if (buffer.empty()) return buffer;
         for (int64_t i = static_cast<int>(buffer.length() - 1); i >= 0; i--) {
             switch (buffer.back()) {
@@ -54,6 +54,10 @@ namespace b {
             }
         }
         return buffer;
+    }
+
+    void process::stdin_write(const b::string& str) {
+        stdin_write(str.data(), str.length());
     }
 
     void process::stdin_write(const std::string_view& str) {
@@ -79,27 +83,27 @@ namespace b {
 
     std::error_code process::stdout_sink(const uint8_t* _buffer, size_t length) {
         if (length == 0) return {};
-        auto buffer = std::string(std::bit_cast<const char*>(_buffer), length);
+        auto buffer = b::string(std::string(std::bit_cast<const char*>(_buffer), length));
         if (options.suppress_carriage_return) {
-            buffer = b::replace(buffer, "\r", "");
+            buffer = b::string::replace(buffer, "\r", "");
         }
         output_stdout += buffer;
         output_combined += buffer;
         if (options.stdout_callback) { options.stdout_callback(buffer); }
-        if (!options.silent) { std::cout << buffer; }
+        if (!options.silent) { b::print("{}", buffer); }
         return {};
     }
 
     std::error_code process::stderr_sink(const uint8_t* _buffer, size_t length) {
         if (length == 0) return {};
-        auto buffer = std::string(std::bit_cast<const char*>(_buffer), length);
+        auto buffer = b::string(std::string(std::bit_cast<const char*>(_buffer), length));
         if (options.suppress_carriage_return) {
-            buffer = b::replace(buffer, "\r", "");
+            buffer = b::string::replace(buffer, "\r", "");
         }
         output_stderr += buffer;
         output_combined += buffer;
         if (options.stderr_callback) { options.stderr_callback(buffer); }
-        if (!options.silent) { std::cout << buffer; }
+        if (!options.silent) { b::print("{}", buffer); }
         return {};
     }
 
@@ -128,14 +132,14 @@ namespace b {
         cmd_cstr.emplace_back(nullptr);
 
         options.reproc_options.redirect.parent = options.passthrough_to_parent;
-        std::string workdir = b::u8_as_str(options.working_directory.has_value() ? options.working_directory->u8string() : u8"");
+        b::string workdir = options.working_directory.has_value() ? options.working_directory->string() : "";
         options.reproc_options.working_directory = !workdir.empty() ? workdir.c_str() : nullptr;
         options.reproc_options.redirect.err.type = reproc::redirect::type::pipe;
 
         if (options.working_directory.has_value()) {
             auto dir = options.working_directory.value();
             if (!fs::is_directory(dir)) {
-                throw std::invalid_argument(fmt::format("Cannot run process in working directory '{}': Directory does not exist", workdir));
+                throw std::invalid_argument(b::format("Cannot run process in working directory '{}': Directory does not exist", workdir));
             }
         }
 
@@ -194,7 +198,7 @@ namespace b {
         if (ctrl_c_handler) b::pop_ctrl_c_handler();
     }
 
-    process execute(const std::string& command, const process::options_t& options) {
+    process execute(const b::string& command, const process::options_t& options) {
         b::process process;
         process.options = options;
         process.options.passthrough_to_parent = true;

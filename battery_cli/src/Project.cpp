@@ -13,7 +13,7 @@ bool Project::isProjectConfigured() {
     }
 }
 
-b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags, const std::string& root, const std::string& args) {
+b::expected<std::nullopt_t, Error> Project::init(const b::string& cmake_flags, const b::string& root, const b::string& args) {
 
     scripts["pre_configure"] = "exit 0";
     scripts["configure"] = "b run pre_configure && cmake -B {{build_directory}} -S {{project_root}} -DCMAKE_BUILD_TYPE={{config}} {{cmake_flags}} && b run post_configure";
@@ -54,7 +54,7 @@ b::expected<std::nullopt_t, Error> Project::init(const std::string& cmake_flags,
     return std::nullopt;
 }
 
-b::expected<std::nullopt_t, Error> Project::findProjectRoot(const std::string& root) {
+b::expected<std::nullopt_t, Error> Project::findProjectRoot(const b::string& root) {
     b::fs::path path = b::fs::current_path();       // TODO: This type is still wrong (b::fs todo)
 
     if (!root.empty()) {
@@ -82,7 +82,7 @@ b::expected<std::nullopt_t, Error> Project::findProjectRoot(const std::string& r
     return b::unexpected(Error::PROJECT_FILE_NOT_FOUND);
 }
 
-b::expected<std::nullopt_t, Error> Project::fetchProjectData(const std::string& root) {
+b::expected<std::nullopt_t, Error> Project::fetchProjectData(const b::string& root) {
 
     auto success = findProjectRoot(root);
     if (!success) { return b::unexpected(success.error()); }
@@ -128,12 +128,12 @@ b::expected<std::nullopt_t, Error> Project::fetchProjectData(const std::string& 
     return std::nullopt;
 }
 
-void Project::printScriptLabel(const std::string& script) {
+void Project::printScriptLabel(const b::string& script) {
     b::print(b::colors::fg::green, ">> {} v{} {}\n", projectName, projectVersion.to_string(), script);
 }
 
-b::expected<std::string, Error> Project::renderString(std::string string) {
-    std::string old;
+b::expected<b::string, Error> Project::renderString(b::string string) {
+    b::string old;
     try {
         while (old != string) {
             old = string;
@@ -148,7 +148,7 @@ b::expected<std::string, Error> Project::renderString(std::string string) {
     }
 }
 
-b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
+b::expected<std::nullopt_t, Error> Project::runScript(b::string script) {
 
     if (script.empty()) {   // 'b run' is equivalent to 'b run start' or 'b start'
         script = "start";
@@ -174,7 +174,7 @@ b::expected<std::nullopt_t, Error> Project::runScript(std::string script) {
     if (!command_result) {
         return b::unexpected(command_result.error());
     }
-    std::string command = command_result.value();
+    b::string command = command_result.value();
 
     b::print(">> {}\n", command);
 

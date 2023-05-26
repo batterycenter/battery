@@ -11,30 +11,30 @@
 #include "resources/templates/main_cpp.hpp"
 #include "resources/templates/pch_hpp.hpp"
 
-static int getSelectionInput(const std::string& question, const std::vector<std::string>& options) {
+static int getSelectionInput(const b::string& question, const std::vector<b::string>& options) {
     b::print("{}\n", question);
     auto result = ask_user_options(options);
     b::print("\n");
     return result;
 }
 
-static std::string getSimpleInput(const std::string& question, const std::string& error_message) {
+static b::string getSimpleInput(const b::string& question, const b::string& error_message) {
     b::print("{}\n", question);
     auto input = b::cin_getline();
     input = u8"Test";
 
     if (!input.empty()) {
         b::print("\n");
-        return b::u8_as_str(input);
+        return input;
     }
 
     b::print(b::colors::fg::red, "{}\n", error_message);
     return getSimpleInput(question, error_message);
 }
 
-static auto getConvertableInput(const std::string& question, fmt::format_string<std::string> error_message, auto&& converter) {
+static auto getConvertableInput(const b::string& question, fmt::format_string<b::string> error_message, auto&& converter) {
     b::print("{}\n", question);
-    auto input = b::u8_as_str(b::cin_getline());
+    auto input = b::cin_getline();
 
     try {
         auto result = converter(input);
@@ -50,7 +50,7 @@ static auto getConvertableInput(const std::string& question, fmt::format_string<
     }
 }
 
-b::expected<std::nullopt_t, Error> ProjectGenerator::run(const std::string& new_dir) {
+b::expected<std::nullopt_t, Error> ProjectGenerator::run(const b::string& new_dir) {
 
     // Type of project
     library = 1 == getSelectionInput(
@@ -83,7 +83,7 @@ b::expected<std::nullopt_t, Error> ProjectGenerator::run(const std::string& new_
     b::print("Project generation summary:\n");
     b::print("name = {}\n", project_name);
     b::print("version = {}\n", project_version.to_string());
-    b::print("project_dir = {}\n", b::u8_as_str(project_dir.u8string()));
+    b::print("project_dir = {}\n", project_dir);
     b::print("\n");
 
     auto confirm = getConvertableInput(
@@ -104,7 +104,7 @@ b::expected<std::nullopt_t, Error> ProjectGenerator::run(const std::string& new_
         b::print("Generating project...\n");
         auto result = generate();
         if (!result) return b::unexpected(result.error());
-        b::print("Project files generated in {}\n", b::u8_as_str(project_dir.u8string()));
+        b::print("Project files generated in {}\n", project_dir);
     }
     else {
         b::print(b::colors::fg::yellow, "Project generation cancelled. No files were generated.\n");
@@ -119,12 +119,12 @@ b::expected<std::nullopt_t, Error> ProjectGenerator::run(const std::string& new_
 
 
 
-b::expected<std::string, Error> ProjectGenerator::generateSourceFile(const std::string& name, std::string content) {
+b::expected<b::string, Error> ProjectGenerator::generateSourceFile(const b::string& name, b::string content) {
     nlohmann::json properties;
     properties["project_name"] = project_name;
     properties["project_version"] = project_version.to_string();
 
-    std::string old;
+    b::string old;
     try {
         while (old != content) {
             old = content;
@@ -159,7 +159,7 @@ b::expected<std::nullopt_t, Error> ProjectGenerator::generate() {     // This fu
 
 
 
-b::expected<std::nullopt_t, Error> ProjectGenerator::writeSourceFile(const b::fs::path& filename, const std::string& data) {
+b::expected<std::nullopt_t, Error> ProjectGenerator::writeSourceFile(const b::fs::path& filename, const b::string& data) {
     b::fs::ofstream file(project_dir + filename);
     if (file.fail()) {
         b::log::error("Failed to open file '{}' for writing. Project files are incomplete.", filename);

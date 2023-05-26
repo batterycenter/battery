@@ -7,15 +7,15 @@
                                                     // Thus, this cannot be defined in the header or we'd be
 namespace b {                                       // polluting the global namespace with the Windows API and iostream
 
-    void print(const std::string& str) {
+    void print(const b::string& str) {
         std::cout << str;
     }
 
-    void print(const b_color_variants_t& color, const std::string& str) {
+    void print(const b_color_variants_t& color, const b::string& str) {
         std::visit([&str](auto&& color) { std::cout << color << str << rang::fg::reset; }, color);
     }
 
-    void print(const std::vector<b_color_variants_t>& colors, const std::string& str) {
+    void print(const std::vector<b_color_variants_t>& colors, const b::string& str) {
         for (auto& any_color : colors) {
             b::print(any_color, str);
         }

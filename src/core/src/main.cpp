@@ -13,7 +13,7 @@
 
 namespace b {
 
-    static std::vector<std::u8string> parse_cli([[maybe_unused]] int argc, [[maybe_unused]] const char** argv) {
+    static std::vector<b::string> parse_cli([[maybe_unused]] int argc, [[maybe_unused]] const char** argv) {
 #ifdef BATTERY_ARCH_WINDOWS                 // On Windows, parse CLI arguments from WinAPI and convert to UTF-8
         int _argc = 0;
         LPWSTR* _args = ::CommandLineToArgvW((LPCWSTR)GetCommandLineW(), &_argc);
@@ -22,9 +22,9 @@ namespace b {
             b::message_box_error("[Battery->WinAPI]: CommandLineToArgvW failed: " + b::internal::get_last_win32_error());
             return {};
         }
-        std::vector<std::u8string> args;
+        std::vector<b::string> args;
         for (int i = 0; i < _argc; i++) {
-            args.push_back(b::osstring_to_u8(_args[i]));
+            args.push_back(std::wstring(_args[i]));
         }
         ::LocalFree(_args);
 
@@ -55,7 +55,7 @@ namespace b {
 #endif
     }
 	
-    const char** args_to_argv(const std::vector<std::u8string>& args) {
+    const char** args_to_argv(const std::vector<b::string>& args) {
         static auto args_raw = args;     // Static, so the data will stay in memory forever (needed by c_str())
         static std::vector<const char*> arguments;
 

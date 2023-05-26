@@ -1,9 +1,9 @@
 #pragma once
 
 #include <vector>
-#include <string>
 #include <functional>
 #include <map>
+#include "battery/core/string.hpp"
 
 namespace b {
 
@@ -12,9 +12,9 @@ namespace b {
         console_application();
         virtual ~console_application() = default;
 
-        static console_application* get();
+        static console_application & get();
 
-        std::vector<std::u8string> args;
+        std::vector<b::string> args;
         double framerate { 0.0 };
         double frametime { 0.0 };
         uint64_t framecount { 0 };
@@ -29,7 +29,7 @@ namespace b {
         void stop_application();
         void set_stop_requested(bool stop_requested);
 
-        void run(const std::u8string& appname, const std::vector<std::u8string>& args);
+        void run(const b::string& appname, const std::vector<b::string>& args);
 
         console_application& operator=(const console_application&) = delete;
         console_application& operator=(console_application&&) = delete;
@@ -44,7 +44,7 @@ namespace b {
 
         bool stop_requested { false };
         double requested_framerate { 0.0 };
-        inline static console_application* instance {nullptr };
+        inline static console_application* instance { nullptr };
     };
 
 }

@@ -43,7 +43,7 @@ public:
     bool async() {
         for (int i = 0; i < 5; i++) {
             data = "Private class members";
-            std::string str = data;
+            b::string str = data;
             b::sleep(0.1);
         }
         success = true;
@@ -70,7 +70,7 @@ public:
     inline static std::atomic<bool> success = false;
 
 private:
-    std::string data;
+    b::string data;
     b::thread thread;
     std::atomic<bool> bool_data = false;
 };

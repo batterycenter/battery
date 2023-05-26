@@ -1,6 +1,7 @@
 
 #include "battery/graphics/widget_builder.hpp"
 #include "battery/graphics/property_stack.hpp"
+#include "battery/core/log.hpp"
 #include "magic_enum.hpp"
 
 namespace b::widgets {
@@ -27,7 +28,7 @@ namespace b::widgets {
                     }
                 }
             } else {
-                throw std::runtime_error(fmt::format(
+                throw std::runtime_error(b::format(
                         "Failed to apply widget_builder rule {}: Loaded property pack has {} values, expected 1!",
                         tag, property.value().get_properties().size()));
             }
@@ -74,7 +75,7 @@ namespace b::widgets {
         auto property = property_stack::get(tag);
         if (property) {
             if (property.value().get_properties().size() != 2) {
-                throw std::runtime_error(fmt::format(
+                throw std::runtime_error(b::format(
                         "Failed to apply widget_builder rule {}: Loaded property pack has {} values, expected 2!",
                         tag, property.value().get_properties().size()));
             }
@@ -124,13 +125,13 @@ namespace b::widgets {
         auto property = property_stack::get(tag);
         if (property) {
             if (property.value().get_properties().size() != 1) {
-                throw std::runtime_error(fmt::format(
+                throw std::runtime_error(b::format(
                         "Failed to apply widget_builder rule {}: Loaded property pack has {} values, expected 1!",
                         tag, property.value().get_properties().size()));
             }
 
             if (property.value().get_properties()[0].unit() != b::unit::COLOR_HEX) {
-                throw std::runtime_error(fmt::format(
+                throw std::runtime_error(b::format(
                         "Failed to apply widget_builder rule {}: Property type is {}, expected {}",
                         tag, magic_enum::enum_name(property.value().get_properties()[0].unit()), magic_enum::enum_name(b::unit::COLOR_HEX)));
             }
