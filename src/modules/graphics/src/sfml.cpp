@@ -148,6 +148,14 @@ namespace b {
         return a.x * b.x + a.y * b.y;
     }
 
+    ImVec2 round(const ImVec2& v) {
+        return ImVec2(std::round(v.x), std::round(v.y));
+    }
+
+    sf::Vector2f round(const sf::Vector2f& v) {
+        return sf::Vector2f(std::round(v.x), std::round(v.y));
+    }
+
     float map(const float value, const float min, const float max, const float new_min, const float new_max) {
         return (value - min) / (max - min) * (new_max - new_min) + new_min;
     }
