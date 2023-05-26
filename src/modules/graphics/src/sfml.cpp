@@ -156,6 +156,22 @@ namespace b {
         return sf::Vector2f(std::round(v.x), std::round(v.y));
     }
 
+    ImVec2 min(const ImVec2& a, const ImVec2& b) {
+        return ImVec2(std::min(a.x, b.x), std::min(a.y, b.y));
+    }
+
+    sf::Vector2f min(const sf::Vector2f& a, const sf::Vector2f& b) {
+        return sf::Vector2f(std::min(a.x, b.x), std::min(a.y, b.y));
+    }
+
+    ImVec2 max(const ImVec2& a, const ImVec2& b) {
+        return ImVec2(std::max(a.x, b.x), std::max(a.y, b.y));
+    }
+
+    sf::Vector2f max(const sf::Vector2f& a, const sf::Vector2f& b) {
+        return sf::Vector2f(std::max(a.x, b.x), std::max(a.y, b.y));
+    }
+
     float map(const float value, const float min, const float max, const float new_min, const float new_max) {
         return (value - min) / (max - min) * (new_max - new_min) + new_min;
     }

@@ -49,6 +49,11 @@ namespace b {
     ImVec2 round(const ImVec2& v);
     sf::Vector2f round(const sf::Vector2f& v);
 
+    ImVec2 min(const ImVec2& v1, const ImVec2& v2);
+    sf::Vector2f min(const sf::Vector2f& v1, const sf::Vector2f& v2);
+    ImVec2 max(const ImVec2& v1, const ImVec2& v2);
+    sf::Vector2f max(const sf::Vector2f& v1, const sf::Vector2f& v2);
+
     float map(float value, float min1, float max1, float min2, float max2);
     ImVec2 map(const ImVec2& value, const ImVec2& min1, const ImVec2& max1, const ImVec2& min2, const ImVec2& max2);
     sf::Vector2f map(const sf::Vector2f& value, const sf::Vector2f& min1, const sf::Vector2f& max1, const sf::Vector2f& min2, const sf::Vector2f& max2);
