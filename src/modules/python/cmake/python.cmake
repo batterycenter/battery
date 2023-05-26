@@ -53,13 +53,12 @@ macro(battery_download_python_embedded_distro)
         NAME battery_python_embed
         URL ${PYTHON_EMBED_URL}
     )
-    set(BATTERY_PYTHON_EMBED_SOURCE_DIR ${battery_python_embed_SOURCE_DIR} PARENT_SCOPE)
-    set(BATTERY_PYTHON_EMBED_SOURCE_DIR ${battery_python_embed_SOURCE_DIR})
+    set(BATTERY_PYTHON_EMBED_SOURCE_DIR ${battery_python_embed_SOURCE_DIR} CACHE INTERNAL "Path to Python embedded distro")
 endmacro()
 
 # Copy runtime files to output directory after build
 function(battery_copy_python_runtime_files_after_build TARGET)
-add_custom_command(TARGET ${TARGET} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${BATTERY_PYTHON_EMBED_SOURCE_DIR}" ${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE}/${TARGET}
-)
+    add_custom_command(TARGET ${TARGET} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${BATTERY_PYTHON_EMBED_SOURCE_DIR}" ${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE}/${TARGET}
+    )
 endfunction()

@@ -5,9 +5,17 @@
 
 namespace b {
 
+    namespace internal {
 #ifdef BATTERY_ARCH_WINDOWS
-    std::string get_last_win32_error();
+
+        std::string get_last_win32_error();
+
+#else
+
+        void linux_run_zenity(const std::vector<std::string>& commands);
+
 #endif
+    }
 
     void message_box_info(const std::string& message);
     void message_box_info(const std::u8string& message);

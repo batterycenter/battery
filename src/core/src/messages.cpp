@@ -12,6 +12,8 @@
 
 namespace b {
 
+    namespace internal {
+
 #ifdef BATTERY_ARCH_WINDOWS
     std::string get_last_win32_error() {
 
@@ -42,15 +44,17 @@ namespace b {
     }
 #endif  // BATTERY_ARCH_WINDOWS
 
+    }  // namespace internal
+
     void message_box_info(const std::string& message) {
         return message_box_info(b::u8_from_std_string(message));
     }
 
     void message_box_info(const std::u8string& message) {
 #ifdef BATTERY_ARCH_WINDOWS
-        win32_message_box(message, MB_ICONINFORMATION | MB_OK);
+        internal::win32_message_box(message, MB_ICONINFORMATION | MB_OK);
 #else
-        linux_run_zenity({ "--info", "--text=" + b::u8_as_str(message) });
+        internal::linux_run_zenity({ "--info", "--text=" + b::u8_as_str(message) });
 #endif
     }
 
@@ -67,9 +71,9 @@ namespace b {
 
     void message_box_warning(const std::u8string& message) {
 #ifdef BATTERY_ARCH_WINDOWS
-        win32_message_box(message, MB_ICONWARNING | MB_OK);
+        internal::win32_message_box(message, MB_ICONWARNING | MB_OK);
 #else
-        linux_run_zenity({ "--warning", "--text=" + b::u8_as_str(message) });
+        internal::linux_run_zenity({ "--warning", "--text=" + b::u8_as_str(message) });
 #endif
     }
 
@@ -87,9 +91,9 @@ namespace b {
 
     void message_box_error(const std::u8string& message) {
 #ifdef BATTERY_ARCH_WINDOWS
-        win32_message_box(message, MB_ICONERROR | MB_OK);
+        internal::win32_message_box(message, MB_ICONERROR | MB_OK);
 #else
-        linux_run_zenity({ "--error", "--text=" + b::u8_as_str(message) });
+        internal::linux_run_zenity({ "--error", "--text=" + b::u8_as_str(message) });
 #endif
     }
 

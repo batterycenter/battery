@@ -4,6 +4,12 @@
 
 #include "utf8.h"
 
+TEST(BatteryCore_String, OsStringAndBackStr) {
+    std::string str = "年 Hello World! 本";
+    auto osstr = b::to_osstring(str);
+    EXPECT_EQ(str, b::osstring_to_str(osstr));
+}
+
 TEST(BatteryCore_String, OsStringAndBackU8) {
     std::u8string str = u8"年 Hello World! 本";
     auto osstr = b::to_osstring(str);

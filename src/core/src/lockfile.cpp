@@ -48,7 +48,7 @@ namespace b {
                 FILE_ATTRIBUTE_NORMAL,
                 nullptr);
         if (this->fileHandle == INVALID_HANDLE_VALUE) {
-            throw std::runtime_error(fmt::format("Failed to create lockfile '{}': Failed to open file for writing: {}", b::u8_as_str(filename.u8string()), b::get_last_win32_error()));
+            throw std::runtime_error(fmt::format("Failed to create lockfile '{}': Failed to open file for writing: {}", b::u8_as_str(filename.u8string()), b::internal::get_last_win32_error()));
         }
 #else
         this->fileHandle = reinterpret_cast<void *>(open(filename.c_str(), O_CREAT | O_RDWR, 0666));

@@ -3,7 +3,7 @@
 #include <battery/core/log.hpp>
 #include <battery/python/python.hpp>
 
-#include "resources/script.py.h"
+#include "resources/script_py.hpp"
 
 #include <pybind11/stl.h>   // We need this to be able to send and receive STL containers like std::vector from python
 

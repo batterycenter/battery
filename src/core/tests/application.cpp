@@ -12,13 +12,13 @@ public:
     double sum_framerate { 0 };
     size_t max_frames { 0 };
 
-    void setup() override {
+    void app_setup() override {
         setup_called = true;
         set_requested_framerate(test_framerate);
         max_frames = static_cast<size_t>(test_framerate * 2);
     }
 
-    void update() override {
+    void app_update() override {
         EXPECT_EQ(this->framerate, this->frametime > 0.0 ? 1.0 / this->frametime : 0.0);
 
         std::vector<std::u8string> expected_args = {u8"ABC", u8"DEF", u8"GHI"};
@@ -46,7 +46,7 @@ public:
         }
     }
 
-    void cleanup() override {
+    void app_cleanup() override {
         cleaned_called = true;
     }
 

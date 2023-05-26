@@ -62,7 +62,19 @@ namespace b {
     ///          only is for the current expression. Thus, if you have a Win32 API or Linux API function that holds onto
     ///          the pointer or you store the pointer in a struct, then you must save the osstring in a variable, call `.c_str()`
     ///          on the variable and make sure that the variable outlives the data structure.
-    ///          See `b::to_u8()` and `b::to_u32()` for the reverse operation.
+    ///          See `b::osstring_to_u8()` and `b::osstring_to_u32()` for the reverse operation.
+    /// \param[in] str The string to be converted
+    /// \throw std::invalid_argument on an invalid utf-8 sequence
+    /// \return std::wstring on Windows converted to UTF-16, std::string on other platforms with the unchanged string
+    /// \see b::osstring_to_u8()
+    /// \see b::osstring_to_u32()
+    /// \see b::to_u8()
+    /// \see b::to_u32()
+    ///
+    b::osstring to_osstring(const std::string& str);
+
+    ///
+    /// \brief u8 overload of `b::to_osstring()`
     /// \param[in] str The string to be converted
     /// \throw std::invalid_argument on an invalid utf-8 sequence
     /// \return std::wstring on Windows converted to UTF-16, std::string on other platforms with the unchanged string
@@ -84,6 +96,15 @@ namespace b {
     /// \see b::to_u32()
     ///
     b::osstring to_osstring(const std::u32string& str);
+
+    ///
+    /// \brief Convert a platform-native string like Windows UTF-16 wide-strings to standardized UTF-8
+    /// \param[in] str The string to be converted
+    /// \throw std::invalid_argument on an invalid unicode character
+    /// \return std::string the input string converted to UTF-8
+    /// \see b::to_osstring()
+    ///
+    std::string osstring_to_str(const b::osstring& str);
 
     ///
     /// \brief Convert a platform-native string like Windows UTF-16 wide-strings to standardized UTF-8

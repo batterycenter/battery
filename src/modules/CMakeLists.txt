@@ -2,6 +2,7 @@
 # Add all bundled modules
 battery_clear_available_modules()
 battery_make_module_available(eventbus ${CMAKE_CURRENT_LIST_DIR}/eventbus)
+battery_make_module_available(filedialog ${CMAKE_CURRENT_LIST_DIR}/filedialog)
 battery_make_module_available(graphics ${CMAKE_CURRENT_LIST_DIR}/graphics)
 battery_make_module_available(imgui ${CMAKE_CURRENT_LIST_DIR}/imgui)
 battery_make_module_available(imgui_sfml ${CMAKE_CURRENT_LIST_DIR}/imgui_sfml)

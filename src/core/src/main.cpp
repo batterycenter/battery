@@ -18,8 +18,8 @@ namespace b {
         int _argc = 0;
         LPWSTR* _args = ::CommandLineToArgvW((LPCWSTR)GetCommandLineW(), &_argc);
         if (_args == nullptr) {
-            b::log::core::critical("CommandLineToArgvW failed: {}", b::get_last_win32_error());
-            b::message_box_error("[Battery->WinAPI]: CommandLineToArgvW failed: " + b::get_last_win32_error());
+            b::log::core::critical("CommandLineToArgvW failed: {}", b::internal::get_last_win32_error());
+            b::message_box_error("[Battery->WinAPI]: CommandLineToArgvW failed: " + b::internal::get_last_win32_error());
             return {};
         }
         std::vector<std::u8string> args;
@@ -39,6 +39,13 @@ namespace b {
         SetConsoleCP(CP_UTF8);
         SetConsoleOutputCP(CP_UTF8);
         b::log::core::trace("Switched terminal codepage to Unicode (UTF-8)");
+#endif
+    }
+
+    static void set_windows_dpi_awareness() {
+#ifdef BATTERY_ARCH_WINDOWS
+        SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+        b::log::core::trace("Enabling DPI-awareness");
 #endif
     }
 
@@ -62,6 +69,7 @@ namespace b {
     int invoke_main(int argc, const char** argv) {
         b::time();                  // First call sets zero-time to now
         setup_windows_console();
+        set_windows_dpi_awareness();
         print_production_warning();
 
         int result = -1;

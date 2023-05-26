@@ -8,14 +8,19 @@
 
 namespace b {
 
-    osstring to_osstring(const std::u8string& str) {
+    osstring to_osstring(const std::string& str) {
         if (!is_valid_u8(str)) throw std::invalid_argument("Invalid utf-8 sequence");
 #ifdef BATTERY_ARCH_WINDOWS
-        auto u16 = utf8::utf8to16(b::u8_as_str(str));
+        auto u16 = utf8::utf8to16(str);
         return std::wstring(std::bit_cast<wchar_t*>(u16.data()), u16.size());   // construct new from other
 #else
         return str;
 #endif
+    }
+
+    osstring to_osstring(const std::u8string& str) {
+        if (!is_valid_u8(str)) throw std::invalid_argument("Invalid utf-8 sequence");
+        return b::to_osstring(b::u8_as_str(str));
     }
 
     osstring to_osstring(const std::u32string& str) {
@@ -23,13 +28,17 @@ namespace b {
         return b::to_osstring(b::to_u8(str));
     }
 
-    std::u8string osstring_to_u8(const b::osstring& str) {
+    std::string osstring_to_str(const b::osstring& str) {
 #ifdef BATTERY_ARCH_WINDOWS
         auto u16 = std::u16string(std::bit_cast<char16_t*>(str.data()), str.size());
-        return u8_from_std_string(utf8::utf16to8(u16));
+        return utf8::utf16to8(u16);
 #else
-        return parse_u8_from_std_string(str);
+        return str;
 #endif
+    }
+
+    std::u8string osstring_to_u8(const b::osstring& str) {
+        return u8_from_std_string(osstring_to_str(str));
     }
 
     std::u32string osstring_to_u32(const b::osstring& str) {
