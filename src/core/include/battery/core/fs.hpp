@@ -45,6 +45,7 @@ namespace b::fs {
 
         fs::path extension() const { return std::filesystem::path::extension(); }
         fs::path filename() const { return std::filesystem::path::filename(); }
+        fs::path stem() const { return std::filesystem::path::stem(); }
         fs::path parent_path() const { return std::filesystem::path::parent_path(); }
         fs::path make_preferred() { return std::filesystem::path::make_preferred(); }
         fs::path relative_path() const { return std::filesystem::path::relative_path(); }
