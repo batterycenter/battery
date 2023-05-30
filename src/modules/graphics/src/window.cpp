@@ -21,10 +21,10 @@ namespace b {
         auto icon = b::resource::from_base64(b::constants::battery_icon_base64());
         sf::Image image;
         if (image.loadFromMemory(icon.data(), icon.size())) {
-            (void)m_window.setIcon(image);
+            (void)m_sfmlWindow.setIcon(image);
         }
 
-        if (!ImGui::SFML::Init(m_window)) {
+        if (!ImGui::SFML::Init(m_sfmlWindow)) {
             throw std::runtime_error("Failed to initialize ImGui-SFML");
         }
 
@@ -60,7 +60,7 @@ namespace b {
         if (m_useWin32ImmersiveDarkMode != m_win32IDMActive) {
             BOOL USE_DARK_MODE = m_useWin32ImmersiveDarkMode;
             BOOL SET_IMMERSIVE_DARK_MODE_SUCCESS = SUCCEEDED(DwmSetWindowAttribute(
-                    m_window.getSystemHandle(), DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE,
+                    m_sfmlWindow.getSystemHandle(), DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE,
                     &USE_DARK_MODE, sizeof(USE_DARK_MODE)));
             m_win32IDMActive = m_useWin32ImmersiveDarkMode;
             if (!SET_IMMERSIVE_DARK_MODE_SUCCESS) {
@@ -70,15 +70,15 @@ namespace b {
 #endif
 
         sf::Event event {};
-        while (m_window.pollEvent(event)) {
-            ImGui::SFML::ProcessEvent(m_window, event);
+        while (m_sfmlWindow.pollEvent(event)) {
+            ImGui::SFML::ProcessEvent(m_sfmlWindow, event);
 
             if (event.type == sf::Event::Closed) {
-                m_window.close();
+                m_sfmlWindow.close();
             }
             else if (event.type == sf::Event::Resized) {
                 sf::FloatRect visibleArea({ 0, 0 }, { (float)event.size.width, (float)event.size.height });
-                m_window.setView(sf::View(visibleArea));
+                m_sfmlWindow.setView(sf::View(visibleArea));
             }
         }
 
@@ -102,8 +102,8 @@ namespace b {
             }
         }
 
-        m_window.clear(b::graphics_constants::battery_default_background_color());
-        ImGui::SFML::Update(m_window, m_deltaClock.restart());
+        m_sfmlWindow.clear(b::graphics_constants::battery_default_background_color());
+        ImGui::SFML::Update(m_sfmlWindow, m_deltaClock.restart());
         b::lock_font_stack();
 
         // And then render
@@ -133,8 +133,8 @@ namespace b {
         }
 
         b::unlock_font_stack();
-        ImGui::SFML::Render(m_window);
-        m_window.display();
+        ImGui::SFML::Render(m_sfmlWindow);
+        m_sfmlWindow.display();
     }
 
     void window::render_error_message(const b::string& error) {

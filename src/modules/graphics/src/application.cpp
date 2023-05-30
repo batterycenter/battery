@@ -48,7 +48,7 @@ namespace b {
         bool should_stop = true;
         for (auto& window : m_windows) {
             window->_update();
-            if (window->m_window.isOpen()) {
+            if (window->m_sfmlWindow.isOpen()) {
                 should_stop = false;
             }
         }
