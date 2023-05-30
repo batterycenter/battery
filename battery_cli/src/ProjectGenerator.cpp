@@ -2,14 +2,14 @@
 #include "ProjectGenerator.h"
 #include "console.h"
 
-#include "resources/version_txt.hpp"
-#include "resources/templates/gitignore.hpp"
-#include "resources/templates/CMakeLists_txt.hpp"
-#include "resources/templates/CPM_cmake.hpp"
-#include "resources/templates/battery_toml.hpp"
-#include "resources/templates/version_txt.hpp"
-#include "resources/templates/main_cpp.hpp"
-#include "resources/templates/pch_hpp.hpp"
+#include "resources/battery_cli/version_txt.hpp"
+#include "resources/battery_cli/templates/gitignore.hpp"
+#include "resources/battery_cli/templates/CMakeLists_txt.hpp"
+#include "resources/battery_cli/templates/CPM_cmake.hpp"
+#include "resources/battery_cli/templates/battery_toml.hpp"
+#include "resources/battery_cli/templates/version_txt.hpp"
+#include "resources/battery_cli/templates/main_cpp.hpp"
+#include "resources/battery_cli/templates/pch_hpp.hpp"
 
 static int getSelectionInput(const b::string& question, const std::vector<b::string>& options) {
     b::print("{}\n", question);
@@ -146,13 +146,13 @@ b::expected<b::string, Error> ProjectGenerator::generateSourceFile(const b::stri
     }
 
 b::expected<std::nullopt_t, Error> ProjectGenerator::generate() {     // This function loads every file as a string, and generates them from templates.
-    GENERATE_FILE(this->gitignore, ".gitignore", resources::templates::gitignore);
-    GENERATE_FILE(this->cmakelists, "CMakeLists.txt", resources::templates::CMakeLists_txt);
-    GENERATE_FILE(this->cmake_cpm_cmake, "cmake/CPM.cmake", resources::templates::CPM_cmake);
-    GENERATE_FILE(this->battery_toml, "battery.toml", resources::templates::battery_toml);
-    GENERATE_FILE(this->version_txt, "version.txt", resources::templates::version_txt);
-    GENERATE_FILE(this->main_cpp, "src/main.cpp", resources::templates::main_cpp);
-    GENERATE_FILE(this->pch_hpp, "include/pch.hpp", resources::templates::pch_hpp);
+    GENERATE_FILE(this->gitignore, ".gitignore", resources::battery_cli::templates::gitignore);
+    GENERATE_FILE(this->cmakelists, "CMakeLists.txt", resources::battery_cli::templates::CMakeLists_txt);
+    GENERATE_FILE(this->cmake_cpm_cmake, "cmake/CPM.cmake", resources::battery_cli::templates::CPM_cmake);
+    GENERATE_FILE(this->battery_toml, "battery.toml", resources::battery_cli::templates::battery_toml);
+    GENERATE_FILE(this->version_txt, "version.txt", resources::battery_cli::templates::version_txt);
+    GENERATE_FILE(this->main_cpp, "src/main.cpp", resources::battery_cli::templates::main_cpp);
+    GENERATE_FILE(this->pch_hpp, "include/pch.hpp", resources::battery_cli::templates::pch_hpp);
     return writeToDisk();
 }
 

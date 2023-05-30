@@ -204,7 +204,7 @@ public:
         file << b::format("    public:") << std::endl;
         file << b::format("        {}_t() = default;", m_sanitizedSymbolName) << std::endl;
         file << std::endl;
-        file << b::format("        inline static b::string str() {{") << std::endl;
+        file << b::format("        inline static b::string string() {{") << std::endl;
         file << b::format("            return std::string({{ reinterpret_cast<const char*>(__{}_data), __{}_size }});", m_sanitizedSymbolName, m_sanitizedSymbolName) << std::endl;
         file << b::format("        }}") << std::endl;
         file << std::endl;
@@ -213,7 +213,7 @@ public:
         file << b::format("        }}") << std::endl;
         file << std::endl;
         file << b::format("        inline operator b::string() {{") << std::endl;
-        file << b::format("            return str();") << std::endl;
+        file << b::format("            return string();") << std::endl;
         file << b::format("        }}") << std::endl;
         file << std::endl;
         file << b::format("        inline static std::vector<uint8_t> vec() {{") << std::endl;
@@ -235,14 +235,14 @@ public:
         file << b::format("#endif") << std::endl;
         file << std::endl;
         file << b::format("        inline operator b::resource() {{") << std::endl;
-        file << b::format("            return b::resource::from_byte_string(str());") << std::endl;
+        file << b::format("            return b::resource::from_byte_string(string());") << std::endl;
         file << b::format("        }}") << std::endl;
         file << std::endl;
         file << b::format("        inline size_t size() {{") << std::endl;
-        file << b::format("            return str().size();") << std::endl;
+        file << b::format("            return string().size();") << std::endl;
         file << b::format("        }}") << std::endl;
         file << b::format("    }};") << std::endl;
-        file << b::format("    inline std::ostream& operator<<(std::ostream& os, const {}_t& data) {{ os << data.str(); return os; }}\n", m_sanitizedSymbolName) << std::endl;
+        file << b::format("    inline std::ostream& operator<<(std::ostream& os, const {}_t& data) {{ os << data.string(); return os; }}\n", m_sanitizedSymbolName) << std::endl;
         file << b::format("}}") << std::endl;
         file << std::endl;
         file << b::format("namespace resources{} {{", m_packedNamespace) << std::endl;
