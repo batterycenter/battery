@@ -37,39 +37,39 @@ namespace b {
             on_disk_resource& operator=(const on_disk_resource&) = delete;
             on_disk_resource(on_disk_resource&& other) {
                 reset();
-                path = std::move(other.path);
-                other.path.clear();
+                m_path = std::move(other.m_path);
+                other.m_path.clear();
             }
             on_disk_resource& operator=(on_disk_resource&& other) noexcept {
                 reset();
-                path = std::move(other.path);
-                other.path.clear();
+                m_path = std::move(other.m_path);
+                other.m_path.clear();
                 return *this;
             }
 
             b::string str() {
-                return path;
+                return m_path;
             }
 
             operator b::fs::path() {
-                return path;
+                return m_path;
             }
 
             operator b::string() {
-                return path;
+                return m_path;
             }
 
             void reset();
 
         private:
-            b::fs::path path;
+            b::fs::path m_path;
         };
 
         [[nodiscard]] on_disk_resource as_temporary_on_disk_resource() const;
 
     private:
-        b::string _data;
-        b::string _filetype;
+        b::string m_data;
+        b::string m_filetype;
     };
 
 }

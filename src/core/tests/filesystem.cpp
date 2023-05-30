@@ -14,21 +14,20 @@ TEST(BatteryCore_Filesystem, ReadFileWithSpacesAndKanji) {
     // We just try to open it to see if unicode filenames work
 
     // The filename from above written in unicode codepoints
-    b::string filename = TESTDATA_FOLDER "/\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8";
+    b::fs::path filename = TESTDATA_FOLDER "/\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8";
 
     b::fs::ifstream file(filename);
     ASSERT_FALSE(file.fail());
+    file.close();
 
-    auto content = file.string();
+    auto content = b::fs::read_text_file(filename);
     EXPECT_EQ(content, "utf-8 filenames work");
 
-    file.return_to_beginning();
-    content = file.read_string().value();
+    content = b::fs::read_text_file_nothrow(filename).value();
     EXPECT_EQ(content, "utf-8 filenames work");
 
     content.clear();
-    file.return_to_beginning();
-    file.read_in_chunks(2, [&content](std::string_view str) {
+    b::fs::read_text_file_in_chunks(filename, 2, [&content](std::string_view str) {
         content += str;
     });
     EXPECT_EQ(content, "utf-8 filenames work");
@@ -40,18 +39,11 @@ TEST(BatteryCore_Filesystem, ReadWriteFileContent_UTF8) {
 
     b::string content = "\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8";
 
-    auto test = [&content](b::fs::Mode mode) {
-        b::fs::ofstream outfile("filesystem-test.txt", mode);
-        ASSERT_FALSE(outfile.fail());
-        outfile << content;
-        outfile.close();
+    ASSERT_TRUE(b::fs::write_text_file_nothrow("filesystem-test.txt", content));
+    ASSERT_TRUE(b::fs::write_binary_file_nothrow("filesystem-test.txt", content));
 
-        b::fs::ifstream infile("filesystem-test.txt", mode);
-        ASSERT_EQ(infile.read_string().value(), content);
-    };
-
-    test(b::fs::Mode::TEXT);
-    test(b::fs::Mode::BINARY);
+    ASSERT_TRUE(b::fs::read_text_file_nothrow("filesystem-test.txt").has_value());
+    ASSERT_TRUE(b::fs::read_binary_file_nothrow("filesystem-test.txt").has_value());
 }
 
 void CreateDirectoryOnFileWrite_RunTest(const b::fs::path& path, bool create_directories, bool expected_to_exist) {

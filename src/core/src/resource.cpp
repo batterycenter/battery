@@ -12,37 +12,31 @@
 namespace b {
 
     resource resource::from_text_file(const fs::path& filepath) {
-        fs::ifstream file(filepath, fs::Mode::TEXT);
-        if (file.fail())
-            throw std::ios::failure(b::format("battery::resource: Failed to open file '{}' for reading: ", filepath, strerror(errno)));
         resource res;
-        res._data = file.read_string().value();
-        res._filetype = b::string::to_lower(filepath.raw_extension().string());
+        res.m_data = fs::read_text_file(filepath);
+        res.m_filetype = b::string::to_lower(filepath.raw_extension().string());
         return res;
     }
 
     resource resource::from_binary_file(const fs::path& filepath) {
-        fs::ifstream file(filepath, fs::Mode::BINARY);
-        if (file.fail())
-            throw std::ios::failure(b::format("battery::resource: Failed to open file '{}' for reading: ", filepath, strerror(errno)));
         resource res;
-        res._data = file.read_string().value();
-        res._filetype = b::string::to_lower(filepath.raw_extension().string());
+        res.m_data = fs::read_binary_file(filepath);
+        res.m_filetype = b::string::to_lower(filepath.raw_extension().string());
         return res;
     }
 
     resource resource::from_byte_string(const b::string& data, const b::string& filetype) {
         resource res;
-        res._data = data;
-        res._filetype = filetype;
+        res.m_data = data;
+        res.m_filetype = filetype;
         return res;
     }
 
     resource resource::from_buffer(const void* buffer, size_t length, const b::string& filetype) {
         resource res;
-        res._data.resize(length);
-        res._filetype = filetype;
-        std::memcpy(res._data.data(), buffer, length);
+        res.m_data.resize(length);
+        res.m_filetype = filetype;
+        std::memcpy(res.m_data.data(), buffer, length);
         return res;
     }
 
@@ -51,23 +45,23 @@ namespace b {
     }
 
     void* resource::data() const {
-        return (void*)_data.data();
+        return (void*)m_data.data();
     }
 
     size_t resource::size() const {
-        return _data.size();
+        return m_data.size();
     }
 
     b::string resource::filetype() const {
-        return _filetype;
+        return m_filetype;
     }
 
     b::string resource::string() const {
-        return _data;
+        return m_data;
     }
 
     std::vector<uint8_t> resource::as_vector() const {
-        return { _data.begin(), _data.end() };
+        return { m_data.begin(), m_data.end() };
     }
 
     b::string resource::base64() const {
@@ -78,7 +72,7 @@ namespace b {
         b::fs::ofstream file(filepath, b::fs::Mode::TEXT);
         if (file.fail())
             return false;
-        file << _data;
+        file << m_data;
         return true;
     }
 
@@ -86,11 +80,11 @@ namespace b {
         b::fs::ofstream file(filepath, b::fs::Mode::BINARY);
         if (file.fail())
             return false;
-        file << _data;
+        file << m_data;
         return true;
     }
 
-    resource::on_disk_resource::on_disk_resource(const b::fs::path &path, const b::string& data) : path(path) {
+    resource::on_disk_resource::on_disk_resource(const b::fs::path &path, const b::string& data) : m_path(path) {
         b::fs::ofstream file(path, b::fs::Mode::BINARY);
         file << data;
     }
@@ -101,14 +95,16 @@ namespace b {
 
     resource::on_disk_resource resource::as_temporary_on_disk_resource() const {
         auto path = b::folders::get_cache();
-        path += b::fs::path(b::uuid::v4()) + b::string(_filetype.empty() ? "" : "." + _filetype);
-        return on_disk_resource(path, _data);
+        path += b::uuid::v4();
+        if (!m_filetype.empty())
+            path += "." + m_filetype;
+        return on_disk_resource(path, m_data);
     };
 
     void resource::on_disk_resource::reset() {
-        if (!path.empty()) {
-            b::fs::remove(path);
-            path.clear();
+        if (!m_path.empty()) {
+            b::fs::remove(m_path);
+            m_path.clear();
         }
     };
 

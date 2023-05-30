@@ -87,19 +87,18 @@ public:
     }
 
     ErrorCode generateCpp(bool binary) {
-        b::fs::ifstream infile(m_resourcePath, binary ? b::fs::Mode::BINARY : b::fs::Mode::TEXT);
-        if (!infile.is_open()) {
-            b::log::error("Failed to open input file for reading (error code {}): {}", (int)ErrorCode::INPUT_FILE_FAILED, strerror(errno));
-            return ErrorCode::INPUT_FILE_FAILED;
-        }
-
         b::fs::ofstream outfile(m_targetPath, b::fs::Mode::TEXT);
         if (!outfile.is_open()) {
             b::log::error("Failed to open source output file for writing (error code {}): {}", (int)ErrorCode::OUTPUT_FILE_FAILED, strerror(errno));
             return ErrorCode::OUTPUT_FILE_FAILED;
         }
 
-        size_t filesize = infile.compensated_file_size();
+        // TODO: Document the compensated file size misere
+        size_t filesize = b::fs::compensated_file_size_nothrow(m_resourcePath, binary ? b::fs::Mode::BINARY : b::fs::Mode::TEXT);
+        if (filesize == -1) {
+            b::log::error("Failed to open input file for reading (error code {}): {}", (int)ErrorCode::INPUT_FILE_FAILED, strerror(errno));
+            return ErrorCode::INPUT_FILE_FAILED;
+        }
 
         // Generate the source file
         outfile << b::format("// File generated using battery_embed. https://github.com/batterycenter/battery") << std::endl;
@@ -127,7 +126,7 @@ public:
         outbuffer.resize(chunk_size * 5 + (chunk_size / 20 * 5) + 2); // Calculate the required buffer size
         // 5 bytes per byte + 5 bytes every 20 bytes + 2 (\0)
 
-        infile.read_in_chunks(chunk_size, [&outbuffer,&outfile] (std::string_view chunk) {
+        auto callback = [&outbuffer,&outfile] (std::string_view chunk) {
             // Parse each chunk of the file
             size_t index = 0;
             for (size_t i = 0; i < chunk.size(); i++) {
@@ -139,7 +138,18 @@ public:
                 }
             }
             outfile << std::string(outbuffer.data(), index);
-        });
+        };
+        bool success = false;
+        if (binary) {
+            success = b::fs::read_binary_file_in_chunks_nothrow(m_resourcePath, chunk_size, callback);
+        }
+        else {
+            success = b::fs::read_text_file_in_chunks_nothrow(m_resourcePath, chunk_size, callback);
+        }
+        if (!success) {
+            b::log::error("Failed to open input file for reading (error code {}): {}", (int)ErrorCode::INPUT_FILE_FAILED, strerror(errno));
+            return ErrorCode::INPUT_FILE_FAILED;
+        }
 
         outfile << "\n    };\n\n} // namespace resources_internal\n";
         return ErrorCode::SUCCESS;
@@ -158,7 +168,11 @@ public:
             return ErrorCode::OUTPUT_HEADER_FILE_FAILED;
         }
 
-        size_t filesize = infile.compensated_file_size();
+        size_t filesize = b::fs::compensated_file_size_nothrow(m_resourcePath, binary ? b::fs::Mode::BINARY : b::fs::Mode::TEXT);
+        if (filesize == -1) {
+            b::log::error("Failed to open input file for reading (error code {}): {}", (int)ErrorCode::INPUT_FILE_FAILED, strerror(errno));
+            return ErrorCode::INPUT_FILE_FAILED;
+        }
 
         // Generate the header file
         file << b::format("// File generated using battery_embed. https://github.com/batterycenter/battery") << std::endl;

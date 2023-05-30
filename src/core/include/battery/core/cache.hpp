@@ -44,27 +44,22 @@ namespace b {
 
         template<typename T>
         T get(const b::string& key) {
-            b::fs::ifstream file(filename);
-            if (file.fail()) {
-                throw std::runtime_error(b::format("b::cachefile: Failed to open file '{}' for reading: ", filename, strerror(errno)));
-            }
-            json = nlohmann::json::parse(file.read_string().value());
+            reload();
             return json[key.str()];
         }
 
         template<typename T>
         void set(const b::string& key, T value) {
-            b::fs::ifstream in(filename);
-            if (in.fail()) {
-                throw std::runtime_error(b::format("b::cachefile: Failed to open file '{}' for reading: ", filename, strerror(errno)));
-            }
-            json = nlohmann::json::parse(in.read_string().value());
+            reload();
             json[key] = value;
-            b::fs::ofstream file(filename);
-            if (file.fail()) {
-                throw std::runtime_error(b::format("b::cachefile: Failed to open file '{}' for reading: ", filename, strerror(errno)));
-            }
-            file << json.dump(4);
+
+            b::fs::write_text_file(filename, json.dump(4));
+        }
+
+    private:
+        void reload() {
+            auto file = b::fs::read_text_file(filename);
+            json = nlohmann::json::parse(file);
         }
 
     private:

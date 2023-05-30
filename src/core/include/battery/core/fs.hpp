@@ -1,12 +1,11 @@
 #pragma once
 
 #include <bit>
-#include <string>
 #include <fstream>
 #include <filesystem>
 #include <functional>
-#include <spdlog/fmt/bundled/format.h>
 #include "battery/core/string.hpp"
+#include "battery/core/log.hpp"
 
 namespace b::fs {
 
@@ -113,34 +112,39 @@ namespace b::fs {
 
         ~ifstream() override = default;
 
-        // In Binary mode this function is cheap, it reads the filesize from the filesystem.
-        // In Text mode this function is expensive, it reads the entire file into memory, just for the filesize.
-        // There is no other way to get the filesize in text mode, because the representation on-disk is different
-        // from what is read into memory. (Line endings)
-        std::streamsize compensated_file_size() const {
-            if (binary) {		// Binary mode
-                return std::filesystem::file_size(b::string(path).str());
-            }
-            else {				// Text mode: read the entire file into memory to compensate line-endings
-                b::string temp;	// Buffer is as large as the file on-disk -> Reading will make it smaller, but not larger
-                auto filesize_temp = std::filesystem::file_size(b::string(path).str());
-                temp.resize(filesize_temp);
+    private:
+        fs::path path;
+        bool binary = false;
+    };
 
-                // Read file
-                fs::ifstream file(path, Mode::TEXT);
-                file.read(temp.data(), temp.size());
-                return static_cast<size_t>(file.gcount());
+    namespace internal {
+        inline static std::optional<b::string> read_file_nothrow(const fs::path &path, enum Mode filemode) {
+            ifstream file(path, filemode);
+            if (!file.is_open()) return {};
+            std::stringstream buffer;
+            buffer << file.rdbuf();
+            return buffer.str();
+        }
+
+        inline static b::string read_file(const fs::path& path, enum Mode filemode) {
+            if (auto str = read_file_nothrow(path, filemode)) {
+                return str.value();
+            }
+            else {
+                throw std::runtime_error(b::format("Cannot read file as b::string: File failed while reading into buffer: {}", strerror(errno)));
             }
         }
 
         template<typename TFunc>
-        size_t read_in_chunks(size_t chunk_size, TFunc callback) {
+        inline static size_t read_file_in_chunks_nothrow(const fs::path& path, size_t chunk_size, TFunc callback, enum Mode filemode) {
+            auto file = fs::ifstream(path, filemode);
+            if (file.fail()) return -1;
             b::string buffer(chunk_size, 0);
             size_t total_bytes = 0;
 
-            while (!this->eof()) {
-                this->read(buffer.data(), buffer.size());    // Read a chunk of the file
-                auto this_chunk_size = this->gcount();
+            while (!file.eof()) {
+                file.read(buffer.data(), buffer.size());    // Read a chunk of the file
+                auto this_chunk_size = file.gcount();
                 total_bytes += this_chunk_size;
 
                 if (this_chunk_size != 0) {
@@ -151,32 +155,82 @@ namespace b::fs {
             return total_bytes;
         }
 
-        std::optional<b::string> read_string() {
-            if (!is_open()) return {};
-            std::stringstream buffer;
-            buffer << this->rdbuf();
-            return buffer.str();
-        }
-
-        void return_to_beginning() {
-            this->clear();                   // clear fail and eof bits
-            this->seekg(0, std::ios::beg);   // back to the start!
-        }
-
-        b::string string() {
-            auto str = read_string();
-            if (str) {
-                return str.value();
+        template<typename TFunc>
+        inline static size_t read_file_in_chunks(const fs::path& path, size_t chunk_size, TFunc callback, enum Mode filemode) {
+            auto bytes_read = read_file_in_chunks_nothrow(path, chunk_size, callback, filemode);
+            if (bytes_read == -1) {
+                throw std::runtime_error(b::format("Cannot read file in chunks: File failed while chunk reading into buffer: {}", strerror(errno)));
             }
             else {
-                throw std::runtime_error("Cannot read file as b::string: File is not open");
+                return bytes_read;
             }
         }
+    }
 
-    private:
-        fs::path path;
-        bool binary = false;
-    };
+    inline static std::optional<b::string> read_text_file_nothrow(const fs::path& path) {
+        return internal::read_file_nothrow(path, Mode::TEXT);
+    }
+
+    inline static std::optional<b::string> read_binary_file_nothrow(const fs::path& path) {
+        return internal::read_file_nothrow(path, Mode::BINARY);
+    }
+
+    inline static b::string read_text_file(const fs::path& path) {
+        return internal::read_file(path, Mode::TEXT);
+    }
+
+    inline static b::string read_binary_file(const fs::path& path) {
+        return internal::read_file(path, Mode::BINARY);
+    }
+
+    template<typename TFunc>
+    inline static size_t read_text_file_in_chunks_nothrow(const fs::path& path, size_t chunk_size, TFunc callback) {
+        return internal::read_file_in_chunks_nothrow(path, chunk_size, callback, Mode::TEXT);
+    }
+
+    template<typename TFunc>
+    inline static size_t read_binary_file_in_chunks_nothrow(const fs::path& path, size_t chunk_size, TFunc callback) {
+        return internal::read_file_in_chunks_nothrow(path, chunk_size, callback, Mode::BINARY);
+    }
+
+    template<typename TFunc>
+    inline static size_t read_text_file_in_chunks(const fs::path& path, size_t chunk_size, TFunc callback) {
+        return internal::read_file_in_chunks(path, chunk_size, callback, Mode::TEXT);
+    }
+
+    template<typename TFunc>
+    inline static size_t read_binary_file_in_chunks(const fs::path& path, size_t chunk_size, TFunc callback) {
+        return internal::read_file_in_chunks(path, chunk_size, callback, Mode::BINARY);
+    }
+
+    // In Binary mode this function is cheap, it reads the filesize from the filesystem.
+    // In Text mode this function is expensive, it reads the entire file into memory, just for the filesize.
+    // There is no other way to get the filesize in text mode, because the representation on-disk is different
+    // from what is read into memory. (Due to line endings)
+    inline static std::streamsize compensated_file_size_nothrow(const fs::path& path, enum Mode filemode) {
+        if (filemode == b::fs::Mode::BINARY) {		// Binary mode
+            return std::filesystem::file_size(b::string(path).str());
+        }
+        else {
+            auto str = fs::read_text_file_nothrow(path);
+            if (str) {
+                return str.value().size();
+            }
+            else {
+                return -1;
+            }
+        }
+    }
+
+    inline static std::streamsize compensated_file_size(const fs::path& path, enum Mode filemode) {
+        auto size = compensated_file_size_nothrow(path, filemode);
+        if (size == -1) {
+            throw std::runtime_error(b::format("Cannot get compensated file size: File failed while reading into buffer: {}", strerror(errno)));
+        }
+        else {
+            return size;
+        }
+    }
 
     class ofstream : public std::ofstream {
     public:
@@ -208,6 +262,35 @@ namespace b::fs {
             return path.string().wstr();
         }
     };
+
+    namespace internal {
+        inline static bool write_file_nothrow(const fs::path &path, const b::string &str, enum Mode filemode, bool createDirectory = true) {
+            ofstream file(path, filemode, createDirectory);
+            if (file.fail()) return false;
+            file << str;
+            return true;
+        }
+    }
+
+    inline static bool write_text_file_nothrow(const fs::path& path, const b::string& str) {
+        return internal::write_file_nothrow(path, str, Mode::TEXT);
+    }
+
+    inline static bool write_binary_file_nothrow(const fs::path& path, const b::string& str) {
+        return internal::write_file_nothrow(path, str, Mode::BINARY);
+    }
+
+    inline static void write_text_file(const fs::path& path, const b::string& str) {
+        if (!write_text_file_nothrow(path, str)) {
+            throw std::runtime_error(b::format("Cannot write file from b::string: File failed for writing: {}", strerror(errno)));
+        }
+    }
+
+    inline static void write_binary_file(const fs::path& path, const b::string& str) {
+        if (!write_binary_file_nothrow(path, str)) {
+            throw std::runtime_error(b::format("Cannot write file from b::string: File failed for writing: {}", strerror(errno)));
+        }
+    }
 
 }
 

@@ -31,15 +31,14 @@ namespace b {
     private:
 #ifndef BATTERY_PRODUCTION_MODE     // Non-production mode
         void onchange_callback() {      // On every change, reload the resource
-            auto file = b::fs::ifstream(resource_path, is_binary ? b::fs::Mode::BINARY : b::fs::Mode::TEXT);
-            auto str = file.read_string();
-            if (str.has_value()) {
-                b::log::info("Hot-reloaded resource '{}'", resource_path);
-                callback(b::resource::from_byte_string(str.value(), resource_path.raw_extension()));
-            }
-            else {
+            auto str = is_binary ? b::fs::read_binary_file_nothrow(resource_path) : b::fs::read_text_file_nothrow(resource_path);
+            if (!str.has_value()) {
                 b::log::error("Failed to hot-reload resource '{}': {}", resource_path, strerror(errno));
+                return;
             }
+
+            b::log::info("Hot-reloaded resource '{}'", resource_path);
+            callback(b::resource::from_byte_string(str.value(), resource_path.raw_extension()));
         }
 
         b::fs::path resource_path;

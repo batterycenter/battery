@@ -100,8 +100,8 @@ b::expected<std::nullopt_t, Error> Project::fetchProjectData(const b::string& ro
         }
 
         // Parse the version
-        auto version = b::fs::ifstream(projectRoot + toml::find<std::string>(toml, "version_file")).read_string();
-        if (!version) {
+        auto version = b::fs::read_text_file_nothrow(projectRoot + toml::find<std::string>(toml, "version_file"));
+        if (!version.has_value()) {
             b::log::warn(MESSAGES_CANNOT_READ_VERSION_FILE, projectRoot + toml::find<std::string>(toml, "version_file"));
             return b::unexpected(Error::VERSION_FILE_NOT_FOUND);
         }
@@ -205,7 +205,7 @@ b::expected<std::nullopt_t, Error> Project::runScript(b::string script) {
 b::expected<std::nullopt_t, Error> Project::generateFile(const b::fs::path& input_path, const b::fs::path& output_path) {
     b::print(">> Generating {}\n", output_path);
 
-    auto input = b::fs::ifstream(input_path).read_string();
+    auto input = b::fs::read_text_file_nothrow(input_path);
     if (!input) {
         b::log::warn(MESSAGES_CANNOT_READ_FILE, input_path);
         return b::unexpected(Error::FILE_NOT_FOUND_ERROR);
