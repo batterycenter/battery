@@ -17,7 +17,11 @@ namespace b {
         virtual void update() = 0;
         virtual void cleanup() = 0;
 
-        std::vector<std::shared_ptr<b::window>> windows;
+        void add_window(std::shared_ptr<b::window> window_ptr);
+        void add_window(b::window* window_ptr);
+        void clear_windows();
+
+        std::vector<std::shared_ptr<b::window>>& windows();
 
     private:
         void console_setup() final override;
@@ -25,6 +29,7 @@ namespace b {
         void console_cleanup() final override;
 
         b::py::scoped_interpreter guard{};
+        std::vector<std::shared_ptr<b::window>> m_windows;
     };
 
 }

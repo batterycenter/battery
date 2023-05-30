@@ -14,10 +14,11 @@ namespace b {
 
         static console_application & get();
 
-        std::vector<b::string> args;
-        double framerate { 0.0 };
-        double frametime { 0.0 };
-        uint64_t framecount { 0 };
+        std::vector<b::string> m_args;
+        double m_framerate { 0.0 };
+        double m_frametime { 0.0 };
+        uint64_t m_framecount { 0 };
+        int m_exitCode { 0 };
 
         virtual void console_setup();
         virtual void console_update();
@@ -29,7 +30,7 @@ namespace b {
         void stop_application();
         void set_stop_requested(bool stop_requested);
 
-        void run(const b::string& appname, const std::vector<b::string>& args);
+        [[nodiscard]] int run(const b::string& appname, const std::vector<b::string>& args);
 
         console_application& operator=(const console_application&) = delete;
         console_application& operator=(console_application&&) = delete;
@@ -42,9 +43,9 @@ namespace b {
         bool _update();
         bool _cleanup();
 
-        bool stop_requested { false };
-        double requested_framerate { 0.0 };
-        inline static console_application* instance { nullptr };
+        bool m_stopRequested { false };
+        double m_requestedFramerate { 0.0 };
+        inline static console_application* m_instance { nullptr };
     };
 
 }

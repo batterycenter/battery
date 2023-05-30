@@ -21,10 +21,10 @@ namespace b {
         auto icon = b::resource::from_base64(b::constants::battery_icon_base64());
         sf::Image image;
         if (image.loadFromMemory(icon.data(), icon.size())) {
-            (void)sfml_window.setIcon(image);
+            (void)m_window.setIcon(image);
         }
 
-        if (!ImGui::SFML::Init(sfml_window)) {
+        if (!ImGui::SFML::Init(m_window)) {
             throw std::runtime_error("Failed to initialize ImGui-SFML");
         }
 
@@ -32,13 +32,13 @@ namespace b {
         b::load_default_fonts();
     }
 
-    void window::init(py::function python_ui_loop) {
-        this->python_ui_loop = python_ui_loop;
+    void window::init(py::function callback) {
+        this->m_pythonUiLoopCallback = callback;
     }
 
     void window::load_py_script(const b::resource& script) {
-        ui_script = script;
-        ui_script_loaded = false;
+        m_uiScriptResource = script;
+        m_uiScriptLoaded = false;
     }
 
     static void recover_imgui_font_stack() {
@@ -57,12 +57,12 @@ namespace b {
     void window::_update() {
 
 #ifdef BATTERY_ARCH_WINDOWS
-        if (win32_use_immersive_dark_mode != win32_idm_used) {
-            BOOL USE_DARK_MODE = win32_use_immersive_dark_mode;
+        if (m_useWin32ImmersiveDarkMode != m_win32IDMActive) {
+            BOOL USE_DARK_MODE = m_useWin32ImmersiveDarkMode;
             BOOL SET_IMMERSIVE_DARK_MODE_SUCCESS = SUCCEEDED(DwmSetWindowAttribute(
-                    sfml_window.getSystemHandle(), DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE,
+                    m_window.getSystemHandle(), DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE,
                     &USE_DARK_MODE, sizeof(USE_DARK_MODE)));
-            win32_idm_used = win32_use_immersive_dark_mode;
+            m_win32IDMActive = m_useWin32ImmersiveDarkMode;
             if (!SET_IMMERSIVE_DARK_MODE_SUCCESS) {
                 throw std::runtime_error("Failed to set immersive dark mode on b::window");
             }
@@ -70,45 +70,45 @@ namespace b {
 #endif
 
         sf::Event event {};
-        while (sfml_window.pollEvent(event)) {
-            ImGui::SFML::ProcessEvent(sfml_window, event);
+        while (m_window.pollEvent(event)) {
+            ImGui::SFML::ProcessEvent(m_window, event);
 
             if (event.type == sf::Event::Closed) {
-                sfml_window.close();
+                m_window.close();
             }
             else if (event.type == sf::Event::Resized) {
                 sf::FloatRect visibleArea({ 0, 0 }, { (float)event.size.width, (float)event.size.height });
-                sfml_window.setView(sf::View(visibleArea));
+                m_window.setView(sf::View(visibleArea));
             }
         }
 
         b::update_themes();
 
         // Load python if not loaded already
-        if (!ui_script.string().empty() && !ui_script_loaded) {
-            ui_script_loaded = true;
-            error = {};
+        if (!m_uiScriptResource.string().empty() && !m_uiScriptLoaded) {
+            m_uiScriptLoaded = true;
+            m_errorMessage = {};
 #ifndef BATTERY_PRODUCTION_MODE
             b::log::info("Loading b::window python ui script");
 #endif
             try {
-                b::py::exec(ui_script.string());
+                b::py::exec(m_uiScriptResource.string());
             }
             catch (const std::exception &e) {
                 ImGui::ErrorCheckEndFrameRecover(nullptr);
                 recover_imgui_font_stack();
-                error = e.what();
+                m_errorMessage = e.what();
                 b::log::error("Unhandled exception:\n{}", e.what());
             }
         }
 
-        sfml_window.clear(b::graphics_constants::battery_default_background_color());
-        ImGui::SFML::Update(sfml_window, delta_clock.restart());
+        m_window.clear(b::graphics_constants::battery_default_background_color());
+        ImGui::SFML::Update(m_window, m_deltaClock.restart());
         b::lock_font_stack();
 
         // And then render
-        if (error.has_value()) {
-            render_error_message(error.value());    // Py init error
+        if (m_errorMessage.has_value()) {
+            render_error_message(m_errorMessage.value());    // Py init error
         }
         else {
             try {
@@ -117,8 +117,8 @@ namespace b {
 
                 update();
 
-                if (python_ui_loop) {
-                    python_ui_loop();
+                if (m_pythonUiLoopCallback) {
+                    m_pythonUiLoopCallback();
                 }
 
                 style.pop();
@@ -133,24 +133,24 @@ namespace b {
         }
 
         b::unlock_font_stack();
-        ImGui::SFML::Render(sfml_window);
-        sfml_window.display();
+        ImGui::SFML::Render(m_window);
+        m_window.display();
     }
 
     void window::render_error_message(const b::string& error) {
-        error_window.children_style.font = "default";  // Ask it to explicitly push the default font, in case it wasn't cleaned up properly
-        error_window.left = 0;
-        error_window.top = 0;
-        error_window.width = static_cast<float>(getSize().x);
-        error_window.height = static_cast<float>(getSize().y);
-        error_window.flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
-        error_window.style["ImGuiCol_WindowBg"] = "#333333"_u;
-        error_window.style["ImGuiStyleVar_WindowRounding"] = 0;
-        error_text.label = b::format("Unhandled exception:\n{}", error);
-        error_text.style["ImGuiCol_Text"] = "#D34040"_u;
+        m_errorWindowWidget.children_style.font = "default";  // Ask it to explicitly push the default font, in case it wasn't cleaned up properly
+        m_errorWindowWidget.left = 0;
+        m_errorWindowWidget.top = 0;
+        m_errorWindowWidget.width = static_cast<float>(getSize().x);
+        m_errorWindowWidget.height = static_cast<float>(getSize().y);
+        m_errorWindowWidget.flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
+        m_errorWindowWidget.style["ImGuiCol_WindowBg"] = "#333333"_u;
+        m_errorWindowWidget.style["ImGuiStyleVar_WindowRounding"] = 0;
+        m_errorTextWidget.label = b::format("Unhandled exception:\n{}", error);
+        m_errorTextWidget.style["ImGuiCol_Text"] = "#D34040"_u;
 
-        error_window([this]() {
-            error_text();
+        m_errorWindowWidget([this]() {
+            m_errorTextWidget();
         });
     }
 

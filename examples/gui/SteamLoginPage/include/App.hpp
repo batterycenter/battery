@@ -43,7 +43,7 @@ public:
     template<typename... Args> MainWindow(Args... args) : b::window(args...) {}
     ~MainWindow() = default;
 
-    inline static MainWindow& get() { return dynamic_cast<MainWindow&>(*b::application::get().windows[0].get()); }
+    inline static MainWindow& get() { return dynamic_cast<MainWindow&>(*b::application::get().windows()[0].get()); }
 };
 
 class App : public b::application {
@@ -67,12 +67,7 @@ public:
     ~App() = default;
 
     void setup() override {
-        windows.emplace_back(std::make_shared<MainWindow>(
-                u8"Battery SteamLoginPage Example",
-                sf::Vector2u(1180, 720),
-                sf::Style::None));
-
-
+        this->add_window(new MainWindow("Battery SteamLoginPage Example", sf::Vector2u(1180, 720), sf::Style::None));
     }
 
     void update() override {}

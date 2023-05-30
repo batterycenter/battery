@@ -37,7 +37,7 @@ void MainWindow::handle_window_dragging() {
 
     if (dragWindow) {
         ImVec2 delta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Left);
-        sfml_window.setPosition(sfml_window.getPosition() + sf::Vector2i((int)delta.x, (int)delta.y));
+        m_window.setPosition(m_window.getPosition() + sf::Vector2i((int)delta.x, (int)delta.y));
     }
 
     wasMouseDragging = mouseDragging;
@@ -58,7 +58,7 @@ void MainWindow::setup() {
 }
 
 void MainWindow::update() {
-    context.window_size = { (float)sfml_window.getSize().x, (float)sfml_window.getSize().y };
+    context.window_size = { (float)m_window.getSize().x, (float)m_window.getSize().y };
 
     if (context.steam_hyperlink_clicked || context.help_hyperlink_clicked || context.create_account_hyperlink_clicked) {
         b::log::info("Opening URL: {}", URL);

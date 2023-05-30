@@ -13,30 +13,42 @@ namespace b {
         return dynamic_cast<application&>(b::console_application::get());
     }
 
+    void application::add_window(std::shared_ptr<b::window> window_ptr) {
+        m_windows.push_back(window_ptr);
+        m_windows.back()->setup();
+    }
+
+    void application::add_window(b::window* window_ptr) {
+        add_window(std::shared_ptr<b::window>(window_ptr));
+    }
+
+    void application::clear_windows() {
+        m_windows.clear();
+    }
+
+    std::vector<std::shared_ptr<b::window>>& application::windows() {
+        return m_windows;
+    }
+
     void application::console_setup() {
-
         setup();
-
-        for (auto& window : windows) {
-            window->setup();
-        }
     }
 
     void application::console_update() {
 
         update();
 
-        for (auto& window : windows) {
-            window->framecount = framecount;
-            window->frametime = frametime;
-            window->framerate = framerate;
+        for (auto& window : m_windows) {
+            window->m_framecount = m_framecount;
+            window->m_frametime = m_frametime;
+            window->m_framerate = m_framerate;
             window->_update();
         }
 
         bool should_stop = true;
-        for (auto& window : windows) {
+        for (auto& window : m_windows) {
             window->_update();
-            if (window->sfml_window.isOpen()) {
+            if (window->m_window.isOpen()) {
                 should_stop = false;
             }
         }
@@ -47,14 +59,11 @@ namespace b {
     }
 
     void application::console_cleanup() {
-
         cleanup();
-
-        for (auto& window : windows) {
+        for (auto& window : m_windows) {
             window->cleanup();
         }
-
-        windows.clear();
+        m_windows.clear();
 
         ImGui::SFML::Shutdown();
     }

@@ -10,13 +10,13 @@ namespace b {
     class window : public sf::RenderWindow {
     public:
 
-        double framerate { 0.0 };
-        double frametime { 0.0 };
-        uint64_t framecount { 0 };
+        double m_framerate { 0.0 };
+        double m_frametime { 0.0 };
+        uint64_t m_framecount { 0 };
+        bool m_useWin32ImmersiveDarkMode = true;
         widget_style style;
-        bool win32_use_immersive_dark_mode = true;
 
-        sf::RenderWindow& sfml_window = *this;          // This is a reference to the base class
+        sf::RenderWindow& m_window = *this;          // This is a reference to the base class
 
         window(const b::string& title, sf::Vector2u size, uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
         virtual ~window() = default;
@@ -38,15 +38,15 @@ namespace b {
         void _update();
         void render_error_message(const b::string& error);
 
-        py::function python_ui_loop;
-        b::resource ui_script;
-        bool ui_script_loaded = true;
-        std::optional<b::string> error;
-        b::widgets::window error_window;
-        b::widgets::text error_text;
+        py::function m_pythonUiLoopCallback;
+        b::resource m_uiScriptResource;
+        bool m_uiScriptLoaded = true;
+        std::optional<b::string> m_errorMessage;
+        b::widgets::window m_errorWindowWidget;
+        b::widgets::text m_errorTextWidget;
 
-        sf::Clock delta_clock;
-        bool win32_idm_used = !win32_use_immersive_dark_mode;
+        sf::Clock m_deltaClock;
+        bool m_win32IDMActive = !m_useWin32ImmersiveDarkMode;
         friend class application;
     };
 
