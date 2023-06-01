@@ -13,11 +13,6 @@ namespace b {
         return dynamic_cast<application&>(b::console_application::get());
     }
 
-    void application::add_window(std::shared_ptr<b::window> window_ptr) {
-        m_windows.push_back(window_ptr);
-        m_windows.back()->setup();
-    }
-
     void application::clear_windows() {
         m_windows.clear();
     }
