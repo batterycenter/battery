@@ -10,6 +10,8 @@ namespace b {
     struct graphics_constants {
         static sf::Color battery_default_background_color();
         static std::pair<b::string, float> battery_default_font();
+        static sf::Vector2u default_window_size();
+        static b::string default_window_title();
     };
 
 }

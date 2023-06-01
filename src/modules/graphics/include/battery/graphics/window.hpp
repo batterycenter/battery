@@ -18,7 +18,7 @@ namespace b {
 
         sf::RenderWindow& m_sfmlWindow = *this;          // This is a reference to the base class
 
-        window(const b::string& title, sf::Vector2u size, uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
+        window(std::optional<b::string> title, std::optional<sf::Vector2u> size, uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
         virtual ~window() = default;
 
         virtual void setup() = 0;

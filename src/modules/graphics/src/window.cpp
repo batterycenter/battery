@@ -15,8 +15,8 @@
 
 namespace b {
 
-    window::window(const b::string& title, sf::Vector2u size, uint32_t style, const sf::ContextSettings& settings) {
-        this->create(sf::VideoMode(size), title, style, settings);
+    window::window(std::optional<b::string> title, std::optional<sf::Vector2u> size, uint32_t style, const sf::ContextSettings& settings) {
+        this->create(sf::VideoMode(size.value_or(b::graphics_constants::default_window_size())), title.value_or(b::graphics_constants::default_window_title()), style, settings);
 
         auto icon = b::resource::from_base64(b::constants::battery_icon_base64());
         sf::Image image;
