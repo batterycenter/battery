@@ -18,7 +18,7 @@ namespace b {
         virtual void cleanup() = 0;
 
         template<typename T>
-        std::shared_ptr<T> create_window() {
+        [[nodiscard]] std::shared_ptr<T> create_window() {
             auto window_ptr = std::make_shared<T>();
             m_windows.push_back(window_ptr);
             return window_ptr;
