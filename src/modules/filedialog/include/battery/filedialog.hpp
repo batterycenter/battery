@@ -1,8 +1,6 @@
 #pragma once
 
-#include <optional>
-#include "battery/core/messages.hpp"
-#include "battery/core/fs.hpp"
+#include "battery/core.hpp"
 
 namespace b {
 

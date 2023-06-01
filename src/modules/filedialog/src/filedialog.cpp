@@ -1,6 +1,6 @@
 
-#include "battery/filedialog/filedialog.hpp"
-#include "battery/core/all.hpp"
+#include "battery/filedialog.hpp"
+#include "battery/core.hpp"
 
 #ifdef BATTERY_ARCH_WINDOWS
 #include "battery/core/internal/windows.hpp"
