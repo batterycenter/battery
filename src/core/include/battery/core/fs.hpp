@@ -16,6 +16,7 @@ namespace b::fs {
     using std::filesystem::remove;                  // Delete a file (symlinks not followed)
     using std::filesystem::remove_all;              // Recursively delete a directory (symlinks not followed)
     using std::filesystem::last_write_time;
+    using std::filesystem::file_size;
 
     using std::filesystem::status;					// Get filesystem status: what type of entry it is
     using std::filesystem::is_regular_file;
@@ -202,35 +203,35 @@ namespace b::fs {
     inline static size_t read_binary_file_in_chunks(const fs::path& path, size_t chunk_size, TFunc callback) {
         return internal::read_file_in_chunks(path, chunk_size, callback, Mode::BINARY);
     }
-
-    // In Binary mode this function is cheap, it reads the filesize from the filesystem.
-    // In Text mode this function is expensive, it reads the entire file into memory, just for the filesize.
-    // There is no other way to get the filesize in text mode, because the representation on-disk is different
-    // from what is read into memory. (Due to line endings)
-    inline static std::streamsize compensated_file_size_nothrow(const fs::path& path, enum Mode filemode) {
-        if (filemode == b::fs::Mode::BINARY) {		// Binary mode
-            return std::filesystem::file_size(b::string(path).str());
-        }
-        else {
-            auto str = fs::read_text_file_nothrow(path);
-            if (str) {
-                return str.value().size();
-            }
-            else {
-                return -1;
-            }
-        }
-    }
-
-    inline static std::streamsize compensated_file_size(const fs::path& path, enum Mode filemode) {
-        auto size = compensated_file_size_nothrow(path, filemode);
-        if (size == -1) {
-            throw std::runtime_error(b::format("Cannot get compensated file size: File failed while reading into buffer: {}", strerror(errno)));
-        }
-        else {
-            return size;
-        }
-    }
+//
+//    // In Binary mode this function is cheap, it reads the filesize from the filesystem.
+//    // In Text mode this function is expensive, it reads the entire file into memory, just for the filesize.
+//    // There is no other way to get the filesize in text mode, because the representation on-disk is different
+//    // from what is read into memory. (Due to line endings) Be aware that it returns the number of bytes in UTF-8
+//    inline static std::streamsize file_size_nothrow(const fs::path& path, enum Mode filemode) {
+//        if (filemode == b::fs::Mode::BINARY) {
+//            return std::filesystem::file_size(b::string(path).str());
+//        }
+//        else {
+//            auto str = fs::read_text_file_nothrow(path);
+//            if (str) {
+//                return str.value().length();
+//            }
+//            else {
+//                return -1;
+//            }
+//        }
+//    }
+//
+//    inline static std::streamsize file_size(const fs::path& path, enum Mode filemode) {
+//        auto size = file_size_nothrow(path, filemode);
+//        if (size == -1) {
+//            throw std::runtime_error(b::format("Cannot get compensated file size: File failed while reading into buffer: {}", strerror(errno)));
+//        }
+//        else {
+//            return size;
+//        }
+//    }
 
     class ofstream : public std::ofstream {
     public:

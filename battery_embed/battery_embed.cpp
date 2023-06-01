@@ -88,15 +88,22 @@ public:
 
     ErrorCode generateCpp(bool binary) {
         b::fs::ofstream outfile(m_targetPath, b::fs::Mode::TEXT);
-        if (!outfile.is_open()) {
-            b::log::error("Failed to open source output file for writing (error code {}): {}", (int)ErrorCode::OUTPUT_FILE_FAILED, strerror(errno));
+        if (outfile.fail()) {
+            b::log::error("Failed to open source output file '{}' for writing (error code {}): {}", m_targetPath, (int)ErrorCode::OUTPUT_FILE_FAILED, strerror(errno));
             return ErrorCode::OUTPUT_FILE_FAILED;
         }
 
-        // TODO: Document the compensated file size misere
-        size_t filesize = b::fs::compensated_file_size_nothrow(m_resourcePath, binary ? b::fs::Mode::BINARY : b::fs::Mode::TEXT);
-        if (filesize == -1) {
-            b::log::error("Failed to open input file for reading (error code {}): {}", (int)ErrorCode::INPUT_FILE_FAILED, strerror(errno));
+        if (!b::fs::exists(m_resourcePath)) {
+            b::log::error("Failed to open input file '{}' for reading (error code {}): No such file or directory", m_resourcePath, (int)ErrorCode::INPUT_FILE_FAILED);
+            return ErrorCode::INPUT_FILE_FAILED;
+        }
+
+        size_t filesize = 0;
+        try {
+            filesize = binary ? b::fs::read_binary_file(m_resourcePath).str().length() : b::fs::read_text_file(m_resourcePath).str().length();
+        }
+        catch (const std::exception& e) {
+            b::log::error("Failed to open input file '{}' for reading (error code {}): {}", m_resourcePath, (int)ErrorCode::INPUT_FILE_FAILED, e.what());
             return ErrorCode::INPUT_FILE_FAILED;
         }
 
@@ -139,15 +146,21 @@ public:
             }
             outfile << std::string(outbuffer.data(), index);
         };
-        bool success = false;
+
+        size_t totalBytes = 0;
         if (binary) {
-            success = b::fs::read_binary_file_in_chunks_nothrow(m_resourcePath, chunk_size, callback);
+            totalBytes = b::fs::read_binary_file_in_chunks_nothrow(m_resourcePath, chunk_size, callback);
         }
         else {
-            success = b::fs::read_text_file_in_chunks_nothrow(m_resourcePath, chunk_size, callback);
+            totalBytes = b::fs::read_text_file_in_chunks_nothrow(m_resourcePath, chunk_size, callback);
         }
-        if (!success) {
-            b::log::error("Failed to open input file for reading (error code {}): {}", (int)ErrorCode::INPUT_FILE_FAILED, strerror(errno));
+
+        if (totalBytes == 0) {  // File is empty: A C array must have at least one element. We add a zero byte to it,
+            callback(std::string_view("\0", 1));     // although it will not be read anyway as the size is 0 too.
+        }
+
+        if (totalBytes == -1) {
+            b::log::error("Failed to open input file '{}' for reading (error code {}): {}", m_resourcePath, (int)ErrorCode::INPUT_FILE_FAILED, strerror(errno));
             return ErrorCode::INPUT_FILE_FAILED;
         }
 
@@ -156,21 +169,29 @@ public:
     }
 
     ErrorCode generateHpp(bool binary) {
+        if (!b::fs::exists(m_resourcePath)) {
+            b::log::error("Failed to open input file '{}' for reading (error code {}): No such file or directory", m_resourcePath, (int)ErrorCode::INPUT_FILE_FAILED);
+            return ErrorCode::INPUT_FILE_FAILED;
+        }
+
         b::fs::ifstream infile(m_resourcePath, binary ? b::fs::Mode::BINARY : b::fs::Mode::TEXT);
         if (!infile.is_open()) {
-            b::log::error("Failed to open input file for reading (error code {}): {}", (int)ErrorCode::INPUT_FILE_FAILED, strerror(errno));
+            b::log::error("Failed to open input file '{}' for reading (error code {}): {}", m_resourcePath, (int)ErrorCode::INPUT_FILE_FAILED, strerror(errno));
             return ErrorCode::INPUT_FILE_FAILED;
         }
 
         b::fs::ofstream file(m_targetPath, b::fs::Mode::TEXT);
         if (!file.is_open()) {
-            b::log::error("Failed to open header output file for writing (error code {}): {}", (int)ErrorCode::OUTPUT_HEADER_FILE_FAILED, strerror(errno));
+            b::log::error("Failed to open header output file '{}' for writing (error code {}): {}", m_targetPath, (int)ErrorCode::OUTPUT_HEADER_FILE_FAILED, strerror(errno));
             return ErrorCode::OUTPUT_HEADER_FILE_FAILED;
         }
 
-        size_t filesize = b::fs::compensated_file_size_nothrow(m_resourcePath, binary ? b::fs::Mode::BINARY : b::fs::Mode::TEXT);
-        if (filesize == -1) {
-            b::log::error("Failed to open input file for reading (error code {}): {}", (int)ErrorCode::INPUT_FILE_FAILED, strerror(errno));
+        size_t filesize = 0;
+        try {
+            filesize = binary ? b::fs::read_binary_file(m_resourcePath).str().length() : b::fs::read_text_file(m_resourcePath).str().length();
+        }
+        catch (const std::exception& e) {
+            b::log::error("Failed to open input file '{}' for reading (error code {}): {}", m_resourcePath, (int)ErrorCode::INPUT_FILE_FAILED, e.what());
             return ErrorCode::INPUT_FILE_FAILED;
         }
 
@@ -267,7 +288,7 @@ int b::main(const std::vector<b::string>& args) {             // NOLINT NOSONAR
     app.add_option("c++ target file", targetPath, "The C++ target source file or header file (depending on --header and --cpp)")->required();
 
     b::string symbolName;
-    app.add_option("--symbol_name", symbolName, "Override the symbol name for the output files");
+    app.add_option("--symbol-name", symbolName, "Override the symbol name for the output files")->required();
 
     bool binary = false;
     app.add_flag("--binary", binary, "File is in binary format instead of plain text (regarding line endings)");
