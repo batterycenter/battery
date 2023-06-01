@@ -17,8 +17,13 @@ namespace b {
         virtual void update() = 0;
         virtual void cleanup() = 0;
 
-        void add_window(std::shared_ptr<b::window> window_ptr);
-        void add_window(b::window* window_ptr);
+        template<typename T>
+        std::shared_ptr<T> create_window() {
+            auto window_ptr = std::make_shared<T>();
+            m_windows.push_back(window_ptr);
+            return window_ptr;
+        }
+
         void clear_windows();
 
         std::vector<std::shared_ptr<b::window>>& windows();

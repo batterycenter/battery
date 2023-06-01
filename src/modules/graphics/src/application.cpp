@@ -18,10 +18,6 @@ namespace b {
         m_windows.back()->setup();
     }
 
-    void application::add_window(b::window* window_ptr) {
-        add_window(std::shared_ptr<b::window>(window_ptr));
-    }
-
     void application::clear_windows() {
         m_windows.clear();
     }
