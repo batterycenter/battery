@@ -22,7 +22,6 @@ namespace b {
             window_ptr = std::make_shared<T>();
             m_windows.push_back(window_ptr);
             window_ptr->setup();
-            return window_ptr;
         }
 
         void clear_windows();
