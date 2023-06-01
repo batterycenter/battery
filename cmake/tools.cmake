@@ -196,6 +196,9 @@ function(battery_add_source_files TARGET)
 endfunction()
 
 function(battery_precompile_headers TARGET FILE)
+    if (NOT EXISTS ${FILE})
+        message(FATAL_ERROR "Precompiled header file ${FILE} does not exist!")
+    endif()
     target_precompile_headers(${TARGET} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${FILE}>")
 endfunction()
 
