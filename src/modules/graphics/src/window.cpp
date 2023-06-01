@@ -23,12 +23,6 @@ namespace b {
     void window::create(sf::VideoMode mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
         m_sfmlWindow.create(mode, title, style, settings);
 
-        auto icon = b::resource::from_base64(b::constants::battery_icon_base64());
-        sf::Image image;
-        if (image.loadFromMemory(icon.data(), icon.size())) {
-            (void)m_sfmlWindow.setIcon(image);
-        }
-
         if (m_firstWindowCreation) {
             if (!ImGui::SFML::Init(m_sfmlWindow)) {
                 throw std::runtime_error("Failed to initialize ImGui-SFML");
@@ -38,6 +32,12 @@ namespace b {
             b::load_default_fonts();
 
             m_firstWindowCreation = false;
+        }
+
+        auto icon = b::resource::from_base64(b::constants::battery_icon_base64());
+        sf::Image image;
+        if (image.loadFromMemory(icon.data(), icon.size())) {
+            (void)m_sfmlWindow.setIcon(image);
         }
     }
 
