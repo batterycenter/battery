@@ -98,6 +98,14 @@ namespace b {
                     dispatchEvent<b::events::WindowResizeEvent>(event.size.width, event.size.height);
                     break;
 
+                case sf::Event::LostFocus:
+                    dispatchEvent<b::events::WindowLostFocusEvent>();
+                    break;
+
+                case sf::Event::GainedFocus:
+                    dispatchEvent<b::events::WindowGainedFocusEvent>();
+                    break;
+
                 case sf::Event::KeyPressed:
                     dispatchEvent<b::events::KeyPressEvent>(event.key);
                     break;
