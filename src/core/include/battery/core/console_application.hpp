@@ -13,6 +13,7 @@ namespace b {
         virtual ~console_application() = default;
 
         static console_application & get();
+        static bool instanceExists();
 
         std::vector<b::string> m_args;
         double m_framerate { 0.0 };
@@ -20,15 +21,15 @@ namespace b {
         uint64_t m_framecount { 0 };
         int m_exitCode { 0 };
 
-        virtual void console_setup();
-        virtual void console_update();
-        virtual void console_cleanup();
+        virtual void consoleSetup();
+        virtual void consoleUpdate();
+        virtual void consoleCleanup();
 
-        void set_requested_framerate(double requested_framerate);
-        void set_requested_frametime(double requested_frametime);
+        void setRequestedFramerate(double requested_framerate);
+        void setRequestedFrametime(double requested_frametime);
 
-        void stop_application();
-        void set_stop_requested(bool stop_requested);
+        void stopApplication();
+        void setStopRequested(bool stop_requested);
 
         [[nodiscard]] int run(const b::string& appname, const std::vector<b::string>& args);
 

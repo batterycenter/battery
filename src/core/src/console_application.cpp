@@ -18,34 +18,38 @@ namespace b {
         return *m_instance;
     }
 
-    void console_application::console_setup() {
+    bool console_application::instanceExists() {
+        return m_instance != nullptr;
+    }
+
+    void console_application::consoleSetup() {
         // No action
     }
 
-    void console_application::console_update() {
+    void console_application::consoleUpdate() {
         // No action
     }
 
-    void console_application::console_cleanup() {
+    void console_application::consoleCleanup() {
         // No action
     }
 
 
 
 
-    void console_application::set_requested_framerate(double requested_framerate) {
+    void console_application::setRequestedFramerate(double requested_framerate) {
         this->m_requestedFramerate = requested_framerate;
     }
 
-    void console_application::set_requested_frametime(double requested_frametime) {
+    void console_application::setRequestedFrametime(double requested_frametime) {
         this->m_requestedFramerate = 1.0 / requested_frametime;
     }
 
-    void console_application::stop_application() {
+    void console_application::stopApplication() {
         this->m_stopRequested = true;
     }
 
-    void console_application::set_stop_requested(bool stop_requested) {
+    void console_application::setStopRequested(bool stop_requested) {
         this->m_stopRequested = stop_requested;
     }
 
@@ -68,7 +72,7 @@ namespace b {
         while (!this->m_stopRequested) {
 
             if (!this->_update()) {
-                stop_application();
+                stopApplication();
             }
             sleep(1.0 / this->m_requestedFramerate - (b::time() - last_frame));
 
@@ -102,15 +106,15 @@ namespace b {
     }
 
     bool console_application::_setup() {
-        return catch_exceptions("b::application::setup()", &console_application::console_setup, this);
+        return catch_exceptions("b::application::setup()", &console_application::consoleSetup, this);
     }
 
     bool console_application::_update() {
-        return catch_exceptions("b::application::update()", &console_application::console_update, this);
+        return catch_exceptions("b::application::update()", &console_application::consoleUpdate, this);
     }
 
     bool console_application::_cleanup() {
-        return catch_exceptions("b::application::cleanup()", &console_application::console_cleanup, this);
+        return catch_exceptions("b::application::cleanup()", &console_application::consoleCleanup, this);
     }
 
 }

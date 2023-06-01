@@ -18,20 +18,20 @@ namespace b {
         virtual void cleanup() = 0;
 
         template<typename T>
-        void attach_window(std::shared_ptr<T>& window_ptr) {
-            window_ptr = std::make_shared<T>();
-            m_windows.push_back(window_ptr);
-            window_ptr->attach();
+        void attachWindow(std::shared_ptr<T>& windowPtr) {
+            windowPtr = std::make_shared<T>();
+            m_windows.push_back(windowPtr);
+            windowPtr->attach();
         }
 
-        void detach_windows();
+        void detachWindows();
 
         std::vector<std::shared_ptr<b::window>>& windows();
 
     private:
-        void console_setup() final override;
-        void console_update() final override;
-        void console_cleanup() final override;
+        void consoleSetup() final override;
+        void consoleUpdate() final override;
+        void consoleCleanup() final override;
 
         b::py::scoped_interpreter guard{};
         std::vector<std::shared_ptr<b::window>> m_windows;

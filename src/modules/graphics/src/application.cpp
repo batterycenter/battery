@@ -6,14 +6,14 @@
 namespace b {
 
     application::application() {
-        set_requested_framerate(60.0);
+        setRequestedFramerate(60.0);
     }
 
     application & application::get() {
         return dynamic_cast<application&>(b::console_application::get());
     }
 
-    void application::detach_windows() {
+    void application::detachWindows() {
         for (auto& window : m_windows) {
             window->detach();
         }
@@ -24,11 +24,11 @@ namespace b {
         return m_windows;
     }
 
-    void application::console_setup() {
+    void application::consoleSetup() {
         setup();
     }
 
-    void application::console_update() {
+    void application::consoleUpdate() {
 
         update();
 
@@ -48,13 +48,13 @@ namespace b {
         }
 
         if (should_stop) {
-            this->stop_application();
+            this->stopApplication();
         }
     }
 
-    void application::console_cleanup() {
+    void application::consoleCleanup() {
         cleanup();
-        detach_windows();
+        detachWindows();
 
         ImGui::SFML::Shutdown();
     }
