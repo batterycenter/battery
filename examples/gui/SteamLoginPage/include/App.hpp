@@ -1,8 +1,7 @@
 #pragma once
 
-#include "battery/core/all.hpp"
-#include "battery/graphics/application.hpp"
-#include "battery/graphics/widgets/all.hpp"
+#include "battery/core.hpp"
+#include "battery/graphics.hpp"
 
 class MainWindow : public b::window {
 public:
