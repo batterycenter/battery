@@ -13,7 +13,10 @@ namespace b {
         return dynamic_cast<application&>(b::console_application::get());
     }
 
-    void application::clear_windows() {
+    void application::detach_windows() {
+        for (auto& window : m_windows) {
+            window->detach();
+        }
         m_windows.clear();
     }
 
@@ -51,10 +54,7 @@ namespace b {
 
     void application::console_cleanup() {
         cleanup();
-        for (auto& window : m_windows) {
-            window->cleanup();
-        }
-        m_windows.clear();
+        detach_windows();
 
         ImGui::SFML::Shutdown();
     }

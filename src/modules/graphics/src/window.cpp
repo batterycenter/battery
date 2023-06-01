@@ -15,38 +15,29 @@
 
 namespace b {
 
-    window::window() {
-        this->create(sf::VideoMode(b::graphics_constants::default_window_size()), b::graphics_constants::default_window_title());
-
-        auto icon = b::resource::from_base64(b::constants::battery_icon_base64());
-        sf::Image image;
-        if (image.loadFromMemory(icon.data(), icon.size())) {
-            (void)m_sfmlWindow.setIcon(image);
-        }
-
-        if (!ImGui::SFML::Init(m_sfmlWindow)) {
-            throw std::runtime_error("Failed to initialize ImGui-SFML");
-        }
-
-        b::make_default_themes_available();
-        b::load_default_fonts();
+    void window::create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
+        create(sf::VideoMode(mode), title, style, settings);
     }
 
-    window::window(std::optional<b::string> title, std::optional<sf::Vector2u> size, uint32_t style, const sf::ContextSettings& settings) {
-        this->create(sf::VideoMode(size.value_or(b::graphics_constants::default_window_size())), title.value_or(b::graphics_constants::default_window_title()), style, settings);
+    void window::create(sf::VideoMode mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
+        m_sfmlWindow.create(mode, title, style, settings);
 
-        auto icon = b::resource::from_base64(b::constants::battery_icon_base64());
-        sf::Image image;
-        if (image.loadFromMemory(icon.data(), icon.size())) {
-            (void)m_sfmlWindow.setIcon(image);
+        if (m_firstWindowCreation) {
+            auto icon = b::resource::from_base64(b::constants::battery_icon_base64());
+            sf::Image image;
+            if (image.loadFromMemory(icon.data(), icon.size())) {
+                (void)m_sfmlWindow.setIcon(image);
+            }
+
+            if (!ImGui::SFML::Init(m_sfmlWindow)) {
+                throw std::runtime_error("Failed to initialize ImGui-SFML");
+            }
+
+            b::make_default_themes_available();     // TODO: Move these to a better place
+            b::load_default_fonts();
+
+            m_firstWindowCreation = false;
         }
-
-        if (!ImGui::SFML::Init(m_sfmlWindow)) {
-            throw std::runtime_error("Failed to initialize ImGui-SFML");
-        }
-
-        b::make_default_themes_available();
-        b::load_default_fonts();
     }
 
     void window::init(py::function callback) {
@@ -72,6 +63,10 @@ namespace b {
     }
 
     void window::_update() {
+
+        if (!m_sfmlWindow.isOpen()) {
+            return;
+        }
 
 #ifdef BATTERY_ARCH_WINDOWS
         if (m_useWin32ImmersiveDarkMode != m_win32IDMActive) {

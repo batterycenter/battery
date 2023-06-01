@@ -18,13 +18,14 @@ namespace b {
 
         sf::RenderWindow& m_sfmlWindow = *this;          // This is a reference to the base class
 
-        window();
-        window(std::optional<b::string> title, std::optional<sf::Vector2u> size, uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
+        window() = default;
         virtual ~window() = default;
 
-        virtual void setup() = 0;
+        void create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
+        void create(sf::VideoMode mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
+        virtual void attach() = 0;
         virtual void update() = 0;
-        virtual void cleanup() = 0;
+        virtual void detach() = 0;
 
         void init(py::function python_ui_loop);
         void load_py_script(const b::resource& script);
@@ -45,6 +46,7 @@ namespace b {
         std::optional<b::string> m_errorMessage;
         b::widgets::window m_errorWindowWidget;
         b::widgets::text m_errorTextWidget;
+        bool m_firstWindowCreation = true;
 
         sf::Clock m_deltaClock;
         bool m_win32IDMActive = !m_useWin32ImmersiveDarkMode;
