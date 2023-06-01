@@ -86,15 +86,94 @@ namespace b {
         while (m_sfmlWindow.pollEvent(event)) {
             ImGui::SFML::ProcessEvent(m_sfmlWindow, event);
 
-            if (event.type == sf::Event::Closed) {
-                if (!dispatchEvent<b::events::WindowCloseEvent>()) {
-                    m_sfmlWindow.close();
-                }
+            switch (event.type) {
+                case sf::Event::Closed:
+                    if (!dispatchEvent<b::events::WindowCloseEvent>()) {
+                        m_sfmlWindow.close();
+                    }
+                    break;
+
+                case sf::Event::Resized:
+                    m_sfmlWindow.setView(sf::View(sf::FloatRect({ 0, 0 }, { (float)event.size.width, (float)event.size.height })));
+                    dispatchEvent<b::events::WindowResizeEvent>(event.size.width, event.size.height);
+                    break;
+
+                case sf::Event::KeyPressed:
+                    dispatchEvent<b::events::KeyPressEvent>(event.key);
+                    break;
+
+                case sf::Event::KeyReleased:
+                    dispatchEvent<b::events::KeyReleaseEvent>(event.key);
+                    break;
+
+                case sf::Event::TextEntered:
+                    dispatchEvent<b::events::TextEnteredEvent>(event.text);
+                    break;
+
+                case sf::Event::MouseWheelScrolled:
+                    dispatchEvent<b::events::MouseWheelScrollEvent>(event.mouseWheelScroll);
+                    break;
+
+                case sf::Event::MouseButtonPressed:
+                    dispatchEvent<b::events::MouseButtonPressEvent>(event.mouseButton);
+                    break;
+
+                case sf::Event::MouseButtonReleased:
+                    dispatchEvent<b::events::MouseButtonReleaseEvent>(event.mouseButton);
+                    break;
+
+                case sf::Event::MouseMoved:
+                    dispatchEvent<b::events::MouseMoveEvent>(event.mouseMove);
+                    break;
+
+                case sf::Event::MouseEntered:
+                    dispatchEvent<b::events::MouseEnteredWindowEvent>();
+                    break;
+
+                case sf::Event::MouseLeft:
+                    dispatchEvent<b::events::MouseLeftWindowEvent>();
+                    break;
+
+                case sf::Event::JoystickButtonPressed:
+                    dispatchEvent<b::events::JoystickButtonPressEvent>(event.joystickButton);
+                    break;
+
+                case sf::Event::JoystickButtonReleased:
+                    dispatchEvent<b::events::JoystickButtonReleaseEvent>(event.joystickButton);
+                    break;
+
+                case sf::Event::JoystickMoved:
+                    dispatchEvent<b::events::JoystickMoveEvent>(event.joystickMove);
+                    break;
+
+                case sf::Event::JoystickConnected:
+                    dispatchEvent<b::events::JoystickConnectEvent>(event.joystickConnect);
+                    break;
+
+                case sf::Event::JoystickDisconnected:
+                    dispatchEvent<b::events::JoystickDisconnectEvent>(event.joystickConnect);
+                    break;
+
+                case sf::Event::TouchBegan:
+                    dispatchEvent<b::events::TouchBeginEvent>(event.touch);
+                    break;
+
+                case sf::Event::TouchMoved:
+                    dispatchEvent<b::events::TouchMoveEvent>(event.touch);
+                    break;
+
+                case sf::Event::TouchEnded:
+                    dispatchEvent<b::events::TouchEndEvent>(event.touch);
+                    break;
+
+                case sf::Event::SensorChanged:
+                    dispatchEvent<b::events::SensorChangeEvent>(event.sensor);
+                    break;
+
+                default:
+                    break;
             }
-            else if (event.type == sf::Event::Resized) {
-                sf::FloatRect visibleArea({ 0, 0 }, { (float)event.size.width, (float)event.size.height });
-                m_sfmlWindow.setView(sf::View(visibleArea));
-            }
+
         }
 
         b::update_themes();

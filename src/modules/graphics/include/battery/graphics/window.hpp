@@ -9,12 +9,28 @@
 namespace b {
 
     namespace events {
-
         struct WindowCloseEvent {};
-
-        struct WindowResizeEvent {
-            sf::Vector2u size;
-        };
+        struct WindowResizeEvent : public sf::Event::SizeEvent {};
+        struct WindowLostFocusEvent {};
+        struct WindowGainedFocusEvent {};
+        struct TextEnteredEvent : public sf::Event::TextEvent {};
+        struct KeyPressEvent : public sf::Event::KeyEvent {};
+        struct KeyReleaseEvent : public sf::Event::KeyEvent {};
+        struct MouseWheelScrollEvent : public sf::Event::MouseWheelScrollEvent {};
+        struct MouseButtonPressEvent : public sf::Event::MouseButtonEvent {};
+        struct MouseButtonReleaseEvent : public sf::Event::MouseButtonEvent {};
+        struct MouseMoveEvent : public sf::Event::MouseMoveEvent {};
+        struct MouseEnteredWindowEvent {};
+        struct MouseLeftWindowEvent {};
+        struct JoystickButtonPressEvent : public sf::Event::JoystickButtonEvent {};
+        struct JoystickButtonReleaseEvent : public sf::Event::JoystickButtonEvent {};
+        struct JoystickMoveEvent : public sf::Event::JoystickMoveEvent {};
+        struct JoystickConnectEvent : public sf::Event::JoystickConnectEvent {};
+        struct JoystickDisconnectEvent : public sf::Event::JoystickConnectEvent {};
+        struct TouchBeginEvent : public sf::Event::TouchEvent {};
+        struct TouchMoveEvent : public sf::Event::TouchEvent {};
+        struct TouchEndEvent : public sf::Event::TouchEvent {};
+        struct SensorChangeEvent : public sf::Event::SensorEvent {};
     }
 
     class window : public sf::RenderWindow {
@@ -39,15 +55,18 @@ namespace b {
 
         template<typename T, typename... TArgs>
         bool dispatchEvent(TArgs&&... args) {
+            if (std::find(m_registeredEvents.begin(), m_registeredEvents.end(), typeid(T).name()) == m_registeredEvents.end()) {
+                return false;
+            }
             m_eventbus->postpone<T>({ std::forward<TArgs>(args)... });
             m_eventbus->process();
-            return std::find(m_registeredEvents.begin(), m_registeredEvents.end(), typeid(T).name()) != m_registeredEvents.end();
+            return true;
         }
 
         template<typename T>
         void listenEvent(std::function<void(const T&)> listener) {
             m_eventListener.listenToCallback(listener);
-            m_registeredEvents.push_back(typeid(T).name());
+            m_registeredEvents.emplace_back(typeid(T).name());
         }
 
         void init(py::function python_ui_loop);
