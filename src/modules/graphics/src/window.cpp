@@ -15,6 +15,23 @@
 
 namespace b {
 
+    window::window() {
+        this->create(sf::VideoMode(b::graphics_constants::default_window_size()), b::graphics_constants::default_window_title());
+
+        auto icon = b::resource::from_base64(b::constants::battery_icon_base64());
+        sf::Image image;
+        if (image.loadFromMemory(icon.data(), icon.size())) {
+            (void)m_sfmlWindow.setIcon(image);
+        }
+
+        if (!ImGui::SFML::Init(m_sfmlWindow)) {
+            throw std::runtime_error("Failed to initialize ImGui-SFML");
+        }
+
+        b::make_default_themes_available();
+        b::load_default_fonts();
+    }
+
     window::window(std::optional<b::string> title, std::optional<sf::Vector2u> size, uint32_t style, const sf::ContextSettings& settings) {
         this->create(sf::VideoMode(size.value_or(b::graphics_constants::default_window_size())), title.value_or(b::graphics_constants::default_window_title()), style, settings);
 
