@@ -8,6 +8,7 @@
 #include "imgui_internal.h"
 
 #include "battery/core/environment.hpp"
+
 #ifdef BATTERY_ARCH_WINDOWS
 #include <Windows.h>
 #include <dwmapi.h>
@@ -86,7 +87,9 @@ namespace b {
             ImGui::SFML::ProcessEvent(m_sfmlWindow, event);
 
             if (event.type == sf::Event::Closed) {
-                m_sfmlWindow.close();
+                if (!dispatchEvent<b::events::WindowCloseEvent>()) {
+                    m_sfmlWindow.close();
+                }
             }
             else if (event.type == sf::Event::Resized) {
                 sf::FloatRect visibleArea({ 0, 0 }, { (float)event.size.width, (float)event.size.height });

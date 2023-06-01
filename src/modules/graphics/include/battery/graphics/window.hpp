@@ -4,8 +4,18 @@
 #include "battery/graphics/widget_style.hpp"
 #include "battery/graphics/font_stack.hpp"
 #include "battery/graphics/widgets/all.hpp"
+#include "battery/eventbus.hpp"
 
 namespace b {
+
+    namespace events {
+
+        struct WindowCloseEvent {};
+
+        struct WindowResizeEvent {
+            sf::Vector2u size;
+        };
+    }
 
     class window : public sf::RenderWindow {
     public:
@@ -18,7 +28,7 @@ namespace b {
 
         sf::RenderWindow& m_sfmlWindow = *this;          // This is a reference to the base class
 
-        window() = default;
+        window() : m_eventbus(std::make_shared<b::event_bus>()), m_eventListener(m_eventbus) {};
         virtual ~window() = default;
 
         void create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
@@ -26,6 +36,19 @@ namespace b {
         virtual void attach() = 0;
         virtual void update() = 0;
         virtual void detach() = 0;
+
+        template<typename T, typename... TArgs>
+        bool dispatchEvent(TArgs&&... args) {
+            m_eventbus->postpone<T>({ std::forward<TArgs>(args)... });
+            m_eventbus->process();
+            return std::find(m_registeredEvents.begin(), m_registeredEvents.end(), typeid(T).name()) != m_registeredEvents.end();
+        }
+
+        template<typename T>
+        void listenEvent(std::function<void(const T&)> listener) {
+            m_eventListener.listenToCallback(listener);
+            m_registeredEvents.push_back(typeid(T).name());
+        }
 
         void init(py::function python_ui_loop);
         void load_py_script(const b::resource& script);
@@ -47,6 +70,10 @@ namespace b {
         b::widgets::window m_errorWindowWidget;
         b::widgets::text m_errorTextWidget;
         bool m_firstWindowCreation = true;
+
+        std::vector<b::string> m_registeredEvents;
+        std::shared_ptr<b::event_bus> m_eventbus;
+        b::event_listener m_eventListener;
 
         sf::Clock m_deltaClock;
         bool m_win32IDMActive = !m_useWin32ImmersiveDarkMode;
