@@ -2,6 +2,7 @@
 #include "battery/graphics/unit_property.hpp"
 #include "battery/graphics/sfml.hpp"
 #include "battery/graphics/types.hpp"
+#include "battery/graphics/widgets/all.hpp"
 #include "battery/graphics/font_stack.hpp"
 #include "battery/core/log.hpp"
 
@@ -111,6 +112,8 @@ namespace b {
         py::class_<sf::Texture>(module, "sfTexture");
         py::class_<ImFont>(module, "ImFont");
         b::unit_property::define_python_types(module);
+
+        b::define_widget_types(module);
 
         module.def("sameline", &ImGui::SameLine);
         module.def("sameline", []() { ImGui::SameLine(); });

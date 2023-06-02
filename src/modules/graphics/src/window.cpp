@@ -16,11 +16,11 @@
 
 namespace b {
 
-    void window::create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
+    void basic_window::create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
         create(sf::VideoMode(mode), title, style, settings);
     }
 
-    void window::create(sf::VideoMode mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
+    void basic_window::create(sf::VideoMode mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
         m_sfmlWindow.create(mode, title, style, settings);
 
         if (m_firstWindowCreation) {
@@ -41,13 +41,8 @@ namespace b {
         }
     }
 
-    void window::init(py::function callback) {
+    void basic_window::pyInit(py::function callback) {
         this->m_pythonUiLoopCallback = callback;
-    }
-
-    void window::load_py_script(const b::resource& script) {
-        m_uiScriptResource = script;
-        m_uiScriptLoaded = false;
     }
 
     static void recover_imgui_font_stack() {
@@ -63,7 +58,7 @@ namespace b {
         }
     }
 
-    void window::_update() {
+    void basic_window::invoke_update() {
 
         if (!m_sfmlWindow.isOpen()) {
             return;
@@ -239,7 +234,7 @@ namespace b {
         m_sfmlWindow.display();
     }
 
-    void window::render_error_message(const b::string& error) {
+    void basic_window::render_error_message(const b::string& error) {
         m_errorWindowWidget.children_style.font = "default";  // Ask it to explicitly push the default font, in case it wasn't cleaned up properly
         m_errorWindowWidget.left = 0;
         m_errorWindowWidget.top = 0;

@@ -3,6 +3,7 @@
 #include "battery/graphics/widgets/all.hpp"
 #include "battery/graphics/application.hpp"
 #include "battery/graphics/color_hex.hpp"
+#include "battery/graphics/context.hpp"
 #include "battery/graphics/font_stack.hpp"
 #include "battery/graphics/graphics_constants.hpp"
 #include "battery/graphics/property_pack.hpp"

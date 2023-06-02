@@ -4,6 +4,8 @@
 #include "battery/graphics/widget_style.hpp"
 #include "battery/graphics/font_stack.hpp"
 #include "battery/graphics/widgets/all.hpp"
+#include "battery/graphics/context.hpp"
+#include "battery/core/resource_loader.hpp"
 #include "battery/eventbus.hpp"
 
 namespace b {
@@ -33,7 +35,7 @@ namespace b {
         struct SensorChangeEvent : public sf::Event::SensorEvent {};
     }
 
-    class window : public sf::RenderWindow {
+    class basic_window : public sf::RenderWindow {
     public:
 
         double m_framerate { 0.0 };
@@ -44,14 +46,15 @@ namespace b {
 
         sf::RenderWindow& m_sfmlWindow = *this;          // This is a reference to the base class
 
-        window() : m_eventbus(std::make_shared<b::event_bus>()), m_eventListener(m_eventbus) {};
-        virtual ~window() = default;
+        basic_window() : m_eventbus(std::make_shared<b::event_bus>()), m_eventListener(m_eventbus) {};
+        virtual ~basic_window() = default;
 
         void create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
         void create(sf::VideoMode mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
         virtual void attach() = 0;
         virtual void update() = 0;
         virtual void detach() = 0;
+        virtual void defineContextPythonTypes(b::py::module& module) = 0;
 
         template<typename T, typename... TArgs>
         bool dispatchEvent(TArgs&&... args) {
@@ -69,22 +72,32 @@ namespace b {
             m_registeredEvents.emplace_back(typeid(T).name());
         }
 
-        void init(py::function python_ui_loop);
-        void load_py_script(const b::resource& script);
+        void pyInit(py::function python_ui_loop);
+
+        template<typename T>
+        void setPythonUiScriptResource(const T& script) {
+            m_uiScriptResourceLoader = std::make_unique<b::resource_loader>(script, [this](const auto& resource) {
+                m_uiScriptResource = resource;
+                m_uiScriptLoaded = false;
+            });
+        }
 
         // Prevent all move and assignment operations due to the reference
-        window(const window&) = delete;
-        window& operator=(const window&) = delete;
-        window(window&&) = delete;
-        window& operator=(window&&) = delete;
+        basic_window(const basic_window&) = delete;
+        basic_window& operator=(const basic_window&) = delete;
+        basic_window(basic_window&&) = delete;
+        basic_window& operator=(basic_window&&) = delete;
+
+        void invoke_update();
 
     private:
-        void _update();
         void render_error_message(const b::string& error);
 
         py::function m_pythonUiLoopCallback;
         b::resource m_uiScriptResource;
+        std::unique_ptr<b::resource_loader> m_uiScriptResourceLoader;
         bool m_uiScriptLoaded = true;
+
         std::optional<b::string> m_errorMessage;
         b::widgets::window m_errorWindowWidget;
         b::widgets::text m_errorTextWidget;
@@ -96,7 +109,22 @@ namespace b {
 
         sf::Clock m_deltaClock;
         bool m_win32IDMActive = !m_useWin32ImmersiveDarkMode;
-        friend class application;
+    };
+
+    template<b::derived_from<b::context> T, b::string_literal ContextName>
+    class window : public basic_window {
+    public:
+        T m_context;
+
+        window() = default;
+
+        void defineContextPythonTypes(b::py::module& module) override {
+            m_context.define_python_types(module);
+            module.attr(ContextName.value) = m_context;
+            module.attr("init") = [this](const b::py::function& python_ui_loop) {
+                pyInit(python_ui_loop);
+            };
+        }
     };
 
 }
