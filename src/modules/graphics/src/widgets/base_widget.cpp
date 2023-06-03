@@ -4,14 +4,14 @@
 namespace b::widgets {
 
     base_widget::base_widget(py::object context, b::string name) : context(std::move(context)), name(std::move(name)) {
-        new_id();
+        createNewId();
     }
 
-    b::string base_widget::base_get_identifier() const {
-        return name + "##batteryui" + std::to_string(id);
+    b::string base_widget::baseGetIdentifier() const {
+        return name + "##batteryui" + std::to_string(m_id);
     }
 
-    static std::optional<float> get_horizontal_px(const unit_property& property) {
+    static std::optional<float> getHorizontalPx(const unit_property& property) {
         std::optional<float> px;
         switch (property.unit()) {
             case b::unit::UNITLESS: px = property.numeric(); break;
@@ -23,7 +23,7 @@ namespace b::widgets {
         return px;
     }
 
-    static std::optional<float> get_vertical_px(const unit_property& property) {
+    static std::optional<float> getVerticalPx(const unit_property& property) {
         std::optional<float> px;
         switch (property.unit()) {
             case b::unit::UNITLESS: px = property.numeric(); break;
@@ -35,17 +35,17 @@ namespace b::widgets {
         return px;
     }
 
-    void base_widget::base_set_cursor_position_to_min_bb() const {
-        ImGui::SetCursorPos(base_get_bb_min());
+    void base_widget::baseSetCursorPositionToMinBB() const {
+        ImGui::SetCursorPos(baseGetBBMin());
     }
 
-    std::pair<ImVec2, ImVec2> base_widget::base_get_bb() const {
-        auto left_px = get_horizontal_px(left);
-        auto right_px = get_horizontal_px(right);
-        auto width_px = get_horizontal_px(width);
-        auto top_px = get_vertical_px(top);
-        auto bottom_px = get_vertical_px(bottom);
-        auto height_px = get_vertical_px(height);
+    std::pair<ImVec2, ImVec2> base_widget::baseGetBB() const {
+        auto left_px = getHorizontalPx(left);
+        auto right_px = getHorizontalPx(right);
+        auto width_px = getHorizontalPx(width);
+        auto top_px = getVerticalPx(top);
+        auto bottom_px = getVerticalPx(bottom);
+        auto height_px = getVerticalPx(height);
 
         float cursor_left = ImGui::GetCursorPosX();
         float cursor_width = 0;
@@ -98,29 +98,29 @@ namespace b::widgets {
         return std::make_pair(ImVec2(cursor_left, cursor_top), ImVec2(cursor_left + cursor_width, cursor_top + cursor_height));
     }
 
-    ImVec2 base_widget::base_get_bb_min() const {
-        return base_get_bb().first;
+    ImVec2 base_widget::baseGetBBMin() const {
+        return baseGetBB().first;
     }
 
-    ImVec2 base_widget::base_get_bb_max() const {
-        return base_get_bb().second;
+    ImVec2 base_widget::baseGetBBMax() const {
+        return baseGetBB().second;
     }
 
-    ImVec2 base_widget::base_get_bb_size() const {
-        return base_get_bb().second - base_get_bb().first;
+    ImVec2 base_widget::baseGetBBSize() const {
+        return baseGetBB().second - baseGetBB().first;
     }
 
-    void base_widget::base_push_style() {
+    void base_widget::basePushStyle() {
         style.push();
     }
 
-    void base_widget::base_pop_style() {
+    void base_widget::basePopStyle() {
         style.pop();
     }
 
-    void base_widget::new_id() {
-        id = static_id_counter;
-        static_id_counter++;
+    void base_widget::createNewId() {
+        m_id = m_staticIdCounter;
+        m_staticIdCounter++;
     }
 
 }

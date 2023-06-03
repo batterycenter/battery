@@ -28,8 +28,8 @@ namespace b::widgets {
         )
 
     private:
-        void calc_widths();
-        void calc_heights();
+        void calcWidths();
+        void calcHeights();
 
     private:
         std::vector<float> widths;

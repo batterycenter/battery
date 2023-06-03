@@ -4,21 +4,21 @@
 namespace b::widgets {
 
     void panel::operator()(const std::function<void()>& callback) {
-        base_push_style();
+        basePushStyle();
 
-        ImGui::SetNextWindowPos(base_get_bb_min());
-        ImGui::SetNextWindowSize(base_get_bb_size());
+        ImGui::SetNextWindowPos(baseGetBBMin());
+        ImGui::SetNextWindowSize(baseGetBBSize());
 
         if (!always_open) {
-            ImGui::Begin(base_get_identifier().c_str(), &is_open, flags);
+            ImGui::Begin(baseGetIdentifier().c_str(), &is_open, flags);
         } else {
-            ImGui::Begin(base_get_identifier().c_str(), nullptr, flags);
+            ImGui::Begin(baseGetIdentifier().c_str(), nullptr, flags);
         }
         titlebar_hovered = ImGui::IsItemHovered();
         actual_position = ImGui::GetWindowPos();
         actual_size = ImGui::GetWindowSize();
 
-        base_pop_style();
+        basePopStyle();
 
         if (callback) {
             children_style.push();

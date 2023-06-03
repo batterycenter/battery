@@ -6,14 +6,14 @@
 namespace b::widgets {
 
     void button::operator()() {
-        base_push_style();
+        basePushStyle();
 
-        base_set_cursor_position_to_min_bb();
+        baseSetCursorPositionToMinBB();
         if (custom_implementation) {
             std::tie(clicked, hovered, held) = custom_implementation();
         }
         else {
-            clicked = ImGui::Button(base_get_identifier().c_str(), base_get_bb_size());
+            clicked = ImGui::Button(baseGetIdentifier().c_str(), baseGetBBSize());
         }
 
         held = ImGui::IsItemActive();
@@ -21,7 +21,7 @@ namespace b::widgets {
         actual_position = ImGui::GetItemRectMin();
         actual_size = ImGui::GetItemRectSize();
 
-        base_pop_style();
+        basePopStyle();
     }
 
 }

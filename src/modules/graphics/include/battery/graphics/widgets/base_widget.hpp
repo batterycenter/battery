@@ -52,21 +52,21 @@ namespace b::widgets {
         )
 
     protected:
-        b::string base_get_identifier() const;
-        void base_set_cursor_position_to_min_bb() const;
-        std::pair<ImVec2, ImVec2> base_get_bb() const;
-        ImVec2 base_get_bb_min() const;
-        ImVec2 base_get_bb_max() const;
-        ImVec2 base_get_bb_size() const;
-        void base_push_style();
-        void base_pop_style();
+        b::string baseGetIdentifier() const;
+        void baseSetCursorPositionToMinBB() const;
+        std::pair<ImVec2, ImVec2> baseGetBB() const;
+        ImVec2 baseGetBBMin() const;
+        ImVec2 baseGetBBMax() const;
+        ImVec2 baseGetBBSize() const;
+        void basePushStyle();
+        void basePopStyle();
 
-        size_t id = 0;
+        size_t m_id = 0;
 
     private:
-        void new_id();
+        void createNewId();
 
-        inline static size_t static_id_counter = 0;
+        inline static size_t m_staticIdCounter = 0;
     };
 
 }

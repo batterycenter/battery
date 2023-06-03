@@ -8,14 +8,14 @@ namespace b::widgets {
     }
 
     void container::operator()(const std::function<void()>& callback) {
-        base_push_style();
+        basePushStyle();
 
-        base_set_cursor_position_to_min_bb();
+        baseSetCursorPositionToMinBB();
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-        ImGui::BeginChild(base_get_identifier().c_str(), base_get_bb_size(), native_window_border, flags);
+        ImGui::BeginChild(baseGetIdentifier().c_str(), baseGetBBSize(), native_window_border, flags);
         ImGui::PopStyleVar();
 
-        base_pop_style();
+        basePopStyle();
 
         if (callback) {
             children_style.push();

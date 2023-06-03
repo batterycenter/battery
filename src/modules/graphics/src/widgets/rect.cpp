@@ -4,13 +4,13 @@
 namespace b::widgets {
 
     void rect::operator()() {
-        base_push_style();
+        basePushStyle();
 
-        auto size = base_get_bb_size();
+        auto size = baseGetBBSize();
         if (size.x != 0 && size.y != 0) {
-            base_set_cursor_position_to_min_bb();
+            baseSetCursorPositionToMinBB();
             ImVec2 p0 = ImGui::GetCursorScreenPos();
-            ImGui::InvisibleButton(base_get_identifier().c_str(), size);
+            ImGui::InvisibleButton(baseGetIdentifier().c_str(), size);
             ImGui::GetWindowDrawList()->AddRectFilled(
                     p0,
                     p0 + size,
@@ -21,7 +21,7 @@ namespace b::widgets {
             actual_size = ImGui::GetItemRectSize();
         }
 
-        base_pop_style();
+        basePopStyle();
     }
 
 }

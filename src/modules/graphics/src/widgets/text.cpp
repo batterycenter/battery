@@ -4,7 +4,7 @@
 namespace b::widgets {
 
     void text::operator()() {
-        base_push_style();
+        basePushStyle();
 
         text_container.native_window_border = false;
 
@@ -27,7 +27,7 @@ namespace b::widgets {
             this->height = textSize.y;
         }
 
-        base_set_cursor_position_to_min_bb();
+        baseSetCursorPositionToMinBB();
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
         ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0);
@@ -61,7 +61,7 @@ namespace b::widgets {
             if (hyperlink) {
                 ImGui::SetCursorPos(cursorpos);
                 ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0);
-                hyperlink_clicked = ImGui::InvisibleButton(base_get_identifier().c_str(), textSize);
+                hyperlink_clicked = ImGui::InvisibleButton(baseGetIdentifier().c_str(), textSize);
                 hyperlink_hovered = ImGui::IsItemHovered();
                 if (hyperlink_hovered) {
                     ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
@@ -71,7 +71,7 @@ namespace b::widgets {
         });
         ImGui::PopStyleVar(3);
 
-        base_pop_style();
+        basePopStyle();
     }
 
 }

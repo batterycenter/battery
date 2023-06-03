@@ -4,23 +4,23 @@
 namespace b::widgets {
 
     void input::operator()() {
-        base_push_style();
+        basePushStyle();
 
         buffer = content;
         buffer.resize(buffer_size);
-        base_set_cursor_position_to_min_bb();
+        baseSetCursorPositionToMinBB();
 
-        if (base_get_bb_size().x != 0) {
-            ImGui::PushItemWidth(base_get_bb_size().x);
+        if (baseGetBBSize().x != 0) {
+            ImGui::PushItemWidth(baseGetBBSize().x);
         }
 
-        changed = ImGui::InputTextWithHint(base_get_identifier().c_str(), hint.c_str(), buffer.data(), buffer.size(), flags);
+        changed = ImGui::InputTextWithHint(baseGetIdentifier().c_str(), hint.c_str(), buffer.data(), buffer.size(), flags);
         actual_position = ImGui::GetItemRectMin();
         actual_size = ImGui::GetItemRectSize();
         active = ImGui::IsItemActive();
         content = buffer.data();    // Re-parse as a C-String
 
-        base_pop_style();
+        basePopStyle();
     }
 
 }
