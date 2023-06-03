@@ -71,8 +71,12 @@ function(__apply_common_target_options TARGET)  # For all libraries and executab
     target_link_libraries(${TARGET} Threads::Threads)
 
     # Set common Preprocessor Flags
-    if(MSVC)
-        target_compile_options(${TARGET} PRIVATE /Zc:__cplusplus /MP /W2 /utf-8)
+    if(MSVC)        # TODO: Document all of these MSVC shitties
+        target_compile_options(${TARGET} PRIVATE /Zc:__cplusplus)   # Use the standards-compliant __cplusplus macro
+        target_compile_options(${TARGET} PRIVATE /Zc:preprocessor)  # Use the standards-compliant preprocessor instead of MSVC legacy mode
+        target_compile_options(${TARGET} PRIVATE /MP)               # Use multiple cores for compilation
+        target_compile_options(${TARGET} PRIVATE /W2)               # Warning level
+        target_compile_options(${TARGET} PRIVATE /utf-8)            # Use UTF-8 source and execution character sets
     else()
         target_compile_options(${TARGET} PRIVATE -Wno-psabi -Wall -Wextra)
     endif()

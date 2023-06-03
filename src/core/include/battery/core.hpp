@@ -17,6 +17,7 @@
 #include "battery/core/log.hpp"
 #include "battery/core/magic_enum.hpp"
 #include "battery/core/main.hpp"
+#include "battery/core/map.hpp"
 #include "battery/core/messages.hpp"
 #include "battery/core/process.hpp"
 #include "battery/core/resource.hpp"

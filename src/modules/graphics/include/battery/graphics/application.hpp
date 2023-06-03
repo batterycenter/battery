@@ -38,9 +38,11 @@ namespace b {
         std::vector<std::shared_ptr<b::basic_window>> m_windows;
     };
 
-    template<b::derived_from<b::context> T, string_literal ContextName>
-    class application : public basic_application {
+    template<b::derived_from<b::py_context> T, b::template_string_literal ContextName>
+    class py_application : public basic_application {
     public:
+        py_application() = default;
+
         T m_context;
 
         void apply_python_types(b::py::module& module) {
@@ -53,8 +55,6 @@ namespace b {
                 window->defineContextPythonTypes(module);
             }
         }
-
-        application() = default;
     };
 
 }

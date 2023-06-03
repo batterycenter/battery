@@ -111,19 +111,19 @@ namespace b {
         bool m_win32IDMActive = !m_useWin32ImmersiveDarkMode;
     };
 
-    template<b::derived_from<b::context> T, b::string_literal ContextName>
-    class window : public basic_window {
+    template<b::derived_from<b::py_context> T, b::template_string_literal ContextName>
+    class py_window : public basic_window {
     public:
         T m_context;
 
-        window() = default;
+        py_window() = default;
 
         void defineContextPythonTypes(b::py::module& module) override {
             m_context.define_python_types(module);
             module.attr(ContextName.value) = m_context;
-            module.attr("init") = [this](const b::py::function& python_ui_loop) {
-                pyInit(python_ui_loop);
-            };
+//            module.attr("init") = [this](const b::py::function& python_ui_loop) {
+//                pyInit(python_ui_loop);
+//            };
         }
     };
 
