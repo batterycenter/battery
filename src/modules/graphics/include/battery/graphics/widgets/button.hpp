@@ -15,15 +15,12 @@ namespace b::widgets {
 
         void operator()() override;
 
-        inline static void define_python_types(py::module& module) {
-            b::py::class_<b::widgets::button, b::widgets::base_widget>(module, "button")
-                .def(b::py::init<>())
-                .def(b::py::init<py::object>())
-                .def_readwrite("clicked", &b::widgets::button::clicked)
-                .def_readwrite("held", &b::widgets::button::held)
-                .def_readwrite("hovered", &b::widgets::button::hovered)
-                .def("__call__", &b::widgets::button::operator());
-        }
+        B_DEF_PY_WIDGET_CONTEXT_FUNC(
+            B_DEF_PY_WIDGET_SUBCLASS(button, clicked, held, hovered)
+            .def(py::init<>())
+            .def(py::init<py::object>())
+            .def("__call__", [](button& self) { self(); })
+        )
 
     protected:
         std::function<std::tuple<bool, bool, bool>()> custom_implementation {};

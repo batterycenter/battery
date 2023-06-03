@@ -9,7 +9,7 @@ namespace b::widgets {
     void dummy(float width, float height);
 
     namespace dummies {
-        inline void define_python_types(b::py::module& module) {
+        inline void definePythonFunctions(b::py::module& module) {
             module.def("vspace", &b::widgets::vspace);
             module.def("hspace", &b::widgets::hspace);
             module.def("dummy", &b::widgets::dummy);

@@ -13,13 +13,12 @@ namespace b::widgets {
 
         void operator()() override;
 
-        inline static void define_python_types(py::module& module) {
-            b::py::class_<b::widgets::checkbox_ex, b::widgets::checkbox>(module, "checkbox_ex")
-                .def(b::py::init<>())
-                .def(b::py::init<py::object>())
-                .def_readwrite("inner_padding_factor", &b::widgets::checkbox_ex::inner_padding_factor)
-                .def("__call__", &b::widgets::checkbox::operator());
-        }
+        B_DEF_PY_WIDGET_CONTEXT_FUNC(
+            B_DEF_PY_WIDGET_SUBCLASS(checkbox_ex, inner_padding_factor)
+            .def(py::init<>())
+            .def(py::init<py::object>())
+            .def("__call__", [](checkbox_ex& self) { self(); })
+        )
 
     private:
         bool Checkbox(const char* label, bool* v);

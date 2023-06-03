@@ -11,13 +11,12 @@ namespace b::widgets {
         checkbox(py::object context = py::object()) : base_widget(context, "checkbox") {}
         void operator()() override;
 
-        inline static void define_python_types(py::module& module) {
-            b::py::class_<b::widgets::checkbox, b::widgets::base_widget>(module, "checkbox")
-                .def(b::py::init<>())
-                .def(b::py::init<py::object>())
-                .def_readwrite("state", &b::widgets::checkbox::state)
-                .def("__call__", &b::widgets::checkbox::operator());
-        }
+        B_DEF_PY_WIDGET_CONTEXT_FUNC(
+            B_DEF_PY_WIDGET_SUBCLASS(checkbox, state)
+            .def(py::init<>())
+            .def(py::init<py::object>())
+            .def("__call__", [](checkbox& self) { self(); })
+        )
     };
 
 }

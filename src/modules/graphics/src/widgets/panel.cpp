@@ -1,9 +1,9 @@
 
-#include "battery/graphics/widgets/window.hpp"
+#include "battery/graphics/widgets/panel.hpp"
 
 namespace b::widgets {
 
-    void window::operator()(const std::function<void()>& callback) {
+    void panel::operator()(const std::function<void()>& callback) {
         base_push_style();
 
         ImGui::SetNextWindowPos(base_get_bb_min());

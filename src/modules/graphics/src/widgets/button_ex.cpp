@@ -1,5 +1,5 @@
 
-#include "battery/graphics/widgets/fancy_button.hpp"
+#include "battery/graphics/widgets/button_ex.hpp"
 #include "imgui_internal.h"
 
 namespace b::widgets {
@@ -74,7 +74,7 @@ namespace b::widgets {
         return { clicked, held, hovered };
     }
 
-    fancy_button::fancy_button(py::object context) : button(context) {
+    button_ex::button_ex(py::object context) : button(context) {
         this->custom_implementation = [this]() {
             auto color_left = b::property_stack::get("button-gradient-color-left", "#000000"_u.color());
             auto color_right = b::property_stack::get("button-gradient-color-right", "#FFFFFF"_u.color());
@@ -82,7 +82,7 @@ namespace b::widgets {
         };
     }
 
-    void fancy_button::operator()() {
+    void button_ex::operator()() {
         b::widgets::button::operator()();
     }
 

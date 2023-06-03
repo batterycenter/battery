@@ -19,18 +19,13 @@ namespace b::widgets {
         void operator()() override;
         void operator()(const std::function<void(std::function<void(int, int, std::function<void()>)>)>& callback);
 
-        inline static void define_python_types(py::module& module) {
-            b::py::class_<b::widgets::grid, b::widgets::base_widget>(module, "grid")
-                .def(b::py::init<>())
-                .def(b::py::init<py::object>())
-                .def_readwrite("frame_border", &b::widgets::grid::frame_border)
-                .def_readwrite("cell_border", &b::widgets::grid::cell_border)
-                .def_readwrite("cell_heights", &b::widgets::grid::cell_heights)
-                .def_readwrite("cell_widths", &b::widgets::grid::cell_widths)
-                .def_readwrite("children_style", &b::widgets::grid::children_style)
-                .def("__call__", [](b::widgets::grid& self) { self(); })
-                .def("__call__", [](b::widgets::grid& self, const std::function<void(std::function<void(int, int, std::function<void()>)>)>& callback) { self(callback); });
-        }
+        B_DEF_PY_WIDGET_CONTEXT_FUNC(
+            B_DEF_PY_WIDGET_SUBCLASS(grid, frame_border, cell_border, cell_heights, cell_widths, children_style)
+            .def(py::init<>())
+            .def(py::init<py::object>())
+            .def("__call__", [](grid& self) { self(); })
+            .def("__call__", [](grid& self, const std::function<void(std::function<void(int, int, std::function<void()>)>)>& callback) { self(callback); })
+        )
 
     private:
         void calc_widths();

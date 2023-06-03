@@ -11,14 +11,15 @@ battery_add_source_files(battery_graphics
         src/widgets/checkbox_ex.cpp
         src/widgets/container.cpp
         src/widgets/dummy.cpp
-        src/widgets/fancy_button.cpp
+        src/widgets/button_ex.cpp
         src/widgets/grid.cpp
         src/widgets/image.cpp
         src/widgets/input.cpp
         src/widgets/rect.cpp
         src/widgets/text.cpp
-        src/widgets/window.cpp
+        src/widgets/panel.cpp
 
+        src/application.cpp
         src/color_hex.cpp
         src/font_stack.cpp
         src/graphics_constants.cpp
@@ -29,7 +30,6 @@ battery_add_source_files(battery_graphics
         src/unit_property.cpp
         src/widget_builder.cpp
         src/window.cpp
-        src/application.cpp
         )
 
 battery_set_ide_folder(battery_graphics "battery/modules")

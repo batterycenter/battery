@@ -5,6 +5,7 @@
 #include "battery/graphics/unit_property.hpp"
 #include "battery/graphics/property_stack.hpp"
 #include "battery/graphics/font_stack.hpp"
+#include "battery/graphics/context.hpp"
 
 namespace b {
 
@@ -49,16 +50,14 @@ namespace b {
             properties[str] = { pack.first, pack.second };
         }
 
-        inline static void define_python_types(b::py::module& module) {
-            b::py::class_<b::widget_style>(module, "widget_style")
-                    .def(b::py::init<>())
-                    .def_readwrite("font", &b::widget_style::font)
-                    .def("__getitem__", static_cast<property_pack& (widget_style::*)(const b::string&)>(&b::widget_style::get))
-                    .def("__setitem__", static_cast<void (widget_style::*)(const b::string&, const b::string&)>(&b::widget_style::set))
-                    .def("__setitem__", static_cast<void (widget_style::*)(const b::string&, const std::pair<b::string, b::string>&)>(&b::widget_style::set))
-                    .def("push", &b::widget_style::push)
-                    .def("pop", &b::widget_style::pop);
-        }
+        B_DEF_PY_STATIC_CONTEXT_FUNC(
+            B_DEF_PY_RAW_CLASS(widget_style, font)
+            .def("__getitem__", static_cast<property_pack& (widget_style::*)(const b::string&)>(&b::widget_style::get))
+            .def("__setitem__", static_cast<void (widget_style::*)(const b::string&, const b::string&)>(&b::widget_style::set))
+            .def("__setitem__", static_cast<void (widget_style::*)(const b::string&, const std::pair<b::string, b::string>&)>(&b::widget_style::set))
+            .def("push", &b::widget_style::push)
+            .def("pop", &b::widget_style::pop)
+        )
 
     private:
         std::unordered_map<b::string, property_pack> properties;

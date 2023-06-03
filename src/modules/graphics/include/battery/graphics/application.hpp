@@ -41,18 +41,19 @@ namespace b {
     template<b::derived_from<b::py_context> T, b::template_string_literal ContextName>
     class py_application : public basic_application {
     public:
-        py_application() = default;
-
         T m_context;
 
-        void apply_python_types(b::py::module& module) {
+        py_application() = default;
+
+        void definePythonClasses(b::py::module& module) {
             b::define_python_types(module);
 
-            m_context.define_python_types(module);
+            T::defineParentPythonClass(module);
+            m_context.definePythonClass(module);
             module.attr(ContextName.value) = m_context;
 
             for (auto& window : windows()) {
-                window->defineContextPythonTypes(module);
+                window->definePythonClass(module);
             }
         }
     };

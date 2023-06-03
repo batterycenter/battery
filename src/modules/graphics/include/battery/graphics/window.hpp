@@ -54,7 +54,7 @@ namespace b {
         virtual void attach() = 0;
         virtual void update() = 0;
         virtual void detach() = 0;
-        virtual void defineContextPythonTypes(b::py::module& module) = 0;
+        virtual void definePythonClass(b::py::module& module) = 0;
 
         template<typename T, typename... TArgs>
         bool dispatchEvent(TArgs&&... args) {
@@ -99,7 +99,7 @@ namespace b {
         bool m_uiScriptLoaded = true;
 
         std::optional<b::string> m_errorMessage;
-        b::widgets::window m_errorWindowWidget;
+        b::widgets::panel m_errorPanelWidget;
         b::widgets::text m_errorTextWidget;
         bool m_firstWindowCreation = true;
 
@@ -116,14 +116,16 @@ namespace b {
     public:
         T m_context;
 
-        py_window() = default;
+        py_window() {
+            m_context.m_initPyWindowFunc = [this](const b::py::function& python_ui_loop) {
+                pyInit(python_ui_loop);
+            };
+        }
 
-        void defineContextPythonTypes(b::py::module& module) override {
-            m_context.define_python_types(module);
+        void definePythonClass(b::py::module& module) override {
+            T::defineParentPythonClass(module);
+            m_context.definePythonClass(module);
             module.attr(ContextName.value) = m_context;
-//            module.attr("init") = [this](const b::py::function& python_ui_loop) {
-//                pyInit(python_ui_loop);
-//            };
         }
     };
 

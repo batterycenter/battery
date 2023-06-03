@@ -17,18 +17,12 @@ namespace b::widgets {
         input(py::object context = py::object()) : base_widget(context, "input") {}
         void operator()() override;
 
-        inline static void define_python_types(py::module& module) {
-            b::py::class_<b::widgets::input, b::widgets::base_widget>(module, "input")
-                    .def(b::py::init<>())
-                    .def(b::py::init<py::object>())
-                    .def_readwrite("content", &b::widgets::input::content)
-                    .def_readwrite("hint", &b::widgets::input::hint)
-                    .def_readwrite("flags", &b::widgets::input::flags)
-                    .def_readwrite("buffer_size", &b::widgets::input::buffer_size)
-                    .def_readonly("changed", &b::widgets::input::changed)
-                    .def_readonly("active", &b::widgets::input::active)
-                    .def("__call__", [](b::widgets::input& self) { self(); });
-        }
+        B_DEF_PY_WIDGET_CONTEXT_FUNC(
+            B_DEF_PY_WIDGET_SUBCLASS(input, content, hint, flags, buffer_size, changed, active)
+            .def(py::init<>())
+            .def(py::init<py::object>())
+            .def("__call__", [](input& self) { self(); })
+        )
 
     private:
         b::string buffer;    // This is a buffer filled with zeros

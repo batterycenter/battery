@@ -10,6 +10,7 @@
 #include "battery/graphics/widget_style.hpp"
 #include "battery/graphics/font_stack.hpp"
 #include "battery/graphics/types.hpp"
+#include "battery/graphics/context.hpp"
 #include "magic_enum.hpp"
 
 namespace b::widgets {
@@ -40,26 +41,15 @@ namespace b::widgets {
         base_widget(base_widget const& other) = delete;     // Copying is NOT allowed due to the unique ID
         void operator=(base_widget const& other) = delete;
 
-        base_widget(base_widget&& other) = default;	        // Moving is allowed as the other object is then invalid
+        base_widget(base_widget&& other) = default;	        // Moving is allowed as the id will not be duplicated
         base_widget& operator=(base_widget&& other) = default;
 
         virtual void operator()() = 0;
 
-        inline static void define_python_types(py::module& module) {
-            b::py::class_<b::widgets::base_widget>(module, "base_widget")
-                    .def_property("name", [](b::widgets::base_widget& base) { return base.name; }, [](b::widgets::base_widget& base, const std::string& str) { base.name = str; })
-                    .def_readwrite("context", &b::widgets::base_widget::context)
-                    .def_readwrite("left", &b::widgets::base_widget::left)
-                    .def_readwrite("top", &b::widgets::base_widget::top)
-                    .def_readwrite("width", &b::widgets::base_widget::width)
-                    .def_readwrite("height", &b::widgets::base_widget::height)
-                    .def_readwrite("right", &b::widgets::base_widget::right)
-                    .def_readwrite("bottom", &b::widgets::base_widget::bottom)
-                    .def_readwrite("actual_position", &b::widgets::base_widget::actual_position)
-                    .def_readwrite("actual_size", &b::widgets::base_widget::actual_size)
-                    .def_readwrite("style", &b::widgets::base_widget::style)
-                    .def("__call__", &b::widgets::base_widget::operator());
-        }
+        B_DEF_PY_STATIC_CONTEXT_FUNC(
+            B_DEF_PY_RAW_CLASS(base_widget, name, context, left, top, width, height, right, bottom, actual_position, actual_size, style)
+            .def("__call__", &base_widget::operator())
+        )
 
     protected:
         b::string base_get_identifier() const;

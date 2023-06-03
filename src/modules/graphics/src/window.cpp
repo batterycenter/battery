@@ -197,6 +197,8 @@ namespace b {
                 m_errorMessage = e.what();
                 b::log::error("Unhandled exception:\n{}", e.what());
             }
+
+            b::log::info("Loaded successfully");
         }
 
         m_sfmlWindow.clear(b::graphics_constants::battery_default_background_color());
@@ -235,18 +237,23 @@ namespace b {
     }
 
     void basic_window::render_error_message(const b::string& error) {
-        m_errorWindowWidget.children_style.font = "default";  // Ask it to explicitly push the default font, in case it wasn't cleaned up properly
-        m_errorWindowWidget.left = 0;
-        m_errorWindowWidget.top = 0;
-        m_errorWindowWidget.width = static_cast<float>(getSize().x);
-        m_errorWindowWidget.height = static_cast<float>(getSize().y);
-        m_errorWindowWidget.flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
-        m_errorWindowWidget.style["ImGuiCol_WindowBg"] = "#333333"_u;
-        m_errorWindowWidget.style["ImGuiStyleVar_WindowRounding"] = 0;
+        m_errorPanelWidget.children_style.font = "default";  // Ask it to explicitly push the default font, in case it wasn't cleaned up properly
+        m_errorPanelWidget.left = 0;
+        m_errorPanelWidget.top = 0;
+        m_errorPanelWidget.width = static_cast<float>(getSize().x);
+        m_errorPanelWidget.height = static_cast<float>(getSize().y);
+        m_errorPanelWidget.flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
+        m_errorPanelWidget.style["ImGuiCol_WindowBg"] = "#333333"_u;
+        m_errorPanelWidget.style["ImGuiStyleVar_WindowRounding"] = 0;
         m_errorTextWidget.label = b::format("Unhandled exception:\n{}", error);
+        m_errorTextWidget.left = "5px"_u;
+        m_errorTextWidget.top = "5px"_u;
+        m_errorTextWidget.right = "5px"_u;
+        m_errorTextWidget.bottom = "5px"_u;
+        m_errorTextWidget.alignv = b::alignv::TOP;
         m_errorTextWidget.style["ImGuiCol_Text"] = "#D34040"_u;
 
-        m_errorWindowWidget([this]() {
+        m_errorPanelWidget([this]() {
             m_errorTextWidget();
         });
     }

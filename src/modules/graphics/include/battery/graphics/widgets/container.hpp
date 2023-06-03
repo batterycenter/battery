@@ -16,16 +16,13 @@ namespace b::widgets {
         void operator()() override;
         void operator()(const std::function<void()>& callback);
 
-        inline static void define_python_types(py::module& module) {
-            b::py::class_<b::widgets::container, b::widgets::base_widget>(module, "container")
-                .def(b::py::init<>())
-                .def(b::py::init<py::object>())
-                .def_readwrite("flags", &b::widgets::container::flags)
-                .def_readwrite("native_window_border", &b::widgets::container::native_window_border)
-                .def_readwrite("children_style", &b::widgets::container::children_style)
-                .def("__call__", [](b::widgets::container& self) { self(); })
-                .def("__call__", [](b::widgets::container& self, const std::function<void()>& callback) { self(callback); });
-        }
+        B_DEF_PY_WIDGET_CONTEXT_FUNC(
+            B_DEF_PY_WIDGET_SUBCLASS(container, flags, native_window_border, children_style)
+            .def(py::init<>())
+            .def(py::init<py::object>())
+            .def("__call__", [](container& self) { self(); })
+            .def("__call__", [](container& self, const std::function<void()>& callback) { self(callback); })
+        )
 
     private:
         void calc_cell_sizes();

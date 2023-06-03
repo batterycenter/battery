@@ -11,13 +11,12 @@ namespace b::widgets {
         image(py::object context = py::object()) : base_widget(context, "image") {}
         void operator()() override;
 
-        inline static void define_python_types(py::module& module) {
-            b::py::class_<b::widgets::image, b::widgets::base_widget>(module, "image")
-                    .def(b::py::init<>())
-                    .def(b::py::init<py::object>())
-                    .def_readwrite("src", &b::widgets::image::src)
-                    .def("__call__", [](b::widgets::image& self) { self(); });
-        }
+        B_DEF_PY_WIDGET_CONTEXT_FUNC(
+            B_DEF_PY_WIDGET_SUBCLASS(image, src)
+            .def(py::init<>())
+            .def(py::init<py::object>())
+            .def("__call__", [](image& self) { self(); })
+        )
     };
 
 }
