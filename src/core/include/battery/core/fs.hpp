@@ -6,6 +6,7 @@
 #include <functional>
 #include "battery/core/string.hpp"
 #include "battery/core/log.hpp"
+#include "battery/core/error.hpp"
 
 namespace b::fs {
 
@@ -132,7 +133,7 @@ namespace b::fs {
                 return str.value();
             }
             else {
-                throw std::runtime_error(b::format("Cannot read file as b::string: File failed while reading into buffer: {}", strerror(errno)));
+                throw std::runtime_error(b::format("Cannot read file as b::string: File failed while reading into buffer: {}", b::strerror(errno)));
             }
         }
 
@@ -160,7 +161,7 @@ namespace b::fs {
         inline static size_t read_file_in_chunks(const fs::path& path, size_t chunk_size, TFunc callback, enum Mode filemode) {
             auto bytes_read = read_file_in_chunks_nothrow(path, chunk_size, callback, filemode);
             if (bytes_read == -1) {
-                throw std::runtime_error(b::format("Cannot read file in chunks: File failed while chunk reading into buffer: {}", strerror(errno)));
+                throw std::runtime_error(b::format("Cannot read file in chunks: File failed while chunk reading into buffer: {}", b::strerror(errno)));
             }
             else {
                 return bytes_read;
@@ -226,7 +227,7 @@ namespace b::fs {
 //    inline static std::streamsize file_size(const fs::path& path, enum Mode filemode) {
 //        auto size = file_size_nothrow(path, filemode);
 //        if (size == -1) {
-//            throw std::runtime_error(b::format("Cannot get compensated file size: File failed while reading into buffer: {}", strerror(errno)));
+//            throw std::runtime_error(b::format("Cannot get compensated file size: File failed while reading into buffer: {}", b::strerror(errno)));
 //        }
 //        else {
 //            return size;
@@ -283,13 +284,13 @@ namespace b::fs {
 
     inline static void write_text_file(const fs::path& path, const b::string& str) {
         if (!write_text_file_nothrow(path, str)) {
-            throw std::runtime_error(b::format("Cannot write file from b::string: File failed for writing: {}", strerror(errno)));
+            throw std::runtime_error(b::format("Cannot write file from b::string: File failed for writing: {}", b::strerror(errno)));
         }
     }
 
     inline static void write_binary_file(const fs::path& path, const b::string& str) {
         if (!write_binary_file_nothrow(path, str)) {
-            throw std::runtime_error(b::format("Cannot write file from b::string: File failed for writing: {}", strerror(errno)));
+            throw std::runtime_error(b::format("Cannot write file from b::string: File failed for writing: {}", b::strerror(errno)));
         }
     }
 

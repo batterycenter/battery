@@ -7,6 +7,7 @@ namespace b {
 
     BaseApplication::BaseApplication() {
         setRequestedFramerate(60.0);
+
     }
 
     BaseApplication & BaseApplication::get() {

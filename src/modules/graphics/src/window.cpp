@@ -1,7 +1,7 @@
 
 #include "battery/graphics/application.hpp"
 #include "battery/graphics/window.hpp"
-#include "battery/graphics/graphics_constants.hpp"
+#include "battery/graphics/constants.hpp"
 #include "battery/graphics/styles.hpp"
 #include "battery/core/string.hpp"
 #include "battery/core/constants.hpp"
@@ -17,6 +17,25 @@
 namespace b {
 
     BaseWindow::~BaseWindow() noexcept {
+
+        if (!m_windowPositionJsonFile.empty()) {                // TODO: Add a check that the window is not created off-monitor. This could make the window unusable.
+            try {
+                nlohmann::json json;       // If the file does not exist yet, just create it
+                try {
+                    json = nlohmann::json::parse(b::fs::read_text_file(m_windowPositionJsonFile));
+                }
+                catch (...) {}
+
+                json["position"] = { m_lastWindowState.position.x, m_lastWindowState.position.y };
+                json["size"] = { m_lastWindowState.size.x, m_lastWindowState.size.y };
+                json["maximized"] = m_lastWindowState.maximized;
+                b::fs::write_text_file(m_windowPositionJsonFile, json.dump(4));
+            }
+            catch (const std::exception& e) {
+                b::log::core::warn("Failed to save window position to '{}': {}", m_windowPositionJsonFile.string(), e.what());
+            }
+        }
+
         ImGui::SFML::Shutdown(m_sfmlWindow);
     }
 
@@ -24,8 +43,14 @@ namespace b {
         create(sf::VideoMode(mode), title, style, settings);
     }
 
-    void BaseWindow::create(sf::VideoMode mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
+    void BaseWindow::create(sf::VideoMode mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings, bool silenceJsonWarning) {
         m_sfmlWindow.create(mode, title, style, settings);
+
+        if (!m_windowPositionJsonFile.empty() && !silenceJsonWarning) {
+            b::log::core::warn("rememberWindowPositionJsonFile() was called on this window, "
+                               "but create() was called with an explicit window size. "
+                               "The last window position will not have any effect.");
+        }
 
         if (m_firstWindowCreation) {
             if (!ImGui::SFML::Init(m_sfmlWindow)) {
@@ -45,8 +70,116 @@ namespace b {
         }
     }
 
+    void BaseWindow::create(const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
+
+        // Reload the window where it was last closed
+        sf::Vector2u size = m_defaultWindowSize;
+        sf::Vector2i position = { static_cast<int>(sf::VideoMode::getDesktopMode().size.x - size.x) / 2,
+                                  static_cast<int>(sf::VideoMode::getDesktopMode().size.y - size.y) / 2 };
+        bool maximized = false;
+
+        try {
+            nlohmann::json json = nlohmann::json::parse(b::fs::read_text_file(m_windowPositionJsonFile));
+            size.x = json["size"][0];
+            size.y = json["size"][1];
+            position.x = json["position"][0];
+            position.y = json["position"][1];
+            maximized = json["maximized"];
+        }
+        catch (const std::exception& e) {
+            if (b::fs::exists(m_windowPositionJsonFile)) {
+                b::log::core::warn("Failed to reload window position from '{}': {}", m_windowPositionJsonFile.string(), e.what());
+            }
+        }
+
+        create(sf::VideoMode(size), title, style, settings, true);
+        m_sfmlWindow.setPosition(position);
+        if (maximized) {
+            maximize();
+        }
+    }
+
     void BaseWindow::pyInit(py::function callback) {
         this->m_pythonUiLoopCallback = callback;
+    }
+
+    void BaseWindow::rememberWindowPositionJsonFile(const b::fs::path& filename) {
+        m_windowPositionJsonFile = filename;
+        if (isOpen()) {
+            b::log::warn("b::window::rememberWindowPositionJsonFile() called after window was already created. "
+                         "This will not have any effect on the current window.");
+        }
+    }
+
+    void BaseWindow::setDefaultWindowSize(const sf::Vector2u& size) {
+        m_defaultWindowSize = size;
+        if (isOpen()) {
+            b::log::warn("b::window::rememberWindowPositionJsonFile() called after window was already created. "
+                         "This will not have any effect on the current window.");
+        }
+    }
+
+    void BaseWindow::showInTaskbar() {
+#ifdef BATTERY_ARCH_WINDOWS
+        long style = GetWindowLongW(getSystemHandle(), GWL_STYLE);
+        style &= ~(WS_VISIBLE);
+        SetWindowLongW(getSystemHandle(), GWL_STYLE, style);
+        ShowWindow(getSystemHandle(), SW_SHOW);
+#else
+#error "Not implemented"
+#endif
+    }
+
+    void BaseWindow::hideFromTaskbar() {
+#ifdef BATTERY_ARCH_WINDOWS
+        long style = GetWindowLongW(getSystemHandle(), GWL_STYLE);
+        style |= WS_VISIBLE;
+        ShowWindow(getSystemHandle(), SW_HIDE);
+        SetWindowLongW(getSystemHandle(), GWL_STYLE, style);
+        ShowWindow(getSystemHandle(), SW_SHOW);
+#else
+#error "Not implemented"
+#endif
+    }
+
+    void BaseWindow::maximize() {
+#ifdef BATTERY_ARCH_WINDOWS
+        ShowWindow(getSystemHandle(), SW_MAXIMIZE);
+#else
+#error "Not implemented"
+#endif
+    }
+
+    void BaseWindow::minimize() {
+#ifdef BATTERY_ARCH_WINDOWS
+        ShowWindow(getSystemHandle(), SW_MINIMIZE);
+#else
+#error "Not implemented"
+#endif
+    }
+
+    void BaseWindow::restore() {
+#ifdef BATTERY_ARCH_WINDOWS
+        ShowWindow(getSystemHandle(), SW_RESTORE);
+#else
+#error "Not implemented"
+#endif
+    }
+
+    bool BaseWindow::isMaximized() {
+#ifdef BATTERY_ARCH_WINDOWS
+        return IsZoomed(getSystemHandle());
+#else
+#error "Not implemented"
+#endif
+    }
+
+    bool BaseWindow::isMinimized() {
+#ifdef BATTERY_ARCH_WINDOWS
+        return IsIconic(getSystemHandle());
+#else
+#error "Not implemented"
+#endif
     }
 
     static void RecoverImguiFontStack() {
@@ -201,7 +334,7 @@ namespace b {
             b::log::info("Loaded successfully");
         }
 
-        m_sfmlWindow.clear(b::graphics_constants::battery_default_background_color());
+        m_sfmlWindow.clear(b::Constants::DefaultWindowBackgroundColor());
         ImGui::SFML::Update(m_sfmlWindow, m_deltaClock.restart());
         b::LockFontStack();
 
@@ -234,6 +367,12 @@ namespace b {
         b::UnlockFontStack();
         ImGui::SFML::Render(m_sfmlWindow);
         m_sfmlWindow.display();
+
+        if (isOpen()) {
+            m_lastWindowState.position = getPosition();
+            m_lastWindowState.size = getSize();
+            m_lastWindowState.maximized = isMaximized();
+        }
     }
 
     void BaseWindow::renderErrorMessage(const b::string& error) {

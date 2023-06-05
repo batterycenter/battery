@@ -1,6 +1,6 @@
 
 #include "battery/graphics/font_stack.hpp"
-#include "battery/graphics/graphics_constants.hpp"
+#include "battery/graphics/constants.hpp"
 #include "resources/fonts_inter_bold_ttf.hpp"
 #include "resources/fonts_inter_medium_ttf.hpp"
 #include "resources/fonts_inter_regular_ttf.hpp"
@@ -124,7 +124,7 @@ namespace b {
         MakeFontAvailable("montserrat-medium", Resources::FONTS_MONTSERRAT_MEDIUM_TTF);
         MakeFontAvailable("montserrat-bold", Resources::FONTS_MONTSERRAT_BOLD_TTF);
 
-        auto [default_font, default_font_size] = b::graphics_constants::battery_default_font();
+        auto [default_font, default_font_size] = b::Constants::DefaultFont();
         b::LoadFont("default", default_font, default_font_size);
     }
 

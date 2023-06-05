@@ -9,7 +9,7 @@ namespace b {
     }
 
     b::string Constants::DefaultApplicationName() {
-        return u8"Battery Application";
+        return u8"BatteryApp";
     }
 
     Platform Constants::Platform() {

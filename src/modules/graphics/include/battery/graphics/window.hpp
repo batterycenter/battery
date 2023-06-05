@@ -5,6 +5,7 @@
 #include "battery/graphics/font_stack.hpp"
 #include "battery/graphics/widgets/all.hpp"
 #include "battery/graphics/context.hpp"
+#include "battery/graphics/constants.hpp"
 #include "battery/core/resource_loader.hpp"
 #include "battery/eventbus.hpp"
 
@@ -50,7 +51,8 @@ namespace b {
         ~BaseWindow() noexcept override;
 
         void create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
-        void create(sf::VideoMode mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
+        void create(sf::VideoMode mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings(), bool silenceJsonWarning = false);
+        void create(const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
         virtual void onAttach() = 0;
         virtual void onUpdate() = 0;
         virtual void onDetach() = 0;
@@ -73,6 +75,16 @@ namespace b {
         }
 
         void pyInit(py::function python_ui_loop);
+        void rememberWindowPositionJsonFile(const b::fs::path& filename);
+        void setDefaultWindowSize(const sf::Vector2u& size);
+
+        void showInTaskbar();
+        void hideFromTaskbar();
+        void maximize();
+        void minimize();
+        void restore();
+        bool isMaximized();
+        bool isMinimized();
 
         template<typename T>
         void setPythonUiScriptResource(const T& script) {
@@ -109,6 +121,15 @@ namespace b {
 
         sf::Clock m_deltaClock;
         bool m_win32IDMActive = !m_useWin32ImmersiveDarkMode;
+
+        b::fs::path m_windowPositionJsonFile;
+        sf::Vector2u m_defaultWindowSize = Constants::DefaultWindowSize();
+
+        struct WindowState {
+            sf::Vector2u size;
+            sf::Vector2i position;
+            bool maximized = false;
+        } m_lastWindowState;
     };
 
     template<b::derived_from<b::PyContext> T, b::template_string_literal ContextName>
