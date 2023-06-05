@@ -16,6 +16,10 @@
 
 namespace b {
 
+    BaseWindow::~BaseWindow() noexcept {
+        ImGui::SFML::Shutdown(m_sfmlWindow);
+    }
+
     void BaseWindow::create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
         create(sf::VideoMode(mode), title, style, settings);
     }
@@ -59,10 +63,6 @@ namespace b {
     }
 
     void BaseWindow::invoke_update() {
-
-        if (!m_sfmlWindow.isOpen()) {
-            return;
-        }
 
 #ifdef BATTERY_ARCH_WINDOWS
         if (m_useWin32ImmersiveDarkMode != m_win32IDMActive) {
@@ -214,7 +214,7 @@ namespace b {
                 b::PushFont("default");
                 style.push();
 
-                update();
+                onUpdate();
 
                 if (m_pythonUiLoopCallback) {
                     m_pythonUiLoopCallback();

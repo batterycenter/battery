@@ -15,7 +15,7 @@ namespace b {
 
     void BaseApplication::detachWindows() {
         for (auto& window : m_windows) {
-            window->detach();
+            window->onDetach();
         }
         m_windows.clear();
     }
@@ -23,39 +23,27 @@ namespace b {
     std::vector<std::shared_ptr<b::BaseWindow>>& BaseApplication::windows() {
         return m_windows;
     }
-    void BaseApplication::consoleSetup() {
-            setup();
+
+    void BaseApplication::onConsoleSetup() {
+        onSetup();
     }
 
-    void BaseApplication::consoleUpdate() {
-
-            update();
-
-            for (auto& window : m_windows) {
+    void BaseApplication::onConsoleUpdate() {
+        onUpdate();
+        for (auto& window : m_windows) {
+            if (window->isOpen()) {
                 window->m_framecount = m_framecount;
                 window->m_frametime = m_frametime;
                 window->m_framerate = m_framerate;
                 window->invoke_update();
             }
-
-            bool should_stop = true;
-            for (auto& window : m_windows) {
-                window->invoke_update();
-                if (window->m_sfmlWindow.isOpen()) {
-                    should_stop = false;
-                }
-            }
-
-            if (should_stop) {
-                this->stopApplication();
-            }
+        }
     }
 
-    void BaseApplication::consoleCleanup() {
-            cleanup();
-            detachWindows();
-
-            ImGui::SFML::Shutdown();
+    void BaseApplication::onConsoleCleanup() {
+        onCleanup();
+        detachWindows();
+        ImGui::SFML::Shutdown();
     }
 
-}
+} // namespace b

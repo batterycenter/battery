@@ -16,15 +16,28 @@ namespace b {
 
         static BaseApplication & get();
 
-        virtual void setup() = 0;
-        virtual void update() = 0;
-        virtual void cleanup() = 0;
+        virtual void onSetup() = 0;
+        virtual void onUpdate() = 0;
+        virtual void onCleanup() = 0;
 
-        template<typename T>
+        template<b::derived_from<b::BaseWindow> T>
         void attachWindow(T** windowPtr) {
             m_windows.emplace_back(std::make_shared<T>());
             *windowPtr = dynamic_cast<T*>(m_windows.back().get());
-            (*windowPtr)->attach();
+            (*windowPtr)->onAttach();
+        }
+
+        template<b::derived_from<b::BaseWindow> T>
+        void detachWindow(T** windowPtr) {
+            (*windowPtr)->onDetach();
+            auto index = std::distance(m_windows.begin(), std::find_if(m_windows.begin(), m_windows.end(), [&](auto& window) {
+                return window.get() == *windowPtr;
+            }));
+            if (index == m_windows.size()) {
+                throw std::runtime_error("Failed to detach window: No such window is registered");
+            }
+            m_windows.erase(m_windows.begin() + index);
+            *windowPtr = nullptr;
         }
 
         void detachWindows();
@@ -32,9 +45,9 @@ namespace b {
         std::vector<std::shared_ptr<b::BaseWindow>>& windows();
 
     private:
-        void consoleSetup() final override;
-        void consoleUpdate() final override;
-        void consoleCleanup() final override;
+        void onConsoleSetup() final override;
+        void onConsoleUpdate() final override;
+        void onConsoleCleanup() final override;
 
         b::py::scoped_interpreter guard{};
         std::vector<std::shared_ptr<b::BaseWindow>> m_windows;

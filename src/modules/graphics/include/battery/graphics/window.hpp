@@ -47,13 +47,13 @@ namespace b {
         sf::RenderWindow& m_sfmlWindow = *this;          // This is a reference to the base class
 
         BaseWindow() : m_eventbus(std::make_shared<b::event_bus>()), m_eventListener(m_eventbus) {};
-        ~BaseWindow() override = default;
+        ~BaseWindow() noexcept override;
 
         void create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
         void create(sf::VideoMode mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
-        virtual void attach() = 0;
-        virtual void update() = 0;
-        virtual void detach() = 0;
+        virtual void onAttach() = 0;
+        virtual void onUpdate() = 0;
+        virtual void onDetach() = 0;
         virtual void definePythonClass(b::py::module& module) = 0;
 
         template<typename T, typename... TArgs>

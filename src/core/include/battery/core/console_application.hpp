@@ -21,9 +21,9 @@ namespace b {
         uint64_t m_framecount { 0 };
         int m_exitCode { 0 };
 
-        virtual void consoleSetup();
-        virtual void consoleUpdate();
-        virtual void consoleCleanup();
+        virtual void onConsoleSetup();
+        virtual void onConsoleUpdate();
+        virtual void onConsoleCleanup();
 
         void setRequestedFramerate(double requested_framerate);
         void setRequestedFrametime(double requested_frametime);

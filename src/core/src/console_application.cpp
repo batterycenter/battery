@@ -26,15 +26,15 @@ namespace b {
         return m_instance != nullptr;
     }
 
-    void ConsoleApplication::consoleSetup() {
+    void ConsoleApplication::onConsoleSetup() {
         // No action
     }
 
-    void ConsoleApplication::consoleUpdate() {
+    void ConsoleApplication::onConsoleUpdate() {
         // No action
     }
 
-    void ConsoleApplication::consoleCleanup() {
+    void ConsoleApplication::onConsoleCleanup() {
         // No action
     }
 
@@ -110,15 +110,15 @@ namespace b {
     }
 
     bool ConsoleApplication::_setup() {
-        return CatchExceptions("b::application::setup()", &ConsoleApplication::consoleSetup, this);
+        return CatchExceptions("b::application::setup()", &ConsoleApplication::onConsoleSetup, this);
     }
 
     bool ConsoleApplication::_update() {
-        return CatchExceptions("b::application::update()", &ConsoleApplication::consoleUpdate, this);
+        return CatchExceptions("b::application::update()", &ConsoleApplication::onConsoleUpdate, this);
     }
 
     bool ConsoleApplication::_cleanup() {
-        return CatchExceptions("b::application::cleanup()", &ConsoleApplication::consoleCleanup, this);
+        return CatchExceptions("b::application::cleanup()", &ConsoleApplication::onConsoleCleanup, this);
     }
 
 } // namespace b
