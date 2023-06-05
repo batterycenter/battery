@@ -1,6 +1,7 @@
 
 #include "battery/core/all.hpp"
 #include <regex>
+#include <utility>
 
 // TODO: Print version (add option)
 // TODO: Create cache file besides executable, that remembers the hash of a file and does not overwrite if not necessary
@@ -17,7 +18,7 @@ enum class ErrorCode {
 };
 
 // Using lookup tables for converting ints to hex strings, for best performance
-size_t write_hex_comma(char* buf, uint8_t num) {
+size_t WriteHexComma(char* buf, uint8_t num) {
     static b::string lut =
             "000102030405060708090a0b0c0d0e0f"
             "101112131415161718191a1b1c1d1e1f"
@@ -36,15 +37,17 @@ size_t write_hex_comma(char* buf, uint8_t num) {
             "e0e1e2e3e4e5e6e7e8e9eaebecedeeef"
             "f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff";
 
+    // NOLINTBEGIN
     buf[0] = '0';
     buf[1] = 'x';
     buf[2] = lut[(num & 0xFF) * 2];
     buf[3] = lut[(num & 0xFF) * 2 + 1];
     buf[4] = ',';
+    // NOLINTEND
     return 5;
 }
 
-b::string sanitizeVariableName(b::string symbol) {
+b::string SanitizeVariableName(b::string symbol) {
     symbol = b::string::replace(symbol, "Ä", "ae");
     symbol = b::string::replace(symbol, "ä", "ae");
     symbol = b::string::replace(symbol, "Ö", "oe");
@@ -72,29 +75,29 @@ public:
         )
         : m_resourcePath(resourcePath),
           m_targetPath(targetPath),
-          m_packedSymbolName(symbolName)
+          m_packedSymbolName(b::string::to_upper(symbolName))
     {
         auto packedSymbol = b::fs::path(m_packedSymbolName);
-        m_strippedSymbolName = sanitizeVariableName(packedSymbol.filename().u8string());
-        m_sanitizedSymbolName = sanitizeVariableName(packedSymbol.u8string());
+        m_strippedSymbolName = SanitizeVariableName(packedSymbol.filename().u8string());
+        m_sanitizedSymbolName = SanitizeVariableName(packedSymbol.u8string());
 
         auto parts = b::string::split(packedSymbol, "/");
         parts.pop_back();
-        auto ns = b::string::join(parts, "::");
-        if (!ns.empty()) {
-            m_packedNamespace = "::" + ns;
+        auto nameSpace = b::string::join(parts, "::");
+        if (!nameSpace.empty()) {
+            m_packedNamespace = "::" + nameSpace;
         }
     }
 
     ErrorCode generateCpp(bool binary) {
         b::fs::ofstream outfile(m_targetPath, b::fs::Mode::TEXT);
         if (outfile.fail()) {
-            b::log::error("Failed to open source output file '{}' for writing (error code {}): {}", m_targetPath, (int)ErrorCode::OUTPUT_FILE_FAILED, strerror(errno));
+            b::log::error("Failed to open source output file '{}' for writing (error code {}): {}", m_targetPath, static_cast<int>(ErrorCode::OUTPUT_FILE_FAILED), b::strerror(errno));
             return ErrorCode::OUTPUT_FILE_FAILED;
         }
 
         if (!b::fs::exists(m_resourcePath)) {
-            b::log::error("Failed to open input file '{}' for reading (error code {}): No such file or directory", m_resourcePath, (int)ErrorCode::INPUT_FILE_FAILED);
+            b::log::error("Failed to open input file '{}' for reading (error code {}): No such file or directory", m_resourcePath, static_cast<int>(ErrorCode::INPUT_FILE_FAILED));
             return ErrorCode::INPUT_FILE_FAILED;
         }
 
@@ -103,7 +106,7 @@ public:
             filesize = binary ? b::fs::read_binary_file(m_resourcePath).str().length() : b::fs::read_text_file(m_resourcePath).str().length();
         }
         catch (const std::exception& e) {
-            b::log::error("Failed to open input file '{}' for reading (error code {}): {}", m_resourcePath, (int)ErrorCode::INPUT_FILE_FAILED, e.what());
+            b::log::error("Failed to open input file '{}' for reading (error code {}): {}", m_resourcePath, static_cast<int>(ErrorCode::INPUT_FILE_FAILED), e.what());
             return ErrorCode::INPUT_FILE_FAILED;
         }
 
@@ -119,28 +122,28 @@ public:
         outfile << b::format("namespace resources_internal {{") << std::endl;
         outfile << std::endl;
         outfile << b::format("#ifndef BATTERY_PRODUCTION_MODE") << std::endl;
-        outfile << b::format("    extern const char* __{}_filepath = \"{}\";", m_sanitizedSymbolName, m_resourcePath) << std::endl;
-        outfile << b::format("    extern const bool __{}_is_binary = {};", m_sanitizedSymbolName, binary ? "true" : "false") << std::endl;
+        outfile << b::format("    const char* const RESOURCE_{}_FILEPATH = \"{}\";", m_sanitizedSymbolName, m_resourcePath) << std::endl;
+        outfile << b::format("    const bool RESOURCE_{}_IS_BINARY = {};", m_sanitizedSymbolName, binary ? "true" : "false") << std::endl;
         outfile << b::format("#endif") << std::endl;
         outfile << std::endl;
-        outfile << b::format("    extern const size_t __{}_size = {};", m_sanitizedSymbolName, filesize) << std::endl;
-        outfile << b::format("    extern const uint8_t __{}_data[] = {{", m_sanitizedSymbolName) << std::endl;
+        outfile << b::format("    const size_t RESOURCE_{}_SIZE = {};", m_sanitizedSymbolName, filesize) << std::endl;
+        outfile << b::format("    const uint8_t RESOURCE_{}_DATA[] = {{ // NOLINT", m_sanitizedSymbolName) << std::endl;
         outfile << b::format("    ");
 
         // And now parse all bytes as fast as possible, this part is computationally intensive
-        size_t chunk_size = 1024 * 64;  // 64kb chunks
+        auto chunkSize = static_cast<size_t>(1024 * 64);  // 64kb chunks
         b::string outbuffer;
-        outbuffer.resize(chunk_size * 5 + (chunk_size / 20 * 5) + 2); // Calculate the required buffer size
+        outbuffer.resize(chunkSize * 5 + (chunkSize / 20 * 5) + 2); // Calculate the required buffer size
         // 5 bytes per byte + 5 bytes every 20 bytes + 2 (\0)
 
         auto callback = [&outbuffer,&outfile] (std::string_view chunk) {
             // Parse each chunk of the file
             size_t index = 0;
             for (size_t i = 0; i < chunk.size(); i++) {
-                index += write_hex_comma(outbuffer.data() + index, chunk[i]);
+                index += WriteHexComma(outbuffer.data() + index, chunk[i]);   // NOLINT
 
                 if (i % 20 == 19) {
-                    strcpy(outbuffer.data() + index, "\n    ");
+                    strcpy(outbuffer.data() + index, "\n    "); // NOLINT
                     index += 5;
                 }
             }
@@ -149,10 +152,10 @@ public:
 
         size_t totalBytes = 0;
         if (binary) {
-            totalBytes = b::fs::read_binary_file_in_chunks_nothrow(m_resourcePath, chunk_size, callback);
+            totalBytes = b::fs::read_binary_file_in_chunks_nothrow(m_resourcePath, chunkSize, callback);
         }
         else {
-            totalBytes = b::fs::read_text_file_in_chunks_nothrow(m_resourcePath, chunk_size, callback);
+            totalBytes = b::fs::read_text_file_in_chunks_nothrow(m_resourcePath, chunkSize, callback);
         }
 
         if (totalBytes == 0) {  // File is empty: A C array must have at least one element. We add a zero byte to it,
@@ -160,7 +163,7 @@ public:
         }
 
         if (totalBytes == -1) {
-            b::log::error("Failed to open input file '{}' for reading (error code {}): {}", m_resourcePath, (int)ErrorCode::INPUT_FILE_FAILED, strerror(errno));
+            b::log::error("Failed to open input file '{}' for reading (error code {}): {}", m_resourcePath, static_cast<int>(ErrorCode::INPUT_FILE_FAILED), b::strerror(errno));
             return ErrorCode::INPUT_FILE_FAILED;
         }
 
@@ -170,19 +173,13 @@ public:
 
     ErrorCode generateHpp(bool binary) {
         if (!b::fs::exists(m_resourcePath)) {
-            b::log::error("Failed to open input file '{}' for reading (error code {}): No such file or directory", m_resourcePath, (int)ErrorCode::INPUT_FILE_FAILED);
-            return ErrorCode::INPUT_FILE_FAILED;
-        }
-
-        b::fs::ifstream infile(m_resourcePath, binary ? b::fs::Mode::BINARY : b::fs::Mode::TEXT);
-        if (!infile.is_open()) {
-            b::log::error("Failed to open input file '{}' for reading (error code {}): {}", m_resourcePath, (int)ErrorCode::INPUT_FILE_FAILED, strerror(errno));
+            b::log::error("Failed to open input file '{}' for reading (error code {}): No such file or directory", m_resourcePath, static_cast<int>(ErrorCode::INPUT_FILE_FAILED));
             return ErrorCode::INPUT_FILE_FAILED;
         }
 
         b::fs::ofstream file(m_targetPath, b::fs::Mode::TEXT);
         if (!file.is_open()) {
-            b::log::error("Failed to open header output file '{}' for writing (error code {}): {}", m_targetPath, (int)ErrorCode::OUTPUT_HEADER_FILE_FAILED, strerror(errno));
+            b::log::error("Failed to open header output file '{}' for writing (error code {}): {}", m_targetPath, static_cast<int>(ErrorCode::OUTPUT_HEADER_FILE_FAILED), b::strerror(errno));
             return ErrorCode::OUTPUT_HEADER_FILE_FAILED;
         }
 
@@ -191,7 +188,7 @@ public:
             filesize = binary ? b::fs::read_binary_file(m_resourcePath).str().length() : b::fs::read_text_file(m_resourcePath).str().length();
         }
         catch (const std::exception& e) {
-            b::log::error("Failed to open input file '{}' for reading (error code {}): {}", m_resourcePath, (int)ErrorCode::INPUT_FILE_FAILED, e.what());
+            b::log::error("Failed to open input file '{}' for reading (error code {}): {}", m_resourcePath, static_cast<int>(ErrorCode::INPUT_FILE_FAILED), e.what());
             return ErrorCode::INPUT_FILE_FAILED;
         }
 
@@ -214,23 +211,23 @@ public:
         file << b::format("namespace resources_internal {{", m_packedNamespace) << std::endl;
         file << std::endl;
         file << b::format("#ifndef BATTERY_PRODUCTION_MODE") << std::endl;
-        file << b::format("    extern const char* __{}_filepath;", m_sanitizedSymbolName) << std::endl;
-        file << b::format("    extern const bool __{}_is_binary;", m_sanitizedSymbolName) << std::endl;
+        file << b::format("    extern const char* const RESOURCE_{}_FILEPATH;", m_sanitizedSymbolName) << std::endl;
+        file << b::format("    extern const bool RESOURCE_{}_IS_BINARY;", m_sanitizedSymbolName) << std::endl;
         file << b::format("#endif") << std::endl;
         file << std::endl;
-        file << b::format("    extern const size_t __{}_size;", m_sanitizedSymbolName) << std::endl;
-        file << b::format("    extern const uint8_t __{}_data[];", m_sanitizedSymbolName) << std::endl;
+        file << b::format("    extern const size_t RESOURCE_{}_SIZE;", m_sanitizedSymbolName) << std::endl;
+        file << b::format("    extern const uint8_t RESOURCE_{}_DATA[];", m_sanitizedSymbolName) << std::endl;
         file << std::endl;
         file << b::format("    class {}_t {{", m_sanitizedSymbolName) << std::endl;
         file << b::format("    public:") << std::endl;
         file << b::format("        {}_t() = default;", m_sanitizedSymbolName) << std::endl;
         file << std::endl;
         file << b::format("        inline static b::string string() {{") << std::endl;
-        file << b::format("            return std::string({{ reinterpret_cast<const char*>(__{}_data), __{}_size }});", m_sanitizedSymbolName, m_sanitizedSymbolName) << std::endl;
+        file << b::format("            return std::string({{ reinterpret_cast<const char*>(RESOURCE_{}_DATA), RESOURCE_{}_SIZE }});", m_sanitizedSymbolName, m_sanitizedSymbolName) << std::endl;
         file << b::format("        }}") << std::endl;
         file << std::endl;
         file << b::format("        inline static const char* data() {{") << std::endl;
-        file << b::format("            return reinterpret_cast<const char*>(__{}_data);", m_sanitizedSymbolName) << std::endl;
+        file << b::format("            return reinterpret_cast<const char*>(RESOURCE_{}_DATA);", m_sanitizedSymbolName) << std::endl;
         file << b::format("        }}") << std::endl;
         file << std::endl;
         file << b::format("        inline operator b::string() {{") << std::endl;
@@ -238,7 +235,7 @@ public:
         file << b::format("        }}") << std::endl;
         file << std::endl;
         file << b::format("        inline static std::vector<uint8_t> vec() {{") << std::endl;
-        file << b::format("            return {{ __{}_data, __{}_data + __{}_size }};", m_sanitizedSymbolName, m_sanitizedSymbolName, m_sanitizedSymbolName) << std::endl;
+        file << b::format("            return {{ RESOURCE_{}_DATA, RESOURCE_{}_DATA + RESOURCE_{}_SIZE }};", m_sanitizedSymbolName, m_sanitizedSymbolName, m_sanitizedSymbolName) << std::endl;
         file << b::format("        }}") << std::endl;
         file << std::endl;
         file << b::format("        inline operator std::vector<uint8_t>() {{") << std::endl;
@@ -247,11 +244,11 @@ public:
         file << std::endl;
         file << b::format("#ifndef BATTERY_PRODUCTION_MODE") << std::endl;
         file << b::format("        inline static b::fs::path filepath() {{") << std::endl;
-        file << b::format("            return __{}_filepath;", m_sanitizedSymbolName) << std::endl;
+        file << b::format("            return RESOURCE_{}_FILEPATH;", m_sanitizedSymbolName) << std::endl;
         file << b::format("        }}") << std::endl;
         file << std::endl;
         file << b::format("        inline static bool is_binary() {{") << std::endl;
-        file << b::format("            return __{}_is_binary;", m_sanitizedSymbolName) << std::endl;
+        file << b::format("            return RESOURCE_{}_IS_BINARY;", m_sanitizedSymbolName) << std::endl;
         file << b::format("        }}") << std::endl;
         file << b::format("#endif") << std::endl;
         file << std::endl;
@@ -293,11 +290,11 @@ int b::main(const std::vector<b::string>& args) {             // NOLINT NOSONAR
     bool binary = false;
     app.add_flag("--binary", binary, "File is in binary format instead of plain text (regarding line endings)");
 
-    bool generate_hpp = false;
-    app.add_flag("--header", generate_hpp, "Generate the header file for the embedded resource");
+    bool generateHpp = false;
+    app.add_flag("--header", generateHpp, "Generate the header file for the embedded resource");
 
-    bool generate_cpp = false;
-    app.add_flag("--cpp", generate_cpp, "Generate the cpp file for the embedded resource");
+    bool generateCpp = false;
+    app.add_flag("--cpp", generateCpp, "Generate the cpp file for the embedded resource");
 
     // Parse the CLI options
     CLI11_PARSE(app, args.size(), b::args_to_argv(args));
@@ -308,12 +305,13 @@ int b::main(const std::vector<b::string>& args) {             // NOLINT NOSONAR
             symbolName
     );
 
-    if (generate_hpp && !generate_cpp) {
-        return (int)embedder.generateHpp(binary);
-    } else if (generate_cpp && !generate_hpp) {
-        return (int)embedder.generateCpp(binary);
-    } else {
-        b::log::error("Error {} (INVALID_ARGUMENTS): You must specify exactly one of --header or --cpp!", (int)ErrorCode::INVALID_ARGUMENTS);
-        return (int)ErrorCode::INVALID_ARGUMENTS;
+    if (generateHpp && !generateCpp) {
+        return static_cast<int>(embedder.generateHpp(binary));
     }
+    if (generateCpp && !generateHpp) {
+        return static_cast<int>(embedder.generateCpp(binary));
+    }
+
+    b::log::error("Error {} (INVALID_ARGUMENTS): You must specify exactly one of --header or --cpp!", static_cast<int>(ErrorCode::INVALID_ARGUMENTS));
+    return static_cast<int>(ErrorCode::INVALID_ARGUMENTS);
 }

@@ -20,7 +20,7 @@ namespace b {
     class file_watcher : basic_file_watcher {
     public:
         file_watcher() = default;
-        file_watcher(const b::fs::path& file_path, const std::function<void()>& callback, float poll_interval = 0.1f);
+        file_watcher(const b::fs::path& file_path, std::function<void()> callback, float poll_interval = 0.1f);
 
         file_watcher(const file_watcher&) = delete;
         file_watcher& operator=(const file_watcher&) = delete;

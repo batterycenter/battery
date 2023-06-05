@@ -1,7 +1,8 @@
 #pragma once
 
 #include <exception>
-#include <string>
+#include "battery/core/string.hpp"
+
 /*
 #define UNWRAP(result) \
     [&] () {  \
@@ -12,8 +13,8 @@
         return opt.value();               \
     }();
 */
-namespace battery {
+namespace b {
 
-
+    b::string strerror(int errnum);
 
 }

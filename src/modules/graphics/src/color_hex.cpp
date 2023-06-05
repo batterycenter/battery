@@ -9,17 +9,20 @@ namespace b {
             throw std::invalid_argument(b::format("Cannot parse '{}' as an HTML color code: Unexpected length", hex));
         }
 
-        std::stringstream ss;
         ImColor color;
-        color.Value.x = (float)std::stoi(hex.substr(1, 2), nullptr, 16);
-        color.Value.y = (float)std::stoi(hex.substr(3, 2), nullptr, 16);
-        color.Value.z = (float)std::stoi(hex.substr(5, 2), nullptr, 16);
-        color.Value.w = hex.size() == 9 ? (float)std::stoi(hex.substr(7, 2), nullptr, 16) : 255;
+        color.Value.x = static_cast<float>(std::stoi(hex.substr(1, 2), nullptr, 16));
+        color.Value.y = static_cast<float>(std::stoi(hex.substr(3, 2), nullptr, 16));
+        color.Value.z = static_cast<float>(std::stoi(hex.substr(5, 2), nullptr, 16));
+        color.Value.w = hex.size() == 9 ? static_cast<float>(std::stoi(hex.substr(7, 2), nullptr, 16)) : 255;
         return color;
     }
 
     b::string color_hex(ImColor color) {
-        return b::format("#{:02X}{:02X}{:02X}{:02X}", (int)color.Value.x, (int)color.Value.y, (int)color.Value.z, (int)color.Value.w);
+        return b::format("#{:02X}{:02X}{:02X}{:02X}",
+                         static_cast<int>(color.Value.x),
+                         static_cast<int>(color.Value.y),
+                         static_cast<int>(color.Value.z),
+                         static_cast<int>(color.Value.w));
     }
 
 }

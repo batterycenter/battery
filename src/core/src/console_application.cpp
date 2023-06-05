@@ -2,19 +2,23 @@
 #include <utility>
 
 #include "battery/core/console_application.hpp"
-#include "battery/core/time.hpp"
 #include "battery/core/log.hpp"
+#include "battery/core/time.hpp"
 #include "battery/core/folders.hpp"
 
 namespace b {
 
     console_application::console_application() {
-        if (m_instance != nullptr) throw std::runtime_error("Only one instance of b::console_application or b::application is ever allowed to exist");
+        if (m_instance != nullptr) {
+            throw std::runtime_error("Only one instance of b::console_application or b::application is ever allowed to exist");
+        }
         m_instance = this;
     }
 
     console_application & console_application::get() {
-        if (m_instance == nullptr) throw std::runtime_error("No instance of b::console_application or b::application exists");
+        if (m_instance == nullptr) {
+            throw std::runtime_error("No instance of b::console_application or b::application exists");
+        }
         return *m_instance;
     }
 
@@ -117,4 +121,4 @@ namespace b {
         return catch_exceptions("b::application::cleanup()", &console_application::consoleCleanup, this);
     }
 
-}
+} // namespace b

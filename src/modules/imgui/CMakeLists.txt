@@ -6,6 +6,8 @@
 # Pull latest commit from GitHub from May 9, 2923 -> docking branch
 battery_add_package("gh:ocornut/imgui#031148dc56d70158b3ad84d9be95b04bb3f5baaf")
 
+set(ENABLE_CLANG_TIDY OFF)  # Disable clang-tidy for this subdirectory: ImGui is a third-party library
+
 # ImGui does not have CMake support
 battery_add_library(battery_imgui STATIC ALIAS battery::imgui)
 target_include_directories(battery_imgui PUBLIC ${imgui_SOURCE_DIR})

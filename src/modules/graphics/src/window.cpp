@@ -89,7 +89,7 @@ namespace b {
                     break;
 
                 case sf::Event::Resized:
-                    m_sfmlWindow.setView(sf::View(sf::FloatRect({ 0, 0 }, { (float)event.size.width, (float)event.size.height })));
+                    m_sfmlWindow.setView(sf::View(sf::FloatRect({ 0, 0 }, { static_cast<float>(event.size.width), static_cast<float>(event.size.height) })));
                     dispatchEvent<b::events::WindowResizeEvent>(event.size.width, event.size.height);
                     break;
 

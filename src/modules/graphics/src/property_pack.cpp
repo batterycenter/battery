@@ -5,7 +5,7 @@ namespace b {
 
     b::string property_pack::string() const {
         b::string result = "[";
-        for (auto& property : properties) {
+        for (const auto& property : properties) {
             result += property.string() + ", ";
         }
         result.pop_back();
@@ -27,4 +27,4 @@ namespace b {
         return *this;
     }
 
-}
+} // namespace b

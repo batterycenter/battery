@@ -5,7 +5,7 @@
 namespace b::widgets {
 
     void vspace(float height);
-    void hspace(float height);
+    void hspace(float width);
     void dummy(float width, float height);
 
     namespace dummies {

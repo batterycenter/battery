@@ -1,7 +1,7 @@
 
 #include "battery/core/process.hpp"
-#include "battery/core/time.hpp"
 #include "battery/core/signal.hpp"
+#include "battery/core/time.hpp"
 
 #include "reproc++/drain.hpp"
 
@@ -40,7 +40,9 @@ namespace b {
     }
 
     b::string process::remove_trailing_whitespace(b::string buffer) {
-        if (buffer.empty()) return buffer;
+        if (buffer.empty()) {
+            return buffer;
+        }
         for (int64_t i = static_cast<int>(buffer.length() - 1); i >= 0; i--) {
             switch (buffer.back()) {
                 case '\r':
@@ -82,7 +84,9 @@ namespace b {
     }
 
     std::error_code process::stdout_sink(const uint8_t* _buffer, size_t length) {
-        if (length == 0) return {};
+        if (length == 0) {
+            return {};
+        }
         auto buffer = b::string(std::string(std::bit_cast<const char*>(_buffer), length));
         if (options.suppress_carriage_return) {
             buffer = b::string::replace(buffer, "\r", "");
@@ -95,7 +99,9 @@ namespace b {
     }
 
     std::error_code process::stderr_sink(const uint8_t* _buffer, size_t length) {
-        if (length == 0) return {};
+        if (length == 0) {
+            return {};
+        }
         auto buffer = b::string(std::string(std::bit_cast<const char*>(_buffer), length));
         if (options.suppress_carriage_return) {
             buffer = b::string::replace(buffer, "\r", "");
@@ -125,9 +131,11 @@ namespace b {
         if (!options.executable.empty()) {
             cmd_cstr.emplace_back(options.executable.c_str());
         }
-        for (const auto& c : options.arguments) {
-            if (c.empty()) continue;
-            cmd_cstr.emplace_back(c.c_str());
+        for (const auto& command : options.arguments) {
+            if (command.empty()) {
+                continue;
+            }
+            cmd_cstr.emplace_back(command.c_str());
         }
         cmd_cstr.emplace_back(nullptr);
 
@@ -155,15 +163,17 @@ namespace b {
             });
         }
 
-        std::error_code ec = _process.start(cmd_cstr.data(), options.reproc_options);
-        if (ec) {
-            exit_code = ec.value();
-            error_message = ec.message();
-            if (ctrl_c_handler) b::pop_ctrl_c_handler();
+        std::error_code errorCode = _process.start(cmd_cstr.data(), options.reproc_options);
+        if (errorCode) {
+            exit_code = errorCode.value();
+            error_message = errorCode.message();
+            if (ctrl_c_handler) {
+                b::pop_ctrl_c_handler();
+            }
             return;
         }
 
-        ec = reproc::drain(
+        errorCode = reproc::drain(
                 _process,
                 [this] (auto, const auto* buffer, auto length) {
                     return this->stdout_sink(buffer, length);
@@ -172,10 +182,12 @@ namespace b {
                     return this->stderr_sink(buffer, length);
                 });
 
-        if (ec) {
-            exit_code = ec.value();
-            error_message = ec.message();
-            if (ctrl_c_handler) b::pop_ctrl_c_handler();
+        if (errorCode) {
+            exit_code = errorCode.value();
+            error_message = errorCode.message();
+            if (ctrl_c_handler) {
+                b::pop_ctrl_c_handler();
+            }
             return;
         }
 
@@ -183,7 +195,9 @@ namespace b {
         if (_ec) {
             exit_code = status;
             error_message = _ec.message();
-            if (ctrl_c_handler) b::pop_ctrl_c_handler();
+            if (ctrl_c_handler) {
+                b::pop_ctrl_c_handler();
+            }
             return;
         }
 
@@ -195,7 +209,9 @@ namespace b {
 
         exit_code = status;
         error_message = _ec.message();
-        if (ctrl_c_handler) b::pop_ctrl_c_handler();
+        if (ctrl_c_handler) {
+            b::pop_ctrl_c_handler();
+        }
     }
 
     process execute(const b::string& command, const process::options_t& options) {
@@ -208,4 +224,4 @@ namespace b {
         return process;
     }
 
-}
+} // namespace b

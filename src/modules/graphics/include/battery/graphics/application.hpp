@@ -5,6 +5,8 @@
 #include "battery/graphics/context.hpp"
 #include "battery/python/python.hpp"
 
+#define B_DEF_PY_APPLICATION(T) inline static T& get() { return dynamic_cast<T&>(b::basic_application::get()); }
+
 namespace b {
 
     class basic_application : public b::console_application {
@@ -19,10 +21,10 @@ namespace b {
         virtual void cleanup() = 0;
 
         template<typename T>
-        void attachWindow(T* windowPtr) {
+        void attachWindow(T** windowPtr) {
             m_windows.emplace_back(std::make_shared<T>());
-            windowPtr = dynamic_cast<T*>(m_windows.back().get());
-            windowPtr->attach();
+            *windowPtr = dynamic_cast<T*>(m_windows.back().get());
+            (*windowPtr)->attach();
         }
 
         void detachWindows();

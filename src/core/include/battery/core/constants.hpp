@@ -29,4 +29,4 @@ namespace b {
         static bool is_production_mode();
     };
 
-}
+} // namespace b

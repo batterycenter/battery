@@ -3,7 +3,26 @@ include(cmake/CPM.cmake)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-set(BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR}/.. CACHE INTERNAL "Root directory of the battery project" FORCE)
+get_filename_component(__BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
+set(BATTERY_ROOT_DIR ${__BATTERY_ROOT_DIR} CACHE INTERNAL "Root directory of the battery project" FORCE)
+
+if (ENABLE_CLANG_TIDY)
+    if (NOT DEFINED CLANG_TIDY_CONFIG_FILE)
+        set(CLANG_TIDY_CONFIG_FILE ${BATTERY_ROOT_DIR}/.clang-tidy CACHE INTERNAL "Path to the clang-tidy config file" FORCE)
+    endif()
+    execute_process(COMMAND clang-tidy --version OUTPUT_QUIET RESULT_VARIABLE CLANG_TIDY_RESULT)
+    if (NOT CLANG_TIDY_RESULT EQUAL 0)
+        if (WIN32)
+            if (MSVC)
+                message(FATAL_ERROR "clang-tidy.exe not found. Please install the LLVM toolset from 'https://github.com/llvm/llvm-project/releases/latest' (LLVM-...-win64.exe) and make sure clang-tidy.exe is available in the PATH. Otherwise set ENABLE_CLANG_TIDY to OFF to disable static code analysis (not recommended).")
+            else()
+                message(FATAL_ERROR "clang-tidy.exe not found. Please install clang-tidy manually or set ENABLE_CLANG_TIDY to OFF.")
+            endif()
+        else()
+            message(FATAL_ERROR "clang-tidy not found. Please install clang-tidy manually or set ENABLE_CLANG_TIDY to OFF.")
+        endif()
+    endif()
+endif()
 
 if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     set(BATTERY_IS_ROOT_PROJECT ON CACHE INTERNAL "" FORCE)
@@ -69,6 +88,13 @@ function(__apply_common_target_options TARGET)  # For all libraries and executab
     # Link against pthreads if applicable
     find_package (Threads REQUIRED)
     target_link_libraries(${TARGET} Threads::Threads)
+
+    if (ENABLE_CLANG_TIDY)
+        if (MSVC)
+            set(EXTRA_FLAGS ";--extra-arg=/EHsc")
+        endif()
+        set_target_properties(${TARGET} PROPERTIES CXX_CLANG_TIDY "clang-tidy;-config-file=${CLANG_TIDY_CONFIG_FILE}${EXTRA_FLAGS}")
+    endif()
 
     # Set common Preprocessor Flags
     if(MSVC)        # TODO: Document all of these MSVC shitties

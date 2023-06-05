@@ -32,7 +32,7 @@ ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-
+// NOLINTBEGIN
 #include "battery/core/extern/platform_folders.h"                                   // BATTERY MODIFIED
 #include <iostream>
 #include <stdexcept>
@@ -462,3 +462,4 @@ static void PlatformFoldersFillData(std::map<std::string, std::string>& folders)
     }
 
 }  //namespace sago
+//NOLINTEND

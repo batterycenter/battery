@@ -11,8 +11,8 @@ battery_add_source_files(battery_core_no_main
         src/cache.cpp
         src/console.cpp
         src/constants.cpp
+        src/error.cpp
         src/file_watcher.cpp
-        src/fs.cpp
         src/lockfile.cpp
         src/log.cpp
         src/main.cpp
@@ -27,6 +27,10 @@ battery_add_source_files(battery_core_no_main
 
 battery_set_ide_folder(battery_core_no_main "battery/modules")
 
+set_property(SOURCE src/extern/platform_folders.cpp PROPERTY CMAKE_CXX_CLANG_TIDY "")
+set_property(SOURCE src/extern/utf8proc.c PROPERTY CMAKE_CXX_CLANG_TIDY "")
+set_property(SOURCE src/extern/utf8proc_data.c PROPERTY CMAKE_CXX_CLANG_TIDY "")
+
 if (PRODUCTION_MODE)
     target_compile_definitions(battery_core_no_main PUBLIC BATTERY_PRODUCTION_MODE)
 endif ()
@@ -35,6 +39,8 @@ battery_add_module(spdlog)
 battery_add_module(reproc++)
 battery_add_module(utfcpp)
 target_link_libraries(battery_core_no_main battery::spdlog battery::reproc++ battery::utfcpp)
+
+battery_add_module(check)
 
 if (WIN32)
     target_link_libraries(battery_core_no_main Winmm.lib dwmapi.lib)   # for b::sleep_ms timer resolution and immersive dark mode

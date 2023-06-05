@@ -1,103 +1,128 @@
 
 #include "battery/graphics/font_stack.hpp"
 #include "battery/graphics/graphics_constants.hpp"
-#include "resources/fonts_inter_regular_ttf.hpp"
-#include "resources/fonts_inter_medium_ttf.hpp"
 #include "resources/fonts_inter_bold_ttf.hpp"
-#include "resources/fonts_montserrat_regular_ttf.hpp"
-#include "resources/fonts_montserrat_medium_ttf.hpp"
+#include "resources/fonts_inter_medium_ttf.hpp"
+#include "resources/fonts_inter_regular_ttf.hpp"
 #include "resources/fonts_montserrat_bold_ttf.hpp"
-#include "resources/fonts_roboto_regular_ttf.hpp"
-#include "resources/fonts_roboto_medium_ttf.hpp"
+#include "resources/fonts_montserrat_medium_ttf.hpp"
+#include "resources/fonts_montserrat_regular_ttf.hpp"
 #include "resources/fonts_roboto_bold_ttf.hpp"
+#include "resources/fonts_roboto_medium_ttf.hpp"
+#include "resources/fonts_roboto_regular_ttf.hpp"
 
 namespace b {
 
-    struct font_stack {
-        inline static std::unordered_map<b::string, b::resource> available_fonts;
-        inline static std::unordered_map<b::string, ImFont*> loaded_fonts;
-        inline static bool locked = false;
-    };
+    namespace FontStack {
+        inline static std::unordered_map<b::string, b::resource> AvailableFonts() {
+            static std::unordered_map<b::string, b::resource> const availableFontsMap;
+            return availableFontsMap;
+        }
+
+        inline static std::unordered_map<b::string, ImFont*> LoadedFonts() {
+            static std::unordered_map<b::string, ImFont*> const loadedFontsMap;
+            return loadedFontsMap;
+        }
+
+        inline static bool Locked(std::optional<bool> locked = {}) {
+            static bool isLocked = false;
+            if (locked.has_value()) {
+                isLocked = locked.value();
+            }
+            return isLocked;
+        }
+    } // namespace FontStack
 
     void make_font_available(const b::string& font, const b::resource& ttf_file) {
-        if (font_stack::locked)
+        if (FontStack::Locked()) {
             throw std::runtime_error("b::load_font() failed: Font loading operations cannot be performed during a render pass!");
+        }
 
-        font_stack::available_fonts[font] = ttf_file;
+        FontStack::AvailableFonts()[font] = ttf_file;
     }
 
     ImFont* load_font(const b::string& identifier, const b::string& font, float size) {
-        if (font_stack::locked)
+        if (FontStack::Locked()) {
             throw std::runtime_error("b::load_font() failed: Font loading operations cannot be performed during a render pass!");
+        }
 
-        if (!font_stack::available_fonts.contains(font))
+        if (!FontStack::AvailableFonts().contains(font)) {
             throw std::invalid_argument(b::format("Cannot load font '{}': No such font was made available", font));
+        }
 
-        ImFontConfig font_cfg;
-        font_cfg.FontDataOwnedByAtlas = false;
-        auto ttf_resource = font_stack::available_fonts[font];
-        auto new_font = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(ttf_resource.data(), static_cast<int>(ttf_resource.size()), size, &font_cfg);
+        ImFontConfig fontCfg;
+        fontCfg.FontDataOwnedByAtlas = false;
+        auto ttfResource = FontStack::AvailableFonts()[font];
+        auto *newFont = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(ttfResource.data(), static_cast<int>(ttfResource.size()), size, &fontCfg);
 
-        if (new_font == nullptr)
+        if (newFont == nullptr) {
             throw std::runtime_error(b::format("Failed to load font '{}'", font));
+        }
 
-        font_stack::loaded_fonts[identifier] = new_font;
-        if (!ImGui::SFML::UpdateFontTexture())
+        FontStack::LoadedFonts()[identifier] = newFont;
+        if (!ImGui::SFML::UpdateFontTexture()) {
             throw std::runtime_error(b::format("Failed to update font texture for font '{}'", font));
+        }
 
-        return new_font;
+        return newFont;
     }
 
     void push_font(const b::string& font) {
-        if (!font_stack::locked)
+        if (!FontStack::Locked()) {
             throw std::runtime_error("b::push_font() failed: Font push/pop operations can only be performed during a render pass!");
+        }
 
-        if (!font_stack::loaded_fonts.contains(font))
+        if (!FontStack::LoadedFonts().contains(font)) {
             throw std::invalid_argument(b::format("Cannot push font '{}': No such font was loaded", font));
+        }
 
-        ImGui::PushFont(font_stack::loaded_fonts[font]);
+        ImGui::PushFont(FontStack::LoadedFonts()[font]);
     }
 
     void pop_font() {
-        if (!font_stack::locked)
+        if (!FontStack::Locked()) {
             throw std::runtime_error("b::pop_font() failed: Font push/pop operations can only be performed during a render pass!");
+        }
 
         ImGui::PopFont();
     }
 
     void lock_font_stack() {
-        if (font_stack::locked)
+        if (FontStack::Locked()) {
             throw std::runtime_error("Cannot lock font stack: Font stack is already locked");
-        font_stack::locked = true;
+        }
+        FontStack::Locked(true);
     }
 
     void unlock_font_stack() {
-        if (!font_stack::locked)
+        if (!FontStack::Locked()) {
             throw std::runtime_error("Cannot unlock font stack: Font stack is not locked");
-        font_stack::locked = false;
+        }
+        FontStack::Locked(false);
     }
 
     std::vector<b::string> get_available_fonts() {
         std::vector<b::string> fonts;
-        for (auto& [font, _] : font_stack::available_fonts) {
+        fonts.reserve(FontStack::AvailableFonts().size());
+        for (auto& [font, _] : FontStack::AvailableFonts()) {
             fonts.push_back(font);
         }
         return fonts;
     }
 
     void load_default_fonts() {
-        make_font_available("inter-regular", resources::fonts_inter_regular_ttf);
-        make_font_available("inter-medium", resources::fonts_inter_medium_ttf);
-        make_font_available("inter-bold", resources::fonts_inter_bold_ttf);
-        make_font_available("roboto-regular", resources::fonts_roboto_regular_ttf);
-        make_font_available("roboto-medium", resources::fonts_roboto_medium_ttf);
-        make_font_available("roboto-bold", resources::fonts_roboto_bold_ttf);
-        make_font_available("montserrat-regular", resources::fonts_montserrat_regular_ttf);
-        make_font_available("montserrat-medium", resources::fonts_montserrat_medium_ttf);
-        make_font_available("montserrat-bold", resources::fonts_montserrat_bold_ttf);
+        make_font_available("inter-regular", resources::FONTS_INTER_REGULAR_TTF);       // TODO: Make default fonts optional
+        make_font_available("inter-medium", resources::FONTS_INTER_MEDIUM_TTF);
+        make_font_available("inter-bold", resources::FONTS_INTER_BOLD_TTF);
+        make_font_available("roboto-regular", resources::FONTS_ROBOTO_REGULAR_TTF);
+        make_font_available("roboto-medium", resources::FONTS_ROBOTO_MEDIUM_TTF);
+        make_font_available("roboto-bold", resources::FONTS_ROBOTO_BOLD_TTF);
+        make_font_available("montserrat-regular", resources::FONTS_MONTSERRAT_REGULAR_TTF);
+        make_font_available("montserrat-medium", resources::FONTS_MONTSERRAT_MEDIUM_TTF);
+        make_font_available("montserrat-bold", resources::FONTS_MONTSERRAT_BOLD_TTF);
 
         auto [default_font, default_font_size] = b::graphics_constants::battery_default_font();
         b::load_font("default", default_font, default_font_size);
     }
 
-}
+} // namespace b

@@ -5,7 +5,13 @@ enable_testing()
 set(OLD_CMAKE_CXX_STANDARD ${CMAKE_CXX_STANDARD})   # Set the default C++ version for any non-specified targets
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+#set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+if(NOT ${BATTERY_CONFIGURED_ONCE})
+    message("BATTERY: CMake is called for the first time, dependencies are automatically downloaded. This may take a few minutes...")
+endif()
+
+option(ENABLE_CLANG_TIDY "Enable clang-tidy best-practices checks" ON)
 
 include(cmake/tools.cmake)
 battery_check_required_compiler_features()
@@ -158,3 +164,5 @@ set(CMAKE_CXX_STANDARD ${OLD_CMAKE_CXX_STANDARD})   # Reset the default C++ vers
 #set_property(TARGET spdlog PROPERTY FOLDER "Battery/deps")
 #set_property(TARGET nativefiledialog PROPERTY FOLDER "Battery/deps")
 #set_property(TARGET clip PROPERTY FOLDER "Battery/deps")
+
+set(BATTERY_CONFIGURED_ONCE TRUE CACHE INTERNAL "A flag showing that CMake has configured at least once.")

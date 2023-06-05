@@ -50,4 +50,4 @@ namespace b {
 #endif
     }
 
-}
+}  // namespace b

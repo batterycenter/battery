@@ -17,8 +17,8 @@ namespace b {
         return false;
     }
 
-    file_watcher::file_watcher(const b::fs::path &file_path, const std::function<void()> &callback, float poll_interval)
-        : basic_file_watcher(file_path), callback(callback), poll_interval(poll_interval) {
+    file_watcher::file_watcher(const b::fs::path &file_path, std::function<void()> callback, float poll_interval)
+        : basic_file_watcher(file_path), callback(std::move(callback)), poll_interval(poll_interval) {
         thread = b::thread([this](std::stop_token stop_token) { this->watch(stop_token); });
     }
 
@@ -31,4 +31,4 @@ namespace b {
         }
     }
 
-}
+} // namespace b
