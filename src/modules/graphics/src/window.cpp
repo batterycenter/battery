@@ -16,11 +16,11 @@
 
 namespace b {
 
-    void basic_window::create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
+    void BaseWindow::create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
         create(sf::VideoMode(mode), title, style, settings);
     }
 
-    void basic_window::create(sf::VideoMode mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
+    void BaseWindow::create(sf::VideoMode mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
         m_sfmlWindow.create(mode, title, style, settings);
 
         if (m_firstWindowCreation) {
@@ -41,7 +41,7 @@ namespace b {
         }
     }
 
-    void basic_window::pyInit(py::function callback) {
+    void BaseWindow::pyInit(py::function callback) {
         this->m_pythonUiLoopCallback = callback;
     }
 
@@ -58,7 +58,7 @@ namespace b {
         }
     }
 
-    void basic_window::invoke_update() {
+    void BaseWindow::invoke_update() {
 
         if (!m_sfmlWindow.isOpen()) {
             return;
@@ -83,94 +83,94 @@ namespace b {
 
             switch (event.type) {
                 case sf::Event::Closed:
-                    if (!dispatchEvent<b::events::WindowCloseEvent>()) {
+                    if (!dispatchEvent<b::Events::WindowCloseEvent>()) {
                         m_sfmlWindow.close();
                     }
                     break;
 
                 case sf::Event::Resized:
                     m_sfmlWindow.setView(sf::View(sf::FloatRect({ 0, 0 }, { static_cast<float>(event.size.width), static_cast<float>(event.size.height) })));
-                    dispatchEvent<b::events::WindowResizeEvent>(event.size.width, event.size.height);
+                    dispatchEvent<b::Events::WindowResizeEvent>(event.size.width, event.size.height);
                     break;
 
                 case sf::Event::LostFocus:
-                    dispatchEvent<b::events::WindowLostFocusEvent>();
+                    dispatchEvent<b::Events::WindowLostFocusEvent>();
                     break;
 
                 case sf::Event::GainedFocus:
-                    dispatchEvent<b::events::WindowGainedFocusEvent>();
+                    dispatchEvent<b::Events::WindowGainedFocusEvent>();
                     break;
 
                 case sf::Event::KeyPressed:
-                    dispatchEvent<b::events::KeyPressEvent>(event.key);
+                    dispatchEvent<b::Events::KeyPressEvent>(event.key);
                     break;
 
                 case sf::Event::KeyReleased:
-                    dispatchEvent<b::events::KeyReleaseEvent>(event.key);
+                    dispatchEvent<b::Events::KeyReleaseEvent>(event.key);
                     break;
 
                 case sf::Event::TextEntered:
-                    dispatchEvent<b::events::TextEnteredEvent>(event.text);
+                    dispatchEvent<b::Events::TextEnteredEvent>(event.text);
                     break;
 
                 case sf::Event::MouseWheelScrolled:
-                    dispatchEvent<b::events::MouseWheelScrollEvent>(event.mouseWheelScroll);
+                    dispatchEvent<b::Events::MouseWheelScrollEvent>(event.mouseWheelScroll);
                     break;
 
                 case sf::Event::MouseButtonPressed:
-                    dispatchEvent<b::events::MouseButtonPressEvent>(event.mouseButton);
+                    dispatchEvent<b::Events::MouseButtonPressEvent>(event.mouseButton);
                     break;
 
                 case sf::Event::MouseButtonReleased:
-                    dispatchEvent<b::events::MouseButtonReleaseEvent>(event.mouseButton);
+                    dispatchEvent<b::Events::MouseButtonReleaseEvent>(event.mouseButton);
                     break;
 
                 case sf::Event::MouseMoved:
-                    dispatchEvent<b::events::MouseMoveEvent>(event.mouseMove);
+                    dispatchEvent<b::Events::MouseMoveEvent>(event.mouseMove);
                     break;
 
                 case sf::Event::MouseEntered:
-                    dispatchEvent<b::events::MouseEnteredWindowEvent>();
+                    dispatchEvent<b::Events::MouseEnteredWindowEvent>();
                     break;
 
                 case sf::Event::MouseLeft:
-                    dispatchEvent<b::events::MouseLeftWindowEvent>();
+                    dispatchEvent<b::Events::MouseLeftWindowEvent>();
                     break;
 
                 case sf::Event::JoystickButtonPressed:
-                    dispatchEvent<b::events::JoystickButtonPressEvent>(event.joystickButton);
+                    dispatchEvent<b::Events::JoystickButtonPressEvent>(event.joystickButton);
                     break;
 
                 case sf::Event::JoystickButtonReleased:
-                    dispatchEvent<b::events::JoystickButtonReleaseEvent>(event.joystickButton);
+                    dispatchEvent<b::Events::JoystickButtonReleaseEvent>(event.joystickButton);
                     break;
 
                 case sf::Event::JoystickMoved:
-                    dispatchEvent<b::events::JoystickMoveEvent>(event.joystickMove);
+                    dispatchEvent<b::Events::JoystickMoveEvent>(event.joystickMove);
                     break;
 
                 case sf::Event::JoystickConnected:
-                    dispatchEvent<b::events::JoystickConnectEvent>(event.joystickConnect);
+                    dispatchEvent<b::Events::JoystickConnectEvent>(event.joystickConnect);
                     break;
 
                 case sf::Event::JoystickDisconnected:
-                    dispatchEvent<b::events::JoystickDisconnectEvent>(event.joystickConnect);
+                    dispatchEvent<b::Events::JoystickDisconnectEvent>(event.joystickConnect);
                     break;
 
                 case sf::Event::TouchBegan:
-                    dispatchEvent<b::events::TouchBeginEvent>(event.touch);
+                    dispatchEvent<b::Events::TouchBeginEvent>(event.touch);
                     break;
 
                 case sf::Event::TouchMoved:
-                    dispatchEvent<b::events::TouchMoveEvent>(event.touch);
+                    dispatchEvent<b::Events::TouchMoveEvent>(event.touch);
                     break;
 
                 case sf::Event::TouchEnded:
-                    dispatchEvent<b::events::TouchEndEvent>(event.touch);
+                    dispatchEvent<b::Events::TouchEndEvent>(event.touch);
                     break;
 
                 case sf::Event::SensorChanged:
-                    dispatchEvent<b::events::SensorChangeEvent>(event.sensor);
+                    dispatchEvent<b::Events::SensorChangeEvent>(event.sensor);
                     break;
 
                 default:
@@ -207,7 +207,7 @@ namespace b {
 
         // And then render
         if (m_errorMessage.has_value()) {
-            render_error_message(m_errorMessage.value());    // Py init error
+            renderErrorMessage(m_errorMessage.value());    // Py init error
         }
         else {
             try {
@@ -226,7 +226,7 @@ namespace b {
             catch (const std::exception &e) {
                 ImGui::ErrorCheckEndFrameRecover(nullptr);
                 RecoverImguiFontStack();
-                render_error_message(e.what());     // Py ui loop error
+                renderErrorMessage(e.what());     // Py ui loop error
                 b::log::error("Unhandled exception:\n{}", e.what());
             }
         }
@@ -236,7 +236,7 @@ namespace b {
         m_sfmlWindow.display();
     }
 
-    void basic_window::render_error_message(const b::string& error) {
+    void BaseWindow::renderErrorMessage(const b::string& error) {
         m_errorPanelWidget.children_style.font = "default";  // Ask it to explicitly push the default font, in case it wasn't cleaned up properly
         m_errorPanelWidget.left = 0;
         m_errorPanelWidget.top = 0;

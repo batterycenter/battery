@@ -10,7 +10,7 @@
 
 namespace b {
 
-    namespace events {
+    namespace Events {
         struct WindowCloseEvent {};
         struct WindowResizeEvent : public sf::Event::SizeEvent {};
         struct WindowLostFocusEvent {};
@@ -35,7 +35,7 @@ namespace b {
         struct SensorChangeEvent : public sf::Event::SensorEvent {};
     }
 
-    class basic_window : public sf::RenderWindow {
+    class BaseWindow : public sf::RenderWindow {
     public:
 
         double m_framerate { 0.0 };
@@ -46,8 +46,8 @@ namespace b {
 
         sf::RenderWindow& m_sfmlWindow = *this;          // This is a reference to the base class
 
-        basic_window() : m_eventbus(std::make_shared<b::event_bus>()), m_eventListener(m_eventbus) {};
-        ~basic_window() override = default;
+        BaseWindow() : m_eventbus(std::make_shared<b::event_bus>()), m_eventListener(m_eventbus) {};
+        ~BaseWindow() override = default;
 
         void create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
         void create(sf::VideoMode mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
@@ -83,15 +83,15 @@ namespace b {
         }
 
         // Prevent all move and assignment operations due to the reference
-        basic_window(const basic_window&) = delete;
-        basic_window& operator=(const basic_window&) = delete;
-        basic_window(basic_window&&) = delete;
-        basic_window& operator=(basic_window&&) = delete;
+        BaseWindow(const BaseWindow&) = delete;
+        BaseWindow& operator=(const BaseWindow&) = delete;
+        BaseWindow(BaseWindow&&) = delete;
+        BaseWindow& operator=(BaseWindow&&) = delete;
 
         void invoke_update();
 
     private:
-        void render_error_message(const b::string& error);
+        void renderErrorMessage(const b::string& error);
 
         py::function m_pythonUiLoopCallback;
         b::Resource m_uiScriptResource;
@@ -112,11 +112,11 @@ namespace b {
     };
 
     template<b::derived_from<b::PyContext> T, b::template_string_literal ContextName>
-    class py_window : public basic_window {
+    class PyWindow : public BaseWindow {
     public:
         T m_context;
 
-        py_window() {
+        PyWindow() {
             m_context.m_initPyWindowFunc = [this](const b::py::function& python_ui_loop) {
                 pyInit(python_ui_loop);
             };

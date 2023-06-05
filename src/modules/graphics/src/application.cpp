@@ -20,7 +20,7 @@ namespace b {
         m_windows.clear();
     }
 
-    std::vector<std::shared_ptr<b::basic_window>>& BaseApplication::windows() {
+    std::vector<std::shared_ptr<b::BaseWindow>>& BaseApplication::windows() {
         return m_windows;
     }
     void BaseApplication::consoleSetup() {

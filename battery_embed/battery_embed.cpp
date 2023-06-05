@@ -222,11 +222,11 @@ public:
         file << b::format("    public:") << std::endl;
         file << b::format("        {}_t() = default;", m_sanitizedSymbolName) << std::endl;
         file << std::endl;
-        file << b::format("        inline static b::string string() {{") << std::endl;
+        file << b::format("        inline b::string string() const {{") << std::endl;
         file << b::format("            return std::string({{ reinterpret_cast<const char*>(RESOURCE_{}_DATA), RESOURCE_{}_SIZE }});", m_sanitizedSymbolName, m_sanitizedSymbolName) << std::endl;
         file << b::format("        }}") << std::endl;
         file << std::endl;
-        file << b::format("        inline static const char* data() {{") << std::endl;
+        file << b::format("        inline const char* data() const {{") << std::endl;
         file << b::format("            return reinterpret_cast<const char*>(RESOURCE_{}_DATA);", m_sanitizedSymbolName) << std::endl;
         file << b::format("        }}") << std::endl;
         file << std::endl;
@@ -234,7 +234,7 @@ public:
         file << b::format("            return string();") << std::endl;
         file << b::format("        }}") << std::endl;
         file << std::endl;
-        file << b::format("        inline static std::vector<uint8_t> vec() {{") << std::endl;
+        file << b::format("        inline std::vector<uint8_t> vec() const {{") << std::endl;
         file << b::format("            return {{ RESOURCE_{}_DATA, RESOURCE_{}_DATA + RESOURCE_{}_SIZE }};", m_sanitizedSymbolName, m_sanitizedSymbolName, m_sanitizedSymbolName) << std::endl;
         file << b::format("        }}") << std::endl;
         file << std::endl;
@@ -243,11 +243,11 @@ public:
         file << b::format("        }}") << std::endl;
         file << std::endl;
         file << b::format("#ifndef BATTERY_PRODUCTION_MODE") << std::endl;
-        file << b::format("        inline static b::fs::path filepath() {{") << std::endl;
+        file << b::format("        inline b::fs::path filepath() const {{") << std::endl;
         file << b::format("            return RESOURCE_{}_FILEPATH;", m_sanitizedSymbolName) << std::endl;
         file << b::format("        }}") << std::endl;
         file << std::endl;
-        file << b::format("        inline static bool isBinary() {{") << std::endl;
+        file << b::format("        inline bool isBinary() const {{") << std::endl;
         file << b::format("            return RESOURCE_{}_IS_BINARY;", m_sanitizedSymbolName) << std::endl;
         file << b::format("        }}") << std::endl;
         file << b::format("#endif") << std::endl;
@@ -256,7 +256,7 @@ public:
         file << b::format("            return b::Resource::FromByteString(string());") << std::endl;
         file << b::format("        }}") << std::endl;
         file << std::endl;
-        file << b::format("        inline size_t size() {{") << std::endl;
+        file << b::format("        inline size_t size() const {{") << std::endl;
         file << b::format("            return string().size();") << std::endl;
         file << b::format("        }}") << std::endl;
         file << b::format("    }};") << std::endl;

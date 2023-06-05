@@ -29,7 +29,7 @@ namespace b {
 
         void detachWindows();
 
-        std::vector<std::shared_ptr<b::basic_window>>& windows();
+        std::vector<std::shared_ptr<b::BaseWindow>>& windows();
 
     private:
         void consoleSetup() final override;
@@ -37,7 +37,7 @@ namespace b {
         void consoleCleanup() final override;
 
         b::py::scoped_interpreter guard{};
-        std::vector<std::shared_ptr<b::basic_window>> m_windows;
+        std::vector<std::shared_ptr<b::BaseWindow>> m_windows;
     };
 
     template<b::derived_from<b::PyContext> T, b::template_string_literal ContextName>
