@@ -7,6 +7,7 @@
 #include "SFML/Audio.hpp"
 #include "battery/python/python.hpp"
 #include "battery/core/string.hpp"
+#include "battery/core/extern/json.hpp"
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "imgui.h"
@@ -31,6 +32,67 @@ inline bool operator!=(const ImVec2& lhs, const ImVec2& rhs) { return !(lhs == r
 
 inline bool operator==(const ImVec4& lhs, const ImVec4& rhs) { return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z && lhs.w == rhs.w; }
 inline bool operator!=(const ImVec4& lhs, const ImVec4& rhs) { return !(lhs == rhs); }
+
+namespace nlohmann {
+    template<> struct adl_serializer<sf::Color> {
+        static void to_json(json& j, const sf::Color& col) {
+            j = { col.r, col.g, col.b, col.a };
+        }
+        static void from_json(const json& j, sf::Color& opt) {
+            opt.r = j[0];
+            opt.g = j[1];
+            opt.b = j[2];
+            opt.a = j[3];
+        }
+    };
+    template<> struct adl_serializer<sf::Vector2f> {
+        static void to_json(json& j, const sf::Vector2f& vec) {
+            j = { vec.x, vec.y };
+        }
+        static void from_json(const json& j, sf::Vector2f& opt) {
+            opt.x = j[0];
+            opt.y = j[1];
+        }
+    };
+    template<> struct adl_serializer<sf::Vector2i> {
+        static void to_json(json& j, const sf::Vector2i& vec) {
+            j = { vec.x, vec.y };
+        }
+        static void from_json(const json& j, sf::Vector2i& opt) {
+            opt.x = j[0];
+            opt.y = j[1];
+        }
+    };
+    template<> struct adl_serializer<sf::Vector2u> {
+        static void to_json(json& j, const sf::Vector2u& vec) {
+            j = { vec.x, vec.y };
+        }
+        static void from_json(const json& j, sf::Vector2u& opt) {
+            opt.x = j[0];
+            opt.y = j[1];
+        }
+    };
+    template<> struct adl_serializer<ImVec2> {
+        static void to_json(json& j, const ImVec2& vec) {
+            j = { vec.x, vec.y };
+        }
+        static void from_json(const json& j, ImVec2& opt) {
+            opt.x = j[0];
+            opt.y = j[1];
+        }
+    };
+    template<> struct adl_serializer<ImVec4> {
+        static void to_json(json& j, const ImVec4& vec) {
+            j = { vec.x, vec.y, vec.z, vec.w };
+        }
+        static void from_json(const json& j, ImVec4& opt) {
+            opt.x = j[0];
+            opt.y = j[1];
+            opt.z = j[2];
+            opt.w = j[3];
+        }
+    };
+}
 
 namespace pybind11::detail {
     template <> struct type_caster<b::string> : public type_caster_base<b::string> {

@@ -56,6 +56,11 @@ namespace b {
             b::fs::write_text_file(filename, json.dump(4));
         }
 
+        bool contains(const b::string& key) {
+            reload();
+            return json.contains(key);
+        }
+
     private:
         void reload() {
             auto file = b::fs::read_text_file(filename);

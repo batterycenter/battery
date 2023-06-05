@@ -2,6 +2,7 @@
 
 #include "battery/python/python.hpp"
 #include "battery/core/map.hpp"
+#include "battery/core/containers.hpp"
 
 #define B_DEF_PY_ATTR(attr) .def_readwrite(#attr, &ContextType::attr)
 #define B_DEF_PY_CLASS_PROPS(...) B_MAP(B_DEF_PY_ATTR, __VA_ARGS__)
@@ -22,9 +23,6 @@
 #define B_DEF_PY_WIDGET_CONTEXT(...) B_DEF_PY_WIDGET_CONTEXT_FUNC(B_DEF_PY_WIDGET_SUBCLASS(module, __VA_ARGS__))
 
 namespace b {
-
-    template <typename Derived, typename Base>
-    concept derived_from = std::is_base_of_v<Base, Derived>;
 
     struct PyContext {
         virtual void definePythonClass(b::py::module& module) = 0;
