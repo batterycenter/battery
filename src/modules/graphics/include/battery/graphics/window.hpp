@@ -111,7 +111,7 @@ namespace b {
         bool m_win32IDMActive = !m_useWin32ImmersiveDarkMode;
     };
 
-    template<b::derived_from<b::py_context> T, b::template_string_literal ContextName>
+    template<b::derived_from<b::PyContext> T, b::template_string_literal ContextName>
     class py_window : public basic_window {
     public:
         T m_context;

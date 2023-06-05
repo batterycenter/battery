@@ -7,12 +7,12 @@
 
 namespace b {
 
-    class console_application {
+    class ConsoleApplication {
     public:
-        console_application();
-        virtual ~console_application() = default;
+        ConsoleApplication();
+        virtual ~ConsoleApplication() = default;
 
-        static console_application & get();
+        static ConsoleApplication & get();
         static bool instanceExists();
 
         std::vector<b::string> m_args;
@@ -33,10 +33,10 @@ namespace b {
 
         [[nodiscard]] int run(const b::string& appname, const std::vector<b::string>& args);
 
-        console_application& operator=(const console_application&) = delete;
-        console_application& operator=(console_application&&) = delete;
-        console_application(const console_application&) = delete;
-        console_application(console_application&&) = delete;
+        ConsoleApplication& operator=(const ConsoleApplication&) = delete;
+        ConsoleApplication& operator=(ConsoleApplication&&) = delete;
+        ConsoleApplication(const ConsoleApplication&) = delete;
+        ConsoleApplication(ConsoleApplication&&) = delete;
 
     private:
 
@@ -46,7 +46,7 @@ namespace b {
 
         bool m_stopRequested { false };
         double m_requestedFramerate { 0.0 };
-        inline static console_application* m_instance { nullptr };
+        inline static ConsoleApplication* m_instance {nullptr };
     };
 
 }

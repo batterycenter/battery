@@ -8,59 +8,59 @@
 
 namespace b {
 
-    console_application::console_application() {
+    ConsoleApplication::ConsoleApplication() {
         if (m_instance != nullptr) {
             throw std::runtime_error("Only one instance of b::console_application or b::application is ever allowed to exist");
         }
         m_instance = this;
     }
 
-    console_application & console_application::get() {
+    ConsoleApplication & ConsoleApplication::get() {
         if (m_instance == nullptr) {
             throw std::runtime_error("No instance of b::console_application or b::application exists");
         }
         return *m_instance;
     }
 
-    bool console_application::instanceExists() {
+    bool ConsoleApplication::instanceExists() {
         return m_instance != nullptr;
     }
 
-    void console_application::consoleSetup() {
+    void ConsoleApplication::consoleSetup() {
         // No action
     }
 
-    void console_application::consoleUpdate() {
+    void ConsoleApplication::consoleUpdate() {
         // No action
     }
 
-    void console_application::consoleCleanup() {
+    void ConsoleApplication::consoleCleanup() {
         // No action
     }
 
 
 
 
-    void console_application::setRequestedFramerate(double requested_framerate) {
+    void ConsoleApplication::setRequestedFramerate(double requested_framerate) {
         this->m_requestedFramerate = requested_framerate;
     }
 
-    void console_application::setRequestedFrametime(double requested_frametime) {
+    void ConsoleApplication::setRequestedFrametime(double requested_frametime) {
         this->m_requestedFramerate = 1.0 / requested_frametime;
     }
 
-    void console_application::stopApplication() {
+    void ConsoleApplication::stopApplication() {
         this->m_stopRequested = true;
     }
 
-    void console_application::setStopRequested(bool stop_requested) {
+    void ConsoleApplication::setStopRequested(bool stop_requested) {
         this->m_stopRequested = stop_requested;
     }
 
 
 
 
-    int console_application::run(const b::string& appname, const std::vector<b::string>& args) {
+    int ConsoleApplication::run(const b::string& appname, const std::vector<b::string>& args) {
         this->m_args = args;
         b::Folders::ApplicationName() = appname;
 
@@ -109,16 +109,16 @@ namespace b {
         return false;
     }
 
-    bool console_application::_setup() {
-        return CatchExceptions("b::application::setup()", &console_application::consoleSetup, this);
+    bool ConsoleApplication::_setup() {
+        return CatchExceptions("b::application::setup()", &ConsoleApplication::consoleSetup, this);
     }
 
-    bool console_application::_update() {
-        return CatchExceptions("b::application::update()", &console_application::consoleUpdate, this);
+    bool ConsoleApplication::_update() {
+        return CatchExceptions("b::application::update()", &ConsoleApplication::consoleUpdate, this);
     }
 
-    bool console_application::_cleanup() {
-        return CatchExceptions("b::application::cleanup()", &console_application::consoleCleanup, this);
+    bool ConsoleApplication::_cleanup() {
+        return CatchExceptions("b::application::cleanup()", &ConsoleApplication::consoleCleanup, this);
     }
 
 } // namespace b

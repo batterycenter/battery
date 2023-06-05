@@ -5,16 +5,16 @@
 #include "battery/graphics/context.hpp"
 #include "battery/python/python.hpp"
 
-#define B_DEF_PY_APPLICATION(T) inline static T& get() { return dynamic_cast<T&>(b::basic_application::get()); }
+#define B_DEF_PY_APPLICATION(T) inline static T& get() { return dynamic_cast<T&>(b::BaseApplication::get()); }
 
 namespace b {
 
-    class basic_application : public b::console_application {
+    class BaseApplication : public b::ConsoleApplication {
     public:
-        basic_application();
-        virtual ~basic_application() = default;
+        BaseApplication();
+        virtual ~BaseApplication() = default;
 
-        static basic_application & get();
+        static BaseApplication & get();
 
         virtual void setup() = 0;
         virtual void update() = 0;
@@ -40,12 +40,12 @@ namespace b {
         std::vector<std::shared_ptr<b::basic_window>> m_windows;
     };
 
-    template<b::derived_from<b::py_context> T, b::template_string_literal ContextName>
-    class py_application : public basic_application {
+    template<b::derived_from<b::PyContext> T, b::template_string_literal ContextName>
+    class PyApplication : public BaseApplication {
     public:
         T m_context;
 
-        py_application() = default;
+        PyApplication() = default;
 
         void definePythonClasses(b::py::module& module) {
             b::define_python_types(module);

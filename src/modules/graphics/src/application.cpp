@@ -5,29 +5,29 @@
 
 namespace b {
 
-    basic_application::basic_application() {
+    BaseApplication::BaseApplication() {
         setRequestedFramerate(60.0);
     }
 
-    basic_application & basic_application::get() {
-        return dynamic_cast<basic_application&>(b::console_application::get());
+    BaseApplication & BaseApplication::get() {
+        return dynamic_cast<BaseApplication&>(b::ConsoleApplication::get());
     }
 
-    void basic_application::detachWindows() {
+    void BaseApplication::detachWindows() {
         for (auto& window : m_windows) {
             window->detach();
         }
         m_windows.clear();
     }
 
-    std::vector<std::shared_ptr<b::basic_window>>& basic_application::windows() {
+    std::vector<std::shared_ptr<b::basic_window>>& BaseApplication::windows() {
         return m_windows;
     }
-    void basic_application::consoleSetup() {
+    void BaseApplication::consoleSetup() {
             setup();
     }
 
-    void basic_application::consoleUpdate() {
+    void BaseApplication::consoleUpdate() {
 
             update();
 
@@ -51,7 +51,7 @@ namespace b {
             }
     }
 
-    void basic_application::consoleCleanup() {
+    void BaseApplication::consoleCleanup() {
             cleanup();
             detachWindows();
 

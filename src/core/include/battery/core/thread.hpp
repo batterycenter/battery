@@ -59,14 +59,14 @@ namespace b {
                 m_waitRunningPromise.set_value();
                 if constexpr (std::is_invocable_v<std::decay_t<Fn>, std::stop_token, std::decay_t<Args>...>) {
                     if (!catch_common_exceptions(std::move(func), get_stop_token(), std::move(args)...)) {
-                        if (b::console_application::instanceExists()) {
-                            b::console_application::get().stopApplication();
+                        if (b::ConsoleApplication::instanceExists()) {
+                            b::ConsoleApplication::get().stopApplication();
                         }
                     }
                 } else {
                     if (!catch_common_exceptions(std::move(func), std::move(args)...)) {
-                        if (b::console_application::instanceExists()) {
-                            b::console_application::get().stopApplication();
+                        if (b::ConsoleApplication::instanceExists()) {
+                            b::ConsoleApplication::get().stopApplication();
                         }
                     }
                 }
