@@ -1,33 +1,51 @@
 
 #include "battery/graphics/styles.hpp"
+#include "battery/core/resource_loader.hpp"
 #include "battery/graphics/color_hex.hpp"
 #include "battery/graphics/property_stack.hpp"
-#include "battery/core/resource_loader.hpp"
 #include "resources/default_themes_json.hpp"
 #include "magic_enum.hpp"
 
 namespace b {
 
-    struct themes {
-        inline static std::mutex theme_mutex;
-        inline static std::unordered_map<b::string, nlohmann::json> available_themes;
-        inline static b::string current_theme = "default";
-        inline static bool theme_reloading_requested = false;
-    };
+    // We use static functions instead of static global variables to have defined lifetime, the ability
+    // to catch first-time constructor exceptions and avoid static initialization order fiascos
+    // https://isocpp.org/wiki/faq/ctors#static-init-order
+    namespace Themes {
+        inline static std::mutex& ThemeMutex() {
+            static std::mutex mutex;
+            return mutex;
+        }
+
+        inline static std::unordered_map<b::string, nlohmann::json>& AvailableThemes() {
+            static std::unordered_map<b::string, nlohmann::json> themes;
+            return themes;
+        }
+
+        inline static b::string& CurrentTheme() {
+            static b::string themeString = "default";
+            return themeString;
+        }
+
+        inline static bool& ThemeReloadingRequested() {
+            static bool isRequested = false;
+            return isRequested;
+        }
+    } // namespace Themes
 
     void make_theme_available(const b::string& name, const nlohmann::json& data) {
-        themes::available_themes[name] = data;
+        Themes::AvailableThemes()[name] = data;
     }
 
     void make_default_themes_available() {
-        static b::resource_loader loader(resources::DEFAULT_THEMES_JSON, [&] (auto resource) {  // Must be & to capture themes::theme_mutex
+        static b::ResourceLoader const loader(Resources::DEFAULT_THEMES_JSON, [&] (auto resource) {  // Must be & to capture themes::theme_mutex
             try {
-                const std::scoped_lock lock(themes::theme_mutex);
+                const std::scoped_lock lock(Themes::ThemeMutex());
                 auto style = nlohmann::json::parse(resource.string());
                 for (auto &[name, theme]: style.items()) {
                     make_theme_available(name, theme);
                 }
-                themes::theme_reloading_requested = true;
+                Themes::ThemeReloadingRequested() = true;
             }
             catch (const std::exception& e) {
                 b::log::error("Failed to make default_themes.json available: {}", e.what());
@@ -36,24 +54,24 @@ namespace b {
     }
 
     void load_theme(const b::string& name) {
-        if (!themes::available_themes.contains(name)) {
+        if (!Themes::AvailableThemes().contains(name)) {
             throw std::invalid_argument(b::format("Cannot load theme '{}': Theme does not exist", name));
         }
 
-        themes::current_theme = name;
-        apply_theme(themes::available_themes[name]);
+        Themes::CurrentTheme() = name;
+        apply_theme(Themes::AvailableThemes()[name]);
     }
 
     void update_themes() {
-        std::scoped_lock lock(themes::theme_mutex);
+        auto lock = std::scoped_lock(Themes::ThemeMutex());
 
         try {
-            if (!themes::theme_reloading_requested) {
+            if (!Themes::ThemeReloadingRequested()) {
                 return;
             }
 
-            load_theme(themes::current_theme);
-            themes::theme_reloading_requested = false;
+            load_theme(Themes::CurrentTheme());
+            Themes::ThemeReloadingRequested() = false;
         }
         catch (const std::exception& e) {
             b::log::error("Failed to load default_themes.json: {}", e.what());
@@ -104,8 +122,13 @@ namespace b {
             // If it is an ImGui Color
             auto colorEnum = magic_enum::enum_cast<ImGuiCol_>(key);
             if (colorEnum.has_value()) {
-                auto colors = ImGui::GetStyle().Colors;
-                colors[colorEnum.value()] = color_hex(std::string(value)).Value / 255;
+                auto arrayIndex = colorEnum.value();
+                if (arrayIndex < ImGuiCol_COUNT) {
+                    ImGui::GetStyle().Colors[arrayIndex] = color_hex(std::string(value)).Value / 255;   // NOLINT
+                }
+                else {
+                    throw std::invalid_argument(b::format("Cannot apply theme: Unknown ImGuiCol '{}'", key));
+                }
                 continue;
             }
 
@@ -119,4 +142,4 @@ namespace b {
         }
     }
 
-}
+} // namespace b

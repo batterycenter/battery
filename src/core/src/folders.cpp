@@ -6,127 +6,129 @@
 
 namespace b {
 
-    fs::path folders::get_executable_path() {
+    fs::path Folders::ExecutablePath() {
 #ifdef BATTERY_ARCH_WINDOWS
-        wchar_t buffer[MAX_PATH * 5];
-        if (GetModuleFileNameW(nullptr, buffer, sizeof(buffer)) == 0) {
+        std::array<wchar_t, static_cast<size_t>(MAX_PATH * 5)> buffer = {};
+        if (GetModuleFileNameW(nullptr, buffer.data(), buffer.size()) == 0) {
             return {};
         }
-        return b::string(std::wstring(buffer));
+        return b::string(std::wstring(buffer.data()));
 #else
-        char buffer[PATH_MAX];
-        auto count = readlink("/proc/self/exe", buffer, sizeof(buffer));
+        std::array<char, PATH_MAX> buffer = {};
+        auto count = readlink("/proc/self/exe", buffer.data(), buffer.size());
         if (count == -1) {
             return {};
         }
-        return b::string(buffer, count);
+        return b::string(buffer.data(), count);
 #endif
     }
 
-    fs::path folders::get_executable_dir() {
-        auto exe = get_executable_path();
+    fs::path Folders::ExecutableDir() {
+        auto exe = ExecutablePath();
         return exe.parent_path();
     }
 
 
 
-    fs::path folders::get_global_config_home() {
+
+    fs::path Folders::AppHomeDir() {
+        return SystemHomeDir() + ApplicationName();
+    }
+
+    fs::path Folders::AppConfigDir() {
+        return SystemConfigDir() + ApplicationName();
+    }
+
+    fs::path Folders::AppLocalShareDir() {
+        return SystemLocalShareDir() + ApplicationName();
+    }
+
+    fs::path Folders::AppCacheDir() {
+        return SystemCacheDir() + ApplicationName();
+    }
+
+    fs::path Folders::AppRootDir() {
+        return SystemAppRootDir() + ApplicationName();
+    }
+
+    fs::path Folders::AppDocumentsDir() {
+        return SystemDocumentsDir() + ApplicationName();
+    }
+
+    fs::path Folders::AppDesktopDir() {
+        return SystemDesktopDir() + ApplicationName();
+    }
+
+    fs::path Folders::AppPicturesDir() {
+        return SystemPicturesDir() + ApplicationName();
+    }
+
+    fs::path Folders::AppMusicDir() {
+        return SystemMusicDir() + ApplicationName();
+    }
+
+    fs::path Folders::AppVideoDir() {
+        return SystemVideoDir() + ApplicationName();
+    }
+
+    fs::path Folders::AppDownloadsDir() {
+        return SystemDownloadsDir() + ApplicationName();
+    }
+
+
+
+
+
+    fs::path Folders::SystemHomeDir() {
+        return sago::getUserHome();
+    }
+
+    fs::path Folders::SystemConfigDir() {
         return sago::getConfigHome();
     }
 
-    fs::path folders::get_global_data_home() {
+    fs::path Folders::SystemLocalShareDir() {
         return sago::getDataHome();
     }
 
-    fs::path folders::get_global_state() {
-        return sago::getStateDir();
-    }
-
-    fs::path folders::get_global_cache() {
+    fs::path Folders::SystemCacheDir() {
         return sago::getCacheDir();
     }
 
-    fs::path folders::get_global_documents() {
+    fs::path Folders::SystemAppRootDir() {
+        if (b::Constants::Platform() == b::Platform::Windows) {
+            return sago::getStateDir();     // Local AppData
+        }
+        else if (b::Constants::Platform() == b::Platform::MacOS) {
+            return SystemHomeDir() + "bin";     // ~/bin
+        }
+        else {
+            return SystemHomeDir() + "bin";     // ~/bin
+        }
+    }
+
+    fs::path Folders::SystemDocumentsDir() {
         return sago::getDocumentsFolder();
     }
 
-    fs::path folders::get_global_desktop() {
+    fs::path Folders::SystemDesktopDir() {
         return sago::getDesktopFolder();
     }
 
-    fs::path folders::get_global_pictures() {
+    fs::path Folders::SystemPicturesDir() {
         return sago::getPicturesFolder();
     }
 
-    fs::path folders::get_global_music() {
+    fs::path Folders::SystemMusicDir() {
         return sago::getMusicFolder();
     }
 
-    fs::path folders::get_global_video() {
+    fs::path Folders::SystemVideoDir() {
         return sago::getVideoFolder();
     }
 
-    fs::path folders::get_global_downloads() {
+    fs::path Folders::SystemDownloadsDir() {
         return sago::getDownloadFolder();
-    }
-
-    fs::path folders::get_global_save_games1() {
-        return sago::getSaveGamesFolder1();
-    }
-
-    fs::path folders::get_global_save_games2() {
-        return sago::getSaveGamesFolder2();
-    }
-
-
-
-
-    fs::path folders::get_config_home() {
-        return get_global_config_home() + appname;
-    }
-
-    fs::path folders::get_data_home() {
-        return get_global_data_home() + appname;
-    }
-
-    fs::path folders::get_state() {
-        return get_global_state() + appname;
-    }
-
-    fs::path folders::get_cache() {
-        return get_global_cache() + appname;
-    }
-
-    fs::path folders::get_documents() {
-        return get_global_documents() + appname;
-    }
-
-    fs::path folders::get_desktop() {
-        return get_global_desktop() + appname;
-    }
-
-    fs::path folders::get_pictures() {
-        return get_global_pictures() + appname;
-    }
-
-    fs::path folders::get_music() {
-        return get_global_music() + appname;
-    }
-
-    fs::path folders::get_video() {
-        return get_global_video() + appname;
-    }
-
-    fs::path folders::get_downloads() {
-        return get_global_downloads() + appname;
-    }
-
-    fs::path folders::get_save_games1() {
-        return get_global_save_games1() + appname;
-    }
-
-    fs::path folders::get_save_games2() {
-        return get_global_save_games2() + appname;
     }
 
 } // namespace b

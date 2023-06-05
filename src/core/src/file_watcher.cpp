@@ -3,31 +3,31 @@
 
 namespace b {
 
-    basic_file_watcher::basic_file_watcher(const b::fs::path &file_path) : file_path(file_path) {}
+    BasicFileWatcher::BasicFileWatcher(const b::fs::path &filePath) : m_filePath(filePath) {}
 
-    bool basic_file_watcher::update() {
-        if (file_path.empty()) return false;
-        if (!b::fs::exists(file_path)) return false;
+    bool BasicFileWatcher::update() {
+        if (m_filePath.empty()) return false;
+        if (!b::fs::exists(m_filePath)) return false;
 
-        auto current_modification_time = b::fs::last_write_time(file_path);
-        if (current_modification_time != last_modification_time) {
-            last_modification_time = current_modification_time;
+        auto current_modification_time = b::fs::last_write_time(m_filePath);
+        if (current_modification_time != m_lastModificationTime) {
+            m_lastModificationTime = current_modification_time;
             return true;
         }
         return false;
     }
 
-    file_watcher::file_watcher(const b::fs::path &file_path, std::function<void()> callback, float poll_interval)
-        : basic_file_watcher(file_path), callback(std::move(callback)), poll_interval(poll_interval) {
-        thread = b::thread([this](std::stop_token stop_token) { this->watch(stop_token); });
+    FileWatcher::FileWatcher(const b::fs::path &file_path, std::function<void()> callback, float pollInterval)
+        : BasicFileWatcher(file_path), m_callback(std::move(callback)), m_pollInterval(pollInterval) {
+        m_thread = b::thread([this](std::stop_token stop_token) { this->watch(stop_token); });
     }
 
-    void file_watcher::watch(std::stop_token& stop_token) {
+    void FileWatcher::watch(std::stop_token& stop_token) {
         while (!stop_token.stop_requested()) {
             if (this->update()) {
-                this->callback();
+                this->m_callback();
             }
-            b::sleep(poll_interval);
+            b::sleep(m_pollInterval);
         }
     }
 

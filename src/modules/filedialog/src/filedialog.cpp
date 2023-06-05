@@ -93,8 +93,8 @@ namespace b {
             throw std::runtime_error(b::format("{}: Failed to show file dialog: CoCreateInstance failed", std::source_location::current().function_name()));
         }
 
-        if (b::fs::exists(b::folders::get_global_documents())) {
-            SetDefaultFolder(pFileOpen, b::folders::get_global_documents());
+        if (b::fs::exists(b::Folders::SystemDocumentsDir())) {
+            SetDefaultFolder(pFileOpen, b::Folders::SystemDocumentsDir());
         }
         if (b::fs::exists(dialog.initial_folder)) {
             SetFolder(pFileOpen, dialog.initial_folder);
@@ -152,8 +152,8 @@ namespace b {
             throw std::runtime_error(b::format("{}: Failed to show file dialog: CoCreateInstance failed", std::source_location::current().function_name()));
         }
 
-        if (b::fs::exists(b::folders::get_global_documents())) {
-            SetDefaultFolder(pFileSave, b::folders::get_global_documents());
+        if (b::fs::exists(b::Folders::SystemDocumentsDir())) {
+            SetDefaultFolder(pFileSave, b::Folders::SystemDocumentsDir());
         }
         if (b::fs::exists(dialog.initial_folder)) {
             SetFolder(pFileSave, dialog.initial_folder);

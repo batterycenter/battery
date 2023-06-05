@@ -9,6 +9,7 @@ Checks: '*,
   -hicpp-uppercase-literal-suffix
   -readability-uppercase-literal-suffix
   -misc-use-anonymous-namespace
+  -llvm-else-after-return
   -fuchsia-*
   -altera-*
   -llvmlibc-*'

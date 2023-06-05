@@ -56,7 +56,15 @@ namespace sago {
 #endif  //DOXYGEN_SHOULD_SKIP_THIS
 
 /**
- * Retrives the base folder for storing data files.
+ * Retrieves the user's home directory.
+ * On Windows this is %USERPROFILE% (C:\Users\username)
+ * On Linux and Apple this is ~ or $HOME
+ * @return The user's home directory.
+ */
+    std::string getUserHome();
+
+/**
+ * Retrieves the base folder for storing data files.
  * You must add the program name yourself like this:
  * @code{.cpp}
  * string data_home = getDataHome()+"/My Program Name/";
@@ -68,7 +76,7 @@ namespace sago {
     std::string getDataHome();
 
 /**
- * Retrives the base folder for storing config files.
+ * Retrieves the base folder for storing config files.
  * You must add the program name yourself like this:
  * @code{.cpp}
  * string data_home = getConfigHome()+"/My Program Name/";
@@ -80,12 +88,12 @@ namespace sago {
     std::string getConfigHome();
 
 /**
- * Retrives the base folder for storing cache files.
+ * Retrieves the base folder for storing cache files.
  * You must add the program name yourself like this:
  * @code{.cpp}
  * string data_home = getCacheDir()+"/My Program Name/cache/";
  * @endcode
- * On Windows this defaults to %APPDATALOCAL%
+ * On Windows this defaults to %APPDATA%
  * On Linux this defaults to ~/.cache but can be configured by the user
  * Note that it is recommended to append "cache" after the program name to prevent conflicting with "StateDir" under Windows
  * @return The base folder for storing data that do not need to be backed up and might be deleted.
@@ -93,7 +101,7 @@ namespace sago {
     std::string getCacheDir();
 
 /**
- * Retrives the base folder used for state files.
+ * Retrieves the base folder used for state files.
  * You must add the program name yourself like this:
  * @code{.cpp}
  * string data_home = getStateDir()+"/My Program Name/";

@@ -119,15 +119,15 @@ public:
         outfile << b::format("#include <cinttypes>") << std::endl;
         outfile << b::format("#include <cstddef>") << std::endl;
         outfile << std::endl;
-        outfile << b::format("namespace resources_internal {{") << std::endl;
+        outfile << b::format("namespace ResourcesInternal {{") << std::endl;
         outfile << std::endl;
         outfile << b::format("#ifndef BATTERY_PRODUCTION_MODE") << std::endl;
-        outfile << b::format("    const char* const RESOURCE_{}_FILEPATH = \"{}\";", m_sanitizedSymbolName, m_resourcePath) << std::endl;
-        outfile << b::format("    const bool RESOURCE_{}_IS_BINARY = {};", m_sanitizedSymbolName, binary ? "true" : "false") << std::endl;
+        outfile << b::format("    extern const char* const RESOURCE_{}_FILEPATH = \"{}\";", m_sanitizedSymbolName, m_resourcePath) << std::endl;
+        outfile << b::format("    extern const bool RESOURCE_{}_IS_BINARY = {};", m_sanitizedSymbolName, binary ? "true" : "false") << std::endl;
         outfile << b::format("#endif") << std::endl;
         outfile << std::endl;
-        outfile << b::format("    const size_t RESOURCE_{}_SIZE = {};", m_sanitizedSymbolName, filesize) << std::endl;
-        outfile << b::format("    const uint8_t RESOURCE_{}_DATA[] = {{ // NOLINT", m_sanitizedSymbolName) << std::endl;
+        outfile << b::format("    extern const size_t RESOURCE_{}_SIZE = {};", m_sanitizedSymbolName, filesize) << std::endl;
+        outfile << b::format("    extern const uint8_t RESOURCE_{}_DATA[] = {{ // NOLINT", m_sanitizedSymbolName) << std::endl;
         outfile << b::format("    ");
 
         // And now parse all bytes as fast as possible, this part is computationally intensive
@@ -167,7 +167,7 @@ public:
             return ErrorCode::INPUT_FILE_FAILED;
         }
 
-        outfile << "\n    };\n\n} // namespace resources_internal\n";
+        outfile << "\n    };\n\n} // namespace ResourcesInternal\n";
         return ErrorCode::SUCCESS;
     }
 
@@ -208,7 +208,7 @@ public:
         file << b::format("#include \"battery/core/string.hpp\"") << std::endl;
         file << b::format("#include \"battery/core/fs.hpp\"") << std::endl;
         file << std::endl;
-        file << b::format("namespace resources_internal {{", m_packedNamespace) << std::endl;
+        file << b::format("namespace ResourcesInternal {{", m_packedNamespace) << std::endl;
         file << std::endl;
         file << b::format("#ifndef BATTERY_PRODUCTION_MODE") << std::endl;
         file << b::format("    extern const char* const RESOURCE_{}_FILEPATH;", m_sanitizedSymbolName) << std::endl;
@@ -247,13 +247,13 @@ public:
         file << b::format("            return RESOURCE_{}_FILEPATH;", m_sanitizedSymbolName) << std::endl;
         file << b::format("        }}") << std::endl;
         file << std::endl;
-        file << b::format("        inline static bool is_binary() {{") << std::endl;
+        file << b::format("        inline static bool isBinary() {{") << std::endl;
         file << b::format("            return RESOURCE_{}_IS_BINARY;", m_sanitizedSymbolName) << std::endl;
         file << b::format("        }}") << std::endl;
         file << b::format("#endif") << std::endl;
         file << std::endl;
-        file << b::format("        inline operator b::resource() {{") << std::endl;
-        file << b::format("            return b::resource::from_byte_string(string());") << std::endl;
+        file << b::format("        inline operator b::Resource() {{") << std::endl;
+        file << b::format("            return b::Resource::FromByteString(string());") << std::endl;
         file << b::format("        }}") << std::endl;
         file << std::endl;
         file << b::format("        inline size_t size() {{") << std::endl;
@@ -261,10 +261,10 @@ public:
         file << b::format("        }}") << std::endl;
         file << b::format("    }};") << std::endl;
         file << b::format("    inline std::ostream& operator<<(std::ostream& os, const {}_t& data) {{ os << data.string(); return os; }}\n", m_sanitizedSymbolName) << std::endl;
-        file << b::format("}}") << std::endl;
+        file << b::format("}} // namespace ResourcesInternal") << std::endl;
         file << std::endl;
-        file << b::format("namespace resources{} {{", m_packedNamespace) << std::endl;
-        file << b::format("    inline resources_internal::{}_t {};", m_sanitizedSymbolName, m_strippedSymbolName) << std::endl;
+        file << b::format("namespace Resources{} {{", m_packedNamespace) << std::endl;
+        file << b::format("    inline ResourcesInternal::{}_t {};", m_sanitizedSymbolName, m_strippedSymbolName) << std::endl;
         file << b::format("}}") << std::endl;
         file << std::endl;
         file << b::format("#endif // __battery_embed_{}_", m_sanitizedSymbolName) << std::endl;

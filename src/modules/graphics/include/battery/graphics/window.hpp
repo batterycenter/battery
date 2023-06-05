@@ -47,7 +47,7 @@ namespace b {
         sf::RenderWindow& m_sfmlWindow = *this;          // This is a reference to the base class
 
         basic_window() : m_eventbus(std::make_shared<b::event_bus>()), m_eventListener(m_eventbus) {};
-        virtual ~basic_window() = default;
+        ~basic_window() override = default;
 
         void create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
         void create(sf::VideoMode mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings());
@@ -76,7 +76,7 @@ namespace b {
 
         template<typename T>
         void setPythonUiScriptResource(const T& script) {
-            m_uiScriptResourceLoader = std::make_unique<b::resource_loader>(script, [this](const auto& resource) {
+            m_uiScriptResourceLoader = std::make_unique<b::ResourceLoader>(script, [this](const auto& resource) {
                 m_uiScriptResource = resource;
                 m_uiScriptLoaded = false;
             });
@@ -94,8 +94,8 @@ namespace b {
         void render_error_message(const b::string& error);
 
         py::function m_pythonUiLoopCallback;
-        b::resource m_uiScriptResource;
-        std::unique_ptr<b::resource_loader> m_uiScriptResourceLoader;
+        b::Resource m_uiScriptResource;
+        std::unique_ptr<b::ResourceLoader> m_uiScriptResourceLoader;
         bool m_uiScriptLoaded = true;
 
         std::optional<b::string> m_errorMessage;

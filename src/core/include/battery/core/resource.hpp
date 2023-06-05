@@ -5,44 +5,44 @@
 
 namespace b {
 
-    class resource {
+    class Resource {
     public:
-        resource() = default;
+        Resource() = default;
 
-        static resource from_text_file(const fs::path& filepath);
-        static resource from_binary_file(const fs::path& filepath);
-        static resource from_byte_string(const b::string& data, const b::string& filetype = "");
-        static resource from_buffer(const void* buffer, size_t length, const b::string& filetype = "");
-        static resource from_base64(const b::string& base64, const b::string& filetype = "");
+        static Resource FromTextFile(const fs::path& filepath);
+        static Resource FromBinaryFile(const fs::path& filepath);
+        static Resource FromByteString(const b::string& data, const b::string& filetype = "");
+        static Resource FromBuffer(const void* buffer, size_t length, const b::string& filetype = "");
+        static Resource FromBase64(const b::string& base64, const b::string& filetype = "");
 
-        [[nodiscard]] void* data() const;
+        [[nodiscard]] const char* data() const;
         [[nodiscard]] size_t size() const;
         // If specified correctly, the filetype will be a string hinting the encoding of the data. Empty is unknown,
         // it's parsed from the file path or specified manually. Guaranteed to be lowercase. Example: "" or "png" or "txt".
         // Can be used in the receiving function to parse the data differently based on the file type
         [[nodiscard]] b::string filetype() const;
         [[nodiscard]] b::string string() const;
-        [[nodiscard]] std::vector<uint8_t> as_vector() const;
+        [[nodiscard]] std::vector<uint8_t> asVector() const;
         [[nodiscard]] b::string base64() const;
-        [[nodiscard]] bool write_to_text_file(const fs::path& filepath) const;
-        [[nodiscard]] bool write_to_binary_file(const fs::path& filepath) const;
+        [[nodiscard]] bool writeToTextFile(const fs::path& filepath) const;
+        [[nodiscard]] bool writeToBinaryFile(const fs::path& filepath) const;
 
-        class on_disk_resource {
+        class OnDiskResource {
         public:
-            on_disk_resource() = default;
-            explicit on_disk_resource(const b::fs::path& path, const b::string& data);
-            ~on_disk_resource();
+            OnDiskResource() = default;
+            explicit OnDiskResource(const b::fs::path& path, const b::string& data);
+            ~OnDiskResource();
 
-            on_disk_resource(const on_disk_resource&) = delete;     // We cannot allow a copy. A move is allowed
-            on_disk_resource& operator=(const on_disk_resource&) = delete;
-            on_disk_resource(on_disk_resource&& other) {
+            OnDiskResource(const OnDiskResource&) = delete;     // We cannot allow a copy. A move is allowed
+            OnDiskResource& operator=(const OnDiskResource&) = delete;
+            OnDiskResource(OnDiskResource&& other) noexcept {
                 reset();
-                m_path = std::move(other.m_path);
+                m_path = other.m_path;
                 other.m_path.clear();
             }
-            on_disk_resource& operator=(on_disk_resource&& other) noexcept {
+            OnDiskResource& operator=(OnDiskResource&& other) noexcept {
                 reset();
-                m_path = std::move(other.m_path);
+                m_path = other.m_path;
                 other.m_path.clear();
                 return *this;
             }
@@ -65,7 +65,7 @@ namespace b {
             b::fs::path m_path;
         };
 
-        [[nodiscard]] on_disk_resource as_temporary_on_disk_resource() const;
+        [[nodiscard]] OnDiskResource asTemporaryOnDiskResource() const;
 
     private:
         b::string m_data;

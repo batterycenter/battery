@@ -53,25 +53,25 @@ namespace b {
         /// \param[in] args Any number of parameters to pass to the function when calling it
         ///
 
-        template <class _Fn, class... _Args>
-        explicit thread(_Fn&& _Fx, _Args&&... _Ax)
-          : std::jthread([_Fx = std::forward<_Fn>(_Fx), ...args = std::forward<_Args>(_Ax), this]() mutable {
-                _promise.set_value();
-                if constexpr (std::is_invocable_v<std::decay_t<_Fn>, std::stop_token, std::decay_t<_Args>...>) {
-                    if (!catch_common_exceptions(std::move(_Fx), get_stop_token(), std::move(args)...)) {
+        template <class Fn, class... Args>
+        explicit thread(Fn&& func, Args&&... args)
+          : std::jthread([func = std::forward<Fn>(func), ...args = std::forward<Args>(args), this]() mutable {
+                m_waitRunningPromise.set_value();
+                if constexpr (std::is_invocable_v<std::decay_t<Fn>, std::stop_token, std::decay_t<Args>...>) {
+                    if (!catch_common_exceptions(std::move(func), get_stop_token(), std::move(args)...)) {
                         if (b::console_application::instanceExists()) {
                             b::console_application::get().stopApplication();
                         }
                     }
                 } else {
-                    if (!catch_common_exceptions(std::move(_Fx), std::move(args)...)) {
+                    if (!catch_common_exceptions(std::move(func), std::move(args)...)) {
                         if (b::console_application::instanceExists()) {
                             b::console_application::get().stopApplication();
                         }
                     }
                 }
             }) {
-              _promise.get_future().get();
+              m_waitRunningPromise.get_future().get();
           }
 
         ///
@@ -91,7 +91,7 @@ namespace b {
         ///
         template<class... Args>
         inline static bool catch_common_exceptions(Args&&... args) {
-            if (!_catch_common_exceptions) {            // Catching is disabled: Call and return
+            if (!m_catchCommonExceptionsEnabled) {            // Catching is disabled: Call and return
                 std::invoke(std::forward<Args>(args)...);
                 return true;
             }
@@ -102,13 +102,13 @@ namespace b {
             }
             catch (const std::exception& e) {
                 b::log::core::critical("Unhandled exception in b::thread: [std::exception]: {}", e.what());
-                if (_message_box_on_exception) {
+                if (m_messageBoxOnExceptionEnabled) {
                     b::message_box_error(b::format("Unhandled exception in b::thread: [std::exception]: {}", e.what()));
                 }
             }
             catch (...) {
                 b::log::core::critical("Unidentifiable exception caught in b::thread, no further information");
-                if (_message_box_on_exception) {
+                if (m_messageBoxOnExceptionEnabled) {
                     b::message_box_error("Unidentifiable exception caught in b::thread, no further information");
                 }
             }
@@ -122,7 +122,7 @@ namespace b {
         /// \see b::thread::catch_common_exceptions()
         ///
         inline static void enable_message_box_on_exception(bool enable) {
-            _message_box_on_exception = enable;
+            m_messageBoxOnExceptionEnabled = enable;
         }
 
         ///
@@ -132,13 +132,13 @@ namespace b {
         /// \see b::thread::catch_common_exceptions()
         ///
         inline static void enable_catch_common_exceptions(bool enable) {
-            _catch_common_exceptions = enable;
+            m_catchCommonExceptionsEnabled = enable;
         }
 
     private:
-        inline static std::atomic<bool> _message_box_on_exception { b::constants::message_box_on_exception_default() };
-        inline static std::atomic<bool> _catch_common_exceptions { b::constants::catch_common_exceptions_default() };
-        std::promise<void> _promise;
+        inline static std::atomic<bool> m_messageBoxOnExceptionEnabled {b::Constants::MessageBoxOnExceptionDefault() };
+        inline static std::atomic<bool> m_catchCommonExceptionsEnabled {b::Constants::CatchCommonExceptionsDefault() };
+        std::promise<void> m_waitRunningPromise;
     };
 
     ///

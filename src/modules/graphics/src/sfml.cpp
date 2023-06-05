@@ -117,9 +117,9 @@ namespace b {
 
         module.def("sameline", &ImGui::SameLine);
         module.def("sameline", []() { ImGui::SameLine(); });
-        module.def("load_font", &b::load_font, py::return_value_policy::reference);
-        module.def("push_font", &b::push_font);
-        module.def("pop_font", &b::pop_font);
+        module.def("LoadFont", &b::LoadFont, py::return_value_policy::reference);
+        module.def("PushFont", &b::PushFont);
+        module.def("PopFont", &b::PopFont);
         module.def("show_demo_window", &ImGui::ShowDemoWindow);
         module.def("show_demo_window", []() { ImGui::ShowDemoWindow(nullptr); });
     }

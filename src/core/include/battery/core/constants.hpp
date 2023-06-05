@@ -4,29 +4,30 @@
 
 namespace b {
 
-    enum class platform_t {
-        windows,
-        linux,
-        macos,
+    enum class Platform {
+        Windows,
+        Linux,
+        MacOS,
     };
 
-    enum class arch_t {
+    enum class Arch {
         x64,
         x86,
     };
 
-    // These constants are defined as static getter functions instead of variables,
-    // to avoid a 'static initialization order fiasco' https://isocpp.org/wiki/faq/ctors#static-init-order
-    struct constants {
-        static b::string battery_icon_base64();
-        static b::string default_application_name();
+    // We use static functions instead of static global variables to have defined lifetime, the ability
+    // to catch first-time constructor exceptions and avoid static initialization order fiascos
+    // https://isocpp.org/wiki/faq/ctors#static-init-order
+    namespace Constants {
+        b::string BatteryIconBase64();
+        b::string DefaultApplicationName();
 
-        static bool message_box_on_exception_default();
-        static bool catch_common_exceptions_default();
-        static platform_t platform();
-        static arch_t architecture();
+        bool MessageBoxOnExceptionDefault();
+        bool CatchCommonExceptionsDefault();
+        Platform Platform();
+        Arch Architecture();
 
-        static bool is_production_mode();
-    };
+        bool IsProductionMode();
+    } // namespace Constants
 
 } // namespace b

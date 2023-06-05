@@ -29,12 +29,12 @@ namespace b {
             }
 
             b::make_default_themes_available();     // TODO: Move these to a better place
-            b::load_default_fonts();
+            b::LoadDefaultFonts();
 
             m_firstWindowCreation = false;
         }
 
-        auto icon = b::resource::from_base64(b::constants::battery_icon_base64());
+        auto icon = b::Resource::FromBase64(b::Constants::BatteryIconBase64());
         sf::Image image;
         if (image.loadFromMemory(icon.data(), icon.size())) {
             (void)m_sfmlWindow.setIcon(image);
@@ -45,15 +45,15 @@ namespace b {
         this->m_pythonUiLoopCallback = callback;
     }
 
-    static void recover_imgui_font_stack() {
+    static void RecoverImguiFontStack() {
         ImGuiContext& g = *GImGui;
 
         if (g.CurrentWindowStack.empty()) {
             return;
         }
 
-        ImGuiStackSizes* stack_sizes = &g.CurrentWindowStack.back().StackSizesOnBegin;
-        while (g.FontStack.Size > stack_sizes->SizeOfFontStack) {
+        ImGuiStackSizes* stackSizes = &g.CurrentWindowStack.back().StackSizesOnBegin;
+        while (g.FontStack.Size > stackSizes->SizeOfFontStack) {
             ImGui::PopFont();
         }
     }
@@ -66,12 +66,12 @@ namespace b {
 
 #ifdef BATTERY_ARCH_WINDOWS
         if (m_useWin32ImmersiveDarkMode != m_win32IDMActive) {
-            BOOL USE_DARK_MODE = m_useWin32ImmersiveDarkMode;
-            BOOL SET_IMMERSIVE_DARK_MODE_SUCCESS = SUCCEEDED(DwmSetWindowAttribute(
+            BOOL useDarkMode = static_cast<BOOL>(m_useWin32ImmersiveDarkMode);
+            bool const setImmersiveDarkModeSuccess = SUCCEEDED(DwmSetWindowAttribute(
                     m_sfmlWindow.getSystemHandle(), DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE,
-                    &USE_DARK_MODE, sizeof(USE_DARK_MODE)));
+                    &useDarkMode, sizeof(useDarkMode)));
             m_win32IDMActive = m_useWin32ImmersiveDarkMode;
-            if (!SET_IMMERSIVE_DARK_MODE_SUCCESS) {
+            if (!setImmersiveDarkModeSuccess) {
                 throw std::runtime_error("Failed to set immersive dark mode on b::window");
             }
         }
@@ -193,7 +193,7 @@ namespace b {
             }
             catch (const std::exception &e) {
                 ImGui::ErrorCheckEndFrameRecover(nullptr);
-                recover_imgui_font_stack();
+                RecoverImguiFontStack();
                 m_errorMessage = e.what();
                 b::log::error("Unhandled exception:\n{}", e.what());
             }
@@ -203,7 +203,7 @@ namespace b {
 
         m_sfmlWindow.clear(b::graphics_constants::battery_default_background_color());
         ImGui::SFML::Update(m_sfmlWindow, m_deltaClock.restart());
-        b::lock_font_stack();
+        b::LockFontStack();
 
         // And then render
         if (m_errorMessage.has_value()) {
@@ -211,7 +211,7 @@ namespace b {
         }
         else {
             try {
-                b::push_font("default");
+                b::PushFont("default");
                 style.push();
 
                 update();
@@ -221,17 +221,17 @@ namespace b {
                 }
 
                 style.pop();
-                b::pop_font();
+                b::PopFont();
             }
             catch (const std::exception &e) {
                 ImGui::ErrorCheckEndFrameRecover(nullptr);
-                recover_imgui_font_stack();
+                RecoverImguiFontStack();
                 render_error_message(e.what());     // Py ui loop error
                 b::log::error("Unhandled exception:\n{}", e.what());
             }
         }
 
-        b::unlock_font_stack();
+        b::UnlockFontStack();
         ImGui::SFML::Render(m_sfmlWindow);
         m_sfmlWindow.display();
     }

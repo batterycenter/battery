@@ -5,17 +5,17 @@
 
 namespace b {
 
-    class resource_loader {
+    class ResourceLoader {
     public:
-        resource_loader() = default;
+        ResourceLoader() = default;
 
 #ifndef BATTERY_PRODUCTION_MODE     // Non-production mode
         template<typename T>
-        resource_loader(const T& resource, const std::function<void(b::resource)>& callback, float poll_interval = 0.1f)
-            : resource_path(resource.filepath()),
-              is_binary(resource.is_binary()),
-              file_watcher(std::make_unique<b::file_watcher>(resource.filepath(), [this]() { this->onchange_callback(); }, poll_interval)),
-              callback(callback) {}
+        ResourceLoader(const T& resource, const std::function<void(b::Resource)>& callback, float poll_interval = 0.1f)
+            : m_resourcePath(resource.filepath()),
+              m_isBinary(resource.isBinary()),
+              m_fileWatcher(std::make_unique<b::FileWatcher>(resource.filepath(), [this]() { this->onChangeCallback(); }, poll_interval)),
+              m_callback(callback) {}
 #else                               // Production mode
         template<typename T>
         resource_loader(const T& resource, const std::function<void(b::resource)>& callback, float poll_interval = 0.1f) {
@@ -23,28 +23,28 @@ namespace b {
         }
 #endif
 
-        resource_loader(const resource_loader&) = delete;
-        resource_loader& operator=(const resource_loader&) = delete;
-        resource_loader(resource_loader&&) = delete;
-        resource_loader& operator=(resource_loader&&) = delete;
+        ResourceLoader(const ResourceLoader&) = delete;
+        ResourceLoader& operator=(const ResourceLoader&) = delete;
+        ResourceLoader(ResourceLoader&&) = delete;
+        ResourceLoader& operator=(ResourceLoader&&) = delete;
 
     private:
 #ifndef BATTERY_PRODUCTION_MODE     // Non-production mode
-        void onchange_callback() {      // On every change, reload the resource
-            auto str = is_binary ? b::fs::read_binary_file_nothrow(resource_path) : b::fs::read_text_file_nothrow(resource_path);
+        void onChangeCallback() {      // On every change, reload the resource
+            auto str = m_isBinary ? b::fs::read_binary_file_nothrow(m_resourcePath) : b::fs::read_text_file_nothrow(m_resourcePath);
             if (!str.has_value()) {
-                b::log::error("Failed to hot-reload resource '{}': {}", resource_path, strerror(errno));
+                b::log::error("Failed to hot-reload resource '{}': {}", m_resourcePath, strerror(errno));
                 return;
             }
 
-            b::log::info("Hot-reloaded resource '{}'", resource_path);
-            callback(b::resource::from_byte_string(str.value(), resource_path.raw_extension()));
+            b::log::info("Hot-reloaded resource '{}'", m_resourcePath);
+            m_callback(b::Resource::FromByteString(str.value(), m_resourcePath.raw_extension()));
         }
 
-        b::fs::path resource_path;
-        bool is_binary {};
-        std::function<void(b::resource)> callback;
-        std::unique_ptr<b::file_watcher> file_watcher;
+        b::fs::path m_resourcePath;
+        bool m_isBinary {};
+        std::function<void(b::Resource)> m_callback;
+        std::unique_ptr<b::FileWatcher> m_fileWatcher;
 #endif
     };
 

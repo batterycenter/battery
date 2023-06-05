@@ -2,9 +2,9 @@
 #include <utility>
 
 #include "battery/core/console_application.hpp"
+#include "battery/core/folders.hpp"
 #include "battery/core/log.hpp"
 #include "battery/core/time.hpp"
-#include "battery/core/folders.hpp"
 
 namespace b {
 
@@ -62,7 +62,7 @@ namespace b {
 
     int console_application::run(const b::string& appname, const std::vector<b::string>& args) {
         this->m_args = args;
-        b::folders::set_application_name(appname);
+        b::Folders::ApplicationName() = appname;
 
         if (!this->_setup()) {
             this->_cleanup();
@@ -72,21 +72,21 @@ namespace b {
         this->m_frametime = 0.0;
         this->m_framerate = 0.0;
 
-        auto last_frame = b::time();
+        auto lastFrame = b::time();
         while (!this->m_stopRequested) {
 
             if (!this->_update()) {
                 stopApplication();
             }
-            sleep(1.0 / this->m_requestedFramerate - (b::time() - last_frame));
+            sleep(1.0 / this->m_requestedFramerate - (b::time() - lastFrame));
 
             this->m_framecount++;
-            this->m_frametime = b::time() - last_frame;
+            this->m_frametime = b::time() - lastFrame;
             if (this->m_frametime > 0.0) {
                 this->m_framerate = 1.0 / this->m_frametime;
             }
 
-            last_frame = b::time();
+            lastFrame = b::time();
         }
         this->_cleanup();
         return m_exitCode;
@@ -95,9 +95,9 @@ namespace b {
 
 
     template<typename Fn, typename... Args>
-    bool catch_exceptions(const b::string& funcname, Fn&& fn, Args&&... args) {
+    bool CatchExceptions(const b::string& funcname, Fn&& func, Args&&... args) {
         try {
-            std::invoke(std::forward<Fn>(fn), std::forward<Args>(args)...);
+            std::invoke(std::forward<Fn>(func), std::forward<Args>(args)...);
             return true;
         }
         catch (const std::exception& e) {
@@ -110,15 +110,15 @@ namespace b {
     }
 
     bool console_application::_setup() {
-        return catch_exceptions("b::application::setup()", &console_application::consoleSetup, this);
+        return CatchExceptions("b::application::setup()", &console_application::consoleSetup, this);
     }
 
     bool console_application::_update() {
-        return catch_exceptions("b::application::update()", &console_application::consoleUpdate, this);
+        return CatchExceptions("b::application::update()", &console_application::consoleUpdate, this);
     }
 
     bool console_application::_cleanup() {
-        return catch_exceptions("b::application::cleanup()", &console_application::consoleCleanup, this);
+        return CatchExceptions("b::application::cleanup()", &console_application::consoleCleanup, this);
     }
 
 } // namespace b

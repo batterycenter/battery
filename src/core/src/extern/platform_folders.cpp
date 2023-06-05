@@ -150,6 +150,10 @@ static std::string GetAppDataCommon() {
 static std::string GetAppDataLocal() {
     return GetKnownWindowsFolder(FOLDERID_LocalAppData, "LocalAppData could not be found");
 }
+
+static std::string GetUserProfiles() {
+    return GetKnownWindowsFolder(FOLDERID_UserProfiles, "UserProfile could not be found");
+}
 #elif defined(__APPLE__)
 #else
 #include <map>
@@ -214,6 +218,16 @@ void appendExtraFoldersTokenizer(const char* envName, const char* envValue, std:
 }
 #endif
 
+    std::string getUserHome() {
+#ifdef _WIN32
+        return GetUserProfiles();
+#elif defined(__APPLE__)
+        return getHome();
+#else
+	    return getHome();
+#endif
+    }
+
     std::string getDataHome() {
 #ifdef _WIN32
         return GetAppData();
@@ -236,7 +250,7 @@ void appendExtraFoldersTokenizer(const char* envName, const char* envValue, std:
 
     std::string getCacheDir() {
 #ifdef _WIN32
-        return GetAppDataLocal();
+        return GetAppData();
 #elif defined(__APPLE__)
         return getHome()+"/Library/Caches";
 #else

@@ -25,7 +25,7 @@ namespace b {
                 property_stack::push(key, property);
             }
             if (font.has_value()) {
-                b::push_font(font.value());
+                b::PushFont(font.value());
             }
         }
 
@@ -34,7 +34,7 @@ namespace b {
                 property_stack::pop();
             }
             if (font.has_value()) {
-                b::pop_font();
+                b::PopFont();
             }
         }
 
