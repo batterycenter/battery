@@ -27,6 +27,9 @@ namespace b {
         Platform Platform();
         Arch Architecture();
 
+        double PI();
+        float fPI();
+
         bool IsProductionMode();
     } // namespace Constants
 

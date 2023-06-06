@@ -22,6 +22,7 @@ battery_add_source_files(battery_graphics
         src/application.cpp
         src/color_hex.cpp
         src/font_stack.cpp
+        src/primitive_render_window.cpp
         src/constants.cpp
         src/property_pack.cpp
         src/property_stack.cpp

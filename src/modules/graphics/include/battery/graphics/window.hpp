@@ -6,6 +6,7 @@
 #include "battery/graphics/widgets/all.hpp"
 #include "battery/graphics/context.hpp"
 #include "battery/graphics/constants.hpp"
+#include "battery/graphics/primitive_render_window.hpp"
 #include "battery/core/resource_loader.hpp"
 #include "battery/eventbus.hpp"
 
@@ -36,16 +37,13 @@ namespace b {
         struct SensorChangeEvent : public sf::Event::SensorEvent {};
     }
 
-    class BaseWindow : public sf::RenderWindow {
+    class BaseWindow : public b::PrimitiveRenderWindow {
     public:
-
         double m_framerate { 0.0 };
         double m_frametime { 0.0 };
         uint64_t m_framecount { 0 };
         bool m_useWin32ImmersiveDarkMode = true;
         widget_style style;
-
-        sf::RenderWindow& m_sfmlWindow = *this;          // This is a reference to the base class
 
         BaseWindow() : m_eventbus(std::make_shared<b::event_bus>()), m_eventListener(m_eventbus) {};
         ~BaseWindow() noexcept override;
@@ -86,6 +84,10 @@ namespace b {
         bool isMaximized();
         bool isMinimized();
 
+        ImVec2 getMousePos();
+        ImVec2 getMousePosPrev();
+        ImVec2 getMouseDelta();
+
         template<typename T>
         void setPythonUiScriptResource(const T& script) {
             m_uiScriptResourceLoader = std::make_unique<b::ResourceLoader>(script, [this](const auto& resource) {
@@ -124,6 +126,10 @@ namespace b {
 
         b::fs::path m_windowPositionJsonFile;
         sf::Vector2u m_defaultWindowSize = Constants::DefaultWindowSize();
+
+        ImVec2 m_mousePos;
+        ImVec2 m_mousePosPrev;
+        ImVec2 m_mouseDelta;
 
         struct WindowState {
             sf::Vector2u size;

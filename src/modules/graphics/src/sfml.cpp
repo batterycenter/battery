@@ -5,6 +5,7 @@
 #include "battery/graphics/widgets/all.hpp"
 #include "battery/graphics/font_stack.hpp"
 #include "battery/core/log.hpp"
+#include "battery/core/constants.hpp"
 
 namespace b {
 
@@ -132,12 +133,12 @@ namespace b {
         return std::sqrt(std::pow(a.x - b.x, 2) + std::pow(a.y - b.y, 2));
     }
 
-    float degrees(const float radians) {
-        return radians * 180.f / 3.14159265358979323846f;
+    float degrees(float radians) {
+        return radians * 180.f / b::Constants::fPI();
     }
 
-    float radians(const float degrees) {
-        return degrees * 3.14159265358979323846f / 180.f;
+    float radians(float degrees) {
+        return degrees * b::Constants::fPI() / 180.f;
     }
 
     float length(const ImVec2& v) {

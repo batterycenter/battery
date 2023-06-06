@@ -168,7 +168,7 @@ namespace b {
 
     bool BaseWindow::isMaximized() {
 #ifdef BATTERY_ARCH_WINDOWS
-        return IsZoomed(getSystemHandle());
+        return IsZoomed(getSystemHandle()) != 0;
 #else
 #error "Not implemented"
 #endif
@@ -176,10 +176,22 @@ namespace b {
 
     bool BaseWindow::isMinimized() {
 #ifdef BATTERY_ARCH_WINDOWS
-        return IsIconic(getSystemHandle());
+        return IsIconic(getSystemHandle()) != 0;
 #else
 #error "Not implemented"
 #endif
+    }
+
+    ImVec2 BaseWindow::getMousePos() {
+        return m_mousePos;
+    }
+
+    ImVec2 BaseWindow::getMousePosPrev() {
+        return m_mousePosPrev;
+    }
+
+    ImVec2 BaseWindow::getMouseDelta() {
+        return m_mouseDelta;
     }
 
     static void RecoverImguiFontStack() {
@@ -259,6 +271,7 @@ namespace b {
                     break;
 
                 case sf::Event::MouseMoved:
+                    m_mousePos = { static_cast<float>(event.mouseMove.x), static_cast<float>(event.mouseMove.y) };
                     dispatchEvent<b::Events::MouseMoveEvent>(event.mouseMove);
                     break;
 
@@ -311,6 +324,9 @@ namespace b {
             }
 
         }
+
+        m_mouseDelta = m_mousePos - m_mousePosPrev;
+        m_mousePosPrev = m_mousePos;
 
         b::update_themes();
 
