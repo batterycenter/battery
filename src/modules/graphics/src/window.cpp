@@ -126,7 +126,7 @@ namespace b {
         SetWindowLongW(getSystemHandle(), GWL_STYLE, style);
         ShowWindow(getSystemHandle(), SW_SHOW);
 #else
-#error "Not implemented"
+#warning "Not implemented"
 #endif
     }
 
@@ -138,7 +138,7 @@ namespace b {
         SetWindowLongW(getSystemHandle(), GWL_STYLE, style);
         ShowWindow(getSystemHandle(), SW_SHOW);
 #else
-#error "Not implemented"
+#warning "Not implemented"
 #endif
     }
 
@@ -146,7 +146,7 @@ namespace b {
 #ifdef BATTERY_ARCH_WINDOWS
         ShowWindow(getSystemHandle(), SW_MAXIMIZE);
 #else
-#error "Not implemented"
+#warning "Not implemented"
 #endif
     }
 
@@ -154,7 +154,7 @@ namespace b {
 #ifdef BATTERY_ARCH_WINDOWS
         ShowWindow(getSystemHandle(), SW_MINIMIZE);
 #else
-#error "Not implemented"
+#warning "Not implemented"
 #endif
     }
 
@@ -162,7 +162,7 @@ namespace b {
 #ifdef BATTERY_ARCH_WINDOWS
         ShowWindow(getSystemHandle(), SW_RESTORE);
 #else
-#error "Not implemented"
+#warning "Not implemented"
 #endif
     }
 
@@ -170,7 +170,7 @@ namespace b {
 #ifdef BATTERY_ARCH_WINDOWS
         return IsZoomed(getSystemHandle()) != 0;
 #else
-#error "Not implemented"
+#warning "Not implemented"
 #endif
     }
 
@@ -178,7 +178,7 @@ namespace b {
 #ifdef BATTERY_ARCH_WINDOWS
         return IsIconic(getSystemHandle()) != 0;
 #else
-#error "Not implemented"
+#warning "Not implemented"
 #endif
     }
 
@@ -405,7 +405,7 @@ namespace b {
         m_errorTextWidget.top = "5px"_u;
         m_errorTextWidget.right = "5px"_u;
         m_errorTextWidget.bottom = "5px"_u;
-        m_errorTextWidget.alignv = b::alignv::TOP;
+        m_errorTextWidget.alignv = b::AlignV::Top;
         m_errorTextWidget.style["ImGuiCol_Text"] = "#D34040"_u;
 
         m_errorPanelWidget([this]() {

@@ -31,6 +31,13 @@
 ///
 namespace b {
 
+    /// \brief platform native string type: std::wstring on Windows, std::string on other platforms
+#ifdef BATTERY_ARCH_WINDOWS
+    using platform_native_string = std::wstring;
+#else
+    using platform_native_string = std::string;
+#endif
+
     ///
     /// \brief Yet another string class, that combines all other. Synonymous to `std::string`, but with more features.
     /// \details This class is derived from `std::string`, thus all `std::string` features are directly available.
@@ -242,6 +249,16 @@ namespace b {
         /// \throw std::invalid_argument if the string does not contain valid UTF-8
         /// \return std::wstring containing the UTF-16 wide-string representation of the string
         std::wstring& wstr();
+
+        /// \brief convert to a platform native string: std::wstring on Windows, std::string on other platforms
+        /// \return std::wstring or std::string depending on the platform
+        platform_native_string platform_native() const {
+#ifdef BATTERY_ARCH_WINDOWS
+            return wstr();
+#else
+            return str();
+#endif
+        }
 
         ///
         /// \brief Call a function for every character in a UTF-8 encoded string, not for every byte.

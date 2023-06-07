@@ -58,17 +58,17 @@ target_link_libraries(battery_graphics
         battery::eventbus
     )
 
-battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/default_themes.json default_themes_json TEXT)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/default_themes.json DefaultThemesJson TEXT)
 
-battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/inter-regular.ttf fonts_inter_regular_ttf BINARY)
-battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/inter-medium.ttf fonts_inter_medium_ttf BINARY)
-battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/inter-bold.ttf fonts_inter_bold_ttf BINARY)
-battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/roboto-regular.ttf fonts_roboto_regular_ttf BINARY)
-battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/roboto-medium.ttf fonts_roboto_medium_ttf BINARY)
-battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/roboto-bold.ttf fonts_roboto_bold_ttf BINARY)
-battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/montserrat-regular.ttf fonts_montserrat_regular_ttf BINARY)
-battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/montserrat-medium.ttf fonts_montserrat_medium_ttf BINARY)
-battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/montserrat-bold.ttf fonts_montserrat_bold_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/inter-regular.ttf FontsInterRegular_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/inter-medium.ttf FontsInterMedium_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/inter-bold.ttf FontsInterBold_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/roboto-regular.ttf FontsRobotoRegular_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/roboto-medium.ttf FontsRobotoMedium_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/roboto-bold.ttf FontsRobotoBold_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/montserrat-regular.ttf FontsMontserratRegular_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/montserrat-medium.ttf FontsMontserratMedium_ttf BINARY)
+battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/montserrat-bold.ttf FontsMontserratBold_ttf BINARY)
 
 if (BUILD_TESTS)
     add_subdirectory(tests)

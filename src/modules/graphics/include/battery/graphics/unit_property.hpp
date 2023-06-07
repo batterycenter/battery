@@ -6,7 +6,7 @@
 
 namespace b {
 
-    enum class unit {                   // BE CAREFUL WHEN CHANGING!!! (implementations check == COLOR_HEX as synonym for NOT NUMERIC)
+    enum class Unit {                   // BE CAREFUL WHEN CHANGING!!! (implementations check == COLOR_HEX as synonym for NOT NUMERIC)
         NONE,               // Invalid
         UNITLESS,           // eg. '2.7'
         PIXEL,              // eg. '35.2px'
@@ -20,7 +20,7 @@ namespace b {
 
         unit_property() = default;
         unit_property(const b::string& value);
-        unit_property(float value, unit unit);
+        unit_property(float value, Unit unit);
         unit_property(float value);
         unit_property(ImColor color);
         unit_property(sf::Color color);
@@ -38,28 +38,28 @@ namespace b {
         [[nodiscard]] ImColor color() const;
         [[nodiscard]] b::string string() const;
 
-        [[nodiscard]] unit unit() const { return m_unit; }
-        [[nodiscard]] bool defined() const { return m_unit != b::unit::NONE; }
+        [[nodiscard]] Unit unit() const { return m_unit; }
+        [[nodiscard]] bool defined() const { return m_unit != b::Unit::NONE; }
 
         bool operator==(const unit_property& other) { return this->string() == other.string(); }
         bool operator!=(const unit_property& other) { return !this->operator==(other); }
 
         inline static void define_python_types(b::py::module& module) {
 
-            b::py::enum_<b::unit>(module, "unit")
-                .value("NONE", b::unit::NONE)
-                .value("UNITLESS", b::unit::UNITLESS)
-                .value("PIXEL", b::unit::PIXEL)
-                .value("PERCENT", b::unit::PERCENT)
-                .value("COLOR_HEX", b::unit::COLOR_HEX)
-                .value("EM", b::unit::EM)
+            b::py::enum_<b::Unit>(module, "unit")
+                .value("NONE", b::Unit::NONE)
+                .value("UNITLESS", b::Unit::UNITLESS)
+                .value("PIXEL", b::Unit::PIXEL)
+                .value("PERCENT", b::Unit::PERCENT)
+                .value("COLOR_HEX", b::Unit::COLOR_HEX)
+                .value("EM", b::Unit::EM)
                 .export_values();
 
             b::py::class_<b::unit_property>(module, "unit_property")
                 .def(b::py::init<>())
                 .def(b::py::init<const b::string&>())
                 .def(b::py::init<const std::string&>())
-                .def(b::py::init<float, b::unit>())
+                .def(b::py::init<float, b::Unit>())
                 .def(b::py::init<float>())
                 .def(b::py::init<ImColor>())
                 .def("string", &b::unit_property::string)
@@ -77,7 +77,7 @@ namespace b {
 
         float m_float = 0.f;
         ImColor m_color {};
-        enum unit m_unit = unit::NONE;
+        enum Unit m_unit = Unit::NONE;
     };
 
 }

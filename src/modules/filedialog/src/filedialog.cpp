@@ -191,7 +191,12 @@ namespace b {
 #endif
 
     b::fs::path filedialog::sync_open() {
+#ifdef BATTERY_ARCH_WINDOWS
         auto path = Win32OpenDialog(*this, false, default_extension)[0];
+#else
+#warning FILEDIALOG NOT IMPLEMENTED
+        auto path = b::fs::path();
+#endif
         if (!default_extension.empty() && path.extension().empty()) {
             path.replace_extension(default_extension);
         }
@@ -199,7 +204,12 @@ namespace b {
     }
 
     std::vector<b::fs::path> filedialog::sync_open_multiple() {
+#ifdef BATTERY_ARCH_WINDOWS
         auto paths = Win32OpenDialog(*this, true, default_extension);
+#else
+#warning FILEDIALOG NOT IMPLEMENTED
+        auto paths = std::vector<b::fs::path>();
+#endif
         if (!default_extension.empty()) {
             for (auto& path : paths) {
                 if (path.extension().empty()) {
@@ -211,7 +221,12 @@ namespace b {
     }
 
     b::fs::path filedialog::sync_save() {
+#ifdef BATTERY_ARCH_WINDOWS
         auto path = Win32SaveDialog(*this, default_extension);
+#else
+#warning FILEDIALOG NOT IMPLEMENTED
+        auto path = b::fs::path();
+#endif
         if (!default_extension.empty() && path.extension().empty()) {
             path.replace_extension(default_extension);
         }

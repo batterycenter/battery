@@ -14,7 +14,7 @@ namespace b {
 
     private:
         b::fs::path m_filePath {};
-        std::chrono::time_point<std::filesystem::_File_time_clock> m_lastModificationTime {};
+        std::filesystem::file_time_type m_lastModificationTime {};
     };
 
     class FileWatcher : BasicFileWatcher {

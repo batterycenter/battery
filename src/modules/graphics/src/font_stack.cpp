@@ -1,15 +1,15 @@
 
 #include "battery/graphics/font_stack.hpp"
 #include "battery/graphics/constants.hpp"
-#include "resources/fonts_inter_bold_ttf.hpp"
-#include "resources/fonts_inter_medium_ttf.hpp"
-#include "resources/fonts_inter_regular_ttf.hpp"
-#include "resources/fonts_montserrat_bold_ttf.hpp"
-#include "resources/fonts_montserrat_medium_ttf.hpp"
-#include "resources/fonts_montserrat_regular_ttf.hpp"
-#include "resources/fonts_roboto_bold_ttf.hpp"
-#include "resources/fonts_roboto_medium_ttf.hpp"
-#include "resources/fonts_roboto_regular_ttf.hpp"
+#include "resources/FontsInterBold_ttf.hpp"
+#include "resources/FontsInterMedium_ttf.hpp"
+#include "resources/FontsInterRegular_ttf.hpp"
+#include "resources/FontsMontserratBold_ttf.hpp"
+#include "resources/FontsMontserratMedium_ttf.hpp"
+#include "resources/FontsMontserratRegular_ttf.hpp"
+#include "resources/FontsRobotoBold_ttf.hpp"
+#include "resources/FontsRobotoMedium_ttf.hpp"
+#include "resources/FontsRobotoRegular_ttf.hpp"
 
 namespace b {
 
@@ -114,15 +114,15 @@ namespace b {
     }
 
     void LoadDefaultFonts() {
-        MakeFontAvailable("inter-regular", Resources::FONTS_INTER_REGULAR_TTF);       // TODO: Make default fonts optional
-        MakeFontAvailable("inter-medium", Resources::FONTS_INTER_MEDIUM_TTF);
-        MakeFontAvailable("inter-bold", Resources::FONTS_INTER_BOLD_TTF);
-        MakeFontAvailable("roboto-regular", Resources::FONTS_ROBOTO_REGULAR_TTF);
-        MakeFontAvailable("roboto-medium", Resources::FONTS_ROBOTO_MEDIUM_TTF);
-        MakeFontAvailable("roboto-bold", Resources::FONTS_ROBOTO_BOLD_TTF);
-        MakeFontAvailable("montserrat-regular", Resources::FONTS_MONTSERRAT_REGULAR_TTF);
-        MakeFontAvailable("montserrat-medium", Resources::FONTS_MONTSERRAT_MEDIUM_TTF);
-        MakeFontAvailable("montserrat-bold", Resources::FONTS_MONTSERRAT_BOLD_TTF);
+        MakeFontAvailable("inter-regular", Resources::FontsInterRegular_ttf);       // TODO: Make default fonts optional
+        MakeFontAvailable("inter-medium", Resources::FontsInterMedium_ttf);
+        MakeFontAvailable("inter-bold", Resources::FontsInterBold_ttf);
+        MakeFontAvailable("roboto-regular", Resources::FontsRobotoRegular_ttf);
+        MakeFontAvailable("roboto-medium", Resources::FontsRobotoMedium_ttf);
+        MakeFontAvailable("roboto-bold", Resources::FontsRobotoBold_ttf);
+        MakeFontAvailable("montserrat-regular", Resources::FontsMontserratRegular_ttf);
+        MakeFontAvailable("montserrat-medium", Resources::FontsMontserratMedium_ttf);
+        MakeFontAvailable("montserrat-bold", Resources::FontsMontserratBold_ttf);
 
         auto [default_font, default_font_size] = b::Constants::DefaultFont();
         b::LoadFont("default", default_font, default_font_size);

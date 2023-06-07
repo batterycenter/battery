@@ -15,34 +15,32 @@ namespace b {
     namespace internal {
 
 #ifdef BATTERY_ARCH_WINDOWS
-    b::string get_last_win32_error() {
+        b::string get_last_win32_error() {
+            DWORD errorMessageID = ::GetLastError();
+            if (errorMessageID == 0)
+                return "";
 
-        DWORD errorMessageID = ::GetLastError();
-        if (errorMessageID == 0)
-            return "";
+            LPWSTR messageBuffer = nullptr;
+            FormatMessageW(
+                    FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+                    nullptr, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR) & messageBuffer, 0,
+                    nullptr);
 
-        LPWSTR messageBuffer = nullptr;
-        FormatMessageW(
-                FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                nullptr, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR) & messageBuffer, 0,
-                nullptr);
-
-        auto buffer = b::string(std::wstring(messageBuffer));
-        LocalFree(messageBuffer);
-        return buffer;
-    }
-    static void win32_message_box(const b::string& message, UINT options) {
-        ::MessageBoxW(nullptr, std::bit_cast<const wchar_t*>(message.c_str()), L"Error", options);
-    }
-#else
-    static void linux_run_zenity(const std::vector<b::string>& commands) {
-        b::process zenity;
-        zenity.options.executable = "zenity";
-        zenity.options.arguments = commands;
-        zenity.execute_sync();
-    }
-#endif  // BATTERY_ARCH_WINDOWS
-
+            auto buffer = b::string(std::wstring(messageBuffer));
+            LocalFree(messageBuffer);
+            return buffer;
+        }
+        static void win32_message_box(const b::string& message, UINT options) {
+            ::MessageBoxW(nullptr, std::bit_cast<const wchar_t*>(message.c_str()), L"Error", options);
+        }
+#else       // BATTERY_ARCH_WINDOWS
+        void linux_run_zenity(const std::vector<b::string>& commands) {
+            b::process zenity;
+            zenity.options.executable = "zenity";
+            zenity.options.arguments = commands;
+            zenity.execute_sync();
+        }
+#endif      // BATTERY_ARCH_WINDOWS
     }  // namespace internal
 
     void message_box_info(const b::string& message) {

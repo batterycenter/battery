@@ -102,13 +102,17 @@ namespace b::fs {
     class ifstream : public std::ifstream {
     public:
         ifstream(const fs::path& path, enum Mode filemode = Mode::TEXT)
-                : std::ifstream(path.string().wstr(), (filemode == Mode::TEXT) ? std::ios::in : (std::ios::in | std::ios::binary)),
-                  path(path)
+                : std::ifstream(path.string().platform_native(),
+                                (filemode == Mode::TEXT) ? std::ios::in : (std::ios::in | std::ios::binary)),
+                                path(path)
         {
             binary = (filemode == Mode::BINARY);	// remember for later
         }
 
-        ifstream(const fs::path& path, std::ios_base::openmode mode) : std::ifstream(b::string(path.string()), mode), path(path)  {
+        ifstream(const fs::path& path, std::ios_base::openmode mode)
+                : std::ifstream(path.string().platform_native(), mode),
+                                path(path)
+        {
             binary = (mode & std::ios::binary);		// remember for later
         }
 
@@ -254,14 +258,14 @@ namespace b::fs {
             }
         }
 
-        std::wstring create_dir_return_path(const fs::path& path, bool createDirectory) const {
+        b::platform_native_string create_dir_return_path(const fs::path& path, bool createDirectory) const {
             if (path.has_parent_path() && createDirectory) {
                 auto parent = path.parent_path();
                 if (!fs::exists(parent)) {
                     fs::create_directories(fs::path(path).parent_path());
                 }
             }
-            return path.string().wstr();
+            return path.string().platform_native();
         }
     };
 

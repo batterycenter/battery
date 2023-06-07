@@ -12,7 +12,7 @@ namespace b::widgets {
             numeric_rule(const char* tag) : tag(tag) {}
             ~numeric_rule();
 
-            numeric_rule& add_case(enum b::unit unit, const std::function<float(float)>& transformer);
+            numeric_rule& add_case(enum b::Unit unit, const std::function<float(float)>& transformer);
             std::optional<float> get_result();
             float get_result(float default_value);
             void push(ImGuiStyleVar_ style_var);
@@ -34,7 +34,7 @@ namespace b::widgets {
         private:
             const char* tag;
             int pushed = 0;
-            std::vector<std::pair<enum b::unit, std::function<float(float)>>> cases;
+            std::vector<std::pair<enum b::Unit, std::function<float(float)>>> cases;
         };
 
         class vec2_rule {
@@ -42,8 +42,8 @@ namespace b::widgets {
             vec2_rule(const char* tag) : tag(tag) {}
             ~vec2_rule();
 
-            vec2_rule& add_case_x(enum b::unit unit, const std::function<float(float)>& transformer);
-            vec2_rule& add_case_y(enum b::unit unit, const std::function<float(float)>& transformer);
+            vec2_rule& add_case_x(enum b::Unit unit, const std::function<float(float)>& transformer);
+            vec2_rule& add_case_y(enum b::Unit unit, const std::function<float(float)>& transformer);
             std::optional<ImVec2> get_result();
             ImVec2 get_result(ImVec2 default_value);
             void push(ImGuiStyleVar_ style_var);
@@ -66,8 +66,8 @@ namespace b::widgets {
         private:
             const char* tag;
             int pushed = 0;
-            std::vector<std::pair<enum b::unit, std::function<float(float)>>> cases_x;
-            std::vector<std::pair<enum b::unit, std::function<float(float)>>> cases_y;
+            std::vector<std::pair<enum b::Unit, std::function<float(float)>>> cases_x;
+            std::vector<std::pair<enum b::Unit, std::function<float(float)>>> cases_y;
         };
 
         class color_rule {
@@ -96,7 +96,7 @@ namespace b::widgets {
         private:
             const char* tag;
             int pushed = 0;
-            std::vector<std::pair<enum b::unit, std::function<ImColor(ImColor)>>> cases;
+            std::vector<std::pair<enum b::Unit, std::function<ImColor(ImColor)>>> cases;
         };
 
     public:

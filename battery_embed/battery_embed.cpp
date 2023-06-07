@@ -75,7 +75,7 @@ public:
         )
         : m_resourcePath(resourcePath),
           m_targetPath(targetPath),
-          m_packedSymbolName(b::string::to_upper(symbolName))
+          m_packedSymbolName(symbolName)
     {
         auto packedSymbol = b::fs::path(m_packedSymbolName);
         m_strippedSymbolName = SanitizeVariableName(packedSymbol.filename().u8string());
@@ -162,7 +162,7 @@ public:
             callback(std::string_view("\0", 1));     // although it will not be read anyway as the size is 0 too.
         }
 
-        if (totalBytes == -1) {
+        if (totalBytes == static_cast<size_t>(-1)) {
             b::log::error("Failed to open input file '{}' for reading (error code {}): {}", m_resourcePath, static_cast<int>(ErrorCode::INPUT_FILE_FAILED), b::strerror(errno));
             return ErrorCode::INPUT_FILE_FAILED;
         }

@@ -2,16 +2,16 @@
 
 namespace b {
 
-    enum class alignh {
-        LEFT,
-        CENTER,
-        RIGHT
+    enum class AlignH {
+        Left,
+        Center,
+        Right
     };
 
-    enum class alignv {
-        TOP,
-        CENTER,
-        BOTTOM
+    enum class AlignV {
+        Top,
+        Center,
+        Bottom
     };
 
 }

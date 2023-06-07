@@ -17,12 +17,12 @@ namespace b::widgets {
 
         auto textSize = ImGui::CalcTextSize(label.c_str());
         // If the width not defined, set it to the width of the text
-        if (text_container.width.unit() == b::unit::NONE && (text_container.left.unit() == b::unit::NONE || text_container.right.unit() == b::unit::NONE)) {
+        if (text_container.width.unit() == b::Unit::NONE && (text_container.left.unit() == b::Unit::NONE || text_container.right.unit() == b::Unit::NONE)) {
             text_container.width = textSize.x;
             this->width = textSize.x;
         }
         // If the height not defined, set it to the height of the text
-        if (text_container.height.unit() == b::unit::NONE && (text_container.top.unit() == b::unit::NONE || text_container.bottom.unit() == b::unit::NONE)) {
+        if (text_container.height.unit() == b::Unit::NONE && (text_container.top.unit() == b::Unit::NONE || text_container.bottom.unit() == b::Unit::NONE)) {
             text_container.height = textSize.y;
             this->height = textSize.y;
         }
@@ -33,15 +33,15 @@ namespace b::widgets {
         ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0);
         text_container([this, &textSize]() {
 
-            if (alignh == alignh::CENTER) {
+            if (alignh == AlignH::Center) {
                 ImGui::SetCursorPosX((text_container.actual_size.x - textSize.x) / 2);
-            } else if (alignh == alignh::RIGHT) {
+            } else if (alignh == AlignH::Right) {
                 ImGui::SetCursorPosX(text_container.actual_size.x - textSize.x);
             }
 
-            if (alignv == alignv::CENTER) {
+            if (alignv == AlignV::Center) {
                 ImGui::SetCursorPosY((text_container.actual_size.y - textSize.y) / 2);
-            } else if (alignv == alignv::BOTTOM) {
+            } else if (alignv == AlignV::Bottom) {
                 ImGui::SetCursorPosY(text_container.actual_size.y - textSize.y);
             }
 

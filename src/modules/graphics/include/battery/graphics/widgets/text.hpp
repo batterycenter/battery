@@ -8,8 +8,8 @@ namespace b::widgets {
     class text : public b::widgets::base_widget {
     public:
         b::string label = "Label";
-        alignh alignh = alignh::LEFT;
-        alignv alignv = alignv::CENTER;
+        AlignH alignh = AlignH::Left;
+        AlignV alignv = AlignV::Center;
         bool underline = false;
         float underline_offset = 2.0f;
 

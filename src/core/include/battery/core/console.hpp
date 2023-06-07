@@ -6,7 +6,7 @@
 
 namespace b {
 
-    b::string cin_getline(int buffer_size = 1024);
+    b::string cin_getline(size_t buffer_size = 1024);
 
     bool open_url_in_default_browser(const b::string& url);
 

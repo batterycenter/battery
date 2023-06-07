@@ -1,5 +1,6 @@
 
 #include "battery/graphics/primitive_render_window.hpp"
+#include <cmath>
 
 namespace b {
 
@@ -9,7 +10,7 @@ namespace b {
         line.setSize({ b::distance(point1, point2), thickness });
         line.setOrigin({ 0, thickness / 2.0f });
         line.setPosition(point1);
-        line.setRotation(sf::radians(std::atan2f(point2.y - point1.y, point2.x - point1.x)));
+        line.setRotation(sf::radians(atan2f(point2.y - point1.y, point2.x - point1.x)));
         m_sfmlWindow.draw(line);
 
         if (cap == LineCap::Round) {

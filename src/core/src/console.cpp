@@ -24,7 +24,7 @@
 
 namespace b {
 
-    b::string cin_getline(int buffer_size) {          // We must do this so complicated because std::cin does not have UTF-8 support
+    b::string cin_getline(size_t buffer_size) {          // We must do this so complicated because std::cin does not have UTF-8 support
 #ifdef BATTERY_ARCH_WINDOWS
         DWORD read = 0;
         std::wstring buffer;
@@ -38,9 +38,11 @@ namespace b {
 
         auto line = b::string(buffer.substr(0, read));
 #else
-        b::string _line;
-        std::getline(std::cin, line);           // TODO: buffer size is not used
-        auto line = b::string(_line);
+        b::string line;
+        std::getline(std::cin, line);
+        if (line.size() > buffer_size) {    // Limit to buffer size for consistent behavior across platforms
+            line = line.substr(0, buffer_size);
+        }
 #endif
         line = b::string::replace(line, "\n", "");
         line = b::string::replace(line, "\r", "");
@@ -126,9 +128,9 @@ namespace b {
             switch (ch) {
 #ifdef BATTERY_ARCH_WINDOWS
                 case 75:
-                    return keycode::LEFT;
+                    return keycode::Left;
                 case 77:
-                    return keycode::RIGHT;
+                    return keycode::Right;
                 case 72:
                     return keycode::UP;
                 case 80:

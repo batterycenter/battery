@@ -13,7 +13,7 @@ namespace b::widgets {
         }
     }
 
-    widget_builder::numeric_rule& widget_builder::numeric_rule::add_case(enum b::unit unit, const std::function<float(float)>& transformer) {
+    widget_builder::numeric_rule& widget_builder::numeric_rule::add_case(enum b::Unit unit, const std::function<float(float)>& transformer) {
         cases.emplace_back(unit, transformer);
         return *this;
     }
@@ -61,12 +61,12 @@ namespace b::widgets {
         }
     }
 
-    widget_builder::vec2_rule& widget_builder::vec2_rule::add_case_x(enum b::unit unit, const std::function<float(float)>& transformer) {
+    widget_builder::vec2_rule& widget_builder::vec2_rule::add_case_x(enum b::Unit unit, const std::function<float(float)>& transformer) {
         cases_x.emplace_back(unit, transformer);
         return *this;
     }
 
-    widget_builder::vec2_rule& widget_builder::vec2_rule::add_case_y(enum b::unit unit, const std::function<float(float)>& transformer) {
+    widget_builder::vec2_rule& widget_builder::vec2_rule::add_case_y(enum b::Unit unit, const std::function<float(float)>& transformer) {
         cases_y.emplace_back(unit, transformer);
         return *this;
     }
@@ -130,10 +130,10 @@ namespace b::widgets {
                         tag, property.value().get_properties().size()));
             }
 
-            if (property.value().get_properties()[0].unit() != b::unit::COLOR_HEX) {
+            if (property.value().get_properties()[0].unit() != b::Unit::COLOR_HEX) {
                 throw std::runtime_error(b::format(
                         "Failed to apply widget_builder rule {}: Property type is {}, expected {}",
-                        tag, magic_enum::enum_name(property.value().get_properties()[0].unit()), magic_enum::enum_name(b::unit::COLOR_HEX)));
+                        tag, magic_enum::enum_name(property.value().get_properties()[0].unit()), magic_enum::enum_name(b::Unit::COLOR_HEX)));
             }
 
             return property.value().get_properties()[0].color();

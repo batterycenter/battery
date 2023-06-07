@@ -14,6 +14,7 @@
 namespace b {
 
     static std::vector<b::string> parse_cli([[maybe_unused]] int argc, [[maybe_unused]] const char** argv) {
+        std::vector<b::string> args;
 #ifdef BATTERY_ARCH_WINDOWS                 // On Windows, parse CLI arguments from WinAPI and convert to UTF-8
         int _argc = 0;
         LPWSTR* _args = ::CommandLineToArgvW((LPCWSTR)GetCommandLineW(), &_argc);
@@ -22,16 +23,18 @@ namespace b {
             b::message_box_error("[Battery->WinAPI]: CommandLineToArgvW failed: " + b::internal::get_last_win32_error());
             return {};
         }
-        std::vector<b::string> args;
         for (int i = 0; i < _argc; i++) {
             args.push_back(std::wstring(_args[i]));
         }
         ::LocalFree(_args);
 
         return args;
-#else
-        return { argv, argv + argc };    // All other platforms simply pass-through
+#else                   // All other platforms simply pass-through
+        for (int i = 0; i < argc; i++) {
+            args.emplace_back(argv[i]);     // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+        }
 #endif
+        return args;
     }
 
     static void setup_windows_console() {

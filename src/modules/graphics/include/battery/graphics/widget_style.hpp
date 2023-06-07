@@ -30,7 +30,7 @@ namespace b {
         }
 
         inline void pop() {
-            for (auto& [key, property] : pushed_properties) {
+            for ([[maybe_unused]] auto& property : pushed_properties) {
                 property_stack::pop();
             }
             if (font.has_value()) {

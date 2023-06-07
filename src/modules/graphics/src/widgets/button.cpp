@@ -1,4 +1,3 @@
-#pragma once
 
 #include "battery/graphics/widgets/button.hpp"
 #include "battery/graphics/sfml.hpp"

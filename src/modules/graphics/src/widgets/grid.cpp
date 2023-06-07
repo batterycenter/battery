@@ -79,7 +79,7 @@ namespace b::widgets {
         // First apply all absolute values
         float absolute_sum = 0;
         for (size_t i = 0; i < number_of_columns; i++) {
-            if (cell_widths[i].unit() == b::unit::PIXEL) {
+            if (cell_widths[i].unit() == b::Unit::PIXEL) {
                 widths[i] = cell_widths[i].numeric();                       // - ImGui::GetStyle().ItemSpacing.x;
                 absolute_sum += cell_widths[i].numeric();
             }
@@ -93,7 +93,7 @@ namespace b::widgets {
         // Now fill in the relative PERCENT columns
         float percent_sum = 0.f;
         for (size_t i = 0; i < number_of_columns; i++) {
-            if (cell_widths[i].unit() == b::unit::PERCENT) {
+            if (cell_widths[i].unit() == b::Unit::PERCENT) {
                 float proportion = std::clamp(cell_widths[i].numeric() / 100.f, 0.f, 1.f);
                 widths[i] = actual_size.x * proportion;                  // - ImGui::GetStyle().ItemSpacing.x;
                 percent_sum += actual_size.x * proportion;
@@ -108,7 +108,7 @@ namespace b::widgets {
         // Now fill in the relative EM columns
         float em_sum = 0.f;
         for (size_t i = 0; i < number_of_columns; i++) {
-            if (cell_widths[i].unit() == b::unit::PERCENT) {
+            if (cell_widths[i].unit() == b::Unit::PERCENT) {
                 widths[i] = cell_widths[i].numeric() * ImGui::GetFontSize();                  // - ImGui::GetStyle().ItemSpacing.x;
                 em_sum += cell_widths[i].numeric() * ImGui::GetFontSize();
             }
@@ -122,14 +122,14 @@ namespace b::widgets {
         // And finally, share the remaining space proportionally between the UNITLESS columns
         float unitless_sum = 0.f;
         for (size_t i = 0; i < number_of_columns; i++) {
-            if (cell_widths[i].unit() == b::unit::UNITLESS) {
+            if (cell_widths[i].unit() == b::Unit::UNITLESS) {
                 unitless_sum += cell_widths[i].numeric();
             }
         }
 
         float remaining = actual_size.x - absolute_sum - percent_sum - em_sum;
         for (size_t i = 0; i < number_of_columns; i++) {
-            if (cell_widths[i].unit() == b::unit::UNITLESS) {
+            if (cell_widths[i].unit() == b::Unit::UNITLESS) {
                 if (unitless_sum != 0) {
                     float proportion = cell_widths[i].numeric() / unitless_sum;
                     widths[i] = remaining * proportion;                     // - ImGui::GetStyle().ItemSpacing.x;
@@ -148,7 +148,7 @@ namespace b::widgets {
         // First apply all absolute values
         float absolute_sum = 0;
         for (size_t i = 0; i < number_of_rows; i++) {
-            if (cell_heights[i].unit() == b::unit::PIXEL) {
+            if (cell_heights[i].unit() == b::Unit::PIXEL) {
                 heights[i] = cell_heights[i].numeric();                       // - ImGui::GetStyle().ItemSpacing.x;
                 absolute_sum += cell_heights[i].numeric();
             }
@@ -162,7 +162,7 @@ namespace b::widgets {
         // Now fill in the relative PERCENT columns
         float percent_sum = 0.f;
         for (size_t i = 0; i < number_of_rows; i++) {
-            if (cell_heights[i].unit() == b::unit::PERCENT) {
+            if (cell_heights[i].unit() == b::Unit::PERCENT) {
                 float proportion = std::clamp(cell_heights[i].numeric() / 100.f, 0.f, 1.f);
                 heights[i] = actual_size.y * proportion;                  // - ImGui::GetStyle().ItemSpacing.x;
                 percent_sum += actual_size.y * proportion;
@@ -177,7 +177,7 @@ namespace b::widgets {
         // Now fill in the relative EM columns
         float em_sum = 0.f;
         for (size_t i = 0; i < number_of_rows; i++) {
-            if (cell_heights[i].unit() == b::unit::PERCENT) {
+            if (cell_heights[i].unit() == b::Unit::PERCENT) {
                 heights[i] = cell_heights[i].numeric() * ImGui::GetFontSize();                  // - ImGui::GetStyle().ItemSpacing.x;
                 em_sum += cell_heights[i].numeric() * ImGui::GetFontSize();
             }
@@ -191,14 +191,14 @@ namespace b::widgets {
         // And finally, share the remaining space proportionally between the UNITLESS columns
         float unitless_sum = 0.f;
         for (size_t i = 0; i < number_of_rows; i++) {
-            if (cell_heights[i].unit() == b::unit::UNITLESS) {
+            if (cell_heights[i].unit() == b::Unit::UNITLESS) {
                 unitless_sum += cell_heights[i].numeric();
             }
         }
 
         float remaining = actual_size.y - absolute_sum - percent_sum - em_sum;
         for (size_t i = 0; i < number_of_rows; i++) {
-            if (cell_heights[i].unit() == b::unit::UNITLESS) {
+            if (cell_heights[i].unit() == b::Unit::UNITLESS) {
                 if (unitless_sum != 0) {
                     float proportion = cell_heights[i].numeric() / unitless_sum;
                     heights[i] = remaining * proportion;                     // - ImGui::GetStyle().ItemSpacing.x;

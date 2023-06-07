@@ -14,10 +14,10 @@ namespace b::widgets {
     static std::optional<float> getHorizontalPx(const unit_property& property) {
         std::optional<float> px;
         switch (property.unit()) {
-            case b::unit::UNITLESS: px = property.numeric(); break;
-            case b::unit::PIXEL:    px = property.numeric(); break;
-            case b::unit::PERCENT:  px = property.numeric() * (ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x) / 100.0f; break;
-            case b::unit::EM:       px = property.numeric() * ImGui::GetFontSize(); break;
+            case b::Unit::UNITLESS: px = property.numeric(); break;
+            case b::Unit::PIXEL: px = property.numeric(); break;
+            case b::Unit::PERCENT: px = property.numeric() * (ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x) / 100.0f; break;
+            case b::Unit::EM: px = property.numeric() * ImGui::GetFontSize(); break;
             default: break;
         }
         return px;
@@ -26,10 +26,10 @@ namespace b::widgets {
     static std::optional<float> getVerticalPx(const unit_property& property) {
         std::optional<float> px;
         switch (property.unit()) {
-            case b::unit::UNITLESS: px = property.numeric(); break;
-            case b::unit::PIXEL:    px = property.numeric(); break;
-            case b::unit::PERCENT:  px = property.numeric() * (ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y) / 100.0f; break;
-            case b::unit::EM:       px = property.numeric() * ImGui::GetFontSize(); break;
+            case b::Unit::UNITLESS: px = property.numeric(); break;
+            case b::Unit::PIXEL: px = property.numeric(); break;
+            case b::Unit::PERCENT: px = property.numeric() * (ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y) / 100.0f; break;
+            case b::Unit::EM: px = property.numeric() * ImGui::GetFontSize(); break;
             default: break;
         }
         return px;

@@ -96,15 +96,15 @@ namespace b {
             .value("Multiline", ImGuiInputTextFlags_CallbackEdit)
             .value("NoMarkEdited", ImGuiInputTextFlags_EscapeClearsAll);
 
-        py::enum_<b::alignh>(module, "AlignH", py::arithmetic())
-            .value("Left", b::alignh::LEFT)
-            .value("Center", b::alignh::CENTER)
-            .value("Right", b::alignh::RIGHT);
+        py::enum_<b::AlignH>(module, "AlignH", py::arithmetic())
+            .value("Left", b::AlignH::Left)
+            .value("Center", b::AlignH::Center)
+            .value("Right", b::AlignH::Right);
 
-        py::enum_<b::alignv>(module, "AlignV", py::arithmetic())
-            .value("Top", b::alignv::TOP)
-            .value("Center", b::alignv::CENTER)
-            .value("Bottom", b::alignv::BOTTOM);
+        py::enum_<b::AlignV>(module, "AlignV", py::arithmetic())
+            .value("Top", b::AlignV::Top)
+            .value("Center", b::AlignV::Center)
+            .value("Bottom", b::AlignV::Bottom);
 
         py::class_<b::string>(module, "string")
             .def(b::py::init<>())

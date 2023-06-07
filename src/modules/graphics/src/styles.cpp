@@ -3,7 +3,7 @@
 #include "battery/core/resource_loader.hpp"
 #include "battery/graphics/color_hex.hpp"
 #include "battery/graphics/property_stack.hpp"
-#include "resources/default_themes_json.hpp"
+#include "resources/DefaultThemesJson.hpp"
 #include "magic_enum.hpp"
 
 namespace b {
@@ -38,7 +38,7 @@ namespace b {
     }
 
     void make_default_themes_available() {
-        static b::ResourceLoader const loader(Resources::DEFAULT_THEMES_JSON, [&] (auto resource) {  // Must be & to capture themes::theme_mutex
+        static b::ResourceLoader const loader(Resources::DefaultThemesJson, [&] (auto resource) {  // Must be & to capture themes::theme_mutex
             try {
                 const std::scoped_lock lock(Themes::ThemeMutex());
                 auto style = nlohmann::json::parse(resource.string());
