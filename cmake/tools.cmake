@@ -41,6 +41,8 @@ function(battery_test_if_compiles RESULT_VAR OUTPUT_VAR STD_VERSION SOURCE_CONTE
         ${CMAKE_CURRENT_BINARY_DIR}/try_compile/
         ${CMAKE_CURRENT_BINARY_DIR}/try_compile/main.cpp
         CXX_STANDARD ${STD_VERSION}
+        CXX_STANDARD_REQUIRED YES
+        CXX_EXTENSIONS NO
         LINK_LIBRARIES ${pthread}
         OUTPUT_VARIABLE _OUTPUT_VAR
     )
@@ -69,14 +71,14 @@ endfunction()
 
 function(battery_check_required_compiler_features)
 
-    battery_must_have_cxx20_feature(HAVE_JTHREAD
-        "#include <thread>
-        #include <iostream>
-        int main() {
-            std::jthread thread([] {
-                std::cout << \"Hello world\" << std::endl\\\;
-            })\\\;
-        }")
+#    battery_must_have_cxx20_feature(HAVE_JTHREAD
+#        "#include <thread>
+#        #include <iostream>
+#        int main() {
+#            std::jthread thread([] {
+#                std::cout << \"Hello world\" << std::endl\\\;
+#            })\\\;
+#        }")
 endfunction()
 
 function(__apply_common_target_options TARGET)  # For all libraries and executables

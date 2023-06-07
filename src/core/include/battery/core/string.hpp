@@ -203,62 +203,63 @@ namespace b {
         /// \brief conversion operator to std::u8string
         /// \throw std::invalid_argument if the string does not contain valid UTF-8
         /// \return std::u8string containing the UTF-8 representation of the string
-        operator std::u8string() const { return u8(); }
+        explicit operator std::u8string() const { return u8(); }
 
         /// \brief conversion operator to std::u16string
         /// \throw std::invalid_argument if the string does not contain valid UTF-8
         /// \return std::u16string containing the UTF-16 representation of the string
-        operator std::u16string() const { return u16(); }
+        explicit operator std::u16string() const { return u16(); }
 
         /// \brief conversion operator to std::u32string
         /// \throw std::invalid_argument if the string does not contain valid UTF-8
         /// \return std::u32string containing the UTF-32 representation of the string
-        operator std::u32string() const { return u32(); }
+        explicit operator std::u32string() const { return u32(); }
 
         /// \brief conversion operator to std::wstring
         /// \warning You are not encouraged to use `std::wstring` anywhere, except for platform specific APIs.
         /// \throw std::invalid_argument if the string does not contain valid UTF-8
         /// \return std::wstring containing the UTF-16 wide-string representation of the string
-        operator std::wstring&() { return wstr(); }
+        explicit operator std::wstring() { return wstr(); }
 
         /// \brief conversion function to std::string reference
+        /// \details This function provides a non-const reference to the std::string base class. Thus, this function could
+        ///          theoretically be used to modify the base string directly. This does not mean you should.
         /// \return The raw std::string itself
         std::string& str() { return *this; }
 
         /// \brief conversion function to const std::string reference
         /// \return The raw std::string itself
-        const std::string& str() const { return *this; }
+        [[nodiscard]] const std::string& str() const { return *this; }
 
         /// \brief conversion function to std::u8string
         /// \throw std::invalid_argument if the string does not contain valid UTF-8
         /// \return std::u8string containing the UTF-8 representation of the string
-        std::u8string u8() const;
+        [[nodiscard]] std::u8string u8() const;
 
         /// \brief conversion function to std::u16string
         /// \throw std::invalid_argument if the string does not contain valid UTF-8
         /// \return std::u16string containing the UTF-8 representation of the string
-        std::u16string u16() const;
+        [[nodiscard]] std::u16string u16() const;
 
         /// \brief conversion function to std::u32string
         /// \throw std::invalid_argument if the string does not contain valid UTF-8
         /// \return std::u32string containing the UTF-8 representation of the string
-        std::u32string u32() const;
+        [[nodiscard]] std::u32string u32() const;
 
         /// \brief conversion function to std::wstring
         /// \warning You are not encouraged to use `std::wstring` anywhere, except for platform specific APIs.
+        /// \details This function stores the wide string representation inside the string and returns a reference to it.
+        ///          This makes the lifetime of the return value the lifetime of this b::string. Returning a copy would not.
         /// \throw std::invalid_argument if the string does not contain valid UTF-8
         /// \return std::wstring containing the UTF-16 wide-string representation of the string
-        std::wstring& wstr();
+        const std::wstring& wstr();
 
         /// \brief convert to a platform native string: std::wstring on Windows, std::string on other platforms
+        /// \details Calling `string.platform_native().c_str()` returns a string pointer in the platform-native encoding
+        ///          (std::wstring on Windows, std::string on other platforms), which is valid until the function is
+        ///          called again or the object is destroyed.
         /// \return std::wstring or std::string depending on the platform
-        platform_native_string platform_native() const {
-#ifdef BATTERY_ARCH_WINDOWS
-            return wstr();
-#else
-            return str();
-#endif
-        }
+        const platform_native_string& platform_native();
 
         ///
         /// \brief Call a function for every character in a UTF-8 encoded string, not for every byte.

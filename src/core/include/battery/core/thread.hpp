@@ -27,6 +27,10 @@
 #include "battery/core/constants.hpp"
 #include "battery/core/console_application.hpp"
 
+#ifndef __cpp_lib_jthread
+#error "Your compiler does not support std::jthread. Please use a newer compiler that has C++20 support."
+#endif
+
 ///
 /// \brief Everything related to multithreading
 /// \addtogroup Thread

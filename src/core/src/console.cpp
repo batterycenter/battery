@@ -128,9 +128,9 @@ namespace b {
             switch (ch) {
 #ifdef BATTERY_ARCH_WINDOWS
                 case 75:
-                    return keycode::Left;
+                    return keycode::LEFT;
                 case 77:
-                    return keycode::Right;
+                    return keycode::RIGHT;
                 case 72:
                     return keycode::UP;
                 case 80:

@@ -27,10 +27,18 @@ namespace b {
         return utf8::utf8to32(*this);
     }
 
-    std::wstring& string::wstr() {
-        std::u16string str_u16 = u16();
-        internal_wide_string = std::wstring(std::bit_cast<wchar_t*>(str_u16.data()), str_u16.size());
+    const std::wstring& string::wstr() {
+        std::u16string strU16 = u16();
+        internal_wide_string = std::wstring(std::bit_cast<wchar_t*>(strU16.data()), strU16.size());
         return internal_wide_string;
+    }
+
+    const platform_native_string& string::platform_native() {
+#ifdef BATTERY_ARCH_WINDOWS
+        return wstr();
+#else
+        return str();
+#endif
     }
 
     b::string string::foreach(const b::string& str, const std::function<b::string(b::string)>& function) {
