@@ -121,7 +121,7 @@ public:
         outfile << std::endl;
         outfile << b::format("namespace ResourcesInternal {{") << std::endl;
         outfile << std::endl;
-        outfile << b::format("#ifndef BATTERY_PRODUCTION_MODE") << std::endl;
+        outfile << b::format("#ifndef B_PRODUCTION_MODE") << std::endl;
         outfile << b::format("    extern const char* const RESOURCE_{}_FILEPATH = \"{}\";", m_sanitizedSymbolName, m_resourcePath) << std::endl;
         outfile << b::format("    extern const bool RESOURCE_{}_IS_BINARY = {};", m_sanitizedSymbolName, binary ? "true" : "false") << std::endl;
         outfile << b::format("#endif") << std::endl;
@@ -210,7 +210,7 @@ public:
         file << std::endl;
         file << b::format("namespace ResourcesInternal {{", m_packedNamespace) << std::endl;
         file << std::endl;
-        file << b::format("#ifndef BATTERY_PRODUCTION_MODE") << std::endl;
+        file << b::format("#ifndef B_PRODUCTION_MODE") << std::endl;
         file << b::format("    extern const char* const RESOURCE_{}_FILEPATH;", m_sanitizedSymbolName) << std::endl;
         file << b::format("    extern const bool RESOURCE_{}_IS_BINARY;", m_sanitizedSymbolName) << std::endl;
         file << b::format("#endif") << std::endl;
@@ -242,7 +242,7 @@ public:
         file << b::format("            return vec();") << std::endl;
         file << b::format("        }}") << std::endl;
         file << std::endl;
-        file << b::format("#ifndef BATTERY_PRODUCTION_MODE") << std::endl;
+        file << b::format("#ifndef B_PRODUCTION_MODE") << std::endl;
         file << b::format("        inline b::fs::path filepath() const {{") << std::endl;
         file << b::format("            return RESOURCE_{}_FILEPATH;", m_sanitizedSymbolName) << std::endl;
         file << b::format("        }}") << std::endl;

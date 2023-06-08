@@ -9,7 +9,6 @@
 #include "battery/core/cache.hpp"
 #include "battery/core/console.hpp"
 #include "battery/core/constants.hpp"
-#include "battery/core/environment.hpp"
 #include "battery/core/error.hpp"
 #include "battery/core/folders.hpp"
 #include "battery/core/fs.hpp"
@@ -25,7 +24,7 @@
 #include "battery/core/uuid.hpp"
 #include "battery/core/resource_loader.hpp"
 
-//#ifdef BATTERY_COMPILER_MSVC
+//#ifdef B_COMPILER_MSVC
 //#pragma warning( push )
 //#pragma warning( disable : 4244 )
 //#endif
@@ -34,6 +33,6 @@
 #include "battery/core/extern/indicators.hpp"   // TODO: Think about moving these to different files
 #include "battery/core/extern/json.hpp"         // TODO: Think about moving these to different files
 
-//#ifdef BATTERY_COMPILER_MSVC
+//#ifdef B_COMPILER_MSVC
 //#pragma warning( pop )
 //#endif

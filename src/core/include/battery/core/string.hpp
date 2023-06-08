@@ -22,8 +22,6 @@
 #include <optional>
 #include <functional>
 
-#include "battery/core/environment.hpp"
-
 ///
 /// \brief Everything related to string manipulation and encoding
 /// \addtogroup String
@@ -32,7 +30,7 @@
 namespace b {
 
     /// \brief platform native string type: std::wstring on Windows, std::string on other platforms
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
     using platform_native_string = std::wstring;
 #else
     using platform_native_string = std::string;

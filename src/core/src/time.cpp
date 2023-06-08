@@ -1,11 +1,10 @@
 
-#include "battery/core/environment.hpp"
 #include "battery/core/time.hpp"
 
 #include <thread>
 #include <chrono>
 
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
 #include <Windows.h>
 #include <timeapi.h>
 #else
@@ -49,7 +48,7 @@ namespace b {
     }
 
     void sleep_ms(double milliseconds) {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         TIMECAPS tc;                        // Choose the minimum timer resolution
         timeGetDevCaps(&tc, sizeof(TIMECAPS));
         timeBeginPeriod(tc.wPeriodMin);

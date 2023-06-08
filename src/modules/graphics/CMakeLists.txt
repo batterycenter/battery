@@ -40,7 +40,6 @@ battery_add_module(imgui)
 battery_add_module(imgui_sfml)
 battery_add_module(magic_enum)
 battery_add_module(json)
-battery_add_module(python)
 battery_add_module(eventbus)
 
 target_link_libraries(battery_graphics
@@ -48,13 +47,12 @@ target_link_libraries(battery_graphics
         battery::sfml::graphics
         battery::sfml::window
         battery::sfml::system
-        battery::sfml::audio
+        # battery::sfml::audio
         battery::sfml::network
         battery::imgui
         battery::imgui_sfml
         battery::magic_enum
         battery::json
-        battery::python
         battery::eventbus
     )
 

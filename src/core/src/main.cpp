@@ -1,7 +1,4 @@
 
-//#define PRINT_PLATFORMS
-#include "battery/core/environment.hpp"
-
 #include "battery/core/main.hpp"
 #include "battery/core/string.hpp"
 #include "battery/core/log.hpp"
@@ -15,7 +12,7 @@ namespace b {
 
     static std::vector<b::string> parse_cli([[maybe_unused]] int argc, [[maybe_unused]] const char** argv) {
         std::vector<b::string> args;
-#ifdef BATTERY_ARCH_WINDOWS                 // On Windows, parse CLI arguments from WinAPI and convert to UTF-8
+#ifdef B_OS_WINDOWS                 // On Windows, parse CLI arguments from WinAPI and convert to UTF-8
         int _argc = 0;
         LPWSTR* _args = ::CommandLineToArgvW((LPCWSTR)GetCommandLineW(), &_argc);
         if (_args == nullptr) {
@@ -38,7 +35,7 @@ namespace b {
     }
 
     static void setup_windows_console() {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         SetConsoleCP(CP_UTF8);
         SetConsoleOutputCP(CP_UTF8);
         b::log::core::trace("Switched terminal codepage to Unicode (UTF-8)");
@@ -46,14 +43,14 @@ namespace b {
     }
 
     static void set_windows_dpi_awareness() {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
         b::log::core::trace("Enabling DPI-awareness");
 #endif
     }
 
     static void print_production_warning() {
-#ifndef BATTERY_PRODUCTION_MODE
+#ifndef B_PRODUCTION_MODE
         b::log::core::warn("Battery is running in non-production mode, enabling live-reloaded resources. Make sure to enable production mode before releasing your app!");
 #endif
     }

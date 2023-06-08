@@ -1,5 +1,4 @@
 
-#include "battery/core/environment.hpp"
 #include "battery/core/folders.hpp"
 #include "battery/core/extern/platform_folders.h"
 #include "battery/core/internal/windows.hpp"
@@ -7,7 +6,7 @@
 namespace b {
 
     fs::path Folders::ExecutablePath() {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         std::array<wchar_t, static_cast<size_t>(MAX_PATH * 5)> buffer = {};
         if (GetModuleFileNameW(nullptr, buffer.data(), buffer.size()) == 0) {
             return {};

@@ -2,14 +2,14 @@
 #include "battery/filedialog.hpp"
 #include "battery/core.hpp"
 
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
 #include "battery/core/internal/windows.hpp"
 #include <shobjidl.h>
 #endif
 
 namespace b {
 
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
     static void SetDefaultFolder(IFileDialog *dialog, const b::fs::path& defaultPath) {
         if (defaultPath.empty()) {
             return;
@@ -191,7 +191,7 @@ namespace b {
 #endif
 
     b::fs::path filedialog::sync_open() {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         auto path = Win32OpenDialog(*this, false, default_extension)[0];
 #else
 #warning FILEDIALOG NOT IMPLEMENTED
@@ -204,7 +204,7 @@ namespace b {
     }
 
     std::vector<b::fs::path> filedialog::sync_open_multiple() {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         auto paths = Win32OpenDialog(*this, true, default_extension);
 #else
 #warning FILEDIALOG NOT IMPLEMENTED
@@ -221,7 +221,7 @@ namespace b {
     }
 
     b::fs::path filedialog::sync_save() {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         auto path = Win32SaveDialog(*this, default_extension);
 #else
 #warning FILEDIALOG NOT IMPLEMENTED

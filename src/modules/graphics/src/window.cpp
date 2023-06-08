@@ -7,9 +7,7 @@
 #include "battery/core/constants.hpp"
 #include "imgui_internal.h"
 
-#include "battery/core/environment.hpp"
-
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
 #include <Windows.h>
 #include <dwmapi.h>
 #endif
@@ -120,7 +118,7 @@ namespace b {
     }
 
     void BaseWindow::showInTaskbar() {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         long style = GetWindowLongW(getSystemHandle(), GWL_STYLE);
         style &= ~(WS_VISIBLE);
         SetWindowLongW(getSystemHandle(), GWL_STYLE, style);
@@ -131,7 +129,7 @@ namespace b {
     }
 
     void BaseWindow::hideFromTaskbar() {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         long style = GetWindowLongW(getSystemHandle(), GWL_STYLE);
         style |= WS_VISIBLE;
         ShowWindow(getSystemHandle(), SW_HIDE);
@@ -143,7 +141,7 @@ namespace b {
     }
 
     void BaseWindow::maximize() {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         ShowWindow(getSystemHandle(), SW_MAXIMIZE);
 #else
 #warning "Not implemented"
@@ -151,7 +149,7 @@ namespace b {
     }
 
     void BaseWindow::minimize() {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         ShowWindow(getSystemHandle(), SW_MINIMIZE);
 #else
 #warning "Not implemented"
@@ -159,7 +157,7 @@ namespace b {
     }
 
     void BaseWindow::restore() {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         ShowWindow(getSystemHandle(), SW_RESTORE);
 #else
 #warning "Not implemented"
@@ -167,7 +165,7 @@ namespace b {
     }
 
     bool BaseWindow::isMaximized() {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         return IsZoomed(getSystemHandle()) != 0;
 #else
 #warning "Not implemented"
@@ -175,7 +173,7 @@ namespace b {
     }
 
     bool BaseWindow::isMinimized() {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         return IsIconic(getSystemHandle()) != 0;
 #else
 #warning "Not implemented"
@@ -209,7 +207,7 @@ namespace b {
 
     void BaseWindow::invoke_update() {
 
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         if (m_useWin32ImmersiveDarkMode != m_win32IDMActive) {
             BOOL useDarkMode = static_cast<BOOL>(m_useWin32ImmersiveDarkMode);
             bool const setImmersiveDarkModeSuccess = SUCCEEDED(DwmSetWindowAttribute(
@@ -334,7 +332,7 @@ namespace b {
         if (!m_uiScriptResource.string().empty() && !m_uiScriptLoaded) {
             m_uiScriptLoaded = true;
             m_errorMessage = {};
-#ifndef BATTERY_PRODUCTION_MODE
+#ifndef B_OS_WINDOWS
             b::log::info("Loading b::window python ui script");
 #endif
             try {

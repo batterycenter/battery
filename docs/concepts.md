@@ -142,27 +142,37 @@ The primary goal of Battery is to unify your code to compile on any platform. If
 Battery has a few `define`s which help you with this:
 
 ```cpp
-#ifdef BATTERY_ARCH_WINDOWS     // If the platform is Windows
-#ifdef BATTERY_ARCH_LINUX       // If the platform some flavour of Linux
-                                // MacOS is not supported yet, but planned
+#ifdef B_OS_WINDOWS     // If the platform is Windows
+#ifdef B_OS_LINUX       // If the platform some flavour of Linux
+//#ifdef B_OS_MACOS     // MacOS is not officially supported yet, but planned
 
-#ifdef BATTERY_ARCH_64          // Platform is 64 bit (Win or Linux)
-#ifdef BATTERY_ARCH_32          // Platform is 32 bit (Win or Linux)
+#ifdef B_ARCH_64          // Platform is 64 bit
+#ifdef B_ARCH_32          // Platform is 32 bit
+
+#ifdef B_COMPILER_MSVC    // Compiler is Microsoft Visual C++ (Visual Studio)
+#ifdef B_COMPILER_GCC     // Compiler is GNU Compiler Collection (or MinGW)
+#ifdef B_COMPILER_CLANG   // Compiler is Clang
+
+#ifdef B_DEBUG            // Debug build
+#ifdef B_RELEASE          // Release build
+
+#ifdef B_PRODUCTION_MODE  // Production mode
 ```
 
-There are many other defines, see `include/Battery/Environment.h`.
+All of these blocks are guaranteed to be mutually exclusive.
 
 ```cpp
 void foo(const std::string& bar) {
-#if defined(BATTERY_ARCH_WINDOWS)
+#if defined(B_OS_WINDOWS)
     // Do some Windows-specific work
     // ...
-#elif defined(BATTERY_ARCH_LINUX)
+#elif defined(B_OS_LINUX)
     // Do some Linux-specific work
     // ...
-#else               // MacOS is not supported yet, but planned
-    #error Unsupported architecture!
-#endif
+//#elif defined(B_OS_MACOS)             // MacOS is not supported yet, but planned
+    // Do some Apple-specific work
+    // ...
+#endif              // No else needed, because the defines are mutually exclusive and guaranteed to be one of them
     return bar;
 }
 ```

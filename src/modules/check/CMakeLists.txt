@@ -8,7 +8,7 @@ battery_add_package("gh:mapbox/cncc#5fe381fe1d2810bb6ba8770c74d1551dac69a1c3")
 
 # Target to execute the cncc script when building
 add_custom_target(battery_check
-    COMMAND cncc ${BATTERY_ROOT_DIR}/check.style --dbdir ${CMAKE_BINARY_DIR}
+    COMMAND cncc ${B_ROOT_DIR}/check.style --dbdir ${CMAKE_BINARY_DIR}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Running cncc"
 )

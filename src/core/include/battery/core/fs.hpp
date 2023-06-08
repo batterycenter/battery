@@ -2,6 +2,7 @@
 
 #include <bit>
 #include <fstream>
+#include <sstream>
 #include <filesystem>
 #include <functional>
 #include "battery/core/string.hpp"

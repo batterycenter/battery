@@ -2,11 +2,10 @@
 #include "battery/core/console.hpp"
 #include "battery/core/string.hpp"
 #include "battery/core/log.hpp"
-#include "battery/core/environment.hpp"
 #include "battery/core/process.hpp"
 #include "battery/core/extern/magic_enum.hpp"
 
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
 #include <conio.h>
 #include <Windows.h>
 #else
@@ -25,7 +24,7 @@
 namespace b {
 
     b::string cin_getline(size_t buffer_size) {          // We must do this so complicated because std::cin does not have UTF-8 support
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         DWORD read = 0;
         std::wstring buffer;
         buffer.resize(buffer_size);
@@ -50,7 +49,7 @@ namespace b {
     }
 
     bool open_url_in_default_browser(const b::string& url) {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         auto process = b::execute("start " + url);
         return process.exit_code == 0;
 #else
@@ -62,7 +61,7 @@ namespace b {
     namespace console {
 
         struct terminal::terminal_data {
-#ifndef BATTERY_ARCH_WINDOWS
+#ifndef B_OS_WINDOWS
             struct termios previous_terminal_state;
 #else
             CONSOLE_CURSOR_INFO previousCursorInfo;
@@ -70,7 +69,7 @@ namespace b {
         };
 
         terminal::terminal() : data(std::make_unique<terminal::terminal_data>()) {
-#ifndef BATTERY_ARCH_WINDOWS
+#ifndef B_OS_WINDOWS
             static struct termios newtio;
             tcgetattr(0, &data->previous_terminal_state);
             newtio = data->previous_terminal_state;
@@ -89,7 +88,7 @@ namespace b {
         }
 
         terminal::~terminal() {
-#ifndef BATTERY_ARCH_WINDOWS
+#ifndef B_OS_WINDOWS
             tcsetattr(0, TCSANOW, &data->previous_terminal_state);
 #else
             HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -126,7 +125,7 @@ namespace b {
 
         static keycode make_special_key(int ch) {
             switch (ch) {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
                 case 75:
                     return keycode::LEFT;
                 case 77:
@@ -159,7 +158,7 @@ namespace b {
         }
 
         keycode terminal::get_control_key() {       // https://en.wikipedia.org/wiki/ANSI_escape_code
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
             int ch = _getch();
             if (ch != 0 && ch != 224) {     // 0 or 224 mean special key code
                 return make_simple_key(ch);

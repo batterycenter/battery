@@ -6,7 +6,7 @@
 #include "Error.h"
 
 inline const b::string CLI_PRODUCT_NAME = "Battery";
-inline const b::string BATTERY_PROJECT_FILE_NAME = "battery.toml";
+inline const b::string B_PROJECT_FILE_NAME = "battery.toml";
 
 class Project {
 public:

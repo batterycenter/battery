@@ -3,74 +3,73 @@ include(cmake/CPM.cmake)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-get_filename_component(__BATTERY_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
-set(BATTERY_ROOT_DIR ${__BATTERY_ROOT_DIR} CACHE INTERNAL "Root directory of the battery project" FORCE)
+get_filename_component(B_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
+set(B_ROOT_DIR ${B_ROOT_DIR} CACHE INTERNAL "Root directory of the battery project" FORCE)
 
-if (ENABLE_CLANG_TIDY)
-    if (NOT DEFINED CLANG_TIDY_CONFIG_FILE)
-        set(CLANG_TIDY_CONFIG_FILE ${BATTERY_ROOT_DIR}/.clang-tidy CACHE INTERNAL "Path to the clang-tidy config file" FORCE)
-    endif()
-    execute_process(COMMAND clang-tidy --version OUTPUT_QUIET RESULT_VARIABLE CLANG_TIDY_RESULT)
-    if (NOT CLANG_TIDY_RESULT EQUAL 0)
-        if (WIN32)
-            if (MSVC)
-                message(FATAL_ERROR "clang-tidy.exe not found. Please install the LLVM toolset from 'https://github.com/llvm/llvm-project/releases/latest' (LLVM-...-win64.exe) and make sure clang-tidy.exe is available in the PATH. Otherwise set ENABLE_CLANG_TIDY to OFF to disable static code analysis (not recommended).")
-            else()
-                message(FATAL_ERROR "clang-tidy.exe not found. Please install clang-tidy manually or set ENABLE_CLANG_TIDY to OFF.")
-            endif()
-        else()
-            message(FATAL_ERROR "clang-tidy not found. Please install clang-tidy manually or set ENABLE_CLANG_TIDY to OFF.")
-        endif()
-    endif()
-endif()
+#if (ENABLE_CLANG_TIDY)
+#    if (NOT DEFINED CLANG_TIDY_CONFIG_FILE)
+#        set(CLANG_TIDY_CONFIG_FILE ${B_ROOT_DIR}/.clang-tidy CACHE INTERNAL "Path to the clang-tidy config file" FORCE)
+#    endif()
+#    execute_process(COMMAND clang-tidy --version OUTPUT_QUIET RESULT_VARIABLE CLANG_TIDY_RESULT)
+#    if (NOT CLANG_TIDY_RESULT EQUAL 0)
+#        if (WIN32)
+#            if (MSVC)
+#                message(FATAL_ERROR "clang-tidy.exe not found. Please install the LLVM toolset from 'https://github.com/llvm/llvm-project/releases/latest' (LLVM-...-win64.exe) and make sure clang-tidy.exe is available in the PATH. Otherwise set ENABLE_CLANG_TIDY to OFF to disable static code analysis (not recommended).")
+#            else()
+#                message(FATAL_ERROR "clang-tidy.exe not found. Please install clang-tidy manually or set ENABLE_CLANG_TIDY to OFF.")
+#            endif()
+#        else()
+#            message(FATAL_ERROR "clang-tidy not found. Please install clang-tidy manually or set ENABLE_CLANG_TIDY to OFF.")
+#        endif()
+#    endif()
+#endif()
 
 if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-    set(BATTERY_IS_ROOT_PROJECT ON CACHE INTERNAL "" FORCE)
+    set(B_IS_ROOT_PROJECT ON CACHE INTERNAL "" FORCE)
 else()
-    set(BATTERY_IS_ROOT_PROJECT OFF CACHE INTERNAL "" FORCE)
+    set(B_IS_ROOT_PROJECT OFF CACHE INTERNAL "" FORCE)
 endif()
 
-function(battery_test_if_compiles RESULT_VAR OUTPUT_VAR STD_VERSION SOURCE_CONTENT)
-    message(STATUS "Checking for compiler feature ${RESULT_VAR}")
-    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/try_compile/main.cpp ${SOURCE_CONTENT})
-    if (NOT MSVC)
-        set(pthread pthread)
-    endif()
-    try_compile(
-        ${RESULT_VAR} 
-        ${CMAKE_CURRENT_BINARY_DIR}/try_compile/
-        ${CMAKE_CURRENT_BINARY_DIR}/try_compile/main.cpp
-        CXX_STANDARD ${STD_VERSION}
-        CXX_STANDARD_REQUIRED YES
-        CXX_EXTENSIONS NO
-        LINK_LIBRARIES ${pthread}
-        OUTPUT_VARIABLE _OUTPUT_VAR
-    )
-    set(${OUTPUT_VAR} ${_OUTPUT_VAR} PARENT_SCOPE)
-    file(REMOVE_RECURSE ${CMAKE_CURRENT_BINARY_DIR}/try_compile)
-    if (${RESULT_VAR})
-        message(STATUS "Checking for compiler feature ${RESULT_VAR} - Success")
-    else()
-        message(STATUS "Checking for compiler feature ${RESULT_VAR} - Failed")
-    endif()
-endfunction()
+#function(battery_test_if_compiles RESULT_VAR OUTPUT_VAR STD_VERSION SOURCE_CONTENT)
+#    message(STATUS "Checking for compiler feature ${RESULT_VAR}")
+#    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/try_compile/main.cpp ${SOURCE_CONTENT})
+#    if (NOT MSVC)
+#        set(pthread pthread)
+#    endif()
+#    try_compile(
+#        ${RESULT_VAR}
+#        ${CMAKE_CURRENT_BINARY_DIR}/try_compile/
+#        ${CMAKE_CURRENT_BINARY_DIR}/try_compile/main.cpp
+#        CXX_STANDARD ${STD_VERSION}
+#        CXX_STANDARD_REQUIRED YES
+#        CXX_EXTENSIONS NO
+#        LINK_LIBRARIES ${pthread}
+#        OUTPUT_VARIABLE _OUTPUT_VAR
+#    )
+#    set(${OUTPUT_VAR} ${_OUTPUT_VAR} PARENT_SCOPE)
+#    file(REMOVE_RECURSE ${CMAKE_CURRENT_BINARY_DIR}/try_compile)
+#    if (${RESULT_VAR})
+#        message(STATUS "Checking for compiler feature ${RESULT_VAR} - Success")
+#    else()
+#        message(STATUS "Checking for compiler feature ${RESULT_VAR} - Failed")
+#    endif()
+#endfunction()
 
-function(battery_must_have_cxx20_feature FEATURE_NAME SOURCE_CONTENT)
-    if (${FEATURE_NAME})
-        return()
-    endif()
-    battery_test_if_compiles(${FEATURE_NAME} OUTPUT_VAR 20 ${SOURCE_CONTENT})
-    if (NOT ${FEATURE_NAME})
-        message(SEND_ERROR "Test ${FEATURE_NAME} Failed. Reason: Compiler output: ${OUTPUT_VAR}")
-        set(${FEATURE_NAME} OFF CACHE BOOL "" FORCE)
-    else()
-        set(${FEATURE_NAME} ON CACHE BOOL "" FORCE)
-    endif()
-    mark_as_advanced(${FEATURE_NAME})
-endfunction()
+#function(battery_must_have_cxx20_feature FEATURE_NAME SOURCE_CONTENT)
+#    if (${FEATURE_NAME})
+#        return()
+#    endif()
+#    battery_test_if_compiles(${FEATURE_NAME} OUTPUT_VAR 20 ${SOURCE_CONTENT})
+#    if (NOT ${FEATURE_NAME})
+#        message(SEND_ERROR "Test ${FEATURE_NAME} Failed. Reason: Compiler output: ${OUTPUT_VAR}")
+#        set(${FEATURE_NAME} OFF CACHE BOOL "" FORCE)
+#    else()
+#        set(${FEATURE_NAME} ON CACHE BOOL "" FORCE)
+#    endif()
+#    mark_as_advanced(${FEATURE_NAME})
+#endfunction()
 
-function(battery_check_required_compiler_features)
-
+#function(battery_check_required_compiler_features)
 #    battery_must_have_cxx20_feature(HAVE_JTHREAD
 #        "#include <thread>
 #        #include <iostream>
@@ -79,7 +78,7 @@ function(battery_check_required_compiler_features)
 #                std::cout << \"Hello world\" << std::endl\\\;
 #            })\\\;
 #        }")
-endfunction()
+#endfunction()
 
 function(__apply_common_target_options TARGET)  # For all libraries and executables
 
@@ -178,12 +177,12 @@ function(battery_add_executable TARGET)
 endfunction()
 
 function(battery_add_test TARGET)
-    if (NOT BATTERY_GTEST_INCLUDED)
+    if (NOT B_GTEST_INCLUDED)
         set(gtest_force_shared_crt "Use shared (DLL) run-time lib even when Google Test is built as static lib." ON FORCE)
         set(CMAKE_DISABLE_FIND_PACKAGE_Python TRUE)
         battery_add_package("gh:google/googletest#main")      # Live at head: main branch recommended
         include(GoogleTest)
-        set(BATTERY_GTEST_INCLUDED ON PARENT_SCOPE)
+        set(B_GTEST_INCLUDED ON PARENT_SCOPE)
         battery_set_target_ide_folder(gtest "battery/tests")
     endif()
     battery_add_executable(${TARGET} ${ARGN})
@@ -244,5 +243,6 @@ function(battery_require_find_package PACKAGE_NAME PACKAGE_NAME_FOUND ADDITIONAL
 
 endfunction()
 
-include(${CMAKE_CURRENT_LIST_DIR}/modules.cmake)    # This defines the module helper functions
-include(${CMAKE_CURRENT_LIST_DIR}/embed.cmake)      # battery_embed()
+include(${CMAKE_CURRENT_LIST_DIR}/modules.cmake)        # This defines the module helper functions
+include(${CMAKE_CURRENT_LIST_DIR}/embed.cmake)          # battery_embed()
+include(${CMAKE_CURRENT_LIST_DIR}/environment.cmake)    # platform and architecture definitions

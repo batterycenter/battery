@@ -1,5 +1,4 @@
 
-#include "battery/core/environment.hpp"
 #include "battery/core/constants.hpp"
 
 namespace b {
@@ -9,25 +8,27 @@ namespace b {
     }
 
     b::string Constants::DefaultApplicationName() {
-        return u8"BatteryApp";
+        return "BatteryApp";
     }
 
     Platform Constants::Platform() {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         return Platform::Windows;
-#elif defined(BATTERY_ARCH_LINUX)
+#elif defined(B_OS_LINUX)
         return Platform::Linux;
-#elif defined(BATTERY_ARCH_MACOS)
+#elif defined(B_OS_MACOS)
         return Platform::MacOS;
+#elif defined(B_OS_WEB)
+        return Platform::Web;
 #else
         #error "Unknown platform"
 #endif
     }
 
     Arch Constants::Architecture() {
-#ifdef BATTERY_ARCH_64
+#ifdef B_ARCH_64
         return Arch::x64;
-#elif defined(BATTERY_ARCH_32)
+#elif defined(B_ARCH_32)
         return Arch::x86;
 #else
         #error "Invalid architecure configuration!"
@@ -42,7 +43,7 @@ namespace b {
         return static_cast<float>(PI());
     }
 
-#ifdef BATTERY_DEBUG
+#ifdef B_DEBUG
     bool Constants::MessageBoxOnExceptionDefault() { return true; }
     bool Constants::CatchCommonExceptionsDefault() { return true; }
 #else
@@ -51,7 +52,7 @@ namespace b {
 #endif
 
     bool Constants::IsProductionMode() {
-#ifdef BATTERY_PRODUCTION_MODE
+#ifdef B_PRODUCTION_MODE
         return true;
 #else
         return false;

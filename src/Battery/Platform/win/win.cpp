@@ -30,7 +30,7 @@ namespace Battery {
 
 
 
-#ifdef BATTERY_FEATURES_GRAPHICS
+#ifdef B_MODULE_LOADED_graphics
 	bool platform_IsFocused(sf::WindowHandle window) {
 		return GetForegroundWindow() == window;
 	}
@@ -75,7 +75,7 @@ namespace Battery {
 	void platform_SetWindowAlpha(sf::WindowHandle window, uint8_t alpha) {
 		SetLayeredWindowAttributes(window, 0, alpha, LWA_ALPHA);
 	}
-#endif // BATTERY_FEATURES_GRAPHICS
+#endif
 
 
 

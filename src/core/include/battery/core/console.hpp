@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include "battery/core/environment.hpp"
 #include "battery/core/string.hpp"
 
 namespace b {

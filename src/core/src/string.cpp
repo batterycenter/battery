@@ -34,7 +34,7 @@ namespace b {
     }
 
     const platform_native_string& string::platform_native() {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         return wstr();
 #else
         return str();

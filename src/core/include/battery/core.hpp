@@ -7,7 +7,6 @@
 #include "battery/core/console_application.hpp"
 #include "battery/core/constants.hpp"
 #include "battery/core/containers.hpp"
-#include "battery/core/environment.hpp"
 #include "battery/core/error.hpp"
 #include "battery/core/expected.hpp"
 #include "battery/core/file_watcher.hpp"

@@ -9,7 +9,7 @@ namespace b {
     public:
         ResourceLoader() = default;
 
-#ifndef BATTERY_PRODUCTION_MODE     // Non-production mode
+#ifndef B_PRODUCTION_MODE     // Non-production mode
         template<typename T>
         ResourceLoader(const T& resource, const std::function<void(b::Resource)>& callback, float poll_interval = 0.1f)
             : m_resourcePath(resource.filepath()),
@@ -29,7 +29,7 @@ namespace b {
         ResourceLoader& operator=(ResourceLoader&&) = delete;
 
     private:
-#ifndef BATTERY_PRODUCTION_MODE     // Non-production mode
+#ifndef B_PRODUCTION_MODE     // Non-production mode
         void onChangeCallback() {      // On every change, reload the resource
             auto str = m_isBinary ? b::fs::read_binary_file_nothrow(m_resourcePath) : b::fs::read_text_file_nothrow(m_resourcePath);
             if (!str.has_value()) {

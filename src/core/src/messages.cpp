@@ -1,11 +1,10 @@
 
-#include "battery/core/environment.hpp"
 #include "battery/core/messages.hpp"
 #include "battery/core/string.hpp"
 #include "battery/core/process.hpp"
 
-#ifdef BATTERY_ARCH_WINDOWS
-#include <windows.h>
+#ifdef B_OS_WINDOWS
+#include <Windows.h>
 #endif
 
 // TODO: Check if zenity is available at program startup
@@ -14,7 +13,7 @@ namespace b {
 
     namespace internal {
 
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         b::string get_last_win32_error() {
             DWORD errorMessageID = ::GetLastError();
             if (errorMessageID == 0)
@@ -33,18 +32,18 @@ namespace b {
         static void win32_message_box(const b::string& message, UINT options) {
             ::MessageBoxW(nullptr, std::bit_cast<const wchar_t*>(message.c_str()), L"Error", options);
         }
-#else       // BATTERY_ARCH_WINDOWS
+#else
         void linux_run_zenity(const std::vector<b::string>& commands) {
             b::process zenity;
             zenity.options.executable = "zenity";
             zenity.options.arguments = commands;
             zenity.execute_sync();
         }
-#endif      // BATTERY_ARCH_WINDOWS
+#endif
     }  // namespace internal
 
     void message_box_info(const b::string& message) {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         internal::win32_message_box(message, MB_ICONINFORMATION | MB_OK);
 #else
         internal::linux_run_zenity({ "--info", "--text=" + message });
@@ -52,7 +51,7 @@ namespace b {
     }
 
     void message_box_warning(const b::string& message) {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         internal::win32_message_box(message, MB_ICONWARNING | MB_OK);
 #else
         internal::linux_run_zenity({ "--warning", "--text=" + message });
@@ -60,7 +59,7 @@ namespace b {
     }
 
     void message_box_error(const b::string& message) {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         internal::win32_message_box(message, MB_ICONERROR | MB_OK);
 #else
         internal::linux_run_zenity({ "--error", "--text=" + message });

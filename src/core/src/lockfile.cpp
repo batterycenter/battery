@@ -19,11 +19,10 @@
 #include "battery/core/fs.hpp"
 #include "battery/core/time.hpp"
 #include "battery/core/messages.hpp"
-#include "battery/core/environment.hpp"
 
 #include "battery/core/log.hpp"
 
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
 #include <Windows.h>
 #else
 #include <unistd.h>
@@ -38,7 +37,7 @@ namespace b {
         }
         // In Windows, we create the file as non-exclusive and then lock it separately using LockFile(),
         // because this is apparently more robust than just opening the file in exclusive write mode.
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         this->fileHandle = CreateFileW(
                 filename.string().wstr().c_str(),
                 GENERIC_READ | GENERIC_WRITE,
@@ -60,7 +59,7 @@ namespace b {
 
     lockfile::~lockfile() {
         unlock();
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         CloseHandle(this->fileHandle);
 #else
         close((size_t)this->fileHandle);
@@ -102,7 +101,7 @@ namespace b {
         if (!this->locked) {
             return;
         }
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         OVERLAPPED overlapped = {0};
         UnlockFileEx(fileHandle, 0, 0xFFFFFFFF, 0xFFFFFFFF, &overlapped);
 #else
@@ -124,7 +123,7 @@ namespace b {
         if (this->locked) {
             throw std::runtime_error(b::format("Failed to aquire lockfile '{}': Lock already in use", filename));
         }
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         OVERLAPPED overlapped = { 0 };
         overlapped.Offset = 0;
         overlapped.OffsetHigh = 0;

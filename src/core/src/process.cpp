@@ -116,17 +116,16 @@ namespace b {
     void process::run_process() {
         std::vector<const char*> cmd_cstr;
 
-#ifdef BATTERY_ARCH_WINDOWS
         if (options.execute_as_shell_command) {
-            cmd_cstr.emplace_back("cmd.exe");
-            cmd_cstr.emplace_back("/c");
+            if (b::Constants::Platform() == b::Platform::Windows) {
+                cmd_cstr.emplace_back("cmd.exe");
+                cmd_cstr.emplace_back("/c");
+            } 
+            else {
+                cmd_cstr.emplace_back("bash");
+                cmd_cstr.emplace_back("-c");
+            }
         }
-#else
-        if (options.execute_as_shell_command) {
-            cmd_cstr.emplace_back("bash");
-            cmd_cstr.emplace_back("-c");
-        }
-#endif
 
         if (!options.executable.empty()) {
             cmd_cstr.emplace_back(options.executable.c_str());

@@ -11,6 +11,7 @@ battery_add_source_files(battery_core_no_main
         src/cache.cpp
         src/console.cpp
         src/constants.cpp
+        src/environment.cpp
         src/error.cpp
         src/file_watcher.cpp
         src/lockfile.cpp
@@ -27,18 +28,14 @@ battery_add_source_files(battery_core_no_main
 
 battery_set_ide_folder(battery_core_no_main "battery/modules")
 
-set_property(SOURCE src/extern/platform_folders.cpp PROPERTY CMAKE_CXX_CLANG_TIDY "")
-set_property(SOURCE src/extern/utf8proc.c PROPERTY CMAKE_CXX_CLANG_TIDY "")
-set_property(SOURCE src/extern/utf8proc_data.c PROPERTY CMAKE_CXX_CLANG_TIDY "")
-
-if (PRODUCTION_MODE)
-    target_compile_definitions(battery_core_no_main PUBLIC BATTERY_PRODUCTION_MODE)
-endif ()
+#set_property(SOURCE src/extern/platform_folders.cpp PROPERTY CMAKE_CXX_CLANG_TIDY "")
+#set_property(SOURCE src/extern/utf8proc.c PROPERTY CMAKE_CXX_CLANG_TIDY "")
+#set_property(SOURCE src/extern/utf8proc_data.c PROPERTY CMAKE_CXX_CLANG_TIDY "")
 
 battery_add_module(spdlog)
-battery_add_module(reproc++)
+battery_add_module(reproc)
 battery_add_module(utfcpp)
-target_link_libraries(battery_core_no_main battery::spdlog battery::reproc++ battery::utfcpp)
+target_link_libraries(battery_core_no_main battery::spdlog battery::reproc battery::utfcpp)
 
 battery_add_module(check)
 

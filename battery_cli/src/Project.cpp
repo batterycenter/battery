@@ -61,7 +61,7 @@ b::expected<std::nullopt_t, Error> Project::findProjectRoot(const b::string& roo
         path = root;
     }
 
-    if (b::fs::is_regular_file(path + BATTERY_PROJECT_FILE_NAME)) {
+    if (b::fs::is_regular_file(path + B_PROJECT_FILE_NAME)) {
         this->projectRoot = path;
         return std::nullopt;
     }
@@ -72,13 +72,13 @@ b::expected<std::nullopt_t, Error> Project::findProjectRoot(const b::string& roo
         if (path == old) {
             break;
         }
-        if (b::fs::is_regular_file(path + BATTERY_PROJECT_FILE_NAME)) {
+        if (b::fs::is_regular_file(path + B_PROJECT_FILE_NAME)) {
             this->projectRoot = path;
             return std::nullopt;
         }
     }
 
-    b::log::warn(MESSAGES_TOML_NOT_FOUND, BATTERY_PROJECT_FILE_NAME);
+    b::log::warn(MESSAGES_TOML_NOT_FOUND, B_PROJECT_FILE_NAME);
     return b::unexpected(Error::PROJECT_FILE_NOT_FOUND);
 }
 
@@ -89,7 +89,7 @@ b::expected<std::nullopt_t, Error> Project::fetchProjectData(const b::string& ro
 
     try {
         // Read toml file and get project name
-        auto toml = toml::parse(projectRoot + BATTERY_PROJECT_FILE_NAME);
+        auto toml = toml::parse(projectRoot + B_PROJECT_FILE_NAME);
         this->projectName = toml::find<std::string>(toml, "project_name");
 
         // Overrides from the toml file -> All json values are directly overridable
@@ -155,7 +155,7 @@ b::expected<std::nullopt_t, Error> Project::runScript(b::string script) {
     }
 
     if (!scripts.contains(script)) {
-        b::log::warn("'{}' is neither a default script, nor is it defined in {}", script, BATTERY_PROJECT_FILE_NAME);
+        b::log::warn("'{}' is neither a default script, nor is it defined in {}", script, B_PROJECT_FILE_NAME);
         return b::unexpected(Error::SCRIPT_NOT_FOUND);
     }
 

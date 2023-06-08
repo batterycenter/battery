@@ -8,6 +8,7 @@ namespace b {
         Windows,
         Linux,
         MacOS,
+        Web
     };
 
     enum class Arch {

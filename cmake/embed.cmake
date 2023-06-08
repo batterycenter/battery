@@ -1,10 +1,10 @@
 
-set(BATTERY_EMBED_USED_IDENTIFIERS CACHE INTERNAL "List of identifiers used by battery_embed()")
+set(B_EMBED_USED_IDENTIFIERS CACHE INTERNAL "List of identifiers used by battery_embed()")
 
 function(battery_embed TARGET RESOURCE_FILE PACKED_SYMBOL_NAME TYPE)
 
     # Check if the symbol name is already used
-    if (PACKED_SYMBOL_NAME IN_LIST BATTERY_EMBED_USED_IDENTIFIERS)
+    if (PACKED_SYMBOL_NAME IN_LIST B_EMBED_USED_IDENTIFIERS)
         message(FATAL_ERROR "The symbol name '${PACKED_SYMBOL_NAME}' is already used by another resource")
     endif()
 
@@ -39,7 +39,7 @@ function(battery_embed TARGET RESOURCE_FILE PACKED_SYMBOL_NAME TYPE)
                 -DSYMBOL_NAME=${PACKED_SYMBOL_NAME}
                 -DTYPE=--header
                 -DBINARY=${BINARY}
-                -P ${BATTERY_ROOT_DIR}/cmake/execute_silent_battery_embed.cmake
+                -P ${B_ROOT_DIR}/cmake/execute_silent_battery_embed.cmake
             DEPENDS ${RESOURCE_FILE} battery::embed
             OUTPUT ${TARGET_HEADER})
 
@@ -52,7 +52,7 @@ function(battery_embed TARGET RESOURCE_FILE PACKED_SYMBOL_NAME TYPE)
                 -DSYMBOL_NAME=${PACKED_SYMBOL_NAME}
                 -DTYPE=--cpp
                 -DBINARY=${BINARY}
-                -P ${BATTERY_ROOT_DIR}/cmake/execute_silent_battery_embed.cmake
+                -P ${B_ROOT_DIR}/cmake/execute_silent_battery_embed.cmake
             DEPENDS ${RESOURCE_FILE} battery::embed
             OUTPUT ${TARGET_SOURCE})
 
@@ -74,7 +74,7 @@ function(battery_embed TARGET RESOURCE_FILE PACKED_SYMBOL_NAME TYPE)
     target_include_directories(${TARGET} PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/resources_include)
 
     # Add the identifier to the list of used identifiers
-    list(APPEND BATTERY_EMBED_USED_IDENTIFIERS ${PACKED_SYMBOL_NAME})
-    set(BATTERY_EMBED_USED_IDENTIFIERS ${BATTERY_EMBED_USED_IDENTIFIERS} CACHE INTERNAL "List of identifiers used by battery_embed()")
+    list(APPEND B_EMBED_USED_IDENTIFIERS ${PACKED_SYMBOL_NAME})
+    set(B_EMBED_USED_IDENTIFIERS ${B_EMBED_USED_IDENTIFIERS} CACHE INTERNAL "List of identifiers used by battery_embed()")
 
 endfunction()

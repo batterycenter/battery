@@ -1,12 +1,11 @@
 #pragma once
 
-#include "battery/core/environment.hpp"
 #include "battery/core/string.hpp"
 
 namespace b {
 
     namespace internal {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
 
         b::string get_last_win32_error();
 

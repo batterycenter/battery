@@ -12,7 +12,6 @@ namespace b {
 
 	const char** args_to_argv(const std::vector<b::string>& args);
 
-    // This function is only to be called manually when BATTERY_CORE_NO_MAIN is defined
     int invoke_main(int argc, const char** argv);
 
 }

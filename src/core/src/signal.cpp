@@ -1,5 +1,4 @@
 
-#include "battery/core/environment.hpp"
 #include "battery/core/signal.hpp"
 #include "battery/core/log.hpp"
 #include "battery/core/time.hpp"
@@ -8,7 +7,7 @@
 #include <queue>
 #include <stack>
 
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
 #include <Windows.h>
 #else
 #include <signal.h>
@@ -101,7 +100,7 @@ namespace b {
         b::thread eventHandlerThread;
     };
 
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
     static int windows_handler(DWORD dwCtrlType) {  // Separate function instead of lambda: We need the function pointer twice
         switch (dwCtrlType) {
             case CTRL_C_EVENT:
@@ -153,7 +152,7 @@ namespace b {
     }
 
     void generate_ctrl_c_event() {
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
         GenerateConsoleCtrlEvent(CTRL_C_EVENT, 0);
 #else
         raise(SIGINT);
