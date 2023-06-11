@@ -1,7 +1,7 @@
 import b
 
 class MainWindow:
-    main_window = b.widgets.window(b.main_window_context)
+    main_window = b.widgets.panel(b.MainWindowContext)
 
     main_window.name = "Steam Login Page"
     main_window.left = 0
@@ -79,7 +79,7 @@ class MainWindow:
     remember_me_checkbox.style["ImGuiCol_CheckMark"] = "#FFFFFF"
     # remember_me_checkbox.style["ImGuiCol_FrameBgHovered"] = remember_me_checkbox.style["ImGuiCol_FrameBg"]
 
-    login_button = b.widgets.fancy_button()
+    login_button = b.widgets.button_ex()
     login_button.name = "Sign in"
     login_button.left = "10%"
     login_button.right = "20%"
@@ -149,20 +149,20 @@ class MainWindow:
     dont_have_account_text.style["ImGuiCol_Text"] = "#808080"
 
     def __init__(self):
-        b.load_font("SteamText", "roboto-bold", 44)
-        b.load_font("SteamTextTrademark", "roboto-bold", 15)
-        b.load_font("InputLabel", "roboto-bold", 18)
-        b.load_font("InputText", "roboto-regular", 20)
-        b.load_font("LoginButton", "roboto-bold", 30)
-        b.load_font("InfoText", "roboto-regular", 18)
+        b.LoadFont("SteamText", "roboto-bold", 44)
+        b.LoadFont("SteamTextTrademark", "roboto-bold", 15)
+        b.LoadFont("InputLabel", "roboto-bold", 18)
+        b.LoadFont("InputText", "roboto-regular", 20)
+        b.LoadFont("LoginButton", "roboto-bold", 30)
+        b.LoadFont("InfoText", "roboto-regular", 18)
 
     def render(self):
 
         def title_content_region():   # Render the title Steam logo and label
             self.steam_logo()
-            b.sameline()
+            b.Sameline()
             self.steam_text()
-            b.sameline()
+            b.Sameline()
             self.steam_text_trademark()
         def left_main_region():
             # Render the username and password fields
@@ -193,9 +193,9 @@ class MainWindow:
             self.qrcode_container(qrcode)
 
             self.under_qrcode_text_1()
-            b.sameline()
+            b.Sameline()
             self.under_qrcode_text_2()
-            b.sameline()
+            b.Sameline()
             self.under_qrcode_text_3()
             self.under_qrcode_text_4()
 
@@ -209,10 +209,10 @@ class MainWindow:
 
         def lower_content_region():
             self.help_text()
-            b.sameline()
+            b.Sameline()
             self.dont_have_account_text.right = self.create_account_text.actual_size.x + 10
             self.dont_have_account_text()
-            b.sameline()
+            b.Sameline()
             self.create_account_text()
 
             self.main_window.context.help_hyperlink_clicked = self.help_text.hyperlink_clicked
@@ -225,15 +225,15 @@ class MainWindow:
         self.main_vertical_grid(main_vertical_grid)
 
     def __call__(self):
-        self.main_window.width = b.main_window_context.window_size.x
-        self.main_window.height = b.main_window_context.window_size.y
+        self.main_window.width = b.MainWindowContext.window_size.x
+        self.main_window.height = b.MainWindowContext.window_size.y
         self.main_window.context.titlebar_hovered = self.main_window.titlebar_hovered
         self.main_window.context.handle_window_dragging()
         if not self.main_window.is_open:
-            b.app_context.stop_application()
+            b.StopApplication()
         self.main_window(self.render)
 
         # b.show_demo_window()
 
 main_window = MainWindow()
-b.init_main_window(main_window)
+main_window.main_window.context.init(main_window.__call__)

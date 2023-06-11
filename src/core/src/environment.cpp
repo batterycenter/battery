@@ -22,5 +22,3 @@
 #if !defined(B_DEBUG) && !defined(B_RELEASE)
 #error No build type defined. Please check your build system!
 #endif
-
-TEST

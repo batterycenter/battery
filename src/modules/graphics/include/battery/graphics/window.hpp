@@ -152,7 +152,7 @@ namespace b {
         void definePythonClass(b::py::module& module) override {
             T::defineParentPythonClass(module);
             m_context.definePythonClass(module);
-            module.attr(ContextName.value) = m_context;
+            module.attr(ContextName.value) = &m_context;
         }
     };
 

@@ -4,6 +4,7 @@
 #include "battery/graphics/types.hpp"
 #include "battery/graphics/widgets/all.hpp"
 #include "battery/graphics/font_stack.hpp"
+#include "battery/graphics/application.hpp"
 #include "battery/core/log.hpp"
 #include "battery/core/constants.hpp"
 
@@ -116,13 +117,14 @@ namespace b {
 
         b::define_widget_types(module);
 
-        module.def("sameline", &ImGui::SameLine);
-        module.def("sameline", []() { ImGui::SameLine(); });
+        module.def("StopApplication", [] { BaseApplication::get().stopApplication(); });
+        module.def("Sameline", &ImGui::SameLine);
+        module.def("Sameline", []() { ImGui::SameLine(); });
         module.def("LoadFont", &b::LoadFont, py::return_value_policy::reference);
         module.def("PushFont", &b::PushFont);
         module.def("PopFont", &b::PopFont);
-        module.def("show_demo_window", &ImGui::ShowDemoWindow);
-        module.def("show_demo_window", []() { ImGui::ShowDemoWindow(nullptr); });
+        module.def("ShowDemoWindow", &ImGui::ShowDemoWindow);
+        module.def("ShowDemoWindow", []() { ImGui::ShowDemoWindow(nullptr); });
     }
 
     float distance(const ImVec2& a, const ImVec2& b) {

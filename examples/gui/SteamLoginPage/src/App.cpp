@@ -10,16 +10,7 @@ const b::string steam_logo_png = "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAA
 const b::string URL = "https://youtu.be/dQw4w9WgXcQ";
 
 PYBIND11_EMBEDDED_MODULE(b, module) {
-    b::define_python_types(module);
-    b::define_widget_types(module);
-
-    App::Context::define_python_types(module);
-    MainWindow::Context::define_python_types(module);
-
-    module.attr("app_context") = &App::get().context;
-    module.attr("main_window_context") = &MainWindow::get().context;
-
-    module.def("init_main_window", [](b::py::function callback) { MainWindow::get().init(callback); });
+    App::get().definePythonClasses(module);
 }
 
 // Move the parent SFML window if the user is dragging the title bar
@@ -28,7 +19,7 @@ void MainWindow::handle_window_dragging() {
     static bool wasMouseDragging = false;
     bool mouseDragging = ImGui::IsMouseDragging(ImGuiMouseButton_Left, 0.0f);
 
-    if (mouseDragging && !wasMouseDragging && context.titlebar_hovered) {   // Start dragging
+    if (mouseDragging && !wasMouseDragging && m_context.titlebar_hovered) {   // Start dragging
         dragWindow = true;
     }
     if (!mouseDragging) {  // Stop dragging
@@ -43,29 +34,29 @@ void MainWindow::handle_window_dragging() {
     wasMouseDragging = mouseDragging;
 }
 
-void MainWindow::setup() {
-    context.handle_window_dragging = [this]() { handle_window_dragging(); };
+void MainWindow::onAttach() {
+    m_context.handle_window_dragging = [this]() { handle_window_dragging(); };
 
-    auto icon = b::resource::from_base64(steam_logo_png);
-    (void)context.steam_logo.loadFromMemory(icon.data(), icon.size());
+    this->create(sf::VideoMode({ 1180, 720 }), "Battery SteamLoginPage Example", sf::Style::None);
 
-    py_ui_loader = std::make_unique<b::resource_loader>(resources::ui_main_py, [this](auto resource) {
-        load_py_script(resource);
-    });
+    auto icon = b::Resource::FromBase64(steam_logo_png);
+    (void)m_context.steam_logo.loadFromMemory(icon.data(), icon.size());
+
+    setPythonUiScriptResource(Resources::ui_main_py);
 
     auto qrcode = b::qrcode::QrCode::encodeText(URL.c_str(), b::qrcode::QrCode::Ecc::HIGH);
-    context.qrcode_texture = b::qrcode::to_texture(qrcode);
+    m_context.qrcode_texture = b::qrcode::to_texture(qrcode);
 }
 
-void MainWindow::update() {
-    context.window_size = {(float)m_sfmlWindow.getSize().x, (float)m_sfmlWindow.getSize().y };
+void MainWindow::onUpdate() {
+    m_context.window_size = {(float)m_sfmlWindow.getSize().x, (float)m_sfmlWindow.getSize().y };
 
-    if (context.steam_hyperlink_clicked || context.help_hyperlink_clicked || context.create_account_hyperlink_clicked) {
+    if (m_context.steam_hyperlink_clicked || m_context.help_hyperlink_clicked || m_context.create_account_hyperlink_clicked) {
         b::log::info("Opening URL: {}", URL);
         b::open_url_in_default_browser(URL);
     }
 }
 
-void MainWindow::cleanup() {
+void MainWindow::onDetach() {
 
 }

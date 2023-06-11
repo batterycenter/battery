@@ -63,9 +63,9 @@ namespace b {
         void definePythonClasses(b::py::module& module) {
             b::define_python_types(module);
 
-            T::defineParentPythonClass(module);
+            m_context.defineParentPythonClass(module);
             m_context.definePythonClass(module);
-            module.attr(ContextName.value) = m_context;
+            module.attr(ContextName.value) = &m_context;
 
             for (auto& window : windows()) {
                 window->definePythonClass(module);

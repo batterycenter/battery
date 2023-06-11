@@ -41,6 +41,7 @@ battery_add_module(imgui_sfml)
 battery_add_module(magic_enum)
 battery_add_module(json)
 battery_add_module(eventbus)
+battery_add_module(python)
 
 target_link_libraries(battery_graphics
         battery::core
@@ -54,6 +55,7 @@ target_link_libraries(battery_graphics
         battery::magic_enum
         battery::json
         battery::eventbus
+        battery::python
     )
 
 battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/default_themes.json DefaultThemesJson TEXT)

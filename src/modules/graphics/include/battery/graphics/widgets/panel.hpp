@@ -21,6 +21,8 @@ namespace b::widgets {
 
         B_DEF_PY_WIDGET_CONTEXT_FUNC(
             B_DEF_PY_WIDGET_SUBCLASS(panel, flags, always_open, children_style, titlebar_hovered, is_open)
+            .def(py::init<>())
+            .def(py::init<py::object>())
             .def("__call__", [](panel& self) { self({}); })
             .def("__call__", [](panel& self, const std::function<void()>& callback) { self(callback); })
         )
