@@ -20,6 +20,7 @@ battery_add_source_files(battery_core_no_main
         src/messages.cpp
         src/folders.cpp
         src/process.cpp
+        src/random.cpp
         src/resource.cpp
         src/signal.cpp
         src/string.cpp

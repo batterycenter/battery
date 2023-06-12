@@ -1,2 +1,3 @@
 
+add_subdirectory(MazeSolver)
 add_subdirectory(SimpleGraphics)

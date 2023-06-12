@@ -17,7 +17,7 @@ target_link_libraries(battery_cli battery::core)
 battery_add_module(toml11)
 target_link_libraries(battery_cli battery::toml11)
 
-battery_precompile_headers(battery_cli "${CMAKE_CURRENT_LIST_DIR}/include/pch.hpp")
+battery_precompile_headers(battery_cli "include/pch.hpp")
 
 battery_embed(battery_cli "${CMAKE_CURRENT_LIST_DIR}/../version.txt" "battery_cli/version" TEXT)
 

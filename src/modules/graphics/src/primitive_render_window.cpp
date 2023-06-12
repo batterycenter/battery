@@ -25,4 +25,17 @@ namespace b {
         }
     }
 
+    void PrimitiveRenderWindow::drawRect(const sf::Vector2f& point1, const sf::Vector2f& point2, const sf::Color& fillColor, float outlineThickness, const sf::Color& outlineColor) {
+        sf::RectangleShape rect;
+        rect.setFillColor(fillColor);
+        rect.setOutlineColor(fillColor);
+        rect.setOutlineThickness(1.0f);
+        rect.setOrigin({ 0, 0 });
+        rect.setSize({ point2.x - point1.x, point2.y - point1.y });
+        rect.setPosition(point1);
+        rect.setOutlineColor(outlineColor);
+        rect.setOutlineThickness(outlineThickness);
+        m_sfmlWindow.draw(rect);
+    }
+
 } // namespace b
