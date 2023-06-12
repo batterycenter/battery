@@ -54,7 +54,7 @@ namespace b {
         virtual void onAttach() = 0;
         virtual void onUpdate() = 0;
         virtual void onDetach() = 0;
-        virtual void definePythonClass(b::py::module& module) = 0;
+        virtual void definePythonBindings(b::py::module& module) {}
 
         template<typename T, typename... TArgs>
         bool dispatchEvent(TArgs&&... args) {
@@ -149,7 +149,7 @@ namespace b {
             };
         }
 
-        void definePythonClass(b::py::module& module) override {
+        void definePythonBindings(b::py::module& module) override {
             T::defineParentPythonClass(module);
             m_context.definePythonClass(module);
             module.attr(ContextName.value) = &m_context;

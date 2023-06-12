@@ -4,6 +4,5 @@
 
 int b::main(const std::vector<b::string>& args) {
     App app;
-    app.run(u8"Battery_SimpleGraphicsExample", args);
-    return 0;
+    return app.run("Battery_SimpleGraphicsExample", args);
 }

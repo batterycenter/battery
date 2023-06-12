@@ -68,7 +68,7 @@ namespace b {
             module.attr(ContextName.value) = &m_context;
 
             for (auto& window : windows()) {
-                window->definePythonClass(module);
+                window->definePythonBindings(module);
             }
         }
     };

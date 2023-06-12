@@ -5,14 +5,14 @@
 
 // TODO: Resizing the window destroys everything
 
-void App::setup() {
+void MainWindow::onAttach() {
 
-    window.create(sf::VideoMode({ 800, 600 }), "Hello, world!");
+    this->create({ 800, 600 }, "Battery SimpleGraphics Example");
     if (!font.loadFromFile("C:\\Users\\zachs\\Downloads\\fontawesome-free-6.4.0-web\\fontawesome-free-6.4.0-web\\webfonts\\fa-solid-900.ttf")) {
         return;
     }
 
-    auto img = b::resource::from_base64(b::constants::battery_icon_base64(), "png");
+    auto img = b::Resource::FromBase64(b::Constants::BatteryIconBase64(), "png");
     if (!battery.loadFromMemory(img.data(), img.size())) {
         return;
     }
@@ -31,27 +31,12 @@ void drawBounds(sf::RenderWindow& window, T obj) {
     window.draw(rect);
 }
 
-void App::update() {
+void MainWindow::onUpdate() {
 
-    float speed = 50.0f;
+    float speed = 150.0f;
     uint32_t fontSize = 36;
     float padding = 10.0f;
     sf::Vector2 batteryOffset = { 15.0f, 10.0f };
-
-    if (!window.isOpen()) {
-        this->stop_application();
-    }
-
-    sf::Event event;
-    while (window.pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
-            window.close();
-        }
-        else if (event.type == sf::Event::Resized) {
-            sf::FloatRect visibleArea({ 0, 0 }, { (float)event.size.width, (float)event.size.height });
-            window.setView(sf::View(visibleArea));
-        }
-    }
 
     sf::Text t1(font, "I", fontSize);
     t1.setFillColor(sf::Color::Green);
@@ -71,17 +56,17 @@ void App::update() {
             std::max(t1.getLocalBounds().height, std::max(t2.getLocalBounds().height, t3.getLocalBounds().height) - padding)
     };
 
-    position += velocity * speed * (float)frametime;
+    position += velocity * speed * (float)m_frametime;
 
     sf::Vector2 minimum = { position.x - totalBounds.x / 2.0f, position.y - totalBounds.y / 2.0f };
     sf::Vector2 maximum = { position.x + totalBounds.x / 2.0f, position.y + totalBounds.y / 2.0f };
 
-    if (minimum.x < 0 || maximum.x > window.getSize().x) {
-        position -= velocity * speed * (float)frametime;
+    if (minimum.x < 0 || maximum.x > this->getSize().x) {
+        position -= velocity * speed * (float)m_frametime;
         velocity.x *= -1;
     }
-    if (minimum.y < 0 || maximum.y > window.getSize().y) {
-        position -= velocity * speed * (float)frametime;
+    if (minimum.y < 0 || maximum.y > this->getSize().y) {
+        position -= velocity * speed * (float)m_frametime;
         velocity.y *= -1;
     }
 
@@ -89,14 +74,12 @@ void App::update() {
     t2.setPosition(position);
     t3.setPosition(position);
 
-    window.clear(sf::Color::Black);
-    window.draw(t1);
-    window.draw(t2);
-    window.draw(t3);
-
-    window.display();
+    this->clear(sf::Color::Black);
+    this->draw(t1);
+    this->draw(t2);
+    this->draw(t3);
 }
 
-void App::cleanup() {
+void MainWindow::onDetach() {
 
 }
