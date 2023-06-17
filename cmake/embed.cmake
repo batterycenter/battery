@@ -2,6 +2,7 @@
 set(B_EMBED_USED_IDENTIFIERS CACHE INTERNAL "List of identifiers used by battery_embed()")
 
 function(battery_embed TARGET RESOURCE_FILE PACKED_SYMBOL_NAME TYPE)
+    get_filename_component(RESOURCE_FILE ${RESOURCE_FILE} ABSOLUTE)
 
     # Check if the symbol name is already used
     if (PACKED_SYMBOL_NAME IN_LIST B_EMBED_USED_IDENTIFIERS)

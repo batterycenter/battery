@@ -1,3 +1,1 @@
-
-battery_add_executable(Example_CustomMain src/main.cpp)
-target_link_libraries(Example_CustomMain battery::core_no_main)
+battery_add_example_no_main(Example_CustomMain src/main.cpp)

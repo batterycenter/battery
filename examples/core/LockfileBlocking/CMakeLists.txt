@@ -1,3 +1,1 @@
-
-battery_add_executable(Example_LockfileBlocking src/main.cpp)
-target_link_libraries(Example_LockfileBlocking battery::core)
+battery_add_example(Example_LockfileBlocking src/main.cpp)
