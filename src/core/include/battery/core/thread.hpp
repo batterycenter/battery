@@ -27,9 +27,9 @@
 #include "battery/core/constants.hpp"
 #include "battery/core/console_application.hpp"
 
-#ifndef __cpp_lib_jthread
-#error "Your compiler does not support std::jthread. Please use a newer compiler that has C++20 support."
-#endif
+// #ifndef __cpp_lib_jthread
+// #error "Your compiler does not support std::jthread. Please use a newer compiler that has C++20 support."
+// #endif
 
 ///
 /// \brief Everything related to multithreading
@@ -37,6 +37,12 @@
 /// @{
 ///
 namespace b {
+
+#ifndef __cpp_lib_jthread
+    using std_base_thread = std::thread;
+#else
+    using std_base_thread = std::jthread;
+#endif
 
     ///
     /// \brief A threading class just like good old `std::thread`, but better.
@@ -47,7 +53,7 @@ namespace b {
     ///
     ///          Example when calling a class member function: `b::thread(&MyClass::myMember, this)`
     ///
-    class thread : public std::jthread {
+    class thread : public std_base_thread {
     public:
         thread() = default;
 
@@ -59,7 +65,7 @@ namespace b {
 
         template <class Fn, class... Args>
         explicit thread(Fn&& func, Args&&... args)
-          : std::jthread([func = std::forward<Fn>(func), ...args = std::forward<Args>(args), this]() mutable {
+          : std_base_thread([func = std::forward<Fn>(func), ...args = std::forward<Args>(args), this]() mutable {
                 m_waitRunningPromise.set_value();
                 if constexpr (std::is_invocable_v<std::decay_t<Fn>, std::stop_token, std::decay_t<Args>...>) {
                     if (!catch_common_exceptions(std::move(func), get_stop_token(), std::move(args)...)) {
@@ -76,7 +82,15 @@ namespace b {
                 }
             }) {
               m_waitRunningPromise.get_future().get();
-          }
+        }
+
+#ifndef __cpp_lib_jthread
+        ~thread() {
+            if (joinable()) {
+                join();
+            }
+        }
+#endif
 
         ///
         /// \brief Run a function and catch all exceptions with nice error messages.
