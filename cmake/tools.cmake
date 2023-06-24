@@ -116,7 +116,8 @@ function(__apply_common_target_options TARGET)  # For all libraries and executab
                 )
     endif()
     target_include_directories(${TARGET} PUBLIC include)
-    target_compile_definitions(${TARGET} PUBLIC UNICODE _UNICODE UTF8PROC_STATIC )
+    target_compile_definitions(${TARGET} PUBLIC UNICODE _UNICODE UTF8PROC_STATIC)
+    battery_add_environment_definitions(${TARGET})
 
 endfunction()
 
@@ -251,4 +252,4 @@ endfunction()
 
 include(${CMAKE_CURRENT_LIST_DIR}/modules.cmake)        # This defines the module helper functions
 include(${CMAKE_CURRENT_LIST_DIR}/embed.cmake)          # battery_embed()
-include(${CMAKE_CURRENT_LIST_DIR}/environment.cmake)    # platform and architecture definitions
+include(${CMAKE_CURRENT_LIST_DIR}/environment.cmake)    # battery_add_environment_definitions()
