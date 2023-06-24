@@ -1,7 +1,5 @@
 
-#include "battery/core/console_application.hpp"
-
-#include "battery/core/all.hpp"
+#include "battery/core.hpp"
 #include <gtest/gtest.h>
 
 class App : public b::console_application {

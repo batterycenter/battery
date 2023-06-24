@@ -3,12 +3,12 @@
 
 void MainWindow::onAttach() {
     this->create("Battery MazeSolver Example");
-    mazeHost.init(this->getSize());
+    mazeHost.init(this);
 }
 
 void MainWindow::onUpdate() {
     mazeHost.update();
-    mazeHost.render(*this);
+    mazeHost.render();
 }
 
 void MainWindow::onDetach() {

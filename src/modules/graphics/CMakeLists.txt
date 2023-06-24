@@ -20,6 +20,7 @@ battery_add_source_files(battery_graphics
         src/widgets/panel.cpp
 
         src/application.cpp
+        src/batch_renderer.cpp
         src/color_hex.cpp
         src/font_stack.cpp
         src/primitive_render_window.cpp

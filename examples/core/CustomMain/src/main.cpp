@@ -1,5 +1,5 @@
 
-#include "battery/core/all.hpp"
+#include "battery/core.hpp"
 
 int b::main(const std::vector<b::string>& args) {
 

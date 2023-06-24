@@ -1,5 +1,5 @@
 
-#include "battery/core/all.hpp"
+#include "battery/core.hpp"
 #include <gtest/gtest.h>
 
 #include "utf8.h"

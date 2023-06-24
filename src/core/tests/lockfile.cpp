@@ -20,7 +20,7 @@ TEST(BatteryCore_Lockfile, basic_lockfile) {
 }
 
 TEST(BatteryCore_Lockfile, lockfile) {
-    auto parent = b::folders::get_cache() + "unit_test_folder";
+    auto parent = b::Folders::AppCacheDir() + "unit_test_folder";
     auto path = parent + "unit_test.lock";
     if (b::fs::exists(parent)) {
         b::fs::remove_all(parent);
@@ -70,7 +70,7 @@ TEST(BatteryCore_Lockfile, lockfile) {
 }
 
 TEST(BatteryCore_Lockfile, ScopedLockfile) {
-    auto parent = b::folders::get_cache() + "unit_test_folder";
+    auto parent = b::Folders::AppCacheDir() + "unit_test_folder";
     auto path = parent + "unit_test.lock";
     if (b::fs::exists(parent)) {
         b::fs::remove_all(parent);
@@ -96,7 +96,7 @@ TEST(BatteryCore_Lockfile, ScopedLockfile) {
 }
 
 TEST(BatteryCore_Lockfile, ScopedNoThrowLockfile) {
-    auto parent = b::folders::get_cache() + "unit_test_folder";
+    auto parent = b::Folders::AppCacheDir() + "unit_test_folder";
     auto path = parent + "unit_test.lock";
     if (b::fs::exists(parent)) {
         b::fs::remove_all(parent);

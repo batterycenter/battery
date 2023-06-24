@@ -1,6 +1,5 @@
 
-#include "battery/core/all.hpp"
-
+#include "battery/core.hpp"
 #include "resources/another_folder/message_txt.hpp"
 #include "resources/banner_txt.hpp"
 
