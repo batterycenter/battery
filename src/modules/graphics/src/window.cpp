@@ -37,8 +37,8 @@ namespace b {
         ImGui::SFML::Shutdown(sfmlWindow);
     }
 
-    void Window::create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
-        create(sf::VideoMode(mode), title, style, settings);
+    void Window::create(const b::vec2& size, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
+        create(sf::VideoMode(size), title, style, settings);
     }
 
     void Window::create(sf::VideoMode mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings, bool silenceJsonWarning) {
@@ -71,8 +71,8 @@ namespace b {
     void Window::create(const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
 
         // Reload the window where it was last closed
-        sf::Vector2u size = m_defaultWindowSize;
-        sf::Vector2i position = { static_cast<int>(sf::VideoMode::getDesktopMode().size.x - size.x) / 2,
+        b::vec2 size = m_defaultWindowSize;
+        b::vec2 position = { static_cast<int>(sf::VideoMode::getDesktopMode().size.x - size.x) / 2,
                                   static_cast<int>(sf::VideoMode::getDesktopMode().size.y - size.y) / 2 };
         bool maximized = false;
 
@@ -109,7 +109,7 @@ namespace b {
         }
     }
 
-    void Window::setDefaultWindowSize(const sf::Vector2u& size) {
+    void Window::setDefaultWindowSize(const b::vec2& size) {
         m_defaultWindowSize = size;
         if (isOpen()) {
             b::log::warn("b::window::rememberWindowPositionJsonFile() called after window was already created. "
@@ -180,15 +180,15 @@ namespace b {
 #endif
     }
 
-    ImVec2 Window::getMousePos() {
+    b::vec2 Window::getMousePos() {
         return m_mousePos;
     }
 
-    ImVec2 Window::getMousePosPrev() {
+    b::vec2 Window::getMousePosPrev() {
         return m_mousePosPrev;
     }
 
-    ImVec2 Window::getMouseDelta() {
+    b::vec2 Window::getMouseDelta() {
         return m_mouseDelta;
     }
 
@@ -232,7 +232,7 @@ namespace b {
                     break;
 
                 case sf::Event::Resized:
-                    sfmlWindow.setView(sf::View(sf::FloatRect({ 0, 0 }, { static_cast<float>(event.size.width), static_cast<float>(event.size.height) })));
+                    sfmlWindow.setView(sf::View(sf::FloatRect({ 0, 0 }, b::vec2(event.size.width, event.size.height))));
                     dispatchEvent<b::Events::WindowResizeEvent>(event.size.width, event.size.height);
                     break;
 
@@ -269,7 +269,7 @@ namespace b {
                     break;
 
                 case sf::Event::MouseMoved:
-                    m_mousePos = { static_cast<float>(event.mouseMove.x), static_cast<float>(event.mouseMove.y) };
+                    m_mousePos = event.mouseMove;
                     dispatchEvent<b::Events::MouseMoveEvent>(event.mouseMove);
                     break;
 
@@ -394,8 +394,8 @@ namespace b {
         m_errorPanelWidget.children_style.font = "default";  // Ask it to explicitly push the default font, in case it wasn't cleaned up properly
         m_errorPanelWidget.left = 0;
         m_errorPanelWidget.top = 0;
-        m_errorPanelWidget.width = static_cast<float>(getSize().x);
-        m_errorPanelWidget.height = static_cast<float>(getSize().y);
+        m_errorPanelWidget.width = getSize().x;
+        m_errorPanelWidget.height = getSize().y;
         m_errorPanelWidget.flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
         m_errorPanelWidget.style["ImGuiCol_WindowBg"] = "#333333"_u;
         m_errorPanelWidget.style["ImGuiStyleVar_WindowRounding"] = 0;

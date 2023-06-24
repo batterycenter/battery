@@ -11,14 +11,14 @@ namespace b {
 
 #ifndef B_PRODUCTION_MODE     // Non-production mode
         template<typename T>
-        ResourceLoader(const T& resource, const std::function<void(b::Resource)>& callback, float poll_interval = 0.1f)
+        ResourceLoader(const T& resource, const std::function<void(b::Resource)>& callback, double poll_interval = 0.1)
             : m_resourcePath(resource.filepath()),
               m_isBinary(resource.isBinary()),
               m_fileWatcher(std::make_unique<b::FileWatcher>(resource.filepath(), [this]() { this->onChangeCallback(); }, poll_interval)),
               m_callback(callback) {}
 #else                               // Production mode
         template<typename T>
-        resource_loader(const T& resource, const std::function<void(b::resource)>& callback, float poll_interval = 0.1f) {
+        resource_loader(const T& resource, const std::function<void(b::resource)>& callback, double poll_interval = 0.1) {
             callback(static_cast<b::resource>(resource));
         }
 #endif

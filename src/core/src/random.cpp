@@ -4,10 +4,10 @@
 
 namespace b {
 
-    float random(float min, float max) {
+    double random(double min, double max) {
         static std::random_device dev;
         static std::mt19937 rng(dev());
-        std::uniform_real_distribution<float> dist(min, max);
+        std::uniform_real_distribution<double> dist(min, max);
         return dist(rng);
     }
 

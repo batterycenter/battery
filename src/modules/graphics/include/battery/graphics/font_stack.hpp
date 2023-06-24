@@ -7,7 +7,7 @@ namespace b {
 
     void MakeFontAvailable(const b::string& font, const b::Resource& ttf_file);
 
-    ImFont* LoadFont(const b::string& identifier, const b::string& font, float size);
+    ImFont* LoadFont(const b::string& identifier, const b::string& font, double size);
     void PushFont(const b::string& font);
     void PopFont();
 

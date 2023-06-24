@@ -11,7 +11,7 @@ namespace b::widgets {
         basePushStyle();
 
         baseSetCursorPositionToMinBB();
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, b::vec2(0, 0));
         ImGui::BeginChild(baseGetIdentifier().c_str(), baseGetBBSize(), native_window_border, flags);
         ImGui::PopStyleVar();
 

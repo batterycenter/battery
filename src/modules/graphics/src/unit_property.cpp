@@ -6,12 +6,12 @@
 namespace b {
 
     unit_property::unit_property(const b::string& value) { operator=(value); }
-    unit_property::unit_property(float value) { operator=(value); }
+    unit_property::unit_property(double value) { operator=(value); }
     unit_property::unit_property(ImColor color) { operator=(color); }
     unit_property::unit_property(sf::Color color) { operator=(color); }
 
-    unit_property::unit_property(float value, enum Unit unit) {
-        m_float = value;
+    unit_property::unit_property(double value, enum Unit unit) {
+        m_numeric = value;
         m_unit = unit;
     }
 
@@ -28,9 +28,9 @@ namespace b {
         return *this;
     }
 
-    unit_property& unit_property::operator=(float value) {
+    unit_property& unit_property::operator=(double value) {
         clear();
-        m_float = value;
+        m_numeric = value;
         m_unit = Unit::UNITLESS;
         return *this;
     }
@@ -49,7 +49,7 @@ namespace b {
         return *this;
     }
 
-    unit_property::operator float() const {
+    unit_property::operator double() const {
         return numeric();
     }
 
@@ -61,12 +61,12 @@ namespace b {
         return string();
     }
 
-    float unit_property::numeric() const {
+    double unit_property::numeric() const {
         if (m_unit == Unit::UNITLESS || m_unit == Unit::PERCENT || m_unit == Unit::PIXEL || m_unit == Unit::EM) {
-            return m_float;
+            return m_numeric;
         }
         else {
-            throw std::runtime_error("Cannot convert b::unit_property to float: property holds a non-float value!");
+            throw std::runtime_error("Cannot convert b::unit_property to numeric: property holds a non-numeric value!");
         }
     }
 
@@ -81,17 +81,17 @@ namespace b {
 
     b::string unit_property::string() const {
         switch (m_unit) {
-            case Unit::UNITLESS: return b::format("{:.06}", m_float);
-            case Unit::PERCENT: return b::format("{:.06}%", m_float);
-            case Unit::PIXEL: return b::format("{:.06}px", m_float);
+            case Unit::UNITLESS: return b::format("{:.06}", m_numeric);
+            case Unit::PERCENT: return b::format("{:.06}%", m_numeric);
+            case Unit::PIXEL: return b::format("{:.06}px", m_numeric);
             case Unit::COLOR_HEX: return color_hex(m_color);
-            case Unit::EM: return b::format("{:.06}em", m_float);
+            case Unit::EM: return b::format("{:.06}em", m_numeric);
             default: return {};
         }
     }
 
     void unit_property::parse_numeric_property(const b::string& str) {
-        float tempValue {};
+        double tempValue {};
         enum Unit tempUnit {};
 
         if (b::string("0123456789.-").find(str[0]) == b::string::npos)       // Doesn't start with a digit
@@ -104,7 +104,7 @@ namespace b {
             tempValue = std::stof(str.substr(0, numberDigits));
         }
         catch (...) {
-            throw std::invalid_argument(b::format("Cannot load value '{}' into b::unit_property: Parsing as float failed", str));
+            throw std::invalid_argument(b::format("Cannot load value '{}' into b::unit_property: Parsing as numeric failed", str));
         }
 
         if (numberDigits == str.length()) {     // Only numeric characters
@@ -118,7 +118,7 @@ namespace b {
             else throw std::invalid_argument(b::format("Cannot load value '{}' into b::unit_property: Unexpected unit!", str));
         }
 
-        m_float = tempValue;
+        m_numeric = tempValue;
         m_unit = tempUnit;
     }
 
@@ -129,7 +129,7 @@ namespace b {
     }
 
     void unit_property::clear() {
-        m_float = 0.f;
+        m_numeric = 0.f;
         m_color = ImColor(0.f, 0.f, 0.f, 0.f);
         m_unit = Unit::NONE;
     }

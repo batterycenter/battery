@@ -13,10 +13,6 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
-inline ImVec2 operator-(const ImVec2& self) {
-    return ImVec2(-self.x, -self.y);
-}
-
 inline ImVec4 operator+(const ImVec4& lhs, float rhs) { return ImVec4(lhs.x + rhs, lhs.y + rhs, lhs.z + rhs, lhs.w + rhs); }
 inline ImVec4 operator-(const ImVec4& lhs, float rhs) { return ImVec4(lhs.x - rhs, lhs.y - rhs, lhs.z - rhs, lhs.w - rhs); }
 inline ImVec4 operator*(const ImVec4& lhs, float rhs) { return ImVec4(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs, lhs.w * rhs); }
@@ -26,9 +22,6 @@ inline ImVec4 operator+=(const ImVec4& lhs, float rhs) { return ImVec4(lhs.x + r
 inline ImVec4 operator-=(const ImVec4& lhs, float rhs) { return ImVec4(lhs.x - rhs, lhs.y - rhs, lhs.z - rhs, lhs.w - rhs); }
 inline ImVec4 operator*=(const ImVec4& lhs, float rhs) { return ImVec4(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs, lhs.w * rhs); }
 inline ImVec4 operator/=(const ImVec4& lhs, float rhs) { return ImVec4(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs, lhs.w / rhs); }
-
-inline bool operator==(const ImVec2& lhs, const ImVec2& rhs) { return lhs.x == rhs.x && lhs.y == rhs.y; }
-inline bool operator!=(const ImVec2& lhs, const ImVec2& rhs) { return !(lhs == rhs); }
 
 inline bool operator==(const ImVec4& lhs, const ImVec4& rhs) { return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z && lhs.w == rhs.w; }
 inline bool operator!=(const ImVec4& lhs, const ImVec4& rhs) { return !(lhs == rhs); }
@@ -118,27 +111,18 @@ namespace pybind11::detail {
 namespace b {
     void define_python_types(b::py::module& module);
 
-    float distance(const ImVec2& p1, const ImVec2& p2);
-    float distance(const sf::Vector2f& p1, const sf::Vector2f& p2);
+    double distance(const b::vec2& p1, const b::vec2& p2);
 
-    float degrees(float radians);
-    float radians(float degrees);
+    double degrees(double radians);
+    double radians(double degrees);
 
-    float length(const ImVec2& v);
-    float length(const sf::Vector2f& v);
+    b::vec2 round(const b::vec2& v);    // TODO: Maybe this should go in b::vec2 too?
 
-    float dot(const ImVec2& v1, const ImVec2& v2);
-    float dot(const sf::Vector2f& v1, const sf::Vector2f& v2);
+    b::vec2 min(const b::vec2& v1, const b::vec2& v2);
+    b::vec2 max(const b::vec2& v1, const b::vec2& v2);
 
-    ImVec2 round(const ImVec2& v);
-    sf::Vector2f round(const sf::Vector2f& v);
+    // TODO: Refactor lerp functions to be more consistent with all possible usages (Arduino/Processing/ImGui/...)
 
-    ImVec2 min(const ImVec2& v1, const ImVec2& v2);
-    sf::Vector2f min(const sf::Vector2f& v1, const sf::Vector2f& v2);
-    ImVec2 max(const ImVec2& v1, const ImVec2& v2);
-    sf::Vector2f max(const sf::Vector2f& v1, const sf::Vector2f& v2);
-
-    float map(float value, float min1, float max1, float min2, float max2);
-    ImVec2 map(const ImVec2& value, const ImVec2& min1, const ImVec2& max1, const ImVec2& min2, const ImVec2& max2);
-    sf::Vector2f map(const sf::Vector2f& value, const sf::Vector2f& min1, const sf::Vector2f& max1, const sf::Vector2f& min2, const sf::Vector2f& max2);
+    double lerp(double val, double val_min, double val_max, double new_min, double new_max);
+    b::vec2 lerp(const b::vec2& val, const b::vec2& val_min, const b::vec2& val_max, const b::vec2& new_min, const b::vec2& new_max);
 }

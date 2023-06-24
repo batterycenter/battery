@@ -7,11 +7,11 @@ namespace b {
         m_va.setPrimitiveType(sf::PrimitiveType::Triangles);
     }
 
-    void BatchRenderer::drawLine(const b::vec2& pos1, const b::vec2& pos2, const sf::Color& color, float thickness) {
+    void BatchRenderer::drawLine(const b::vec2& pos1, const b::vec2& pos2, const sf::Color& color, double thickness) {
         auto span = pos2 - pos1;
         m_rectShape.setPosition(pos1);
-        m_rectShape.setOrigin({ 0, thickness / 2.f });
-        m_rectShape.setSize({ static_cast<float>(span.length()), thickness });
+        m_rectShape.setOrigin(b::vec2(0, thickness));
+        m_rectShape.setSize(b::vec2(span.length(), thickness));
         m_rectShape.setFillColor(color);
         m_rectShape.setOutlineThickness({});
         m_rectShape.setOutlineColor({});
@@ -28,7 +28,7 @@ namespace b {
     }
 
 
-    void BatchRenderer::drawRect(const b::vec2& pos, const b::vec2& size, sf::Color fillColor, float outlineThickness, sf::Color outlineColor) {
+    void BatchRenderer::drawRect(const b::vec2& pos, const b::vec2& size, sf::Color fillColor, double outlineThickness, sf::Color outlineColor) {
         m_rectShape.setPosition(pos);
         m_rectShape.setOrigin({});
         m_rectShape.setSize(size);
@@ -45,7 +45,7 @@ namespace b {
                              transform.transformPoint(m_rectShape.getPoint(3)),
                              m_rectShape.getFillColor());
         }
-        if (m_rectShape.getOutlineColor() != sf::Color::Transparent && m_rectShape.getOutlineThickness() > 0.0f) {
+        if (m_rectShape.getOutlineColor() != sf::Color::Transparent && m_rectShape.getOutlineThickness() > 0.0) {
             appendSimpleLine(transform.transformPoint(m_rectShape.getPoint(0)),
                              transform.transformPoint(m_rectShape.getPoint(1)),
                              m_rectShape.getOutlineColor(),
@@ -79,14 +79,14 @@ namespace b {
         m_va.append(sf::Vertex(pos1, color));
     }
 
-    void BatchRenderer::appendSimpleLine(const b::vec2& pos1, const b::vec2& pos2, sf::Color color, float thickness) {
+    void BatchRenderer::appendSimpleLine(const b::vec2& pos1, const b::vec2& pos2, sf::Color color, double thickness) {
         auto dir = pos2 - pos1;
         auto normDir = dir.normalized(true);
         auto perp = dir.perpendicular().normalized(true);
-        auto vert1 = pos1 - perp * thickness / 2.f - normDir * thickness / 2.f;
-        auto vert2 = pos1 + perp * thickness / 2.f - normDir * thickness / 2.f;
-        auto vert3 = pos2 - perp * thickness / 2.f + normDir * thickness / 2.f;
-        auto vert4 = pos2 + perp * thickness / 2.f + normDir * thickness / 2.f;
+        auto vert1 = pos1 - perp * thickness / 2.0 - normDir * thickness / 2.0;
+        auto vert2 = pos1 + perp * thickness / 2.0 - normDir * thickness / 2.0;
+        auto vert3 = pos2 - perp * thickness / 2.0 + normDir * thickness / 2.0;
+        auto vert4 = pos2 + perp * thickness / 2.0 + normDir * thickness / 2.0;
         appendSimpleRect(vert1, vert2, vert4, vert3, color);
     }
 

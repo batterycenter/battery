@@ -4,10 +4,10 @@
 
 namespace b {
 
-    float random(float min, float max);
+    double random(double min, double max);
 
-    inline float random(float max) {
-        return random(0.0f, max);
+    inline double random(double max) {
+        return random(0.0, max);
     }
 
     int randomInt(int min, int max);

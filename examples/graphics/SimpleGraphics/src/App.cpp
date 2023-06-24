@@ -36,7 +36,7 @@ void MainWindow::onUpdate() {
     float speed = 150.0f;
     uint32_t fontSize = 36;
     float padding = 10.0f;
-    sf::Vector2 batteryOffset = { 15.0f, 10.0f };
+    b::vec2 batteryOffset = { 15.0f, 10.0f };
 
     sf::Text t1(font, "I", fontSize);
     t1.setFillColor(sf::Color::Green);
@@ -51,15 +51,15 @@ void MainWindow::onUpdate() {
     t1.setOrigin({ t1.getLocalBounds().width + t2.getLocalBounds().width / 2.0f + padding, t1.getLocalBounds().height / 2.0f });
     t3.setOrigin({ -t2.getLocalBounds().width / 2.0f - padding - batteryOffset.x, t3.getLocalBounds().height / 2.0f - batteryOffset.y });
 
-    sf::Vector2 totalBounds = {
+    b::vec2 totalBounds = {
             t1.getLocalBounds().width + t2.getLocalBounds().width + t3.getLocalBounds().width - padding,
             std::max(t1.getLocalBounds().height, std::max(t2.getLocalBounds().height, t3.getLocalBounds().height) - padding)
     };
 
     position += velocity * speed * (float)m_frametime;
 
-    sf::Vector2 minimum = { position.x - totalBounds.x / 2.0f, position.y - totalBounds.y / 2.0f };
-    sf::Vector2 maximum = { position.x + totalBounds.x / 2.0f, position.y + totalBounds.y / 2.0f };
+    b::vec2 minimum = { position.x - totalBounds.x / 2.0f, position.y - totalBounds.y / 2.0f };
+    b::vec2 maximum = { position.x + totalBounds.x / 2.0f, position.y + totalBounds.y / 2.0f };
 
     if (minimum.x < 0 || maximum.x > this->getSize().x) {
         position -= velocity * speed * (float)m_frametime;

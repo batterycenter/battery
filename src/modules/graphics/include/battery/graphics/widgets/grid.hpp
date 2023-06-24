@@ -32,8 +32,8 @@ namespace b::widgets {
         void calcHeights();
 
     private:
-        std::vector<float> widths;
-        std::vector<float> heights;
+        std::vector<double> widths;
+        std::vector<double> heights;
         b::widgets::container grid_container;
         b::widgets::container worker_cell;
     };

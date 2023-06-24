@@ -127,78 +127,39 @@ namespace b {
         module.def("ShowDemoWindow", []() { ImGui::ShowDemoWindow(nullptr); });
     }
 
-    float distance(const ImVec2& a, const ImVec2& b) {
+    double distance(const b::vec2& a, const b::vec2& b) {
         return std::sqrt(std::pow(a.x - b.x, 2) + std::pow(a.y - b.y, 2));
     }
 
-    float distance(const sf::Vector2f& a, const sf::Vector2f& b) {
-        return std::sqrt(std::pow(a.x - b.x, 2) + std::pow(a.y - b.y, 2));
+    double degrees(double radians) {
+        return radians * 180.0 / b::Constants::Pi();
     }
 
-    float degrees(float radians) {
-        return radians * 180.f / b::Constants::fPI();
+    double radians(double degrees) {
+        return degrees * b::Constants::Pi() / 180.0;
     }
 
-    float radians(float degrees) {
-        return degrees * b::Constants::fPI() / 180.f;
+    b::vec2 round(const b::vec2& v) {
+        return { std::round(v.x), std::round(v.y) };
     }
 
-    float length(const ImVec2& v) {
-        return std::sqrt(v.x * v.x + v.y * v.y);
+    b::vec2 min(const b::vec2& a, const b::vec2& b) {
+        return { std::min(a.x, b.x), std::min(a.y, b.y) };
     }
 
-    float length(const sf::Vector2f& v) {
-        return std::sqrt(v.x * v.x + v.y * v.y);
+    b::vec2 max(const b::vec2& a, const b::vec2& b) {
+        return { std::max(a.x, b.x), std::max(a.y, b.y) };
     }
 
-    float dot(const ImVec2& a, const ImVec2& b) {
-        return a.x * b.x + a.y * b.y;
+    double lerp(double val, double val_min, double val_max, double new_min, double new_max) {
+        return (val - val_min) / (val_max - val_min) * (new_max - new_min) + new_min;
     }
 
-    float dot(const sf::Vector2f& a, const sf::Vector2f& b) {
-        return a.x * b.x + a.y * b.y;
-    }
-
-    ImVec2 round(const ImVec2& v) {
-        return ImVec2(std::round(v.x), std::round(v.y));
-    }
-
-    sf::Vector2f round(const sf::Vector2f& v) {
-        return sf::Vector2f(std::round(v.x), std::round(v.y));
-    }
-
-    ImVec2 min(const ImVec2& a, const ImVec2& b) {
-        return ImVec2(std::min(a.x, b.x), std::min(a.y, b.y));
-    }
-
-    sf::Vector2f min(const sf::Vector2f& a, const sf::Vector2f& b) {
-        return sf::Vector2f(std::min(a.x, b.x), std::min(a.y, b.y));
-    }
-
-    ImVec2 max(const ImVec2& a, const ImVec2& b) {
-        return ImVec2(std::max(a.x, b.x), std::max(a.y, b.y));
-    }
-
-    sf::Vector2f max(const sf::Vector2f& a, const sf::Vector2f& b) {
-        return sf::Vector2f(std::max(a.x, b.x), std::max(a.y, b.y));
-    }
-
-    float map(const float value, const float min, const float max, const float new_min, const float new_max) {
-        return (value - min) / (max - min) * (new_max - new_min) + new_min;
-    }
-
-    ImVec2 map(const ImVec2& value, const ImVec2& min, const ImVec2& max, const ImVec2& new_min, const ImVec2& new_max) {
-        return ImVec2(
-            map(value.x, min.x, max.x, new_min.x, new_max.x),
-            map(value.y, min.y, max.y, new_min.y, new_max.y)
-        );
-    }
-
-    sf::Vector2f map(const sf::Vector2f& value, const sf::Vector2f& min, const sf::Vector2f& max, const sf::Vector2f& new_min, const sf::Vector2f& new_max) {
-        return sf::Vector2f(
-            map(value.x, min.x, max.x, new_min.x, new_max.x),
-            map(value.y, min.y, max.y, new_min.y, new_max.y)
-        );
+    b::vec2 lerp(const b::vec2& val, const b::vec2& val_min, const b::vec2& val_max, const b::vec2& new_min, const b::vec2& new_max) {
+        return {
+            lerp(val.x, val_min.x, val_max.x, new_min.x, new_max.x),
+            lerp(val.y, val_min.y, val_max.y, new_min.y, new_max.y)
+        };
     }
 
 }

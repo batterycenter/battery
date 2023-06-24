@@ -52,7 +52,7 @@ namespace b {
         Window() : m_eventbus(std::make_shared<b::event_bus>()), m_eventListener(m_eventbus) {};
         ~Window() noexcept;
 
-        void create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings(0, 0, 8));
+        void create(const b::vec2& mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings(0, 0, 8));
         void create(sf::VideoMode mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings(0, 0, 8), bool silenceJsonWarning = false);
         void create(const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings(0, 0, 8));
         virtual void onAttach() = 0;
@@ -77,7 +77,7 @@ namespace b {
 
         void pyInit(py::function python_ui_loop);
         void rememberWindowPositionJsonFile(const b::fs::path& filename);
-        void setDefaultWindowSize(const sf::Vector2u& size);
+        void setDefaultWindowSize(const b::vec2& size);
 
         void showInTaskbar();
         void hideFromTaskbar();
@@ -87,9 +87,9 @@ namespace b {
         bool isMaximized();
         bool isMinimized();
 
-        ImVec2 getMousePos();
-        ImVec2 getMousePosPrev();
-        ImVec2 getMouseDelta();
+        b::vec2 getMousePos();
+        b::vec2 getMousePosPrev();
+        b::vec2 getMouseDelta();
 
         template<typename T>
         void setPythonUiScriptResource(const T& script) {
@@ -127,15 +127,15 @@ namespace b {
         bool m_win32IDMActive = !useWin32ImmersiveDarkMode;
 
         b::fs::path m_windowPositionJsonFile;
-        sf::Vector2u m_defaultWindowSize = Constants::DefaultWindowSize();
+        b::vec2 m_defaultWindowSize = Constants::DefaultWindowSize();
 
-        ImVec2 m_mousePos;
-        ImVec2 m_mousePosPrev;
-        ImVec2 m_mouseDelta;
+        b::vec2 m_mousePos;
+        b::vec2 m_mousePosPrev;
+        b::vec2 m_mouseDelta;
 
         struct WindowState {
-            sf::Vector2u size;
-            sf::Vector2i position;
+            b::vec2 size;
+            b::vec2 position;
             bool maximized = false;
         } m_lastWindowState;
     };

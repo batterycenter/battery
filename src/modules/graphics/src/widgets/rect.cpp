@@ -9,7 +9,7 @@ namespace b::widgets {
         auto size = baseGetBBSize();
         if (size.x != 0 && size.y != 0) {
             baseSetCursorPositionToMinBB();
-            ImVec2 p0 = ImGui::GetCursorScreenPos();
+            auto p0 = ImGui::GetCursorScreenPos();
             ImGui::InvisibleButton(baseGetIdentifier().c_str(), size);
             ImGui::GetWindowDrawList()->AddRectFilled(
                     p0,

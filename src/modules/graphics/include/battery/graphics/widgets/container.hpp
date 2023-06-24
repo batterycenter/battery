@@ -28,8 +28,8 @@ namespace b::widgets {
         void calc_cell_sizes();
 
     private:
-        std::vector<float> column_widths;
-        std::vector<float> row_heights;
+        std::vector<double> column_widths;
+        std::vector<double> row_heights;
     };
 
 }

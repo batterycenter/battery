@@ -10,8 +10,8 @@ namespace b {
     // https://isocpp.org/wiki/faq/ctors#static-init-order
     namespace Constants {
         sf::Color DefaultWindowBackgroundColor();
-        std::pair<b::string, float> DefaultFont();
-        sf::Vector2u DefaultWindowSize();
+        std::pair<b::string, double> DefaultFont();
+        b::vec2 DefaultWindowSize();
         b::string DefaultWindowTitle();
     } // namespace Constants
 

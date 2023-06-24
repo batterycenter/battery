@@ -28,8 +28,8 @@ namespace b::widgets {
         }
 
         baseSetCursorPositionToMinBB();
-        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, b::vec2(0, 0));
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, b::vec2(0, 0));
         ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0);
         text_container([this, &textSize]() {
 
@@ -51,11 +51,11 @@ namespace b::widgets {
             actual_size = ImGui::GetItemRectSize();
 
             if (underline && !hyperlink_hovered) {
-                ImVec2 min = ImGui::GetItemRectMin();
-                ImVec2 max = ImGui::GetItemRectMax();
+                auto min = ImGui::GetItemRectMin();
+                auto max = ImGui::GetItemRectMax();
                 max.y -= underline_offset;
                 min.y = max.y;
-                ImGui::GetWindowDrawList()->AddLine(min, max, ImGui::GetColorU32(ImGuiCol_Text), 1.0f);
+                ImGui::GetWindowDrawList()->AddLine(min, max, ImGui::GetColorU32(ImGuiCol_Text), 1.0);
             }
 
             if (hyperlink) {

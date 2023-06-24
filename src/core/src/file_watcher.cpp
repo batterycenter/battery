@@ -17,7 +17,7 @@ namespace b {
         return false;
     }
 
-    FileWatcher::FileWatcher(const b::fs::path &file_path, std::function<void()> callback, float pollInterval)
+    FileWatcher::FileWatcher(const b::fs::path &file_path, std::function<void()> callback, double pollInterval)
         : BasicFileWatcher(file_path), m_callback(std::move(callback)), m_pollInterval(pollInterval) {
         m_thread = b::thread([this](std::stop_token stop_token) { this->watch(stop_token); });
     }

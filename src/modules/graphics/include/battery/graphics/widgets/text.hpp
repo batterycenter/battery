@@ -11,7 +11,7 @@ namespace b::widgets {
         AlignH alignh = AlignH::Left;
         AlignV alignv = AlignV::Center;
         bool underline = false;
-        float underline_offset = 2.0f;
+        double underline_offset = 2.0;
 
         bool hyperlink = false;
         bool hyperlink_hovered = false;

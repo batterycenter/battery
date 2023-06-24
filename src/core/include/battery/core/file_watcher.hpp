@@ -20,7 +20,7 @@ namespace b {
     class FileWatcher : BasicFileWatcher {
     public:
         FileWatcher() = default;
-        FileWatcher(const b::fs::path& file_path, std::function<void()> callback, float pollInterval = 0.1f);
+        FileWatcher(const b::fs::path& file_path, std::function<void()> callback, double pollInterval = 0.1);
 
         FileWatcher(const FileWatcher&) = delete;
         FileWatcher& operator=(const FileWatcher&) = delete;
@@ -32,7 +32,7 @@ namespace b {
 
     private:
         std::function<void()> m_callback;
-        float m_pollInterval {};
+        double m_pollInterval {};
         b::thread m_thread {};
     };
 

@@ -7,15 +7,15 @@ void MazeSolver::init() {
             m_maze.m_walls[x][y].identifier = 0;
         }
     }
-    m_startPosition = sf::Vector2i(b::randomInt(m_maze.m_width), m_maze.m_height - 1);
-    m_targetPosition = sf::Vector2i(b::randomInt(m_maze.m_width), 0);
+    m_startPosition = b::vec2(b::randomInt(m_maze.m_width), m_maze.m_height - 1);
+    m_targetPosition = b::vec2(b::randomInt(m_maze.m_width), 0);
 
     m_branch = Branch();
     m_branch.m_path.push_back(m_startPosition);
 }
 
 void stepBranch(Branch& branch) {
-    sf::Vector2i currentPosition = branch.m_path.back();
+    b::vec2 currentPosition = branch.m_path.back();
 
 
 }

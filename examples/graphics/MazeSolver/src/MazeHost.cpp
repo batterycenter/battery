@@ -45,7 +45,7 @@ void MazeHost::render() {
 }
 
 void MazeHost::drawMaze() {
-    m_mazeArea = sf::Vector2(m_maze->m_width * GRID_SIZE.x, m_maze->m_height * GRID_SIZE.y);
+    m_mazeArea = { m_maze->m_width * GRID_SIZE.x, m_maze->m_height * GRID_SIZE.y };
     m_leftUpperMazeCorner = m_window->getSize() / 2.f - m_mazeArea / 2.f;
     m_batchRenderer.drawRect(m_leftUpperMazeCorner, m_mazeArea, sf::Color::White);
 
@@ -55,7 +55,7 @@ void MazeHost::drawMaze() {
 
     for (int x = 0; x < m_maze->m_width; x++) {
         for (int y = 0; y < m_maze->m_height; y++) {
-            auto leftUpper = m_leftUpperMazeCorner + sf::Vector2(x * GRID_SIZE.x, y * GRID_SIZE.y);
+            auto leftUpper = m_leftUpperMazeCorner + b::vec2(x * GRID_SIZE.x, y * GRID_SIZE.y);
             auto rightLower = leftUpper + GRID_SIZE;
             if (m_maze->m_walls[x][y].m_bottomWall && y < m_maze->m_height - 1) {
                 m_batchRenderer.drawLine({ leftUpper.x, rightLower.y }, rightLower, sf::Color::Black, 1.f);
@@ -74,7 +74,7 @@ void MazeHost::drawMaze() {
 }
 
 void MazeHost::drawCell(int x, int y, sf::Color color) {
-    auto leftUpper = m_leftUpperMazeCorner + sf::Vector2(x * GRID_SIZE.x, y * GRID_SIZE.y);
+    auto leftUpper = m_leftUpperMazeCorner + b::vec2(x * GRID_SIZE.x, y * GRID_SIZE.y);
     m_batchRenderer.drawRect(leftUpper, GRID_SIZE, color, 0.f);
 }
 

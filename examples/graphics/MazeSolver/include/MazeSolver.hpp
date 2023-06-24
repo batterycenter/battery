@@ -14,6 +14,6 @@ public:
 
 private:
     Maze& m_maze;
-    sf::Vector2i m_startPosition;
-    sf::Vector2i m_targetPosition;
+    b::vec2 m_startPosition;
+    b::vec2 m_targetPosition;
 };

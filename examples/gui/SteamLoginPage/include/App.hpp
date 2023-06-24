@@ -3,11 +3,13 @@
 #include "battery/core.hpp"
 #include "battery/graphics.hpp"
 
+// TODO: Fix casing
+
 struct MainWindowContext : public b::PyContext {
 
     std::function<void()> handle_window_dragging;
     bool titlebar_hovered = false;
-    ImVec2 window_size;
+    b::vec2 window_size;
     sf::Texture steam_logo;
     sf::Texture qrcode_texture;
 
