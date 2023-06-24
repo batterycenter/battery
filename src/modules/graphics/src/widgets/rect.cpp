@@ -9,7 +9,7 @@ namespace b::widgets {
         auto size = baseGetBBSize();
         if (size.x != 0 && size.y != 0) {
             baseSetCursorPositionToMinBB();
-            auto p0 = ImGui::GetCursorScreenPos();
+            b::vec2 p0 = ImGui::GetCursorScreenPos();
             ImGui::InvisibleButton(baseGetIdentifier().c_str(), size);
             ImGui::GetWindowDrawList()->AddRectFilled(
                     p0,
@@ -17,8 +17,8 @@ namespace b::widgets {
                     ImGui::GetColorU32(fill_color.color().Value / 255.f),
                     ImGui::GetStyle().FrameRounding,
                     flags);
-            actual_position = ImGui::GetItemRectMin();
-            actual_size = ImGui::GetItemRectSize();
+            actualPosition = ImGui::GetItemRectMin();
+            actualSize = ImGui::GetItemRectSize();
         }
 
         basePopStyle();

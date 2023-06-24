@@ -72,8 +72,8 @@ namespace b {
 
         // Reload the window where it was last closed
         b::vec2 size = m_defaultWindowSize;
-        b::vec2 position = { static_cast<int>(sf::VideoMode::getDesktopMode().size.x - size.x) / 2,
-                                  static_cast<int>(sf::VideoMode::getDesktopMode().size.y - size.y) / 2 };
+        b::vec2 position = { (sf::VideoMode::getDesktopMode().size.x - size.x) / 2.0,
+                             (sf::VideoMode::getDesktopMode().size.y - size.y) / 2.0 };
         bool maximized = false;
 
         try {
@@ -269,7 +269,7 @@ namespace b {
                     break;
 
                 case sf::Event::MouseMoved:
-                    m_mousePos = event.mouseMove;
+                    m_mousePos = b::vec2(event.mouseMove.x, event.mouseMove.y);
                     dispatchEvent<b::Events::MouseMoveEvent>(event.mouseMove);
                     break;
 

@@ -34,21 +34,21 @@ namespace b::widgets {
         text_container([this, &textSize]() {
 
             if (alignh == AlignH::Center) {
-                ImGui::SetCursorPosX((text_container.actual_size.x - textSize.x) / 2);
+                ImGui::SetCursorPosX((text_container.actualSize.x - textSize.x) / 2);
             } else if (alignh == AlignH::Right) {
-                ImGui::SetCursorPosX(text_container.actual_size.x - textSize.x);
+                ImGui::SetCursorPosX(text_container.actualSize.x - textSize.x);
             }
 
             if (alignv == AlignV::Center) {
-                ImGui::SetCursorPosY((text_container.actual_size.y - textSize.y) / 2);
+                ImGui::SetCursorPosY((text_container.actualSize.y - textSize.y) / 2);
             } else if (alignv == AlignV::Bottom) {
-                ImGui::SetCursorPosY(text_container.actual_size.y - textSize.y);
+                ImGui::SetCursorPosY(text_container.actualSize.y - textSize.y);
             }
 
             auto cursorpos = ImGui::GetCursorPos();
             ImGui::TextColored(ImGui::GetStyleColorVec4(ImGuiCol_Text), "%s", label.c_str());
-            actual_position = ImGui::GetItemRectMin();
-            actual_size = ImGui::GetItemRectSize();
+            actualPosition = ImGui::GetItemRectMin();
+            actualSize = ImGui::GetItemRectSize();
 
             if (underline && !hyperlink_hovered) {
                 auto min = ImGui::GetItemRectMin();

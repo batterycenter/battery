@@ -10,6 +10,7 @@
 #include "battery/core/extern/json.hpp"
 
 #define IMGUI_DEFINE_MATH_OPERATORS
+#include "battery/core/vec.hpp"
 #include "imgui.h"
 #include "imgui-SFML.h"
 

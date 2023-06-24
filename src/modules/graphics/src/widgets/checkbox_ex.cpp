@@ -9,8 +9,8 @@ namespace b::widgets {
 
         baseSetCursorPositionToMinBB();
         Checkbox(baseGetIdentifier().c_str(), &state);
-        actual_position = ImGui::GetItemRectMin();
-        actual_size = ImGui::GetItemRectSize();
+        actualPosition = ImGui::GetItemRectMin();
+        actualSize = ImGui::GetItemRectSize();
 
         basePopStyle();
     }
@@ -59,7 +59,7 @@ namespace b::widgets {
         }
         else if (*v)
         {
-            const float pad = ImMin(ImMax(1.0f, IM_FLOOR(square_sz / 6.0f) * inner_padding_factor), square_sz / 2.f);
+            const float pad = ImMin(ImMax(1.0f, IM_FLOOR(square_sz / 6.0f) * static_cast<float>(inner_padding_factor)), square_sz / 2.f);
             RenderCheckMark(window->DrawList, check_bb.Min + ImVec2(pad, pad), check_col, square_sz - pad * 2.0f);
         }
 

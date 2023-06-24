@@ -47,7 +47,7 @@ namespace b::widgets {
         virtual void operator()() = 0;
 
         B_DEF_PY_STATIC_CONTEXT_FUNC(
-            B_DEF_PY_RAW_CLASS(base_widget, name, context, left, top, width, height, right, bottom, actual_position, actual_size, style)
+            B_DEF_PY_RAW_CLASS(base_widget, name, context, left, top, width, height, right, bottom, actualPosition, actualSize, style)
             .def("__call__", &base_widget::operator())
         )
 

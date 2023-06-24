@@ -94,7 +94,7 @@ namespace pybind11::detail {
                 value = new b::unit_property(b::py::cast<std::string>(src));
                 return true;
             }
-            else if (b::py::isinstance<b::py::double_>(src)) {
+            else if (b::py::isinstance<b::py::float_>(src)) {
                 value = new b::unit_property(b::py::cast<double>(src));
                 return true;
             }

@@ -11,8 +11,8 @@ namespace b::widgets {
         if (_size.y == 0) _size.y = (double)src.getSize().y;     // TODO: Allow proportional scaling when only one is defined
         baseSetCursorPositionToMinBB();
         ImGui::Image(src, _size);
-        actual_position = ImGui::GetItemRectMin();
-        actual_size = ImGui::GetItemRectSize();
+        actualPosition = ImGui::GetItemRectMin();
+        actualSize = ImGui::GetItemRectSize();
 
         basePopStyle();
     }

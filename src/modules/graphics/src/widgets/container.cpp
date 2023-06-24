@@ -24,8 +24,8 @@ namespace b::widgets {
         }
 
         ImGui::EndChild();
-        actual_position = ImGui::GetItemRectMin();
-        actual_size = ImGui::GetItemRectSize();
+        actualPosition = ImGui::GetItemRectMin();
+        actualSize = ImGui::GetItemRectSize();
     }
 
 }
