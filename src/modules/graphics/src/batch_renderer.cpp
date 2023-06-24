@@ -7,11 +7,11 @@ namespace b {
         m_va.setPrimitiveType(sf::PrimitiveType::Triangles);
     }
 
-    void BatchRenderer::drawLine(const sf::Vector2f& pos1, const sf::Vector2f& pos2, const sf::Color& color, float thickness) {
+    void BatchRenderer::drawLine(const b::vec2& pos1, const b::vec2& pos2, const sf::Color& color, float thickness) {
         auto span = pos2 - pos1;
         m_rectShape.setPosition(pos1);
-        m_rectShape.setOrigin(sf::Vector2f(0, thickness / 2.f));
-        m_rectShape.setSize(sf::Vector2f(span.length(), thickness));
+        m_rectShape.setOrigin({ 0, thickness / 2.f });
+        m_rectShape.setSize({ static_cast<float>(span.length()), thickness });
         m_rectShape.setFillColor(color);
         m_rectShape.setOutlineThickness({});
         m_rectShape.setOutlineColor({});
@@ -28,7 +28,7 @@ namespace b {
     }
 
 
-    void BatchRenderer::drawRect(sf::Vector2f pos, sf::Vector2f size, sf::Color fillColor, float outlineThickness, sf::Color outlineColor) {
+    void BatchRenderer::drawRect(const b::vec2& pos, const b::vec2& size, sf::Color fillColor, float outlineThickness, sf::Color outlineColor) {
         m_rectShape.setPosition(pos);
         m_rectShape.setOrigin({});
         m_rectShape.setSize(size);
@@ -70,7 +70,7 @@ namespace b {
         m_va.clear();
     }
 
-    void BatchRenderer::appendSimpleRect(sf::Vector2f pos1, sf::Vector2f pos2, sf::Vector2f pos3, sf::Vector2f pos4, sf::Color color) {
+    void BatchRenderer::appendSimpleRect(const b::vec2& pos1, const b::vec2& pos2, const b::vec2& pos3, const b::vec2& pos4, sf::Color color) {
         m_va.append(sf::Vertex(pos1, color));
         m_va.append(sf::Vertex(pos2, color));
         m_va.append(sf::Vertex(pos3, color));
@@ -79,10 +79,10 @@ namespace b {
         m_va.append(sf::Vertex(pos1, color));
     }
 
-    void BatchRenderer::appendSimpleLine(sf::Vector2f pos1, sf::Vector2f pos2, sf::Color color, float thickness) {
+    void BatchRenderer::appendSimpleLine(const b::vec2& pos1, const b::vec2& pos2, sf::Color color, float thickness) {
         auto dir = pos2 - pos1;
-        auto normDir = dir.length() > 0 ? dir.normalized() : sf::Vector2f(0, 0);
-        auto perp = dir.length() > 0 ? sf::Vector2f(dir.y, -dir.x).normalized() : sf::Vector2f(0, 0);
+        auto normDir = dir.normalized(true);
+        auto perp = dir.perpendicular().normalized(true);
         auto vert1 = pos1 - perp * thickness / 2.f - normDir * thickness / 2.f;
         auto vert2 = pos1 + perp * thickness / 2.f - normDir * thickness / 2.f;
         auto vert3 = pos2 - perp * thickness / 2.f + normDir * thickness / 2.f;

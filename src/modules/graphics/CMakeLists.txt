@@ -59,6 +59,9 @@ target_link_libraries(battery_graphics
         battery::python
     )
 
+target_compile_definitions(battery_graphics PUBLIC B_VEC_INTEGRATE_SFML)     # Define b::vec conversion operators for SFML types
+target_compile_definitions(battery_graphics PUBLIC B_VEC_INTEGRATE_IMGUI)    # Define b::vec conversion operators for ImGui types
+
 battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/default_themes.json DefaultThemesJson TEXT)
 
 battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/fonts/inter-regular.ttf FontsInterRegular_ttf BINARY)

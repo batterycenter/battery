@@ -14,7 +14,7 @@
 
 namespace b {
 
-    BaseWindow::~BaseWindow() noexcept {
+    Window::~Window() noexcept {
 
         if (!m_windowPositionJsonFile.empty()) {                // TODO: Add a check that the window is not created off-monitor. This could make the window unusable.
             try {
@@ -34,15 +34,15 @@ namespace b {
             }
         }
 
-        ImGui::SFML::Shutdown(m_sfmlWindow);
+        ImGui::SFML::Shutdown(sfmlWindow);
     }
 
-    void BaseWindow::create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
+    void Window::create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
         create(sf::VideoMode(mode), title, style, settings);
     }
 
-    void BaseWindow::create(sf::VideoMode mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings, bool silenceJsonWarning) {
-        m_sfmlWindow.create(mode, title, style, settings);
+    void Window::create(sf::VideoMode mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings, bool silenceJsonWarning) {
+        sfmlWindow.create(mode, title, style, settings);
 
         if (!m_windowPositionJsonFile.empty() && !silenceJsonWarning) {
             b::log::core::warn("rememberWindowPositionJsonFile() was called on this window, "
@@ -51,7 +51,7 @@ namespace b {
         }
 
         if (m_firstWindowCreation) {
-            if (!ImGui::SFML::Init(m_sfmlWindow)) {
+            if (!ImGui::SFML::Init(sfmlWindow)) {
                 throw std::runtime_error("Failed to initialize ImGui-SFML");
             }
 
@@ -64,11 +64,11 @@ namespace b {
         auto icon = b::Resource::FromBase64(b::Constants::BatteryIconBase64());
         sf::Image image;
         if (image.loadFromMemory(icon.data(), icon.size())) {
-            (void)m_sfmlWindow.setIcon(image);
+            (void)sfmlWindow.setIcon(image);
         }
     }
 
-    void BaseWindow::create(const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
+    void Window::create(const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
 
         // Reload the window where it was last closed
         sf::Vector2u size = m_defaultWindowSize;
@@ -91,17 +91,17 @@ namespace b {
         }
 
         create(sf::VideoMode(size), title, style, settings, true);
-        m_sfmlWindow.setPosition(position);
+        sfmlWindow.setPosition(position);
         if (maximized) {
             maximize();
         }
     }
 
-    void BaseWindow::pyInit(py::function callback) {
+    void Window::pyInit(py::function callback) {
         this->m_pythonUiLoopCallback = callback;
     }
 
-    void BaseWindow::rememberWindowPositionJsonFile(const b::fs::path& filename) {
+    void Window::rememberWindowPositionJsonFile(const b::fs::path& filename) {
         m_windowPositionJsonFile = filename;
         if (isOpen()) {
             b::log::warn("b::window::rememberWindowPositionJsonFile() called after window was already created. "
@@ -109,7 +109,7 @@ namespace b {
         }
     }
 
-    void BaseWindow::setDefaultWindowSize(const sf::Vector2u& size) {
+    void Window::setDefaultWindowSize(const sf::Vector2u& size) {
         m_defaultWindowSize = size;
         if (isOpen()) {
             b::log::warn("b::window::rememberWindowPositionJsonFile() called after window was already created. "
@@ -117,7 +117,7 @@ namespace b {
         }
     }
 
-    void BaseWindow::showInTaskbar() {
+    void Window::showInTaskbar() {
 #ifdef B_OS_WINDOWS
         long style = GetWindowLongW(getSystemHandle(), GWL_STYLE);
         style &= ~(WS_VISIBLE);
@@ -128,7 +128,7 @@ namespace b {
 #endif
     }
 
-    void BaseWindow::hideFromTaskbar() {
+    void Window::hideFromTaskbar() {
 #ifdef B_OS_WINDOWS
         long style = GetWindowLongW(getSystemHandle(), GWL_STYLE);
         style |= WS_VISIBLE;
@@ -140,7 +140,7 @@ namespace b {
 #endif
     }
 
-    void BaseWindow::maximize() {
+    void Window::maximize() {
 #ifdef B_OS_WINDOWS
         ShowWindow(getSystemHandle(), SW_MAXIMIZE);
 #else
@@ -148,7 +148,7 @@ namespace b {
 #endif
     }
 
-    void BaseWindow::minimize() {
+    void Window::minimize() {
 #ifdef B_OS_WINDOWS
         ShowWindow(getSystemHandle(), SW_MINIMIZE);
 #else
@@ -156,7 +156,7 @@ namespace b {
 #endif
     }
 
-    void BaseWindow::restore() {
+    void Window::restore() {
 #ifdef B_OS_WINDOWS
         ShowWindow(getSystemHandle(), SW_RESTORE);
 #else
@@ -164,7 +164,7 @@ namespace b {
 #endif
     }
 
-    bool BaseWindow::isMaximized() {
+    bool Window::isMaximized() {
 #ifdef B_OS_WINDOWS
         return IsZoomed(getSystemHandle()) != 0;
 #else
@@ -172,7 +172,7 @@ namespace b {
 #endif
     }
 
-    bool BaseWindow::isMinimized() {
+    bool Window::isMinimized() {
 #ifdef B_OS_WINDOWS
         return IsIconic(getSystemHandle()) != 0;
 #else
@@ -180,15 +180,15 @@ namespace b {
 #endif
     }
 
-    ImVec2 BaseWindow::getMousePos() {
+    ImVec2 Window::getMousePos() {
         return m_mousePos;
     }
 
-    ImVec2 BaseWindow::getMousePosPrev() {
+    ImVec2 Window::getMousePosPrev() {
         return m_mousePosPrev;
     }
 
-    ImVec2 BaseWindow::getMouseDelta() {
+    ImVec2 Window::getMouseDelta() {
         return m_mouseDelta;
     }
 
@@ -205,15 +205,15 @@ namespace b {
         }
     }
 
-    void BaseWindow::invoke_update() {
+    void Window::invoke_update() {
 
 #ifdef B_OS_WINDOWS
-        if (m_useWin32ImmersiveDarkMode != m_win32IDMActive) {
-            BOOL useDarkMode = static_cast<BOOL>(m_useWin32ImmersiveDarkMode);
+        if (useWin32ImmersiveDarkMode != m_win32IDMActive) {
+            BOOL useDarkMode = static_cast<BOOL>(useWin32ImmersiveDarkMode);
             bool const setImmersiveDarkModeSuccess = SUCCEEDED(DwmSetWindowAttribute(
-                    m_sfmlWindow.getSystemHandle(), DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE,
+                    sfmlWindow.getSystemHandle(), DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE,
                     &useDarkMode, sizeof(useDarkMode)));
-            m_win32IDMActive = m_useWin32ImmersiveDarkMode;
+            m_win32IDMActive = useWin32ImmersiveDarkMode;
             if (!setImmersiveDarkModeSuccess) {
                 throw std::runtime_error("Failed to set immersive dark mode on b::window");
             }
@@ -221,18 +221,18 @@ namespace b {
 #endif
 
         sf::Event event {};
-        while (m_sfmlWindow.pollEvent(event)) {
-            ImGui::SFML::ProcessEvent(m_sfmlWindow, event);
+        while (sfmlWindow.pollEvent(event)) {
+            ImGui::SFML::ProcessEvent(sfmlWindow, event);
 
             switch (event.type) {
                 case sf::Event::Closed:
                     if (!dispatchEvent<b::Events::WindowCloseEvent>()) {
-                        m_sfmlWindow.close();
+                        sfmlWindow.close();
                     }
                     break;
 
                 case sf::Event::Resized:
-                    m_sfmlWindow.setView(sf::View(sf::FloatRect({ 0, 0 }, { static_cast<float>(event.size.width), static_cast<float>(event.size.height) })));
+                    sfmlWindow.setView(sf::View(sf::FloatRect({ 0, 0 }, { static_cast<float>(event.size.width), static_cast<float>(event.size.height) })));
                     dispatchEvent<b::Events::WindowResizeEvent>(event.size.width, event.size.height);
                     break;
 
@@ -348,8 +348,8 @@ namespace b {
             b::log::info("Loaded successfully");
         }
 
-        m_sfmlWindow.clear(b::Constants::DefaultWindowBackgroundColor());
-        ImGui::SFML::Update(m_sfmlWindow, m_deltaClock.restart());
+        sfmlWindow.clear(b::Constants::DefaultWindowBackgroundColor());
+        ImGui::SFML::Update(sfmlWindow, m_deltaClock.restart());
         b::LockFontStack();
 
         // And then render
@@ -379,8 +379,9 @@ namespace b {
         }
 
         b::UnlockFontStack();
-        ImGui::SFML::Render(m_sfmlWindow);
-        m_sfmlWindow.display();
+        batchRenderer.render(sfmlWindow);
+        ImGui::SFML::Render(sfmlWindow);
+        sfmlWindow.display();
 
         if (isOpen()) {
             m_lastWindowState.position = getPosition();
@@ -389,7 +390,7 @@ namespace b {
         }
     }
 
-    void BaseWindow::renderErrorMessage(const b::string& error) {
+    void Window::renderErrorMessage(const b::string& error) {
         m_errorPanelWidget.children_style.font = "default";  // Ask it to explicitly push the default font, in case it wasn't cleaned up properly
         m_errorPanelWidget.left = 0;
         m_errorPanelWidget.top = 0;

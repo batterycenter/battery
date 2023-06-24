@@ -11,7 +11,7 @@ namespace b {
         line.setOrigin({ 0, thickness / 2.0f });
         line.setPosition(point1);
         line.setRotation(sf::radians(atan2f(point2.y - point1.y, point2.x - point1.x)));
-        m_sfmlWindow.draw(line);
+        sfmlWindow.draw(line);
 
         if (cap == LineCap::Round) {
             sf::CircleShape circle;
@@ -19,9 +19,9 @@ namespace b {
             circle.setRadius(thickness / 2.0f);
             circle.setOrigin({ thickness / 2.0f, thickness / 2.0f });
             circle.setPosition(point1);
-            m_sfmlWindow.draw(circle);
+            sfmlWindow.draw(circle);
             circle.setPosition(point2);
-            m_sfmlWindow.draw(circle);
+            sfmlWindow.draw(circle);
         }
     }
 
@@ -35,7 +35,7 @@ namespace b {
         rect.setPosition(point1);
         rect.setOutlineColor(outlineColor);
         rect.setOutlineThickness(outlineThickness);
-        m_sfmlWindow.draw(rect);
+        sfmlWindow.draw(rect);
     }
 
 } // namespace b
