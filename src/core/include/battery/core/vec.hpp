@@ -18,6 +18,8 @@
 // You can set B_VEC_INTEGRATE_CUSTOM
 // to your custom vector type conversion functions
 
+#include "battery/core/log.hpp"
+
 namespace b {
 
     // TODO: Define vec3 and vec4
@@ -126,3 +128,12 @@ namespace b {
     };
 
 } // namespace b
+
+template <> struct fmt::formatter<b::Vec2> {
+    constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator {
+        return ctx.begin();
+    }
+    auto format(const b::Vec2& vec, format_context& ctx) const -> format_context::iterator {
+        return fmt::format_to(ctx.out(), "[{:.6f}, {:.6f}]", vec.x, vec.y);
+    }
+};

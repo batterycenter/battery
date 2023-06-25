@@ -63,6 +63,7 @@ target_compile_definitions(battery_graphics PUBLIC B_VEC_INTEGRATE_SFML)     # D
 target_compile_definitions(battery_graphics PUBLIC B_VEC_INTEGRATE_IMGUI)    # Define b::Vec conversion operators for ImGui types
 target_compile_definitions(battery_graphics PUBLIC B_COLOR_INTEGRATE_SFML)   # Define b::Color conversion operators for SFML types
 target_compile_definitions(battery_graphics PUBLIC B_COLOR_INTEGRATE_IMGUI)  # Define b::Color conversion operators for ImGui types
+target_compile_definitions(battery_graphics PUBLIC B_COLOR_INTEGRATE_NLOHMANN_JSON)  # Define b::Color json serialization
 
 battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/default_themes.json DefaultThemesJson TEXT)
 

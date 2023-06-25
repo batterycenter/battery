@@ -7,7 +7,7 @@ namespace b {
         m_va.setPrimitiveType(sf::PrimitiveType::Triangles);
     }
 
-    void BatchRenderer::drawLine(const b::Vec2& pos1, const b::Vec2& pos2, const sf::Color& color, double thickness) {
+    void BatchRenderer::drawLine(const b::Vec2& pos1, const b::Vec2& pos2, const b::Color& color, double thickness) {
         auto span = pos2 - pos1;
         m_rectShape.setPosition(pos1);
         m_rectShape.setOrigin(b::Vec2(0, thickness));
@@ -28,12 +28,13 @@ namespace b {
     }
 
 
-    void BatchRenderer::drawRect(const b::Vec2& pos, const b::Vec2& size, sf::Color fillColor, double outlineThickness, sf::Color outlineColor) {
+    void BatchRenderer::drawRect(const b::Vec2& pos, const b::Vec2& size, const b::Color& fillColor,
+                                 double outlineThickness, const b::Color& outlineColor) {
         m_rectShape.setPosition(pos);
         m_rectShape.setOrigin({});
         m_rectShape.setSize(size);
         m_rectShape.setFillColor(fillColor);
-        m_rectShape.setOutlineThickness(outlineThickness);
+        m_rectShape.setOutlineThickness(static_cast<float>(outlineThickness));
         m_rectShape.setOutlineColor(outlineColor);
         m_rectShape.setRotation({});
 
@@ -73,7 +74,8 @@ namespace b {
         m_va.clear();
     }
 
-    void BatchRenderer::appendSimpleRect(const b::Vec2& pos1, const b::Vec2& pos2, const b::Vec2& pos3, const b::Vec2& pos4, sf::Color color) {
+    void BatchRenderer::appendSimpleRect(const b::Vec2& pos1, const b::Vec2& pos2, const b::Vec2& pos3,
+                                         const b::Vec2& pos4, const b::Color& color) {
         m_va.append(sf::Vertex(pos1, color));
         m_va.append(sf::Vertex(pos2, color));
         m_va.append(sf::Vertex(pos3, color));
@@ -82,7 +84,8 @@ namespace b {
         m_va.append(sf::Vertex(pos1, color));
     }
 
-    void BatchRenderer::appendSimpleLine(const b::Vec2& pos1, const b::Vec2& pos2, sf::Color color, double thickness) {
+    void BatchRenderer::appendSimpleLine(const b::Vec2& pos1, const b::Vec2& pos2,
+                                         const b::Color& color, double thickness) {
         auto dir = pos2 - pos1;
         auto normDir = dir.normalized(true);
         auto perp = dir.perpendicular().normalized(true);
