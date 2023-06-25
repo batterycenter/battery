@@ -4,16 +4,16 @@
 
 namespace b::widgets {
 
-    void vspace(float height) {
-        ImGui::Dummy(ImVec2(0.0f, height));
+    void vspace(double height) {
+        ImGui::Dummy(b::vec2(0.0, height));
     }
 
-    void hspace(float width) {
-        ImGui::Dummy(ImVec2(width, 0.0f));
+    void hspace(double width) {
+        ImGui::Dummy(b::vec2(width, 0.0));
     }
 
-    void dummy(float width, float height) {
-        ImGui::Dummy(ImVec2(width, height));
+    void dummy(double width, double height) {
+        ImGui::Dummy(b::vec2(width, height));
     }
 
 }

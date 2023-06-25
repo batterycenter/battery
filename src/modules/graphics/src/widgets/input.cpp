@@ -15,8 +15,8 @@ namespace b::widgets {
         }
 
         changed = ImGui::InputTextWithHint(baseGetIdentifier().c_str(), hint.c_str(), buffer.data(), buffer.size(), flags);
-        actual_position = ImGui::GetItemRectMin();
-        actual_size = ImGui::GetItemRectSize();
+        actualPosition = ImGui::GetItemRectMin();
+        actualSize = ImGui::GetItemRectSize();
         active = ImGui::IsItemActive();
         content = buffer.data();    // Re-parse as a C-String
 

@@ -28,34 +28,34 @@ namespace b::widgets {
         }
 
         baseSetCursorPositionToMinBB();
-        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, b::vec2(0, 0));
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, b::vec2(0, 0));
         ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0);
         text_container([this, &textSize]() {
 
             if (alignh == AlignH::Center) {
-                ImGui::SetCursorPosX((text_container.actual_size.x - textSize.x) / 2);
+                ImGui::SetCursorPosX((text_container.actualSize.x - textSize.x) / 2);
             } else if (alignh == AlignH::Right) {
-                ImGui::SetCursorPosX(text_container.actual_size.x - textSize.x);
+                ImGui::SetCursorPosX(text_container.actualSize.x - textSize.x);
             }
 
             if (alignv == AlignV::Center) {
-                ImGui::SetCursorPosY((text_container.actual_size.y - textSize.y) / 2);
+                ImGui::SetCursorPosY((text_container.actualSize.y - textSize.y) / 2);
             } else if (alignv == AlignV::Bottom) {
-                ImGui::SetCursorPosY(text_container.actual_size.y - textSize.y);
+                ImGui::SetCursorPosY(text_container.actualSize.y - textSize.y);
             }
 
             auto cursorpos = ImGui::GetCursorPos();
             ImGui::TextColored(ImGui::GetStyleColorVec4(ImGuiCol_Text), "%s", label.c_str());
-            actual_position = ImGui::GetItemRectMin();
-            actual_size = ImGui::GetItemRectSize();
+            actualPosition = ImGui::GetItemRectMin();
+            actualSize = ImGui::GetItemRectSize();
 
             if (underline && !hyperlink_hovered) {
-                ImVec2 min = ImGui::GetItemRectMin();
-                ImVec2 max = ImGui::GetItemRectMax();
+                auto min = ImGui::GetItemRectMin();
+                auto max = ImGui::GetItemRectMax();
                 max.y -= underline_offset;
                 min.y = max.y;
-                ImGui::GetWindowDrawList()->AddLine(min, max, ImGui::GetColorU32(ImGuiCol_Text), 1.0f);
+                ImGui::GetWindowDrawList()->AddLine(min, max, ImGui::GetColorU32(ImGuiCol_Text), 1.0);
             }
 
             if (hyperlink) {

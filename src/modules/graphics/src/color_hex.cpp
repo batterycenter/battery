@@ -10,10 +10,10 @@ namespace b {
         }
 
         ImColor color;
-        color.Value.x = static_cast<float>(std::stoi(hex.substr(1, 2), nullptr, 16));
-        color.Value.y = static_cast<float>(std::stoi(hex.substr(3, 2), nullptr, 16));
-        color.Value.z = static_cast<float>(std::stoi(hex.substr(5, 2), nullptr, 16));
-        color.Value.w = hex.size() == 9 ? static_cast<float>(std::stoi(hex.substr(7, 2), nullptr, 16)) : 255;
+        color.Value.x = static_cast<double>(std::stoi(hex.substr(1, 2), nullptr, 16));
+        color.Value.y = static_cast<double>(std::stoi(hex.substr(3, 2), nullptr, 16));
+        color.Value.z = static_cast<double>(std::stoi(hex.substr(5, 2), nullptr, 16));
+        color.Value.w = hex.size() == 9 ? static_cast<double>(std::stoi(hex.substr(7, 2), nullptr, 16)) : 255;
         return color;
     }
 

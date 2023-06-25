@@ -7,6 +7,7 @@
 #include "battery/graphics/context.hpp"
 #include "battery/graphics/constants.hpp"
 #include "battery/graphics/primitive_render_window.hpp"
+#include "battery/graphics/batch_renderer.hpp"
 #include "battery/core/resource_loader.hpp"
 #include "battery/eventbus.hpp"
 
@@ -37,18 +38,21 @@ namespace b {
         struct SensorChangeEvent : public sf::Event::SensorEvent {};
     }
 
-    class BaseWindow : public b::PrimitiveRenderWindow {
+    class Window : public sf::RenderWindow {
     public:
-        double m_framerate { 0.0 };
-        double m_frametime { 0.0 };
-        uint64_t m_framecount { 0 };
-        bool m_useWin32ImmersiveDarkMode = true;
+        double framerate { 0.0 };
+        double frametime { 0.0 };
+        uint64_t framecount { 0 };
+        bool useWin32ImmersiveDarkMode = true;
         widget_style style;
 
-        BaseWindow() : m_eventbus(std::make_shared<b::event_bus>()), m_eventListener(m_eventbus) {};
-        ~BaseWindow() noexcept override;
+        BatchRenderer batchRenderer;
+        sf::RenderWindow& sfmlWindow = *this;
 
-        void create(const sf::Vector2u& mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings(0, 0, 8));
+        Window() : m_eventbus(std::make_shared<b::event_bus>()), m_eventListener(m_eventbus) {};
+        ~Window() noexcept;
+
+        void create(const b::vec2& mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings(0, 0, 8));
         void create(sf::VideoMode mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings(0, 0, 8), bool silenceJsonWarning = false);
         void create(const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings(0, 0, 8));
         virtual void onAttach() = 0;
@@ -58,7 +62,7 @@ namespace b {
 
         template<typename T, typename... TArgs>
         bool dispatchEvent(TArgs&&... args) {
-            if (std::find(m_registeredEvents.begin(), m_registeredEvents.end(), typeid(T).name()) == m_registeredEvents.end()) {
+            if (!m_eventListener.isListening<T>()) {
                 return false;
             }
             m_eventbus->postpone<T>({ std::forward<TArgs>(args)... });
@@ -67,14 +71,13 @@ namespace b {
         }
 
         template<typename T>
-        void listenEvent(std::function<void(const T&)> listener) {
+        void attachEventHandler(std::function<void(const T&)> listener) {
             m_eventListener.listenToCallback(listener);
-            m_registeredEvents.emplace_back(typeid(T).name());
         }
 
         void pyInit(py::function python_ui_loop);
         void rememberWindowPositionJsonFile(const b::fs::path& filename);
-        void setDefaultWindowSize(const sf::Vector2u& size);
+        void setDefaultWindowSize(const b::vec2& size);
 
         void showInTaskbar();
         void hideFromTaskbar();
@@ -84,9 +87,9 @@ namespace b {
         bool isMaximized();
         bool isMinimized();
 
-        ImVec2 getMousePos();
-        ImVec2 getMousePosPrev();
-        ImVec2 getMouseDelta();
+        b::vec2 getMousePos();
+        b::vec2 getMousePosPrev();
+        b::vec2 getMouseDelta();
 
         template<typename T>
         void setPythonUiScriptResource(const T& script) {
@@ -97,10 +100,10 @@ namespace b {
         }
 
         // Prevent all move and assignment operations due to the reference
-        BaseWindow(const BaseWindow&) = delete;
-        BaseWindow& operator=(const BaseWindow&) = delete;
-        BaseWindow(BaseWindow&&) = delete;
-        BaseWindow& operator=(BaseWindow&&) = delete;
+        Window(const Window&) = delete;
+        Window& operator=(const Window&) = delete;
+        Window(Window&&) = delete;
+        Window& operator=(Window&&) = delete;
 
         void invoke_update();
 
@@ -117,42 +120,41 @@ namespace b {
         b::widgets::text m_errorTextWidget;
         bool m_firstWindowCreation = true;
 
-        std::vector<b::string> m_registeredEvents;
         std::shared_ptr<b::event_bus> m_eventbus;
         b::event_listener m_eventListener;
 
         sf::Clock m_deltaClock;
-        bool m_win32IDMActive = !m_useWin32ImmersiveDarkMode;
+        bool m_win32IDMActive = !useWin32ImmersiveDarkMode;
 
         b::fs::path m_windowPositionJsonFile;
-        sf::Vector2u m_defaultWindowSize = Constants::DefaultWindowSize();
+        b::vec2 m_defaultWindowSize = Constants::DefaultWindowSize();
 
-        ImVec2 m_mousePos;
-        ImVec2 m_mousePosPrev;
-        ImVec2 m_mouseDelta;
+        b::vec2 m_mousePos;
+        b::vec2 m_mousePosPrev;
+        b::vec2 m_mouseDelta;
 
         struct WindowState {
-            sf::Vector2u size;
-            sf::Vector2i position;
+            b::vec2 size;
+            b::vec2 position;
             bool maximized = false;
         } m_lastWindowState;
     };
 
     template<b::derived_from<b::PyContext> T, b::template_string_literal ContextName>
-    class PyWindow : public BaseWindow {
+    class PyWindow : public Window {
     public:
-        T m_context;
+        T context;
 
         PyWindow() {
-            m_context.m_initPyWindowFunc = [this](const b::py::function& python_ui_loop) {
+            context.m_initPyWindowFunc = [this](const b::py::function& python_ui_loop) {
                 pyInit(python_ui_loop);
             };
         }
 
         void definePythonBindings(b::py::module& module) override {
             T::defineParentPythonClass(module);
-            m_context.definePythonClass(module);
-            module.attr(ContextName.value) = &m_context;
+            context.definePythonClass(module);
+            module.attr(ContextName.value) = &context;
         }
     };
 

@@ -141,7 +141,7 @@ TEST(BatteryCore_Thread, StopTokenParams) {
     std::atomic<bool> stopped = false;
     std::atomic<bool> values_correct = false;
 
-    b::thread thread([&stopped,&values_correct](std::stop_token token, int i, float x) {
+    b::thread thread([&stopped,&values_correct](std::stop_token token, int i, double x) {
         while (!token.stop_requested()) {
             b::sleep(0.1);
         }
@@ -164,7 +164,7 @@ public:
         thread.join();
     }
 
-    void member_thread(int i, float x) {
+    void member_thread(int i, double x) {
         success = true;
         values_correct = (i == 187 && x == 3.14f);
     }
@@ -175,7 +175,7 @@ public:
         thread.join();
     }
 
-    void member_stop_thread(int i, float x) {
+    void member_stop_thread(int i, double x) {
         while(!thread.get_stop_token().stop_requested()) {
             b::sleep(0.1);
         }

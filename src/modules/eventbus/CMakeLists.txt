@@ -5,7 +5,7 @@
 
 # Download the EventBus library from Github
 set(ENABLE_TEST OFF)
-battery_add_package("gh:gelldur/EventBus#v3.0.3")
+battery_add_package("gh:gelldur/EventBus#v3.0.4")
 battery_set_target_ide_folder(EventBus "battery/modules")
 
 battery_add_library(battery_eventbus STATIC ALIAS battery::eventbus)

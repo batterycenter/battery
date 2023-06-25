@@ -21,7 +21,7 @@ namespace b {
         m_windows.clear();
     }
 
-    std::vector<std::shared_ptr<b::BaseWindow>>& BaseApplication::windows() {
+    std::vector<std::shared_ptr<b::Window>>& BaseApplication::windows() {
         return m_windows;
     }
 
@@ -33,9 +33,9 @@ namespace b {
         onUpdate();
         for (auto& window : m_windows) {
             if (window->isOpen()) {
-                window->m_framecount = framecount;
-                window->m_frametime = frametime;
-                window->m_framerate = framerate;
+                window->framecount = framecount;
+                window->frametime = frametime;
+                window->framerate = framerate;
                 window->invoke_update();
             }
         }

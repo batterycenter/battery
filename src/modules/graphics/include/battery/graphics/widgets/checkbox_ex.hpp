@@ -7,7 +7,7 @@ namespace b::widgets {
 
     class checkbox_ex : public b::widgets::checkbox {
     public:
-        float inner_padding_factor = 1.0f;
+        double inner_padding_factor = 1.0;
 
         checkbox_ex(py::object context = py::object()) : checkbox(context) {}
 

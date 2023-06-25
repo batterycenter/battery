@@ -58,8 +58,10 @@ function(battery_add_module module_name)
     # And now process the actual module
     if (NOT ${B_MODULE_LOADED_${module_name}})
         add_subdirectory(${module_path} ${module_binary_dir})
+
+        # Mark the module as loaded globally, for all compiled targets
         set(B_MODULE_LOADED_${module_name} ON CACHE INTERNAL "" FORCE)
-        add_compile_definitions(B_MODULE_LOADED_${module_name})
+        target_compile_definitions(battery_core_no_main PUBLIC B_MODULE_LOADED_${module_name})
     endif()
 
 endfunction()

@@ -5,7 +5,7 @@
 #include "MazeGenerator.hpp"
 #include "MazeSolver.hpp"
 
-inline const ImVec2 GRID_SIZE = ImVec2(150, 150);
+inline const b::vec2 GRID_SIZE = { 150, 150 };
 inline const int FRAME_SPEEDUP = 50;
 
 enum class MazeState {
@@ -30,8 +30,8 @@ private:
 private:
     b::BaseWindow* m_window;
 
-    sf::Vector2f m_mazeArea;
-    sf::Vector2f m_leftUpperMazeCorner;
+    b::vec2 m_mazeArea;
+    b::vec2 m_leftUpperMazeCorner;
 
     b::BatchRenderer m_batchRenderer;
     std::unique_ptr<Maze> m_maze;

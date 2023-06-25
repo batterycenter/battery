@@ -15,8 +15,8 @@ namespace b::widgets {
             ImGui::Begin(baseGetIdentifier().c_str(), nullptr, flags);
         }
         titlebar_hovered = ImGui::IsItemHovered();
-        actual_position = ImGui::GetWindowPos();
-        actual_size = ImGui::GetWindowSize();
+        actualPosition = ImGui::GetWindowPos();
+        actualSize = ImGui::GetWindowSize();
 
         basePopStyle();
 

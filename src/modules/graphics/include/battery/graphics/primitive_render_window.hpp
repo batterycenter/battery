@@ -13,10 +13,10 @@ namespace b {
     public:
         PrimitiveRenderWindow() = default;
 
-        sf::RenderWindow& m_sfmlWindow = *this;
+        sf::RenderWindow& sfmlWindow = *this;
 
-        void drawLine(const sf::Vector2f& point1, const sf::Vector2f& point2, const sf::Color& color = sf::Color::Black, float thickness = 1.0f, LineCap cap = LineCap::Square);
-        void drawRect(const sf::Vector2f& point1, const sf::Vector2f& point2, const sf::Color& fillColor = sf::Color::Black, float outlineThickness = 1.0f, const sf::Color& outlineColor = sf::Color::Black);
+        void drawLine(const b::vec2& point1, const b::vec2& point2, const sf::Color& color = sf::Color::Black, double thickness = 1.0, LineCap cap = LineCap::Square);
+        void drawRect(const b::vec2& point1, const b::vec2& point2, const sf::Color& fillColor = sf::Color::Black, double outlineThickness = 1.0, const sf::Color& outlineColor = sf::Color::Black);
     };
 
 } // namespace b

@@ -11,24 +11,24 @@ namespace b::widgets {
         return name + "##batteryui" + std::to_string(m_id);
     }
 
-    static std::optional<float> getHorizontalPx(const unit_property& property) {
-        std::optional<float> px;
+    static std::optional<double> getHorizontalPx(const unit_property& property) {
+        std::optional<double> px;
         switch (property.unit()) {
             case b::Unit::UNITLESS: px = property.numeric(); break;
             case b::Unit::PIXEL: px = property.numeric(); break;
-            case b::Unit::PERCENT: px = property.numeric() * (ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x) / 100.0f; break;
+            case b::Unit::PERCENT: px = property.numeric() * (ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x) / 100.0; break;
             case b::Unit::EM: px = property.numeric() * ImGui::GetFontSize(); break;
             default: break;
         }
         return px;
     }
 
-    static std::optional<float> getVerticalPx(const unit_property& property) {
-        std::optional<float> px;
+    static std::optional<double> getVerticalPx(const unit_property& property) {
+        std::optional<double> px;
         switch (property.unit()) {
             case b::Unit::UNITLESS: px = property.numeric(); break;
             case b::Unit::PIXEL: px = property.numeric(); break;
-            case b::Unit::PERCENT: px = property.numeric() * (ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y) / 100.0f; break;
+            case b::Unit::PERCENT: px = property.numeric() * (ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y) / 100.0; break;
             case b::Unit::EM: px = property.numeric() * ImGui::GetFontSize(); break;
             default: break;
         }
@@ -39,7 +39,7 @@ namespace b::widgets {
         ImGui::SetCursorPos(baseGetBBMin());
     }
 
-    std::pair<ImVec2, ImVec2> base_widget::baseGetBB() const {
+    std::pair<b::vec2, b::vec2> base_widget::baseGetBB() const {
         auto left_px = getHorizontalPx(left);
         auto right_px = getHorizontalPx(right);
         auto width_px = getHorizontalPx(width);
@@ -47,8 +47,8 @@ namespace b::widgets {
         auto bottom_px = getVerticalPx(bottom);
         auto height_px = getVerticalPx(height);
 
-        float cursor_left = ImGui::GetCursorPosX();
-        float cursor_width = 0;
+        double cursor_left = ImGui::GetCursorPosX();
+        double cursor_width = 0;
         if (width_px.has_value() && right_px.has_value()) {
             cursor_left = ImGui::GetWindowContentRegionMax().x - right_px.value() - width_px.value();
             cursor_width = width_px.value();
@@ -71,8 +71,8 @@ namespace b::widgets {
             cursor_width = width_px.value();
         }
 
-        float cursor_top = ImGui::GetCursorPosY();
-        float cursor_height = 0;
+        double cursor_top = ImGui::GetCursorPosY();
+        double cursor_height = 0;
         if (height_px.has_value() && bottom_px.has_value()) {
             cursor_top = ImGui::GetWindowContentRegionMax().y - bottom_px.value() - height_px.value();
             cursor_height = height_px.value();
@@ -95,18 +95,18 @@ namespace b::widgets {
             cursor_height = height_px.value();
         }
 
-        return std::make_pair(ImVec2(cursor_left, cursor_top), ImVec2(cursor_left + cursor_width, cursor_top + cursor_height));
+        return std::make_pair(b::vec2(cursor_left, cursor_top), b::vec2(cursor_left + cursor_width, cursor_top + cursor_height));
     }
 
-    ImVec2 base_widget::baseGetBBMin() const {
+    b::vec2 base_widget::baseGetBBMin() const {
         return baseGetBB().first;
     }
 
-    ImVec2 base_widget::baseGetBBMax() const {
+    b::vec2 base_widget::baseGetBBMax() const {
         return baseGetBB().second;
     }
 
-    ImVec2 base_widget::baseGetBBSize() const {
+    b::vec2 base_widget::baseGetBBSize() const {
         return baseGetBB().second - baseGetBB().first;
     }
 

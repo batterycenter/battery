@@ -44,7 +44,7 @@ namespace b {
         FontStack::AvailableFonts()[font] = ttf_file;
     }
 
-    ImFont* LoadFont(const b::string& identifier, const b::string& font, float size) {
+    ImFont* LoadFont(const b::string& identifier, const b::string& font, double size) {
         if (FontStack::Locked()) {
             throw std::runtime_error("b::LoadFont() failed: Font loading operations cannot be performed during a render pass!");
         }

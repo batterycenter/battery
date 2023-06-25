@@ -20,14 +20,14 @@ namespace b {
         virtual void onUpdate() = 0;
         virtual void onCleanup() = 0;
 
-        template<b::derived_from<b::BaseWindow> T>
+        template<b::derived_from<b::Window> T>
         void attachWindow(T** windowPtr) {
             m_windows.emplace_back(std::make_shared<T>());
             *windowPtr = dynamic_cast<T*>(m_windows.back().get());
             (*windowPtr)->onAttach();
         }
 
-        template<b::derived_from<b::BaseWindow> T>
+        template<b::derived_from<b::Window> T>
         void detachWindow(T** windowPtr) {
             (*windowPtr)->onDetach();
             auto index = std::distance(m_windows.begin(), std::find_if(m_windows.begin(), m_windows.end(), [&](auto& window) {
@@ -42,30 +42,30 @@ namespace b {
 
         void detachWindows();
 
-        std::vector<std::shared_ptr<b::BaseWindow>>& windows();
+        std::vector<std::shared_ptr<b::Window>>& windows();
 
     private:
         void onConsoleSetup() final override;
         void onConsoleUpdate() final override;
         void onConsoleCleanup() final override;
 
-        b::py::scoped_interpreter guard{};
-        std::vector<std::shared_ptr<b::BaseWindow>> m_windows;
+        b::py::scoped_interpreter m_guard{};
+        std::vector<std::shared_ptr<b::Window>> m_windows;
     };
 
     template<b::derived_from<b::PyContext> T, b::template_string_literal ContextName>
     class PyApplication : public BaseApplication {
     public:
-        T m_context;
+        T context;
 
         PyApplication() = default;
 
         void definePythonClasses(b::py::module& module) {
             b::define_python_types(module);
 
-            m_context.defineParentPythonClass(module);
-            m_context.definePythonClass(module);
-            module.attr(ContextName.value) = &m_context;
+            context.defineParentPythonClass(module);
+            context.definePythonClass(module);
+            module.attr(ContextName.value) = &context;
 
             for (auto& window : windows()) {
                 window->definePythonBindings(module);

@@ -8,8 +8,8 @@ namespace b::widgets {
 
         baseSetCursorPositionToMinBB();
         ImGui::Checkbox(baseGetIdentifier().c_str(), &state);
-        actual_position = ImGui::GetItemRectMin();
-        actual_size = ImGui::GetItemRectSize();
+        actualPosition = ImGui::GetItemRectMin();
+        actualSize = ImGui::GetItemRectSize();
 
         basePopStyle();
     }

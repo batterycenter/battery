@@ -14,31 +14,31 @@ namespace b::widgets {
         calcWidths();
         calcHeights();
 
-        grid_container.native_window_border = frame_border;
-        grid_container.width = baseGetBBSize().x;
-        grid_container.height = baseGetBBSize().y;
-        grid_container.flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+        m_gridContainer.native_window_border = frameBorder;
+        m_gridContainer.width = baseGetBBSize().x;
+        m_gridContainer.height = baseGetBBSize().y;
+        m_gridContainer.flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
         // This callback is the actual container of the grid itself
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, b::vec2(0, 0));
         baseSetCursorPositionToMinBB();
-        grid_container([this, &grid_callback]() {
+        m_gridContainer([this, &grid_callback]() {
             ImGui::PopStyleVar();
 
             basePopStyle();
-            children_style.push();
+            childrenStyle.push();
 
             // This callback runs once for the grid and runs the user code, which then calls the inner callback
             grid_callback([this] (int column, int row, const std::function<void()>& cell_content) {
                 // This lambda function is called by the user code for each cell
 
-                if (column >= widths.size()) {
-                    b::log::error("b::widgets::grid: Column index out of bounds: {} >= {}", column, widths.size());
+                if (column >= m_widths.size()) {
+                    b::log::error("b::widgets::grid: Column index out of bounds: {} >= {}", column, m_widths.size());
                     return;
                 }
 
-                if (row >= heights.size()) {
-                    b::log::error("b::widgets::grid: Row index out of bounds: {} >= {}", row, heights.size());
+                if (row >= m_heights.size()) {
+                    b::log::error("b::widgets::grid: Row index out of bounds: {} >= {}", row, m_heights.size());
                     return;
                 }
 
@@ -46,15 +46,19 @@ namespace b::widgets {
                 ImGui::PushID(column);
                 ImGui::PushID(row);
 
-                worker_cell.left = 0;
-                for (size_t i = 0; i < column; i++) worker_cell.left = worker_cell.left.numeric() + widths[i];
-                worker_cell.top = 0;
-                for (size_t i = 0; i < row; i++) worker_cell.top = worker_cell.top.numeric() + heights[i];
+                m_workerCell.left = 0;
+                for (size_t i = 0; i < column; i++) {
+                    m_workerCell.left = m_workerCell.left.numeric() + m_widths[i];
+                }
+                m_workerCell.top = 0;
+                for (size_t i = 0; i < row; i++) {
+                    m_workerCell.top = m_workerCell.top.numeric() + m_heights[i];
+                }
 
-                worker_cell.native_window_border = cell_border;
-                worker_cell.width = widths[column];
-                worker_cell.height = heights[row];
-                worker_cell([&cell_content]() {
+                m_workerCell.native_window_border = cellBorder;
+                m_workerCell.width = m_widths[column];
+                m_workerCell.height = m_heights[row];
+                m_workerCell([&cell_content]() {
                     cell_content();
                 });
 
@@ -63,148 +67,148 @@ namespace b::widgets {
                 ImGui::PopID();
             });
 
-            children_style.pop();
+            childrenStyle.pop();
         });
-        actual_position = grid_container.actual_position;
-        actual_size = grid_container.actual_size;
+        actualPosition = m_gridContainer.actualPosition;
+        actualSize = m_gridContainer.actualSize;
     }
 
     void grid::calcWidths() {
-        auto number_of_columns = cell_widths.size();
-        widths.resize(number_of_columns);
+        auto numberOfColumns = cellWidths.size();
+        m_widths.resize(numberOfColumns);
 
         // Clear values
-        std::fill(widths.begin(), widths.end(), 0.f);
+        std::fill(m_widths.begin(), m_widths.end(), 0.0);
 
         // First apply all absolute values
-        float absolute_sum = 0;
-        for (size_t i = 0; i < number_of_columns; i++) {
-            if (cell_widths[i].unit() == b::Unit::PIXEL) {
-                widths[i] = cell_widths[i].numeric();                       // - ImGui::GetStyle().ItemSpacing.x;
-                absolute_sum += cell_widths[i].numeric();
+        double absoluteSum = 0.0;
+        for (size_t i = 0; i < numberOfColumns; i++) {
+            if (cellWidths[i].unit() == b::Unit::PIXEL) {
+                m_widths[i] = cellWidths[i].numeric();                       // - ImGui::GetStyle().ItemSpacing.x;
+                absoluteSum += cellWidths[i].numeric();
             }
         }
 
         // If all absolute columns already fill the page, we're done
-        if (absolute_sum >= actual_size.x) {
+        if (absoluteSum >= actualSize.x) {
             return;
         }
 
         // Now fill in the relative PERCENT columns
-        float percent_sum = 0.f;
-        for (size_t i = 0; i < number_of_columns; i++) {
-            if (cell_widths[i].unit() == b::Unit::PERCENT) {
-                float proportion = std::clamp(cell_widths[i].numeric() / 100.f, 0.f, 1.f);
-                widths[i] = actual_size.x * proportion;                  // - ImGui::GetStyle().ItemSpacing.x;
-                percent_sum += actual_size.x * proportion;
+        double percentSum = 0.0;
+        for (size_t i = 0; i < numberOfColumns; i++) {
+            if (cellWidths[i].unit() == b::Unit::PERCENT) {
+                auto proportion = std::clamp(cellWidths[i].numeric() / 100.0, 0.0, 1.0);
+                m_widths[i] = actualSize.x * proportion;                  // - ImGui::GetStyle().ItemSpacing.x;
+                percentSum += actualSize.x * proportion;
             }
         }
 
         // Stop if absolute and percent fill the page
-        if (absolute_sum + percent_sum >= actual_size.x) {
+        if (absoluteSum + percentSum >= actualSize.x) {
             return;
         }
 
         // Now fill in the relative EM columns
-        float em_sum = 0.f;
-        for (size_t i = 0; i < number_of_columns; i++) {
-            if (cell_widths[i].unit() == b::Unit::PERCENT) {
-                widths[i] = cell_widths[i].numeric() * ImGui::GetFontSize();                  // - ImGui::GetStyle().ItemSpacing.x;
-                em_sum += cell_widths[i].numeric() * ImGui::GetFontSize();
+        double emSum = 0.0;
+        for (size_t i = 0; i < numberOfColumns; i++) {
+            if (cellWidths[i].unit() == b::Unit::PERCENT) {
+                m_widths[i] = cellWidths[i].numeric() * ImGui::GetFontSize();                  // - ImGui::GetStyle().ItemSpacing.x;
+                emSum += cellWidths[i].numeric() * ImGui::GetFontSize();
             }
         }
 
         // Stop if absolute, percent and em fill the page
-        if (absolute_sum + percent_sum + em_sum >= actual_size.x) {
+        if (absoluteSum + percentSum + emSum >= actualSize.x) {
             return;
         }
 
         // And finally, share the remaining space proportionally between the UNITLESS columns
-        float unitless_sum = 0.f;
-        for (size_t i = 0; i < number_of_columns; i++) {
-            if (cell_widths[i].unit() == b::Unit::UNITLESS) {
-                unitless_sum += cell_widths[i].numeric();
+        double unitlessSum = 0.0;
+        for (size_t i = 0; i < numberOfColumns; i++) {
+            if (cellWidths[i].unit() == b::Unit::UNITLESS) {
+                unitlessSum += cellWidths[i].numeric();
             }
         }
 
-        float remaining = actual_size.x - absolute_sum - percent_sum - em_sum;
-        for (size_t i = 0; i < number_of_columns; i++) {
-            if (cell_widths[i].unit() == b::Unit::UNITLESS) {
-                if (unitless_sum != 0) {
-                    float proportion = cell_widths[i].numeric() / unitless_sum;
-                    widths[i] = remaining * proportion;                     // - ImGui::GetStyle().ItemSpacing.x;
+        auto remaining = actualSize.x - absoluteSum - percentSum - emSum;
+        for (size_t i = 0; i < numberOfColumns; i++) {
+            if (cellWidths[i].unit() == b::Unit::UNITLESS) {
+                if (unitlessSum != 0) {
+                    auto proportion = cellWidths[i].numeric() / unitlessSum;
+                    m_widths[i] = remaining * proportion;                     // - ImGui::GetStyle().ItemSpacing.x;
                 }
             }
         }
     }
 
     void grid::calcHeights() {
-        auto number_of_rows = cell_heights.size();
-        heights.resize(number_of_rows);
+        auto numberOfRows = cellHeights.size();
+        m_heights.resize(numberOfRows);
 
         // Clear values
-        std::fill(heights.begin(), heights.end(), 0.f);
+        std::fill(m_heights.begin(), m_heights.end(), 0.0);
 
         // First apply all absolute values
-        float absolute_sum = 0;
-        for (size_t i = 0; i < number_of_rows; i++) {
-            if (cell_heights[i].unit() == b::Unit::PIXEL) {
-                heights[i] = cell_heights[i].numeric();                       // - ImGui::GetStyle().ItemSpacing.x;
-                absolute_sum += cell_heights[i].numeric();
+        double absoluteSum = 0;
+        for (size_t i = 0; i < numberOfRows; i++) {
+            if (cellHeights[i].unit() == b::Unit::PIXEL) {
+                m_heights[i] = cellHeights[i].numeric();                       // - ImGui::GetStyle().ItemSpacing.x;
+                absoluteSum += cellHeights[i].numeric();
             }
         }
 
         // If all absolute columns already fill the page, we're done
-        if (absolute_sum >= actual_size.y) {
+        if (absoluteSum >= actualSize.y) {
             return;
         }
 
         // Now fill in the relative PERCENT columns
-        float percent_sum = 0.f;
-        for (size_t i = 0; i < number_of_rows; i++) {
-            if (cell_heights[i].unit() == b::Unit::PERCENT) {
-                float proportion = std::clamp(cell_heights[i].numeric() / 100.f, 0.f, 1.f);
-                heights[i] = actual_size.y * proportion;                  // - ImGui::GetStyle().ItemSpacing.x;
-                percent_sum += actual_size.y * proportion;
+        double percentSum = 0.0;
+        for (size_t i = 0; i < numberOfRows; i++) {
+            if (cellHeights[i].unit() == b::Unit::PERCENT) {
+                auto proportion = std::clamp(cellHeights[i].numeric() / 100.0, 0.0, 1.0);
+                m_heights[i] = actualSize.y * proportion;                  // - ImGui::GetStyle().ItemSpacing.x;
+                percentSum += actualSize.y * proportion;
             }
         }
 
         // Stop if absolute and percent fill the page
-        if (absolute_sum + percent_sum >= actual_size.y) {
+        if (absoluteSum + percentSum >= actualSize.y) {
             return;
         }
 
         // Now fill in the relative EM columns
-        float em_sum = 0.f;
-        for (size_t i = 0; i < number_of_rows; i++) {
-            if (cell_heights[i].unit() == b::Unit::PERCENT) {
-                heights[i] = cell_heights[i].numeric() * ImGui::GetFontSize();                  // - ImGui::GetStyle().ItemSpacing.x;
-                em_sum += cell_heights[i].numeric() * ImGui::GetFontSize();
+        double emSum = 0.0;
+        for (size_t i = 0; i < numberOfRows; i++) {
+            if (cellHeights[i].unit() == b::Unit::PERCENT) {
+                m_heights[i] = cellHeights[i].numeric() * ImGui::GetFontSize();                  // - ImGui::GetStyle().ItemSpacing.x;
+                emSum += cellHeights[i].numeric() * ImGui::GetFontSize();
             }
         }
 
         // Stop if absolute, percent and em fill the page
-        if (absolute_sum + percent_sum + em_sum >= actual_size.y) {
+        if (absoluteSum + percentSum + emSum >= actualSize.y) {
             return;
         }
 
         // And finally, share the remaining space proportionally between the UNITLESS columns
-        float unitless_sum = 0.f;
-        for (size_t i = 0; i < number_of_rows; i++) {
-            if (cell_heights[i].unit() == b::Unit::UNITLESS) {
-                unitless_sum += cell_heights[i].numeric();
+        double unitlessSum = 0.0;
+        for (size_t i = 0; i < numberOfRows; i++) {
+            if (cellHeights[i].unit() == b::Unit::UNITLESS) {
+                unitlessSum += cellHeights[i].numeric();
             }
         }
 
-        float remaining = actual_size.y - absolute_sum - percent_sum - em_sum;
-        for (size_t i = 0; i < number_of_rows; i++) {
-            if (cell_heights[i].unit() == b::Unit::UNITLESS) {
-                if (unitless_sum != 0) {
-                    float proportion = cell_heights[i].numeric() / unitless_sum;
-                    heights[i] = remaining * proportion;                     // - ImGui::GetStyle().ItemSpacing.x;
+        auto remaining = actualSize.y - absoluteSum - percentSum - emSum;
+        for (size_t i = 0; i < numberOfRows; i++) {
+            if (cellHeights[i].unit() == b::Unit::UNITLESS) {
+                if (unitlessSum != 0) {
+                    auto proportion = cellHeights[i].numeric() / unitlessSum;
+                    m_heights[i] = remaining * proportion;                     // - ImGui::GetStyle().ItemSpacing.x;
                 }
             }
         }
     }
 
-}
+} // namespace b

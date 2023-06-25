@@ -27,8 +27,8 @@ void MainWindow::handle_window_dragging() {
     }
 
     if (dragWindow) {
-        ImVec2 delta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Left);
-        m_sfmlWindow.setPosition(m_sfmlWindow.getPosition() + sf::Vector2i((int)delta.x, (int)delta.y));
+        b::vec2 delta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Left);
+        m_sfmlWindow.setPosition(m_sfmlWindow.getPosition() + delta.x);
     }
 
     wasMouseDragging = mouseDragging;

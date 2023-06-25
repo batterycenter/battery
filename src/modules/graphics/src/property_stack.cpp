@@ -31,9 +31,9 @@ namespace b {
                 throw std::invalid_argument(b::format("Cannot push ImGuiItemWidth: Nested properties are not supported!"));
 
             if (property_value.get_properties()[0].unit() == b::Unit::COLOR_HEX)
-                throw std::invalid_argument(b::format("Cannot push ImGuiItemWidth: Property value is not of type float!"));
+                throw std::invalid_argument(b::format("Cannot push ImGuiItemWidth: Property value is not a numeric type!"));
 
-            ImGui::PushItemWidth((float)property_value.get_properties()[0]);
+            ImGui::PushItemWidth(property_value.get_properties()[0].numeric());
         }
 
         // Otherwise, nothing is pushed to ImGui
@@ -65,7 +65,7 @@ namespace b {
                 throw std::invalid_argument(b::format("Cannot pop ImGuiItemWidth: Nested properties are not supported!"));
 
             if (property_value.get_properties()[0].unit() == b::Unit::COLOR_HEX)
-                throw std::invalid_argument(b::format("Cannot pop ImGuiItemWidth: Property value is not of type float!"));
+                throw std::invalid_argument(b::format("Cannot pop ImGuiItemWidth: Property value is not a numeric type!"));
 
             ImGui::PopItemWidth();
         }
@@ -100,20 +100,20 @@ namespace b {
     void property_stack::pushpop_stylevar(ImGuiStyleVar_ stylevar_enum, const b::string& property_name, const property_pack& property_value, bool push) {
         if (property_value.get_properties().size() == 1) {  // Single property
             if (property_value.get_properties()[0].unit() == b::Unit::COLOR_HEX)
-                throw std::invalid_argument(b::format("Cannot push/pop style var {}: Property value is not of type float!", property_name));
+                throw std::invalid_argument(b::format("Cannot push/pop style var {}: Property value is not a numeric type", property_name));
 
             if (push) ImGui::PushStyleVar(stylevar_enum, property_value.get_properties()[0].numeric());
             else ImGui::PopStyleVar();
         }
         else if (property_value.get_properties().size() == 2) {  // ImVec2
             if (property_value.get_properties()[0].unit() == b::Unit::COLOR_HEX)
-                throw std::invalid_argument(b::format("Cannot push/pop style var {}: Either nested property value is not of type float!", property_name));
+                throw std::invalid_argument(b::format("Cannot push/pop style var {}: Either nested property value is not a numeric type", property_name));
 
             if (push) ImGui::PushStyleVar(stylevar_enum, ImVec2(property_value.get_properties()[0].numeric(), property_value.get_properties()[1].numeric()));
             else ImGui::PopStyleVar();
         }
         else {
-            throw std::invalid_argument(b::format("Cannot push/pop style var {}: Property value is neither of type float nor ImVec2!", property_name));
+            throw std::invalid_argument(b::format("Cannot push/pop style var {}: Property value is neither numeric nor of type ImVec2", property_name));
         }
     }
 

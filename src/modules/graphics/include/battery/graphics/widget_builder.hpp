@@ -12,9 +12,9 @@ namespace b::widgets {
             numeric_rule(const char* tag) : tag(tag) {}
             ~numeric_rule();
 
-            numeric_rule& add_case(enum b::Unit unit, const std::function<float(float)>& transformer);
-            std::optional<float> get_result();
-            float get_result(float default_value);
+            numeric_rule& add_case(enum b::Unit unit, const std::function<double(double)>& transformer);
+            std::optional<double> get_result();
+            double get_result(double default_value);
             void push(ImGuiStyleVar_ style_var);
 
             numeric_rule& operator=(const numeric_rule&) = delete;
@@ -34,7 +34,7 @@ namespace b::widgets {
         private:
             const char* tag;
             int pushed = 0;
-            std::vector<std::pair<enum b::Unit, std::function<float(float)>>> cases;
+            std::vector<std::pair<enum b::Unit, std::function<double(double)>>> cases;
         };
 
         class vec2_rule {
@@ -42,10 +42,10 @@ namespace b::widgets {
             vec2_rule(const char* tag) : tag(tag) {}
             ~vec2_rule();
 
-            vec2_rule& add_case_x(enum b::Unit unit, const std::function<float(float)>& transformer);
-            vec2_rule& add_case_y(enum b::Unit unit, const std::function<float(float)>& transformer);
-            std::optional<ImVec2> get_result();
-            ImVec2 get_result(ImVec2 default_value);
+            vec2_rule& add_case_x(enum b::Unit unit, const std::function<double(double)>& transformer);
+            vec2_rule& add_case_y(enum b::Unit unit, const std::function<double(double)>& transformer);
+            std::optional<b::vec2> get_result();
+            b::vec2 get_result(b::vec2 default_value);
             void push(ImGuiStyleVar_ style_var);
 
             vec2_rule& operator=(const vec2_rule&) = delete;
@@ -66,8 +66,8 @@ namespace b::widgets {
         private:
             const char* tag;
             int pushed = 0;
-            std::vector<std::pair<enum b::Unit, std::function<float(float)>>> cases_x;
-            std::vector<std::pair<enum b::Unit, std::function<float(float)>>> cases_y;
+            std::vector<std::pair<enum b::Unit, std::function<double(double)>>> cases_x;
+            std::vector<std::pair<enum b::Unit, std::function<double(double)>>> cases_y;
         };
 
         class color_rule {

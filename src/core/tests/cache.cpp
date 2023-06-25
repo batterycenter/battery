@@ -11,7 +11,7 @@ TEST(BatteryCore_Cache, Cache) {
         b::cachefile cache(path);
         cache["boolean"] = true;
         cache["integer"] = 187;
-        cache["float"] = 0.5;
+        cache["double"] = 0.5;
         cache["string"] = "unit test";
         nlohmann::json data;
         data["test1"] = 5;
@@ -22,7 +22,7 @@ TEST(BatteryCore_Cache, Cache) {
         b::cachefile cache(path);
         EXPECT_EQ((bool)cache["boolean"], true);
         EXPECT_EQ((int)cache["integer"], 187);
-        EXPECT_EQ((float)cache["float"], 0.5);
+        EXPECT_EQ((double)cache["double"], 0.5);
         std::string str = cache["string"];
         EXPECT_EQ(str, "unit test");
         nlohmann::json data;

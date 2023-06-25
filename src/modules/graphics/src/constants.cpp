@@ -7,11 +7,11 @@ namespace b {
         return { 20, 20, 20, 255 };
     }
 
-    std::pair<b::string, float> Constants::DefaultFont() {
+    std::pair<b::string, double> Constants::DefaultFont() {
         return { "roboto-regular", 18.f };
     }
 
-    sf::Vector2u Constants::DefaultWindowSize() {
+    b::vec2 Constants::DefaultWindowSize() {
         return { 1280, 720 };
     }
 

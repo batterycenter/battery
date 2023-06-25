@@ -17,8 +17,8 @@ namespace b::widgets {
 
         held = ImGui::IsItemActive();
         hovered = ImGui::IsItemHovered();
-        actual_position = ImGui::GetItemRectMin();
-        actual_size = ImGui::GetItemRectSize();
+        actualPosition = ImGui::GetItemRectMin();
+        actualSize = ImGui::GetItemRectSize();
 
         basePopStyle();
     }

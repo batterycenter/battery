@@ -4,9 +4,9 @@
 
 namespace b::widgets {
 
-    void vspace(float height);
-    void hspace(float width);
-    void dummy(float width, float height);
+    void vspace(double height);
+    void hspace(double width);
+    void dummy(double width, double height);
 
     namespace dummies {
         inline void definePythonFunctions(b::py::module& module) {

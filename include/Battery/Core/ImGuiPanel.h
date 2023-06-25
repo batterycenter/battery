@@ -42,8 +42,8 @@ namespace Battery {
 
 			ImGui::PushID(id);
 
-			ImGui::SetNextWindowPos(ImVec2(position.x, position.y));
-			ImGui::SetNextWindowSize(ImVec2(size.x, size.y));
+			ImGui::SetNextWindowPos({ position.x, position.y });
+			ImGui::SetNextWindowSize({ size.x, size.y });
 			ImGui::GetStyle().WindowRounding = 0.0f;
 			ImGui::Begin(title.c_str(), nullptr, flags.has_value() ? flags.value() : this->flags);
 

@@ -12,8 +12,8 @@ public:
 
     sf::Font font;
     sf::Texture battery;
-    sf::Vector2<float> position = { 100.0f, 100.0f };
-    sf::Vector2<float> velocity = { 1.0f, 1.0f };
+    b::vec2 position = { 100.0f, 100.0f };
+    b::vec2 velocity = { 1.0f, 1.0f };
 
     void onAttach() override;
     void onUpdate() override;

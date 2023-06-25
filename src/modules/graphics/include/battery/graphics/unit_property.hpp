@@ -20,21 +20,21 @@ namespace b {
 
         unit_property() = default;
         unit_property(const b::string& value);
-        unit_property(float value, Unit unit);
-        unit_property(float value);
+        unit_property(double value, Unit unit);
+        unit_property(double value);
         unit_property(ImColor color);
         unit_property(sf::Color color);
 
         unit_property& operator=(const b::string& value);
-        unit_property& operator=(float value);
+        unit_property& operator=(double value);
         unit_property& operator=(ImColor color);
         unit_property& operator=(sf::Color color);
 
-        explicit operator float() const;
+        explicit operator double() const;
         explicit operator ImColor() const;
         explicit operator b::string() const;
 
-        [[nodiscard]] float numeric() const;
+        [[nodiscard]] double numeric() const;
         [[nodiscard]] ImColor color() const;
         [[nodiscard]] b::string string() const;
 
@@ -59,8 +59,8 @@ namespace b {
                 .def(b::py::init<>())
                 .def(b::py::init<const b::string&>())
                 .def(b::py::init<const std::string&>())
-                .def(b::py::init<float, b::Unit>())
-                .def(b::py::init<float>())
+                .def(b::py::init<double, b::Unit>())
+                .def(b::py::init<double>())
                 .def(b::py::init<ImColor>())
                 .def("string", &b::unit_property::string)
                 .def("numeric", &b::unit_property::numeric)
@@ -75,7 +75,7 @@ namespace b {
         void parse_color(const b::string& str);
         void clear();
 
-        float m_float = 0.f;
+        double m_numeric = 0.0;
         ImColor m_color {};
         enum Unit m_unit = Unit::NONE;
     };
@@ -95,11 +95,11 @@ namespace pybind11::detail {
                 return true;
             }
             else if (b::py::isinstance<b::py::float_>(src)) {
-                value = new b::unit_property(b::py::cast<float>(src));
+                value = new b::unit_property(b::py::cast<double>(src));
                 return true;
             }
             else if (b::py::isinstance<b::py::int_>(src)) {
-                value = new b::unit_property(static_cast<float>(b::py::cast<int>(src)));
+                value = new b::unit_property(static_cast<double>(b::py::cast<int>(src)));
                 return true;
             }
             return false;

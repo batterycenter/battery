@@ -35,12 +35,8 @@ namespace b {
 #endif
     }
 
-    double Constants::PI() {
+    double Constants::Pi() {
         return 3.141592653589793238462643383279502884197169399375105820974944592307816406286;
-    }
-
-    float Constants::fPI() {
-        return static_cast<float>(PI());
     }
 
 #ifdef B_DEBUG
