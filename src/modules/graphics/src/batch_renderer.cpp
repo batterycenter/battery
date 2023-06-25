@@ -65,8 +65,11 @@ namespace b {
         }
     }
 
-    void BatchRenderer::render(sf::RenderTarget& target) {
-        target.draw(m_va);
+    void BatchRenderer::draw(sf::RenderTarget& target, const sf::RenderStates& state) const {
+        target.draw(m_va, state);
+    }
+
+    void BatchRenderer::clear() {
         m_va.clear();
     }
 

@@ -13,6 +13,8 @@
 
 namespace b {
 
+    class Application;  // Forward declaration for 'friend' access
+
     namespace Events {
         struct WindowCloseEvent {};
         struct WindowResizeEvent : public sf::Event::SizeEvent {};
@@ -24,7 +26,11 @@ namespace b {
         struct MouseWheelScrollEvent : public sf::Event::MouseWheelScrollEvent {};
         struct MouseButtonPressEvent : public sf::Event::MouseButtonEvent {};
         struct MouseButtonReleaseEvent : public sf::Event::MouseButtonEvent {};
-        struct MouseMoveEvent : public sf::Event::MouseMoveEvent {};
+        struct MouseMoveEvent {
+            b::vec2 pos;
+            b::vec2 delta;
+            b::vec2 previous;
+        };
         struct MouseEnteredWindowEvent {};
         struct MouseLeftWindowEvent {};
         struct JoystickButtonPressEvent : public sf::Event::JoystickButtonEvent {};
@@ -38,16 +44,13 @@ namespace b {
         struct SensorChangeEvent : public sf::Event::SensorEvent {};
     }
 
-    class Window : public sf::RenderWindow {
+    class Window {
     public:
         double framerate { 0.0 };
         double frametime { 0.0 };
         uint64_t framecount { 0 };
         bool useWin32ImmersiveDarkMode = true;
         widget_style style;
-
-        BatchRenderer batchRenderer;
-        sf::RenderWindow& sfmlWindow = *this;
 
         Window() : m_eventbus(std::make_shared<b::event_bus>()), m_eventListener(m_eventbus) {};
         ~Window() noexcept;
@@ -90,6 +93,7 @@ namespace b {
         b::vec2 getMousePos();
         b::vec2 getMousePosPrev();
         b::vec2 getMouseDelta();
+        bool isAttached() const { return m_isAttached; }
 
         template<typename T>
         void setPythonUiScriptResource(const T& script) {
@@ -105,10 +109,83 @@ namespace b {
         Window(Window&&) = delete;
         Window& operator=(Window&&) = delete;
 
-        void invoke_update();
+        sf::RenderWindow& getRenderWindow();
+        const sf::RenderWindow& getRenderWindow() const;
+
+        void setIcon(const sf::Image& icon);
+        void setIcon(const b::vec2& size, const std::uint8_t* pixels);
+
+        void setPosition(const b::vec2& position);
+        b::vec2 getPosition() const;
+
+        void setSize(const b::vec2& size);
+        b::vec2 getSize() const;
+
+        void setFramerateLimit(int limit);
+
+        void requestFocus();
+
+        bool isOpen() const;
+
+        void clear(const sf::Color& color = sf::Color(0, 0, 0, 255));
+
+        void close();
+
+        void draw(const sf::Drawable& drawable, const sf::RenderStates& states = sf::RenderStates::Default);
+
+        void draw(const sf::Vertex*       vertices,
+                  std::size_t         vertexCount,
+                  sf::PrimitiveType       type,
+                  const sf::RenderStates& states = sf::RenderStates::Default);
+
+        void draw(const sf::VertexBuffer& vertexBuffer, const sf::RenderStates& states = sf::RenderStates::Default);
+
+        void draw(const sf::VertexBuffer& vertexBuffer,
+                  std::size_t         firstVertex,
+                  std::size_t         vertexCount,
+                  const sf::RenderStates& states = sf::RenderStates::Default);
+
+        const sf::View& getDefaultView() const;
+
+        void setView(const sf::View& view);
+        const sf::View& getView() const;
+
+        void setTitle(const b::string& title);
+
+        sf::IntRect getViewport(const sf::View& view) const;
+
+        b::vec2 mapCoordsToPixel(const b::vec2& point) const;
+        b::vec2 mapCoordsToPixel(const b::vec2& point, const sf::View& view) const;
+
+        b::vec2 mapPixelToCoords(const b::vec2& pixel) const;
+        b::vec2 mapPixelToCoords(const b::vec2& pixel, const sf::View& view) const;
+
+        bool hasFocus() const;
+
+        bool setActive(bool active = true);
+
+        void setJoystickThreshold(float threshold);
+
+        void setKeyRepeatEnabled(bool enabled);
+
+        void setMouseCursorGrabbed(bool grabbed);
+        void setMouseCursorVisible(bool visible);
+        void setMouseCursor(const sf::Cursor& cursor);
+
+        void setVerticalSyncEnabled(bool enabled);
+
+        void setVisible(bool visible);
+
+        void invokeUpdate();
+
+        friend class b::Application;
 
     private:
         void renderErrorMessage(const b::string& error);
+        void attach();
+        void detach();
+
+        sf::RenderWindow m_sfmlWindow;
 
         py::function m_pythonUiLoopCallback;
         b::Resource m_uiScriptResource;
@@ -132,6 +209,7 @@ namespace b {
         b::vec2 m_mousePos;
         b::vec2 m_mousePosPrev;
         b::vec2 m_mouseDelta;
+        bool m_isAttached = false;
 
         struct WindowState {
             b::vec2 size;

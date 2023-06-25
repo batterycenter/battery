@@ -34,7 +34,12 @@ namespace b {
             }
         }
 
-        ImGui::SFML::Shutdown(sfmlWindow);
+        if (isAttached()) {
+            b::log::core::warn("b::Window was not detached before destruction!");
+            detach();
+        }
+
+        ImGui::SFML::Shutdown(getRenderWindow());
     }
 
     void Window::create(const b::vec2& size, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
@@ -42,7 +47,7 @@ namespace b {
     }
 
     void Window::create(sf::VideoMode mode, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings, bool silenceJsonWarning) {
-        sfmlWindow.create(mode, title, style, settings);
+        getRenderWindow().create(mode, title, style, settings);
 
         if (!m_windowPositionJsonFile.empty() && !silenceJsonWarning) {
             b::log::core::warn("rememberWindowPositionJsonFile() was called on this window, "
@@ -51,7 +56,7 @@ namespace b {
         }
 
         if (m_firstWindowCreation) {
-            if (!ImGui::SFML::Init(sfmlWindow)) {
+            if (!ImGui::SFML::Init(getRenderWindow())) {
                 throw std::runtime_error("Failed to initialize ImGui-SFML");
             }
 
@@ -64,7 +69,7 @@ namespace b {
         auto icon = b::Resource::FromBase64(b::Constants::BatteryIconBase64());
         sf::Image image;
         if (image.loadFromMemory(icon.data(), icon.size())) {
-            (void)sfmlWindow.setIcon(image);
+            (void)getRenderWindow().setIcon(image);
         }
     }
 
@@ -91,7 +96,7 @@ namespace b {
         }
 
         create(sf::VideoMode(size), title, style, settings, true);
-        sfmlWindow.setPosition(position);
+        getRenderWindow().setPosition(position);
         if (maximized) {
             maximize();
         }
@@ -119,10 +124,10 @@ namespace b {
 
     void Window::showInTaskbar() {
 #ifdef B_OS_WINDOWS
-        long style = GetWindowLongW(getSystemHandle(), GWL_STYLE);
+        long style = GetWindowLongW(getRenderWindow().getSystemHandle(), GWL_STYLE);
         style &= ~(WS_VISIBLE);
-        SetWindowLongW(getSystemHandle(), GWL_STYLE, style);
-        ShowWindow(getSystemHandle(), SW_SHOW);
+        SetWindowLongW(getRenderWindow().getSystemHandle(), GWL_STYLE, style);
+        ShowWindow(getRenderWindow().getSystemHandle(), SW_SHOW);
 #else
 #warning "Not implemented"
 #endif
@@ -130,11 +135,11 @@ namespace b {
 
     void Window::hideFromTaskbar() {
 #ifdef B_OS_WINDOWS
-        long style = GetWindowLongW(getSystemHandle(), GWL_STYLE);
+        long style = GetWindowLongW(getRenderWindow().getSystemHandle(), GWL_STYLE);
         style |= WS_VISIBLE;
-        ShowWindow(getSystemHandle(), SW_HIDE);
-        SetWindowLongW(getSystemHandle(), GWL_STYLE, style);
-        ShowWindow(getSystemHandle(), SW_SHOW);
+        ShowWindow(getRenderWindow().getSystemHandle(), SW_HIDE);
+        SetWindowLongW(getRenderWindow().getSystemHandle(), GWL_STYLE, style);
+        ShowWindow(getRenderWindow().getSystemHandle(), SW_SHOW);
 #else
 #warning "Not implemented"
 #endif
@@ -142,7 +147,7 @@ namespace b {
 
     void Window::maximize() {
 #ifdef B_OS_WINDOWS
-        ShowWindow(getSystemHandle(), SW_MAXIMIZE);
+        ShowWindow(getRenderWindow().getSystemHandle(), SW_MAXIMIZE);
 #else
 #warning "Not implemented"
 #endif
@@ -150,7 +155,7 @@ namespace b {
 
     void Window::minimize() {
 #ifdef B_OS_WINDOWS
-        ShowWindow(getSystemHandle(), SW_MINIMIZE);
+        ShowWindow(getRenderWindow().getSystemHandle(), SW_MINIMIZE);
 #else
 #warning "Not implemented"
 #endif
@@ -158,7 +163,7 @@ namespace b {
 
     void Window::restore() {
 #ifdef B_OS_WINDOWS
-        ShowWindow(getSystemHandle(), SW_RESTORE);
+        ShowWindow(getRenderWindow().getSystemHandle(), SW_RESTORE);
 #else
 #warning "Not implemented"
 #endif
@@ -166,7 +171,7 @@ namespace b {
 
     bool Window::isMaximized() {
 #ifdef B_OS_WINDOWS
-        return IsZoomed(getSystemHandle()) != 0;
+        return IsZoomed(getRenderWindow().getSystemHandle()) != 0;
 #else
 #warning "Not implemented"
 #endif
@@ -174,7 +179,7 @@ namespace b {
 
     bool Window::isMinimized() {
 #ifdef B_OS_WINDOWS
-        return IsIconic(getSystemHandle()) != 0;
+        return IsIconic(getRenderWindow().getSystemHandle()) != 0;
 #else
 #warning "Not implemented"
 #endif
@@ -205,13 +210,160 @@ namespace b {
         }
     }
 
-    void Window::invoke_update() {
+    sf::RenderWindow& Window::getRenderWindow() {
+        return m_sfmlWindow;
+    }
+
+    const sf::RenderWindow& Window::getRenderWindow() const {
+        return m_sfmlWindow;
+    }
+
+    void Window::setIcon(const sf::Image& icon) {
+        getRenderWindow().setIcon(icon);
+    }
+
+    void Window::setIcon(const b::vec2& size, const std::uint8_t* pixels) {
+        getRenderWindow().setIcon(size, pixels);
+    }
+
+    void Window::setPosition(const b::vec2& position) {
+        getRenderWindow().setPosition(position);
+    }
+
+    b::vec2 Window::getPosition() const {
+        return getRenderWindow().getPosition();
+    }
+
+    void Window::setSize(const b::vec2& size) {
+        getRenderWindow().setSize(size);
+    }
+
+    b::vec2 Window::getSize() const {
+        return getRenderWindow().getSize();
+    }
+
+    void Window::setFramerateLimit(int limit) {
+        getRenderWindow().setFramerateLimit(limit);
+    }
+
+    void Window::requestFocus() {
+        getRenderWindow().requestFocus();
+    }
+
+    bool Window::isOpen() const {
+        return getRenderWindow().isOpen();
+    }
+
+    void Window::clear(const sf::Color& color) {
+        getRenderWindow().clear(color);
+    }
+
+    void Window::close() {
+        getRenderWindow().close();
+    }
+
+    void Window::draw(const sf::Drawable& drawable, const sf::RenderStates& states) {
+        getRenderWindow().draw(drawable, states);
+    }
+
+    void Window::draw(const sf::Vertex* vertices,
+                      std::size_t vertexCount,
+                      sf::PrimitiveType type,
+                      const sf::RenderStates& states) {
+        getRenderWindow().draw(vertices, vertexCount, type, states);
+    }
+
+    void Window::draw(const sf::VertexBuffer& vertexBuffer,
+                      const sf::RenderStates& states) {
+        getRenderWindow().draw(vertexBuffer, states);
+    }
+
+    void Window::draw(const sf::VertexBuffer& vertexBuffer,
+                      std::size_t         firstVertex,
+                      std::size_t         vertexCount,
+                      const sf::RenderStates& states) {
+        getRenderWindow().draw(vertexBuffer, firstVertex, vertexCount, states);
+    }
+
+    const sf::View& Window::getDefaultView() const {
+        return getRenderWindow().getDefaultView();
+    }
+
+    void Window::setView(const sf::View& view) {
+        getRenderWindow().setView(view);
+    }
+
+    const sf::View& Window::getView() const {
+        return getRenderWindow().getView();
+    }
+
+    void Window::setTitle(const b::string& title) {
+        getRenderWindow().setTitle(title);
+    }
+
+    sf::IntRect Window::getViewport(const sf::View& view) const {
+        return getRenderWindow().getViewport(view);
+    }
+
+    b::vec2 Window::mapCoordsToPixel(const b::vec2& point) const {
+        return getRenderWindow().mapCoordsToPixel(point);
+    }
+
+    b::vec2 Window::mapCoordsToPixel(const b::vec2& point, const sf::View& view) const {
+        return getRenderWindow().mapCoordsToPixel(point, view);
+    }
+
+    b::vec2 Window::mapPixelToCoords(const b::vec2& pixel) const {
+        return getRenderWindow().mapPixelToCoords(pixel);
+    }
+
+    b::vec2 Window::mapPixelToCoords(const b::vec2& pixel, const sf::View& view) const {
+        return getRenderWindow().mapPixelToCoords(pixel, view);
+    }
+
+    bool Window::hasFocus() const {
+        return getRenderWindow().hasFocus();
+    }
+
+    bool Window::setActive(bool active) {
+        return getRenderWindow().setActive(active);
+    }
+
+    void Window::setJoystickThreshold(float threshold) {
+        getRenderWindow().setJoystickThreshold(threshold);
+    }
+
+    void Window::setKeyRepeatEnabled(bool enabled) {
+        getRenderWindow().setKeyRepeatEnabled(enabled);
+    }
+
+    void Window::setMouseCursorGrabbed(bool grabbed) {
+        getRenderWindow().setMouseCursorGrabbed(grabbed);
+    }
+
+    void Window::setMouseCursorVisible(bool visible) {
+        getRenderWindow().setMouseCursorVisible(visible);
+    }
+
+    void Window::setMouseCursor(const sf::Cursor& cursor) {
+        getRenderWindow().setMouseCursor(cursor);
+    }
+
+    void Window::setVerticalSyncEnabled(bool enabled) {
+        getRenderWindow().setVerticalSyncEnabled(enabled);
+    }
+
+    void Window::setVisible(bool visible) {
+        getRenderWindow().setVisible(visible);
+    }
+
+    void Window::invokeUpdate() {
 
 #ifdef B_OS_WINDOWS
         if (useWin32ImmersiveDarkMode != m_win32IDMActive) {
             BOOL useDarkMode = static_cast<BOOL>(useWin32ImmersiveDarkMode);
             bool const setImmersiveDarkModeSuccess = SUCCEEDED(DwmSetWindowAttribute(
-                    sfmlWindow.getSystemHandle(), DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE,
+                    getRenderWindow().getSystemHandle(), DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE,
                     &useDarkMode, sizeof(useDarkMode)));
             m_win32IDMActive = useWin32ImmersiveDarkMode;
             if (!setImmersiveDarkModeSuccess) {
@@ -221,18 +373,18 @@ namespace b {
 #endif
 
         sf::Event event {};
-        while (sfmlWindow.pollEvent(event)) {
-            ImGui::SFML::ProcessEvent(sfmlWindow, event);
+        while (getRenderWindow().pollEvent(event)) {
+            ImGui::SFML::ProcessEvent(getRenderWindow(), event);
 
             switch (event.type) {
                 case sf::Event::Closed:
                     if (!dispatchEvent<b::Events::WindowCloseEvent>()) {
-                        sfmlWindow.close();
+                        getRenderWindow().close();
                     }
                     break;
 
                 case sf::Event::Resized:
-                    sfmlWindow.setView(sf::View(sf::FloatRect({ 0, 0 }, b::vec2(event.size.width, event.size.height))));
+                    getRenderWindow().setView(sf::View(sf::FloatRect({ 0, 0 }, b::vec2(event.size.width, event.size.height))));
                     dispatchEvent<b::Events::WindowResizeEvent>(event.size.width, event.size.height);
                     break;
 
@@ -269,9 +421,15 @@ namespace b {
                     break;
 
                 case sf::Event::MouseMoved:
-                    m_mousePos = b::vec2(event.mouseMove.x, event.mouseMove.y);
-                    dispatchEvent<b::Events::MouseMoveEvent>(event.mouseMove);
-                    break;
+                    {
+                        b::Events::MouseMoveEvent moveEvent;
+                        moveEvent.pos = b::vec2(event.mouseMove.x, event.mouseMove.y);
+                        moveEvent.previous = b::vec2(m_mousePos.x, m_mousePos.y);
+                        moveEvent.delta = moveEvent.pos - moveEvent.previous;
+                        m_mousePos = moveEvent.pos;
+                        dispatchEvent<b::Events::MouseMoveEvent>(moveEvent);
+                        break;
+                    }
 
                 case sf::Event::MouseEntered:
                     dispatchEvent<b::Events::MouseEnteredWindowEvent>();
@@ -348,8 +506,8 @@ namespace b {
             b::log::info("Loaded successfully");
         }
 
-        sfmlWindow.clear(b::Constants::DefaultWindowBackgroundColor());
-        ImGui::SFML::Update(sfmlWindow, m_deltaClock.restart());
+        clear(b::Constants::DefaultWindowBackgroundColor());
+        ImGui::SFML::Update(getRenderWindow(), m_deltaClock.restart());
         b::LockFontStack();
 
         // And then render
@@ -379,9 +537,8 @@ namespace b {
         }
 
         b::UnlockFontStack();
-        batchRenderer.render(sfmlWindow);
-        ImGui::SFML::Render(sfmlWindow);
-        sfmlWindow.display();
+        ImGui::SFML::Render(getRenderWindow());
+        getRenderWindow().display();
 
         if (isOpen()) {
             m_lastWindowState.position = getPosition();
@@ -410,6 +567,17 @@ namespace b {
         m_errorPanelWidget([this]() {
             m_errorTextWidget();
         });
+    }
+
+    void Window::attach() {
+        m_isAttached = true;
+        onAttach();
+    }
+
+    void Window::detach() {
+        onDetach();
+        close();
+        m_isAttached = false;
     }
 
 }

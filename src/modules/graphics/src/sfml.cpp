@@ -117,7 +117,7 @@ namespace b {
 
         b::define_widget_types(module);
 
-        module.def("StopApplication", [] { BaseApplication::get().stopApplication(); });
+        module.def("StopApplication", [] { Application::get().stopApplication(); });
         module.def("Sameline", &ImGui::SameLine);
         module.def("Sameline", []() { ImGui::SameLine(); });
         module.def("LoadFont", &b::LoadFont, py::return_value_policy::reference);

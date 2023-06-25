@@ -23,7 +23,7 @@ namespace b {
 
         virtual void onConsoleSetup();
         virtual void onConsoleUpdate();
-        virtual void onConsoleCleanup();
+        virtual void onConsoleExit();
 
         void setRequestedFramerate(double requested_framerate);
         void setRequestedFrametime(double requested_frametime);
@@ -42,7 +42,7 @@ namespace b {
 
         bool _setup();
         bool _update();
-        bool _cleanup();
+        bool _exit();
 
         bool m_stopRequested { false };
         double m_requestedFramerate { 0.0 };

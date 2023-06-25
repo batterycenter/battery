@@ -5,46 +5,46 @@
 
 namespace b {
 
-    BaseApplication::BaseApplication() {
+    Application::Application() {
         setRequestedFramerate(60.0);
-
     }
 
-    BaseApplication & BaseApplication::get() {
-        return dynamic_cast<BaseApplication&>(b::ConsoleApplication::get());
+    Application::~Application() {
+        detachWindows();
+        ImGui::SFML::Shutdown();
     }
 
-    void BaseApplication::detachWindows() {
-        for (auto& window : m_windows) {
-            window->onDetach();
+    Application & Application::get() {
+        return dynamic_cast<Application&>(b::ConsoleApplication::get());
+    }
+
+    void Application::detachWindows() {
+        while (!m_windows.empty()) {
+            detachWindow(m_windows.back().get());
         }
-        m_windows.clear();
     }
 
-    std::vector<std::shared_ptr<b::Window>>& BaseApplication::windows() {
+    std::vector<std::reference_wrapper<b::Window>>& Application::windowRefs() {
         return m_windows;
     }
 
-    void BaseApplication::onConsoleSetup() {
+    void Application::onConsoleSetup() {
         onSetup();
     }
 
-    void BaseApplication::onConsoleUpdate() {
+    void Application::onConsoleUpdate() {
         onUpdate();
         for (auto& window : m_windows) {
-            if (window->isOpen()) {
-                window->framecount = m_framecount;
-                window->frametime = m_frametime;
-                window->framerate = m_framerate;
-                window->invoke_update();
-            }
+            window.get().framecount = m_framecount;
+            window.get().frametime = m_frametime;
+            window.get().framerate = m_framerate;
+            window.get().invokeUpdate();
         }
     }
 
-    void BaseApplication::onConsoleCleanup() {
-        onCleanup();
+    void Application::onConsoleExit() {
+        onExit();
         detachWindows();
-        ImGui::SFML::Shutdown();
     }
 
 } // namespace b
