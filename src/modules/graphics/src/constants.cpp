@@ -11,7 +11,7 @@ namespace b {
         return { "roboto-regular", 18.f };
     }
 
-    b::vec2 Constants::DefaultWindowSize() {
+    b::Vec2 Constants::DefaultWindowSize() {
         return { 1280, 720 };
     }
 

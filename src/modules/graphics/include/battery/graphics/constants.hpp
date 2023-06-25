@@ -11,7 +11,7 @@ namespace b {
     namespace Constants {
         sf::Color DefaultWindowBackgroundColor();
         std::pair<b::string, double> DefaultFont();
-        b::vec2 DefaultWindowSize();
+        b::Vec2 DefaultWindowSize();
         b::string DefaultWindowTitle();
     } // namespace Constants
 

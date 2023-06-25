@@ -127,7 +127,7 @@ namespace b {
         module.def("ShowDemoWindow", []() { ImGui::ShowDemoWindow(nullptr); });
     }
 
-    double distance(const b::vec2& a, const b::vec2& b) {
+    double distance(const b::Vec2& a, const b::Vec2& b) {
         return std::sqrt(std::pow(a.x - b.x, 2) + std::pow(a.y - b.y, 2));
     }
 
@@ -139,15 +139,15 @@ namespace b {
         return degrees * b::Constants::Pi() / 180.0;
     }
 
-    b::vec2 round(const b::vec2& v) {
+    b::Vec2 round(const b::Vec2& v) {
         return { std::round(v.x), std::round(v.y) };
     }
 
-    b::vec2 min(const b::vec2& a, const b::vec2& b) {
+    b::Vec2 min(const b::Vec2& a, const b::Vec2& b) {
         return { std::min(a.x, b.x), std::min(a.y, b.y) };
     }
 
-    b::vec2 max(const b::vec2& a, const b::vec2& b) {
+    b::Vec2 max(const b::Vec2& a, const b::Vec2& b) {
         return { std::max(a.x, b.x), std::max(a.y, b.y) };
     }
 
@@ -155,7 +155,7 @@ namespace b {
         return (val - val_min) / (val_max - val_min) * (new_max - new_min) + new_min;
     }
 
-    b::vec2 lerp(const b::vec2& val, const b::vec2& val_min, const b::vec2& val_max, const b::vec2& new_min, const b::vec2& new_max) {
+    b::Vec2 lerp(const b::Vec2& val, const b::Vec2& val_min, const b::Vec2& val_max, const b::Vec2& new_min, const b::Vec2& new_max) {
         return {
             lerp(val.x, val_min.x, val_max.x, new_min.x, new_max.x),
             lerp(val.y, val_min.y, val_max.y, new_min.y, new_max.y)

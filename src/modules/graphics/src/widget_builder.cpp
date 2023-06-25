@@ -71,7 +71,7 @@ namespace b::widgets {
         return *this;
     }
 
-    std::optional<b::vec2> widget_builder::vec2_rule::get_result() {
+    std::optional<b::Vec2> widget_builder::vec2_rule::get_result() {
         auto property = property_stack::get(tag);
         if (property) {
             if (property.value().get_properties().size() != 2) {
@@ -80,7 +80,7 @@ namespace b::widgets {
                         tag, property.value().get_properties().size()));
             }
 
-            b::vec2 result(0, 0);
+            b::Vec2 result(0, 0);
             for (auto& [unit, transformer] : cases_x) {
                 if (property.value().get_properties()[0].unit() == unit) {
                     result.x = transformer(property.value().get_properties()[0].numeric());
@@ -96,7 +96,7 @@ namespace b::widgets {
         return {};
     }
 
-    b::vec2 widget_builder::vec2_rule::get_result(b::vec2 default_value) {
+    b::Vec2 widget_builder::vec2_rule::get_result(b::Vec2 default_value) {
         if (auto result = get_result()) {
             return result.value();
         }

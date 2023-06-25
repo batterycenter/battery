@@ -42,7 +42,7 @@ namespace b {
         ImGui::SFML::Shutdown(getRenderWindow());
     }
 
-    void Window::create(const b::vec2& size, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
+    void Window::create(const b::Vec2& size, const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
         create(sf::VideoMode(size), title, style, settings);
     }
 
@@ -76,8 +76,8 @@ namespace b {
     void Window::create(const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
 
         // Reload the window where it was last closed
-        b::vec2 size = m_defaultWindowSize;
-        b::vec2 position = { (sf::VideoMode::getDesktopMode().size.x - size.x) / 2.0,
+        b::Vec2 size = m_defaultWindowSize;
+        b::Vec2 position = {(sf::VideoMode::getDesktopMode().size.x - size.x) / 2.0,
                              (sf::VideoMode::getDesktopMode().size.y - size.y) / 2.0 };
         bool maximized = false;
 
@@ -114,7 +114,7 @@ namespace b {
         }
     }
 
-    void Window::setDefaultWindowSize(const b::vec2& size) {
+    void Window::setDefaultWindowSize(const b::Vec2& size) {
         m_defaultWindowSize = size;
         if (isOpen()) {
             b::log::warn("b::window::rememberWindowPositionJsonFile() called after window was already created. "
@@ -185,15 +185,15 @@ namespace b {
 #endif
     }
 
-    b::vec2 Window::getMousePos() {
+    b::Vec2 Window::getMousePos() {
         return m_mousePos;
     }
 
-    b::vec2 Window::getMousePosPrev() {
+    b::Vec2 Window::getMousePosPrev() {
         return m_mousePosPrev;
     }
 
-    b::vec2 Window::getMouseDelta() {
+    b::Vec2 Window::getMouseDelta() {
         return m_mouseDelta;
     }
 
@@ -222,23 +222,23 @@ namespace b {
         getRenderWindow().setIcon(icon);
     }
 
-    void Window::setIcon(const b::vec2& size, const std::uint8_t* pixels) {
+    void Window::setIcon(const b::Vec2& size, const std::uint8_t* pixels) {
         getRenderWindow().setIcon(size, pixels);
     }
 
-    void Window::setPosition(const b::vec2& position) {
+    void Window::setPosition(const b::Vec2& position) {
         getRenderWindow().setPosition(position);
     }
 
-    b::vec2 Window::getPosition() const {
+    b::Vec2 Window::getPosition() const {
         return getRenderWindow().getPosition();
     }
 
-    void Window::setSize(const b::vec2& size) {
+    void Window::setSize(const b::Vec2& size) {
         getRenderWindow().setSize(size);
     }
 
-    b::vec2 Window::getSize() const {
+    b::Vec2 Window::getSize() const {
         return getRenderWindow().getSize();
     }
 
@@ -305,19 +305,19 @@ namespace b {
         return getRenderWindow().getViewport(view);
     }
 
-    b::vec2 Window::mapCoordsToPixel(const b::vec2& point) const {
+    b::Vec2 Window::mapCoordsToPixel(const b::Vec2& point) const {
         return getRenderWindow().mapCoordsToPixel(point);
     }
 
-    b::vec2 Window::mapCoordsToPixel(const b::vec2& point, const sf::View& view) const {
+    b::Vec2 Window::mapCoordsToPixel(const b::Vec2& point, const sf::View& view) const {
         return getRenderWindow().mapCoordsToPixel(point, view);
     }
 
-    b::vec2 Window::mapPixelToCoords(const b::vec2& pixel) const {
+    b::Vec2 Window::mapPixelToCoords(const b::Vec2& pixel) const {
         return getRenderWindow().mapPixelToCoords(pixel);
     }
 
-    b::vec2 Window::mapPixelToCoords(const b::vec2& pixel, const sf::View& view) const {
+    b::Vec2 Window::mapPixelToCoords(const b::Vec2& pixel, const sf::View& view) const {
         return getRenderWindow().mapPixelToCoords(pixel, view);
     }
 
@@ -384,7 +384,7 @@ namespace b {
                     break;
 
                 case sf::Event::Resized:
-                    getRenderWindow().setView(sf::View(sf::FloatRect({ 0, 0 }, b::vec2(event.size.width, event.size.height))));
+                    getRenderWindow().setView(sf::View(sf::FloatRect({ 0, 0 }, b::Vec2(event.size.width, event.size.height))));
                     dispatchEvent<b::Events::WindowResizeEvent>(event.size.width, event.size.height);
                     break;
 
@@ -423,8 +423,8 @@ namespace b {
                 case sf::Event::MouseMoved:
                     {
                         b::Events::MouseMoveEvent moveEvent;
-                        moveEvent.pos = b::vec2(event.mouseMove.x, event.mouseMove.y);
-                        moveEvent.previous = b::vec2(m_mousePos.x, m_mousePos.y);
+                        moveEvent.pos = b::Vec2(event.mouseMove.x, event.mouseMove.y);
+                        moveEvent.previous = b::Vec2(m_mousePos.x, m_mousePos.y);
                         moveEvent.delta = moveEvent.pos - moveEvent.previous;
                         m_mousePos = moveEvent.pos;
                         dispatchEvent<b::Events::MouseMoveEvent>(moveEvent);

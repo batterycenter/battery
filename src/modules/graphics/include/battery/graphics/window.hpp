@@ -27,9 +27,9 @@ namespace b {
         struct MouseButtonPressEvent : public sf::Event::MouseButtonEvent {};
         struct MouseButtonReleaseEvent : public sf::Event::MouseButtonEvent {};
         struct MouseMoveEvent {
-            b::vec2 pos;
-            b::vec2 delta;
-            b::vec2 previous;
+            b::Vec2 pos;
+            b::Vec2 delta;
+            b::Vec2 previous;
         };
         struct MouseEnteredWindowEvent {};
         struct MouseLeftWindowEvent {};
@@ -55,7 +55,7 @@ namespace b {
         Window() : m_eventbus(std::make_shared<b::event_bus>()), m_eventListener(m_eventbus) {};
         ~Window() noexcept;
 
-        void create(const b::vec2& mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings(0, 0, 8));
+        void create(const b::Vec2& mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings(0, 0, 8));
         void create(sf::VideoMode mode, const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings(0, 0, 8), bool silenceJsonWarning = false);
         void create(const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings(0, 0, 8));
         virtual void onAttach() = 0;
@@ -80,7 +80,7 @@ namespace b {
 
         void pyInit(py::function python_ui_loop);
         void rememberWindowPositionJsonFile(const b::fs::path& filename);
-        void setDefaultWindowSize(const b::vec2& size);
+        void setDefaultWindowSize(const b::Vec2& size);
 
         void showInTaskbar();
         void hideFromTaskbar();
@@ -90,9 +90,9 @@ namespace b {
         bool isMaximized();
         bool isMinimized();
 
-        b::vec2 getMousePos();
-        b::vec2 getMousePosPrev();
-        b::vec2 getMouseDelta();
+        b::Vec2 getMousePos();
+        b::Vec2 getMousePosPrev();
+        b::Vec2 getMouseDelta();
         bool isAttached() const { return m_isAttached; }
 
         template<typename T>
@@ -113,13 +113,13 @@ namespace b {
         const sf::RenderWindow& getRenderWindow() const;
 
         void setIcon(const sf::Image& icon);
-        void setIcon(const b::vec2& size, const std::uint8_t* pixels);
+        void setIcon(const b::Vec2& size, const std::uint8_t* pixels);
 
-        void setPosition(const b::vec2& position);
-        b::vec2 getPosition() const;
+        void setPosition(const b::Vec2& position);
+        b::Vec2 getPosition() const;
 
-        void setSize(const b::vec2& size);
-        b::vec2 getSize() const;
+        void setSize(const b::Vec2& size);
+        b::Vec2 getSize() const;
 
         void setFramerateLimit(int limit);
 
@@ -154,11 +154,11 @@ namespace b {
 
         sf::IntRect getViewport(const sf::View& view) const;
 
-        b::vec2 mapCoordsToPixel(const b::vec2& point) const;
-        b::vec2 mapCoordsToPixel(const b::vec2& point, const sf::View& view) const;
+        b::Vec2 mapCoordsToPixel(const b::Vec2& point) const;
+        b::Vec2 mapCoordsToPixel(const b::Vec2& point, const sf::View& view) const;
 
-        b::vec2 mapPixelToCoords(const b::vec2& pixel) const;
-        b::vec2 mapPixelToCoords(const b::vec2& pixel, const sf::View& view) const;
+        b::Vec2 mapPixelToCoords(const b::Vec2& pixel) const;
+        b::Vec2 mapPixelToCoords(const b::Vec2& pixel, const sf::View& view) const;
 
         bool hasFocus() const;
 
@@ -204,16 +204,16 @@ namespace b {
         bool m_win32IDMActive = !useWin32ImmersiveDarkMode;
 
         b::fs::path m_windowPositionJsonFile;
-        b::vec2 m_defaultWindowSize = Constants::DefaultWindowSize();
+        b::Vec2 m_defaultWindowSize = Constants::DefaultWindowSize();
 
-        b::vec2 m_mousePos;
-        b::vec2 m_mousePosPrev;
-        b::vec2 m_mouseDelta;
+        b::Vec2 m_mousePos;
+        b::Vec2 m_mousePosPrev;
+        b::Vec2 m_mouseDelta;
         bool m_isAttached = false;
 
         struct WindowState {
-            b::vec2 size;
-            b::vec2 position;
+            b::Vec2 size;
+            b::Vec2 position;
             bool maximized = false;
         } m_lastWindowState;
     };

@@ -66,7 +66,7 @@ namespace b {
 
         if (!this->_setup()) {
             this->_exit();
-            return m_exitCode;
+            return exitCode;
         }
 
         this->frametime = 0.0;

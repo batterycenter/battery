@@ -112,18 +112,18 @@ namespace pybind11::detail {
 namespace b {
     void define_python_types(b::py::module& module);
 
-    double distance(const b::vec2& p1, const b::vec2& p2);
+    double distance(const b::Vec2& p1, const b::Vec2& p2);
 
     double degrees(double radians);
     double radians(double degrees);
 
-    b::vec2 round(const b::vec2& v);    // TODO: Maybe this should go in b::vec2 too?
+    b::Vec2 round(const b::Vec2& v);    // TODO: Maybe this should go in b::vec2 too?
 
-    b::vec2 min(const b::vec2& v1, const b::vec2& v2);
-    b::vec2 max(const b::vec2& v1, const b::vec2& v2);
+    b::Vec2 min(const b::Vec2& v1, const b::Vec2& v2);
+    b::Vec2 max(const b::Vec2& v1, const b::Vec2& v2);
 
     // TODO: Refactor lerp functions to be more consistent with all possible usages (Arduino/Processing/ImGui/...)
 
     double lerp(double val, double val_min, double val_max, double new_min, double new_max);
-    b::vec2 lerp(const b::vec2& val, const b::vec2& val_min, const b::vec2& val_max, const b::vec2& new_min, const b::vec2& new_max);
+    b::Vec2 lerp(const b::Vec2& val, const b::Vec2& val_min, const b::Vec2& val_max, const b::Vec2& new_min, const b::Vec2& new_max);
 }

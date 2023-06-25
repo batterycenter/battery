@@ -7,11 +7,11 @@ namespace b {
         m_va.setPrimitiveType(sf::PrimitiveType::Triangles);
     }
 
-    void BatchRenderer::drawLine(const b::vec2& pos1, const b::vec2& pos2, const sf::Color& color, double thickness) {
+    void BatchRenderer::drawLine(const b::Vec2& pos1, const b::Vec2& pos2, const sf::Color& color, double thickness) {
         auto span = pos2 - pos1;
         m_rectShape.setPosition(pos1);
-        m_rectShape.setOrigin(b::vec2(0, thickness));
-        m_rectShape.setSize(b::vec2(span.length(), thickness));
+        m_rectShape.setOrigin(b::Vec2(0, thickness));
+        m_rectShape.setSize(b::Vec2(span.length(), thickness));
         m_rectShape.setFillColor(color);
         m_rectShape.setOutlineThickness({});
         m_rectShape.setOutlineColor({});
@@ -28,7 +28,7 @@ namespace b {
     }
 
 
-    void BatchRenderer::drawRect(const b::vec2& pos, const b::vec2& size, sf::Color fillColor, double outlineThickness, sf::Color outlineColor) {
+    void BatchRenderer::drawRect(const b::Vec2& pos, const b::Vec2& size, sf::Color fillColor, double outlineThickness, sf::Color outlineColor) {
         m_rectShape.setPosition(pos);
         m_rectShape.setOrigin({});
         m_rectShape.setSize(size);
@@ -73,7 +73,7 @@ namespace b {
         m_va.clear();
     }
 
-    void BatchRenderer::appendSimpleRect(const b::vec2& pos1, const b::vec2& pos2, const b::vec2& pos3, const b::vec2& pos4, sf::Color color) {
+    void BatchRenderer::appendSimpleRect(const b::Vec2& pos1, const b::Vec2& pos2, const b::Vec2& pos3, const b::Vec2& pos4, sf::Color color) {
         m_va.append(sf::Vertex(pos1, color));
         m_va.append(sf::Vertex(pos2, color));
         m_va.append(sf::Vertex(pos3, color));
@@ -82,7 +82,7 @@ namespace b {
         m_va.append(sf::Vertex(pos1, color));
     }
 
-    void BatchRenderer::appendSimpleLine(const b::vec2& pos1, const b::vec2& pos2, sf::Color color, double thickness) {
+    void BatchRenderer::appendSimpleLine(const b::Vec2& pos1, const b::Vec2& pos2, sf::Color color, double thickness) {
         auto dir = pos2 - pos1;
         auto normDir = dir.normalized(true);
         auto perp = dir.perpendicular().normalized(true);

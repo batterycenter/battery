@@ -44,8 +44,8 @@ namespace b::widgets {
 
             vec2_rule& add_case_x(enum b::Unit unit, const std::function<double(double)>& transformer);
             vec2_rule& add_case_y(enum b::Unit unit, const std::function<double(double)>& transformer);
-            std::optional<b::vec2> get_result();
-            b::vec2 get_result(b::vec2 default_value);
+            std::optional<b::Vec2> get_result();
+            b::Vec2 get_result(b::Vec2 default_value);
             void push(ImGuiStyleVar_ style_var);
 
             vec2_rule& operator=(const vec2_rule&) = delete;
