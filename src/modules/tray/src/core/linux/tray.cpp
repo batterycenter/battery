@@ -18,10 +18,7 @@
 // It has been heavily modified and modernized to work with battery.
 //
 
-#ifndef BATTERY_CORE_NO_TRAY
-
-#include "battery/core/environment.hpp"
-#ifndef BATTERY_ARCH_WINDOWS
+#ifndef B_OS_WINDOWS
 
 #include <stdexcept>
 #include <libayatana-appindicator/app-indicator.h>
@@ -154,5 +151,4 @@ namespace b::tray {
 
 }
 
-#endif // !BATTERY_ARCH_WINDOWS
-#endif // BATTERY_CORE_NO_TRAY
+#endif // !B_OS_WINDOWS

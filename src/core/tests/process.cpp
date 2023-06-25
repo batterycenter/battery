@@ -55,8 +55,9 @@ TEST(BatteryCore_Process, ProcessRedirectStdoutUtf8) {
 
 TEST(BatteryCore_Process, ProcessRedirectStdin) {
     b::process proc;
+    b::fs::path filename;
     if (b::Constants::Platform() == b::Platform::Windows) {
-        auto filename = "battery-core-unit-test-process-redirect.bat";
+        filename = "battery-core-unit-test-process-redirect.bat";
         b::fs::ofstream file(filename);
         file <<
             "@echo off\n"
@@ -70,7 +71,7 @@ TEST(BatteryCore_Process, ProcessRedirectStdin) {
         proc.options.arguments.emplace_back(filename);
     }
     else {
-        auto filename = "battery-core-unit-test-process-redirect.sh";
+        filename = "battery-core-unit-test-process-redirect.sh";
         b::fs::ofstream file(filename);
         file <<
             "#!/bin/bash\n"

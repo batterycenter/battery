@@ -35,9 +35,9 @@ namespace b {
     void Application::onConsoleUpdate() {
         onUpdate();
         for (auto& window : m_windows) {
-            window.get().framecount = m_framecount;
-            window.get().frametime = m_frametime;
-            window.get().framerate = m_framerate;
+            window.get().framecount = framecount;
+            window.get().frametime = frametime;
+            window.get().framerate = framerate;
             window.get().invokeUpdate();
         }
     }

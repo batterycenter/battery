@@ -18,8 +18,6 @@
 // It has been heavily modified and modernized to work with battery.
 //
 
-#ifndef BATTERY_CORE_NO_TRAY
-
 #include "battery/tray/core/traybase.hpp"
 
 namespace b::tray {
@@ -54,5 +52,3 @@ namespace b::tray {
     }
 
 }
-
-#endif // BATTERY_CORE_NO_TRAY

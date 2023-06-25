@@ -18,8 +18,7 @@
 // It has been heavily modified and modernized to work with battery.
 //
 
-#ifndef BATTERY_CORE_NO_TRAY
-#ifdef _WIN32
+#ifdef B_OS_WINDOWS
 
 #include "battery/core/string.hpp"
 #include "battery/core/resource.hpp"
@@ -41,7 +40,7 @@ namespace b::tray {
 
     static constexpr auto WM_TRAY = WM_USER + 1;
 
-    static HICON loadIcon(const b::resource& icon) {
+    static HICON loadIcon(const b::Resource& icon) {
         return CreateIconFromResourceEx(std::bit_cast<PBYTE>(icon.data()), icon.size(), true, 0x00030000, 0, 0, LR_DEFAULTCOLOR);
     }
 
@@ -81,7 +80,7 @@ namespace b::tray {
         lstrcpyW(notifyData.szTip, getTooltip().wstr().c_str());
         notifyData.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
         notifyData.uCallbackMessage = WM_TRAY;
-        notifyData.hIcon = loadIcon(b::resource::from_base64(b::constants::battery_icon_base64()));
+        notifyData.hIcon = loadIcon(b::Resource::FromBase64(b::Constants::BatteryIconBase64()));
 
         if (Shell_NotifyIcon(NIM_ADD, &notifyData) == FALSE) {
             throw std::runtime_error("Failed to register tray icon");
@@ -218,7 +217,7 @@ namespace b::tray {
         return DefWindowProc(hwnd, msg, wParam, lParam);
     }
 
-    void tray::setIcon(const b::resource& icon) {
+    void tray::setIcon(const b::Resource& icon) {
         DestroyIcon(notifyData.hIcon);
         notifyData.hIcon = loadIcon(icon);
         update();
@@ -247,5 +246,4 @@ namespace b::tray {
 
 }
 
-#endif // _WIN32
-#endif // BATTERY_CORE_NO_TRAY
+#endif // B_OS_WINDOWS

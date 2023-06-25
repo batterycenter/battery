@@ -1,6 +1,6 @@
 #pragma once
 
-#include "battery/core/all.hpp"
+#include "battery/core.hpp"
 #include "Error.h"
 
 class ProjectGenerator {

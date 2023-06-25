@@ -61,15 +61,16 @@ namespace b {
 
 
     int ConsoleApplication::run(const b::string& appname, const std::vector<b::string>& args) {
-        this->m_args = args;
+        this->args = args;
         b::Folders::ApplicationName() = appname;
 
         if (!this->_setup()) {
+            this->_exit();
             return m_exitCode;
         }
 
-        this->m_frametime = 0.0;
-        this->m_framerate = 0.0;
+        this->frametime = 0.0;
+        this->framerate = 0.0;
 
         auto lastFrame = b::time();
         while (!this->m_stopRequested) {
@@ -79,16 +80,16 @@ namespace b {
             }
             sleep(1.0 / this->m_requestedFramerate - (b::time() - lastFrame));
 
-            this->m_framecount++;
-            this->m_frametime = b::time() - lastFrame;
-            if (this->m_frametime > 0.0) {
-                this->m_framerate = 1.0 / this->m_frametime;
+            this->framecount++;
+            this->frametime = b::time() - lastFrame;
+            if (this->frametime > 0.0) {
+                this->framerate = 1.0 / this->frametime;
             }
 
             lastFrame = b::time();
         }
         _exit();
-        return m_exitCode;
+        return exitCode;
     }
 
 
