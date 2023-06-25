@@ -15,11 +15,11 @@ namespace b {
         static ConsoleApplication & get();
         static bool instanceExists();
 
-        std::vector<b::string> m_args;
-        double m_framerate { 0.0 };
-        double m_frametime { 0.0 };
-        uint64_t m_framecount { 0 };
-        int m_exitCode { 0 };
+        std::vector<b::string> args;
+        double framerate { 0.0 };
+        double frametime { 0.0 };
+        uint64_t framecount { 0 };
+        int exitCode { 0 };
 
         virtual void onConsoleSetup();
         virtual void onConsoleUpdate();

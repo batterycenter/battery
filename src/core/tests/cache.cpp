@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 
 TEST(BatteryCore_Cache, Cache) {
-    auto path = b::folders::get_cache() + "unit_test.cache";
+    auto path = b::Folders::AppCacheDir() + "unit_test.cache";
     if (b::fs::exists(path)) {
         b::fs::remove(path);
     }

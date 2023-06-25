@@ -21,7 +21,7 @@
 
 b::expected<std::nullopt_t,Error> parse_cli(const std::vector<b::string>& args) {
 
-    b::string version_message = CLI_PRODUCT_NAME + " version " + resources::battery_cli::version.string();
+    b::string version_message = CLI_PRODUCT_NAME + " version " + Resources::battery_cli::version.string();
     b::string message = version_message + "\n"
         "Your main tool for working with https://github.com/batterycenter/battery\n"
         "Supports you with project generation, building, deploying to your cloud and more!\n";

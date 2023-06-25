@@ -7,6 +7,8 @@
 #include <shobjidl.h>
 #endif
 
+#include <source_location>
+
 namespace b {
 
 #ifdef B_OS_WINDOWS

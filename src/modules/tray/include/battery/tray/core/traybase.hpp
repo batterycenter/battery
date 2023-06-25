@@ -56,7 +56,7 @@ namespace b::tray {
 
         void addClickCallback(MouseButton button, const std::function<void()>& callback);
 
-        virtual void setIcon(const b::resource& icon) = 0;
+        virtual void setIcon(const b::Resource& icon) = 0;
         virtual void run() = 0;
         [[nodiscard]] virtual bool run_nonblocking() = 0;
         virtual void exit() = 0;

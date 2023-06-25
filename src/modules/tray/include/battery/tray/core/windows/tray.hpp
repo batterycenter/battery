@@ -20,8 +20,7 @@
 
 #pragma once
 
-#include "battery/core/environment.hpp"
-#ifdef BATTERY_ARCH_WINDOWS
+#ifdef B_OS_WINDOWS
 
 #include <map>
 #include <Windows.h>
@@ -35,7 +34,7 @@ namespace b::tray {
         tray(b::string identifier, b::string tooltip, MouseButton clickAction = MouseButton::RIGHT);
         ~tray() override = default;
 
-        void setIcon(const b::resource& icon) override;
+        void setIcon(const b::Resource& icon) override;
         void run() override;
         [[nodiscard]] bool run_nonblocking() override;
         void exit() override;
@@ -53,4 +52,4 @@ namespace b::tray {
 
 } // namespace Tray
 
-#endif // BATTERY_ARCH_WINDOWS
+#endif // B_OS_WINDOWS

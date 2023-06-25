@@ -20,8 +20,7 @@
 
 #pragma once
 
-#include "battery/core/environment.hpp"
-#ifndef BATTERY_ARCH_WINDOWS
+#ifndef B_OS_WINDOWS
 
 #include <string>
 #include "battery/tray/core/traybase.hpp"
@@ -46,4 +45,4 @@ namespace b::tray {
 
 } // namespace Tray
 
-#endif // !BATTERY_ARCH_WINDOWS
+#endif // !B_OS_WINDOWS

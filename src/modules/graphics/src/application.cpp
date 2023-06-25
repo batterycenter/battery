@@ -33,9 +33,9 @@ namespace b {
         onUpdate();
         for (auto& window : m_windows) {
             if (window->isOpen()) {
-                window->m_framecount = m_framecount;
-                window->m_frametime = m_frametime;
-                window->m_framerate = m_framerate;
+                window->m_framecount = framecount;
+                window->m_frametime = frametime;
+                window->m_framerate = framerate;
                 window->invoke_update();
             }
         }

@@ -1,5 +1,5 @@
 
-#include "battery/core/all.hpp"
+#include "battery/core.hpp"
 #include "console.h"
 
 static std::unique_ptr<indicators::ProgressBar> make_option(const b::string& label) {
