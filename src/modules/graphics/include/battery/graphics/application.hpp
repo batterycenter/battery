@@ -44,6 +44,8 @@ namespace b {
 
         void detachWindows();
 
+        b::Window& getCurrentlyUpdatingWindow();
+
         std::vector<std::reference_wrapper<b::Window>>& windowRefs();
 
     private:
@@ -53,6 +55,7 @@ namespace b {
 
         b::py::scoped_interpreter m_guard{};
         std::vector<std::reference_wrapper<b::Window>> m_windows;
+        b::Window* m_currentActiveWindow;
     };
 
     template<b::derived_from<b::PyContext> T, b::template_string_literal ContextName>

@@ -24,6 +24,13 @@ namespace b {
         }
     }
 
+    b::Window& Application::getCurrentlyUpdatingWindow() {
+        if (m_currentActiveWindow == nullptr) {
+            throw std::runtime_error("Application::getCurrentlyUpdatingWindow(): Cannot get window, no window is currently updating or rendering");
+        }
+        return *m_currentActiveWindow;
+    }
+
     std::vector<std::reference_wrapper<b::Window>>& Application::windowRefs() {
         return m_windows;
     }
@@ -38,12 +45,17 @@ namespace b {
             window.get().framecount = framecount;
             window.get().frametime = frametime;
             window.get().framerate = framerate;
+            m_currentActiveWindow = &window.get();
             window.get().invokeUpdate();
         }
+        m_currentActiveWindow = nullptr;
+
         onRender();
         for (auto& window : m_windows) {
+            m_currentActiveWindow = &window.get();
             window.get().invokeRender();
         }
+        m_currentActiveWindow = nullptr;
     }
 
     void Application::onConsoleExit() {

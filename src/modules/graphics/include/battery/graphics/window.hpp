@@ -10,6 +10,7 @@
 #include "battery/graphics/constants.hpp"
 #include "battery/graphics/primitive_render_window.hpp"
 #include "battery/graphics/batch_renderer.hpp"
+#include "battery/graphics/mouse.hpp"
 #include "battery/core/resource_loader.hpp"
 #include "battery/eventbus.hpp"
 
@@ -25,14 +26,12 @@ namespace b {
         struct TextEnteredEvent : public sf::Event::TextEvent {};
         struct KeyPressEvent : public sf::Event::KeyEvent {};
         struct KeyReleaseEvent : public sf::Event::KeyEvent {};
-        struct MouseWheelScrollEvent : public sf::Event::MouseWheelScrollEvent {};
+        struct MouseWheelScrollEvent {
+            b::Vec2 scrollDelta;
+        };
         struct MouseButtonPressEvent : public sf::Event::MouseButtonEvent {};
         struct MouseButtonReleaseEvent : public sf::Event::MouseButtonEvent {};
-        struct MouseMoveEvent {
-            b::Vec2 pos;
-            b::Vec2 delta;
-            b::Vec2 previous;
-        };
+        struct MouseMoveEvent : public MousePositionData {};
         struct MouseEnteredWindowEvent {};
         struct MouseLeftWindowEvent {};
         struct JoystickButtonPressEvent : public sf::Event::JoystickButtonEvent {};
@@ -51,6 +50,7 @@ namespace b {
         double framerate { 0.0 };
         double frametime { 0.0 };
         uint64_t framecount { 0 };
+        MousePositionData mouse;
         bool useWin32ImmersiveDarkMode = true;
         widget_style style;
 
@@ -92,9 +92,6 @@ namespace b {
         bool isMaximized();
         bool isMinimized();
 
-        b::Vec2 getMousePos();
-        b::Vec2 getMousePosPrev();
-        b::Vec2 getMouseDelta();
         bool isAttached() const { return m_isAttached; }
 
         // Prevent all move and assignment operations due to the reference
@@ -196,6 +193,7 @@ namespace b {
         b::widgets::text m_errorTextWidget;
         bool m_firstWindowCreation = true;
 
+        b::Events::MouseMoveEvent m_mouseMoveEventData;
         std::shared_ptr<b::event_bus> m_eventbus;
         b::event_listener m_eventListener;
 
@@ -205,9 +203,6 @@ namespace b {
         b::fs::path m_windowPositionJsonFile;
         b::Vec2 m_defaultWindowSize = Constants::DefaultWindowSize();
 
-        b::Vec2 m_mousePos;
-        b::Vec2 m_mousePosPrev;
-        b::Vec2 m_mouseDelta;
         bool m_isAttached = false;
 
         struct WindowState {

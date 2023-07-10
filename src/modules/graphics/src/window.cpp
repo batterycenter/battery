@@ -71,6 +71,8 @@ namespace b {
         if (image.loadFromMemory(icon.data(), icon.size())) {
             (void)getRenderWindow().setIcon(image);
         }
+
+        b::load_theme("default");
     }
 
     void Window::create(const b::string& title, std::uint32_t style, const sf::ContextSettings& settings) {
@@ -179,18 +181,6 @@ namespace b {
 #else
 #warning "Not implemented"
 #endif
-    }
-
-    b::Vec2 Window::getMousePos() {
-        return m_mousePos;
-    }
-
-    b::Vec2 Window::getMousePosPrev() {
-        return m_mousePosPrev;
-    }
-
-    b::Vec2 Window::getMouseDelta() {
-        return m_mouseDelta;
     }
 
     sf::RenderWindow& Window::getRenderWindow() {
@@ -343,11 +333,11 @@ namespace b {
     void Window::invokeUpdate() {
 
         updateWin32DarkMode();
+        mouse.setScrollDelta({});   // Reset scroll to zero
         processWindowEvents();
+        mouse.updatePositionData(sf::Mouse::getPosition(getRenderWindow()));
+        mouse.updateButtonData();
         b::update_themes();     // TODO: Move this to a better place
-
-        m_mouseDelta = m_mousePos - m_mousePosPrev;
-        m_mousePosPrev = m_mousePos;
 
         try {
             onUpdate();
@@ -465,7 +455,13 @@ namespace b {
                     break;
 
                 case sf::Event::MouseWheelScrolled:
-                    dispatchEvent<b::Events::MouseWheelScrollEvent>(event.mouseWheelScroll);
+                    if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
+                        mouse.setScrollDelta(b::Vec2(0, event.mouseWheelScroll.delta));
+                    }
+                    else if (event.mouseWheelScroll.wheel == sf::Mouse::HorizontalWheel) {
+                        mouse.setScrollDelta(b::Vec2(event.mouseWheelScroll.delta, 0));
+                    }
+                    dispatchEvent<b::Events::MouseWheelScrollEvent>(mouse.scrollDelta);
                     break;
 
                 case sf::Event::MouseButtonPressed:
@@ -477,15 +473,9 @@ namespace b {
                     break;
 
                 case sf::Event::MouseMoved:
-                {
-                    b::Events::MouseMoveEvent moveEvent;
-                    moveEvent.pos = b::Vec2(event.mouseMove.x, event.mouseMove.y);
-                    moveEvent.previous = b::Vec2(m_mousePos.x, m_mousePos.y);
-                    moveEvent.delta = moveEvent.pos - moveEvent.previous;
-                    m_mousePos = moveEvent.pos;
-                    dispatchEvent<b::Events::MouseMoveEvent>(moveEvent);
+                    m_mouseMoveEventData.updatePositionData(b::Vec2(event.mouseMove.x, event.mouseMove.y));
+                    dispatchEvent<b::Events::MouseMoveEvent>(m_mouseMoveEventData);
                     break;
-                }
 
                 case sf::Event::MouseEntered:
                     dispatchEvent<b::Events::MouseEnteredWindowEvent>();
@@ -539,12 +529,14 @@ namespace b {
     }
 
     void Window::renderErrorMessage(const b::string& error) {
-        m_errorPanelWidget.children_style.font = "default";  // Ask it to explicitly push the default font, in case it wasn't cleaned up properly
+        m_errorPanelWidget.childrenStyle.font = "default";  // Ask it to explicitly push the default font, in case it wasn't cleaned up properly
         m_errorPanelWidget.left = 0;
         m_errorPanelWidget.top = 0;
         m_errorPanelWidget.width = getSize().x;
         m_errorPanelWidget.height = getSize().y;
-        m_errorPanelWidget.flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
+        m_errorPanelWidget.flags.noTitleBar = true;
+        m_errorPanelWidget.flags.noMove = true;
+        m_errorPanelWidget.flags.noResize = true;
         m_errorPanelWidget.style["ImGuiCol_WindowBg"] = "#333333"_u;
         m_errorPanelWidget.style["ImGuiStyleVar_WindowRounding"] = 0;
         m_errorTextWidget.label = b::format("Unhandled exception:\n{}", error);

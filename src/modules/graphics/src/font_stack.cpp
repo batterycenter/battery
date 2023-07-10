@@ -126,6 +126,7 @@ namespace b {
 
         auto [default_font, default_font_size] = b::Constants::DefaultFont();
         b::LoadFont("default", default_font, default_font_size);
+        ImGui::GetIO().FontDefault = ImGui::GetIO().Fonts->Fonts.back();
     }
 
 } // namespace b

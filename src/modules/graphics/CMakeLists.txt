@@ -7,6 +7,8 @@ battery_add_library(battery_graphics STATIC ALIAS battery::graphics)
 battery_add_source_files(battery_graphics
         src/widgets/base_widget.cpp
         src/widgets/button.cpp
+        src/widgets/button_ex.cpp
+        src/widgets/canvas_host.cpp
         src/widgets/checkbox.cpp
         src/widgets/checkbox_ex.cpp
         src/widgets/container.cpp
@@ -21,8 +23,10 @@ battery_add_source_files(battery_graphics
 
         src/application.cpp
         src/batch_renderer.cpp
+        src/canvas.cpp
         src/color_hex.cpp
         src/font_stack.cpp
+        src/mouse.cpp
         src/primitive_render_window.cpp
         src/constants.cpp
         src/property_pack.cpp
