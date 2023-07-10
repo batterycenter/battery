@@ -18,6 +18,7 @@ namespace b {
 
         virtual void onSetup() = 0;
         virtual void onUpdate() = 0;
+        virtual void onRender() = 0;
         virtual void onExit() = 0;
 
         template<b::derived_from<b::Window> T>

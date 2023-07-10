@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #include "battery/graphics/sfml.hpp"
 #include "battery/graphics/widget_style.hpp"
 #include "battery/graphics/font_stack.hpp"
@@ -60,6 +62,7 @@ namespace b {
         void create(const b::string& title, std::uint32_t style = sf::Style::Default, const sf::ContextSettings& settings = sf::ContextSettings(0, 0, 8));
         virtual void onAttach() = 0;
         virtual void onUpdate() = 0;
+        virtual void onRender() = 0;
         virtual void onDetach() = 0;
         virtual void definePythonBindings(b::py::module& module) {}
 
@@ -78,7 +81,6 @@ namespace b {
             m_eventListener.listenToCallback(listener);
         }
 
-        void pyInit(py::function python_ui_loop);
         void rememberWindowPositionJsonFile(const b::fs::path& filename);
         void setDefaultWindowSize(const b::Vec2& size);
 
@@ -94,14 +96,6 @@ namespace b {
         b::Vec2 getMousePosPrev();
         b::Vec2 getMouseDelta();
         bool isAttached() const { return m_isAttached; }
-
-        template<typename T>
-        void setPythonUiScriptResource(const T& script) {
-            m_uiScriptResourceLoader = std::make_unique<b::ResourceLoader>(script, [this](const auto& resource) {
-                m_uiScriptResource = resource;
-                m_uiScriptLoaded = false;
-            });
-        }
 
         // Prevent all move and assignment operations due to the reference
         Window(const Window&) = delete;
@@ -177,22 +171,27 @@ namespace b {
         void setVisible(bool visible);
 
         void invokeUpdate();
+        void invokeRender();
 
         friend class b::Application;
 
+    protected:
+        virtual void prepareFrontendScript() {}
+        virtual void invokeFrontendScript() {}
+        void recoverImGuiStacks();
+
+        std::optional<b::string> m_errorMessage;
+
     private:
+        void renderContent();
+        void updateWin32DarkMode();
+        void processWindowEvents();
         void renderErrorMessage(const b::string& error);
         void attach();
         void detach();
 
         sf::RenderWindow m_sfmlWindow;
 
-        py::function m_pythonUiLoopCallback;
-        b::Resource m_uiScriptResource;
-        std::unique_ptr<b::ResourceLoader> m_uiScriptResourceLoader;
-        bool m_uiScriptLoaded = true;
-
-        std::optional<b::string> m_errorMessage;
         b::widgets::panel m_errorPanelWidget;
         b::widgets::text m_errorTextWidget;
         bool m_firstWindowCreation = true;
@@ -229,11 +228,42 @@ namespace b {
             };
         }
 
+        void pyInit(const py::function& frontendCallback) {
+            m_pythonUiLoopCallback = frontendCallback;
+        }
+
+        template<typename T>
+        void loadPythonFrontendScriptResource(const T& script) {
+            m_uiScriptResourceLoader = std::make_unique<b::ResourceLoader>(script, [this](const auto& resource) {
+                m_uiScriptResource = resource;
+                m_uiScriptLoaded = false;
+            });
+        }
+
+        void prepareFrontendScript() override {    // Load python if not loaded already
+            if (!m_uiScriptResource.string().empty() && !m_uiScriptLoaded) {
+                m_uiScriptLoaded = false;
+                b::py::exec(m_uiScriptResource.string());
+                m_uiScriptLoaded = true;
+                m_errorMessage = {};
+            }
+        }
+
+        void invokeFrontendScript() override {
+
+        }
+
         void definePythonBindings(b::py::module& module) override {
             T::defineParentPythonClass(module);
             context.definePythonClass(module);
             module.attr(ContextName.value) = &context;
         }
+
+    private:
+        py::function m_pythonUiLoopCallback;
+        b::Resource m_uiScriptResource;
+        std::unique_ptr<b::ResourceLoader> m_uiScriptResourceLoader;
+        bool m_uiScriptLoaded = true;
     };
 
 }

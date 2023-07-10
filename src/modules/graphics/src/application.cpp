@@ -40,6 +40,10 @@ namespace b {
             window.get().framerate = framerate;
             window.get().invokeUpdate();
         }
+        onRender();
+        for (auto& window : m_windows) {
+            window.get().invokeRender();
+        }
     }
 
     void Application::onConsoleExit() {

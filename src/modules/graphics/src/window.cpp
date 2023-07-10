@@ -102,10 +102,6 @@ namespace b {
         }
     }
 
-    void Window::pyInit(py::function callback) {
-        this->m_pythonUiLoopCallback = callback;
-    }
-
     void Window::rememberWindowPositionJsonFile(const b::fs::path& filename) {
         m_windowPositionJsonFile = filename;
         if (isOpen()) {
@@ -124,7 +120,7 @@ namespace b {
 
     void Window::showInTaskbar() {
 #ifdef B_OS_WINDOWS
-        long style = GetWindowLongW(getRenderWindow().getSystemHandle(), GWL_STYLE);
+        int32_t style = GetWindowLongW(getRenderWindow().getSystemHandle(), GWL_STYLE);
         style &= ~(WS_VISIBLE);
         SetWindowLongW(getRenderWindow().getSystemHandle(), GWL_STYLE, style);
         ShowWindow(getRenderWindow().getSystemHandle(), SW_SHOW);
@@ -195,19 +191,6 @@ namespace b {
 
     b::Vec2 Window::getMouseDelta() {
         return m_mouseDelta;
-    }
-
-    static void RecoverImguiFontStack() {
-        ImGuiContext& g = *GImGui;
-
-        if (g.CurrentWindowStack.empty()) {
-            return;
-        }
-
-        ImGuiStackSizes* stackSizes = &g.CurrentWindowStack.back().StackSizesOnBegin;
-        while (g.FontStack.Size > stackSizes->SizeOfFontStack) {
-            ImGui::PopFont();
-        }
     }
 
     sf::RenderWindow& Window::getRenderWindow() {
@@ -359,6 +342,77 @@ namespace b {
 
     void Window::invokeUpdate() {
 
+        updateWin32DarkMode();
+        processWindowEvents();
+        b::update_themes();     // TODO: Move this to a better place
+
+        m_mouseDelta = m_mousePos - m_mousePosPrev;
+        m_mousePosPrev = m_mousePos;
+
+        try {
+            onUpdate();
+            prepareFrontendScript();
+        }
+        catch (const std::exception &e) {
+            recoverImGuiStacks();
+            m_errorMessage = e.what();
+            b::log::core::error("Unhandled exception:\n{}", e.what());
+        }
+
+        if (isOpen()) {
+            m_lastWindowState.position = getPosition();
+            m_lastWindowState.size = getSize();
+            m_lastWindowState.maximized = isMaximized();
+        }
+    }
+
+    void Window::invokeRender() {
+        clear(b::Constants::DefaultWindowBackgroundColor());
+        ImGui::SFML::Update(getRenderWindow(), m_deltaClock.restart());
+
+        b::LockFontStack();
+        renderContent();
+        b::UnlockFontStack();
+
+        ImGui::SFML::Render(getRenderWindow());
+        getRenderWindow().display();
+    }
+
+    void Window::recoverImGuiStacks() {
+        ImGui::ErrorCheckEndFrameRecover(nullptr);
+        ImGuiContext& g = *GImGui;
+
+        if (g.CurrentWindowStack.empty()) {
+            return;
+        }
+
+        ImGuiStackSizes* stackSizes = &g.CurrentWindowStack.back().StackSizesOnBegin;
+        while (g.FontStack.Size > stackSizes->SizeOfFontStack) {
+            ImGui::PopFont();
+        }
+    }
+
+    void Window::renderContent() {
+        if (m_errorMessage.has_value()) {
+            renderErrorMessage(m_errorMessage.value());
+            return;
+        }
+
+        try {
+            style.push();
+            onRender();
+            invokeFrontendScript();
+            style.pop();
+        }
+        catch (const std::exception &e) {
+            recoverImGuiStacks();
+            renderErrorMessage(e.what());
+            b::log::core::error("Unhandled exception:\n{}", e.what());
+        }
+    }
+
+    void Window::updateWin32DarkMode() {
+        // bool const useWin32ImmersiveDarkMode = b::style::get<bool>("b::window.win32ImmersiveDarkMode"); // TODO: <- Interesting Copilot suggestion
 #ifdef B_OS_WINDOWS
         if (useWin32ImmersiveDarkMode != m_win32IDMActive) {
             BOOL useDarkMode = static_cast<BOOL>(useWin32ImmersiveDarkMode);
@@ -371,7 +425,9 @@ namespace b {
             }
         }
 #endif
+    }
 
+    void Window::processWindowEvents() {
         sf::Event event {};
         while (getRenderWindow().pollEvent(event)) {
             ImGui::SFML::ProcessEvent(getRenderWindow(), event);
@@ -421,15 +477,15 @@ namespace b {
                     break;
 
                 case sf::Event::MouseMoved:
-                    {
-                        b::Events::MouseMoveEvent moveEvent;
-                        moveEvent.pos = b::Vec2(event.mouseMove.x, event.mouseMove.y);
-                        moveEvent.previous = b::Vec2(m_mousePos.x, m_mousePos.y);
-                        moveEvent.delta = moveEvent.pos - moveEvent.previous;
-                        m_mousePos = moveEvent.pos;
-                        dispatchEvent<b::Events::MouseMoveEvent>(moveEvent);
-                        break;
-                    }
+                {
+                    b::Events::MouseMoveEvent moveEvent;
+                    moveEvent.pos = b::Vec2(event.mouseMove.x, event.mouseMove.y);
+                    moveEvent.previous = b::Vec2(m_mousePos.x, m_mousePos.y);
+                    moveEvent.delta = moveEvent.pos - moveEvent.previous;
+                    m_mousePos = moveEvent.pos;
+                    dispatchEvent<b::Events::MouseMoveEvent>(moveEvent);
+                    break;
+                }
 
                 case sf::Event::MouseEntered:
                     dispatchEvent<b::Events::MouseEnteredWindowEvent>();
@@ -479,71 +535,6 @@ namespace b {
                     break;
             }
 
-        }
-
-        m_mouseDelta = m_mousePos - m_mousePosPrev;
-        m_mousePosPrev = m_mousePos;
-
-        b::update_themes();
-
-        // Load python if not loaded already
-        if (!m_uiScriptResource.string().empty() && !m_uiScriptLoaded) {
-            m_uiScriptLoaded = true;
-            m_errorMessage = {};
-#ifndef B_OS_WINDOWS
-            b::log::info("Loading b::window python ui script");
-#endif
-            try {
-                b::py::exec(m_uiScriptResource.string());
-            }
-            catch (const std::exception &e) {
-                ImGui::ErrorCheckEndFrameRecover(nullptr);
-                RecoverImguiFontStack();
-                m_errorMessage = e.what();
-                b::log::error("Unhandled exception:\n{}", e.what());
-            }
-
-            b::log::info("Loaded successfully");
-        }
-
-        clear(b::Constants::DefaultWindowBackgroundColor());
-        ImGui::SFML::Update(getRenderWindow(), m_deltaClock.restart());
-        b::LockFontStack();
-
-        // And then render
-        if (m_errorMessage.has_value()) {
-            renderErrorMessage(m_errorMessage.value());    // Py init error
-        }
-        else {
-            try {
-                b::PushFont("default");
-                style.push();
-
-                onUpdate();
-
-                if (m_pythonUiLoopCallback) {
-                    m_pythonUiLoopCallback();
-                }
-
-                style.pop();
-                b::PopFont();
-            }
-            catch (const std::exception &e) {
-                ImGui::ErrorCheckEndFrameRecover(nullptr);
-                RecoverImguiFontStack();
-                renderErrorMessage(e.what());     // Py ui loop error
-                b::log::error("Unhandled exception:\n{}", e.what());
-            }
-        }
-
-        b::UnlockFontStack();
-        ImGui::SFML::Render(getRenderWindow());
-        getRenderWindow().display();
-
-        if (isOpen()) {
-            m_lastWindowState.position = getPosition();
-            m_lastWindowState.size = getSize();
-            m_lastWindowState.maximized = isMaximized();
         }
     }
 
