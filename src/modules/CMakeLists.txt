@@ -13,12 +13,9 @@ battery_make_module_available(network ${CMAKE_CURRENT_LIST_DIR}/network)
 battery_make_module_available(pygraphics ${CMAKE_CURRENT_LIST_DIR}/pygraphics)
 battery_make_module_available(python ${CMAKE_CURRENT_LIST_DIR}/python)
 battery_make_module_available(qrcode ${CMAKE_CURRENT_LIST_DIR}/qrcode)
-battery_make_module_available(reproc ${CMAKE_CURRENT_LIST_DIR}/reproc)
 battery_make_module_available(sfml ${CMAKE_CURRENT_LIST_DIR}/sfml)
-battery_make_module_available(spdlog ${CMAKE_CURRENT_LIST_DIR}/spdlog)
 battery_make_module_available(toml11 ${CMAKE_CURRENT_LIST_DIR}/toml11)
 battery_make_module_available(tray ${CMAKE_CURRENT_LIST_DIR}/tray)
-battery_make_module_available(utfcpp ${CMAKE_CURRENT_LIST_DIR}/utfcpp)
 
 # This does not immediately add the module, it only makes it available
 # Each module's CMakeLists.txt in its subdirectory will only be called 
