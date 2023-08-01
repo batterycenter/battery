@@ -45,7 +45,7 @@
   <td id="projectlogo"><img alt="Logo" src="battery.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Battery
-   &#160;<span id="projectnumber">v0.1.2-alpha</span>
+   &#160;<span id="projectnumber">v0.1.2</span>
    </div>
    <div id="projectbrief">Desktop application framework</div>
   </td>
@@ -103,6 +103,7 @@ $(document).ready(function(){initNavTree('group__String.html',''); initResizable
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
@@ -113,92 +114,188 @@ $(document).ready(function(){initNavTree('group__String.html',''); initResizable
 <p>Everything related to string manipulation and encoding.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classb_1_1string.html">b::string</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Yet another string class, that combines all other. Synonymous to <code>std::string</code>, but with more features.  <a href="classb_1_1string.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstd_1_1hash_3_01b_1_1string_01_4.html">std::hash&lt; b::string &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ga61a14888dd093388872c16651f0f4bd1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga61a14888dd093388872c16651f0f4bd1">b::osstring</a> = std::string</td></tr>
-<tr class="memdesc:ga61a14888dd093388872c16651f0f4bd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">A string type used for interfacing with the corresponding operating system.  <a href="group__String.html#ga61a14888dd093388872c16651f0f4bd1">More...</a><br /></td></tr>
-<tr class="separator:ga61a14888dd093388872c16651f0f4bd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4adfbe65ddf7d0805f505615460b279b"><td class="memItemLeft" align="right" valign="top"><a id="ga4adfbe65ddf7d0805f505615460b279b"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga4adfbe65ddf7d0805f505615460b279b">b::platform_native_string</a> = std::string</td></tr>
+<tr class="memdesc:ga4adfbe65ddf7d0805f505615460b279b"><td class="mdescLeft">&#160;</td><td class="mdescRight">platform native string type: std::wstring on Windows, std::string on other platforms <br /></td></tr>
+<tr class="separator:ga4adfbe65ddf7d0805f505615460b279b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga3ca612ae19ec07a2bdc8352b30d762f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__String.html#ga61a14888dd093388872c16651f0f4bd1">b::osstring</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga3ca612ae19ec07a2bdc8352b30d762f5">b::to_osstring</a> (const std::string &amp;str)</td></tr>
-<tr class="memdesc:ga3ca612ae19ec07a2bdc8352b30d762f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a UTF-8 <code>std::string</code> to its platform agnostic version.  <a href="group__String.html#ga3ca612ae19ec07a2bdc8352b30d762f5">More...</a><br /></td></tr>
-<tr class="separator:ga3ca612ae19ec07a2bdc8352b30d762f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga20793a985603bef8f8f2a772f427c1b0"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga20793a985603bef8f8f2a772f427c1b0">b::from_osstring</a> (const <a class="el" href="group__String.html#ga61a14888dd093388872c16651f0f4bd1">b::osstring</a> &amp;str)</td></tr>
-<tr class="memdesc:ga20793a985603bef8f8f2a772f427c1b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opposite of <code><a class="el" href="group__String.html#ga3ca612ae19ec07a2bdc8352b30d762f5" title="Convert a UTF-8 std::string to its platform agnostic version.">b::to_osstring()</a></code>. See for more info.  <a href="group__String.html#ga20793a985603bef8f8f2a772f427c1b0">More...</a><br /></td></tr>
-<tr class="separator:ga20793a985603bef8f8f2a772f427c1b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9cfd792ba8468e47106391bf93d6f07e"><td class="memItemLeft" align="right" valign="top">std::u32string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga9cfd792ba8468e47106391bf93d6f07e">b::to_u32</a> (const std::string &amp;str)</td></tr>
-<tr class="memdesc:ga9cfd792ba8468e47106391bf93d6f07e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a UTF-8 encoded multibyte string to a UTF-32 encoded string.  <a href="group__String.html#ga9cfd792ba8468e47106391bf93d6f07e">More...</a><br /></td></tr>
-<tr class="separator:ga9cfd792ba8468e47106391bf93d6f07e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gacc56123bb66b1d7ca32e6beeccf02469"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gacc56123bb66b1d7ca32e6beeccf02469">b::to_u8</a> (const std::u32string &amp;str)</td></tr>
-<tr class="memdesc:gacc56123bb66b1d7ca32e6beeccf02469"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a UTF-32 encoded string back to a UTF-8 encoded string.  <a href="group__String.html#gacc56123bb66b1d7ca32e6beeccf02469">More...</a><br /></td></tr>
-<tr class="separator:gacc56123bb66b1d7ca32e6beeccf02469"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga78a79386ae94f195c3ffea648f388db2"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga78a79386ae94f195c3ffea648f388db2">b::to_u8</a> (char32_t c)</td></tr>
-<tr class="memdesc:ga78a79386ae94f195c3ffea648f388db2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a single unicode character into its UTF-8 encoded multibyte form.  <a href="group__String.html#ga78a79386ae94f195c3ffea648f388db2">More...</a><br /></td></tr>
-<tr class="separator:ga78a79386ae94f195c3ffea648f388db2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga58b1ee5c564cafece2371b643c6cd295"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga58b1ee5c564cafece2371b643c6cd295">b::u8_foreach</a> (const std::string &amp;str, const std::function&lt; std::variant&lt; std::string, char32_t &gt;(std::string)&gt; &amp;function)</td></tr>
-<tr class="memdesc:ga58b1ee5c564cafece2371b643c6cd295"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call a function for every character in a UTF-8 encoded string.  <a href="group__String.html#ga58b1ee5c564cafece2371b643c6cd295">More...</a><br /></td></tr>
-<tr class="separator:ga58b1ee5c564cafece2371b643c6cd295"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf059bea799f2e29a74d02e8124d5cf66"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gaf059bea799f2e29a74d02e8124d5cf66">b::u8_foreach</a> (const std::string &amp;str, const std::function&lt; std::variant&lt; std::string, char32_t &gt;(char32_t)&gt; &amp;function)</td></tr>
-<tr class="memdesc:gaf059bea799f2e29a74d02e8124d5cf66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call a function for every character in a UTF-8 encoded string. Check the overload for more info.  <a href="group__String.html#gaf059bea799f2e29a74d02e8124d5cf66">More...</a><br /></td></tr>
-<tr class="separator:gaf059bea799f2e29a74d02e8124d5cf66"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga815d742dd731ef1857d5146204cb0990"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga815d742dd731ef1857d5146204cb0990">b::split</a> (std::string str, const std::string &amp;delimiter)</td></tr>
-<tr class="memdesc:ga815d742dd731ef1857d5146204cb0990"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a string into an array of string pieces by a delimiter.  <a href="group__String.html#ga815d742dd731ef1857d5146204cb0990">More...</a><br /></td></tr>
-<tr class="separator:ga815d742dd731ef1857d5146204cb0990"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga7e95ddc224e06adbcdc28b997c9184ce"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga7e95ddc224e06adbcdc28b997c9184ce">b::join</a> (const std::vector&lt; std::string &gt; &amp;strings, const std::string &amp;spacer=&quot;&quot;)</td></tr>
-<tr class="memdesc:ga7e95ddc224e06adbcdc28b997c9184ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Join an array of strings into a single one. To be used with <code><a class="el" href="group__String.html#ga815d742dd731ef1857d5146204cb0990" title="Split a string into an array of string pieces by a delimiter.">b::split()</a></code>.  <a href="group__String.html#ga7e95ddc224e06adbcdc28b997c9184ce">More...</a><br /></td></tr>
-<tr class="separator:ga7e95ddc224e06adbcdc28b997c9184ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga00199551bb2ca5e5864257ad28a8cbad"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga00199551bb2ca5e5864257ad28a8cbad">b::replace</a> (std::string string, const std::string &amp;from, const std::string &amp;to)</td></tr>
-<tr class="memdesc:ga00199551bb2ca5e5864257ad28a8cbad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace parts of a string with another string.  <a href="group__String.html#ga00199551bb2ca5e5864257ad28a8cbad">More...</a><br /></td></tr>
-<tr class="separator:ga00199551bb2ca5e5864257ad28a8cbad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga05d0a2abdba4ddee5cf78cd59fab4f49"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga05d0a2abdba4ddee5cf78cd59fab4f49">b::replace_one</a> (std::string string, const std::string &amp;from, const std::string &amp;to, int occurrence)</td></tr>
-<tr class="memdesc:ga05d0a2abdba4ddee5cf78cd59fab4f49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace one part of a string with another string.  <a href="group__String.html#ga05d0a2abdba4ddee5cf78cd59fab4f49">More...</a><br /></td></tr>
-<tr class="separator:ga05d0a2abdba4ddee5cf78cd59fab4f49"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga8c0d689a4f54058882aa4dcbeb348e41"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga8c0d689a4f54058882aa4dcbeb348e41">b::replace_first</a> (const std::string &amp;string, const std::string &amp;from, const std::string &amp;to)</td></tr>
-<tr class="memdesc:ga8c0d689a4f54058882aa4dcbeb348e41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace the first occurrence of a string with another string.  <a href="group__String.html#ga8c0d689a4f54058882aa4dcbeb348e41">More...</a><br /></td></tr>
-<tr class="separator:ga8c0d689a4f54058882aa4dcbeb348e41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga87ede38a0c232d547410a3e1a9a43252"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga87ede38a0c232d547410a3e1a9a43252">b::replace_last</a> (const std::string &amp;string, const std::string &amp;from, const std::string &amp;to)</td></tr>
-<tr class="memdesc:ga87ede38a0c232d547410a3e1a9a43252"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace the last occurrence of a string with another string.  <a href="group__String.html#ga87ede38a0c232d547410a3e1a9a43252">More...</a><br /></td></tr>
-<tr class="separator:ga87ede38a0c232d547410a3e1a9a43252"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga20b0197a9e4ed6b0bebb0a91d8826061"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga20b0197a9e4ed6b0bebb0a91d8826061">b::from_u8string</a> (const std::u8string &amp;str)</td></tr>
-<tr class="memdesc:ga20b0197a9e4ed6b0bebb0a91d8826061"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert an <code>std::u8string</code> to an <code>std::string</code>.  <a href="group__String.html#ga20b0197a9e4ed6b0bebb0a91d8826061">More...</a><br /></td></tr>
-<tr class="separator:ga20b0197a9e4ed6b0bebb0a91d8826061"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gad6a3f2785e3086dd95d97460418a0bef"><td class="memItemLeft" align="right" valign="top">std::u8string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gad6a3f2785e3086dd95d97460418a0bef">b::to_u8string</a> (const std::string &amp;str)</td></tr>
-<tr class="memdesc:gad6a3f2785e3086dd95d97460418a0bef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert an <code>std::string</code> to an <code>std::u8string</code>.  <a href="group__String.html#gad6a3f2785e3086dd95d97460418a0bef">More...</a><br /></td></tr>
-<tr class="separator:gad6a3f2785e3086dd95d97460418a0bef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0febb799fd526dbaae7981b9bb8a78ba"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga0febb799fd526dbaae7981b9bb8a78ba">b::to_lower</a> (const std::string &amp;str)</td></tr>
-<tr class="memdesc:ga0febb799fd526dbaae7981b9bb8a78ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make all characters of a UTF-8 string lowercase.  <a href="group__String.html#ga0febb799fd526dbaae7981b9bb8a78ba">More...</a><br /></td></tr>
-<tr class="separator:ga0febb799fd526dbaae7981b9bb8a78ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga6c7a4968814fc4e9b2a8788e90393840"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga6c7a4968814fc4e9b2a8788e90393840">b::to_upper</a> (const std::string &amp;str)</td></tr>
-<tr class="memdesc:ga6c7a4968814fc4e9b2a8788e90393840"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make all characters of a UTF-8 string uppercase.  <a href="group__String.html#ga6c7a4968814fc4e9b2a8788e90393840">More...</a><br /></td></tr>
-<tr class="separator:ga6c7a4968814fc4e9b2a8788e90393840"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gada9e3646d6a80756ec0f8f9e87a98c62"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gada9e3646d6a80756ec0f8f9e87a98c62">b::string::is_valid_utf8</a> (const std::string &amp;<a class="el" href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">str</a>)</td></tr>
+<tr class="memdesc:gada9e3646d6a80756ec0f8f9e87a98c62"><td class="mdescLeft">&#160;</td><td class="mdescRight">static validation function for UTF-8 strings  <a href="group__String.html#gada9e3646d6a80756ec0f8f9e87a98c62">More...</a><br /></td></tr>
+<tr class="separator:gada9e3646d6a80756ec0f8f9e87a98c62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad9ec2a708a1cfe86508a32313b494918"><td class="memItemLeft" align="right" valign="top"><a id="gad9ec2a708a1cfe86508a32313b494918"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gad9ec2a708a1cfe86508a32313b494918">b::string::string</a> ()=default</td></tr>
+<tr class="memdesc:gad9ec2a708a1cfe86508a32313b494918"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> default constructor <br /></td></tr>
+<tr class="separator:gad9ec2a708a1cfe86508a32313b494918"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa3c00db04eb06ec9dd6fe2d58d06b5d8"><td class="memTemplParams" colspan="2"><a id="gaa3c00db04eb06ec9dd6fe2d58d06b5d8"></a>
+template&lt;typename... TArgs&gt; </td></tr>
+<tr class="memitem:gaa3c00db04eb06ec9dd6fe2d58d06b5d8"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__String.html#gaa3c00db04eb06ec9dd6fe2d58d06b5d8">b::string::string</a> (const TArgs &amp;... args)</td></tr>
+<tr class="memdesc:gaa3c00db04eb06ec9dd6fe2d58d06b5d8"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> forwarding constructor to forward any other non-implemented parameters to std::string <br /></td></tr>
+<tr class="separator:gaa3c00db04eb06ec9dd6fe2d58d06b5d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad8ee2b5aef89731cfd91d4d499462df4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gad8ee2b5aef89731cfd91d4d499462df4">b::string::string</a> (char c)</td></tr>
+<tr class="memdesc:gad8ee2b5aef89731cfd91d4d499462df4"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking char  <a href="group__String.html#gad8ee2b5aef89731cfd91d4d499462df4">More...</a><br /></td></tr>
+<tr class="separator:gad8ee2b5aef89731cfd91d4d499462df4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacf6408dbebbd8c5013c3e9898b4a85ac"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gacf6408dbebbd8c5013c3e9898b4a85ac">b::string::string</a> (char8_t c)</td></tr>
+<tr class="memdesc:gacf6408dbebbd8c5013c3e9898b4a85ac"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking char8_t  <a href="group__String.html#gacf6408dbebbd8c5013c3e9898b4a85ac">More...</a><br /></td></tr>
+<tr class="separator:gacf6408dbebbd8c5013c3e9898b4a85ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac377bb53772c3133f942bba57d4ea852"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gac377bb53772c3133f942bba57d4ea852">b::string::string</a> (char16_t c)</td></tr>
+<tr class="memdesc:gac377bb53772c3133f942bba57d4ea852"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking char16_t  <a href="group__String.html#gac377bb53772c3133f942bba57d4ea852">More...</a><br /></td></tr>
+<tr class="separator:gac377bb53772c3133f942bba57d4ea852"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf518ce7f23b2553bc1a26542f767cc88"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gaf518ce7f23b2553bc1a26542f767cc88">b::string::string</a> (char32_t c)</td></tr>
+<tr class="memdesc:gaf518ce7f23b2553bc1a26542f767cc88"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking char32_t  <a href="group__String.html#gaf518ce7f23b2553bc1a26542f767cc88">More...</a><br /></td></tr>
+<tr class="separator:gaf518ce7f23b2553bc1a26542f767cc88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga68638f075bc436fe8449577465c66f98"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga68638f075bc436fe8449577465c66f98">b::string::string</a> (const char *<a class="el" href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">str</a>)</td></tr>
+<tr class="memdesc:ga68638f075bc436fe8449577465c66f98"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking const char*  <a href="group__String.html#ga68638f075bc436fe8449577465c66f98">More...</a><br /></td></tr>
+<tr class="separator:ga68638f075bc436fe8449577465c66f98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac07848411cb3d9852f356559e4537465"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gac07848411cb3d9852f356559e4537465">b::string::string</a> (const char8_t *<a class="el" href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">str</a>)</td></tr>
+<tr class="memdesc:gac07848411cb3d9852f356559e4537465"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking const char8_t*  <a href="group__String.html#gac07848411cb3d9852f356559e4537465">More...</a><br /></td></tr>
+<tr class="separator:gac07848411cb3d9852f356559e4537465"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga17f7a2375e09189468b07716808587ac"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga17f7a2375e09189468b07716808587ac">b::string::string</a> (const char16_t *<a class="el" href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">str</a>)</td></tr>
+<tr class="memdesc:ga17f7a2375e09189468b07716808587ac"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking const char16_t*  <a href="group__String.html#ga17f7a2375e09189468b07716808587ac">More...</a><br /></td></tr>
+<tr class="separator:ga17f7a2375e09189468b07716808587ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga37a4854e3f3b3e6ce03f01f2b0a8017c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga37a4854e3f3b3e6ce03f01f2b0a8017c">b::string::string</a> (const char32_t *<a class="el" href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">str</a>)</td></tr>
+<tr class="memdesc:ga37a4854e3f3b3e6ce03f01f2b0a8017c"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking const char32_t*  <a href="group__String.html#ga37a4854e3f3b3e6ce03f01f2b0a8017c">More...</a><br /></td></tr>
+<tr class="separator:ga37a4854e3f3b3e6ce03f01f2b0a8017c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga10db3c2b8548b1d536815860862fd98f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga10db3c2b8548b1d536815860862fd98f">b::string::string</a> (const std::string &amp;<a class="el" href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">str</a>)</td></tr>
+<tr class="memdesc:ga10db3c2b8548b1d536815860862fd98f"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking std::string  <a href="group__String.html#ga10db3c2b8548b1d536815860862fd98f">More...</a><br /></td></tr>
+<tr class="separator:ga10db3c2b8548b1d536815860862fd98f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf89a9effa569562ab8e0504fb902a67e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gaf89a9effa569562ab8e0504fb902a67e">b::string::string</a> (const std::u8string &amp;<a class="el" href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">str</a>)</td></tr>
+<tr class="memdesc:gaf89a9effa569562ab8e0504fb902a67e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking std::u8string  <a href="group__String.html#gaf89a9effa569562ab8e0504fb902a67e">More...</a><br /></td></tr>
+<tr class="separator:gaf89a9effa569562ab8e0504fb902a67e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf836276091a1ab24803d9c6c30184a96"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gaf836276091a1ab24803d9c6c30184a96">b::string::string</a> (const std::u16string &amp;<a class="el" href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">str</a>)</td></tr>
+<tr class="memdesc:gaf836276091a1ab24803d9c6c30184a96"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking std::u16string  <a href="group__String.html#gaf836276091a1ab24803d9c6c30184a96">More...</a><br /></td></tr>
+<tr class="separator:gaf836276091a1ab24803d9c6c30184a96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2578ccbaf38d3d2a947e783adbc75ba2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga2578ccbaf38d3d2a947e783adbc75ba2">b::string::string</a> (const std::u32string &amp;<a class="el" href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">str</a>)</td></tr>
+<tr class="memdesc:ga2578ccbaf38d3d2a947e783adbc75ba2"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking std::u32string  <a href="group__String.html#ga2578ccbaf38d3d2a947e783adbc75ba2">More...</a><br /></td></tr>
+<tr class="separator:ga2578ccbaf38d3d2a947e783adbc75ba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5d9148638d934dca86a54fba858db980"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga5d9148638d934dca86a54fba858db980">b::string::string</a> (const std::wstring &amp;<a class="el" href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">str</a>)</td></tr>
+<tr class="memdesc:ga5d9148638d934dca86a54fba858db980"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking std::wstring  <a href="group__String.html#ga5d9148638d934dca86a54fba858db980">More...</a><br /></td></tr>
+<tr class="separator:ga5d9148638d934dca86a54fba858db980"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3f3db5c3295d5a7047d29f3ea8f7ba35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">string</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga3f3db5c3295d5a7047d29f3ea8f7ba35">b::string::operator=</a> (char c)</td></tr>
+<tr class="memdesc:ga3f3db5c3295d5a7047d29f3ea8f7ba35"><td class="mdescLeft">&#160;</td><td class="mdescRight">assignment operator taking char  <a href="group__String.html#ga3f3db5c3295d5a7047d29f3ea8f7ba35">More...</a><br /></td></tr>
+<tr class="separator:ga3f3db5c3295d5a7047d29f3ea8f7ba35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf2fd575ac170c7faf5ab15a568e47a47"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">string</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gaf2fd575ac170c7faf5ab15a568e47a47">b::string::operator=</a> (char8_t c)</td></tr>
+<tr class="memdesc:gaf2fd575ac170c7faf5ab15a568e47a47"><td class="mdescLeft">&#160;</td><td class="mdescRight">assignment operator taking char8_t  <a href="group__String.html#gaf2fd575ac170c7faf5ab15a568e47a47">More...</a><br /></td></tr>
+<tr class="separator:gaf2fd575ac170c7faf5ab15a568e47a47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafb0f4900f52b17b7df768dad2e841cdf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">string</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gafb0f4900f52b17b7df768dad2e841cdf">b::string::operator=</a> (char16_t c)</td></tr>
+<tr class="memdesc:gafb0f4900f52b17b7df768dad2e841cdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">assignment operator taking char16_t  <a href="group__String.html#gafb0f4900f52b17b7df768dad2e841cdf">More...</a><br /></td></tr>
+<tr class="separator:gafb0f4900f52b17b7df768dad2e841cdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8e22804a8922fc0af91b11a273dc560e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">string</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga8e22804a8922fc0af91b11a273dc560e">b::string::operator=</a> (char32_t c)</td></tr>
+<tr class="memdesc:ga8e22804a8922fc0af91b11a273dc560e"><td class="mdescLeft">&#160;</td><td class="mdescRight">assignment operator taking char32_t  <a href="group__String.html#ga8e22804a8922fc0af91b11a273dc560e">More...</a><br /></td></tr>
+<tr class="separator:ga8e22804a8922fc0af91b11a273dc560e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga57747431f86ac9fd99678a52b9f90b90"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">string</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga57747431f86ac9fd99678a52b9f90b90">b::string::operator=</a> (const char *other)</td></tr>
+<tr class="memdesc:ga57747431f86ac9fd99678a52b9f90b90"><td class="mdescLeft">&#160;</td><td class="mdescRight">assignment operator taking const char*  <a href="group__String.html#ga57747431f86ac9fd99678a52b9f90b90">More...</a><br /></td></tr>
+<tr class="separator:ga57747431f86ac9fd99678a52b9f90b90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae65bc73595ccb7b2723b9808bfd67955"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">string</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gae65bc73595ccb7b2723b9808bfd67955">b::string::operator=</a> (const char8_t *other)</td></tr>
+<tr class="memdesc:gae65bc73595ccb7b2723b9808bfd67955"><td class="mdescLeft">&#160;</td><td class="mdescRight">assignment operator taking const char8_t*  <a href="group__String.html#gae65bc73595ccb7b2723b9808bfd67955">More...</a><br /></td></tr>
+<tr class="separator:gae65bc73595ccb7b2723b9808bfd67955"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf11c95635440dd6b0c36dcddd0a4987a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">string</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gaf11c95635440dd6b0c36dcddd0a4987a">b::string::operator=</a> (const char16_t *other)</td></tr>
+<tr class="memdesc:gaf11c95635440dd6b0c36dcddd0a4987a"><td class="mdescLeft">&#160;</td><td class="mdescRight">assignment operator taking const char16_t*  <a href="group__String.html#gaf11c95635440dd6b0c36dcddd0a4987a">More...</a><br /></td></tr>
+<tr class="separator:gaf11c95635440dd6b0c36dcddd0a4987a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga30a4cd0c875eff7228f4a031f6b5fc14"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">string</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga30a4cd0c875eff7228f4a031f6b5fc14">b::string::operator=</a> (const char32_t *other)</td></tr>
+<tr class="memdesc:ga30a4cd0c875eff7228f4a031f6b5fc14"><td class="mdescLeft">&#160;</td><td class="mdescRight">assignment operator taking const char32_t*  <a href="group__String.html#ga30a4cd0c875eff7228f4a031f6b5fc14">More...</a><br /></td></tr>
+<tr class="separator:ga30a4cd0c875eff7228f4a031f6b5fc14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8b4bedb753dd471c53442c6c19f85afe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">string</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga8b4bedb753dd471c53442c6c19f85afe">b::string::operator=</a> (const std::string &amp;other)</td></tr>
+<tr class="memdesc:ga8b4bedb753dd471c53442c6c19f85afe"><td class="mdescLeft">&#160;</td><td class="mdescRight">assignment operator taking std::string  <a href="group__String.html#ga8b4bedb753dd471c53442c6c19f85afe">More...</a><br /></td></tr>
+<tr class="separator:ga8b4bedb753dd471c53442c6c19f85afe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga18cacdcbedd66afff3bc593e37b02138"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">string</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga18cacdcbedd66afff3bc593e37b02138">b::string::operator=</a> (const std::u8string &amp;other)</td></tr>
+<tr class="memdesc:ga18cacdcbedd66afff3bc593e37b02138"><td class="mdescLeft">&#160;</td><td class="mdescRight">assignment operator taking std::u8string  <a href="group__String.html#ga18cacdcbedd66afff3bc593e37b02138">More...</a><br /></td></tr>
+<tr class="separator:ga18cacdcbedd66afff3bc593e37b02138"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga136f02e6cd39d931547b71b13d0162f4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">string</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga136f02e6cd39d931547b71b13d0162f4">b::string::operator=</a> (const std::u16string &amp;other)</td></tr>
+<tr class="memdesc:ga136f02e6cd39d931547b71b13d0162f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">assignment operator taking std::u16string  <a href="group__String.html#ga136f02e6cd39d931547b71b13d0162f4">More...</a><br /></td></tr>
+<tr class="separator:ga136f02e6cd39d931547b71b13d0162f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6338f02e320f1de26dc6ca3fb73e4c27"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">string</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga6338f02e320f1de26dc6ca3fb73e4c27">b::string::operator=</a> (const std::u32string &amp;other)</td></tr>
+<tr class="memdesc:ga6338f02e320f1de26dc6ca3fb73e4c27"><td class="mdescLeft">&#160;</td><td class="mdescRight">assignment operator taking std::u32string  <a href="group__String.html#ga6338f02e320f1de26dc6ca3fb73e4c27">More...</a><br /></td></tr>
+<tr class="separator:ga6338f02e320f1de26dc6ca3fb73e4c27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa245896b040ec498d9e5863afd2352d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">string</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gaa245896b040ec498d9e5863afd2352d7">b::string::operator=</a> (const std::wstring &amp;other)</td></tr>
+<tr class="memdesc:gaa245896b040ec498d9e5863afd2352d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">assignment operator taking std::wstring  <a href="group__String.html#gaa245896b040ec498d9e5863afd2352d7">More...</a><br /></td></tr>
+<tr class="separator:gaa245896b040ec498d9e5863afd2352d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae8e71b9b72ecffdbed3719734fd740ef"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gae8e71b9b72ecffdbed3719734fd740ef">b::string::operator std::u8string</a> () const</td></tr>
+<tr class="memdesc:gae8e71b9b72ecffdbed3719734fd740ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">conversion operator to std::u8string  <a href="group__String.html#gae8e71b9b72ecffdbed3719734fd740ef">More...</a><br /></td></tr>
+<tr class="separator:gae8e71b9b72ecffdbed3719734fd740ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab2e9ced3e01e9c04aacac26d22b62297"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gab2e9ced3e01e9c04aacac26d22b62297">b::string::operator std::u16string</a> () const</td></tr>
+<tr class="memdesc:gab2e9ced3e01e9c04aacac26d22b62297"><td class="mdescLeft">&#160;</td><td class="mdescRight">conversion operator to std::u16string  <a href="group__String.html#gab2e9ced3e01e9c04aacac26d22b62297">More...</a><br /></td></tr>
+<tr class="separator:gab2e9ced3e01e9c04aacac26d22b62297"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3fae332b0e64f805c97e1755fb1c9f69"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga3fae332b0e64f805c97e1755fb1c9f69">b::string::operator std::u32string</a> () const</td></tr>
+<tr class="memdesc:ga3fae332b0e64f805c97e1755fb1c9f69"><td class="mdescLeft">&#160;</td><td class="mdescRight">conversion operator to std::u32string  <a href="group__String.html#ga3fae332b0e64f805c97e1755fb1c9f69">More...</a><br /></td></tr>
+<tr class="separator:ga3fae332b0e64f805c97e1755fb1c9f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafa890667a2ccbbc68a86e2afc9ab53fa"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gafa890667a2ccbbc68a86e2afc9ab53fa">b::string::operator std::wstring</a> ()</td></tr>
+<tr class="memdesc:gafa890667a2ccbbc68a86e2afc9ab53fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">conversion operator to std::wstring  <a href="group__String.html#gafa890667a2ccbbc68a86e2afc9ab53fa">More...</a><br /></td></tr>
+<tr class="separator:gafa890667a2ccbbc68a86e2afc9ab53fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf88788348fa3855e4c901a94e63c0eb5"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">b::string::str</a> ()</td></tr>
+<tr class="memdesc:gaf88788348fa3855e4c901a94e63c0eb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">conversion function to std::string reference  <a href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">More...</a><br /></td></tr>
+<tr class="separator:gaf88788348fa3855e4c901a94e63c0eb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafc7ef4f6040b26dc944ed1b9f0368e3b"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gafc7ef4f6040b26dc944ed1b9f0368e3b">b::string::str</a> () const</td></tr>
+<tr class="memdesc:gafc7ef4f6040b26dc944ed1b9f0368e3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">conversion function to const std::string reference  <a href="group__String.html#gafc7ef4f6040b26dc944ed1b9f0368e3b">More...</a><br /></td></tr>
+<tr class="separator:gafc7ef4f6040b26dc944ed1b9f0368e3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga85fa2668f0b0a9ceea2e9d17f73cddb8"><td class="memItemLeft" align="right" valign="top">std::u8string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga85fa2668f0b0a9ceea2e9d17f73cddb8">b::string::u8</a> () const</td></tr>
+<tr class="memdesc:ga85fa2668f0b0a9ceea2e9d17f73cddb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">conversion function to std::u8string  <a href="group__String.html#ga85fa2668f0b0a9ceea2e9d17f73cddb8">More...</a><br /></td></tr>
+<tr class="separator:ga85fa2668f0b0a9ceea2e9d17f73cddb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6e7ad1e5736f04dd6b44f0c351fe9549"><td class="memItemLeft" align="right" valign="top">std::u16string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga6e7ad1e5736f04dd6b44f0c351fe9549">b::string::u16</a> () const</td></tr>
+<tr class="memdesc:ga6e7ad1e5736f04dd6b44f0c351fe9549"><td class="mdescLeft">&#160;</td><td class="mdescRight">conversion function to std::u16string  <a href="group__String.html#ga6e7ad1e5736f04dd6b44f0c351fe9549">More...</a><br /></td></tr>
+<tr class="separator:ga6e7ad1e5736f04dd6b44f0c351fe9549"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa48313a4d8a48eef76eda8f5edf23a38"><td class="memItemLeft" align="right" valign="top">std::u32string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gaa48313a4d8a48eef76eda8f5edf23a38">b::string::u32</a> () const</td></tr>
+<tr class="memdesc:gaa48313a4d8a48eef76eda8f5edf23a38"><td class="mdescLeft">&#160;</td><td class="mdescRight">conversion function to std::u32string  <a href="group__String.html#gaa48313a4d8a48eef76eda8f5edf23a38">More...</a><br /></td></tr>
+<tr class="separator:gaa48313a4d8a48eef76eda8f5edf23a38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga65f0cf11a701daa1c9528be3a75ba871"><td class="memItemLeft" align="right" valign="top">const std::wstring &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga65f0cf11a701daa1c9528be3a75ba871">b::string::wstr</a> ()</td></tr>
+<tr class="memdesc:ga65f0cf11a701daa1c9528be3a75ba871"><td class="mdescLeft">&#160;</td><td class="mdescRight">conversion function to std::wstring  <a href="group__String.html#ga65f0cf11a701daa1c9528be3a75ba871">More...</a><br /></td></tr>
+<tr class="separator:ga65f0cf11a701daa1c9528be3a75ba871"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa31b65905627ec31f45bea54b2d886be"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group__String.html#ga4adfbe65ddf7d0805f505615460b279b">platform_native_string</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gaa31b65905627ec31f45bea54b2d886be">b::string::platform_native</a> ()</td></tr>
+<tr class="memdesc:gaa31b65905627ec31f45bea54b2d886be"><td class="mdescLeft">&#160;</td><td class="mdescRight">convert to a platform native string: std::wstring on Windows, std::string on other platforms  <a href="group__String.html#gaa31b65905627ec31f45bea54b2d886be">More...</a><br /></td></tr>
+<tr class="separator:gaa31b65905627ec31f45bea54b2d886be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae22a1a4c7976d6583c550f4b0dbd8c87"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classb_1_1string.html">b::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gae22a1a4c7976d6583c550f4b0dbd8c87">b::string::foreach</a> (const <a class="el" href="classb_1_1string.html">b::string</a> &amp;<a class="el" href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">str</a>, const std::function&lt; <a class="el" href="classb_1_1string.html">b::string</a>(<a class="el" href="classb_1_1string.html">b::string</a>)&gt; &amp;function)</td></tr>
+<tr class="memdesc:gae22a1a4c7976d6583c550f4b0dbd8c87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call a function for every character in a UTF-8 encoded string, not for every byte.  <a href="group__String.html#gae22a1a4c7976d6583c550f4b0dbd8c87">More...</a><br /></td></tr>
+<tr class="separator:gae22a1a4c7976d6583c550f4b0dbd8c87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga798ac18a3d7b6d893df4e3e0dd4bbd45"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classb_1_1string.html">b::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga798ac18a3d7b6d893df4e3e0dd4bbd45">b::string::foreach</a> (const <a class="el" href="classb_1_1string.html">b::string</a> &amp;<a class="el" href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">str</a>, const std::function&lt; <a class="el" href="classb_1_1string.html">b::string</a>(char32_t)&gt; &amp;function)</td></tr>
+<tr class="memdesc:ga798ac18a3d7b6d893df4e3e0dd4bbd45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call a function for every character in a UTF-8 encoded string. Check the overload for more info.  <a href="group__String.html#ga798ac18a3d7b6d893df4e3e0dd4bbd45">More...</a><br /></td></tr>
+<tr class="separator:ga798ac18a3d7b6d893df4e3e0dd4bbd45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac62e665ea1efbd2cf834cc20b19e0f63"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="classb_1_1string.html">b::string</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gac62e665ea1efbd2cf834cc20b19e0f63">b::string::split</a> (<a class="el" href="classb_1_1string.html">b::string</a> <a class="el" href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">str</a>, const <a class="el" href="classb_1_1string.html">b::string</a> &amp;delimiter)</td></tr>
+<tr class="memdesc:gac62e665ea1efbd2cf834cc20b19e0f63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a string into an array of string pieces by a delimiter.  <a href="group__String.html#gac62e665ea1efbd2cf834cc20b19e0f63">More...</a><br /></td></tr>
+<tr class="separator:gac62e665ea1efbd2cf834cc20b19e0f63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3ca0ff628ab7190d5726e756835ca43f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classb_1_1string.html">b::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga3ca0ff628ab7190d5726e756835ca43f">b::string::join</a> (const std::vector&lt; <a class="el" href="classb_1_1string.html">b::string</a> &gt; &amp;strings, const <a class="el" href="classb_1_1string.html">b::string</a> &amp;delimiter)</td></tr>
+<tr class="memdesc:ga3ca0ff628ab7190d5726e756835ca43f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Join an array of strings into a single one. To be used with <code>b::split()</code>.  <a href="group__String.html#ga3ca0ff628ab7190d5726e756835ca43f">More...</a><br /></td></tr>
+<tr class="separator:ga3ca0ff628ab7190d5726e756835ca43f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf8bcaf8f720d78aefe72ac97194d3dd8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classb_1_1string.html">b::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gaf8bcaf8f720d78aefe72ac97194d3dd8">b::string::replace</a> (<a class="el" href="classb_1_1string.html">b::string</a> <a class="el" href="classb_1_1string.html">string</a>, const <a class="el" href="classb_1_1string.html">b::string</a> &amp;from, const <a class="el" href="classb_1_1string.html">b::string</a> &amp;to)</td></tr>
+<tr class="memdesc:gaf8bcaf8f720d78aefe72ac97194d3dd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace parts of a string with another string.  <a href="group__String.html#gaf8bcaf8f720d78aefe72ac97194d3dd8">More...</a><br /></td></tr>
+<tr class="separator:gaf8bcaf8f720d78aefe72ac97194d3dd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaebc2452c64e024c768a0923005e61e1c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classb_1_1string.html">b::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gaebc2452c64e024c768a0923005e61e1c">b::string::replace_one</a> (<a class="el" href="classb_1_1string.html">b::string</a> <a class="el" href="classb_1_1string.html">string</a>, const <a class="el" href="classb_1_1string.html">b::string</a> &amp;from, const <a class="el" href="classb_1_1string.html">b::string</a> &amp;to, int occurrence)</td></tr>
+<tr class="memdesc:gaebc2452c64e024c768a0923005e61e1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace one part of a string with another string.  <a href="group__String.html#gaebc2452c64e024c768a0923005e61e1c">More...</a><br /></td></tr>
+<tr class="separator:gaebc2452c64e024c768a0923005e61e1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga492f392f5930ac7a04ab5b4f16af47fc"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classb_1_1string.html">b::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga492f392f5930ac7a04ab5b4f16af47fc">b::string::replace_first</a> (const <a class="el" href="classb_1_1string.html">b::string</a> &amp;<a class="el" href="classb_1_1string.html">string</a>, const <a class="el" href="classb_1_1string.html">b::string</a> &amp;from, const <a class="el" href="classb_1_1string.html">b::string</a> &amp;to)</td></tr>
+<tr class="memdesc:ga492f392f5930ac7a04ab5b4f16af47fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace the first occurrence of a string with another string.  <a href="group__String.html#ga492f392f5930ac7a04ab5b4f16af47fc">More...</a><br /></td></tr>
+<tr class="separator:ga492f392f5930ac7a04ab5b4f16af47fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga93aa7712513ff99376289cb42921748c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classb_1_1string.html">b::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga93aa7712513ff99376289cb42921748c">b::string::replace_last</a> (const <a class="el" href="classb_1_1string.html">b::string</a> &amp;<a class="el" href="classb_1_1string.html">string</a>, const <a class="el" href="classb_1_1string.html">b::string</a> &amp;from, const <a class="el" href="classb_1_1string.html">b::string</a> &amp;to)</td></tr>
+<tr class="memdesc:ga93aa7712513ff99376289cb42921748c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace the last occurrence of a string with another string.  <a href="group__String.html#ga93aa7712513ff99376289cb42921748c">More...</a><br /></td></tr>
+<tr class="separator:ga93aa7712513ff99376289cb42921748c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa5eeb7a78cbb15349e28e250a55c5ab4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classb_1_1string.html">b::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gaa5eeb7a78cbb15349e28e250a55c5ab4">b::string::to_lower</a> (const <a class="el" href="classb_1_1string.html">b::string</a> &amp;<a class="el" href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">str</a>)</td></tr>
+<tr class="memdesc:gaa5eeb7a78cbb15349e28e250a55c5ab4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make all characters of a UTF-8 string lowercase.  <a href="group__String.html#gaa5eeb7a78cbb15349e28e250a55c5ab4">More...</a><br /></td></tr>
+<tr class="separator:gaa5eeb7a78cbb15349e28e250a55c5ab4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5f1f749be6cb70d35eae93820e61559a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classb_1_1string.html">b::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga5f1f749be6cb70d35eae93820e61559a">b::string::to_upper</a> (const <a class="el" href="classb_1_1string.html">b::string</a> &amp;<a class="el" href="group__String.html#gaf88788348fa3855e4c901a94e63c0eb5">str</a>)</td></tr>
+<tr class="memdesc:ga5f1f749be6cb70d35eae93820e61559a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make all characters of a UTF-8 string uppercase.  <a href="group__String.html#ga5f1f749be6cb70d35eae93820e61559a">More...</a><br /></td></tr>
+<tr class="separator:ga5f1f749be6cb70d35eae93820e61559a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gade7c5a7f45c7e461f5599b17ce657a8a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gade7c5a7f45c7e461f5599b17ce657a8a">b::encode_base64</a> (const std::string &amp;str)</td></tr>
-<tr class="memdesc:gade7c5a7f45c7e461f5599b17ce657a8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a string or a binary resource as Base-64.  <a href="group__String.html#gade7c5a7f45c7e461f5599b17ce657a8a">More...</a><br /></td></tr>
+<tr class="memdesc:gade7c5a7f45c7e461f5599b17ce657a8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a binary string or a binary resource as Base-64.  <a href="group__String.html#gade7c5a7f45c7e461f5599b17ce657a8a">More...</a><br /></td></tr>
 <tr class="separator:gade7c5a7f45c7e461f5599b17ce657a8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9b3508d763f1f1e50d76f741bef96570"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga9b3508d763f1f1e50d76f741bef96570">b::decode_base64</a> (const std::string &amp;str)</td></tr>
 <tr class="memdesc:ga9b3508d763f1f1e50d76f741bef96570"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a Base-64 encoded resource back to its original form.  <a href="group__String.html#ga9b3508d763f1f1e50d76f741bef96570">More...</a><br /></td></tr>
 <tr class="separator:ga9b3508d763f1f1e50d76f741bef96570"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa520a98c8921b81df228110d2bc1a8e9"><td class="memItemLeft" align="right" valign="top"><a id="gaa520a98c8921b81df228110d2bc1a8e9"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>std::hash&lt; b::string &gt;::operator()</b> (const <a class="el" href="classb_1_1string.html">b::string</a> &amp;str) const</td></tr>
+<tr class="separator:gaa520a98c8921b81df228110d2bc1a8e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Everything related to string manipulation and encoding. </p>
-<h2 class="groupheader">Typedef Documentation</h2>
-<a id="ga61a14888dd093388872c16651f0f4bd1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga61a14888dd093388872c16651f0f4bd1">&#9670;&nbsp;</a></span>osstring</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="group__String.html#ga61a14888dd093388872c16651f0f4bd1">b::osstring</a> = typedef std::string</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>A string type used for interfacing with the corresponding operating system. </p>
-<p>This type is defined as <code>std::wstring</code> on Windows, designed to hold UTF-16 encoded strings for working with the Win32 API exclusively. On all other platforms it is defined as <code>std::string</code>. Thus, <code>b::to_osstring(str).c_str()</code> will always give you a c-style char array, UTF-8 on Unix and UTF-16 on Windows. See <code>b::to_osstring</code> for possible caveats! </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga3ca612ae19ec07a2bdc8352b30d762f5" title="Convert a UTF-8 std::string to its platform agnostic version.">b::to_osstring()</a> </dd></dl>
-
-</div>
-</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ga9b3508d763f1f1e50d76f741bef96570"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga9b3508d763f1f1e50d76f741bef96570">&#9670;&nbsp;</a></span>decode_base64()</h2>
@@ -217,14 +314,14 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Decode a Base-64 encoded resource back to its original form. </p>
-<p>See <a class="el" href="group__String.html#gade7c5a7f45c7e461f5599b17ce657a8a" title="Encode a string or a binary resource as Base-64.">b::encode_base64()</a> for more information </p><dl class="params"><dt>Parameters</dt><dd>
+<p>See <a class="el" href="group__String.html#gade7c5a7f45c7e461f5599b17ce657a8a" title="Encode a binary string or a binary resource as Base-64.">b::encode_base64()</a> for more information </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>A Base-64 encoded string representing a resource </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Decoded resource as a string containing a series of bytes (not necessarily printable characters). </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#gade7c5a7f45c7e461f5599b17ce657a8a" title="Encode a string or a binary resource as Base-64.">b::encode_base64()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#gade7c5a7f45c7e461f5599b17ce657a8a" title="Encode a binary string or a binary resource as Base-64.">b::encode_base64()</a> </dd></dl>
 
 </div>
 </div>
@@ -244,7 +341,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Encode a string or a binary resource as Base-64. </p>
+<p>Encode a binary string or a binary resource as Base-64. </p>
 <p>This string can either be a text or a binary-like byte-series (loaded from a file). Especially useful for embedding small resource files in a source file or exchanging binary resources over a network. The binary resource is stored in the std::string as a series of bytes, <code>std::string</code> can also hold non-printable characters including zero bytes. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The string or byte-series to encode </td></tr>
@@ -256,85 +353,26 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga20793a985603bef8f8f2a772f427c1b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga20793a985603bef8f8f2a772f427c1b0">&#9670;&nbsp;</a></span>from_osstring()</h2>
+<a id="gae22a1a4c7976d6583c550f4b0dbd8c87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae22a1a4c7976d6583c550f4b0dbd8c87">&#9670;&nbsp;</a></span>foreach() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string b::from_osstring </td>
+          <td class="memname">static <a class="el" href="classb_1_1string.html">b::string</a> b::string::foreach </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="group__String.html#ga61a14888dd093388872c16651f0f4bd1">b::osstring</a> &amp;&#160;</td>
-          <td class="paramname"><em>str</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Opposite of <code><a class="el" href="group__String.html#ga3ca612ae19ec07a2bdc8352b30d762f5" title="Convert a UTF-8 std::string to its platform agnostic version.">b::to_osstring()</a></code>. See for more info. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The string to be converted, std::wstring on Windows, std::string on other platforms </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">std::invalid_argument</td><td>on an invalid utf-16 sequence on Windows, none on other platforms </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The converted string </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga3ca612ae19ec07a2bdc8352b30d762f5" title="Convert a UTF-8 std::string to its platform agnostic version.">b::to_osstring()</a> </dd></dl>
-
-</div>
-</div>
-<a id="ga20b0197a9e4ed6b0bebb0a91d8826061"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga20b0197a9e4ed6b0bebb0a91d8826061">&#9670;&nbsp;</a></span>from_u8string()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string b::from_u8string </td>
-          <td>(</td>
-          <td class="paramtype">const std::u8string &amp;&#160;</td>
-          <td class="paramname"><em>str</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Convert an <code>std::u8string</code> to an <code>std::string</code>. </p>
-<p>The returned string is a one-to-one copy of the UTF-8 encoded bytes. No encoding is changed and no check is performed. This function cannot fail. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The string to be converted </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The converted string </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#gad6a3f2785e3086dd95d97460418a0bef" title="Convert an std::string to an std::u8string.">b::to_u8string()</a> </dd></dl>
-
-</div>
-</div>
-<a id="ga7e95ddc224e06adbcdc28b997c9184ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga7e95ddc224e06adbcdc28b997c9184ce">&#9670;&nbsp;</a></span>join()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string b::join </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>strings</em>, </td>
+          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>spacer</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramtype">const std::function&lt; <a class="el" href="classb_1_1string.html">b::string</a>(<a class="el" href="classb_1_1string.html">b::string</a>)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>function</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -342,9 +380,140 @@ Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Join an array of strings into a single one. To be used with <code><a class="el" href="group__String.html#ga815d742dd731ef1857d5146204cb0990" title="Split a string into an array of string pieces by a delimiter.">b::split()</a></code>. </p>
+<p>Call a function for every character in a UTF-8 encoded string, not for every byte. </p>
+<p>This can be used to do operations on a string whereas the function is called for every character (not for every byte). The return values are appended to one another and returned as another string. Thus, directly returning the character in the callback would make this function return the string unchanged. The callback can return either a char32_t or a UTF-8 string, whereas the string can also have more or fewer characters. Returning <code>""</code> essentially removes it. Example usage: <code>auto new = <a class="el" href="group__String.html#gae22a1a4c7976d6583c550f4b0dbd8c87" title="Call a function for every character in a UTF-8 encoded string, not for every byte.">b::string::foreach</a>(str, [] (std::string c) { return c == "ß" ? "SS" : c; })</code> </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The string over which to iterate </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">function</td><td>A callback which is called for every character or codepoint in the string </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>on an invalid UTF-8 sequence </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>All return values from the callbacks appended into a string </dd></dl>
+
+</div>
+</div>
+<a id="ga798ac18a3d7b6d893df4e3e0dd4bbd45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga798ac18a3d7b6d893df4e3e0dd4bbd45">&#9670;&nbsp;</a></span>foreach() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classb_1_1string.html">b::string</a> b::string::foreach </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::function&lt; <a class="el" href="classb_1_1string.html">b::string</a>(char32_t)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>function</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Call a function for every character in a UTF-8 encoded string. Check the overload for more info. </p>
+<p>This is an overload that supplies the callback with <code>char32_t</code> instead of <code>std::string</code>. Please see <code><a class="el" href="group__String.html#gae22a1a4c7976d6583c550f4b0dbd8c87" title="Call a function for every character in a UTF-8 encoded string, not for every byte.">b::string::foreach()</a></code> for any other details. </p>
+
+</div>
+</div>
+<a id="gada9e3646d6a80756ec0f8f9e87a98c62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gada9e3646d6a80756ec0f8f9e87a98c62">&#9670;&nbsp;</a></span>is_valid_utf8()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool b::string::is_valid_utf8 </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>static validation function for UTF-8 strings </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The UTF-8 encoded string to validate </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>false if the string is not valid UTF-8, true otherwise </dd></dl>
+
+</div>
+</div>
+<a id="ga3ca0ff628ab7190d5726e756835ca43f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3ca0ff628ab7190d5726e756835ca43f">&#9670;&nbsp;</a></span>join()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classb_1_1string.html">b::string</a> b::string::join </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classb_1_1string.html">b::string</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>strings</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
+          <td class="paramname"><em>delimiter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Join an array of strings into a single one. To be used with <code>b::split()</code>. </p>
 <p>The spacer string is inserted between any two string tokens being joined. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">strings</td><td>Array of string tokens to be joined </td></tr>
@@ -353,32 +522,689 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The combined string </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga815d742dd731ef1857d5146204cb0990" title="Split a string into an array of string pieces by a delimiter.">b::split()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#gac62e665ea1efbd2cf834cc20b19e0f63" title="Split a string into an array of string pieces by a delimiter.">b::string::split()</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga00199551bb2ca5e5864257ad28a8cbad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga00199551bb2ca5e5864257ad28a8cbad">&#9670;&nbsp;</a></span>replace()</h2>
+<a id="gab2e9ced3e01e9c04aacac26d22b62297"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab2e9ced3e01e9c04aacac26d22b62297">&#9670;&nbsp;</a></span>operator std::u16string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::operator std::u16string </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>conversion operator to std::u16string </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string does not contain valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::u16string containing the UTF-16 representation of the string </dd></dl>
+
+</div>
+</div>
+<a id="ga3fae332b0e64f805c97e1755fb1c9f69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3fae332b0e64f805c97e1755fb1c9f69">&#9670;&nbsp;</a></span>operator std::u32string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::operator std::u32string </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>conversion operator to std::u32string </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string does not contain valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::u32string containing the UTF-32 representation of the string </dd></dl>
+
+</div>
+</div>
+<a id="gae8e71b9b72ecffdbed3719734fd740ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae8e71b9b72ecffdbed3719734fd740ef">&#9670;&nbsp;</a></span>operator std::u8string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::operator std::u8string </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>conversion operator to std::u8string </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string does not contain valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::u8string containing the UTF-8 representation of the string </dd></dl>
+
+</div>
+</div>
+<a id="gafa890667a2ccbbc68a86e2afc9ab53fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gafa890667a2ccbbc68a86e2afc9ab53fa">&#9670;&nbsp;</a></span>operator std::wstring()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::operator std::wstring </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>conversion operator to std::wstring </p>
+<dl class="section warning"><dt>Warning</dt><dd>You are not encouraged to use <code>std::wstring</code> anywhere, except for platform specific APIs. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string does not contain valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::wstring containing the UTF-16 wide-string representation of the string </dd></dl>
+
+</div>
+</div>
+<a id="ga3f3db5c3295d5a7047d29f3ea8f7ba35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3f3db5c3295d5a7047d29f3ea8f7ba35">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classb_1_1string.html">string</a>&amp; b::string::operator= </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>assignment operator taking char </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>The string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>reference to itself </dd></dl>
+
+</div>
+</div>
+<a id="gafb0f4900f52b17b7df768dad2e841cdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gafb0f4900f52b17b7df768dad2e841cdf">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classb_1_1string.html">string</a>&amp; b::string::operator= </td>
+          <td>(</td>
+          <td class="paramtype">char16_t&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>assignment operator taking char16_t </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>The string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>reference to itself </dd></dl>
+
+</div>
+</div>
+<a id="ga8e22804a8922fc0af91b11a273dc560e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8e22804a8922fc0af91b11a273dc560e">&#9670;&nbsp;</a></span>operator=() <span class="overload">[3/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classb_1_1string.html">string</a>&amp; b::string::operator= </td>
+          <td>(</td>
+          <td class="paramtype">char32_t&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>assignment operator taking char32_t </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>The string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>reference to itself </dd></dl>
+
+</div>
+</div>
+<a id="gaf2fd575ac170c7faf5ab15a568e47a47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf2fd575ac170c7faf5ab15a568e47a47">&#9670;&nbsp;</a></span>operator=() <span class="overload">[4/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classb_1_1string.html">string</a>&amp; b::string::operator= </td>
+          <td>(</td>
+          <td class="paramtype">char8_t&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>assignment operator taking char8_t </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>The string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>reference to itself </dd></dl>
+
+</div>
+</div>
+<a id="ga57747431f86ac9fd99678a52b9f90b90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga57747431f86ac9fd99678a52b9f90b90">&#9670;&nbsp;</a></span>operator=() <span class="overload">[5/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classb_1_1string.html">string</a>&amp; b::string::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>assignment operator taking const char* </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>The string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>reference to itself </dd></dl>
+
+</div>
+</div>
+<a id="gaf11c95635440dd6b0c36dcddd0a4987a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf11c95635440dd6b0c36dcddd0a4987a">&#9670;&nbsp;</a></span>operator=() <span class="overload">[6/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classb_1_1string.html">string</a>&amp; b::string::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const char16_t *&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>assignment operator taking const char16_t* </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>The string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string is not valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>reference to itself </dd></dl>
+
+</div>
+</div>
+<a id="ga30a4cd0c875eff7228f4a031f6b5fc14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga30a4cd0c875eff7228f4a031f6b5fc14">&#9670;&nbsp;</a></span>operator=() <span class="overload">[7/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classb_1_1string.html">string</a>&amp; b::string::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const char32_t *&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>assignment operator taking const char32_t* </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>The string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string is not valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>reference to itself </dd></dl>
+
+</div>
+</div>
+<a id="gae65bc73595ccb7b2723b9808bfd67955"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae65bc73595ccb7b2723b9808bfd67955">&#9670;&nbsp;</a></span>operator=() <span class="overload">[8/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classb_1_1string.html">string</a>&amp; b::string::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const char8_t *&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>assignment operator taking const char8_t* </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>The string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string is not valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>reference to itself </dd></dl>
+
+</div>
+</div>
+<a id="ga8b4bedb753dd471c53442c6c19f85afe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8b4bedb753dd471c53442c6c19f85afe">&#9670;&nbsp;</a></span>operator=() <span class="overload">[9/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classb_1_1string.html">string</a>&amp; b::string::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>assignment operator taking std::string </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>The string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>reference to itself </dd></dl>
+
+</div>
+</div>
+<a id="ga136f02e6cd39d931547b71b13d0162f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga136f02e6cd39d931547b71b13d0162f4">&#9670;&nbsp;</a></span>operator=() <span class="overload">[10/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classb_1_1string.html">string</a>&amp; b::string::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const std::u16string &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>assignment operator taking std::u16string </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>The u16string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string is not valid UTF-16 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>reference to itself </dd></dl>
+
+</div>
+</div>
+<a id="ga6338f02e320f1de26dc6ca3fb73e4c27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6338f02e320f1de26dc6ca3fb73e4c27">&#9670;&nbsp;</a></span>operator=() <span class="overload">[11/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classb_1_1string.html">string</a>&amp; b::string::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const std::u32string &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>assignment operator taking std::u32string </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>The u8string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string is not valid UTF-32 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>reference to itself </dd></dl>
+
+</div>
+</div>
+<a id="ga18cacdcbedd66afff3bc593e37b02138"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga18cacdcbedd66afff3bc593e37b02138">&#9670;&nbsp;</a></span>operator=() <span class="overload">[12/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classb_1_1string.html">string</a>&amp; b::string::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const std::u8string &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>assignment operator taking std::u8string </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>The u8string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string is not valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>reference to itself </dd></dl>
+
+</div>
+</div>
+<a id="gaa245896b040ec498d9e5863afd2352d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa245896b040ec498d9e5863afd2352d7">&#9670;&nbsp;</a></span>operator=() <span class="overload">[13/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classb_1_1string.html">string</a>&amp; b::string::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const std::wstring &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>assignment operator taking std::wstring </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>The platform native wide string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the conversion does not result in valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>reference to itself </dd></dl>
+
+</div>
+</div>
+<a id="gaa31b65905627ec31f45bea54b2d886be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa31b65905627ec31f45bea54b2d886be">&#9670;&nbsp;</a></span>platform_native()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::string b::replace </td>
+          <td class="memname">const <a class="el" href="group__String.html#ga4adfbe65ddf7d0805f505615460b279b">platform_native_string</a>&amp; b::string::platform_native </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>convert to a platform native string: std::wstring on Windows, std::string on other platforms </p>
+<p>Calling <code><a class="el" href="group__String.html#gaa31b65905627ec31f45bea54b2d886be" title="convert to a platform native string: std::wstring on Windows, std::string on other platforms">string.platform_native()</a>.c_str()</code> returns a string pointer in the platform-native encoding (std::wstring on Windows, std::string on other platforms), which is valid until the function is called again or the object is destroyed. </p><dl class="section return"><dt>Returns</dt><dd>std::wstring or std::string depending on the platform </dd></dl>
+
+</div>
+</div>
+<a id="gaf8bcaf8f720d78aefe72ac97194d3dd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf8bcaf8f720d78aefe72ac97194d3dd8">&#9670;&nbsp;</a></span>replace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classb_1_1string.html">b::string</a> b::string::replace </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classb_1_1string.html">b::string</a>&#160;</td>
           <td class="paramname"><em>string</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
           <td class="paramname"><em>from</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
           <td class="paramname"><em>to</em>&#160;</td>
         </tr>
         <tr>
@@ -387,6 +1213,11 @@ Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Replace parts of a string with another string. </p>
@@ -399,32 +1230,35 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The modified string </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga05d0a2abdba4ddee5cf78cd59fab4f49" title="Replace one part of a string with another string.">b::replace_one()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#gaebc2452c64e024c768a0923005e61e1c" title="Replace one part of a string with another string.">b::string::replace_one()</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga8c0d689a4f54058882aa4dcbeb348e41"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga8c0d689a4f54058882aa4dcbeb348e41">&#9670;&nbsp;</a></span>replace_first()</h2>
+<a id="ga492f392f5930ac7a04ab5b4f16af47fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga492f392f5930ac7a04ab5b4f16af47fc">&#9670;&nbsp;</a></span>replace_first()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string b::replace_first </td>
+          <td class="memname">static <a class="el" href="classb_1_1string.html">b::string</a> b::string::replace_first </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
           <td class="paramname"><em>string</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
           <td class="paramname"><em>from</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
           <td class="paramname"><em>to</em>&#160;</td>
         </tr>
         <tr>
@@ -433,35 +1267,43 @@ Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Replace the first occurrence of a string with another string. </p>
-<p>Please see <code><a class="el" href="group__String.html#ga05d0a2abdba4ddee5cf78cd59fab4f49" title="Replace one part of a string with another string.">b::replace_one()</a></code>. This function is just a specialization with the last parameter already set. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga87ede38a0c232d547410a3e1a9a43252" title="Replace the last occurrence of a string with another string.">b::replace_last()</a> </dd></dl>
+<p>Please see <code>b::replace_one()</code>. This function is just a specialization with the last parameter already set. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga93aa7712513ff99376289cb42921748c" title="Replace the last occurrence of a string with another string.">b::string::replace_last()</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga87ede38a0c232d547410a3e1a9a43252"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga87ede38a0c232d547410a3e1a9a43252">&#9670;&nbsp;</a></span>replace_last()</h2>
+<a id="ga93aa7712513ff99376289cb42921748c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga93aa7712513ff99376289cb42921748c">&#9670;&nbsp;</a></span>replace_last()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string b::replace_last </td>
+          <td class="memname">static <a class="el" href="classb_1_1string.html">b::string</a> b::string::replace_last </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
           <td class="paramname"><em>string</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
           <td class="paramname"><em>from</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
           <td class="paramname"><em>to</em>&#160;</td>
         </tr>
         <tr>
@@ -470,35 +1312,43 @@ Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Replace the last occurrence of a string with another string. </p>
-<p>Please see <code><a class="el" href="group__String.html#ga05d0a2abdba4ddee5cf78cd59fab4f49" title="Replace one part of a string with another string.">b::replace_one()</a></code>. This function is just a specialization with the last parameter already set. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga8c0d689a4f54058882aa4dcbeb348e41" title="Replace the first occurrence of a string with another string.">b::replace_first()</a> </dd></dl>
+<p>Please see <code>b::replace_one()</code>. This function is just a specialization with the last parameter already set. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga492f392f5930ac7a04ab5b4f16af47fc" title="Replace the first occurrence of a string with another string.">b::string::replace_first()</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga05d0a2abdba4ddee5cf78cd59fab4f49"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga05d0a2abdba4ddee5cf78cd59fab4f49">&#9670;&nbsp;</a></span>replace_one()</h2>
+<a id="gaebc2452c64e024c768a0923005e61e1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaebc2452c64e024c768a0923005e61e1c">&#9670;&nbsp;</a></span>replace_one()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string b::replace_one </td>
+          <td class="memname">static <a class="el" href="classb_1_1string.html">b::string</a> b::string::replace_one </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype"><a class="el" href="classb_1_1string.html">b::string</a>&#160;</td>
           <td class="paramname"><em>string</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
           <td class="paramname"><em>from</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
           <td class="paramname"><em>to</em>, </td>
         </tr>
         <tr>
@@ -513,6 +1363,11 @@ Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Replace one part of a string with another string. </p>
@@ -526,28 +1381,31 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The modified string </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga00199551bb2ca5e5864257ad28a8cbad" title="Replace parts of a string with another string.">b::replace()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#gaf8bcaf8f720d78aefe72ac97194d3dd8" title="Replace parts of a string with another string.">b::string::replace()</a> </dd>
 <dd>
-<a class="el" href="group__String.html#ga8c0d689a4f54058882aa4dcbeb348e41" title="Replace the first occurrence of a string with another string.">b::replace_first()</a> </dd></dl>
+<a class="el" href="group__String.html#ga492f392f5930ac7a04ab5b4f16af47fc" title="Replace the first occurrence of a string with another string.">b::string::replace_first()</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga815d742dd731ef1857d5146204cb0990"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga815d742dd731ef1857d5146204cb0990">&#9670;&nbsp;</a></span>split()</h2>
+<a id="gac62e665ea1efbd2cf834cc20b19e0f63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac62e665ea1efbd2cf834cc20b19e0f63">&#9670;&nbsp;</a></span>split()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;std::string&gt; b::split </td>
+          <td class="memname">static std::vector&lt;<a class="el" href="classb_1_1string.html">b::string</a>&gt; b::string::split </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype"><a class="el" href="classb_1_1string.html">b::string</a>&#160;</td>
           <td class="paramname"><em>str</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
           <td class="paramname"><em>delimiter</em>&#160;</td>
         </tr>
         <tr>
@@ -556,6 +1414,11 @@ Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Split a string into an array of string pieces by a delimiter. </p>
@@ -567,24 +1430,584 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>An array of string tokens </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga7e95ddc224e06adbcdc28b997c9184ce" title="Join an array of strings into a single one. To be used with b::split().">b::join()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga3ca0ff628ab7190d5726e756835ca43f" title="Join an array of strings into a single one. To be used with b::split().">b::string::join()</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga0febb799fd526dbaae7981b9bb8a78ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga0febb799fd526dbaae7981b9bb8a78ba">&#9670;&nbsp;</a></span>to_lower()</h2>
+<a id="gaf88788348fa3855e4c901a94e63c0eb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf88788348fa3855e4c901a94e63c0eb5">&#9670;&nbsp;</a></span>str() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string b::to_lower </td>
+          <td class="memname">std::string&amp; b::string::str </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>conversion function to std::string reference </p>
+<p>This function provides a non-const reference to the std::string base class. Thus, this function could theoretically be used to modify the base string directly. This does not mean you should. </p><dl class="section return"><dt>Returns</dt><dd>The raw std::string itself </dd></dl>
+
+</div>
+</div>
+<a id="gafc7ef4f6040b26dc944ed1b9f0368e3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gafc7ef4f6040b26dc944ed1b9f0368e3b">&#9670;&nbsp;</a></span>str() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string&amp; b::string::str </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>conversion function to const std::string reference </p>
+<dl class="section return"><dt>Returns</dt><dd>The raw std::string itself </dd></dl>
+
+</div>
+</div>
+<a id="gad8ee2b5aef89731cfd91d4d499462df4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad8ee2b5aef89731cfd91d4d499462df4">&#9670;&nbsp;</a></span>string() <span class="overload">[1/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::string </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking char </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The character to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gac377bb53772c3133f942bba57d4ea852"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac377bb53772c3133f942bba57d4ea852">&#9670;&nbsp;</a></span>string() <span class="overload">[2/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::string </td>
+          <td>(</td>
+          <td class="paramtype">char16_t&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking char16_t </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The character to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gaf518ce7f23b2553bc1a26542f767cc88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf518ce7f23b2553bc1a26542f767cc88">&#9670;&nbsp;</a></span>string() <span class="overload">[3/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::string </td>
+          <td>(</td>
+          <td class="paramtype">char32_t&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking char32_t </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The character to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gacf6408dbebbd8c5013c3e9898b4a85ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gacf6408dbebbd8c5013c3e9898b4a85ac">&#9670;&nbsp;</a></span>string() <span class="overload">[4/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::string </td>
+          <td>(</td>
+          <td class="paramtype">char8_t&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking char8_t </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The character to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga68638f075bc436fe8449577465c66f98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga68638f075bc436fe8449577465c66f98">&#9670;&nbsp;</a></span>string() <span class="overload">[5/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::string </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking const char* </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string is not valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga17f7a2375e09189468b07716808587ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga17f7a2375e09189468b07716808587ac">&#9670;&nbsp;</a></span>string() <span class="overload">[6/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::string </td>
+          <td>(</td>
+          <td class="paramtype">const char16_t *&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking const char16_t* </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string is not valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga37a4854e3f3b3e6ce03f01f2b0a8017c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga37a4854e3f3b3e6ce03f01f2b0a8017c">&#9670;&nbsp;</a></span>string() <span class="overload">[7/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::string </td>
+          <td>(</td>
+          <td class="paramtype">const char32_t *&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking const char32_t* </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string is not valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gac07848411cb3d9852f356559e4537465"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac07848411cb3d9852f356559e4537465">&#9670;&nbsp;</a></span>string() <span class="overload">[8/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::string </td>
+          <td>(</td>
+          <td class="paramtype">const char8_t *&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking const char8_t* </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string is not valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga10db3c2b8548b1d536815860862fd98f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga10db3c2b8548b1d536815860862fd98f">&#9670;&nbsp;</a></span>string() <span class="overload">[9/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::string </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>str</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking std::string </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string is not valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gaf836276091a1ab24803d9c6c30184a96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf836276091a1ab24803d9c6c30184a96">&#9670;&nbsp;</a></span>string() <span class="overload">[10/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::string </td>
+          <td>(</td>
+          <td class="paramtype">const std::u16string &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking std::u16string </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The u16string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string is not valid UTF-16 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga2578ccbaf38d3d2a947e783adbc75ba2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2578ccbaf38d3d2a947e783adbc75ba2">&#9670;&nbsp;</a></span>string() <span class="overload">[11/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::string </td>
+          <td>(</td>
+          <td class="paramtype">const std::u32string &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking std::u32string </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The u32string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string is not valid UTF-32 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gaf89a9effa569562ab8e0504fb902a67e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf89a9effa569562ab8e0504fb902a67e">&#9670;&nbsp;</a></span>string() <span class="overload">[12/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::string </td>
+          <td>(</td>
+          <td class="paramtype">const std::u8string &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking std::u8string </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The u8string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string is not valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga5d9148638d934dca86a54fba858db980"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga5d9148638d934dca86a54fba858db980">&#9670;&nbsp;</a></span>string() <span class="overload">[13/13]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::string::string </td>
+          <td>(</td>
+          <td class="paramtype">const std::wstring &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a> constructor taking std::wstring </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The platform native wide string to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the conversion does not result in valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gaa5eeb7a78cbb15349e28e250a55c5ab4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa5eeb7a78cbb15349e28e250a55c5ab4">&#9670;&nbsp;</a></span>to_lower()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classb_1_1string.html">b::string</a> b::string::to_lower </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Make all characters of a UTF-8 string lowercase. </p>
@@ -601,197 +2024,36 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The converted UTF-8 string </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga6c7a4968814fc4e9b2a8788e90393840" title="Make all characters of a UTF-8 string uppercase.">b::to_upper()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga5f1f749be6cb70d35eae93820e61559a" title="Make all characters of a UTF-8 string uppercase.">b::string::to_upper()</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga3ca612ae19ec07a2bdc8352b30d762f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga3ca612ae19ec07a2bdc8352b30d762f5">&#9670;&nbsp;</a></span>to_osstring()</h2>
+<a id="ga5f1f749be6cb70d35eae93820e61559a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga5f1f749be6cb70d35eae93820e61559a">&#9670;&nbsp;</a></span>to_upper()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="group__String.html#ga61a14888dd093388872c16651f0f4bd1">b::osstring</a> b::to_osstring </td>
+          <td class="memname">static <a class="el" href="classb_1_1string.html">b::string</a> b::string::to_upper </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
           <td class="paramname"><em>str</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-<p>Convert a UTF-8 <code>std::string</code> to its platform agnostic version. </p>
-<p>Converting to UTF-16 on Windows, returning the unchanged string on other platforms. <code>b::to_osstring(str).c_str()</code> will always give you a c-style char array, UTF-8 on Unix and UTF-16 on Windows. But beware of the lifetime, in this case the pointer is only valid as long as the osstring object is alive and it only is for the current expression. Thus, if you have a Win32 API or Linux API function that holds onto the pointer or you store the pointer in a struct, then you must save the osstring in a variable, call <code>.c_str()</code> on the variable and make sure that the variable outlives the data structure. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The string to be converted </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">std::invalid_argument</td><td>on an invalid utf-8 sequence on Windows, nothing on other platforms </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>std::wstring on Windows converted to UTF-16, std::string on other platforms with the unchanged string </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga20793a985603bef8f8f2a772f427c1b0" title="Opposite of b::to_osstring(). See for more info.">b::from_osstring()</a> </dd></dl>
-
-</div>
-</div>
-<a id="ga9cfd792ba8468e47106391bf93d6f07e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga9cfd792ba8468e47106391bf93d6f07e">&#9670;&nbsp;</a></span>to_u32()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::u32string b::to_u32 </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>str</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Convert a UTF-8 encoded multibyte string to a UTF-32 encoded string. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The string to be converted </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">std::invalid_argument</td><td>on an invalid UTF-8 sequence </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The converted string </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga78a79386ae94f195c3ffea648f388db2" title="Convert a single unicode character into its UTF-8 encoded multibyte form.">b::to_u8()</a> </dd></dl>
-
-</div>
-</div>
-<a id="ga78a79386ae94f195c3ffea648f388db2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga78a79386ae94f195c3ffea648f388db2">&#9670;&nbsp;</a></span>to_u8() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string b::to_u8 </td>
-          <td>(</td>
-          <td class="paramtype">char32_t&#160;</td>
-          <td class="paramname"><em>c</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Convert a single unicode character into its UTF-8 encoded multibyte form. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">c</td><td>The character to be converted </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">std::invalid_argument</td><td>on an invalid unicode character </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The UTF-8 multibyte string representing the unicode character </dd></dl>
-
-</div>
-</div>
-<a id="gacc56123bb66b1d7ca32e6beeccf02469"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gacc56123bb66b1d7ca32e6beeccf02469">&#9670;&nbsp;</a></span>to_u8() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string b::to_u8 </td>
-          <td>(</td>
-          <td class="paramtype">const std::u32string &amp;&#160;</td>
-          <td class="paramname"><em>str</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Convert a UTF-32 encoded string back to a UTF-8 encoded string. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The string to be converted </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">std::invalid_argument</td><td>on an invalid UTF-32 character </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The converted string </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga9cfd792ba8468e47106391bf93d6f07e" title="Convert a UTF-8 encoded multibyte string to a UTF-32 encoded string.">b::to_u32()</a> </dd></dl>
-
-</div>
-</div>
-<a id="gad6a3f2785e3086dd95d97460418a0bef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gad6a3f2785e3086dd95d97460418a0bef">&#9670;&nbsp;</a></span>to_u8string()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::u8string b::to_u8string </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>str</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Convert an <code>std::string</code> to an <code>std::u8string</code>. </p>
-<p>The input is expected to be a string containing UTF-8 encoded bytes. If the input contains an invalid UTF-8 sequence, an exception is thrown. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The string to be converted </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">std::invalid_argument</td><td>on an invalid UTF-8 sequence </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The converted string. </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga20b0197a9e4ed6b0bebb0a91d8826061" title="Convert an std::u8string to an std::string.">b::from_u8string()</a> </dd></dl>
-
-</div>
-</div>
-<a id="ga6c7a4968814fc4e9b2a8788e90393840"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga6c7a4968814fc4e9b2a8788e90393840">&#9670;&nbsp;</a></span>to_upper()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string b::to_upper </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>str</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Make all characters of a UTF-8 string uppercase. </p>
-<p>Unicode characters are transformed like expected. "ß" is transformed to "SS". </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Unicode characters are transformed like expected. Special case: "ß" is transformed to "SS". </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The UTF-8 string to be converted </td></tr>
   </table>
@@ -804,82 +2066,112 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The converted UTF-8 string </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga0febb799fd526dbaae7981b9bb8a78ba" title="Make all characters of a UTF-8 string lowercase.">b::to_lower()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#gaa5eeb7a78cbb15349e28e250a55c5ab4" title="Make all characters of a UTF-8 string lowercase.">b::string::to_lower()</a> </dd></dl>
 
 </div>
 </div>
-<a id="gaf059bea799f2e29a74d02e8124d5cf66"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaf059bea799f2e29a74d02e8124d5cf66">&#9670;&nbsp;</a></span>u8_foreach() <span class="overload">[1/2]</span></h2>
+<a id="ga6e7ad1e5736f04dd6b44f0c351fe9549"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6e7ad1e5736f04dd6b44f0c351fe9549">&#9670;&nbsp;</a></span>u16()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::string b::u8_foreach </td>
+          <td class="memname">std::u16string b::string::u16 </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::function&lt; std::variant&lt; std::string, char32_t &gt;(char32_t)&gt; &amp;&#160;</td>
-          <td class="paramname"><em>function</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Call a function for every character in a UTF-8 encoded string. Check the overload for more info. </p>
-<p>This is an overload that supplies the callback with <code>char32_t</code> instead of <code>std::string</code>. Please see <code><a class="el" href="group__String.html#gaf059bea799f2e29a74d02e8124d5cf66" title="Call a function for every character in a UTF-8 encoded string. Check the overload for more info.">b::u8_foreach()</a></code> for any other details. </p>
-
-</div>
-</div>
-<a id="ga58b1ee5c564cafece2371b643c6cd295"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga58b1ee5c564cafece2371b643c6cd295">&#9670;&nbsp;</a></span>u8_foreach() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string b::u8_foreach </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::function&lt; std::variant&lt; std::string, char32_t &gt;(std::string)&gt; &amp;&#160;</td>
-          <td class="paramname"><em>function</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Call a function for every character in a UTF-8 encoded string. </p>
-<p>This can be used to do operations on a string whereas the function is called for every character (not for every byte). The return values are appended to one another and returned as another string. Thus, directly returning the character in the callback would make this function return the string unchanged. The callback can return either a char32_t or a UTF-8 string, whereas the string can also have more or fewer characters. Returning <code>""</code> essentially removes it. Example usage: <code>auto new = b::u8_foreach(str, [] (std::string c) { return c == "ß" ? "SS" : c; })</code> </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The string over which to iterate </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">function</td><td>A callback which is called for every character or codepoint in the string </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>conversion function to std::u16string </p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::invalid_argument</td><td>on an invalid UTF-8 sequence </td></tr>
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string does not contain valid UTF-8 </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>All return values from the callbacks appended into a string </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>std::u16string containing the UTF-8 representation of the string </dd></dl>
+
+</div>
+</div>
+<a id="gaa48313a4d8a48eef76eda8f5edf23a38"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa48313a4d8a48eef76eda8f5edf23a38">&#9670;&nbsp;</a></span>u32()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::u32string b::string::u32 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>conversion function to std::u32string </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string does not contain valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::u32string containing the UTF-8 representation of the string </dd></dl>
+
+</div>
+</div>
+<a id="ga85fa2668f0b0a9ceea2e9d17f73cddb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga85fa2668f0b0a9ceea2e9d17f73cddb8">&#9670;&nbsp;</a></span>u8()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::u8string b::string::u8 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>conversion function to std::u8string </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string does not contain valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::u8string containing the UTF-8 representation of the string </dd></dl>
+
+</div>
+</div>
+<a id="ga65f0cf11a701daa1c9528be3a75ba871"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga65f0cf11a701daa1c9528be3a75ba871">&#9670;&nbsp;</a></span>wstr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::wstring&amp; b::string::wstr </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>conversion function to std::wstring </p>
+<dl class="section warning"><dt>Warning</dt><dd>You are not encouraged to use <code>std::wstring</code> anywhere, except for platform specific APIs.</dd></dl>
+<p>This function stores the wide string representation inside the string and returns a reference to it. This makes the lifetime of the return value the lifetime of this <a class="el" href="classb_1_1string.html" title="Yet another string class, that combines all other. Synonymous to std::string, but with more features.">b::string</a>. Returning a copy would not. </p><dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string does not contain valid UTF-8 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::wstring containing the UTF-16 wide-string representation of the string </dd></dl>
 
 </div>
 </div>

@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['ifstream_27',['ifstream',['../classb_1_1fs_1_1ifstream.html',1,'b::fs']]],
-  ['is_5flocked_28',['is_locked',['../group__Lockfile.html#ga6a2ce98e0d031a1c028ca210246b0060',1,'b::lockfile']]],
-  ['is_5fvalid_29',['is_valid',['../group__Uuid.html#ga7454f7247f3a4aadf8475bea98c6c691',1,'b::uuid']]]
+  ['hash_3c_20b_3a_3astring_20_3e_27',['hash&lt; b::string &gt;',['../structstd_1_1hash_3_01b_1_1string_01_4.html',1,'std']]]
 ];

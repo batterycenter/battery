@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['replace_133',['replace',['../group__String.html#ga00199551bb2ca5e5864257ad28a8cbad',1,'b']]],
-  ['replace_5ffirst_134',['replace_first',['../group__String.html#ga8c0d689a4f54058882aa4dcbeb348e41',1,'b']]],
-  ['replace_5flast_135',['replace_last',['../group__String.html#ga87ede38a0c232d547410a3e1a9a43252',1,'b']]],
-  ['replace_5fone_136',['replace_one',['../group__String.html#ga05d0a2abdba4ddee5cf78cd59fab4f49',1,'b']]]
+  ['replace_141',['replace',['../group__String.html#gaf8bcaf8f720d78aefe72ac97194d3dd8',1,'b::string']]],
+  ['replace_5ffirst_142',['replace_first',['../group__String.html#ga492f392f5930ac7a04ab5b4f16af47fc',1,'b::string']]],
+  ['replace_5flast_143',['replace_last',['../group__String.html#ga93aa7712513ff99376289cb42921748c',1,'b::string']]],
+  ['replace_5fone_144',['replace_one',['../group__String.html#gaebc2452c64e024c768a0923005e61e1c',1,'b::string']]]
 ];

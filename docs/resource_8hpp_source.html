@@ -45,7 +45,7 @@
   <td id="projectlogo"><img alt="Logo" src="battery.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Battery
-   &#160;<span id="projectnumber">v0.1.2-alpha</span>
+   &#160;<span id="projectnumber">v0.1.2</span>
    </div>
    <div id="projectbrief">Desktop application framework</div>
   </td>
@@ -113,77 +113,78 @@ $(document).ready(function(){initNavTree('resource_8hpp_source.html',''); initRe
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>b {</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="classb_1_1resource.html">    8</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classb_1_1resource.html">resource</a> {</div>
+<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="classb_1_1Resource.html">    8</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classb_1_1Resource.html">Resource</a> {</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <a class="code" href="classb_1_1resource.html">resource</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <a class="code" href="classb_1_1Resource.html">Resource</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1resource.html">resource</a> from_text_file(<span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">fs::path</a>&amp; filepath);</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1resource.html">resource</a> from_binary_file(<span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">fs::path</a>&amp; filepath);</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1resource.html">resource</a> from_byte_string(<span class="keyword">const</span> std::string&amp; data, <span class="keyword">const</span> std::string&amp; filetype = <span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1resource.html">resource</a> from_buffer(<span class="keyword">const</span> <span class="keywordtype">void</span>* buffer, <span class="keywordtype">size_t</span> length, <span class="keyword">const</span> std::string&amp; filetype = <span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1resource.html">resource</a> from_base64(<span class="keyword">const</span> std::string&amp; base64, <span class="keyword">const</span> std::string&amp; filetype = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1Resource.html">Resource</a> FromTextFile(<span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">fs::path</a>&amp; filepath);</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1Resource.html">Resource</a> FromBinaryFile(<span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">fs::path</a>&amp; filepath);</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1Resource.html">Resource</a> FromByteString(<span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; data, <span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; filetype = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1Resource.html">Resource</a> FromBuffer(<span class="keyword">const</span> <span class="keywordtype">void</span>* buffer, <span class="keywordtype">size_t</span> length, <span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; filetype = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1Resource.html">Resource</a> FromBase64(<span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; base64, <span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; filetype = <span class="stringliteral">&quot;&quot;</span>);</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        [[nodiscard]] <span class="keyword">const</span> <span class="keywordtype">char</span>* data() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        [[nodiscard]] <span class="keywordtype">size_t</span> size() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="comment">// If specified correctly, the filetype will be a string hinting the encoding of the data. Empty is unknown,</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="comment">// it&#39;s parsed from the file path or specified manually. Guaranteed to be lowercase. Example: &quot;&quot; or &quot;png&quot; or &quot;txt&quot;.</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="comment">// Can be used in the receiving function to parse the data differently based on the file type</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        [[nodiscard]] std::string filetype() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        [[nodiscard]] std::string as_string() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        [[nodiscard]] std::vector&lt;uint8_t&gt; as_vector() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        [[nodiscard]] std::string as_base64() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        [[nodiscard]] <span class="keywordtype">bool</span> to_text_file(<span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">fs::path</a>&amp; filepath) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        [[nodiscard]] <span class="keywordtype">bool</span> to_binary_file(<span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">fs::path</a>&amp; filepath) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        [[nodiscard]] <a class="code" href="classb_1_1string.html">b::string</a> filetype() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        [[nodiscard]] <a class="code" href="classb_1_1string.html">b::string</a> <a class="code" href="classb_1_1string.html">string</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        [[nodiscard]] std::vector&lt;uint8_t&gt; asVector() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        [[nodiscard]] <a class="code" href="classb_1_1string.html">b::string</a> base64() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        [[nodiscard]] <span class="keywordtype">bool</span> writeToTextFile(<span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">fs::path</a>&amp; filepath) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        [[nodiscard]] <span class="keywordtype">bool</span> writeToBinaryFile(<span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">fs::path</a>&amp; filepath) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classb_1_1resource_1_1on__disk__resource.html">   30</a></span>&#160;        <span class="keyword">class </span><a class="code" href="classb_1_1resource_1_1on__disk__resource.html">on_disk_resource</a> {</div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classb_1_1Resource_1_1OnDiskResource.html">   30</a></span>&#160;        <span class="keyword">class </span><a class="code" href="classb_1_1Resource_1_1OnDiskResource.html">OnDiskResource</a> {</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            <a class="code" href="classb_1_1resource_1_1on__disk__resource.html">on_disk_resource</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            <span class="keyword">explicit</span> <a class="code" href="classb_1_1resource_1_1on__disk__resource.html">on_disk_resource</a>(<span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a>&amp; path, <span class="keyword">const</span> std::string&amp; data);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            ~<a class="code" href="classb_1_1resource_1_1on__disk__resource.html">on_disk_resource</a>();</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            <a class="code" href="classb_1_1Resource_1_1OnDiskResource.html">OnDiskResource</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            <span class="keyword">explicit</span> <a class="code" href="classb_1_1Resource_1_1OnDiskResource.html">OnDiskResource</a>(<span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a>&amp; path, <span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; data);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            ~<a class="code" href="classb_1_1Resource_1_1OnDiskResource.html">OnDiskResource</a>();</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <a class="code" href="classb_1_1resource_1_1on__disk__resource.html">on_disk_resource</a>(<span class="keyword">const</span> <a class="code" href="classb_1_1resource_1_1on__disk__resource.html">on_disk_resource</a>&amp;) = <span class="keyword">delete</span>;     <span class="comment">// We cannot allow a copy. A move is allowed</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            <a class="code" href="classb_1_1resource_1_1on__disk__resource.html">on_disk_resource</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classb_1_1resource_1_1on__disk__resource.html">on_disk_resource</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <a class="code" href="classb_1_1resource_1_1on__disk__resource.html">on_disk_resource</a>(<a class="code" href="classb_1_1resource_1_1on__disk__resource.html">on_disk_resource</a>&amp;&amp; other) {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <a class="code" href="classb_1_1Resource_1_1OnDiskResource.html">OnDiskResource</a>(<span class="keyword">const</span> <a class="code" href="classb_1_1Resource_1_1OnDiskResource.html">OnDiskResource</a>&amp;) = <span class="keyword">delete</span>;     <span class="comment">// We cannot allow a copy. A move is allowed</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            <a class="code" href="classb_1_1Resource_1_1OnDiskResource.html">OnDiskResource</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classb_1_1Resource_1_1OnDiskResource.html">OnDiskResource</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <a class="code" href="classb_1_1Resource_1_1OnDiskResource.html">OnDiskResource</a>(<a class="code" href="classb_1_1Resource_1_1OnDiskResource.html">OnDiskResource</a>&amp;&amp; other) noexcept {</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                reset();</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                path = std::move(other.path);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                other.path.clear();</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                m_path = other.m_path;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                other.m_path.clear();</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            }</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            <a class="code" href="classb_1_1resource_1_1on__disk__resource.html">on_disk_resource</a>&amp; operator=(<a class="code" href="classb_1_1resource_1_1on__disk__resource.html">on_disk_resource</a>&amp;&amp; other) noexcept {</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            <a class="code" href="classb_1_1Resource_1_1OnDiskResource.html">OnDiskResource</a>&amp; operator=(<a class="code" href="classb_1_1Resource_1_1OnDiskResource.html">OnDiskResource</a>&amp;&amp; other) noexcept {</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                reset();</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                path = std::move(other.path);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                other.path.clear();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                m_path = other.m_path;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                other.m_path.clear();</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            }</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            std::string str() {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                <span class="keywordflow">return</span> path.to_string();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            <a class="code" href="classb_1_1string.html">b::string</a> str() {</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                <span class="keywordflow">return</span> m_path;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            }</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keyword">operator</span> <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a>() {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                <span class="keywordflow">return</span> path;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                <span class="keywordflow">return</span> m_path;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            }</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keyword">operator</span> std::string() {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                <span class="keywordflow">return</span> path.to_string();</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keyword">operator</span> <a class="code" href="classb_1_1string.html">b::string</a>() {</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                <span class="keywordflow">return</span> m_path;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            }</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            <span class="keywordtype">void</span> reset();</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a> path;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a> m_path;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        };</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        [[nodiscard]] <a class="code" href="classb_1_1resource_1_1on__disk__resource.html">on_disk_resource</a> as_temporary_on_disk_resource() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        [[nodiscard]] <a class="code" href="classb_1_1Resource_1_1OnDiskResource.html">OnDiskResource</a> asTemporaryOnDiskResource() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        std::string _data;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        std::string _filetype;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> m_data;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> m_filetype;</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    };</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;}</div>
-<div class="ttc" id="aclassb_1_1fs_1_1path_html"><div class="ttname"><a href="classb_1_1fs_1_1path.html">b::fs::path</a></div><div class="ttdef"><b>Definition:</b> fs.hpp:27</div></div>
-<div class="ttc" id="aclassb_1_1resource_1_1on__disk__resource_html"><div class="ttname"><a href="classb_1_1resource_1_1on__disk__resource.html">b::resource::on_disk_resource</a></div><div class="ttdef"><b>Definition:</b> resource.hpp:30</div></div>
-<div class="ttc" id="aclassb_1_1resource_html"><div class="ttname"><a href="classb_1_1resource.html">b::resource</a></div><div class="ttdef"><b>Definition:</b> resource.hpp:8</div></div>
+<div class="ttc" id="aclassb_1_1Resource_1_1OnDiskResource_html"><div class="ttname"><a href="classb_1_1Resource_1_1OnDiskResource.html">b::Resource::OnDiskResource</a></div><div class="ttdef"><b>Definition:</b> resource.hpp:30</div></div>
+<div class="ttc" id="aclassb_1_1Resource_html"><div class="ttname"><a href="classb_1_1Resource.html">b::Resource</a></div><div class="ttdef"><b>Definition:</b> resource.hpp:8</div></div>
+<div class="ttc" id="aclassb_1_1fs_1_1path_html"><div class="ttname"><a href="classb_1_1fs_1_1path.html">b::fs::path</a></div><div class="ttdef"><b>Definition:</b> fs.hpp:30</div></div>
+<div class="ttc" id="aclassb_1_1string_html"><div class="ttname"><a href="classb_1_1string.html">b::string</a></div><div class="ttdoc">Yet another string class, that combines all other. Synonymous to std::string, but with more features.</div><div class="ttdef"><b>Definition:</b> string.hpp:53</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

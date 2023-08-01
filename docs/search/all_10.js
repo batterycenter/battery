@@ -1,6 +1,12 @@
 var searchData=
 [
-  ['u8_5fforeach_79',['u8_foreach',['../group__String.html#ga58b1ee5c564cafece2371b643c6cd295',1,'b::u8_foreach(const std::string &amp;str, const std::function&lt; std::variant&lt; std::string, char32_t &gt;(std::string)&gt; &amp;function)'],['../group__String.html#gaf059bea799f2e29a74d02e8124d5cf66',1,'b::u8_foreach(const std::string &amp;str, const std::function&lt; std::variant&lt; std::string, char32_t &gt;(char32_t)&gt; &amp;function)']]],
-  ['unlock_80',['unlock',['../group__Lockfile.html#ga624bd42ba47412230cf3fb0a6dca93c8',1,'b::lockfile']]],
-  ['uuid_81',['Uuid',['../group__Uuid.html',1,'']]]
+  ['terminal_70',['terminal',['../classb_1_1console_1_1terminal.html',1,'b::console']]],
+  ['thread_71',['thread',['../classb_1_1thread.html',1,'b::thread'],['../group__Thread.html#gad90e4e197e15b7292a56b92d74296167',1,'b::thread::thread()']]],
+  ['thread_72',['Thread',['../group__Thread.html',1,'']]],
+  ['time_73',['time',['../group__Time.html#ga878d81512dbbfd652b659c1304e5a120',1,'b']]],
+  ['time_74',['Time',['../group__Time.html',1,'']]],
+  ['timeout_75',['timeout',['../group__Lockfile.html#gaf97e84811696bb78b744b545568f6b12',1,'b::lockfile']]],
+  ['to_5flower_76',['to_lower',['../group__String.html#gaa5eeb7a78cbb15349e28e250a55c5ab4',1,'b::string']]],
+  ['to_5fupper_77',['to_upper',['../group__String.html#ga5f1f749be6cb70d35eae93820e61559a',1,'b::string']]],
+  ['try_5flock_78',['try_lock',['../group__Lockfile.html#gab3d5620da722529ff060c5a10a506780',1,'b::lockfile']]]
 ];

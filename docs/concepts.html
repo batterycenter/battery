@@ -45,7 +45,7 @@
   <td id="projectlogo"><img alt="Logo" src="battery.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Battery
-   &#160;<span id="projectnumber">v0.1.2-alpha</span>
+   &#160;<span id="projectnumber">v0.1.2</span>
    </div>
    <div id="projectbrief">Desktop application framework</div>
   </td>
@@ -198,23 +198,33 @@ Using high-level containers</h3>
 Keeping WinAPI / Linux API cross-platform</h3>
 <p>The primary goal of Battery is to unify your code to compile on any platform. If you use the WinAPI or Linux API you prevent this of course, and it will only compile on one platform. Here is a guide on how you can make it cross-platform again, yourself.</p>
 <p>Battery has a few <code>define</code>s which help you with this:</p>
-<div class="fragment"><div class="line"><span class="preprocessor">#ifdef BATTERY_ARCH_WINDOWS     </span><span class="comment">// If the platform is Windows</span></div>
-<div class="line"><span class="preprocessor">#ifdef BATTERY_ARCH_LINUX       </span><span class="comment">// If the platform some flavour of Linux</span></div>
-<div class="line">                                <span class="comment">// MacOS is not supported yet, but planned</span></div>
+<div class="fragment"><div class="line"><span class="preprocessor">#ifdef B_OS_WINDOWS     </span><span class="comment">// If the platform is Windows</span></div>
+<div class="line"><span class="preprocessor">#ifdef B_OS_LINUX       </span><span class="comment">// If the platform some flavour of Linux</span></div>
+<div class="line"><span class="comment">//#ifdef B_OS_MACOS     // MacOS is not officially supported yet, but planned</span></div>
 <div class="line"> </div>
-<div class="line"><span class="preprocessor">#ifdef BATTERY_ARCH_64          </span><span class="comment">// Platform is 64 bit (Win or Linux)</span></div>
-<div class="line">#ifdef BATTERY_ARCH_32          <span class="comment">// Platform is 32 bit (Win or Linux)</span></div>
-</div><!-- fragment --><p>There are many other defines, see <code>include/Battery/Environment.h</code>.</p>
+<div class="line"><span class="preprocessor">#ifdef B_ARCH_64          </span><span class="comment">// Platform is 64 bit</span></div>
+<div class="line"><span class="preprocessor">#ifdef B_ARCH_32          </span><span class="comment">// Platform is 32 bit</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#ifdef B_COMPILER_MSVC    </span><span class="comment">// Compiler is Microsoft Visual C++ (Visual Studio)</span></div>
+<div class="line"><span class="preprocessor">#ifdef B_COMPILER_GCC     </span><span class="comment">// Compiler is GNU Compiler Collection (or MinGW)</span></div>
+<div class="line"><span class="preprocessor">#ifdef B_COMPILER_CLANG   </span><span class="comment">// Compiler is Clang</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#ifdef B_DEBUG            </span><span class="comment">// Debug build</span></div>
+<div class="line"><span class="preprocessor">#ifdef B_RELEASE          </span><span class="comment">// Release build</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#ifdef B_PRODUCTION_MODE  </span><span class="comment">// Production mode</span></div>
+</div><!-- fragment --><p>All of these blocks are guaranteed to be mutually exclusive.</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> foo(<span class="keyword">const</span> std::string&amp; bar) {</div>
-<div class="line"><span class="preprocessor">#if defined(BATTERY_ARCH_WINDOWS)</span></div>
+<div class="line"><span class="preprocessor">#if defined(B_OS_WINDOWS)</span></div>
 <div class="line">    <span class="comment">// Do some Windows-specific work</span></div>
 <div class="line">    <span class="comment">// ...</span></div>
-<div class="line"><span class="preprocessor">#elif defined(BATTERY_ARCH_LINUX)</span></div>
+<div class="line"><span class="preprocessor">#elif defined(B_OS_LINUX)</span></div>
 <div class="line">    <span class="comment">// Do some Linux-specific work</span></div>
 <div class="line">    <span class="comment">// ...</span></div>
-<div class="line"><span class="preprocessor">#else               </span><span class="comment">// MacOS is not supported yet, but planned</span></div>
-<div class="line"><span class="preprocessor">    #error Unsupported architecture!</span></div>
-<div class="line"><span class="preprocessor">#endif</span></div>
+<div class="line"><span class="comment">//#elif defined(B_OS_MACOS)             // MacOS is not supported yet, but planned</span></div>
+<div class="line">    <span class="comment">// Do some Apple-specific work</span></div>
+<div class="line">    <span class="comment">// ...</span></div>
+<div class="line"><span class="preprocessor">#endif              </span><span class="comment">// No else needed, because the defines are mutually exclusive and guaranteed to be one of them</span></div>
 <div class="line">    <span class="keywordflow">return</span> bar;</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>This is how you write functions that use OS-specific features without sacrificing cross-platform availability.</p>

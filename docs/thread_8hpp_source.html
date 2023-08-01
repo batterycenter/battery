@@ -45,7 +45,7 @@
   <td id="projectlogo"><img alt="Logo" src="battery.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Battery
-   &#160;<span id="projectnumber">v0.1.2-alpha</span>
+   &#160;<span id="projectnumber">v0.1.2</span>
    </div>
    <div id="projectbrief">Desktop application framework</div>
   </td>
@@ -133,73 +133,92 @@ $(document).ready(function(){initNavTree('thread_8hpp_source.html',''); initResi
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;battery/core/log.hpp&quot;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;battery/core/time.hpp&quot;</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;battery/core/constants.hpp&quot;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">namespace </span>b {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classb_1_1thread.html">   45</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classb_1_1thread.html">thread</a> : <span class="keyword">public</span> std::jthread {</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <a class="code" href="classb_1_1thread.html">thread</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">class </span>_Fn, <span class="keyword">class</span>... _Args&gt;</div>
-<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="group__Thread.html#ga04ed9b750513f665718b85facf4b0ec9">   56</a></span>&#160;        <span class="keyword">explicit</span> <a class="code" href="group__Thread.html#ga04ed9b750513f665718b85facf4b0ec9">thread</a>(_Fn&amp;&amp; _Fx, _Args&amp;&amp;... _Ax)</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;          : std::jthread([_Fx = std::forward&lt;_Fn&gt;(_Fx), ...args = std::forward&lt;_Args&gt;(_Ax), this]() mutable {</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                if constexpr (std::is_invocable_v&lt;std::decay_t&lt;_Fn&gt;, std::stop_token, std::decay_t&lt;_Args&gt;...&gt;) {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                    <a class="code" href="group__Thread.html#gaa45fae9821f099cd9189f3f44c9b9886">catch_common_exceptions</a>(std::move(_Fx), get_stop_token(), std::move(args)...);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                    <a class="code" href="group__Thread.html#gaa45fae9821f099cd9189f3f44c9b9886">catch_common_exceptions</a>(std::move(_Fx), std::move(args)...);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                }</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            }) {}</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">class</span>... Args&gt;</div>
-<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="group__Thread.html#gaa45fae9821f099cd9189f3f44c9b9886">   81</a></span>&#160;        <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="group__Thread.html#gaa45fae9821f099cd9189f3f44c9b9886">catch_common_exceptions</a>(Args&amp;&amp;... args) {</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <span class="keywordflow">if</span> (!_catch_common_exceptions) {            <span class="comment">// Catching is disabled: Call and return</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                std::invoke(std::forward&lt;Args&gt;(args)...);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            }</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            <span class="keywordflow">try</span> {                                       <span class="comment">// Otherwise catch exceptions properly</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                std::invoke(std::forward&lt;Args&gt;(args)...);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            }</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                b::log::core::critical(<span class="stringliteral">&quot;Unhandled exception in b::thread: [std::exception]: {}&quot;</span>, e.what());</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                <span class="keywordflow">if</span> (_message_box_on_exception) {</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                    b::message_box_error(fmt::format(<span class="stringliteral">&quot;Unhandled exception in b::thread: [std::exception]: {}&quot;</span>, e.what()));</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                }</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            }</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="keywordflow">catch</span> (...) {</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                b::log::core::critical(<span class="stringliteral">&quot;Unidentifiable exception caught in b::thread, no further information&quot;</span>);</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                <span class="keywordflow">if</span> (_message_box_on_exception) {</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                    b::message_box_error(<span class="stringliteral">&quot;Unidentifiable exception caught in b::thread, no further information&quot;</span>);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                }</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;battery/core/console_application.hpp&quot;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#ifndef __cpp_lib_jthread</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#error &quot;Your compiler does not support std::jthread. Please use a newer compiler that has C++20 support.&quot;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">namespace </span>b {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classb_1_1thread.html">   50</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classb_1_1thread.html">thread</a> : <span class="keyword">public</span> std::jthread {</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="code" href="classb_1_1thread.html">thread</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">class </span>Fn, <span class="keyword">class</span>... Args&gt;</div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="group__Thread.html#gad90e4e197e15b7292a56b92d74296167">   61</a></span>&#160;        <span class="keyword">explicit</span> <a class="code" href="group__Thread.html#gad90e4e197e15b7292a56b92d74296167">thread</a>(Fn&amp;&amp; func, Args&amp;&amp;... args)</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;          : std::jthread([func = std::forward&lt;Fn&gt;(func), ...args = std::forward&lt;Args&gt;(args), this]() mutable {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                m_waitRunningPromise.set_value();</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                <span class="keywordflow">if</span> constexpr (std::is_invocable_v&lt;std::decay_t&lt;Fn&gt;, std::stop_token, std::decay_t&lt;Args&gt;...&gt;) {</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                    <span class="keywordflow">if</span> (!<a class="code" href="group__Thread.html#ga70cdbd459d4417f19645b379998af6c7">catch_common_exceptions</a>(std::move(func), get_stop_token(), std::move(args)...)) {</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                        <span class="keywordflow">if</span> (b::ConsoleApplication::instanceExists()) {</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                            b::ConsoleApplication::get().stopApplication();</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                        }</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                    }</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                    <span class="keywordflow">if</span> (!<a class="code" href="group__Thread.html#ga70cdbd459d4417f19645b379998af6c7">catch_common_exceptions</a>(std::move(func), std::move(args)...)) {</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                        <span class="keywordflow">if</span> (b::ConsoleApplication::instanceExists()) {</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                            b::ConsoleApplication::get().stopApplication();</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                        }</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                    }</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                }</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            }) {</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;              m_waitRunningPromise.get_future().get();</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;          }</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">class</span>... Args&gt;</div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="group__Thread.html#ga70cdbd459d4417f19645b379998af6c7">   97</a></span>&#160;        <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="group__Thread.html#ga70cdbd459d4417f19645b379998af6c7">catch_common_exceptions</a>(Args&amp;&amp;... args) {</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            <span class="keywordflow">if</span> (!m_catchCommonExceptionsEnabled) {            <span class="comment">// Catching is disabled: Call and return</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                std::invoke(std::forward&lt;Args&gt;(args)...);</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            }</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        }</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
-<div class="line"><a name="l00110"></a><span class="lineno"><a class="line" href="group__Thread.html#gae5427c2b3c0f620fc334d82bd47c4d86">  110</a></span>&#160;        <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="group__Thread.html#gae5427c2b3c0f620fc334d82bd47c4d86">enable_message_box_on_exception</a>(<span class="keywordtype">bool</span> enable) {</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            _message_box_on_exception = enable;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        }</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno"><a class="line" href="group__Thread.html#ga211861a81c214671423b4c4327b1c4c2">  120</a></span>&#160;        <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="group__Thread.html#ga211861a81c214671423b4c4327b1c4c2">enable_catch_common_exceptions</a>(<span class="keywordtype">bool</span> enable) {</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            _catch_common_exceptions = enable;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        }</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keyword">inline</span> <span class="keyword">static</span> std::atomic&lt;bool&gt; _message_box_on_exception { b::constants::message_box_on_exception_default() };</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keyword">inline</span> <span class="keyword">static</span> std::atomic&lt;bool&gt; _catch_common_exceptions { b::constants::catch_common_exceptions_default() };</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    };</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span>... T&gt;</div>
-<div class="line"><a name="l00137"></a><span class="lineno"><a class="line" href="group__Thread.html#ga15525de49c8e66a16d8210cb6ade756c">  137</a></span>&#160;    <span class="keyword">auto</span> <a class="code" href="group__Thread.html#ga15525de49c8e66a16d8210cb6ade756c">async</a>(T&amp;&amp;... args) {</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="group__Thread.html#ga15525de49c8e66a16d8210cb6ade756c">std::async</a>(<a class="code" href="group__Thread.html#ga15525de49c8e66a16d8210cb6ade756c">std::launch::async</a>, std::forward&lt;T&gt;(args)...);</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    }</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;} <span class="comment">// namespace b</span></div>
-<div class="ttc" id="aclassb_1_1thread_html"><div class="ttname"><a href="classb_1_1thread.html">b::thread</a></div><div class="ttdoc">A threading class just like good old std::thread, but better.</div><div class="ttdef"><b>Definition:</b> thread.hpp:45</div></div>
-<div class="ttc" id="agroup__Thread_html_ga04ed9b750513f665718b85facf4b0ec9"><div class="ttname"><a href="group__Thread.html#ga04ed9b750513f665718b85facf4b0ec9">b::thread::thread</a></div><div class="ttdeci">thread(_Fn &amp;&amp;_Fx, _Args &amp;&amp;... _Ax)</div><div class="ttdoc">b::thread constructor</div><div class="ttdef"><b>Definition:</b> thread.hpp:56</div></div>
-<div class="ttc" id="agroup__Thread_html_ga15525de49c8e66a16d8210cb6ade756c"><div class="ttname"><a href="group__Thread.html#ga15525de49c8e66a16d8210cb6ade756c">b::async</a></div><div class="ttdeci">auto async(T &amp;&amp;... args)</div><div class="ttdoc">Run a function asynchronously in another thread. This is a wrapper around std::async().</div><div class="ttdef"><b>Definition:</b> thread.hpp:137</div></div>
-<div class="ttc" id="agroup__Thread_html_ga211861a81c214671423b4c4327b1c4c2"><div class="ttname"><a href="group__Thread.html#ga211861a81c214671423b4c4327b1c4c2">b::thread::enable_catch_common_exceptions</a></div><div class="ttdeci">static void enable_catch_common_exceptions(bool enable)</div><div class="ttdoc">Specify the behaviour for b::thread::catch_common_exceptions().</div><div class="ttdef"><b>Definition:</b> thread.hpp:120</div></div>
-<div class="ttc" id="agroup__Thread_html_gaa45fae9821f099cd9189f3f44c9b9886"><div class="ttname"><a href="group__Thread.html#gaa45fae9821f099cd9189f3f44c9b9886">b::thread::catch_common_exceptions</a></div><div class="ttdeci">static void catch_common_exceptions(Args &amp;&amp;... args)</div><div class="ttdoc">Run a function and catch all exceptions with nice error messages.</div><div class="ttdef"><b>Definition:</b> thread.hpp:81</div></div>
-<div class="ttc" id="agroup__Thread_html_gae5427c2b3c0f620fc334d82bd47c4d86"><div class="ttname"><a href="group__Thread.html#gae5427c2b3c0f620fc334d82bd47c4d86">b::thread::enable_message_box_on_exception</a></div><div class="ttdeci">static void enable_message_box_on_exception(bool enable)</div><div class="ttdoc">Specify the behaviour for b::thread::catch_common_exceptions().</div><div class="ttdef"><b>Definition:</b> thread.hpp:110</div></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            <span class="keywordflow">try</span> {                                       <span class="comment">// Otherwise catch exceptions properly</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                std::invoke(std::forward&lt;Args&gt;(args)...);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            }</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                b::log::core::critical(<span class="stringliteral">&quot;Unhandled exception in b::thread: [std::exception]: {}&quot;</span>, e.what());</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                <span class="keywordflow">if</span> (m_messageBoxOnExceptionEnabled) {</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                    b::message_box_error(b::format(<span class="stringliteral">&quot;Unhandled exception in b::thread: [std::exception]: {}&quot;</span>, e.what()));</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                }</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            }</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            <span class="keywordflow">catch</span> (...) {</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                b::log::core::critical(<span class="stringliteral">&quot;Unidentifiable exception caught in b::thread, no further information&quot;</span>);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                <span class="keywordflow">if</span> (m_messageBoxOnExceptionEnabled) {</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                    b::message_box_error(<span class="stringliteral">&quot;Unidentifiable exception caught in b::thread, no further information&quot;</span>);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                }</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            }</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        }</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno"><a class="line" href="group__Thread.html#gae5427c2b3c0f620fc334d82bd47c4d86">  128</a></span>&#160;        <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="group__Thread.html#gae5427c2b3c0f620fc334d82bd47c4d86">enable_message_box_on_exception</a>(<span class="keywordtype">bool</span> enable) {</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            m_messageBoxOnExceptionEnabled = enable;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        }</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno"><a class="line" href="group__Thread.html#ga211861a81c214671423b4c4327b1c4c2">  138</a></span>&#160;        <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="group__Thread.html#ga211861a81c214671423b4c4327b1c4c2">enable_catch_common_exceptions</a>(<span class="keywordtype">bool</span> enable) {</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;            m_catchCommonExceptionsEnabled = enable;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        }</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        <span class="keyword">inline</span> <span class="keyword">static</span> std::atomic&lt;bool&gt; m_messageBoxOnExceptionEnabled {b::Constants::MessageBoxOnExceptionDefault() };</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <span class="keyword">inline</span> <span class="keyword">static</span> std::atomic&lt;bool&gt; m_catchCommonExceptionsEnabled {b::Constants::CatchCommonExceptionsDefault() };</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        std::promise&lt;void&gt; m_waitRunningPromise;</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    };</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span>... T&gt;</div>
+<div class="line"><a name="l00156"></a><span class="lineno"><a class="line" href="group__Thread.html#ga15525de49c8e66a16d8210cb6ade756c">  156</a></span>&#160;    <span class="keyword">auto</span> <a class="code" href="group__Thread.html#ga15525de49c8e66a16d8210cb6ade756c">async</a>(T&amp;&amp;... args) {</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="group__Thread.html#ga15525de49c8e66a16d8210cb6ade756c">std::async</a>(<a class="code" href="group__Thread.html#ga15525de49c8e66a16d8210cb6ade756c">std::launch::async</a>, std::forward&lt;T&gt;(args)...);</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    }</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;} <span class="comment">// namespace b</span></div>
+<div class="ttc" id="aclassb_1_1thread_html"><div class="ttname"><a href="classb_1_1thread.html">b::thread</a></div><div class="ttdoc">A threading class just like good old std::thread, but better.</div><div class="ttdef"><b>Definition:</b> thread.hpp:50</div></div>
+<div class="ttc" id="agroup__Thread_html_ga15525de49c8e66a16d8210cb6ade756c"><div class="ttname"><a href="group__Thread.html#ga15525de49c8e66a16d8210cb6ade756c">b::async</a></div><div class="ttdeci">auto async(T &amp;&amp;... args)</div><div class="ttdoc">Run a function asynchronously in another thread. This is a wrapper around std::async().</div><div class="ttdef"><b>Definition:</b> thread.hpp:156</div></div>
+<div class="ttc" id="agroup__Thread_html_ga211861a81c214671423b4c4327b1c4c2"><div class="ttname"><a href="group__Thread.html#ga211861a81c214671423b4c4327b1c4c2">b::thread::enable_catch_common_exceptions</a></div><div class="ttdeci">static void enable_catch_common_exceptions(bool enable)</div><div class="ttdoc">Specify the behaviour for b::thread::catch_common_exceptions().</div><div class="ttdef"><b>Definition:</b> thread.hpp:138</div></div>
+<div class="ttc" id="agroup__Thread_html_ga70cdbd459d4417f19645b379998af6c7"><div class="ttname"><a href="group__Thread.html#ga70cdbd459d4417f19645b379998af6c7">b::thread::catch_common_exceptions</a></div><div class="ttdeci">static bool catch_common_exceptions(Args &amp;&amp;... args)</div><div class="ttdoc">Run a function and catch all exceptions with nice error messages.</div><div class="ttdef"><b>Definition:</b> thread.hpp:97</div></div>
+<div class="ttc" id="agroup__Thread_html_gad90e4e197e15b7292a56b92d74296167"><div class="ttname"><a href="group__Thread.html#gad90e4e197e15b7292a56b92d74296167">b::thread::thread</a></div><div class="ttdeci">thread(Fn &amp;&amp;func, Args &amp;&amp;... args)</div><div class="ttdoc">b::thread constructor</div><div class="ttdef"><b>Definition:</b> thread.hpp:61</div></div>
+<div class="ttc" id="agroup__Thread_html_gae5427c2b3c0f620fc334d82bd47c4d86"><div class="ttname"><a href="group__Thread.html#gae5427c2b3c0f620fc334d82bd47c4d86">b::thread::enable_message_box_on_exception</a></div><div class="ttdeci">static void enable_message_box_on_exception(bool enable)</div><div class="ttdoc">Specify the behaviour for b::thread::catch_common_exceptions().</div><div class="ttdef"><b>Definition:</b> thread.hpp:128</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

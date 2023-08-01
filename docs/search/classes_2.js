@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['cachefile_89',['cachefile',['../classb_1_1cachefile.html',1,'b']]],
-  ['constants_90',['constants',['../structb_1_1constants.html',1,'b']]]
+  ['cachefile_91',['cachefile',['../classb_1_1cachefile.html',1,'b']]],
+  ['color_92',['Color',['../structb_1_1Color.html',1,'b']]],
+  ['consoleapplication_93',['ConsoleApplication',['../classb_1_1ConsoleApplication.html',1,'b']]]
 ];

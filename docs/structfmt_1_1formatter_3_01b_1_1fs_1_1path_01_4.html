@@ -45,7 +45,7 @@
   <td id="projectlogo"><img alt="Logo" src="battery.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Battery
-   &#160;<span id="projectnumber">v0.1.2-alpha</span>
+   &#160;<span id="projectnumber">v0.1.2</span>
    </div>
    <div id="projectbrief">Desktop application framework</div>
   </td>
@@ -112,13 +112,12 @@ $(document).ready(function(){initNavTree('structfmt_1_1formatter_3_01b_1_1fs_1_1
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac7d3841a671ae26f39798faf854a5198"><td class="memItemLeft" align="right" valign="top"><a id="ac7d3841a671ae26f39798faf854a5198"></a>
-constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><b>parse</b> (format_parse_context &amp;ctx) -&gt; decltype(ctx.begin())</td></tr>
-<tr class="separator:ac7d3841a671ae26f39798faf854a5198"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03c7dc0f351b504f7c45213ba584bf4d"><td class="memTemplParams" colspan="2"><a id="a03c7dc0f351b504f7c45213ba584bf4d"></a>
-template&lt;typename FormatContext &gt; </td></tr>
-<tr class="memitem:a03c7dc0f351b504f7c45213ba584bf4d"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>format</b> (const <a class="el" href="classb_1_1fs_1_1path.html">b::fs::path</a> &amp;input, FormatContext &amp;ctx) -&gt; decltype(ctx.out())</td></tr>
-<tr class="separator:a03c7dc0f351b504f7c45213ba584bf4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6467828ce3d8279e6e7be757d6fd407"><td class="memItemLeft" align="right" valign="top"><a id="ac6467828ce3d8279e6e7be757d6fd407"></a>
+constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><b>parse</b> (format_parse_context &amp;ctx) -&gt; format_parse_context::iterator</td></tr>
+<tr class="separator:ac6467828ce3d8279e6e7be757d6fd407"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9833796174aa5c8181a0a715d3a468ba"><td class="memItemLeft" align="right" valign="top"><a id="a9833796174aa5c8181a0a715d3a468ba"></a>
+auto&#160;</td><td class="memItemRight" valign="bottom"><b>format</b> (const <a class="el" href="classb_1_1fs_1_1path.html">b::fs::path</a> &amp;path, format_context &amp;ctx) const -&gt; format_context::iterator</td></tr>
+<tr class="separator:a9833796174aa5c8181a0a715d3a468ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/core/include/battery/core/<a class="el" href="fs_8hpp_source.html">fs.hpp</a></li>

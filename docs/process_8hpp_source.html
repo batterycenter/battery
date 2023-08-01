@@ -45,7 +45,7 @@
   <td id="projectlogo"><img alt="Logo" src="battery.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Battery
-   &#160;<span id="projectnumber">v0.1.2-alpha</span>
+   &#160;<span id="projectnumber">v0.1.2</span>
    </div>
    <div id="projectbrief">Desktop application framework</div>
   </td>
@@ -121,8 +121,8 @@ $(document).ready(function(){initNavTree('process_8hpp_source.html',''); initRes
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
 <div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="structb_1_1process_1_1options__t.html">   15</a></span>&#160;        <span class="keyword">struct </span><a class="code" href="structb_1_1process_1_1options__t.html">options_t</a> {</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;            std::string executable;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;            std::vector&lt;std::string&gt; arguments;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;            <a class="code" href="classb_1_1string.html">b::string</a> executable;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;            std::vector&lt;b::string&gt; arguments;</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            std::optional&lt;fs::path&gt; working_directory;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;            <span class="keywordtype">bool</span> execute_as_shell_command = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;            <span class="keywordtype">bool</span> silent = <span class="keyword">false</span>;</div>
@@ -131,8 +131,8 @@ $(document).ready(function(){initNavTree('process_8hpp_source.html',''); initRes
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            <span class="keywordtype">bool</span> strip_trailing_whitespace_after_join = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            std::optional&lt;bool&gt; forward_ctrl_c = std::nullopt;  <span class="comment">// Defaults to the value of passthrough_to_parent</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;            <span class="keywordtype">double</span> wait_ms_before_every_stdin_write = 100.0;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            std::function&lt;void(<span class="keyword">const</span> std::string&amp; str)&gt; stdout_callback;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            std::function&lt;void(<span class="keyword">const</span> std::string&amp; str)&gt; stderr_callback;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            std::function&lt;void(<span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; str)&gt; stdout_callback;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            std::function&lt;void(<span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; str)&gt; stderr_callback;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;            reproc::options reproc_options;</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            <a class="code" href="structb_1_1process_1_1options__t.html">options_t</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            <a class="code" href="structb_1_1process_1_1options__t.html">options_t</a>(<span class="keyword">const</span> <a class="code" href="structb_1_1process_1_1options__t.html">options_t</a>&amp; other) {</div>
@@ -158,10 +158,10 @@ $(document).ready(function(){initNavTree('process_8hpp_source.html',''); initRes
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordtype">int</span> exit_code = 0;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordtype">bool</span> was_terminated = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        std::string error_message;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        std::string output_stdout;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        std::string output_stderr;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        std::string output_combined;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> error_message;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> output_stdout;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> output_stderr;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> output_combined;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <a class="code" href="classb_1_1process.html">process</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
@@ -174,28 +174,30 @@ $(document).ready(function(){initNavTree('process_8hpp_source.html',''); initRes
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordtype">void</span> execute_async();</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordtype">void</span> join();</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordtype">void</span> stdin_write(<span class="keyword">const</span> std::string_view&amp; str);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordtype">void</span> stdin_write(<span class="keyword">const</span> <span class="keywordtype">char</span>* str);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordtype">void</span> stdin_write(<span class="keyword">const</span> <span class="keywordtype">char</span>* buffer, <span class="keywordtype">size_t</span> length);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordtype">void</span> kill();</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordtype">void</span> terminate();</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keyword">static</span> std::string remove_trailing_whitespace(std::string buffer);</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        std::error_code stdout_sink(<span class="keyword">const</span> uint8_t* _buffer, <span class="keywordtype">size_t</span> length);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        std::error_code stderr_sink(<span class="keyword">const</span> uint8_t* _buffer, <span class="keywordtype">size_t</span> length);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordtype">void</span> run_process();</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <a class="code" href="classb_1_1async__worker.html">b::async_worker&lt;void&gt;</a> worker;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        reproc::process _process;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    };</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <a class="code" href="classb_1_1process.html">process</a> execute(<span class="keyword">const</span> std::string&amp; command, <span class="keyword">const</span> <a class="code" href="structb_1_1process_1_1options__t.html">process::options_t</a>&amp; options = <a class="code" href="structb_1_1process_1_1options__t.html">process::options_t</a>());</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;}</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordtype">void</span> stdin_write(<span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; str);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordtype">void</span> stdin_write(<span class="keyword">const</span> std::string_view&amp; str);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordtype">void</span> stdin_write(<span class="keyword">const</span> <span class="keywordtype">char</span>* str);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordtype">void</span> stdin_write(<span class="keyword">const</span> <span class="keywordtype">char</span>* buffer, <span class="keywordtype">size_t</span> length);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordtype">void</span> kill();</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordtype">void</span> terminate();</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1string.html">b::string</a> remove_trailing_whitespace(<a class="code" href="classb_1_1string.html">b::string</a> buffer);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        std::error_code stdout_sink(<span class="keyword">const</span> uint8_t* _buffer, <span class="keywordtype">size_t</span> length);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        std::error_code stderr_sink(<span class="keyword">const</span> uint8_t* _buffer, <span class="keywordtype">size_t</span> length);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordtype">void</span> run_process();</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <a class="code" href="classb_1_1async__worker.html">b::async_worker&lt;void&gt;</a> worker;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        reproc::process _process;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    };</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <a class="code" href="classb_1_1process.html">process</a> execute(<span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; command, <span class="keyword">const</span> <a class="code" href="structb_1_1process_1_1options__t.html">process::options_t</a>&amp; options = <a class="code" href="structb_1_1process_1_1options__t.html">process::options_t</a>());</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;}</div>
 <div class="ttc" id="aclassb_1_1async__worker_html"><div class="ttname"><a href="classb_1_1async__worker.html">b::async_worker&lt; void &gt;</a></div></div>
 <div class="ttc" id="aclassb_1_1process_html"><div class="ttname"><a href="classb_1_1process.html">b::process</a></div><div class="ttdef"><b>Definition:</b> process.hpp:12</div></div>
+<div class="ttc" id="aclassb_1_1string_html"><div class="ttname"><a href="classb_1_1string.html">b::string</a></div><div class="ttdoc">Yet another string class, that combines all other. Synonymous to std::string, but with more features.</div><div class="ttdef"><b>Definition:</b> string.hpp:53</div></div>
 <div class="ttc" id="astructb_1_1process_1_1options__t_html"><div class="ttname"><a href="structb_1_1process_1_1options__t.html">b::process::options_t</a></div><div class="ttdef"><b>Definition:</b> process.hpp:15</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

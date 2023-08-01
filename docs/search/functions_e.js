@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['u8_5fforeach_152',['u8_foreach',['../group__String.html#ga58b1ee5c564cafece2371b643c6cd295',1,'b::u8_foreach(const std::string &amp;str, const std::function&lt; std::variant&lt; std::string, char32_t &gt;(std::string)&gt; &amp;function)'],['../group__String.html#gaf059bea799f2e29a74d02e8124d5cf66',1,'b::u8_foreach(const std::string &amp;str, const std::function&lt; std::variant&lt; std::string, char32_t &gt;(char32_t)&gt; &amp;function)']]],
-  ['unlock_153',['unlock',['../group__Lockfile.html#ga624bd42ba47412230cf3fb0a6dca93c8',1,'b::lockfile']]]
+  ['u16_158',['u16',['../group__String.html#ga6e7ad1e5736f04dd6b44f0c351fe9549',1,'b::string']]],
+  ['u32_159',['u32',['../group__String.html#gaa48313a4d8a48eef76eda8f5edf23a38',1,'b::string']]],
+  ['u8_160',['u8',['../group__String.html#ga85fa2668f0b0a9ceea2e9d17f73cddb8',1,'b::string']]],
+  ['unlock_161',['unlock',['../group__Lockfile.html#ga624bd42ba47412230cf3fb0a6dca93c8',1,'b::lockfile']]]
 ];

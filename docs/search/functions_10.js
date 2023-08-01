@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_7elockfile_155',['~lockfile',['../group__Lockfile.html#ga48a13fddd51961cd7ce1188b90c0294f',1,'b::lockfile']]]
+  ['wstr_163',['wstr',['../group__String.html#ga65f0cf11a701daa1c9528be3a75ba871',1,'b::string']]]
 ];

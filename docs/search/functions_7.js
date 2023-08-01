@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['join_127',['join',['../group__String.html#ga7e95ddc224e06adbcdc28b997c9184ce',1,'b']]]
+  ['join_129',['join',['../group__String.html#ga3ca0ff628ab7190d5726e756835ca43f',1,'b::string']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['osstring_158',['osstring',['../group__String.html#ga61a14888dd093388872c16651f0f4bd1',1,'b']]]
+  ['platform_5fnative_5fstring_167',['platform_native_string',['../group__String.html#ga4adfbe65ddf7d0805f505615460b279b',1,'b']]]
 ];
