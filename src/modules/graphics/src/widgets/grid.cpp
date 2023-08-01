@@ -20,7 +20,7 @@ namespace b::widgets {
         m_gridContainer.flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
         // This callback is the actual container of the grid itself
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, b::vec2(0, 0));
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, b::Vec2(0, 0));
         baseSetCursorPositionToMinBB();
         m_gridContainer([this, &grid_callback]() {
             ImGui::PopStyleVar();

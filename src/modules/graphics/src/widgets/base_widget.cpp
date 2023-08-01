@@ -39,7 +39,7 @@ namespace b::widgets {
         ImGui::SetCursorPos(baseGetBBMin());
     }
 
-    std::pair<b::vec2, b::vec2> base_widget::baseGetBB() const {
+    std::pair<b::Vec2, b::Vec2> base_widget::baseGetBB() const {
         auto left_px = getHorizontalPx(left);
         auto right_px = getHorizontalPx(right);
         auto width_px = getHorizontalPx(width);
@@ -95,18 +95,18 @@ namespace b::widgets {
             cursor_height = height_px.value();
         }
 
-        return std::make_pair(b::vec2(cursor_left, cursor_top), b::vec2(cursor_left + cursor_width, cursor_top + cursor_height));
+        return std::make_pair(b::Vec2(cursor_left, cursor_top), b::Vec2(cursor_left + cursor_width, cursor_top + cursor_height));
     }
 
-    b::vec2 base_widget::baseGetBBMin() const {
+    b::Vec2 base_widget::baseGetBBMin() const {
         return baseGetBB().first;
     }
 
-    b::vec2 base_widget::baseGetBBMax() const {
+    b::Vec2 base_widget::baseGetBBMax() const {
         return baseGetBB().second;
     }
 
-    b::vec2 base_widget::baseGetBBSize() const {
+    b::Vec2 base_widget::baseGetBBSize() const {
         return baseGetBB().second - baseGetBB().first;
     }
 

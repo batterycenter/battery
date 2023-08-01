@@ -30,8 +30,8 @@ namespace b::widgets {
         unit_property right;
         unit_property bottom;
 
-        b::vec2 actualPosition;
-        b::vec2 actualSize;
+        b::Vec2 actualPosition;
+        b::Vec2 actualSize;
 
         widget_style style;
 
@@ -54,10 +54,10 @@ namespace b::widgets {
     protected:
         b::string baseGetIdentifier() const;
         void baseSetCursorPositionToMinBB() const;
-        std::pair<b::vec2, b::vec2> baseGetBB() const;
-        b::vec2 baseGetBBMin() const;
-        b::vec2 baseGetBBMax() const;
-        b::vec2 baseGetBBSize() const;
+        std::pair<b::Vec2, b::Vec2> baseGetBB() const;
+        b::Vec2 baseGetBBMin() const;
+        b::Vec2 baseGetBBMax() const;
+        b::Vec2 baseGetBBSize() const;
         void basePushStyle();
         void basePopStyle();
 

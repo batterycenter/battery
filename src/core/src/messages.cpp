@@ -30,7 +30,7 @@ namespace b {
             return buffer;
         }
         static void win32_message_box(const b::string& message, UINT options) {
-            ::MessageBoxW(nullptr, std::bit_cast<const wchar_t*>(message.c_str()), L"Error", options);
+            ::MessageBoxW(nullptr, b::string(message).platform_native().c_str(), L"Error", options);
         }
 #else
         void linux_run_zenity(const std::vector<b::string>& commands) {

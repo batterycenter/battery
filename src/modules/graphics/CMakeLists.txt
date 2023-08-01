@@ -7,6 +7,8 @@ battery_add_library(battery_graphics STATIC ALIAS battery::graphics)
 battery_add_source_files(battery_graphics
         src/widgets/base_widget.cpp
         src/widgets/button.cpp
+        src/widgets/button_ex.cpp
+        src/widgets/canvas_host.cpp
         src/widgets/checkbox.cpp
         src/widgets/checkbox_ex.cpp
         src/widgets/container.cpp
@@ -21,8 +23,10 @@ battery_add_source_files(battery_graphics
 
         src/application.cpp
         src/batch_renderer.cpp
+        src/canvas.cpp
         src/color_hex.cpp
         src/font_stack.cpp
+        src/mouse.cpp
         src/primitive_render_window.cpp
         src/constants.cpp
         src/property_pack.cpp
@@ -59,8 +63,11 @@ target_link_libraries(battery_graphics
         battery::python
     )
 
-target_compile_definitions(battery_graphics PUBLIC B_VEC_INTEGRATE_SFML)     # Define b::vec conversion operators for SFML types
-target_compile_definitions(battery_graphics PUBLIC B_VEC_INTEGRATE_IMGUI)    # Define b::vec conversion operators for ImGui types
+target_compile_definitions(battery_graphics PUBLIC B_VEC_INTEGRATE_SFML)     # Define b::Vec conversion operators for SFML types
+target_compile_definitions(battery_graphics PUBLIC B_VEC_INTEGRATE_IMGUI)    # Define b::Vec conversion operators for ImGui types
+target_compile_definitions(battery_graphics PUBLIC B_COLOR_INTEGRATE_SFML)   # Define b::Color conversion operators for SFML types
+target_compile_definitions(battery_graphics PUBLIC B_COLOR_INTEGRATE_IMGUI)  # Define b::Color conversion operators for ImGui types
+target_compile_definitions(battery_graphics PUBLIC B_COLOR_INTEGRATE_NLOHMANN_JSON)  # Define b::Color json serialization
 
 battery_embed(battery_graphics ${CMAKE_CURRENT_LIST_DIR}/resources/default_themes.json DefaultThemesJson TEXT)
 

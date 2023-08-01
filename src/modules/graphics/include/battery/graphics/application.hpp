@@ -5,56 +5,61 @@
 #include "battery/graphics/context.hpp"
 #include "battery/python/python.hpp"
 
-#define B_DEF_PY_APPLICATION(T) inline static T& get() { return dynamic_cast<T&>(b::BaseApplication::get()); }
+#define B_DEF_PY_APPLICATION(T) inline static T& get() { return dynamic_cast<T&>(b::Application::get()); }
 
 namespace b {
 
-    class BaseApplication : public b::ConsoleApplication {
+    class Application : public b::ConsoleApplication {
     public:
-        BaseApplication();
-        virtual ~BaseApplication() = default;
+        Application();
+        virtual ~Application();
 
-        static BaseApplication & get();
+        static Application & get();
 
         virtual void onSetup() = 0;
         virtual void onUpdate() = 0;
-        virtual void onCleanup() = 0;
+        virtual void onRender() = 0;
+        virtual void onExit() = 0;
 
         template<b::derived_from<b::Window> T>
-        void attachWindow(T** windowPtr) {
-            m_windows.emplace_back(std::make_shared<T>());
-            *windowPtr = dynamic_cast<T*>(m_windows.back().get());
-            (*windowPtr)->onAttach();
+        void attachWindow(T& windowToAttach) {
+            if (windowToAttach.isAttached()) {
+                throw std::runtime_error("Failed to attach window: This window is already attached");
+            }
+            windowToAttach.attach();
+            m_windows.emplace_back(windowToAttach);
         }
 
         template<b::derived_from<b::Window> T>
-        void detachWindow(T** windowPtr) {
-            (*windowPtr)->onDetach();
-            auto index = std::distance(m_windows.begin(), std::find_if(m_windows.begin(), m_windows.end(), [&](auto& window) {
-                return window.get() == *windowPtr;
+        void detachWindow(T& windowToDetach) {
+            windowToDetach.detach();
+            auto index = std::distance(m_windows.begin(), std::find_if(m_windows.begin(), m_windows.end(), [&](b::Window& window) {
+                return &window == &windowToDetach;
             }));
             if (index == m_windows.size()) {
-                throw std::runtime_error("Failed to detach window: No such window is registered");
+                throw std::runtime_error("Failed to detach window: This window was not registered");
             }
             m_windows.erase(m_windows.begin() + index);
-            *windowPtr = nullptr;
         }
 
         void detachWindows();
 
-        std::vector<std::shared_ptr<b::Window>>& windows();
+        b::Window& getCurrentlyUpdatingWindow();
+
+        std::vector<std::reference_wrapper<b::Window>>& windowRefs();
 
     private:
         void onConsoleSetup() final override;
         void onConsoleUpdate() final override;
-        void onConsoleCleanup() final override;
+        void onConsoleExit() final override;
 
         b::py::scoped_interpreter m_guard{};
-        std::vector<std::shared_ptr<b::Window>> m_windows;
+        std::vector<std::reference_wrapper<b::Window>> m_windows;
+        b::Window* m_currentActiveWindow;
     };
 
     template<b::derived_from<b::PyContext> T, b::template_string_literal ContextName>
-    class PyApplication : public BaseApplication {
+    class PyApplication : public Application {
     public:
         T context;
 
@@ -67,8 +72,8 @@ namespace b {
             context.definePythonClass(module);
             module.attr(ContextName.value) = &context;
 
-            for (auto& window : windows()) {
-                window->definePythonBindings(module);
+            for (auto& window : windowRefs()) {
+                window.get().definePythonBindings(module);
             }
         }
     };

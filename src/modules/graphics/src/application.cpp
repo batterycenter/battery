@@ -5,46 +5,62 @@
 
 namespace b {
 
-    BaseApplication::BaseApplication() {
+    Application::Application() {
         setRequestedFramerate(60.0);
-
     }
 
-    BaseApplication & BaseApplication::get() {
-        return dynamic_cast<BaseApplication&>(b::ConsoleApplication::get());
+    Application::~Application() {
+        detachWindows();
+        ImGui::SFML::Shutdown();
     }
 
-    void BaseApplication::detachWindows() {
-        for (auto& window : m_windows) {
-            window->onDetach();
+    Application & Application::get() {
+        return dynamic_cast<Application&>(b::ConsoleApplication::get());
+    }
+
+    void Application::detachWindows() {
+        while (!m_windows.empty()) {
+            detachWindow(m_windows.back().get());
         }
-        m_windows.clear();
     }
 
-    std::vector<std::shared_ptr<b::Window>>& BaseApplication::windows() {
+    b::Window& Application::getCurrentlyUpdatingWindow() {
+        if (m_currentActiveWindow == nullptr) {
+            throw std::runtime_error("Application::getCurrentlyUpdatingWindow(): Cannot get window, no window is currently updating or rendering");
+        }
+        return *m_currentActiveWindow;
+    }
+
+    std::vector<std::reference_wrapper<b::Window>>& Application::windowRefs() {
         return m_windows;
     }
 
-    void BaseApplication::onConsoleSetup() {
+    void Application::onConsoleSetup() {
         onSetup();
     }
 
-    void BaseApplication::onConsoleUpdate() {
+    void Application::onConsoleUpdate() {
         onUpdate();
         for (auto& window : m_windows) {
-            if (window->isOpen()) {
-                window->framecount = framecount;
-                window->frametime = frametime;
-                window->framerate = framerate;
-                window->invoke_update();
-            }
+            window.get().framecount = framecount;
+            window.get().frametime = frametime;
+            window.get().framerate = framerate;
+            m_currentActiveWindow = &window.get();
+            window.get().invokeUpdate();
         }
+        m_currentActiveWindow = nullptr;
+
+        onRender();
+        for (auto& window : m_windows) {
+            m_currentActiveWindow = &window.get();
+            window.get().invokeRender();
+        }
+        m_currentActiveWindow = nullptr;
     }
 
-    void BaseApplication::onConsoleCleanup() {
-        onCleanup();
+    void Application::onConsoleExit() {
+        onExit();
         detachWindows();
-        ImGui::SFML::Shutdown();
     }
 
 } // namespace b

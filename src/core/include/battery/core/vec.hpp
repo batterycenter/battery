@@ -18,93 +18,95 @@
 // You can set B_VEC_INTEGRATE_CUSTOM
 // to your custom vector type conversion functions
 
+#include "battery/core/log.hpp"
+
 namespace b {
 
     // TODO: Define vec3 and vec4
 
-    struct vec2 {
+    struct Vec2 {
         double x = 0.0;
         double y = 0.0;
 
-        vec2() = default;
-        vec2(double x, double y) : x(x), y(y) {}
+        Vec2() = default;
+        Vec2(double x, double y) : x(x), y(y) {}
 
         // TODO: Maybe clone SFML in terms of defining a constructor for polar coordinates?
 
         // TODO: Define constructors and getters for glm
         // TODO: Define constructors and getters for sf::Vectors of all types
 
-        vec2 operator+(const vec2 &other) const { return {x + other.x, y + other.y}; }
-        vec2 operator-(const vec2 &other) const { return {x - other.x, y - other.y}; }
-        vec2 operator*(const vec2 &other) const { return {x * other.x, y * other.y}; }
-        vec2 operator/(const vec2 &other) const { return {x / other.x, y / other.y}; }
+        Vec2 operator+(const Vec2 &other) const { return {x + other.x, y + other.y}; }
+        Vec2 operator-(const Vec2 &other) const { return {x - other.x, y - other.y}; }
+        Vec2 operator*(const Vec2 &other) const { return {x * other.x, y * other.y}; }
+        Vec2 operator/(const Vec2 &other) const { return {x / other.x, y / other.y}; }
 
-        vec2 operator+(double other) const { return {x + other, y + other}; }
-        vec2 operator-(double other) const { return {x - other, y - other}; }
-        vec2 operator*(double other) const { return {x * other, y * other}; }
-        vec2 operator/(double other) const { return {x / other, y / other}; }
-        vec2 operator-() const { return {-x, -y}; }
+        Vec2 operator+(double other) const { return {x + other, y + other}; }
+        Vec2 operator-(double other) const { return {x - other, y - other}; }
+        Vec2 operator*(double other) const { return {x * other, y * other}; }
+        Vec2 operator/(double other) const { return {x / other, y / other}; }
+        Vec2 operator-() const { return {-x, -y}; }
 
-        vec2& operator+=(const vec2 &other) { x += other.x; y += other.y; return *this; }
-        vec2& operator-=(const vec2 &other) { x -= other.x; y -= other.y; return *this; }
-        vec2& operator*=(const vec2 &other) { x *= other.x; y *= other.y; return *this; }
-        vec2& operator/=(const vec2 &other) { x /= other.x; y /= other.y; return *this; }
+        Vec2& operator+=(const Vec2 &other) { x += other.x; y += other.y; return *this; }
+        Vec2& operator-=(const Vec2 &other) { x -= other.x; y -= other.y; return *this; }
+        Vec2& operator*=(const Vec2 &other) { x *= other.x; y *= other.y; return *this; }
+        Vec2& operator/=(const Vec2 &other) { x /= other.x; y /= other.y; return *this; }
 
-        vec2& operator+=(double other) { x += other; y += other; return *this; }
-        vec2& operator-=(double other) { x -= other; y -= other; return *this; }
-        vec2& operator*=(double other) { x *= other; y *= other; return *this; }
-        vec2& operator/=(double other) { x /= other; y /= other; return *this; }
+        Vec2& operator+=(double other) { x += other; y += other; return *this; }
+        Vec2& operator-=(double other) { x -= other; y -= other; return *this; }
+        Vec2& operator*=(double other) { x *= other; y *= other; return *this; }
+        Vec2& operator/=(double other) { x /= other; y /= other; return *this; }
 
-        bool operator==(const vec2 &other) const { return x == other.x && y == other.y; }
-        bool operator!=(const vec2 &other) const { return x != other.x || y != other.y; }
+        bool operator==(const Vec2 &other) const { return x == other.x && y == other.y; }
+        bool operator!=(const Vec2 &other) const { return x != other.x || y != other.y; }
 
         double length() const { return std::sqrt(x * x + y * y); }
         double lengthSquared() const { return x * x + y * y; }          // Enough for comparisons, faster than length()
 
-        vec2 normalized(bool returnZeroInsteadOfThrow = false) const {
+        Vec2 normalized(bool returnZeroInsteadOfThrow = false) const {
             if (!returnZeroInsteadOfThrow && length() == 0) {
                 throw std::runtime_error("Cannot normalize a b::vec2 with length 0");
             }
-            return length() == 0 ? vec2(0, 0) : *this / length();
+            return length() == 0 ? Vec2(0, 0) : *this / length();
         }
-        vec2& normalize(bool returnZeroInsteadOfThrow = false) {
+        Vec2& normalize(bool returnZeroInsteadOfThrow = false) {
             return *this = normalized(returnZeroInsteadOfThrow);
         }
 
         // TODO: Maybe clone SFML in terms of defining angle functions to get the angle to X or angle to another vector?
 
-        double dot(const vec2 &other) const { return x * other.x + y * other.y; }
-        double cross(const vec2 &other) const { return x * other.y - y * other.x; }
+        double dot(const Vec2 &other) const { return x * other.x + y * other.y; }
+        double cross(const Vec2 &other) const { return x * other.y - y * other.x; }
 
-        vec2 lerp(const vec2 &other, double t) const { return *this + (other - *this) * t; }
+        Vec2 lerp(const Vec2 &other, double t) const { return *this + (other - *this) * t; }
 
-        vec2 projected(const vec2 &other) const { return other * (dot(other) / other.lengthSquared()); }
-        vec2 reflected(const vec2 &normal) const { return *this - normal * (2.0 * dot(normal)); }
+        Vec2 projected(const Vec2 &other) const { return other * (dot(other) / other.lengthSquared()); }
+        Vec2 reflected(const Vec2 &normal) const { return *this - normal * (2.0 * dot(normal)); }
 
-        vec2 rotated(double angle) const {
+        Vec2 rotated(double angle) const {
             return {x * std::cos(angle) - y * std::sin(angle), x * std::sin(angle) + y * std::cos(angle)};
         }
 
-        vec2& rotate(double angle) { return *this = rotated(angle); }
+        Vec2& rotate(double angle) { return *this = rotated(angle); }
 
-        vec2 perpendicular() const { return {-y, x}; }
-        vec2& makePerpendicular() { return *this = perpendicular(); }
+        Vec2 perpendicular() const { return {-y, x}; }
+        Vec2& makePerpendicular() { return *this = perpendicular(); }
 
 #ifdef B_VEC_INTEGRATE_SFML
-        vec2(const sf::Vector2f &other) : x(other.x), y(other.y) {}
-        vec2(const sf::Vector2i &other) : x(other.x), y(other.y) {}
-        vec2(const sf::Vector2u &other) : x(other.x), y(other.y) {}
-        vec2& operator=(const sf::Vector2f &other) { x = other.x; y = other.y; return *this; }
-        vec2& operator=(const sf::Vector2i &other) { x = other.x; y = other.y; return *this; }
-        vec2& operator=(const sf::Vector2u &other) { x = other.x; y = other.y; return *this; }
+        Vec2(const sf::Vector2f &other) : x(other.x), y(other.y) {}
+        Vec2(const sf::Vector2i &other) : x(other.x), y(other.y) {}
+        Vec2(const sf::Vector2u &other) : x(other.x), y(other.y) {}
+        Vec2& operator=(const sf::Vector2f &other) { x = other.x; y = other.y; return *this; }
+        Vec2& operator=(const sf::Vector2i &other) { x = other.x; y = other.y; return *this; }
+        Vec2& operator=(const sf::Vector2u &other) { x = other.x; y = other.y; return *this; }
         operator sf::Vector2f() const { return {static_cast<float>(x), static_cast<float>(y)}; }
         operator sf::Vector2i() const { return {static_cast<int>(x), static_cast<int>(y)}; }
         operator sf::Vector2u() const { return {static_cast<unsigned int>(x), static_cast<unsigned int>(y)}; }
 #endif
 
 #ifdef B_VEC_INTEGRATE_IMGUI
-        vec2(const ImVec2 &other) : x(other.x), y(other.y) {}
-        vec2& operator=(const ImVec2 &other) { x = other.x; y = other.y; return *this; }
+        Vec2(const ImVec2 &other) : x(other.x), y(other.y) {}
+        Vec2& operator=(const ImVec2 &other) { x = other.x; y = other.y; return *this; }
         operator ImVec2() const { return {static_cast<float>(x), static_cast<float>(y)}; }
 #endif
 
@@ -126,3 +128,12 @@ namespace b {
     };
 
 } // namespace b
+
+template <> struct fmt::formatter<b::Vec2> {
+    constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator {
+        return ctx.begin();
+    }
+    auto format(const b::Vec2& vec, format_context& ctx) const -> format_context::iterator {
+        return fmt::format_to(ctx.out(), "[{:.6f}, {:.6f}]", vec.x, vec.y);
+    }
+};

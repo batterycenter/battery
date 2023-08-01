@@ -34,7 +34,7 @@ namespace b {
         // No action
     }
 
-    void ConsoleApplication::onConsoleCleanup() {
+    void ConsoleApplication::onConsoleExit() {
         // No action
     }
 
@@ -65,7 +65,7 @@ namespace b {
         b::Folders::ApplicationName() = appname;
 
         if (!this->_setup()) {
-            this->_cleanup();
+            this->_exit();
             return exitCode;
         }
 
@@ -88,7 +88,7 @@ namespace b {
 
             lastFrame = b::time();
         }
-        this->_cleanup();
+        _exit();
         return exitCode;
     }
 
@@ -117,8 +117,8 @@ namespace b {
         return CatchExceptions("b::application::update()", &ConsoleApplication::onConsoleUpdate, this);
     }
 
-    bool ConsoleApplication::_cleanup() {
-        return CatchExceptions("b::application::cleanup()", &ConsoleApplication::onConsoleCleanup, this);
+    bool ConsoleApplication::_exit() {
+        return CatchExceptions("b::application::exit()", &ConsoleApplication::onConsoleExit, this);
     }
 
 } // namespace b

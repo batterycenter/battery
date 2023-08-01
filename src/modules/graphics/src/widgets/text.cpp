@@ -28,8 +28,8 @@ namespace b::widgets {
         }
 
         baseSetCursorPositionToMinBB();
-        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, b::vec2(0, 0));
-        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, b::vec2(0, 0));
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, b::Vec2(0, 0));
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, b::Vec2(0, 0));
         ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0);
         text_container([this, &textSize]() {
 
