@@ -39,8 +39,6 @@ target_link_libraries(battery_core_no_main
     utf8::cpp
 )
 
-battery_add_module(check)
-
 if (WIN32)
     target_link_libraries(battery_core_no_main Winmm.lib dwmapi.lib)   # for b::sleep_ms timer resolution and immersive dark mode
 endif ()
