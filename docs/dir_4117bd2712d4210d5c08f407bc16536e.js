@@ -1,5 +1,6 @@
 var dir_4117bd2712d4210d5c08f407bc16536e =
 [
+    [ "tray", "dir_ee38df1b32bf5d9ced820d919da85e0e.html", "dir_ee38df1b32bf5d9ced820d919da85e0e" ],
     [ "async_worker.hpp", "async__worker_8hpp_source.html", null ],
     [ "cache.hpp", "cache_8hpp_source.html", null ],
     [ "color.hpp", "color_8hpp_source.html", null ],
@@ -10,6 +11,7 @@ var dir_4117bd2712d4210d5c08f407bc16536e =
     [ "error.hpp", "error_8hpp_source.html", null ],
     [ "expected.hpp", "expected_8hpp_source.html", null ],
     [ "file_watcher.hpp", "file__watcher_8hpp_source.html", null ],
+    [ "filedialog.hpp", "filedialog_8hpp_source.html", null ],
     [ "folders.hpp", "folders_8hpp_source.html", null ],
     [ "fs.hpp", "fs_8hpp_source.html", null ],
     [ "inja.hpp", "inja_8hpp_source.html", null ],
@@ -28,6 +30,7 @@ var dir_4117bd2712d4210d5c08f407bc16536e =
     [ "string.hpp", "string_8hpp_source.html", null ],
     [ "thread.hpp", "thread_8hpp_source.html", null ],
     [ "time.hpp", "time_8hpp_source.html", null ],
+    [ "tray.hpp", "tray_8hpp_source.html", null ],
     [ "uuid.hpp", "uuid_8hpp_source.html", null ],
     [ "vec.hpp", "vec_8hpp_source.html", null ]
 ];

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['lockfile_101',['lockfile',['../classb_1_1lockfile.html',1,'b']]]
+  ['label_114',['label',['../classb_1_1tray_1_1label.html',1,'b::tray']]],
+  ['lockfile_115',['lockfile',['../classb_1_1lockfile.html',1,'b']]]
 ];

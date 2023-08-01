@@ -2,6 +2,9 @@ var hierarchy =
 [
     [ "b::async_worker< T >", "classb_1_1async__worker.html", null ],
     [ "b::async_worker< void >", "classb_1_1async__worker.html", null ],
+    [ "b::tray::basetray", "classb_1_1tray_1_1basetray.html", [
+      [ "b::tray::tray", "classb_1_1tray_1_1tray.html", null ]
+    ] ],
     [ "std::basic_string< Char >", null, [
       [ "std::string", null, [
         [ "b::string", "classb_1_1string.html", null ]
@@ -14,6 +17,7 @@ var hierarchy =
     [ "b::Color", "structb_1_1Color.html", null ],
     [ "b::ConsoleApplication", "classb_1_1ConsoleApplication.html", null ],
     [ "b::cachefile::entry", "classb_1_1cachefile_1_1entry.html", null ],
+    [ "b::filedialog", "classb_1_1filedialog.html", null ],
     [ "fmt::formatter< b::Color >", "structfmt_1_1formatter_3_01b_1_1Color_01_4.html", null ],
     [ "fmt::formatter< b::fs::path >", "structfmt_1_1formatter_3_01b_1_1fs_1_1path_01_4.html", null ],
     [ "fmt::formatter< b::Vec2 >", "structfmt_1_1formatter_3_01b_1_1Vec2_01_4.html", null ],
@@ -51,5 +55,13 @@ var hierarchy =
     [ "b::scoped_lockfile", "classb_1_1scoped__lockfile.html", null ],
     [ "b::scoped_lockfile_nothrow", "classb_1_1scoped__lockfile__nothrow.html", null ],
     [ "b::console::terminal", "classb_1_1console_1_1terminal.html", null ],
+    [ "b::tray::tray_entry", "classb_1_1tray_1_1tray__entry.html", [
+      [ "b::tray::button", "classb_1_1tray_1_1button.html", null ],
+      [ "b::tray::label", "classb_1_1tray_1_1label.html", null ],
+      [ "b::tray::separator", "classb_1_1tray_1_1separator.html", null ],
+      [ "b::tray::submenu", "classb_1_1tray_1_1submenu.html", null ],
+      [ "b::tray::synced_toggle", "classb_1_1tray_1_1synced__toggle.html", null ],
+      [ "b::tray::toggle", "classb_1_1tray_1_1toggle.html", null ]
+    ] ],
     [ "b::Vec2", "structb_1_1Vec2.html", null ]
 ];
