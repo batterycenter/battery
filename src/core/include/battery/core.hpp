@@ -10,6 +10,7 @@
 #include "battery/core/error.hpp"
 #include "battery/core/expected.hpp"
 #include "battery/core/file_watcher.hpp"
+#include "battery/core/filedialog.hpp"
 #include "battery/core/folders.hpp"
 #include "battery/core/fs.hpp"
 #include "battery/core/inja.hpp"
@@ -28,7 +29,9 @@
 #include "battery/core/string.hpp"
 #include "battery/core/thread.hpp"
 #include "battery/core/time.hpp"
+#include "battery/core/tray.hpp"
 #include "battery/core/uuid.hpp"
+#include "battery/core/vec.hpp"
 
 //#ifdef B_COMPILER_MSVC
 //#pragma warning( push )

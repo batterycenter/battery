@@ -9,6 +9,7 @@ github_dependencies = [
     [ "DaanDeMeyer", "reproc", "v14.2.4" ],            # MIT License
     [ "nemtrif", "utfcpp", "v3.2.3" ],                 # Boost Software License 1.0
     [ "jothepro", "doxygen-awesome-css", "v2.2.1" ],   # MIT License
+    [ "batterycenter", "embed", "v1.0.0" ],            # Apache-2.0 License
 ]
 
 def main():

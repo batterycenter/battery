@@ -14,4 +14,5 @@ target_sources(battery_core_tests PRIVATE
     process.cpp
     string.cpp
     thread.cpp
-    time.cpp)
+    time.cpp
+)

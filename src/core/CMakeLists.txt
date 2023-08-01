@@ -2,9 +2,22 @@
 # battery core library
 battery_add_library(battery_core_no_main STATIC ALIAS battery::core_no_main)
 battery_add_source_files(battery_core_no_main
+
+        src/tray/components/button.cpp
+        src/tray/components/label.cpp
+        src/tray/components/separator.cpp
+        src/tray/components/submenu.cpp
+        src/tray/components/syncedtoggle.cpp
+        src/tray/components/toggle.cpp
+        src/tray/core/linux/tray.cpp
+        src/tray/core/windows/tray.cpp
+        src/tray/core/entry.cpp
+        src/tray/core/traybase.cpp
+
         src/extern/platform_folders.cpp
         src/extern/utf8proc.c
         src/extern/utf8proc_data.c
+
         src/internal/folders.cpp
 
         src/console_application.cpp
@@ -14,6 +27,7 @@ battery_add_source_files(battery_core_no_main
         src/environment.cpp
         src/error.cpp
         src/file_watcher.cpp
+        src/filedialog.cpp
         src/lockfile.cpp
         src/log.cpp
         src/main.cpp

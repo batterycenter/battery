@@ -1,6 +1,5 @@
 
 #include "battery/core.hpp"
-#include "battery/filedialog.hpp"
 
 enum class Options {
     OPEN_FILE,

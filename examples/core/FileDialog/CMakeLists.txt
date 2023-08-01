@@ -1,3 +1,1 @@
 battery_add_example(Example_FileDialog src/main.cpp)
-battery_add_module(filedialog)
-target_link_libraries(Example_FileDialog battery::filedialog)

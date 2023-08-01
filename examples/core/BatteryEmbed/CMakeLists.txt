@@ -1,3 +1,3 @@
 battery_add_example(Example_BatteryEmbed src/main.cpp)
-battery_embed(Example_BatteryEmbed resources/banner.txt banner_txt TEXT)
-battery_embed(Example_BatteryEmbed resources/another_folder/message.txt another_folder/message_txt TEXT)
+b_embed_text(Example_BatteryEmbed resources/banner.txt Banner)
+b_embed_text(Example_BatteryEmbed resources/another_folder/message.txt AnotherFolder/Message)

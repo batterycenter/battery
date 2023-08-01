@@ -4,6 +4,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 get_filename_component(B_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
 set(B_ROOT_DIR ${B_ROOT_DIR} CACHE INTERNAL "Root directory of the battery project" FORCE)
+set(B_GTEST_INCLUDED OFF CACHE INTERNAL "Whether GoogleTest is included in the project" FORCE)
 
 #if (ENABLE_CLANG_TIDY)
 #    if (NOT DEFINED CLANG_TIDY_CONFIG_FILE)
@@ -183,9 +184,17 @@ function(battery_add_test TARGET)
     if (NOT B_GTEST_INCLUDED)
         set(gtest_force_shared_crt "Use shared (DLL) run-time lib even when Google Test is built as static lib." ON FORCE)
         set(CMAKE_DISABLE_FIND_PACKAGE_Python TRUE)
-        battery_add_package("gh:google/googletest#main")      # Live at head: main branch recommended
+
+        include(FetchContent)
+        FetchContent_Declare(
+                googletest
+                GIT_REPOSITORY https://github.com/google/googletest.git
+                GIT_TAG        main    # Live at head: main branch recommended
+        )
+        FetchContent_MakeAvailable(googletest)
+
         include(GoogleTest)
-        set(B_GTEST_INCLUDED ON PARENT_SCOPE)
+        set(B_GTEST_INCLUDED ON CACHE BOOL "Whether or not GoogleTest has been included" FORCE)
         battery_set_target_ide_folder(gtest "battery/tests")
     endif()
     battery_add_executable(${TARGET} ${ARGN})
