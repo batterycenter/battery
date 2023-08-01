@@ -33,10 +33,13 @@ battery_set_ide_folder(battery_core_no_main "battery/modules")
 #set_property(SOURCE src/extern/utf8proc.c PROPERTY CMAKE_CXX_CLANG_TIDY "")
 #set_property(SOURCE src/extern/utf8proc_data.c PROPERTY CMAKE_CXX_CLANG_TIDY "")
 
-battery_add_module(spdlog)
 battery_add_module(reproc)
 battery_add_module(utfcpp)
-target_link_libraries(battery_core_no_main battery::spdlog battery::reproc battery::utfcpp)
+target_link_libraries(battery_core_no_main 
+    spdlog::spdlog 
+    reproc::reproc++
+    utf8::cpp
+)
 
 battery_add_module(check)
 

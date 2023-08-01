@@ -26,21 +26,20 @@ Let's make the world a better place by writing software that is fast and just wo
 # License
 
 Battery is licensed under the Apache License 2.0.  
-Here is the author's interpretation.  
 You ARE allowed to:
  - Use the library and all provided tools for any purpose personally or commercially ✅
  - Modify them, as long as the license remains unchanged and all modifications are clearly marked ✅
- - Distribute any software freely that depends upon battery as a dependency or is statically linked ✅
+ - Distribute any software that depends upon battery as a dependency ✅
  - Redistribute battery in source or binary form as part of another project, while retaining the license ✅
  - Use battery for developing closed source applications commercially ✅
 
 But you are NOT allowed to:
- - Redistribute battery itself or large portions of it, claiming you are the original author ❌
- - Redistribute battery itself without major modifications, with the goal of making money with my work ❌
+ - Redistribute the battery library itself or large portions of it, claiming you are the original author ❌
+ - Sell the code without major modifications, with the goal of making money off of my work ❌
  - Battery is distributed without any warranty whatsoever ❌
 
 Battery is striving to become a healthy community of developers. Everything is allowed that contributes
-to the goal of supporting teams in creating, developing and distributing modern, free software.  
+to the goal of supporting teams in developing and distributing modern, free software.  
 We love open source solutions that just work ❤️ 
 
 # WIP stuff
@@ -48,6 +47,15 @@ We love open source solutions that just work ❤️
 ```
 sudo apt install git cmake build-essential libx11-dev
 ```
+
+# Embedded dependencies
+
+https://github.com/gabime/spdlog -> MIT License
+https://github.com/DaanDeMeyer/reproc -> MIT License
+https://github.com/nemtrif/utfcpp -> Boost Software License 1.0
+https://github.com/jothepro/doxygen-awesome-css -> MIT License
+
+# Other stuff
 
 https://google.github.io/styleguide/cppguide.html
 

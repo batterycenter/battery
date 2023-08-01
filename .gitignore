@@ -9,3 +9,6 @@ bin/
 build/
 build*/
 Testing/
+
+# But ignore nothing in deps/
+!deps/**

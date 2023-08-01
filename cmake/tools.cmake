@@ -1,5 +1,4 @@
 
-include(cmake/CPM.cmake)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -110,18 +109,16 @@ function(__apply_common_target_options TARGET)  # For all libraries and executab
 
     if (WIN32)
         target_compile_definitions(${TARGET} PRIVATE
-                WIN32_LEAN_AND_MEAN      # Prevents Windows.h from adding unnecessary includes
-                NOMINMAX                 # Prevents Windows.h from defining min/max as macros
-                _CRT_SECURE_NO_WARNINGS
-                )
+                WIN32_LEAN_AND_MEAN         # Prevents Windows.h from adding unnecessary includes
+                NOMINMAX                    # Prevents Windows.h from defining min/max as macros
+                _CRT_SECURE_NO_WARNINGS     # Prevent MSVC from complaining about memset, strcpy, etc.
+        )
     endif()
     target_include_directories(${TARGET} PUBLIC include)
     target_compile_definitions(${TARGET} PUBLIC UNICODE _UNICODE UTF8PROC_STATIC)
     battery_add_environment_definitions(${TARGET})
 
 endfunction()
-
-
 
 function(battery_add_alias_library target_name original_target)
     add_library(${target_name} ALIAS ${original_target})
@@ -201,9 +198,9 @@ endfunction()
 
 
 
-macro(battery_add_package)
-    CPMAddPackage(${ARGN})
-endmacro()
+# macro(battery_add_package)
+#     CPMAddPackage(${ARGN})
+# endmacro()
 
 function(battery_set_output_name TARGET NAME)
     set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME ${NAME})
@@ -251,5 +248,4 @@ function(battery_require_find_package PACKAGE_NAME PACKAGE_NAME_FOUND ADDITIONAL
 endfunction()
 
 include(${CMAKE_CURRENT_LIST_DIR}/modules.cmake)        # This defines the module helper functions
-include(${CMAKE_CURRENT_LIST_DIR}/embed.cmake)          # battery_embed()
 include(${CMAKE_CURRENT_LIST_DIR}/environment.cmake)    # battery_add_environment_definitions()
