@@ -59,7 +59,7 @@ namespace b {
     }
 
     void process::stdin_write(const b::string& str) {
-        stdin_write(str.data(), str.length());
+        stdin_write(str.to_utf8().data(), str.length());
     }
 
     void process::stdin_write(const std::string_view& str) {
@@ -83,28 +83,33 @@ namespace b {
         _process.terminate();
     }
 
-    std::error_code process::stdout_sink(const uint8_t* _buffer, size_t length) {
-        if (length == 0) {
+    std::error_code process::stdout_sink(const b::string& data) {
+        auto buffer = data;
+        if (data.empty()) {
             return {};
         }
-        auto buffer = b::string(std::string(std::bit_cast<const char*>(_buffer), length));
         if (options.suppress_carriage_return) {
-            buffer = b::string::replace(buffer, "\r", "");
+            buffer.replace("\r"_b, ""_b);
         }
         output_stdout += buffer;
         output_combined += buffer;
-        if (options.stdout_callback) { options.stdout_callback(buffer); }
-        if (!options.silent) { b::print("{}", buffer); }
+        if (options.stdout_callback) {
+            options.stdout_callback(buffer);
+        }
+        if (!options.silent) {
+            std::string s;
+            b::print("{}", "");
+        }
         return {};
     }
 
-    std::error_code process::stderr_sink(const uint8_t* _buffer, size_t length) {
-        if (length == 0) {
+    std::error_code process::stderr_sink(const b::string& data) {
+        auto buffer = data;
+        if (data.empty()) {
             return {};
         }
-        auto buffer = b::string(std::string(std::bit_cast<const char*>(_buffer), length));
         if (options.suppress_carriage_return) {
-            buffer = b::string::replace(buffer, "\r", "");
+            buffer.replace("\r"_b, ""_b);
         }
         output_stderr += buffer;
         output_combined += buffer;
@@ -114,32 +119,31 @@ namespace b {
     }
 
     void process::run_process() {
-        std::vector<const char*> cmd_cstr;
-
+        std::vector<std::string> cmd;   // Here all the strings are stored in UTF-8 format,
+                                        // the const char* will point to here, later
         if (options.execute_as_shell_command) {
             if (b::Constants::Platform() == b::Platform::Windows) {
-                cmd_cstr.emplace_back("cmd.exe");
-                cmd_cstr.emplace_back("/c");
+                cmd.emplace_back("cmd.exe");
+                cmd.emplace_back("/c");
             } 
             else {
-                cmd_cstr.emplace_back("bash");
-                cmd_cstr.emplace_back("-c");
+                cmd.emplace_back("bash");
+                cmd.emplace_back("-c");
             }
         }
 
         if (!options.executable.empty()) {
-            cmd_cstr.emplace_back(options.executable.c_str());
+            cmd.emplace_back(options.executable.to_utf8());
         }
         for (const auto& command : options.arguments) {
             if (command.empty()) {
                 continue;
             }
-            cmd_cstr.emplace_back(command.c_str());
+            cmd.emplace_back(command.to_utf8());
         }
-        cmd_cstr.emplace_back(nullptr);
 
         options.reproc_options.redirect.parent = options.passthrough_to_parent;
-        b::string workdir = options.working_directory.has_value() ? options.working_directory->string() : "";
+        std::string workdir = options.working_directory.has_value() ? options.working_directory->string().to_utf8() : "";
         options.reproc_options.working_directory = !workdir.empty() ? workdir.c_str() : nullptr;
         options.reproc_options.redirect.err.type = reproc::redirect::type::pipe;
 
@@ -162,10 +166,16 @@ namespace b {
             });
         }
 
-        std::error_code errorCode = _process.start(cmd_cstr.data(), options.reproc_options);
+        std::vector<const char*> cmdCstr;
+        for (const auto& str : cmd) {
+            cmdCstr.emplace_back(str.c_str());
+        }
+        cmdCstr.emplace_back(nullptr);
+
+        std::error_code errorCode = _process.start(cmdCstr.data(), options.reproc_options);
         if (errorCode) {
             exit_code = errorCode.value();
-            error_message = errorCode.message();
+            error_message = b::string::from_utf8(errorCode.message());
             if (ctrl_c_handler) {
                 b::pop_ctrl_c_handler();
             }
@@ -174,16 +184,16 @@ namespace b {
 
         errorCode = reproc::drain(
                 _process,
-                [this] (auto, const auto* buffer, auto length) {
-                    return this->stdout_sink(buffer, length);
+                [this] (auto, const uint8_t* buffer, size_t length) {
+                    return this->stdout_sink(b::string::from_utf8(std::string(std::bit_cast<char*>(buffer), length)));
                 },
-                [this] (auto, const auto* buffer, auto length) {
-                    return this->stderr_sink(buffer, length);
+                [this] (auto, const uint8_t* buffer, size_t length) {
+                    return this->stderr_sink(b::string::from_utf8(std::string(std::bit_cast<char*>(buffer), length)));
                 });
 
         if (errorCode) {
             exit_code = errorCode.value();
-            error_message = errorCode.message();
+            error_message = b::string::from_utf8(errorCode.message());
             if (ctrl_c_handler) {
                 b::pop_ctrl_c_handler();
             }
@@ -193,7 +203,7 @@ namespace b {
         auto [status, _ec] = _process.wait(reproc::infinite);
         if (_ec) {
             exit_code = status;
-            error_message = _ec.message();
+            error_message = b::string::from_utf8(_ec.message());
             if (ctrl_c_handler) {
                 b::pop_ctrl_c_handler();
             }
@@ -207,7 +217,7 @@ namespace b {
         }
 
         exit_code = status;
-        error_message = _ec.message();
+        error_message = b::string::from_utf8(_ec.message());
         if (ctrl_c_handler) {
             b::pop_ctrl_c_handler();
         }

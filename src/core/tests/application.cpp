@@ -47,7 +47,7 @@ public:
         }
     }
 
-    void onConsoleCleanup() override {
+    void onConsoleExit() override {
         cleanedCalled = true;
     }
 
@@ -57,7 +57,7 @@ private:
 
 TEST(BatteryCore_Application, Application) {
     App app;
-    app.run(u8"BatteryCore_UnitTest", { u8"ABC", u8"DEF", u8"GHI" });
+    (void)app.run(u8"BatteryCore_UnitTest", { u8"ABC", u8"DEF", u8"GHI" });
     EXPECT_TRUE(app.setupCalled);
     EXPECT_TRUE(app.cleanedCalled);
     EXPECT_EQ(app.updated, app.maxFrames);

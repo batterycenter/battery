@@ -35,7 +35,7 @@ namespace b {
                      &read,
                      nullptr);
 
-        auto line = b::string(buffer.substr(0, read));
+        auto line = b::string::from_native(buffer.substr(0, read));
 #else
         b::string line;
         std::getline(std::cin, line);
@@ -43,17 +43,17 @@ namespace b {
             line = line.substr(0, buffer_size);
         }
 #endif
-        line = b::string::replace(line, "\n", "");
-        line = b::string::replace(line, "\r", "");
+        line.replace("\n"_b, ""_b);
+        line.replace("\r"_b, ""_b);
         return line;
     }
 
     bool open_url_in_default_browser(const b::string& url) {
 #ifdef B_OS_WINDOWS
-        auto process = b::execute("start " + url);
+        auto process = b::execute("start "_b + url);
         return process.exit_code == 0;
 #else
-        auto process = b::execute("xdg-open " + url);
+        auto process = b::execute("xdg-open "_b + url);
         return process.exit_code == 0;
 #endif
     }
@@ -98,29 +98,29 @@ namespace b {
 
         static keycode make_simple_key(int ch) {
             if (ch >= 'a' && ch <= 'z') {
-                return (keycode) ch;
+                return static_cast<keycode>(ch);
             }
             if (ch >= 'A' && ch <= 'Z') {
-                return (keycode) (ch + ('a' - 'A'));
+                return static_cast<keycode>(ch + ('a' - 'A'));
             }
-            if (ch == 8) return keycode::BACKSPACE;
-            if (ch == 127) return keycode::BACKSPACE;
-            if (ch == 9) return keycode::TAB;
-            if (ch == 27) return keycode::ESCAPE;
-            if (ch == ' ') return keycode::SPACE;
-            if (ch == '+') return keycode::PLUS;
-            if (ch == '-') return keycode::MINUS;
-            if (ch == '.') return keycode::DOT;
-            if (ch == ':') return keycode::COLON;
-            if (ch == ',') return keycode::COMMA;
-            if (ch == ';') return keycode::SEMICOLON;
-            if (ch == '*') return keycode::ASTERISK;
-            if (ch == '%') return keycode::PERCENT;
-            if (ch == '/') return keycode::DIVIDE;
-            else if (ch == 10 || ch == 13) {
-                return keycode::ENTER;
+            switch (ch) {
+                case 8: case 127:   return keycode::BACKSPACE;
+                case 9:             return keycode::TAB;
+                case 27:            return keycode::ESCAPE;
+                case ' ':           return keycode::SPACE;
+                case '+':           return keycode::PLUS;
+                case '-':           return keycode::MINUS;
+                case '.':           return keycode::DOT;
+                case ':':           return keycode::COLON;
+                case ',':           return keycode::COMMA;
+                case ';':           return keycode::SEMICOLON;
+                case '*':           return keycode::ASTERISK;
+                case '%':           return keycode::PERCENT;
+                case '/':           return keycode::DIVIDE;
+                case 10: case 13:   return keycode::ENTER;
+                default:
+                    return keycode::NONE;
             }
-            return keycode::NONE;
         }
 
         static keycode make_special_key(int ch) {

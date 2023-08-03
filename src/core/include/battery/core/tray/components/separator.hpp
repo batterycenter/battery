@@ -19,8 +19,8 @@
 //
 
 #pragma once
+#include "battery/core/tray/core/entry.hpp"
 #include <functional>
-#include "battery/tray/core/entry.hpp"
 
 namespace b::tray {
 
@@ -30,4 +30,4 @@ namespace b::tray {
         ~separator() override = default;
     };
 
-} // namespace Tray
+} // namespace b::tray

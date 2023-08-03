@@ -22,17 +22,16 @@
 
 #ifdef B_OS_WINDOWS
 
-#include <map>
+#include "battery/core/tray/core/traybase.hpp"
 #include <Windows.h>
+#include <map>
 #include <shellapi.h>
-#include <battery/tray/core/traybase.hpp>
 
 namespace b::tray {
 
     class tray : public basetray {
       public:
         tray(b::string identifier, b::string tooltip, MouseButton clickAction = MouseButton::RIGHT);
-        ~tray() override = default;
 
         void setIcon(const b::Resource& icon) override;
         void run() override;
@@ -41,15 +40,15 @@ namespace b::tray {
         void update() override;
 
     private:
-        HWND hwnd = nullptr;
-        HMENU menu = nullptr;
-        NOTIFYICONDATA notifyData{};
+        HWND m_hwnd = nullptr;
+        HMENU m_menu = nullptr;
+        NOTIFYICONDATA m_notifyData{};
 
         static LRESULT CALLBACK wndProc(HWND, UINT, WPARAM, LPARAM);
-        inline static std::map<HWND, std::reference_wrapper<tray>> trayList;
+        inline static std::map<HWND, std::reference_wrapper<tray>> trayList;    // TODO: Static lifetime clang-tidy issue
         static HMENU construct(const std::vector<std::shared_ptr<tray_entry>> &entries, tray *parent);
     };
 
-} // namespace Tray
+} // namespace b::tray
 
 #endif // B_OS_WINDOWS

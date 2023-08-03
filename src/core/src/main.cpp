@@ -17,18 +17,18 @@ namespace b {
         LPWSTR* _args = ::CommandLineToArgvW((LPCWSTR)GetCommandLineW(), &_argc);
         if (_args == nullptr) {
             b::log::core::critical("CommandLineToArgvW failed: {}", b::internal::get_last_win32_error());
-            b::message_box_error("[Battery->WinAPI]: CommandLineToArgvW failed: " + b::internal::get_last_win32_error());
+            b::message_box_error("[Battery->WinAPI]: CommandLineToArgvW failed: "_b + b::internal::get_last_win32_error());
             return {};
         }
         for (int i = 0; i < _argc; i++) {
-            args.push_back(std::wstring(_args[i]));
+            args.push_back(b::string::from_native(std::wstring(_args[i])));
         }
         ::LocalFree(_args);
 
         return args;
 #else                   // All other platforms simply pass-through
         for (int i = 0; i < argc; i++) {
-            args.emplace_back(argv[i]);     // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+            args.emplace_back(b::string::from_utf8(argv[i]));     // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
         }
 #endif
         return args;
@@ -56,12 +56,19 @@ namespace b {
     }
 	
     const char** args_to_argv(const std::vector<b::string>& args) {
-        static auto args_raw = args;     // Static, so the data will stay in memory forever (needed by c_str())
+        static std::vector<std::string> argsData;  // Static, so the data will stay in memory forever (needed by c_str())
         static std::vector<const char*> arguments;
 
+        // Store the actual data into argsData
+        argsData.clear();
+        for (const auto& arg : args) {
+            argsData.push_back(arg.to_utf8());
+        }
+
+        // Now get pointers to each of them
         arguments.clear();
-		for (const auto& arg : args_raw) {
-			arguments.push_back(reinterpret_cast<const char*>(arg.c_str()));
+		for (const auto& arg : argsData) {
+			arguments.push_back(arg.c_str());
 		}
         return arguments.data();
     }

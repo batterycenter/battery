@@ -21,12 +21,12 @@
 // TODO: The left and right mouse button callbacks are still not implemented on linux!!!
 
 #pragma once
-#include "battery/tray/components/button.hpp"
-#include "battery/tray/components/label.hpp"
-#include "battery/tray/components/separator.hpp"
-#include "battery/tray/components/submenu.hpp"
-#include "battery/tray/components/syncedtoggle.hpp"
-#include "battery/tray/components/toggle.hpp"
+#include "battery/core/tray/components/button.hpp"
+#include "battery/core/tray/components/label.hpp"
+#include "battery/core/tray/components/separator.hpp"
+#include "battery/core/tray/components/submenu.hpp"
+#include "battery/core/tray/components/syncedtoggle.hpp"
+#include "battery/core/tray/components/toggle.hpp"
 
-#include "battery/tray/core/windows/tray.hpp"
-#include "battery/tray/core/linux/tray.hpp"
+#include "battery/core/tray/core/windows/tray.hpp"
+#include "battery/core/tray/core/linux/tray.hpp"

@@ -38,7 +38,7 @@ namespace b {
             }
 
             b::log::info("Hot-reloaded resource '{}'", m_resourcePath);
-            m_callback(b::Resource::FromByteString(str.value(), m_resourcePath.raw_extension()));
+            m_callback(b::Resource::FromBytes(str.value().to_utf8(), m_resourcePath.raw_extension().string()));
         }
 
         b::fs::path m_resourcePath;

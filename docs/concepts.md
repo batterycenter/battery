@@ -38,13 +38,17 @@ This is not a problem on Linux and Unix-like systems, as they are built on top o
 
 https://learnmoderncpp.com/2021/03/24/a-unicode-primer/
 
- - ASCII is the most common character encoding, understood by everyone. It uses 7 bits only and one byte is one character.
- - Extended ASCII adds more characters to the ASCII set and uses all 8 bits. It is not compatible with UTF-8.
- - Unicode is the high-level definition of the character set. It assigns every character of the *Unicode character set* to a 32-bit *Unicode codepoint*. Then, a *Unicode codepoint* can be encoded in multiple ways, e.g. *UTF-8*, *UTF-16*, ...
+ - ASCII is the most common character encoding, understood by everyone. It uses 7 bits only and one byte is one character. It is sometimes also called UTF-7.
+ - Extended ASCII is not a real term and criticized as misleading, but is usually used to refer to Latin-1 or ISO-8859-1.
+ - Latin-1 or ISO-8859-1 is a superset of ASCII and uses all 8 bits to provide more characters.
+ - ANSI is not an encoding and has no official meaning, but is usually used to refer to windows-1252 enconding.
+ - Windows-1252 is a Microsoft-specific superset of Latin-1 and provides even more characters in 8 bits.
+ - All of these are very limited in terms of the number of possible characters. Unicode is a solution to this problem.
+ - Unicode is a high-level definition of a character set. It assigns a 32-bit *Unicode codepoint* to every character of the *Unicode character set*. A Unicode string can be encoded by encoding *Unicode Codepoints* using *UTF-8*, *UTF-16* or *UTF-32*.
  - UTF-32 is the one-to-one encoding of *Unicode*, as every *codepoint* fits in 32 bits. Every character of a UTF-32 string uses 32 bits, always.
- - UTF-8 is the most common encoding for *Unicode*, every character uses 1 to 4 bytes. Common ones use 1, less common ones use more. The most common ones only use a single byte and are equivalent to *(plain) ASCII*.
- - UTF-16 follows the same rules as UTF-8, just that every character uses 1 or 2 *16-bit code units*, in other words 2 or 4 bytes, depending on the *Unicode codepoint* being encoded.
- - UTF-7 is sometimes used to refer to *plain ASCII*. It is like UTF-8, but only single-byte characters are allowed. Thus, *UTF-7* is equivalent to *plain ASCII*.
+ - UTF-8 is the most common encoding for *Unicode*. Every character uses 1 to 4 bytes. Common ones use 1, less common ones use more. ASCII can always be interpreted as UTF-8 (it is backwards compatible). This is not the case for Latin-1 or Windows-1252.
+ - UTF-16 follows the same rules as UTF-8, but every character uses one or two *16-bit code units*, in other words 2 or 4 bytes, depending on the *Unicode codepoint* being encoded.
+ - Windows uses UTF-16 internally. In the area of Windows these are generally called *Wide Strings*. All the ANSI-functions (like CreateFileA) in the Windows API are just legacy wrappers around the UTF-16 variants. Do not use them.
 
 ## Working with Unicode
 

@@ -19,7 +19,7 @@
 //
 
 #include <utility>
-#include "battery/tray/components/button.hpp"
+#include "battery/core/tray/components/button.hpp"
 
 namespace b::tray {
 

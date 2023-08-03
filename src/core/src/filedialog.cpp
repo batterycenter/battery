@@ -1,5 +1,5 @@
 
-#include "battery/filedialog.hpp"
+#include "battery/core/filedialog.hpp"
 #include "battery/core.hpp"
 #include <source_location>
 
@@ -20,10 +20,14 @@ namespace b {
         b::log::info("Setting default folder to {}", defaultPath);
 
         IShellItem *folder = nullptr;
-        const HRESULT result = SHCreateItemFromParsingName(defaultPath.string().wstr().c_str(), nullptr, IID_PPV_ARGS(&folder));
+        const HRESULT result = SHCreateItemFromParsingName(defaultPath.string().to_native().c_str(),
+                                                           nullptr,
+                                                           IID_PPV_ARGS(&folder));
 
         if (!SUCCEEDED(result)) {   // NOLINTNEXTLINE
-            throw std::runtime_error(b::format("{}: Failed to show file dialog: Error creating ShellItem: {}", std::source_location::current().function_name(), internal::get_last_win32_error()));
+            throw std::runtime_error(b::format("{}: Failed to show file dialog: Error creating ShellItem: {}",
+                                               std::source_location::current().function_name(),
+                                               internal::get_last_win32_error()));
         }
 
         dialog->SetDefaultFolder(folder);
@@ -36,7 +40,7 @@ namespace b {
         }
 
         IShellItem *folder = nullptr;
-        HRESULT const result = SHCreateItemFromParsingName(path.string().wstr().c_str(), nullptr, IID_PPV_ARGS(&folder));
+        HRESULT const result = SHCreateItemFromParsingName(path.string().to_native().c_str(), nullptr, IID_PPV_ARGS(&folder));
 
         if (!SUCCEEDED(result)) {   // NOLINTNEXTLINE
             throw std::runtime_error(b::format("{}: Failed to show file dialog: Error creating ShellItem: {}", std::source_location::current().function_name(), internal::get_last_win32_error()));
@@ -53,7 +57,7 @@ namespace b {
 
         std::vector<std::pair<std::wstring,std::wstring>> osFilters;
         for (auto& filter : filters) {
-            osFilters.emplace_back(filter.first.wstr(), filter.second.wstr());
+            osFilters.emplace_back(filter.first.to_native(), filter.second.to_native());
         }
 
         std::vector<COMDLG_FILTERSPEC> speclist;
@@ -106,7 +110,7 @@ namespace b {
             SetFilters(pFileOpen, dialog.filters);
         }
         if (!default_extension.empty()) {
-            pFileOpen->SetDefaultExtension(default_extension.wstr().c_str());
+            pFileOpen->SetDefaultExtension(default_extension.to_native().c_str());
         }
         SetOptions(pFileOpen, dialog.confirm_overwrite, dialog.directory, multiple);
 
@@ -131,7 +135,7 @@ namespace b {
             PWSTR pszFilePath = nullptr;
             pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
 
-            paths.emplace_back(b::string(std::wstring(pszFilePath)));
+            paths.emplace_back(b::string::from_native(std::wstring(pszFilePath)));
             CoTaskMemFree(pszFilePath);
 
             pItem->Release();
@@ -165,7 +169,7 @@ namespace b {
             SetFilters(pFileSave, dialog.filters);
         }
         if (!default_extension.empty()) {
-            pFileSave->SetDefaultExtension(default_extension.wstr().c_str());
+            pFileSave->SetDefaultExtension(default_extension.to_native().c_str());
         }
         SetOptions(pFileSave, dialog.confirm_overwrite, dialog.directory, false);
 
@@ -182,7 +186,7 @@ namespace b {
         PWSTR pszFilePath = nullptr;
         pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
 
-        b::fs::path const path = b::string(std::wstring(pszFilePath));
+        b::fs::path const path = b::string::from_native(std::wstring(pszFilePath));
         CoTaskMemFree(pszFilePath);
 
         pItem->Release();
@@ -195,7 +199,7 @@ namespace b {
 
     b::fs::path filedialog::sync_open() {
 #ifdef B_OS_WINDOWS
-        auto path = Win32OpenDialog(*this, false, default_extension)[0];
+        auto path = Win32OpenDialog(*this, false, default_extension.string())[0];
 #else
 #warning FILEDIALOG NOT IMPLEMENTED
         auto path = b::fs::path();
@@ -208,7 +212,7 @@ namespace b {
 
     std::vector<b::fs::path> filedialog::sync_open_multiple() {
 #ifdef B_OS_WINDOWS
-        auto paths = Win32OpenDialog(*this, true, default_extension);
+        auto paths = Win32OpenDialog(*this, true, default_extension.string());
 #else
 #warning FILEDIALOG NOT IMPLEMENTED
         auto paths = std::vector<b::fs::path>();
@@ -225,7 +229,7 @@ namespace b {
 
     b::fs::path filedialog::sync_save() {
 #ifdef B_OS_WINDOWS
-        auto path = Win32SaveDialog(*this, default_extension);
+        auto path = Win32SaveDialog(*this, default_extension.string());
 #else
 #warning FILEDIALOG NOT IMPLEMENTED
         auto path = b::fs::path();

@@ -1,164 +1,527 @@
 
 #include "battery/core/string.hpp"
-#include "battery/core/log.hpp"
 #include "battery/core/extern/utf8proc.h"
+#include "battery/core/internal/windows.hpp"
+#include "battery/core/log.hpp"
 #include "utf8.h"
-
-#include <cstring>
+#include <regex>
 
 namespace b {
+
+    string::string(const std::u8string& other) {
+        *this = from_utf8(other);
+    }
+
+    string::string(const char8_t* other) {
+        *this = from_utf8(other);
+    }
+
+    string::string(const std::u16string& other) {
+        *this = from_utf16(other);
+    }
+
+    string::string(const char16_t* other) {
+        *this = from_utf16(other);
+    }
+
+    string::string(const std::u32string& other) {
+        *this = from_utf32(other);
+    }
+
+    string::string(const char32_t* other) {
+        *this = from_utf32(other);
+    }
+
+    string::string(char32_t chr) {
+        *this = from_utf32(chr);
+    }
+
+    string& string::operator=(const std::u8string& other) {
+        *this = from_utf8(other);
+        return *this;
+    }
+
+    string& string::operator=(const char8_t* other) {
+        *this = from_utf8(other);
+        return *this;
+    }
+
+    string& string::operator=(const std::u16string& other) {
+        *this = from_utf16(other);
+        return *this;
+    }
+
+    string& string::operator=(const char16_t* other) {
+        *this = from_utf16(other);
+        return *this;
+    }
+
+    string& string::operator=(const std::u32string& other) {
+        *this = from_utf32(other);
+        return *this;
+    }
+
+    string& string::operator=(const char32_t* other) {
+        *this = from_utf32(other);
+        return *this;
+    }
+
+    string& string::operator=(char32_t chr) {
+        *this = from_utf32(chr);
+        return *this;
+    }
+
+    string& string::operator+=(const string& other) {
+        return append(other);
+    }
+
+    string& string::assign(const string& other) {
+        m_data = other.m_data;
+        return *this;
+    }
+
+    string& string::append(const string& other) {
+        m_data += other.m_data;
+        return *this;
+    }
+
+    size_t string::size() const {
+        return m_data.size();
+    }
+
+    size_t string::length() const {
+        return m_data.length();
+    }
+
+    bool string::empty() const {
+        return m_data.empty();
+    }
+
+    char32_t& string::back() {
+        return m_data.back();
+    }
+
+    const char32_t& string::back() const {
+        return m_data.back();
+    }
+
+    char32_t& string::front() {
+        return m_data.front();
+    }
+
+    const char32_t& string::front() const {
+        return m_data.front();
+    }
+
+    char32_t& string::at(size_t index) {
+        if (index >= m_data.size()) {
+            throw std::out_of_range("b::string::operator[]: Index out of range");
+        }
+        return m_data.at(index);
+    }
+
+    const char32_t& string::at(size_t index) const {
+        if (index >= m_data.size()) {
+            throw std::out_of_range("b::string::operator[]: Index out of range");
+        }
+        return m_data.at(index);
+    }
+
+    void string::push_back(char32_t chr) {
+        m_data.push_back(chr);
+    }
+
+    char32_t string::pop_back() {
+        if (m_data.length() == 0) {
+            throw std::out_of_range("b::string::pop_back");
+        }
+        auto last = m_data.back();
+        m_data.pop_back();
+        return last;
+    }
+
+    void string::resize(size_t newSize) {
+        m_data.resize(newSize);
+    }
+
+    void string::resize(size_t newSize, char32_t fill) {
+        m_data.resize(newSize, fill);
+    }
+
+    size_t string::capacity() const {
+        return m_data.capacity();
+    }
+
+    void string::reserve(size_t newSize) {
+        m_data.reserve(newSize);
+    }
+
+    void string::clear() {
+        m_data.clear();
+    }
+
+    void string::reverse() {
+        std::reverse(m_data.begin(), m_data.end());
+    }
+
+    string string::substr(size_t pos, size_t len) const {
+        string result;
+        result.m_data = m_data.substr(pos, len);
+        return result;
+    }
 
     bool string::is_valid_utf8(const std::string& str) {
         return utf8::is_valid(str);
     }
 
-    std::u8string string::u8() const {
-        if (!b::string::is_valid_utf8(*this)) throw std::invalid_argument("Invalid utf-8 sequence");
-        return std::u8string(std::bit_cast<char8_t*>(data()), size());
+    string string::from_utf8(const std::string& str) {
+        if (!is_valid_utf8(str)) {
+            throw b::unicode_error();
+        }
+        string result;
+        result.m_data = utf8::utf8to32(str);
+        return result;
     }
 
-    std::u16string string::u16() const {
-        if (!b::string::is_valid_utf8(*this)) throw std::invalid_argument("Invalid utf-8 sequence");
-        return utf8::utf8to16(*this);
+    string string::from_utf8(const std::u8string& str) {
+        auto u8str = std::string(std::bit_cast<char*>(str.data()), str.size());
+        if (!is_valid_utf8(u8str)) {
+            throw b::unicode_error();
+        }
+        string result;
+        result.m_data = utf8::utf8to32(u8str);
+        return result;
     }
 
-    std::u32string string::u32() const {
-        if (!b::string::is_valid_utf8(*this)) throw std::invalid_argument("Invalid utf-8 sequence");
-        return utf8::utf8to32(*this);
+    string string::from_utf16(const std::u16string& str) {
+        try {
+            return from_utf8(utf8::utf16to8(str));
+        }
+        catch (const std::exception&) {
+            throw b::unicode_error();
+        }
     }
 
-    const std::wstring& string::wstr() {
-        std::u16string strU16 = u16();
-        internal_wide_string = std::wstring(std::bit_cast<wchar_t*>(strU16.data()), strU16.size());
-        return internal_wide_string;
+    string string::from_utf16(const std::wstring& str) {
+        return from_utf16(std::u16string(std::bit_cast<char16_t*>(str.data()), str.size()));
     }
 
-    const platform_native_string& string::platform_native() {
+    string string::from_widestring(const std::wstring& str) {
+        return from_utf16(std::u16string(std::bit_cast<char16_t*>(str.data()), str.size()));
+    }
+
+    string string::from_utf32(const std::u32string& str) {
+        try {
+            return from_utf8(utf8::utf32to8(str));
+        }
+        catch (const std::exception&) {
+            throw b::unicode_error();
+        }
+    }
+
+    string string::from_utf32(char32_t chr) {
+        return from_utf32(std::u32string(1, chr));
+    }
+
+    string string::from_native(const b::native_string& str) {
 #ifdef B_OS_WINDOWS
-        return wstr();
+        return from_widestring(str);
 #else
-        return str();
+        return from_utf8(str);
 #endif
     }
 
-    b::string string::foreach(const b::string& str, const std::function<b::string(b::string)>& function) {
-        if (!b::string::is_valid_utf8(str)) throw std::invalid_argument("Invalid utf-8 sequence");
-        b::string result;
-        for (char32_t c : str.u32()) {
-            result += function(b::string(c));
+    string string::from_ascii(const std::string& str) {
+        if (!is_valid_utf8(str)) {
+            throw b::unicode_error();
         }
+        string result;
+        result.m_data = utf8::utf8to32(str);
         return result;
     }
 
-    b::string string::foreach(const b::string& str, const std::function<b::string(char32_t)>& function) {
-        if (!b::string::is_valid_utf8(str)) throw std::invalid_argument("Invalid utf-8 sequence");
-        b::string result;
-        for (char32_t c : str.u32()) {
-            result += function(c);
-        }
-        return result;
+    string string::from_ascii(char chr) {
+        return from_ascii(std::string(1, chr));
     }
 
-    std::vector<b::string> string::split(b::string str, const b::string& delimiter) {
-        std::vector<b::string> result;
+    string string::from_latin1(const std::string& str) {
+        std::string result;
+        for (auto it = str.begin(); it != str.end(); ++it) {
+            uint8_t const chr = *it;
+            if (chr < 0x80) {
+                result.push_back(static_cast<char>(chr));
+            }
+            else {
+                result.push_back(static_cast<char>(0xc0u | static_cast<unsigned char>(chr >> 6u)));
+                result.push_back(static_cast<char>(0x80u | (chr & 0x3fu)));
+            }
+        }
+        if (!is_valid_utf8(result)) {
+            throw b::unicode_error();
+        }
+        return utf8::utf8to32(result);
+    }
+
+    string string::from_latin1(char chr) {
+        return from_latin1(std::string(1, chr));
+    }
+
+#ifdef B_OS_WINDOWS
+    string string::from_windows1252(const std::string& str) {
+        // In this function we load a string in Windows-1252 encoding. We do this by using
+        // MultiByteToWideChar to turn it into common UTF-16 Windows encoding, and then
+        // we can use the from_utf16 function to turn it into a b::string.
+
+        auto requiredBufferSize = MultiByteToWideChar(
+                CP_ACP,                 // ANSI code page
+                MB_ERR_INVALID_CHARS,   // Stop on invalid chars
+                str.c_str(),            // Input string
+                -1,                     // Length: Input string is null-terminated
+                nullptr,                // Output buffer
+                0                       // Output buffer size: 0 = return required buffer size without doing work
+            );
+
+        if (requiredBufferSize == 0) {
+            throw b::unicode_error();
+        }
+
+        std::wstring buffer(requiredBufferSize, 0);
+        auto result = MultiByteToWideChar(
+                CP_ACP,                           // ANSI code page
+                MB_ERR_INVALID_CHARS,             // Stop on invalid chars
+                str.c_str(),                      // Input string
+                -1,                               // Length: Input string is null-terminated
+                buffer.data(),                    // Output buffer
+                static_cast<int>(buffer.size())   // Output buffer size
+        );
+
+        if (result == 0) {
+            throw b::unicode_error();
+        }
+
+        return from_utf16(buffer);
+    }
+
+    string string::from_windows1252(char chr) {
+        return from_windows1252(std::string(1, chr));
+    }
+#endif
+
+    std::string string::to_utf8() const {
+        return utf8::utf32to8(m_data);
+    }
+
+    std::u8string string::to_u8() const {
+        return { std::bit_cast<char8_t*>(m_data.data()), m_data.size() };
+    }
+
+    std::u16string string::to_utf16() const {
+        return utf8::utf8to16(utf8::utf32to8(m_data));
+    }
+
+    std::wstring string::to_widestring() const {
+        auto u16 = to_utf16();
+        return { std::bit_cast<wchar_t*>(u16.data()), u16.size() };
+    }
+
+    std::u32string string::to_utf32() const {
+        return m_data;
+    }
+
+
+    native_string string::to_native() const {
+#ifdef B_OS_WINDOWS
+        return to_widestring();
+#else
+        return to_utf8();
+#endif
+    }
+
+    string::operator std::u8string() const {
+        return to_u8();
+    }
+
+    string::operator std::u16string() const {
+        return to_utf16();
+    }
+
+    string::operator std::u32string() const {
+        return to_utf32();
+    }
+
+    std::u32string& string::str() {
+        return m_data;
+    }
+
+    const std::u32string& string::str() const {
+        return m_data;
+    }
+
+    std::vector<b::string> string::split(const b::string& delimiter) const {
+        return split(*this, delimiter);
+    }
+
+    std::vector<b::string> string::split(const b::string& str, const b::string& delimiter) {
+        auto data = str.m_data;
         size_t pos = 0;
-        while ((pos = str.find(delimiter)) != b::string::npos) {
-            result.emplace_back(str.substr(0, pos));
-            str.erase(0, pos + delimiter.length());
+        std::vector<b::string> result;
+        while ((pos = data.find(delimiter.m_data)) != std::string::npos) {
+            result.emplace_back(b::string::from_utf32(data.substr(0, pos)));
+            data.erase(0, pos + delimiter.m_data.length());
         }
         result.emplace_back(str);
         return result;
     }
 
+    b::string string::join(const std::vector<b::string>& strings) {
+        b::string result;
+        for (const auto& token : strings) {
+            result += token;
+            if (!this->empty()) {
+                result += *this;
+            }
+        }
+        if (!result.empty()) {
+            result.pop_back();
+        }
+        return result;
+    }
+
     b::string string::join(const std::vector<b::string>& strings, const b::string& spacer) {
         b::string result;
-        for (size_t i = 0; i < strings.size(); i++) {
-            result += strings[i];
-            if (i < strings.size() - 1 && !spacer.empty()) {
+        for (const auto& token : strings) {
+            result += token;
+            if (!spacer.empty()) {
                 result += spacer;
             }
         }
+        if (!result.empty()) {
+            result.pop_back();
+        }
         return result;
     }
 
-    b::string string::replace(b::string string, const b::string& from, const b::string& to) {
-        if (from.empty())
-            return string;
-        size_t start_pos = 0;
-        while ((start_pos = string.find(from, start_pos)) != b::string::npos) {
-            string.str().replace(start_pos, from.length(), to);
-            start_pos += to.length();
-        }
-        return string;
+    void string::regex_replace(const b::string& pattern, const b::string& replace) {
+        *this = regex_replace(*this, pattern, replace);
     }
 
-    b::string string::replace_one(b::string string, const b::string& from, const b::string& to, int occurrence) {
-        if (from.empty())
-            return string;
+    b::string string::regex_replace(const b::string& str, const b::string& pattern, const b::string& replace) {
+        auto result = std::regex_replace(
+                str.to_widestring(),
+                std::wregex(pattern.to_widestring()),
+                replace.to_widestring()
+        );
+        return b::string::from_widestring(result);
+    }
 
+    void string::regex_replace_one(const b::string& pattern, const b::string& replace) {
+        *this = regex_replace_one(*this, pattern, replace);
+    }
+
+    b::string string::regex_replace_one(const b::string& str, const b::string& pattern, const b::string& replace) {
+        auto result = std::regex_replace(
+                str.to_widestring(),
+                std::wregex(pattern.to_widestring()),
+                replace.to_widestring(),
+                std::regex_constants::format_first_only
+            );
+        return b::string::from_widestring(result);
+    }
+
+    void string::replace(const b::string& pattern, std::function<b::string(const b::string&, int)> replacer) {
+        *this = replace(*this, pattern, replacer);
+    }
+
+    b::string string::replace(const b::string& str, const b::string& pattern,
+                              std::function<b::string(const b::string&, int)> replacer) {
+        auto data = str.m_data;
         size_t pos = 0;
-        std::vector<size_t> occurrences;
-        while ((pos = string.find(from, pos)) != b::string::npos) {
-            occurrences.push_back(pos);
-            pos += to.length();
+        int occurrence = 0;
+        while ((pos = data.find(pattern.m_data)) != std::string::npos) {
+            data.replace(pos, pattern.m_data.length(), replacer(pattern, occurrence));
+            pos += pattern.m_data.length();
+            occurrence++;
         }
-
-        if (occurrence >= 0 && occurrence >= static_cast<int>(occurrences.size())) {   // index too high
-            return string;
-        }
-        if (occurrence < 0 && abs(occurrence) > occurrences.size()) {   // index too low
-            return string;
-        }
-        size_t index = occurrence >= 0 ? occurrence : occurrences.size() - abs(occurrence);
-        return string.str().replace(occurrences[index], from.length(), to.str());
+        return b::string::from_utf32(data);
     }
 
-    b::string string::replace_first(const b::string &string, const b::string &from, const b::string &to) {
-        return replace_one(string, from, to, 0);
+    void string::replace(const b::string& pattern, const b::string& value) {
+        *this = replace(*this, pattern, value);
     }
 
-    b::string string::replace_last(const b::string &string, const b::string &from, const b::string &to) {
-        return replace_one(string, from, to, -1);
+    b::string string::replace(const b::string& str, const b::string& pattern, const b::string& value) {
+        return replace(str, pattern, [&value](const b::string&, int) { return value; });
     }
 
-    b::string string::to_lower(const b::string& str) {
-        return b::string::foreach(str, [](char32_t c) {
-                return (char32_t)utf8proc_tolower(c);
+    void string::replace_first(const b::string& pattern, const b::string& value) {
+        *this = replace_first(*this, pattern, value);
+    }
+
+    b::string string::replace_first(const b::string& str, const b::string& pattern, const b::string& value) {
+        return replace(str, pattern, [&value](const b::string&, int occurrence) {
+            return occurrence == 0 ? value : b::string();
         });
     }
 
-    b::string string::to_upper(const b::string& str) {
-        return b::string::foreach(str, [](char32_t c) {
-            if (b::string(c) == "ß") {                // This special case which is not handled well in the library (at least not how we want)
-                return b::string("SS");
+    void string::replace_last(const b::string& pattern, const b::string& value) {
+        *this = replace_last(*this, pattern, value);
+    }
+
+    b::string string::replace_last(const b::string& str, const b::string& pattern, const b::string& value) {
+        auto tmp = str;
+        tmp.reverse();
+        tmp.replace_first(pattern, value);
+        tmp.reverse();
+        return tmp;
+    }
+
+    b::string& string::to_lower() {
+        for (auto& chr : m_data) {
+            chr = utf8proc_tolower(static_cast<int32_t>(chr));
+        }
+        return *this;
+    }
+
+    b::string& string::to_upper() {
+        b::string result;
+        for (auto& chr : m_data) {
+            if (chr == U'ß') {  // This special case which is not handled well in the library (at least not how we want)
+                result += U"SS";
+                continue;
             }
-            return b::string((char32_t)utf8proc_toupper(c));
-        });
+            result += static_cast<char32_t>(utf8proc_toupper(static_cast<int32_t>(chr)));
+        }
+        *this = result;
+        return *this;
     }
 
-    std::string string::u8_to_str(const std::u8string& str) const {
-        auto result = std::string(std::bit_cast<char*>(str.data()), str.size());
-        if (!b::string::is_valid_utf8(result)) throw std::invalid_argument("Invalid utf-8 sequence");
-        return result;
+    // Operators
+
+    char32_t& string::operator[](size_t index) {
+        if (index >= m_data.size()) {
+            throw std::out_of_range("b::string::operator[]: Index out of range");
+        }
+        return m_data[index];
     }
 
-    std::string string::u16_to_str(const std::u16string& str) const {
-        auto result = utf8::utf16to8(str);
-        if (!b::string::is_valid_utf8(result)) throw std::invalid_argument("Invalid utf-8 sequence");
-        return result;
+    const char32_t& string::operator[](size_t index) const {
+        if (index >= m_data.size()) {
+            throw std::out_of_range("b::string::operator[]: Index out of range");
+        }
+        return m_data[index];
     }
 
-    std::string string::u32_to_str(const std::u32string& str) const {
-        auto result = utf8::utf32to8(str);
-        if (!b::string::is_valid_utf8(result)) throw std::invalid_argument("Invalid utf-8 sequence");
-        return result;
+    string& string::operator+(const string& other) {
+        m_data += other.m_data;
+        return *this;
     }
 
-    std::string string::wstr_to_str(const std::wstring& str) const {
-        auto u16 = std::u16string(std::bit_cast<char16_t*>(str.data()), str.size());
-        auto result = utf8::utf16to8(u16);
-        if (!b::string::is_valid_utf8(result)) throw std::invalid_argument("Invalid utf-8 sequence");
-        return result;
+    bool string::operator==(const string& other) const {
+        return m_data == other.m_data;
+    }
+
+    bool string::operator!=(const string& other) const {
+        return m_data != other.m_data;
     }
 
 
@@ -174,110 +537,32 @@ namespace b {
     /// =====================================================================
     /// =====================================================================
 
-    static const std::string base64_chars =
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            "abcdefghijklmnopqrstuvwxyz"
-            "0123456789+/";
+} // namespace b
 
-    static inline uint8_t toint(std::byte b) {
-        return std::to_integer<uint8_t>(b);
-    }
+std::ostream& operator<<(std::ostream& stream, const b::string& str) {
+    stream << str.to_utf8();
+    return stream;
+}
 
-    static inline bool is_base64(std::byte c) {
-        return (isalnum(toint(c)) || (toint(c) == '+') || (toint(c) == '/'));
-    }
+std::istream& operator>>(std::istream& stream, b::string& str) {
+    std::string istr;
+    stream >> istr;
+    str = b::string::from_utf8(istr);
+    return stream;
+}
 
-    std::byte operator&(std::byte left, int right) {
-        return static_cast<std::byte>(std::to_integer<int>(left) & right);
-    }
+b::string operator""_b(const char* str, size_t len) {
+    return b::string::from_utf8(std::string(str, len));
+}
 
-    std::byte operator+(std::byte left, std::byte right) {
-        return static_cast<std::byte>(toint(left) + toint(right));
-    }
+b::string operator""_b(const char8_t* str, size_t len) {
+    return b::string::from_utf8(std::u8string(str, len));
+}
 
-    std::string encode_base64(const std::string& str) {
-        auto buf = std::bit_cast<const std::byte*>(str.data());
-        size_t buffer_size = str.size();
-        int i = 0;
-        int j = 0;
-        std::array<std::byte,3> char_array_3 {};
-        std::array<std::byte,4> char_array_4 {};
+b::string operator""_b(const char16_t* str, size_t len) {
+    return b::string::from_utf16(std::u16string(str, len));
+}
 
-        std::string result;
-        while (buffer_size--) {
-            char_array_3[i] = *(buf++);
-            i++;
-            if (i == 3) {
-                char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
-                char_array_4[1] = ((char_array_3[0] & 0x03) << 4) + ((char_array_3[1] & 0xf0) >> 4);
-                char_array_4[2] = ((char_array_3[1] & 0x0f) << 2) + ((char_array_3[2] & 0xc0) >> 6);
-                char_array_4[3] = char_array_3[2] & 0x3f;
-                for (i = 0; i < 4; i++) result += base64_chars[toint(char_array_4[i])];
-                i = 0;
-            }
-        }
-
-        if (i) {
-            for (j = i; j < 3; j++)
-                char_array_3[j] = static_cast<std::byte>('\0');
-
-            char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
-            char_array_4[1] = ((char_array_3[0] & 0x03) << 4) + ((char_array_3[1] & 0xf0) >> 4);
-            char_array_4[2] = ((char_array_3[1] & 0x0f) << 2) + ((char_array_3[2] & 0xc0) >> 6);
-            char_array_4[3] = char_array_3[2] & 0x3f;
-
-            for (j = 0; (j < i + 1); j++)
-                result += base64_chars[toint(char_array_4[j])];
-
-            while (i++ < 3)
-                result += '=';
-        }
-
-        return result;
-    }
-
-    std::string decode_base64(const std::string& str) {
-        auto buf = std::bit_cast<const std::byte*>(str.data());
-        size_t buffer_size = str.size();
-        int i = 0;
-        int j = 0;
-        int in_ = 0;
-        std::array<std::byte,4> char_array_4 {};
-        std::array<std::byte,3> char_array_3 {};
-        std::string result;
-
-        while (buffer_size-- && (static_cast<char>(buf[in_]) != '=') && is_base64(buf[in_])) {
-            char_array_4[i] = buf[in_];
-            i++;
-            in_++;
-            if (i == 4) {
-                for (i = 0; i < 4; i++)
-                    char_array_4[i] = static_cast<std::byte>(base64_chars.find(static_cast<char>(char_array_4[i])));
-
-                char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
-                char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
-                char_array_3[2] = ((char_array_4[2] & 0x3) << 6) + char_array_4[3];
-
-                for (i = 0; (i < 3); i++)
-                    result.push_back(static_cast<char>(char_array_3[i]));
-                i = 0;
-            }
-        }
-
-        if (i) {
-            for (j = i; j < 4; j++)
-                char_array_4[j] = std::byte(0);
-
-            for (j = 0; j < 4; j++)
-                char_array_4[j] = static_cast<std::byte>(base64_chars.find(static_cast<char>(char_array_4[j])));
-
-            char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
-            char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
-            char_array_3[2] = ((char_array_4[2] & 0x3) << 6) + char_array_4[3];
-
-            for (j = 0; (j < i - 1); j++) result.push_back(static_cast<char>(char_array_3[j]));
-        }
-        return result;
-    }
-
+b::string operator""_b(const char32_t* str, size_t len) {
+    return b::string::from_utf32(std::u32string(str, len));
 }

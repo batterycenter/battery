@@ -107,13 +107,15 @@ namespace b {
             catch (const std::exception& e) {
                 b::log::core::critical("Unhandled exception in b::thread: [std::exception]: {}", e.what());
                 if (m_messageBoxOnExceptionEnabled) {
-                    b::message_box_error(b::format("Unhandled exception in b::thread: [std::exception]: {}", e.what()));
+                    b::message_box_error(b::string::from_utf8(
+                            b::format("Unhandled exception in b::thread: [std::exception]: {}", e.what())
+                    ));
                 }
             }
             catch (...) {
                 b::log::core::critical("Unidentifiable exception caught in b::thread, no further information");
                 if (m_messageBoxOnExceptionEnabled) {
-                    b::message_box_error("Unidentifiable exception caught in b::thread, no further information");
+                    b::message_box_error("Unidentifiable exception caught in b::thread, no further information"_b);
                 }
             }
             return false;

@@ -6,13 +6,20 @@
 
 namespace b {
 
+    b::string strerror() {
+        return strerror(errno);
+    }
+
     b::string strerror(int errnum) {
-        std::array<char, 1024> buffer {};
 #ifdef B_OS_WINDOWS
-        return ::strerror_s(buffer.data(), buffer.size(), errnum) == 0 ? buffer.data() : b::string{};   // NOLINT
+        b::native_string const result = _wcserror(errnum);
 #else
-        return ::strerror_r(errnum, buffer.data(), buffer.size()) == 0 ? buffer.data() : b::string{};   // NOLINT
+        std::string result(1024, '\0');
+        if (!0 == strerror_r(errnum, result.data(), result.size())) {
+            return {};
+        }
 #endif
+        return b::string::from_native(result);
     }
 
 } // namespace b

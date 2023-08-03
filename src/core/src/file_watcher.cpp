@@ -6,12 +6,13 @@ namespace b {
     BasicFileWatcher::BasicFileWatcher(const b::fs::path &filePath) : m_filePath(filePath) {}
 
     bool BasicFileWatcher::update() {
-        if (m_filePath.empty()) return false;
-        if (!b::fs::exists(m_filePath)) return false;
+        if (m_filePath.empty() || !b::fs::exists(m_filePath)) {
+            return false;
+        }
 
-        auto current_modification_time = b::fs::last_write_time(m_filePath);
-        if (current_modification_time != m_lastModificationTime) {
-            m_lastModificationTime = current_modification_time;
+        auto currentWriteTime = b::fs::last_write_time(m_filePath);
+        if (currentWriteTime != m_lastWriteTime) {
+            m_lastWriteTime = currentWriteTime;
             return true;
         }
         return false;

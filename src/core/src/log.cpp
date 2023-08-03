@@ -7,6 +7,10 @@
                                                     // Thus, this cannot be defined in the header or we'd be
 namespace b {                                       // polluting the global namespace with the Windows API and iostream
 
+    void print(const std::string& str) {
+        std::cout << str;
+    }
+
     void print(const b::string& str) {
         std::cout << str;
     }
@@ -16,8 +20,8 @@ namespace b {                                       // polluting the global name
     }
 
     void print(const std::vector<b_color_variants_t>& colors, const b::string& str) {
-        for (auto& any_color : colors) {
-            b::print(any_color, str);
+        for (const auto& anyColor : colors) {
+            b::print(anyColor, str);
         }
     }
 

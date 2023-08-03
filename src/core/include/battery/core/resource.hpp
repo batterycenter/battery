@@ -11,11 +11,11 @@ namespace b {
 
         static Resource FromTextFile(const fs::path& filepath);
         static Resource FromBinaryFile(const fs::path& filepath);
-        static Resource FromByteString(const b::string& data, const b::string& filetype = "");
-        static Resource FromBuffer(const void* buffer, size_t length, const b::string& filetype = "");
-        static Resource FromBase64(const b::string& base64, const b::string& filetype = "");
+        static Resource FromBytes(const b::bytearray& bytes, const b::string& filetype = ""_b);
+        static Resource FromBuffer(const void* buffer, size_t length, const b::string& filetype = ""_b);
+        static Resource FromBase64(const b::string& base64, const b::string& filetype = ""_b);
 
-        [[nodiscard]] const char* data() const;
+        [[nodiscard]] const unsigned char* data() const;
         [[nodiscard]] size_t size() const;
         // If specified correctly, the filetype will be a string hinting the encoding of the data. Empty is unknown,
         // it's parsed from the file path or specified manually. Guaranteed to be lowercase. Example: "" or "png" or "txt".
@@ -48,7 +48,7 @@ namespace b {
             }
 
             b::string str() {
-                return m_path;
+                return m_path.generic_string();
             }
 
             operator b::fs::path() {
@@ -56,7 +56,7 @@ namespace b {
             }
 
             operator b::string() {
-                return m_path;
+                return m_path.generic_string();
             }
 
             void reset();
@@ -68,7 +68,7 @@ namespace b {
         [[nodiscard]] OnDiskResource asTemporaryOnDiskResource() const;
 
     private:
-        b::string m_data;
+        b::bytearray m_data;
         b::string m_filetype;
     };
 

@@ -8,6 +8,7 @@ Checks: '*,
   -bugprone-easily-swappable-parameters
   -hicpp-uppercase-literal-suffix
   -readability-uppercase-literal-suffix
+  -readability-identifier-length
   -misc-use-anonymous-namespace
   -llvm-else-after-return
   -fuchsia-*

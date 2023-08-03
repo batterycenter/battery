@@ -42,7 +42,7 @@ public:
 
     bool async() {
         for (int i = 0; i < 5; i++) {
-            data = "Private class members";
+            data = "Private class members"_b;
             b::string str = data;
             b::sleep(0.1);
         }

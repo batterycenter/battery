@@ -15,22 +15,27 @@ namespace b {
 
 #ifdef B_OS_WINDOWS
         b::string get_last_win32_error() {
-            DWORD errorMessageID = ::GetLastError();
-            if (errorMessageID == 0)
-                return "";
+            DWORD const errorMessageID = ::GetLastError();
+            if (errorMessageID == 0) {
+                return ""_b;
+            }
 
             LPWSTR messageBuffer = nullptr;
             FormatMessageW(
                     FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                    nullptr, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR) & messageBuffer, 0,
+                    nullptr,
+                    errorMessageID,
+                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                    std::bit_cast<LPWSTR>(& messageBuffer),
+                    0,
                     nullptr);
 
-            auto buffer = b::string(std::wstring(messageBuffer));
+            auto tmp = b::string::from_native(std::wstring(messageBuffer));
             LocalFree(messageBuffer);
-            return buffer;
+            return tmp;
         }
-        static void win32_message_box(const b::string& message, UINT options) {
-            ::MessageBoxW(nullptr, b::string(message).platform_native().c_str(), L"Error", options);
+        static void win32_message_box(const b::string& message, const b::string& title, UINT options) {
+            ::MessageBoxW(nullptr, message.to_native().c_str(), title.to_native().c_str(), options);
         }
 #else
         void linux_run_zenity(const std::vector<b::string>& commands) {
@@ -44,7 +49,7 @@ namespace b {
 
     void message_box_info(const b::string& message) {
 #ifdef B_OS_WINDOWS
-        internal::win32_message_box(message, MB_ICONINFORMATION | MB_OK);
+        internal::win32_message_box(message, "Info"_b, MB_ICONINFORMATION | MB_OK);
 #else
         internal::linux_run_zenity({ "--info", "--text=" + message });
 #endif
@@ -52,7 +57,7 @@ namespace b {
 
     void message_box_warning(const b::string& message) {
 #ifdef B_OS_WINDOWS
-        internal::win32_message_box(message, MB_ICONWARNING | MB_OK);
+        internal::win32_message_box(message, "Warning"_b, MB_ICONWARNING | MB_OK);
 #else
         internal::linux_run_zenity({ "--warning", "--text=" + message });
 #endif
@@ -60,7 +65,7 @@ namespace b {
 
     void message_box_error(const b::string& message) {
 #ifdef B_OS_WINDOWS
-        internal::win32_message_box(message, MB_ICONERROR | MB_OK);
+        internal::win32_message_box(message, "Error"_b, MB_ICONERROR | MB_OK);
 #else
         internal::linux_run_zenity({ "--error", "--text=" + message });
 #endif

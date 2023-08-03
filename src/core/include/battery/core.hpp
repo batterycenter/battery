@@ -1,6 +1,7 @@
 #pragma once
 
 #include "battery/core/async_worker.hpp"
+#include "battery/core/byte.hpp"
 #include "battery/core/cache.hpp"
 #include "battery/core/color.hpp"
 #include "battery/core/console.hpp"
@@ -8,6 +9,7 @@
 #include "battery/core/constants.hpp"
 #include "battery/core/containers.hpp"
 #include "battery/core/error.hpp"
+#include "battery/core/exception.hpp"
 #include "battery/core/expected.hpp"
 #include "battery/core/file_watcher.hpp"
 #include "battery/core/filedialog.hpp"

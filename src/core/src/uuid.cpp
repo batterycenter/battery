@@ -35,13 +35,13 @@ namespace b::uuid {
 
     b::string v4() {
         auto gen = uuid_data::get();
-        auto uuid = gen.get()->operator()();
-        return to_string(uuid);
+        auto uuid = gen->operator()();
+        return b::string::from_utf8(to_string(uuid));
     }
 
     bool is_valid(const b::string& uuid) {
-        auto opt = uuids::uuid::from_string(uuid);
+        auto opt = uuids::uuid::from_string(uuid.to_utf8());
         return opt.has_value();
     }
 
-} // namespace b
+} // namespace b::uuid

@@ -110,15 +110,15 @@ namespace b {
     }
 
     bool ConsoleApplication::_setup() {
-        return CatchExceptions("b::application::setup()", &ConsoleApplication::onConsoleSetup, this);
+        return CatchExceptions("b::application::setup()"_b, &ConsoleApplication::onConsoleSetup, this);
     }
 
     bool ConsoleApplication::_update() {
-        return CatchExceptions("b::application::update()", &ConsoleApplication::onConsoleUpdate, this);
+        return CatchExceptions("b::application::update()"_b, &ConsoleApplication::onConsoleUpdate, this);
     }
 
     bool ConsoleApplication::_exit() {
-        return CatchExceptions("b::application::exit()", &ConsoleApplication::onConsoleExit, this);
+        return CatchExceptions("b::application::exit()"_b, &ConsoleApplication::onConsoleExit, this);
     }
 
 } // namespace b

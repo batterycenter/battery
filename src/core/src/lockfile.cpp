@@ -33,13 +33,14 @@ namespace b {
 
     lockfile::lockfile(const b::fs::path& filename) : filename(filename), mutex(std::make_unique<std::mutex>()) {
         if (filename.has_parent_path()) {
-            b::fs::create_directories(filename.parent_path());
+            b::fs::create_directory(filename.parent_path());
         }
         // In Windows, we create the file as non-exclusive and then lock it separately using LockFile(),
         // because this is apparently more robust than just opening the file in exclusive write mode.
 #ifdef B_OS_WINDOWS
+        auto nativeFilename = filename.string().to_native();
         this->fileHandle = CreateFileW(
-                filename.string().wstr().c_str(),
+                nativeFilename.c_str(),
                 GENERIC_READ | GENERIC_WRITE,
                 FILE_SHARE_READ | FILE_SHARE_WRITE,
                 nullptr,

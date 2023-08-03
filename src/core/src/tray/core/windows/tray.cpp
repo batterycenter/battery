@@ -23,15 +23,14 @@
 #include "battery/core/string.hpp"
 #include "battery/core/resource.hpp"
 #include "battery/core/constants.hpp"
-
-#include "battery/tray/core/entry.hpp"
-#include "battery/tray/core/windows/tray.hpp"
-#include "battery/tray/components/button.hpp"
-#include "battery/tray/components/label.hpp"
-#include "battery/tray/components/separator.hpp"
-#include "battery/tray/components/submenu.hpp"
-#include "battery/tray/components/syncedtoggle.hpp"
-#include "battery/tray/components/toggle.hpp"
+#include "battery/core/tray/core/entry.hpp"
+#include "battery/core/tray/core/windows/tray.hpp"
+#include "battery/core/tray/components/button.hpp"
+#include "battery/core/tray/components/label.hpp"
+#include "battery/core/tray/components/separator.hpp"
+#include "battery/core/tray/components/submenu.hpp"
+#include "battery/core/tray/components/syncedtoggle.hpp"
+#include "battery/core/tray/components/toggle.hpp"
 
 #include <stdexcept>
 #include <Windows.h>
@@ -46,12 +45,13 @@ namespace b::tray {
 
     template<typename T>
     static HINSTANCE registerClass(T wndProc, b::string identifier) {
+        auto nativeIdentifier = identifier.to_native();
 
         WNDCLASSEX windowClass;
         memset(&windowClass, 0, sizeof(windowClass));
         windowClass.cbSize = sizeof(windowClass);
         windowClass.lpfnWndProc = wndProc;
-        windowClass.lpszClassName = identifier.wstr().c_str();
+        windowClass.lpszClassName = nativeIdentifier.c_str();
         windowClass.hInstance = GetModuleHandle(nullptr);
 
         if (RegisterClassEx(&windowClass) == 0) {
@@ -65,49 +65,50 @@ namespace b::tray {
         auto windowClass = registerClass(wndProc, getIdentifier());
 
         // NOLINTNEXTLINE
-        hwnd = CreateWindow(getIdentifier().wstr().c_str(), nullptr, 0, 0, 0, 0, 0, nullptr, nullptr,
+        m_hwnd = CreateWindow(getIdentifier().to_native().c_str(), nullptr, 0, 0, 0, 0, 0, nullptr, nullptr,
                             windowClass, nullptr);
-        if (hwnd == nullptr) {
+        if (m_hwnd == nullptr) {
             throw std::runtime_error("Failed to create window");
         }
-        if (UpdateWindow(hwnd) == 0) {
+        if (UpdateWindow(m_hwnd) == 0) {
             throw std::runtime_error("Failed to update window");
         }
 
-        std::memset(&notifyData, 0, sizeof(notifyData));
-        notifyData.cbSize = sizeof(notifyData);
-        notifyData.hWnd = hwnd;
-        lstrcpyW(notifyData.szTip, getTooltip().wstr().c_str());
-        notifyData.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
-        notifyData.uCallbackMessage = WM_TRAY;
-        notifyData.hIcon = loadIcon(b::Resource::FromBase64(b::Constants::BatteryIconBase64()));
+        auto nativeTooltip = getTooltip().to_native();
+        std::memset(&m_notifyData, 0, sizeof(m_notifyData));
+        m_notifyData.cbSize = sizeof(m_notifyData);
+        m_notifyData.hWnd = m_hwnd;
+        lstrcpyW(m_notifyData.szTip, nativeTooltip.c_str());
+        m_notifyData.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
+        m_notifyData.uCallbackMessage = WM_TRAY;
+        m_notifyData.hIcon = loadIcon(b::Resource::FromBase64(b::Constants::BatteryIconBase64()));
 
-        if (Shell_NotifyIcon(NIM_ADD, &notifyData) == FALSE) {
+        if (Shell_NotifyIcon(NIM_ADD, &m_notifyData) == FALSE) {
             throw std::runtime_error("Failed to register tray icon");
         }
-        trayList.insert({hwnd, *this});
+        trayList.insert({m_hwnd, *this});
     }
 
     void tray::exit() {
-        Shell_NotifyIcon(NIM_DELETE, &notifyData);
-        DestroyIcon(notifyData.hIcon);
-        DestroyMenu(menu);
+        Shell_NotifyIcon(NIM_DELETE, &m_notifyData);
+        DestroyIcon(m_notifyData.hIcon);
+        DestroyMenu(m_menu);
 
-        UnregisterClass(getIdentifier().wstr().c_str(), GetModuleHandle(nullptr));
-        PostMessage(hwnd, WM_QUIT, 0, 0);
+        UnregisterClass(getIdentifier().to_native().c_str(), GetModuleHandle(nullptr));
+        PostMessage(m_hwnd, WM_QUIT, 0, 0);
 
-        DestroyIcon(notifyData.hIcon);
-        trayList.erase(hwnd);
+        DestroyIcon(m_notifyData.hIcon);
+        trayList.erase(m_hwnd);
     }
 
     void tray::update() {
-        DestroyMenu(menu);
-        menu = construct(getEntries(), this);
+        DestroyMenu(m_menu);
+        m_menu = construct(getEntries(), this);
 
-        if (Shell_NotifyIcon(NIM_MODIFY, &notifyData) == FALSE) {
+        if (Shell_NotifyIcon(NIM_MODIFY, &m_notifyData) == FALSE) {
             throw std::runtime_error("Failed to update tray icon");
         }
-        SendMessage(hwnd, WM_INITMENUPOPUP, std::bit_cast<WPARAM>(menu), 0);
+        SendMessage(m_hwnd, WM_INITMENUPOPUP, std::bit_cast<WPARAM>(m_menu), 0);
     }
 
     HMENU tray::construct(const std::vector<std::shared_ptr<tray_entry>> &entries, tray *parent) {
@@ -117,11 +118,11 @@ namespace b::tray {
         for (const auto &entry: entries) {
             tray_entry *item = entry.get();
 
-            auto name = item->getText().wstr();
+            auto nativeName = item->getText().to_native();
             MENUITEMINFO winItem{0};
 
             winItem.wID = ++id;
-            winItem.dwTypeData = std::bit_cast<LPWSTR>(name.c_str());
+            winItem.dwTypeData = std::bit_cast<LPWSTR>(nativeName.c_str());
             winItem.cbSize = sizeof(winItem);
             winItem.fMask = MIIM_TYPE | MIIM_STATE | MIIM_DATA | MIIM_ID;
             winItem.dwItemData = std::bit_cast<ULONG_PTR>(item);
@@ -186,7 +187,7 @@ namespace b::tray {
                     POINT p;
                     GetCursorPos(&p);
                     SetForegroundWindow(hwnd);
-                    auto cmd = TrackPopupMenu(menu.menu, TPM_RETURNCMD | TPM_NONOTIFY, p.x, p.y, 0, hwnd, nullptr);
+                    auto cmd = TrackPopupMenu(menu.m_menu, TPM_RETURNCMD | TPM_NONOTIFY, p.x, p.y, 0, hwnd, nullptr);
                     SendMessage(hwnd, WM_COMMAND, cmd, 0);
                     return 0;
                 }
@@ -197,7 +198,7 @@ namespace b::tray {
                 winItem.fMask = MIIM_DATA | MIIM_ID;
                 winItem.cbSize = sizeof(MENUITEMINFO);
                 auto &menu = trayList.at(hwnd).get();
-                if (GetMenuItemInfo(menu.menu, static_cast<UINT>(wParam), FALSE, &winItem)) {
+                if (GetMenuItemInfo(menu.m_menu, static_cast<UINT>(wParam), FALSE, &winItem)) {
                     auto *item = std::bit_cast<tray_entry *>(winItem.dwItemData);
                     if (auto *button = dynamic_cast<class button*>(item); button) {
                         button->clicked();
@@ -218,14 +219,14 @@ namespace b::tray {
     }
 
     void tray::setIcon(const b::Resource& icon) {
-        DestroyIcon(notifyData.hIcon);
-        notifyData.hIcon = loadIcon(icon);
+        DestroyIcon(m_notifyData.hIcon);
+        m_notifyData.hIcon = loadIcon(icon);
         update();
     }
 
     void tray::run() {
         MSG msg;
-        while (GetMessage(&msg, hwnd, 0, 0)) {
+        while (GetMessage(&msg, m_hwnd, 0, 0)) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
@@ -234,7 +235,7 @@ namespace b::tray {
     bool tray::run_nonblocking() {
         for(int i = 0; i < 5; i++) {        // We might have multiple events in a single iteration
             MSG msg;
-            PeekMessage(&msg, hwnd, 0, 0, PM_REMOVE);
+            PeekMessage(&msg, m_hwnd, 0, 0, PM_REMOVE);
             if (msg.message == WM_QUIT) {
                 return false;
             }

@@ -18,7 +18,7 @@
 // It has been heavily modified and modernized to work with battery.
 //
 
-#include "battery/tray/components/syncedtoggle.hpp"
+#include "battery/core/tray/components/syncedtoggle.hpp"
 
 namespace b::tray {
 

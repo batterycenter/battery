@@ -11,14 +11,14 @@ namespace b {
         if (GetModuleFileNameW(nullptr, buffer.data(), buffer.size()) == 0) {
             return {};
         }
-        return b::string(std::wstring(buffer.data()));
+        return b::string::from_widestring(std::wstring(buffer.data()));
 #else
         std::array<char, PATH_MAX> buffer = {};
         auto count = readlink("/proc/self/exe", buffer.data(), buffer.size());
         if (count == -1) {
             return {};
         }
-        return b::string(buffer.data(), count);
+        return b::string::from_utf8(std::string(buffer.data(), count));
 #endif
     }
 
@@ -79,55 +79,55 @@ namespace b {
 
 
     fs::path Folders::SystemHomeDir() {
-        return sago::getUserHome();
+        return b::string::from_utf8(sago::getUserHome());
     }
 
     fs::path Folders::SystemConfigDir() {
-        return sago::getConfigHome();
+        return b::string::from_utf8(sago::getConfigHome());
     }
 
     fs::path Folders::SystemLocalShareDir() {
-        return sago::getDataHome();
+        return b::string::from_utf8(sago::getDataHome());
     }
 
     fs::path Folders::SystemCacheDir() {
-        return sago::getCacheDir();
+        return b::string::from_utf8(sago::getCacheDir());
     }
 
     fs::path Folders::SystemAppRootDir() {
         if (b::Constants::Platform() == b::Platform::Windows) {
-            return sago::getStateDir();     // Local AppData
+            return b::string::from_utf8(sago::getStateDir());     // Local AppData
         }
         else if (b::Constants::Platform() == b::Platform::MacOS) {
-            return SystemHomeDir() + "bin";     // ~/bin
+            return SystemHomeDir() / "bin"_b;     // ~/bin
         }
         else {
-            return SystemHomeDir() + "bin";     // ~/bin
+            return SystemHomeDir() / "bin"_b;     // ~/bin
         }
     }
 
     fs::path Folders::SystemDocumentsDir() {
-        return sago::getDocumentsFolder();
+        return b::string::from_utf8(sago::getDocumentsFolder());
     }
 
     fs::path Folders::SystemDesktopDir() {
-        return sago::getDesktopFolder();
+        return b::string::from_utf8(sago::getDesktopFolder());
     }
 
     fs::path Folders::SystemPicturesDir() {
-        return sago::getPicturesFolder();
+        return b::string::from_utf8(sago::getPicturesFolder());
     }
 
     fs::path Folders::SystemMusicDir() {
-        return sago::getMusicFolder();
+        return b::string::from_utf8(sago::getMusicFolder());
     }
 
     fs::path Folders::SystemVideoDir() {
-        return sago::getVideoFolder();
+        return b::string::from_utf8(sago::getVideoFolder());
     }
 
     fs::path Folders::SystemDownloadsDir() {
-        return sago::getDownloadFolder();
+        return b::string::from_utf8(sago::getDownloadFolder());
     }
 
 } // namespace b

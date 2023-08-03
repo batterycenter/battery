@@ -76,8 +76,8 @@ namespace b {
 
     private:
         static b::string remove_trailing_whitespace(b::string buffer);
-        std::error_code stdout_sink(const uint8_t* _buffer, size_t length);
-        std::error_code stderr_sink(const uint8_t* _buffer, size_t length);
+        std::error_code stdout_sink(const b::string& data);
+        std::error_code stderr_sink(const b::string& data);
         void run_process();
 
         b::async_worker<void> worker;

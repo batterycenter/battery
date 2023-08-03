@@ -11,7 +11,7 @@ namespace b {
         b::fs::path default_extension;      // Format: "txt"
         b::fs::path initial_folder;
         b::string separator;      // WHAAATTT (TODO)
-        std::vector<std::pair<b::string, b::string>> filters = { { "All files", "*.*" } };  // TODO: Allow this text to be localized
+        std::vector<std::pair<b::string, b::string>> filters = { { "All files"_b, "*.*"_b } };  // TODO: Allow this text to be localized
 
         filedialog() = default;
 

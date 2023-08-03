@@ -22,8 +22,8 @@
 #include <memory>
 #include <vector>
 #include <type_traits>
-#include "battery/tray/core/entry.hpp"
-#include "battery/tray/core/traybase.hpp"
+#include "battery/core/tray/core/entry.hpp"
+#include "battery/core/tray/core/traybase.hpp"
 
 namespace b::tray {
 

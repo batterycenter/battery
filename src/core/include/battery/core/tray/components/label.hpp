@@ -20,7 +20,7 @@
 
 #pragma once
 #include <functional>
-#include "battery/tray/core/entry.hpp"
+#include "battery/core/tray/core/entry.hpp"
 
 namespace b::tray {
 

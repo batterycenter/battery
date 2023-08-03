@@ -25,7 +25,7 @@
 #include <functional>
 #include <type_traits>
 #include "battery/core/resource.hpp"
-#include "battery/tray/core/entry.hpp"
+#include "battery/core/tray/core/entry.hpp"
 
 namespace b::tray {
 
