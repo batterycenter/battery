@@ -2,6 +2,7 @@ var dir_4117bd2712d4210d5c08f407bc16536e =
 [
     [ "tray", "dir_ee38df1b32bf5d9ced820d919da85e0e.html", "dir_ee38df1b32bf5d9ced820d919da85e0e" ],
     [ "async_worker.hpp", "async__worker_8hpp_source.html", null ],
+    [ "byte.hpp", "byte_8hpp_source.html", null ],
     [ "cache.hpp", "cache_8hpp_source.html", null ],
     [ "color.hpp", "color_8hpp_source.html", null ],
     [ "console.hpp", "console_8hpp_source.html", null ],
@@ -9,6 +10,7 @@ var dir_4117bd2712d4210d5c08f407bc16536e =
     [ "constants.hpp", "constants_8hpp_source.html", null ],
     [ "containers.hpp", "containers_8hpp_source.html", null ],
     [ "error.hpp", "error_8hpp_source.html", null ],
+    [ "exception.hpp", "exception_8hpp_source.html", null ],
     [ "expected.hpp", "expected_8hpp_source.html", null ],
     [ "file_watcher.hpp", "file__watcher_8hpp_source.html", null ],
     [ "filedialog.hpp", "filedialog_8hpp_source.html", null ],

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['v4_94',['v4',['../group__Uuid.html#ga13eb74f7043bb0068dcce8ea5888275b',1,'b::uuid']]],
-  ['vec2_95',['Vec2',['../structb_1_1Vec2.html',1,'b']]]
+  ['unicode_5ferror_162',['unicode_error',['../classb_1_1unicode__error.html',1,'b']]],
+  ['unlock_163',['unlock',['../group__Lockfile.html#ga624bd42ba47412230cf3fb0a6dca93c8',1,'b::lockfile']]],
+  ['uuid_164',['Uuid',['../group__Uuid.html',1,'']]]
 ];

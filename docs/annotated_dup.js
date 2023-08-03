@@ -21,9 +21,10 @@ var annotated_dup =
         [ "basetray", "classb_1_1tray_1_1basetray.html", "classb_1_1tray_1_1basetray" ]
       ] ],
       [ "async_worker", "classb_1_1async__worker.html", "classb_1_1async__worker" ],
-      [ "cachefile", "classb_1_1cachefile.html", "classb_1_1cachefile" ],
+      [ "bytearray", "classb_1_1bytearray.html", "classb_1_1bytearray" ],
       [ "Color", "structb_1_1Color.html", "structb_1_1Color" ],
       [ "ConsoleApplication", "classb_1_1ConsoleApplication.html", "classb_1_1ConsoleApplication" ],
+      [ "unicode_error", "classb_1_1unicode__error.html", "classb_1_1unicode__error" ],
       [ "BasicFileWatcher", "classb_1_1BasicFileWatcher.html", "classb_1_1BasicFileWatcher" ],
       [ "FileWatcher", "classb_1_1FileWatcher.html", "classb_1_1FileWatcher" ],
       [ "filedialog", "classb_1_1filedialog.html", "classb_1_1filedialog" ],
@@ -33,6 +34,7 @@ var annotated_dup =
       [ "process", "classb_1_1process.html", "classb_1_1process" ],
       [ "Resource", "classb_1_1Resource.html", "classb_1_1Resource" ],
       [ "ResourceLoader", "classb_1_1ResourceLoader.html", "classb_1_1ResourceLoader" ],
+      [ "string_iterator", "classb_1_1string__iterator.html", "classb_1_1string__iterator" ],
       [ "string", "classb_1_1string.html", "classb_1_1string" ],
       [ "thread", "classb_1_1thread.html", "classb_1_1thread" ],
       [ "Vec2", "structb_1_1Vec2.html", "structb_1_1Vec2" ]
@@ -40,9 +42,11 @@ var annotated_dup =
     [ "fmt", null, [
       [ "formatter< b::Color >", "structfmt_1_1formatter_3_01b_1_1Color_01_4.html", "structfmt_1_1formatter_3_01b_1_1Color_01_4" ],
       [ "formatter< b::fs::path >", "structfmt_1_1formatter_3_01b_1_1fs_1_1path_01_4.html", "structfmt_1_1formatter_3_01b_1_1fs_1_1path_01_4" ],
+      [ "formatter< b::string >", "structfmt_1_1formatter_3_01b_1_1string_01_4.html", "structfmt_1_1formatter_3_01b_1_1string_01_4" ],
       [ "formatter< b::Vec2 >", "structfmt_1_1formatter_3_01b_1_1Vec2_01_4.html", "structfmt_1_1formatter_3_01b_1_1Vec2_01_4" ]
     ] ],
     [ "std", null, [
+      [ "hash< b::fs::path >", "structstd_1_1hash_3_01b_1_1fs_1_1path_01_4.html", "structstd_1_1hash_3_01b_1_1fs_1_1path_01_4" ],
       [ "hash< b::string >", "structstd_1_1hash_3_01b_1_1string_01_4.html", "structstd_1_1hash_3_01b_1_1string_01_4" ]
     ] ]
 ];

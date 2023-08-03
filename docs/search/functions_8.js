@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['lock_150',['lock',['../group__Lockfile.html#ga57a99437c491cabe160f577f94ff3b2a',1,'b::lockfile']]],
-  ['lockfile_151',['lockfile',['../group__Lockfile.html#ga238f952b89fde5c57c7cc40c26ea50f9',1,'b::lockfile']]]
+  ['is_5fabsolute_246',['is_absolute',['../classb_1_1fs_1_1path.html#afca840007837ebad58229a1806b829fc',1,'b::fs::path']]],
+  ['is_5flocked_247',['is_locked',['../group__Lockfile.html#ga6a2ce98e0d031a1c028ca210246b0060',1,'b::lockfile']]],
+  ['is_5frelative_248',['is_relative',['../classb_1_1fs_1_1path.html#a4341a6d5585761d85c52dd3a432a34ca',1,'b::fs::path']]],
+  ['is_5fvalid_249',['is_valid',['../group__Uuid.html#ga10c0b11cf0ceff12d4d2a32156b05d21',1,'b::uuid']]],
+  ['is_5fvalid_5futf8_250',['is_valid_utf8',['../group__String.html#gada9e3646d6a80756ec0f8f9e87a98c62',1,'b::string']]]
 ];

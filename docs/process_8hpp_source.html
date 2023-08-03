@@ -184,8 +184,8 @@ $(document).ready(function(){initNavTree('process_8hpp_source.html',''); initRes
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1string.html">b::string</a> remove_trailing_whitespace(<a class="code" href="classb_1_1string.html">b::string</a> buffer);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        std::error_code stdout_sink(<span class="keyword">const</span> uint8_t* _buffer, <span class="keywordtype">size_t</span> length);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        std::error_code stderr_sink(<span class="keyword">const</span> uint8_t* _buffer, <span class="keywordtype">size_t</span> length);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        std::error_code stdout_sink(<span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; data);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        std::error_code stderr_sink(<span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; data);</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordtype">void</span> run_process();</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <a class="code" href="classb_1_1async__worker.html">b::async_worker&lt;void&gt;</a> worker;</div>
@@ -197,7 +197,7 @@ $(document).ready(function(){initNavTree('process_8hpp_source.html',''); initRes
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;}</div>
 <div class="ttc" id="aclassb_1_1async__worker_html"><div class="ttname"><a href="classb_1_1async__worker.html">b::async_worker&lt; void &gt;</a></div></div>
 <div class="ttc" id="aclassb_1_1process_html"><div class="ttname"><a href="classb_1_1process.html">b::process</a></div><div class="ttdef"><b>Definition:</b> process.hpp:12</div></div>
-<div class="ttc" id="aclassb_1_1string_html"><div class="ttname"><a href="classb_1_1string.html">b::string</a></div><div class="ttdoc">Yet another string class, that combines all other. Synonymous to std::string, but with more features.</div><div class="ttdef"><b>Definition:</b> string.hpp:53</div></div>
+<div class="ttc" id="aclassb_1_1string_html"><div class="ttname"><a href="classb_1_1string.html">b::string</a></div><div class="ttdoc">A sophisticated, high-level string class with encoding awareness.</div><div class="ttdef"><b>Definition:</b> string.hpp:140</div></div>
 <div class="ttc" id="astructb_1_1process_1_1options__t_html"><div class="ttname"><a href="structb_1_1process_1_1options__t.html">b::process::options_t</a></div><div class="ttdef"><b>Definition:</b> process.hpp:15</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

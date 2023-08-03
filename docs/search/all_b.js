@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['non_5fblocking_41',['non_blocking',['../group__Lockfile.html#ggac8c29eb933f46e4cafcefa7cc9c22367aacc1dd5e3a4019590a9bcc5639a49236',1,'b']]]
+  ['make_5fabsolute_75',['make_absolute',['../classb_1_1fs_1_1path.html#a5cdba756811975f338ce648949102e7f',1,'b::fs::path']]],
+  ['make_5fpreferred_76',['make_preferred',['../classb_1_1fs_1_1path.html#a4f5acdc560fb05054753157c788f247a',1,'b::fs::path']]]
 ];

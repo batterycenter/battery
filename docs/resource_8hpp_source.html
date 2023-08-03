@@ -119,11 +119,11 @@ $(document).ready(function(){initNavTree('resource_8hpp_source.html',''); initRe
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1Resource.html">Resource</a> FromTextFile(<span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">fs::path</a>&amp; filepath);</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1Resource.html">Resource</a> FromBinaryFile(<span class="keyword">const</span> <a class="code" href="classb_1_1fs_1_1path.html">fs::path</a>&amp; filepath);</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1Resource.html">Resource</a> FromByteString(<span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; data, <span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; filetype = <span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1Resource.html">Resource</a> FromBuffer(<span class="keyword">const</span> <span class="keywordtype">void</span>* buffer, <span class="keywordtype">size_t</span> length, <span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; filetype = <span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1Resource.html">Resource</a> FromBase64(<span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; base64, <span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; filetype = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1Resource.html">Resource</a> FromBytes(<span class="keyword">const</span> <a class="code" href="classb_1_1bytearray.html">b::bytearray</a>&amp; bytes, <span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; filetype = <span class="stringliteral">&quot;&quot;</span>_b);</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1Resource.html">Resource</a> FromBuffer(<span class="keyword">const</span> <span class="keywordtype">void</span>* buffer, <span class="keywordtype">size_t</span> length, <span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; filetype = <span class="stringliteral">&quot;&quot;</span>_b);</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1Resource.html">Resource</a> FromBase64(<span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; base64, <span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; filetype = <span class="stringliteral">&quot;&quot;</span>_b);</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        [[nodiscard]] <span class="keyword">const</span> <span class="keywordtype">char</span>* data() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        [[nodiscard]] <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* data() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        [[nodiscard]] <span class="keywordtype">size_t</span> size() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="comment">// If specified correctly, the filetype will be a string hinting the encoding of the data. Empty is unknown,</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="comment">// it&#39;s parsed from the file path or specified manually. Guaranteed to be lowercase. Example: &quot;&quot; or &quot;png&quot; or &quot;txt&quot;.</span></div>
@@ -156,7 +156,7 @@ $(document).ready(function(){initNavTree('resource_8hpp_source.html',''); initRe
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            }</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            <a class="code" href="classb_1_1string.html">b::string</a> str() {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                <span class="keywordflow">return</span> m_path;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                <span class="keywordflow">return</span> m_path.<a class="code" href="classb_1_1fs_1_1path.html#a7a5fa641ac8f6804680d091e6649abb6">generic_string</a>();</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            }</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keyword">operator</span> <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a>() {</div>
@@ -164,7 +164,7 @@ $(document).ready(function(){initNavTree('resource_8hpp_source.html',''); initRe
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            }</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keyword">operator</span> <a class="code" href="classb_1_1string.html">b::string</a>() {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                <span class="keywordflow">return</span> m_path;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                <span class="keywordflow">return</span> m_path.<a class="code" href="classb_1_1fs_1_1path.html#a7a5fa641ac8f6804680d091e6649abb6">generic_string</a>();</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            }</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            <span class="keywordtype">void</span> reset();</div>
@@ -176,15 +176,17 @@ $(document).ready(function(){initNavTree('resource_8hpp_source.html',''); initRe
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        [[nodiscard]] <a class="code" href="classb_1_1Resource_1_1OnDiskResource.html">OnDiskResource</a> asTemporaryOnDiskResource() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> m_data;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <a class="code" href="classb_1_1bytearray.html">b::bytearray</a> m_data;</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> m_filetype;</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    };</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;}</div>
 <div class="ttc" id="aclassb_1_1Resource_1_1OnDiskResource_html"><div class="ttname"><a href="classb_1_1Resource_1_1OnDiskResource.html">b::Resource::OnDiskResource</a></div><div class="ttdef"><b>Definition:</b> resource.hpp:30</div></div>
 <div class="ttc" id="aclassb_1_1Resource_html"><div class="ttname"><a href="classb_1_1Resource.html">b::Resource</a></div><div class="ttdef"><b>Definition:</b> resource.hpp:8</div></div>
-<div class="ttc" id="aclassb_1_1fs_1_1path_html"><div class="ttname"><a href="classb_1_1fs_1_1path.html">b::fs::path</a></div><div class="ttdef"><b>Definition:</b> fs.hpp:30</div></div>
-<div class="ttc" id="aclassb_1_1string_html"><div class="ttname"><a href="classb_1_1string.html">b::string</a></div><div class="ttdoc">Yet another string class, that combines all other. Synonymous to std::string, but with more features.</div><div class="ttdef"><b>Definition:</b> string.hpp:53</div></div>
+<div class="ttc" id="aclassb_1_1bytearray_html"><div class="ttname"><a href="classb_1_1bytearray.html">b::bytearray</a></div><div class="ttdef"><b>Definition:</b> byte.hpp:8</div></div>
+<div class="ttc" id="aclassb_1_1fs_1_1path_html"><div class="ttname"><a href="classb_1_1fs_1_1path.html">b::fs::path</a></div><div class="ttdoc">A Unicode aware high-level filesystem path.</div><div class="ttdef"><b>Definition:</b> fs.hpp:32</div></div>
+<div class="ttc" id="aclassb_1_1fs_1_1path_html_a7a5fa641ac8f6804680d091e6649abb6"><div class="ttname"><a href="classb_1_1fs_1_1path.html#a7a5fa641ac8f6804680d091e6649abb6">b::fs::path::generic_string</a></div><div class="ttdeci">b::string generic_string() const</div><div class="ttdoc">Get the path as a generic string (forward slashes on all systems)</div></div>
+<div class="ttc" id="aclassb_1_1string_html"><div class="ttname"><a href="classb_1_1string.html">b::string</a></div><div class="ttdoc">A sophisticated, high-level string class with encoding awareness.</div><div class="ttdef"><b>Definition:</b> string.hpp:140</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_7elockfile_184',['~lockfile',['../group__Lockfile.html#ga48a13fddd51961cd7ce1188b90c0294f',1,'b::lockfile']]]
+  ['unlock_322',['unlock',['../group__Lockfile.html#ga624bd42ba47412230cf3fb0a6dca93c8',1,'b::lockfile']]]
 ];

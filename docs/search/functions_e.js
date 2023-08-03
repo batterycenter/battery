@@ -1,7 +1,19 @@
 var searchData=
 [
-  ['u16_178',['u16',['../group__String.html#ga6e7ad1e5736f04dd6b44f0c351fe9549',1,'b::string']]],
-  ['u32_179',['u32',['../group__String.html#gaa48313a4d8a48eef76eda8f5edf23a38',1,'b::string']]],
-  ['u8_180',['u8',['../group__String.html#ga85fa2668f0b0a9ceea2e9d17f73cddb8',1,'b::string']]],
-  ['unlock_181',['unlock',['../group__Lockfile.html#ga624bd42ba47412230cf3fb0a6dca93c8',1,'b::lockfile']]]
+  ['raw_5fextension_282',['raw_extension',['../classb_1_1fs_1_1path.html#a68abc484134fe471c20a3e508e7be422',1,'b::fs::path']]],
+  ['regex_5freplace_283',['regex_replace',['../group__String.html#ga7b89a4c48c6119ab6ce65d28d2f31a97',1,'b::string::regex_replace(const b::string &amp;pattern, const b::string &amp;replace)'],['../group__String.html#ga493ade3eeda682397b0a5c6c37343c4f',1,'b::string::regex_replace(const b::string &amp;str, const b::string &amp;pattern, const b::string &amp;replace)']]],
+  ['regex_5freplace_5fone_284',['regex_replace_one',['../group__String.html#ga846d2e72bb6fbc8ad111990b12278e54',1,'b::string::regex_replace_one(const b::string &amp;pattern, const b::string &amp;replace)'],['../group__String.html#ga159b9b0686e8e20e69c77661c89505bf',1,'b::string::regex_replace_one(const b::string &amp;str, const b::string &amp;pattern, const b::string &amp;replace)']]],
+  ['relative_5froot_5fpath_285',['relative_root_path',['../classb_1_1fs_1_1path.html#a4c3621b07db7d1320ea9e05666ee0343',1,'b::fs::path']]],
+  ['remove_5ffilename_286',['remove_filename',['../classb_1_1fs_1_1path.html#a16bae8e76d9559e9c8e8d9728ec681a1',1,'b::fs::path']]],
+  ['replace_287',['replace',['../group__String.html#gaba92a3d8dbddd868e5ed499e036eba83',1,'b::string::replace(const b::string &amp;pattern, std::function&lt; b::string(const b::string &amp;, int)&gt; replacer)'],['../group__String.html#ga9a41d2b1a7cc4a00aa76754b9342b860',1,'b::string::replace(const b::string &amp;str, const b::string &amp;pattern, std::function&lt; b::string(const b::string &amp;, int)&gt; replacer)'],['../group__String.html#gab31175e5c566d1d275e2361df2e09c01',1,'b::string::replace(const b::string &amp;pattern, const b::string &amp;value)'],['../group__String.html#gaf609a3dc9dd65f0a29ebf1cb73e5a370',1,'b::string::replace(const b::string &amp;str, const b::string &amp;pattern, const b::string &amp;value)']]],
+  ['replace_5fextension_288',['replace_extension',['../classb_1_1fs_1_1path.html#af460de29f60f5ec59ca3497213ecbbc7',1,'b::fs::path::replace_extension(const b::string &amp;extension)'],['../classb_1_1fs_1_1path.html#a4e502f6542d2823d6c3fa0da4d5401c6',1,'b::fs::path::replace_extension(const b::fs::path &amp;extension)']]],
+  ['replace_5ffilename_289',['replace_filename',['../classb_1_1fs_1_1path.html#a9714fd4f15cab651233cc4524cdbe2b3',1,'b::fs::path::replace_filename(const b::string &amp;filename)'],['../classb_1_1fs_1_1path.html#a37bbfe4458a9f700a4a3db17471895cc',1,'b::fs::path::replace_filename(const b::fs::path &amp;filename)']]],
+  ['replace_5ffirst_290',['replace_first',['../group__String.html#ga8c216ea5c62cdbedfbe1e048cafde649',1,'b::string::replace_first(const b::string &amp;pattern, const b::string &amp;value)'],['../group__String.html#ga9e63477b6defd10074d456d9af0baadb',1,'b::string::replace_first(const b::string &amp;str, const b::string &amp;pattern, const b::string &amp;value)']]],
+  ['replace_5flast_291',['replace_last',['../group__String.html#gad0365137f8563f5548c024f2c0e6dec2',1,'b::string::replace_last(const b::string &amp;pattern, const b::string &amp;value)'],['../group__String.html#ga4a1fc99e9269cf04b073f36d80ceef9a',1,'b::string::replace_last(const b::string &amp;str, const b::string &amp;pattern, const b::string &amp;value)']]],
+  ['reserve_292',['reserve',['../group__String.html#gaae7d37c3a539274294e5d2f3619b7483',1,'b::string']]],
+  ['resize_293',['resize',['../group__String.html#ga514e44401962011be5e8c293b6880e6c',1,'b::string::resize(size_t newSize)'],['../group__String.html#ga0b70c4a17c36745bfb9a6fc685372b26',1,'b::string::resize(size_t newSize, char32_t fill)']]],
+  ['reverse_294',['reverse',['../group__String.html#gad56bcaf8ba4766c20e38a6b4f57cacac',1,'b::string']]],
+  ['root_5fdirectory_295',['root_directory',['../classb_1_1fs_1_1path.html#a86d694fe8ddbed967df0a81442487725',1,'b::fs::path']]],
+  ['root_5fname_296',['root_name',['../classb_1_1fs_1_1path.html#a70cf9a92084090570c68c08a55e1ac68',1,'b::fs::path']]],
+  ['root_5fpath_297',['root_path',['../classb_1_1fs_1_1path.html#ae0d2aa6e1fef3dc3605b6f68134710d9',1,'b::fs::path']]]
 ];

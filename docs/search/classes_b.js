@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['scoped_5flockfile_123',['scoped_lockfile',['../classb_1_1scoped__lockfile.html',1,'b']]],
-  ['scoped_5flockfile_5fnothrow_124',['scoped_lockfile_nothrow',['../classb_1_1scoped__lockfile__nothrow.html',1,'b']]],
-  ['separator_125',['separator',['../classb_1_1tray_1_1separator.html',1,'b::tray']]],
-  ['string_126',['string',['../classb_1_1string.html',1,'b']]],
-  ['submenu_127',['submenu',['../classb_1_1tray_1_1submenu.html',1,'b::tray']]],
-  ['synced_5ftoggle_128',['synced_toggle',['../classb_1_1tray_1_1synced__toggle.html',1,'b::tray']]]
+  ['terminal_201',['terminal',['../classb_1_1console_1_1terminal.html',1,'b::console']]],
+  ['thread_202',['thread',['../classb_1_1thread.html',1,'b']]],
+  ['toggle_203',['toggle',['../classb_1_1tray_1_1toggle.html',1,'b::tray']]],
+  ['tray_204',['tray',['../classb_1_1tray_1_1tray.html',1,'b::tray']]],
+  ['tray_5fentry_205',['tray_entry',['../classb_1_1tray_1_1tray__entry.html',1,'b::tray']]]
 ];
