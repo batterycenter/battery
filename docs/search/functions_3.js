@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['decode_5fbase64_218',['decode_base64',['../group__String.html#ga9b3508d763f1f1e50d76f741bef96570',1,'b']]]
+  ['decode_5fbase64_5fbinary_222',['decode_base64_binary',['../group__String.html#ga3c34293c1ca76e566ed05b4527f5abf4',1,'b']]],
+  ['decode_5fbase64_5ftext_223',['decode_base64_text',['../group__String.html#gab8ab854fd9d5d652c2b4472dedc8927d',1,'b']]]
 ];

@@ -121,7 +121,17 @@ $(document).ready(function(){initNavTree('exception_8hpp_source.html',''); initR
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        }</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    };</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;} <span class="comment">// namespace b</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classb_1_1base64__invalid__error.html">   16</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classb_1_1base64__invalid__error.html">base64_invalid_error</a> : <span class="keyword">public</span> std::exception {</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <a class="code" href="classb_1_1base64__invalid__error.html">base64_invalid_error</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span>* what() {    <span class="comment">// NOLINT (readability-convert-member-functions-to-static)</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            <span class="keywordflow">return</span> <span class="stringliteral">&quot;base64_invalid_error: Base-64 encoded resource is invalid.&quot;</span>;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        }</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    };</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;} <span class="comment">// namespace b</span></div>
+<div class="ttc" id="aclassb_1_1base64__invalid__error_html"><div class="ttname"><a href="classb_1_1base64__invalid__error.html">b::base64_invalid_error</a></div><div class="ttdef"><b>Definition:</b> exception.hpp:16</div></div>
 <div class="ttc" id="aclassb_1_1unicode__error_html"><div class="ttname"><a href="classb_1_1unicode__error.html">b::unicode_error</a></div><div class="ttdef"><b>Definition:</b> exception.hpp:7</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

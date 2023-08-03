@@ -57,6 +57,7 @@ var NAVTREE =
       [ "OsString -> Always terminates at '\\0'", "concepts.html#autotoc_md14", null ]
     ] ],
     [ "Getting Started", "md_docs_getting_started.html", null ],
+    [ "Todo List", "todo.html", null ],
     [ "Modules", "modules.html", "modules" ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -77,8 +78,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"classb_1_1tray_1_1tray.html#ae588f4cc7ed3a35e61b995075259246e",
-"group__String.html#gae722ccd9ad23c77c3320167f05e97320"
+"classb_1_1tray_1_1tray.html#a85c6b3da1c0b679a312f3edc60798de1",
+"group__String.html#gae335dc98dd0fc5a00a6b7b6a66251e3a"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

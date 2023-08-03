@@ -25,6 +25,7 @@ var annotated_dup =
       [ "Color", "structb_1_1Color.html", "structb_1_1Color" ],
       [ "ConsoleApplication", "classb_1_1ConsoleApplication.html", "classb_1_1ConsoleApplication" ],
       [ "unicode_error", "classb_1_1unicode__error.html", "classb_1_1unicode__error" ],
+      [ "base64_invalid_error", "classb_1_1base64__invalid__error.html", "classb_1_1base64__invalid__error" ],
       [ "BasicFileWatcher", "classb_1_1BasicFileWatcher.html", "classb_1_1BasicFileWatcher" ],
       [ "FileWatcher", "classb_1_1FileWatcher.html", "classb_1_1FileWatcher" ],
       [ "filedialog", "classb_1_1filedialog.html", "classb_1_1filedialog" ],
