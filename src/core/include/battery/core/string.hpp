@@ -721,25 +721,47 @@ namespace b {
     };
 
     ///
-    /// \brief Encode a binary string or a binary resource as Base-64.
-    /// \details This string can either be a text or a binary-like byte-series (loaded from a file).
-    ///          Especially useful for embedding small resource files in a source file
-    ///          or exchanging binary resources over a network. The binary resource is stored in the std::string
-    ///          as a series of bytes, `std::string` can also hold non-printable characters including zero bytes.
-    /// \param[in] str The string or byte-series to encode
+    /// \brief Encode a string or text message as Base-64, encoded in UTF-8
+    /// \details This function is especially useful for exchanging binary resources over a network.
+    ///          See `b::encode_base64(const b::bytearray&)` for more information about binary resources.
+    /// \param[in] str The string to encode
     /// \return Encoded Base-64 string
     /// \see b::decode_base64()
     ///
-    std::string encode_base64(const std::string& str);
+    b::string encode_base64(const b::string& str);
 
     ///
-    /// \brief Decode a Base-64 encoded resource back to its original form.
-    /// \details See b::encode_base64() for more information
+    /// \brief Encode a binary resource as Base-64
+    /// \details This is especially useful for embedding small resource files in the source code, or exchanging
+    ///          binary resources over a network. This overload is for encoding binary resources based on
+    ///          `std::vector<uint8_t>`. Both overloads do the same thing with another input type.
+    /// \param[in] str The byte-series to encode
+    /// \return Encoded Base-64 string
+    /// \see b::decode_base64()
+    ///
+    b::string encode_base64(const b::bytearray& data);
+
+    ///
+    /// \brief Decode a Base-64 encoded text resource back to its original form. The encoding is assumed to be UTF-8.
+    /// \details The encoding of the string before it was encoded is assumed to be UTF-8. This function is to be used
+    ///          with text resources.
     /// \param[in] str A Base-64 encoded string representing a resource
-    /// \return Decoded resource as a string containing a series of bytes (not necessarily printable characters).
+    /// \throw b::base64_invalid_error if the input string is not a valid Base-64 string or the input is empty
+    /// \todo Implement a way to specify the encoding of the string before it was encoded.
+    /// \return Decoded resource in its original form when it was encoded.
     /// \see b::encode_base64()
     ///
-    std::string decode_base64(const std::string& str);
+    b::string decode_base64_text(const b::string& str);
+
+    ///
+    /// \brief Decode a Base-64 encoded binary resource back to its original form.
+    /// \details This function is to be used with binary resources such as images, icons, etc.
+    /// \param[in] str A Base-64 encoded string representing a resource
+    /// \throw b::base64_invalid_error if the input string is not a valid Base-64 string or the input is empty
+    /// \return Decoded binary resource as a byte array
+    /// \see b::encode_base64()
+    ///
+    b::bytearray decode_base64_binary(const b::string& str);
 
 } // namespace b
 

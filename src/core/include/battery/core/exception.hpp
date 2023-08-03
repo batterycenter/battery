@@ -13,4 +13,13 @@ namespace b {
         }
     };
 
+    class base64_invalid_error : public std::exception {
+    public:
+        base64_invalid_error() = default;
+
+        const char* what() {    // NOLINT (readability-convert-member-functions-to-static)
+            return "base64_invalid_error: Base-64 encoded resource is invalid.";
+        }
+    };
+
 } // namespace b
