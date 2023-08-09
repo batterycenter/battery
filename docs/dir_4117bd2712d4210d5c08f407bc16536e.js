@@ -15,6 +15,7 @@ var dir_4117bd2712d4210d5c08f407bc16536e =
     [ "file_watcher.hpp", "file__watcher_8hpp_source.html", null ],
     [ "filedialog.hpp", "filedialog_8hpp_source.html", null ],
     [ "folders.hpp", "folders_8hpp_source.html", null ],
+    [ "format.hpp", "format_8hpp_source.html", null ],
     [ "fs.hpp", "fs_8hpp_source.html", null ],
     [ "inja.hpp", "inja_8hpp_source.html", null ],
     [ "lockfile.hpp", "lockfile_8hpp_source.html", null ],

@@ -35,7 +35,6 @@ var annotated_dup =
       [ "process", "classb_1_1process.html", "classb_1_1process" ],
       [ "Resource", "classb_1_1Resource.html", "classb_1_1Resource" ],
       [ "ResourceLoader", "classb_1_1ResourceLoader.html", "classb_1_1ResourceLoader" ],
-      [ "string_iterator", "classb_1_1string__iterator.html", "classb_1_1string__iterator" ],
       [ "string", "classb_1_1string.html", "classb_1_1string" ],
       [ "thread", "classb_1_1thread.html", "classb_1_1thread" ],
       [ "Vec2", "structb_1_1Vec2.html", "structb_1_1Vec2" ]

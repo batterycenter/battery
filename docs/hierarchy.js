@@ -52,7 +52,6 @@ var hierarchy =
     [ "b::scoped_lockfile", "classb_1_1scoped__lockfile.html", null ],
     [ "b::scoped_lockfile_nothrow", "classb_1_1scoped__lockfile__nothrow.html", null ],
     [ "b::string", "classb_1_1string.html", null ],
-    [ "b::string_iterator< T, Reverse >", "classb_1_1string__iterator.html", null ],
     [ "b::console::terminal", "classb_1_1console_1_1terminal.html", null ],
     [ "b::tray::tray_entry", "classb_1_1tray_1_1tray__entry.html", [
       [ "b::tray::button", "classb_1_1tray_1_1button.html", null ],

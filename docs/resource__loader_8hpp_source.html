@@ -146,7 +146,7 @@ $(document).ready(function(){initNavTree('resource__loader_8hpp_source.html','')
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            }</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            b::log::info(<span class="stringliteral">&quot;Hot-reloaded resource &#39;{}&#39;&quot;</span>, m_resourcePath);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            m_callback(b::Resource::FromBytes(str.value().to_utf8(), m_resourcePath.<a class="code" href="classb_1_1fs_1_1path.html#a68abc484134fe471c20a3e508e7be422">raw_extension</a>().<a class="code" href="classb_1_1fs_1_1path.html#a29cc9df1be3f7c8c741a1b314363ace8">string</a>()));</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            m_callback(b::Resource::FromBytes(str.value().encode_utf8(), m_resourcePath.<a class="code" href="classb_1_1fs_1_1path.html#a68abc484134fe471c20a3e508e7be422">raw_extension</a>().<a class="code" href="classb_1_1fs_1_1path.html#a29cc9df1be3f7c8c741a1b314363ace8">string</a>()));</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        }</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a> m_resourcePath;</div>
