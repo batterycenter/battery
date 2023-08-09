@@ -19,7 +19,7 @@ namespace b {
             return {};
         }
 #endif
-        return b::string::from_native(result);
+        return b::string::decode_native(result);
     }
 
 } // namespace b

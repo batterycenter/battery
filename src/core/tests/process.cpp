@@ -87,7 +87,7 @@ TEST(BatteryCore_Process, ProcessRedirectStdin) {
     proc.execute_async();
     proc.stdin_write("unit test works\n");
     proc.join();
-    EXPECT_EQ(proc.output_combined.to_u8(), "unit test works"_b.to_u8());
+    EXPECT_EQ(proc.output_combined.encode_u8(), "unit test works"_b.encode_u8());
     EXPECT_EQ(proc.exit_code, 100);
     b::fs::remove(filename);
 }

@@ -337,7 +337,7 @@ namespace b::fs {
     /// \return An absolute path that points to the same file as the input path
     template<typename... T>
     b::fs::path absolute(const b::fs::path& path, T&&... args) {
-        return b::fs::path(std::filesystem::absolute(path.generic_string().to_u8(), std::forward<T>(args)...).u8string());
+        return b::fs::path(std::filesystem::absolute(path.generic_string().encode_u8(), std::forward<T>(args)...).u8string());
     }
 
     /// \brief Check if a path exists on-disk. This can either be a file or a directory.
@@ -411,7 +411,7 @@ namespace b::fs {
     class ifstream : public std::ifstream {
     public:
         ifstream(const fs::path& path, enum Mode filemode = Mode::TEXT)
-                : std::ifstream(path.string().to_native(),
+                : std::ifstream(path.string().encode_native(),
                                 (filemode == Mode::TEXT) ? std::ios::in : (std::ios::in | std::ios::binary)),
                                 path(path)
         {
@@ -419,7 +419,7 @@ namespace b::fs {
         }
 
         ifstream(const fs::path& path, std::ios_base::openmode mode)
-                : std::ifstream(path.string().to_native(), mode),
+                : std::ifstream(path.string().encode_native(), mode),
                                 path(path)
         {
             binary = (mode & std::ios::binary);		// remember for later
@@ -439,7 +439,7 @@ namespace b::fs {
                 return {};
             }
             std::string str((std::istreambuf_iterator<char>(file)), (std::istreambuf_iterator<char>()));
-            return string::from_utf8(str);      // TODO: Do this properly with encodings
+            return string::decode_utf8(str);      // TODO: Do this properly with encodings
         }
 
         inline static b::string read_file(const fs::path& path, enum Mode filemode) {
@@ -447,7 +447,7 @@ namespace b::fs {
                 return str.value();
             }
             else {
-                throw std::runtime_error(b::format("Cannot read file as b::string: File failed while reading into buffer: {}", b::strerror(errno)));
+                throw std::runtime_error(b::format("Cannot read file as b::string: File failed while reading into buffer: {}", b::strerror(errno)).encode_utf8());
             }
         }
 
@@ -466,7 +466,7 @@ namespace b::fs {
                 total_bytes += this_chunk_size;
 
                 if (this_chunk_size != 0) {
-                    callback(b::string::from_utf8(std::string(buffer.data(), static_cast<size_t>(this_chunk_size))));
+                    callback(b::string::decode_utf8(std::string(buffer.data(), static_cast<size_t>(this_chunk_size))));
                 }
             }
 
@@ -576,52 +576,46 @@ namespace b::fs {
                     fs::create_directory(path.parent_path());
                 }
             }
-            return path.string().to_native();
+            return path.string().encode_native();
         }
     };
 
     namespace internal {
-        inline static bool write_file_nothrow(const fs::path &path, const b::string &str, enum Mode filemode, bool createDirectory = true) {
-            ofstream file(path, filemode, createDirectory);
-            if (file.fail()) return false;
-            file << str;
-            return true;
-        }
+//        inline static bool write_file_nothrow(const fs::path &path, const b::string &str, enum Mode filemode, bool createDirectory = true) {
+//            ofstream file(path, filemode, createDirectory);
+//            if (file.fail()) return false;
+//            file << str;
+//            return true;
+//        }
     }
 
-    inline static bool write_text_file_nothrow(const fs::path& path, const b::string& str) {
-        return internal::write_file_nothrow(path, str, Mode::TEXT);
-    }
+//    inline static bool write_text_file_nothrow(const fs::path& path, const b::string& str) {
+//        return internal::write_file_nothrow(path, str, Mode::TEXT);
+//    }
+//
+//    inline static bool write_binary_file_nothrow(const fs::path& path, const b::string& str) {
+//        return internal::write_file_nothrow(path, str, Mode::BINARY);
+//    }
 
-    inline static bool write_binary_file_nothrow(const fs::path& path, const b::string& str) {
-        return internal::write_file_nothrow(path, str, Mode::BINARY);
-    }
-
-    inline static void write_text_file(const fs::path& path, const b::string& str) {
-        if (!write_text_file_nothrow(path, str)) {
-            throw std::runtime_error(b::format("Cannot write file from b::string: File failed for writing: {}", b::strerror(errno)));
-        }
-    }
-
-    inline static void write_binary_file(const fs::path& path, const b::string& str) {
-        if (!write_binary_file_nothrow(path, str)) {
-            throw std::runtime_error(b::format("Cannot write file from b::string: File failed for writing: {}", b::strerror(errno)));
-        }
-    }
+//    inline static void write_text_file(const fs::path& path, const b::string& str) {
+//        if (!write_text_file_nothrow(path, str)) {
+//            throw std::runtime_error(b::format("Cannot write file from b::string: File failed for writing: {}", b::strerror(errno)));
+//        }
+//    }
+//
+//    inline static void write_binary_file(const fs::path& path, const b::string& str) {
+//        if (!write_binary_file_nothrow(path, str)) {
+//            throw std::runtime_error(b::format("Cannot write file from b::string: File failed for writing: {}", b::strerror(errno)));
+//        }
+//    }
 
 } // namespace b::fs
-
-// Allow b::fs::path to be used with std::ostream
-std::ostream& operator<<(std::ostream& stream, const b::fs::path& path);
-
-// Allow b::fs::path to be used with std::istream
-std::istream& operator>>(std::istream& stream, b::fs::path& path);
 
 // Hash function that lets b::fs::path be used as a key in std::map and std::unordered_map
 namespace std {
     template <> struct hash<b::fs::path> {
         size_t operator()(const b::fs::path& path) const {
-            return std::hash<std::string>()(path.generic_string().to_utf8());
+            return std::hash<std::string>()(path.generic_string().encode_utf8());
         }
     };
 } // namespace std

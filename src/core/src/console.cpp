@@ -35,7 +35,7 @@ namespace b {
                      &read,
                      nullptr);
 
-        auto line = b::string::from_native(buffer.substr(0, read));
+        auto line = b::string::decode_native(buffer.substr(0, read));
 #else
         b::string line;
         std::getline(std::cin, line);

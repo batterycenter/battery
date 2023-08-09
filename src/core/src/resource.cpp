@@ -10,14 +10,14 @@ namespace b {
 
     Resource Resource::FromTextFile(const fs::path& filepath) {
         Resource res;
-        res.m_data = fs::read_text_file(filepath).to_utf8();
+        res.m_data = fs::read_text_file(filepath).encode_utf8();
         res.m_filetype = filepath.raw_extension().string().to_lower();
         return res;
     }
 
     Resource Resource::FromBinaryFile(const fs::path& filepath) {
         Resource res;
-        res.m_data = fs::read_binary_file(filepath).to_utf8();
+        res.m_data = fs::read_binary_file(filepath).encode_utf8();
         res.m_filetype = filepath.raw_extension().string().to_lower();
         return res;
     }
@@ -88,7 +88,7 @@ namespace b {
 
     Resource::OnDiskResource::OnDiskResource(const b::fs::path &path, const b::string& data) : m_path(path) {
         b::fs::ofstream file(path, b::fs::Mode::BINARY);
-        file << data;
+        file << data.encode_utf8();
     }
 
     Resource::OnDiskResource::~OnDiskResource() {

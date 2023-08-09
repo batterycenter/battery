@@ -21,7 +21,7 @@ namespace b {
             return {};
         }
         for (int i = 0; i < _argc; i++) {
-            args.push_back(b::string::from_native(std::wstring(_args[i])));
+            args.push_back(b::string::decode_native(std::wstring(_args[i])));
         }
         ::LocalFree(_args);
 
@@ -62,7 +62,7 @@ namespace b {
         // Store the actual data into argsData
         argsData.clear();
         for (const auto& arg : args) {
-            argsData.push_back(arg.to_utf8());
+            argsData.push_back(arg.encode_utf8());
         }
 
         // Now get pointers to each of them

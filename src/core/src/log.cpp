@@ -4,7 +4,7 @@
 
 #define RANG_IMPLEMENTATION                         // This file defines the implementation: By doing so, it separates
 #include "battery/core/internal/extern/rang.hpp"    // <iostream>, the rang library and in turn the Windows API from the header
-                                                    // Thus, this cannot be defined in the header or we'd be
+                                                    // Thus, this cannot be defined in the header, or we'd be
 namespace b {                                       // polluting the global namespace with the Windows API and iostream
 
     void print(const std::string& str) {
@@ -12,11 +12,11 @@ namespace b {                                       // polluting the global name
     }
 
     void print(const b::string& str) {
-        std::cout << str;
+        std::cout << str.encode_utf8();
     }
 
     void print(const b_color_variants_t& color, const b::string& str) {
-        std::visit([&str](auto&& color) { std::cout << color << str << rang::fg::reset; }, color);
+        std::visit([&str](auto&& color) { std::cout << color << str.encode_utf8() << rang::fg::reset; }, color);
     }
 
     void print(const std::vector<b_color_variants_t>& colors, const b::string& str) {

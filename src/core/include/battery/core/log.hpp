@@ -4,21 +4,18 @@
 #define SPDLOG_COMPILED_LIB     // Force SPDLOG to recognize the prebuilt library
 #endif
 
+#include "battery/core/format.hpp"
+
 #include <variant>
 
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/rotating_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
-#include <spdlog/fmt/fmt.h>                     // TODO: Use std::format once it's fully implemented
 
 #ifdef ERROR    // An 'ERROR' macro is leaked somewhere from some windows header, and it conflicts with our enums
 #undef ERROR
 #endif
-
-namespace b {
-    using fmt::format;  // This allows b::format()
-} // namespace b
 
 #include "battery/core/internal/extern/rang.hpp"
 #include "battery/core/string.hpp"
@@ -57,7 +54,7 @@ namespace b::log {
     }
 
     inline void pattern(const b::string& pattern) {
-        internal::userLogger->set_pattern(pattern.to_utf8());
+        internal::userLogger->set_pattern(pattern.encode_utf8());
     }
 
     template<typename... T> auto trace(fmt::format_string<T...> fmt, T&&... args) { __init(); internal::userLogger->trace(fmt, std::forward<T>(args)...); }
@@ -77,7 +74,7 @@ namespace b::log {
         }
 
         inline void pattern(const b::string& pattern) {
-            internal::coreLogger->set_pattern(pattern.to_utf8());
+            internal::coreLogger->set_pattern(pattern.encode_utf8());
         }
 
         template<typename... T> auto trace(fmt::format_string<T...> fmt, T&&... args) { __init(); internal::coreLogger->trace(fmt, std::forward<T>(args)...); }

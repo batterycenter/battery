@@ -14,6 +14,7 @@
 #include "battery/core/file_watcher.hpp"
 #include "battery/core/filedialog.hpp"
 #include "battery/core/folders.hpp"
+#include "battery/core/format.hpp"
 #include "battery/core/fs.hpp"
 #include "battery/core/inja.hpp"
 #include "battery/core/lockfile.hpp"

@@ -7,7 +7,7 @@ namespace b::fs {
     /// ================== Begin path class ====================
     /// ========================================================
 
-    path::path(const b::string& path) : m_path(path.to_u8()) {
+    path::path(const b::string& path) : m_path(path.encode_u8()) {
 
     }
 
@@ -16,7 +16,7 @@ namespace b::fs {
     }
 
     path& path::assign(const b::string& path) {
-        m_path = path.to_u8();
+        m_path = path.encode_u8();
         return *this;
     }
 
@@ -26,7 +26,7 @@ namespace b::fs {
     }
 
     path& path::append(const b::string& path) {
-        m_path.append(path.to_u8());
+        m_path.append(path.encode_u8());
         return *this;
     }
 
@@ -44,7 +44,7 @@ namespace b::fs {
     }
 
     path& path::concat(const b::string& path) {
-        m_path.concat(path.to_u8());
+        m_path.concat(path.encode_u8());
         return *this;
     }
 
@@ -81,7 +81,7 @@ namespace b::fs {
     }
 
     path& path::replace_filename(const b::string& filename) {
-        m_path.replace_filename(filename.to_u8());
+        m_path.replace_filename(filename.encode_u8());
         return *this;
     }
 
@@ -91,7 +91,7 @@ namespace b::fs {
     }
 
     path& path::replace_extension(const b::string& extension) {
-        m_path.replace_extension(extension.to_u8());
+        m_path.replace_extension(extension.encode_u8());
         return *this;
     }
 
@@ -121,11 +121,11 @@ namespace b::fs {
     }
 
     path path::lexically_relative(const path& base) const {
-        return { m_path.lexically_relative(base.string().to_u8()).u8string() };
+        return { m_path.lexically_relative(base.string().encode_u8()).u8string() };
     }
 
     path path::lexically_proximate(const path& base) const {
-        return { m_path.lexically_proximate(base.string().to_u8()).u8string() };
+        return { m_path.lexically_proximate(base.string().encode_u8()).u8string() };
     }
 
     path path::root_name() const {
@@ -310,18 +310,6 @@ namespace b::fs {
 
     size_t remove_all(const b::fs::path& path) {
         return std::filesystem::remove_all(path.std_path().u8string());
-    }
-
-    std::ostream& operator<<(std::ostream& stream, const b::fs::path& path) {
-        stream << path.generic_string().to_utf8();
-        return stream;
-    }
-
-    std::istream& operator>>(std::istream& stream, b::fs::path& path) {
-        std::string str;
-        stream >> str;
-        path = b::fs::path(b::string::from_utf8(str));
-        return stream;
     }
 
 } // namespace b::fs

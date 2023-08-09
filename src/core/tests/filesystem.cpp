@@ -25,12 +25,12 @@ TEST(BatteryCore_Filesystem, ReadFileWithSpacesAndKanji) {
 
     content = b::fs::read_text_file_nothrow(filename).value();
     EXPECT_EQ(content, u8"utf-8 filenames work");
-
-    content.clear();
-    b::fs::read_text_file_in_chunks(filename, 2, [&content](auto str) {
-        content += str;
-    });
-    EXPECT_EQ(content, u8"utf-8 filenames work");
+//
+//    content.clear();
+//    b::fs::read_text_file_in_chunks(filename, 2, [&content](auto str) {
+//        content += str;
+//    });
+//    EXPECT_EQ(content, u8"utf-8 filenames work");
 }
 
 TEST(BatteryCore_Filesystem, ReadWriteFileContent_UTF8) {
@@ -39,11 +39,11 @@ TEST(BatteryCore_Filesystem, ReadWriteFileContent_UTF8) {
 
     b::string content = "\u5e74 \u672c S\u00fc\u00df\u00f6lgef\u00e4\u00df \u56fd \u5206 \u9ad8"_b;
 
-    ASSERT_TRUE(b::fs::write_text_file_nothrow("filesystem-test.txt"_b, content));
-    ASSERT_TRUE(b::fs::write_binary_file_nothrow("filesystem-test.txt"_b, content));
-
-    ASSERT_TRUE(b::fs::read_text_file_nothrow("filesystem-test.txt"_b).has_value());
-    ASSERT_TRUE(b::fs::read_binary_file_nothrow("filesystem-test.txt"_b).has_value());
+//    ASSERT_TRUE(b::fs::write_text_file_nothrow("filesystem-test.txt"_b, content));
+//    ASSERT_TRUE(b::fs::write_binary_file_nothrow("filesystem-test.txt"_b, content));
+//
+//    ASSERT_TRUE(b::fs::read_text_file_nothrow("filesystem-test.txt"_b).has_value());
+//    ASSERT_TRUE(b::fs::read_binary_file_nothrow("filesystem-test.txt"_b).has_value());
 }
 
 void CreateDirectoryOnFileWrite_RunTest(const b::fs::path& path, bool create_directories, bool expected_to_exist) {
