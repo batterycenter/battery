@@ -714,7 +714,8 @@ namespace b {
     ///          `std::vector<uint8_t>`. Both overloads do the same thing with another input type.
     /// \param[in] str The byte-series to encode
     /// \return Encoded Base-64 string
-    /// \see b::decode_base64()
+    /// \see b::decode_base64_text()
+    /// \see b::decode_base64_binary()
     ///
     b::string encode_base64(const b::bytearray& data);
 
