@@ -21,8 +21,6 @@
 #define SPDLOG_COMPILED_LIB     // Force SPDLOG to recognize the prebuilt library
 #endif
 
-#include "battery/core/exception.hpp"
-#include "battery/core/byte.hpp"
 #include <functional>
 #include <istream>
 #include <optional>
@@ -152,36 +150,36 @@ namespace b {
         bool empty() const;
 
         /// \brief Get a reference to the last character of the string (Unicode agnostic)
-        /// \throw std::out_of_range if the string is empty
+        /// \throw b::out_of_range_error if the string is empty
         /// \return A reference to the last character of the string
         char32_t& back();
 
         /// \brief Get a const reference to the last character of the string (Unicode agnostic)
-        /// \throw std::out_of_range if the string is empty
+        /// \throw b::out_of_range_error if the string is empty
         /// \return A const reference to the last character of the string
         const char32_t& back() const;
 
         /// \brief Get a reference to the first character of the string (Unicode agnostic)
-        /// \throw std::out_of_range if the string is empty
+        /// \throw b::out_of_range_error if the string is empty
         /// \return A reference to the first character of the string
         char32_t& front();
 
         /// \brief Get a const reference to the first character of the string (Unicode agnostic)
-        /// \throw std::out_of_range if the string is empty
+        /// \throw b::out_of_range_error if the string is empty
         /// \return A const reference to the first character of the string
         const char32_t& front() const;
 
         /// \brief Get a reference to a specific character of the string (Unicode agnostic)
-        /// \details This function has a const variant. If the index is out of range, std::out_of_range is thrown.
+        /// \details This function has a const variant. If the index is out of range, b::out_of_range_error is thrown.
         /// \param[in] index The index of the character to get
-        /// \throw std::out_of_range if the index is out of range
+        /// \throw b::out_of_range_error if the index is out of range
         /// \return A reference to the character at the specified index
         char32_t& at(size_t index);
 
         /// \brief Get a reference to a specific character of the string (Unicode agnostic)
-        /// \details This function has a const variant. If the index is out of range, std::out_of_range is thrown.
+        /// \details This function has a const variant. If the index is out of range, b::out_of_range_error is thrown.
         /// \param[in] index The index of the character to get
-        /// \throw std::out_of_range if the index is out of range
+        /// \throw b::out_of_range_error if the index is out of range
         /// \return A reference to the character at the specified index
         [[nodiscard]] const char32_t& at(size_t index) const;
 
@@ -189,7 +187,7 @@ namespace b {
         void push_back(char32_t chr);
 
         /// \brief Pop the last character from the string and return it (Unicode agnostic)
-        /// \throw std::out_of_range if the string is empty
+        /// \throw b::out_of_range_error if the string is empty
         /// \return The last character of the string
         char32_t pop_back();
 
@@ -246,7 +244,7 @@ namespace b {
         ///          By default, the length is set to std::string::npos, which means 'until the end of the string'.
         /// \param[in] pos The start position of the substring
         /// \param[in] len The length of the substring
-        /// \throw std::out_of_range if the start position is out of range
+        /// \throw b::out_of_range_error if the start position is out of range
         /// \return The substring
         [[nodiscard]] string substr(size_t pos, size_t len = std::string::npos) const;
 
@@ -371,7 +369,7 @@ namespace b {
         /// \brief Decode a string encoded in Windows-1252 (incorrectly known as ANSI) into generic b::string format.
         /// \details Windows-1252 is a superset of ASCII and Latin-1 (ISO-8859-1). Thus, this function may also take
         ///          Latin-1 (ISO-8859-1) or ASCII input.
-        /// \warning This function is only available on Windows
+        /// \note This function is only available on Windows
         /// \note This function would throw when the string after conversion to UTF-8 is not convertible to UTF-32,
         ///       but that is practically impossible as every possible byte in Windows-1252 is mapped to a character.
         ///       Thus, this function practically does not throw.
@@ -381,7 +379,7 @@ namespace b {
         /// \brief Decode a single Windows-1252 (incorrectly known as ANSI) character into generic b::string format.
         /// \details Windows-1252 is a superset of ASCII and Latin-1 (ISO-8859-1). Thus, this function may also take
         ///          Latin-1 (ISO-8859-1) or ASCII input.
-        /// \warning This function is only available on Windows
+        /// \note This function is only available on Windows
         /// \note This function would throw when the string after conversion to UTF-8 is not convertible to UTF-32,
         ///       but that is practically impossible as every possible byte in Windows-1252 is mapped to a character.
         ///       Thus, this function practically does not throw.
@@ -621,13 +619,13 @@ namespace b {
 
         /// \brief Get a character at a specific index.
         /// \param[in] index The index of the character
-        /// \throw std::out_of_range if the index is out of bounds
+        /// \throw b::out_of_range_error if the index is out of bounds
         /// \return A reference to the character at the index
         char32_t& operator[](size_t index);
 
         /// \brief Get a character at a specific index.
         /// \param[in] index The index of the character
-        /// \throw std::out_of_range if the index is out of bounds
+        /// \throw b::out_of_range_error if the index is out of bounds
         /// \return A reference to the character at the index
         const char32_t& operator[](size_t index) const;
 
@@ -687,62 +685,6 @@ namespace b {
 
     // ========================================================
     // ================ End b::string class ===================
-    // ========================================================
-
-
-
-
-
-    // ========================================================
-    // =============== Begin base-64 encoding =================
-    // ========================================================
-
-    ///
-    /// \brief Encode a string or text message as Base-64, encoded in UTF-8
-    /// \details This function is especially useful for exchanging binary resources over a network.
-    ///          See `b::encode_base64(const b::bytearray&)` for more information about binary resources.
-    /// \param[in] str The string to encode
-    /// \return Encoded Base-64 string
-    /// \see b::decode_base64()
-    ///
-    b::string encode_base64(const b::string& str);
-
-    ///
-    /// \brief Encode a binary resource as Base-64
-    /// \details This is especially useful for embedding small resource files in the source code, or exchanging
-    ///          binary resources over a network. This overload is for encoding binary resources based on
-    ///          `std::vector<uint8_t>`. Both overloads do the same thing with another input type.
-    /// \param[in] str The byte-series to encode
-    /// \return Encoded Base-64 string
-    /// \see b::decode_base64_text()
-    /// \see b::decode_base64_binary()
-    ///
-    b::string encode_base64(const b::bytearray& data);
-
-    ///
-    /// \brief Decode a Base-64 encoded text resource back to its original form. The encoding is assumed to be UTF-8.
-    /// \details The encoding of the string before it was encoded is assumed to be UTF-8. This function is to be used
-    ///          with text resources.
-    /// \param[in] str A Base-64 encoded string representing a resource
-    /// \throw b::base64_invalid_error if the input string is not a valid Base-64 string or the input is empty
-    /// \todo Implement a way to specify the encoding of the string before it was encoded.
-    /// \return Decoded resource in its original form when it was encoded.
-    /// \see b::encode_base64()
-    ///
-    b::string decode_base64_text(const b::string& str);
-
-    ///
-    /// \brief Decode a Base-64 encoded binary resource back to its original form.
-    /// \details This function is to be used with binary resources such as images, icons, etc.
-    /// \param[in] str A Base-64 encoded string representing a resource
-    /// \throw b::base64_invalid_error if the input string is not a valid Base-64 string or the input is empty
-    /// \return Decoded binary resource as a byte array
-    /// \see b::encode_base64()
-    ///
-    b::bytearray decode_base64_binary(const b::string& str);
-
-    // ========================================================
-    // ================ End base-64 encoding ==================
     // ========================================================
 
 } // namespace b

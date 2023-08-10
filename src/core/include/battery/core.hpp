@@ -1,7 +1,25 @@
-#pragma once
+#ifndef BATTERY_CORE_HPP
+#define BATTERY_CORE_HPP
+
+//
+// Copyright 2022 Florian Zachs (HerrNamenlos123)
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//         http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 
 #include "battery/core/async_worker.hpp"
-#include "battery/core/byte.hpp"
+#include "battery/core/base64.hpp"
+#include "battery/core/bytearray.hpp"
 #include "battery/core/cache.hpp"
 #include "battery/core/color.hpp"
 #include "battery/core/console.hpp"
@@ -10,7 +28,6 @@
 #include "battery/core/containers.hpp"
 #include "battery/core/error.hpp"
 #include "battery/core/exception.hpp"
-#include "battery/core/expected.hpp"
 #include "battery/core/file_watcher.hpp"
 #include "battery/core/filedialog.hpp"
 #include "battery/core/folders.hpp"
@@ -36,15 +53,8 @@
 #include "battery/core/uuid.hpp"
 #include "battery/core/vec.hpp"
 
-//#ifdef B_COMPILER_MSVC
-//#pragma warning( push )
-//#pragma warning( disable : 4244 )
-//#endif
-
 #include "battery/core/extern/CLI11.hpp"        // TODO: Think about moving these to different files
 #include "battery/core/extern/indicators.hpp"   // TODO: Think about moving these to different files
 #include "battery/core/extern/json.hpp"         // TODO: Think about moving these to different files
 
-//#ifdef B_COMPILER_MSVC
-//#pragma warning( pop )
-//#endif
+#endif // BATTERY_CORE_HPP

@@ -83,7 +83,7 @@ endif()
 function(__apply_common_target_options TARGET)  # For all libraries and executables
 
     # Set the C++ Standard
-    target_compile_features(${TARGET} PRIVATE cxx_std_20)
+    target_compile_features(${TARGET} PRIVATE cxx_std_23)
     set_target_properties(${TARGET} PROPERTIES CXX_EXTENSIONS OFF)
 
     # Link against pthreads if applicable

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "battery/core/fs.hpp"
-#include <string>
+#include "battery/core/bytearray.hpp"
 
 namespace b {
 

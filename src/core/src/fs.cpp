@@ -1,18 +1,13 @@
 
 #include "battery/core/fs.hpp"
 
-//#include <expected>
-//std::expected<int, int> s;
-
 namespace b::fs {
 
-    /// ========================================================
-    /// ================== Begin path class ====================
-    /// ========================================================
+    // ========================================================
+    // ================== Begin path class ====================
+    // ========================================================
 
-    path::path(const b::string& path) : m_path(path.encode_u8()) {
-
-    }
+    path::path(const b::string& path) : m_path(path.encode_u8()) {}
 
     path& path::operator=(const b::string& path) {
         return assign(path);
@@ -165,11 +160,11 @@ namespace b::fs {
 
     path path::raw_extension() const {
         auto ext = extension().string();
-        if (!ext.empty()) {
-            if (ext[0] == U'.') {
-                ext = ext.substr(1);
-//                ext.erase(ext.begin());     // TODO: Correct this using more high-level string functions
-            }
+        if (ext.empty()) {
+            return {};
+        }
+        if (ext[0] == U'.') {
+            return ext.substr(1);
         }
         return ext;
     }
@@ -282,9 +277,9 @@ namespace b::fs {
         return path;
     }
 
-    /// ========================================================
-    /// =================== End path class =====================
-    /// ========================================================
+    // ========================================================
+    // =================== End path class =====================
+    // ========================================================
 
 
 

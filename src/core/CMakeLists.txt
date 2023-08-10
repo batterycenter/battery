@@ -20,6 +20,7 @@ battery_add_source_files(battery_core_no_main
 
         src/internal/folders.cpp
 
+        src/base64.cpp
         src/console_application.cpp
         src/cache.cpp
         src/console.cpp
