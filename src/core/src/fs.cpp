@@ -1,6 +1,9 @@
 
 #include "battery/core/fs.hpp"
 
+//#include <expected>
+//std::expected<int, int> s;
+
 namespace b::fs {
 
     /// ========================================================
@@ -219,15 +222,21 @@ namespace b::fs {
         return m_path;
     }
 
-    // Iterators
+    path::iterator path::begin() noexcept {
+        return m_path.begin();
+    }
 
-//    path::iterator path::begin() const noexcept {
-//        return m_path.begin();
-//    }
-//
-//    path::iterator path::end() const noexcept {
-//        return m_path.end();
-//    }
+    path::iterator path::end() noexcept {
+        return m_path.end();
+    }
+
+    path::const_iterator path::begin() const noexcept {
+        return m_path.begin();
+    }
+
+    path::const_iterator path::end() const noexcept {
+        return m_path.end();
+    }
 
     bool path::operator==(const path& rhs) const noexcept {
         return m_path == rhs.m_path;
@@ -279,6 +288,13 @@ namespace b::fs {
 
 
 
+    path absolute(const b::fs::path& path) {
+        return { std::filesystem::absolute(path.std_path()).u8string() };
+    }
+
+    path absolute(const b::fs::path& path, std::error_code& ec) noexcept {
+        return { std::filesystem::absolute(path.std_path(), ec).u8string() };
+    }
 
     bool exists(const b::fs::path& path) {
         return std::filesystem::exists(path.std_path().u8string());

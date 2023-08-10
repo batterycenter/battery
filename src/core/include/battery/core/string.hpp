@@ -646,40 +646,40 @@ namespace b {
         bool operator!=(const string& other) const;
 
         /// \brief Simple, standard iterator forwarding
-        [[nodiscard]] iterator begin();
+        [[nodiscard]] iterator begin() noexcept;
 
         /// \brief Simple, standard iterator forwarding
-        [[nodiscard]] const_iterator begin() const;
+        [[nodiscard]] const_iterator begin() const noexcept;
 
         /// \brief Simple, standard iterator forwarding
-        [[nodiscard]] iterator end();
+        [[nodiscard]] iterator end() noexcept;
 
         /// \brief Simple, standard iterator forwarding
-        [[nodiscard]] const_iterator end() const;
+        [[nodiscard]] const_iterator end() const noexcept;
 
         /// \brief Simple, standard iterator forwarding
-        [[nodiscard]] const_iterator cbegin() const;
+        [[nodiscard]] const_iterator cbegin() const noexcept;
 
         /// \brief Simple, standard iterator forwarding
-        [[nodiscard]] const_iterator cend() const;
+        [[nodiscard]] const_iterator cend() const noexcept;
 
         /// \brief Simple, standard iterator forwarding
-        [[nodiscard]] reverse_iterator rbegin();
+        [[nodiscard]] reverse_iterator rbegin() noexcept;
 
         /// \brief Simple, standard iterator forwarding
-        [[nodiscard]] const_reverse_iterator rbegin() const;
+        [[nodiscard]] const_reverse_iterator rbegin() const noexcept;
 
         /// \brief Simple, standard iterator forwarding
-        [[nodiscard]] reverse_iterator rend();
+        [[nodiscard]] reverse_iterator rend() noexcept;
 
         /// \brief Simple, standard iterator forwarding
-        [[nodiscard]] const_reverse_iterator rend() const;
+        [[nodiscard]] const_reverse_iterator rend() const noexcept;
 
         /// \brief Simple, standard iterator forwarding
-        [[nodiscard]] const_reverse_iterator crbegin() const;
+        [[nodiscard]] const_reverse_iterator crbegin() const noexcept;
 
         /// \brief Simple, standard iterator forwarding
-        [[nodiscard]] const_reverse_iterator crend() const;
+        [[nodiscard]] const_reverse_iterator crend() const noexcept;
 
     private:
         std::u32string m_data;

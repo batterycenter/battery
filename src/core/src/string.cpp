@@ -592,51 +592,51 @@ namespace b {
         return m_data != other.m_data;
     }
 
-    [[nodiscard]] string::iterator string::begin() {
+    [[nodiscard]] string::iterator string::begin() noexcept {
         return m_data.begin();
     }
 
-    [[nodiscard]] string::const_iterator string::begin() const {
+    [[nodiscard]] string::const_iterator string::begin() const noexcept {
         return m_data.begin();
     }
 
-    [[nodiscard]] string::iterator string::end() {
+    [[nodiscard]] string::iterator string::end() noexcept {
         return m_data.end();
     }
 
-    [[nodiscard]] string::const_iterator string::end() const {
+    [[nodiscard]] string::const_iterator string::end() const noexcept {
         return m_data.end();
     }
 
-    [[nodiscard]] string::const_iterator string::cbegin() const {
+    [[nodiscard]] string::const_iterator string::cbegin() const noexcept {
         return m_data.cbegin();
     }
 
-    [[nodiscard]] string::const_iterator string::cend() const {
+    [[nodiscard]] string::const_iterator string::cend() const noexcept {
         return m_data.cend();
     }
 
-    [[nodiscard]] string::reverse_iterator string::rbegin() {
+    [[nodiscard]] string::reverse_iterator string::rbegin() noexcept {
         return m_data.rbegin();
     }
 
-    [[nodiscard]] string::const_reverse_iterator string::rbegin() const {
+    [[nodiscard]] string::const_reverse_iterator string::rbegin() const noexcept {
         return m_data.rbegin();
     }
 
-    [[nodiscard]] string::reverse_iterator string::rend() {
+    [[nodiscard]] string::reverse_iterator string::rend() noexcept {
         return m_data.rend();
     }
 
-    [[nodiscard]] string::const_reverse_iterator string::rend() const {
+    [[nodiscard]] string::const_reverse_iterator string::rend() const noexcept {
         return m_data.rend();
     }
 
-    [[nodiscard]] string::const_reverse_iterator string::crbegin() const {
+    [[nodiscard]] string::const_reverse_iterator string::crbegin() const noexcept {
         return m_data.crbegin();
     }
 
-    [[nodiscard]] string::const_reverse_iterator string::crend() const {
+    [[nodiscard]] string::const_reverse_iterator string::crend() const noexcept {
         return m_data.crend();
     }
 

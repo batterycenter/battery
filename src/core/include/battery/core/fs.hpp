@@ -1,13 +1,30 @@
-#pragma once
+#ifndef BATTERY_CORE_FS_HPP
+#define BATTERY_CORE_FS_HPP
 
-#include <bit>
-#include <fstream>
-#include <sstream>
-#include <filesystem>
-#include <functional>
+//
+// Copyright 2022 Florian Zachs (HerrNamenlos123)
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//         http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 #include "battery/core/string.hpp"
-#include "battery/core/log.hpp"
 #include "battery/core/error.hpp"
+#include "battery/core/log.hpp"
+#include <bit>
+#include <filesystem>
+#include <fstream>
+#include <functional>
+#include <sstream>
 
 namespace b::fs {
 
@@ -18,9 +35,9 @@ namespace b::fs {
 
     // TODO: filesystem::path seems to be incorrect for UTF-8 (try status())
 
-    /// ========================================================
-    /// ================== Begin path class ====================
-    /// ========================================================
+    // ========================================================
+    // ================== Begin path class ====================
+    // ========================================================
 
     /// \brief A Unicode aware high-level filesystem path
     /// \details The reason to use this class is that many of the C++ standard library functions are not Unicode aware
@@ -31,6 +48,9 @@ namespace b::fs {
     ///          `b::fs::path path2(path.u8string())`.
     class path {
     public:
+
+        using iterator = std::filesystem::path::iterator;
+        using const_iterator = std::filesystem::path::const_iterator;
 
         /// \brief default constructor
         path() = default;
@@ -45,199 +65,236 @@ namespace b::fs {
         path(const b::string& path);
 
         /// \brief Assign from a string (Unicode aware)
+        /// \param path The path to assign from
+        /// \return A reference to self
         path& operator=(const b::string& path);
 
         /// \brief Assign from a string (Unicode aware)
+        /// \param path The path to assign from
+        /// \return A reference to self
         path& assign(const b::string& path);
 
         /// \brief Assign from a string (Unicode aware)
+        /// \param path The path to assign from
+        /// \return A reference to self
         path& assign(const b::fs::path& path);
 
         /// \brief Append another path by adding a directory separator
+        /// \param path The path to append
+        /// \return A reference to self
         path& append(const b::string& path);
 
         /// \brief Append another path by adding a directory separator
+        /// \param path The path to append
+        /// \return A reference to self
         path& append(const b::fs::path& path);
 
         /// \brief Append another path by adding a directory separator
+        /// \param path The path to append
+        /// \return A reference to self
         path& operator/=(const b::string& path);
 
         /// \brief Append another path by adding a directory separator
+        /// \param path The path to append
+        /// \return A reference to self
         path& operator/=(const b::fs::path& path);
 
         /// \brief Concatenate another path without intentionally adding a directory separator
+        /// \param path The path to concatenate
+        /// \return A reference to self
         path& concat(const b::string& path);
 
         /// \brief Concatenate another path without intentionally adding a directory separator
+        /// \param path The path to concatenate
+        /// \return A reference to self
         path& concat(const b::fs::path& path);
 
         /// \brief Concatenate another path without intentionally adding a directory separator
+        /// \param path The path to concatenate
+        /// \return A reference to self
         path& operator+=(const b::string& path);
 
         /// \brief Concatenate another path without intentionally adding a directory separator
+        /// \param path The path to concatenate
+        /// \return A reference to self
         path& operator+=(const b::fs::path& path);
 
         /// \brief Clear the contents of the path
         void clear();
 
         /// \brief Make preferred: convert to native format (Windows: backslashes, Linux: keep as-is)
+        /// \return A reference to self
         path& make_preferred();
 
         /// \brief Make the path absolute, relative to the current working directory. (If it is relative)
         /// \details If the path is already absolute, this function does nothing.
+        /// \return A reference to self
         path& make_absolute();
 
         /// \brief Remove the filename portion of the path. (Everything after the last directory separator)
+        /// \return A reference to self
         path& remove_filename();
 
         /// \brief Replace or add the filename portion of the path. (Everything after the last directory separator)
         /// \param filename The filename to replace with
+        /// \return A reference to self
         path& replace_filename(const b::string& filename);
 
         /// \brief Replace or add the filename portion of the path. (Everything after the last directory separator)
         /// \param filename The filename to replace with
+        /// \return A reference to self
         path& replace_filename(const b::fs::path& filename);
 
         /// \brief Replace or add the filename extension portion of the path.
         /// \param extension The extension to replace with
+        /// \return A reference to self
         path& replace_extension(const b::string& extension);
 
         /// \brief Replace or add the filename extension portion of the path.
         /// \param extension The extension to replace with
+        /// \return A reference to self
         path& replace_extension(const b::fs::path& extension);
 
         /// \brief Swap the contents of two paths
+        /// \param other The other path to swap with
         void swap(path& other) noexcept;
 
         /// \brief Get the path as a platform native string (backslashes on Windows, forward slashes on others)
-        b::string string() const;
+        /// \return The path in string format as a platform native path
+        [[nodiscard]] b::string string() const;
 
-        /// \brief Get the path as a generic string (forward slashes on all systems)
-        b::string generic_string() const;
+        /// \brief Get the path as a generic string (keep forward slashes on all systems)
+        /// \return The path in string format as a generic path
+        [[nodiscard]] b::string generic_string() const;
 
         /// \brief Lexicographical comparison of two paths. (e.g. "/a/b" < "/a/b/c")
-        int compare(const path& other) const noexcept;
+        /// \param other The other path to compare with
+        /// \return -1 if this path is less, 0 if they are equal, 1 if this path is greater
+        [[nodiscard]] int compare(const path& other) const noexcept;
 
         /// \brief Normalize the path. (e.g. "/a/b/../c" -> "/a/c").
         /// \details This function is purely lexical, meaning it does not access the filesystem, does not check if
         ///          files exist, and does not follow symlinks. For that, see `b::fs::relative()` and `b::fs::proximate()`.
+        /// \return The normalized path
         /// \see b::fs::relative()
         /// \see b::fs::proximate()
-        path lexically_normal() const;
+        [[nodiscard]] path lexically_normal() const;
 
         /// \brief Make the path relative to another path. (e.g. "/a/b/c" relative to "/a/d" results in "../b/c")
         /// \details This function is purely lexical, meaning it does not access the filesystem, does not check if
         ///          files exist, and does not follow symlinks. For that, see `b::fs::relative()` and `b::fs::proximate()`.
         ///          If no relative path is found (e.g. one of them is relative), an empty path is returned.
         ///          This makes it different from `lexically_proximate()`
+        /// \param base The base path to make relative to
         /// \return The relative path, or an empty path if no relative path is found.
         /// \see b::fs::relative()
         /// \see b::fs::proximate()
-        path lexically_relative(const path& base) const;
+        [[nodiscard]] path lexically_relative(const path& base) const;
 
         /// \brief Make the path relative to another path. (e.g. "/a/b/c" relative to "/a/d" results in "../b/c")
         /// \details This function is purely lexical, meaning it does not access the filesystem, does not check if
         ///          files exist, and does not follow symlinks. For that, see `b::fs::relative()` and `b::fs::proximate()`.
         ///          If no relative path is found (e.g. one of them is relative), the path itself is returned unchanged.
         ///          This makes it different from `lexically_relative()`
+        /// \param base The base path to make relative to
         /// \return The relative path, or the unchanged path itself if no relative path is found.
         /// \see b::fs::relative()
         /// \see b::fs::proximate()
-        path lexically_proximate(const path& base) const;
+        [[nodiscard]] path lexically_proximate(const path& base) const;
 
         /// \brief Get the root portion of the path. (e.g. "/" on Linux, "C:" on Windows)
         /// \details If the path is relative, an empty path is returned. Use it in combination with `root_directory()`
         /// \return The root portion of the path, or an empty path if the path is relative.
-        path root_name() const;
+        [[nodiscard]] path root_name() const;
 
         /// \brief Get the root directory of the path. (e.g. "" on Linux, "\" on Windows)
         /// \details If the path is relative, an empty path is returned. Use it in combination with `root_name()`
         /// \return The root directory of the path, or an empty path if the path is relative.
-        path root_directory() const;
+        [[nodiscard]] path root_directory() const;
 
         /// \brief Get the root path portion of the path. (e.g. "/" on Linux, "C:\" on Windows)
         /// \details This is equivalent to `root_name() / root_directory()`. If the path is relative,
         ///          an empty path is returned.
         /// \return The root path portion of the path, or an empty path if the path is relative.
-        path root_path() const;
+        [[nodiscard]] path root_path() const;
 
         /// \brief Make the path relative to the `root_path()`. (e.g. "C:\Users\Test" -> "Users\Test")
         /// \details If the path is relative, the path itself is returned unchanged.
         /// \return A path relative to the `root_path()`, or the path itself if the path is relative.
-        path relative_root_path() const;
+        [[nodiscard]] path relative_root_path() const;
 
         /// \brief Get the parent path of the path. (e.g. "/a/b/c" -> "/a/b")
         /// \details If the path has no parent, the path itself is returned unchanged.
         /// \return The parent path of the path, or itself if the path has no parent.
-        path parent_path() const;
+        [[nodiscard]] path parent_path() const;
 
         /// \brief Get the filename portion of the path. (e.g. "/a/b/c" -> "c")
         /// \details If the path has no filename, an empty path is returned.
         /// \return The filename portion of the path, or an empty path if the path has no filename.
-        path filename() const;
+        [[nodiscard]] path filename() const;
 
         /// \brief Get the filename portion of the path without the extension. (e.g. "/a/b/c.txt" -> "c")
         /// \details If the path has no filename, an empty path is returned.
         /// \return The filename portion of the path without the extension, or an empty path if the path has no filename.
-        path stem() const;
+        [[nodiscard]] path stem() const;
 
         /// \brief Get the extension portion of the path. (e.g. "/a/b/c.txt" -> ".txt")
         /// \details If the path has no extension, an empty path is returned.
         /// \return The extension portion of the path, or an empty path if the path has no extension.
-        path extension() const;
+        [[nodiscard]] path extension() const;
 
         /// \brief Get the extension portion of the path, but without the dot. (e.g. "/a/b/c.txt" -> "txt")
         /// \details This function either returns the extension like "png" or "txt", or nothing ("")
         /// \return The extension portion of the path without the dot, or an empty path if the path has no extension.
-        path raw_extension() const;
+        [[nodiscard]] path raw_extension() const;
 
         /// \brief Check if the path is empty.
         /// \return True if the path is empty, false otherwise.
-        bool empty() const noexcept;
+        [[nodiscard]] bool empty() const noexcept;
 
         /// \brief Check if the path has a root path.
         /// \return True, false otherwise.
-        bool has_root_path() const;
+        [[nodiscard]] bool has_root_path() const;
 
         /// \brief Check if the path has a root name.
         /// \return True, false otherwise.
-        bool has_root_name() const;
+        [[nodiscard]] bool has_root_name() const;
 
         /// \brief Check if the path has a root directory.
         /// \return True, false otherwise.
-        bool has_root_directory() const;
+        [[nodiscard]] bool has_root_directory() const;
 
         /// \brief Check if the path has a relative root path.
         /// \return True, false otherwise.
-        bool has_relative_root_path() const;
+        [[nodiscard]] bool has_relative_root_path() const;
 
         /// \brief Check if the path has a parent path.
         /// \return True, false otherwise.
-        bool has_parent_path() const;
+        [[nodiscard]] bool has_parent_path() const;
 
         /// \brief Check if the path has a filename.
         /// \return True, false otherwise.
-        bool has_filename() const;
+        [[nodiscard]] bool has_filename() const;
 
         /// \brief Check if the path has a stem.
         /// \return True, false otherwise.
-        bool has_stem() const;
+        [[nodiscard]] bool has_stem() const;
 
         /// \brief Check if the path has an extension.
         /// \return True, false otherwise.
-        bool has_extension() const;
+        [[nodiscard]] bool has_extension() const;
 
         /// \brief Check if the path is absolute, i.e. has a root path in its native format
         /// \details Note: "/" is absolute on Linux and relative on Windows. It is the opposite of `is_relative()`.
         /// \return True, false otherwise.
         /// \see b::fs::path::is_relative()
-        bool is_absolute() const;
+        [[nodiscard]] bool is_absolute() const;
 
         /// \brief Check if the path is relative, i.e. has no root path in its native format
         /// \details Note: "/" is absolute on Linux and relative on Windows. It is the opposite of `is_absolute()`.
         /// \return True, false otherwise.
         /// \see b::fs::path::is_relative()
-        bool is_relative() const;
+        [[nodiscard]] bool is_relative() const;
 
         /// \brief Get the native underlying path object as a copy.
         /// \details Whenever you must pass a path on to a system std function, make sure that it is Unicode agnostic.
@@ -245,21 +302,25 @@ namespace b::fs {
         ///          as an std::u8string, containing UTF-8. Most system functions will correctly interpret std::u8string,
         ///          but plain std::string is almost always assumed to be a native encoding, like windows-1252 on Windows.
         /// \warning Only use this function if you know what you are doing! The `std::filesystem::path` object will
-        ///          easily make your code fragile in terms of portability if you are not careful.
+        ///          easily make your code fragile in terms of Unicode awareness if you are not careful.
         /// \return The native underlying path object as a copy.
         std::filesystem::path std_path() const;
 
-        // Iterators. TODO: Implement custom iterators to make sure nothing gets leaked in terms of UTF-8 compliance
+        /// \brief Get an iterator to the beginning of the path.
+        /// \return An iterator to the beginning of the path.
+        iterator begin() noexcept;
 
-//        using iterator = std::filesystem::path::iterator;
-//
-//        /// \brief Get an iterator to the beginning of the path.
-//        /// \return An iterator to the beginning of the path.
-//        iterator begin() const noexcept;
-//
-//        /// \brief Get an iterator past the end of the path.
-//        /// \return An iterator past the end of the path.
-//        iterator end() const noexcept;
+        /// \brief Get an iterator past the end of the path.
+        /// \return An iterator past the end of the path.
+        iterator end() noexcept;
+
+        /// \brief Get an iterator to the beginning of the path.
+        /// \return An iterator to the beginning of the path.
+        const_iterator begin() const noexcept;
+
+        /// \brief Get an iterator past the end of the path.
+        /// \return An iterator past the end of the path.
+        const_iterator end() const noexcept;
 
         /// \brief Lexically compare with another path. No filesystem access is performed.
         /// \param rhs The path to compare with.
@@ -317,11 +378,26 @@ namespace b::fs {
     /// \return The concatenated path
     fs::path operator+(const fs::path& lhs, const fs::path& rhs);
 
-    /// ========================================================
-    /// =================== End path class =====================
-    /// ========================================================
+    // ========================================================
+    // =================== End path class =====================
+    // ========================================================
 
 
+
+    /// \brief Make a relative path absolute, from the perspective of the current working directory
+    /// \details This function is a wrapper around std::filesystem::absolute, with Unicode awareness.
+    ///          No filesystem access is performed.
+    /// \param path The path to make absolute
+    /// \return An absolute path that points to the same file as the input path
+    b::fs::path absolute(const b::fs::path& path);
+
+    /// \brief Make a relative path absolute, from the perspective of the current working directory (non-throwing)
+    /// \details This function is a wrapper around std::filesystem::absolute, with Unicode awareness.
+    ///          No filesystem access is performed.
+    /// \param path The path to make absolute
+    /// \param ec The error code to set if an error occurs
+    /// \return An absolute path that points to the same file as the input path
+    b::fs::path absolute(const b::fs::path& path, std::error_code& ec) noexcept;
 
     /// \brief Get or set the current working directory
     /// \details This function is a wrapper around std::filesystem::current_path, but is Unicode agnostic
@@ -329,15 +405,6 @@ namespace b::fs {
     template<typename... T>
     b::fs::path current_path(T&&... args) {
         return b::fs::path(std::filesystem::current_path(std::forward<T>(args)...).u8string());
-    }
-
-    /// \brief Get or set the current working directory
-    /// \details This function is a wrapper around std::filesystem::absolute, but is Unicode agnostic.
-    ///          No filesystem access is performed.
-    /// \return An absolute path that points to the same file as the input path
-    template<typename... T>
-    b::fs::path absolute(const b::fs::path& path, T&&... args) {
-        return b::fs::path(std::filesystem::absolute(path.generic_string().encode_u8(), std::forward<T>(args)...).u8string());
     }
 
     /// \brief Check if a path exists on-disk. This can either be a file or a directory.
@@ -629,3 +696,5 @@ template <> struct fmt::formatter<b::fs::path> {
         return fmt::format_to(ctx.out(), "{}", path.string());
     }
 };
+
+#endif // BATTERY_CORE_FS_HPP
