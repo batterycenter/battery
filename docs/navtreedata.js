@@ -26,35 +26,35 @@ var NAVTREE =
 [
   [ "Battery", "index.html", [
     [ "Battery Library", "index.html", [
-      [ "Heading", "index.html#autotoc_md21", null ],
-      [ "Code fragment", "index.html#autotoc_md22", null ],
-      [ "HLKSAs", "index.html#autotoc_md23", null ],
-      [ "ds", "index.html#autotoc_md24", null ],
-      [ "fd", "index.html#autotoc_md25", null ],
-      [ "Doxygen", "index.html#autotoc_md26", [
-        [ "Doxygen sub-group", "index.html#autotoc_md27", null ]
+      [ "Heading", "index.html#autotoc_md17", null ],
+      [ "Code fragment", "index.html#autotoc_md18", null ],
+      [ "HLKSAs", "index.html#autotoc_md19", null ],
+      [ "ds", "index.html#autotoc_md20", null ],
+      [ "fd", "index.html#autotoc_md21", null ],
+      [ "Doxygen", "index.html#autotoc_md22", [
+        [ "Doxygen sub-group", "index.html#autotoc_md23", null ]
       ] ]
     ] ],
     [ "Battery Concepts", "concepts.html", [
-      [ "Unicode", "concepts.html#autotoc_md6", [
-        [ "Unicode (UTF-8)", "concepts.html#autotoc_md7", [
-          [ "What is Unicode?", "concepts.html#autotoc_md8", null ],
-          [ "The Problem", "concepts.html#autotoc_md9", null ]
+      [ "Unicode", "concepts.html#autotoc_md2", [
+        [ "Unicode (UTF-8)", "concepts.html#autotoc_md3", [
+          [ "What is Unicode?", "concepts.html#autotoc_md4", null ],
+          [ "The Problem", "concepts.html#autotoc_md5", null ]
         ] ],
-        [ "Terminology", "concepts.html#autotoc_md10", null ],
-        [ "Working with Unicode", "concepts.html#autotoc_md11", null ],
-        [ "Source files", "concepts.html#autotoc_md12", null ],
+        [ "Terminology", "concepts.html#autotoc_md6", null ],
+        [ "Working with Unicode", "concepts.html#autotoc_md7", null ],
+        [ "Source files", "concepts.html#autotoc_md8", null ],
         [ "WinAPI / Linux API", "concepts.html#WIN_LINUX_API", [
-          [ "WinAPI: Do not use ANSI functions!", "concepts.html#autotoc_md13", null ],
+          [ "WinAPI: Do not use ANSI functions!", "concepts.html#autotoc_md9", null ],
           [ "Use OsString whenever applicable", "concepts.html#OsString", null ],
-          [ "Using high-level containers", "concepts.html#autotoc_md14", null ],
-          [ "Keeping WinAPI / Linux API cross-platform", "concepts.html#autotoc_md15", null ]
+          [ "Using high-level containers", "concepts.html#autotoc_md10", null ],
+          [ "Keeping WinAPI / Linux API cross-platform", "concepts.html#autotoc_md11", null ]
         ] ]
       ] ],
-      [ "Lockfiles", "concepts.html#autotoc_md16", [
-        [ "Different types", "concepts.html#autotoc_md17", null ]
+      [ "Lockfiles", "concepts.html#autotoc_md12", [
+        [ "Different types", "concepts.html#autotoc_md13", null ]
       ] ],
-      [ "OsString -> Always terminates at '\\0'", "concepts.html#autotoc_md18", null ]
+      [ "OsString -> Always terminates at '\\0'", "concepts.html#autotoc_md14", null ]
     ] ],
     [ "Getting Started", "md_docs_getting_started.html", null ],
     [ "Todo List", "todo.html", null ],
