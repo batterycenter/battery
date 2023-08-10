@@ -25,7 +25,7 @@ namespace b {
             "\x29\x2A\x2B\x2C\x2D\x2E\x2F\x30\x31\x32\x33\xFF\xFF\xFF\xFF\xFF";
 
     b::string encode_base64(const b::string &str) {
-        return encode_base64(str.encode_utf8());
+        return encode_base64(b::bytearray(str.encode_utf8()));
     }
 
     b::string encode_base64(const b::bytearray &data) {
@@ -85,7 +85,7 @@ namespace b {
                 }
             }
         }
-        return result;
+        return b::bytearray(result);
     }
 
 } // namespace b

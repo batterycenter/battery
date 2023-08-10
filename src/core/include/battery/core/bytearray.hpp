@@ -18,6 +18,7 @@
 //
 
 #include "battery/core/string.hpp"
+#include "battery/core/format.hpp"
 #include <string>
 #include <vector>
 
@@ -26,18 +27,44 @@ namespace b {
     class bytearray : public std::vector<uint8_t> {
     public:
         bytearray() = default;
-        bytearray(const std::vector<uint8_t>& vec) : std::vector<uint8_t>(vec) {}
-        bytearray(std::vector<uint8_t>&& vec) : std::vector<uint8_t>(std::move(vec)) {}
 
+        bytearray(const std::vector<uint8_t>& vec) : std::vector<uint8_t>(vec) {}
+        bytearray(std::vector<uint8_t>&& vec) : std::vector<uint8_t>(vec) {}
         bytearray(const std::string& str) : std::vector<uint8_t>(str.begin(), str.end()) {}
+        bytearray(const char* str) : bytearray(std::string(str)) {}
+        bytearray(std::initializer_list<uint8_t> list) : std::vector<uint8_t>(list) {}
+
+        bytearray& operator=(const std::vector<uint8_t>& vec) {
+            std::vector<uint8_t>::operator=(std::vector<uint8_t>(vec));
+            return *this;
+        }
+
+        bytearray& operator=(std::vector<uint8_t>&& vec) {
+            std::vector<uint8_t>::operator=(std::vector<uint8_t>(vec));
+            return *this;
+        }
 
         bytearray& operator=(const std::string& str) {
             std::vector<uint8_t>::operator=(std::vector<uint8_t>(str.begin(), str.end()));
             return *this;
         }
 
-        operator std::string() const {
-            return std::string(begin(), end());
+        bytearray& operator=(const char* str) {
+            this->operator=(std::string(str));
+            return *this;
+        }
+
+        bytearray& operator=(std::initializer_list<uint8_t> list) {
+            std::vector<uint8_t>::operator=(std::vector<uint8_t>(list));
+            return *this;
+        }
+
+        [[nodiscard]] std::string str() const {
+            return { begin(), end() };
+        }
+
+        explicit operator std::string() const {
+            return str();
         }
 
         /// \brief Decode this byte array from UTF-8 encoding to generic b::string format
@@ -45,7 +72,7 @@ namespace b {
         /// \return The generic, encoding-agnostic string
         /// \see b::string::decode_utf8()
         b::string decode_utf8() const {
-            return b::string::decode_utf8(*this);
+            return b::string::decode_utf8(str());
         }
 
         /// \brief Decode this byte array from plain ASCII encoding to generic b::string format
@@ -53,7 +80,7 @@ namespace b {
         /// \return The generic, encoding-agnostic string
         /// \see b::string::decode_ascii()
         b::string decode_ascii() const {
-            return b::string::decode_ascii(*this);
+            return b::string::decode_ascii(str());
         }
 
         /// \brief Decode this byte array from Latin-1 encoding to generic b::string format.
@@ -62,7 +89,7 @@ namespace b {
         /// \return The generic, encoding-agnostic string
         /// \see b::string::decode_latin1()
         b::string decode_latin1() const {
-            return b::string::decode_latin1(*this);
+            return b::string::decode_latin1(str());
         }
 
         /// \brief Decode this byte array from ISO-8859-1 encoding to generic b::string format.
@@ -71,7 +98,7 @@ namespace b {
         /// \return The generic, encoding-agnostic string
         /// \see b::string::decode_iso8859_1()
         b::string decode_iso8859_1() const {
-            return b::string::decode_iso8859_1(*this);
+            return b::string::decode_iso8859_1(str());
         }
 
 #ifdef B_OS_WINDOWS
@@ -81,11 +108,21 @@ namespace b {
         /// \return The generic, encoding-agnostic string
         /// \see b::string::decode_windows1252()
         b::string decode_windows1252() const {
-            return b::string::decode_windows1252(*this);
+            return b::string::decode_windows1252(str());
         }
 #endif
     };
 
 } // namespace b
+
+/// \brief fmt formatter to allow formatting b::bytearray with fmt::format
+template <> struct fmt::formatter<b::bytearray> {
+    constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator {
+        return ctx.begin();
+    }
+    auto format(const b::bytearray& array, format_context& ctx) const -> format_context::iterator {
+        return fmt::format_to(ctx.out(), "{}", static_cast<std::vector<uint8_t>>(array));
+    }
+};
 
 #endif // BATTERY_CORE_BYTE_HPP

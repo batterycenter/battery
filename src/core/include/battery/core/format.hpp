@@ -23,6 +23,7 @@
 
 #include "battery/core/string.hpp"
 #include <spdlog/fmt/fmt.h>                     // TODO: Use std::format once it's fully implemented
+#include <spdlog/fmt/ranges.h>
 
 namespace b {
 

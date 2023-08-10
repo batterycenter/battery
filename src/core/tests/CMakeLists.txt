@@ -8,6 +8,7 @@ target_compile_definitions(battery_core_tests PRIVATE TESTDATA_FOLDER="${CMAKE_C
 target_sources(battery_core_tests PRIVATE
     application.cpp
     base64.cpp
+    bytearray.cpp
     cache.cpp
     filesystem.cpp
     lockfile.cpp
