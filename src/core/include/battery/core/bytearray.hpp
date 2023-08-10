@@ -24,45 +24,72 @@
 
 namespace b {
 
+    /// \brief A higher-level byte array class to be used for binary data
+    /// \details This class is a wrapper around std::vector<uint8_t>. The goal is to provide a standalone type for
+    ///          binary data, such as binary files, etc. It goes hand-in-hand with the b::string class and the
+    ///          filesystem functions. The end goal is that resources are stored as either b::string if they represent
+    ///          text, or b::bytearray if they represent binary data (or a text with a specific encoding). Binary data
+    ///          should use this class instead of std::string, potentially containing non-printable characters. It
+    ///          can also be conveniently formatted and printed.
     class bytearray : public std::vector<uint8_t> {
     public:
+        /// \brief Construct an empty byte array
         bytearray() = default;
 
+        /// \brief Construct a byte array from a vector of bytes
         bytearray(const std::vector<uint8_t>& vec) : std::vector<uint8_t>(vec) {}
+
+        /// \brief Construct a byte array from a vector of bytes
         bytearray(std::vector<uint8_t>&& vec) : std::vector<uint8_t>(vec) {}
+
+        /// \brief Construct a byte array from a string
         bytearray(const std::string& str) : std::vector<uint8_t>(str.begin(), str.end()) {}
+
+        /// \brief Construct a byte array from a string
         bytearray(const char* str) : bytearray(std::string(str)) {}
+
+        /// \brief Construct a byte array from a list of bytes
         bytearray(std::initializer_list<uint8_t> list) : std::vector<uint8_t>(list) {}
 
+        /// \brief Assign this byte array to another byte array
         bytearray& operator=(const std::vector<uint8_t>& vec) {
             std::vector<uint8_t>::operator=(std::vector<uint8_t>(vec));
             return *this;
         }
 
+        /// \brief Assign this byte array to a vector of bytes
         bytearray& operator=(std::vector<uint8_t>&& vec) {
             std::vector<uint8_t>::operator=(std::vector<uint8_t>(vec));
             return *this;
         }
 
+        /// \brief Assign this byte array to a string
         bytearray& operator=(const std::string& str) {
             std::vector<uint8_t>::operator=(std::vector<uint8_t>(str.begin(), str.end()));
             return *this;
         }
 
+        /// \brief Assign this byte array to a C-style string
         bytearray& operator=(const char* str) {
             this->operator=(std::string(str));
             return *this;
         }
 
+        /// \brief Assign this byte array to a list of bytes
         bytearray& operator=(std::initializer_list<uint8_t> list) {
             std::vector<uint8_t>::operator=(std::vector<uint8_t>(list));
             return *this;
         }
 
+        /// \brief Convert this byte array to a string
+        /// \return The string representation of this byte array
         [[nodiscard]] std::string str() const {
             return { begin(), end() };
         }
 
+        /// \brief Conversion operator to std::string
+        /// \details Equivalent to `str()`
+        /// \return The string representation of this byte array
         explicit operator std::string() const {
             return str();
         }
