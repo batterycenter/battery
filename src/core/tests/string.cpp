@@ -638,9 +638,9 @@ TEST(BatteryCore_String, StringLiterals) {
     EXPECT_EQ(reference, U"Süßölgefäß"_b);
 }
 
-/// ========================================================
-/// =============== Begin base-64 encoding =================
-/// ========================================================
+// ========================================================
+// =============== Begin base-64 encoding =================
+// ========================================================
 
 const auto BASE64_UTF8_TEST = u8"Lorem ipsum dolor sit amet イロハニホヘト チリヌシ ヱヒモセスン Heizölrückstoßabdämpfung";
 const auto BASE64_UTF8_TEST_ENCODED = "TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQg44Kk44Ot44OP44OL44Ob44OY44OIIOODgeO"
@@ -723,6 +723,6 @@ TEST(BatteryCore_String, Base64TextDecodePadding) {
     EXPECT_EQ(b::decode_base64_text("bGlnaHQgd29y"_b), "light wor"_b);
 }
 
-/// ========================================================
-/// ================ End base-64 encoding ==================
-/// ========================================================
+// ========================================================
+// ================ End base-64 encoding ==================
+// ========================================================
