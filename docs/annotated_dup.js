@@ -41,6 +41,7 @@ var annotated_dup =
       [ "Vec2", "structb_1_1Vec2.html", "structb_1_1Vec2" ]
     ] ],
     [ "fmt", null, [
+      [ "formatter< b::bytearray >", "structfmt_1_1formatter_3_01b_1_1bytearray_01_4.html", "structfmt_1_1formatter_3_01b_1_1bytearray_01_4" ],
       [ "formatter< b::Color >", "structfmt_1_1formatter_3_01b_1_1Color_01_4.html", "structfmt_1_1formatter_3_01b_1_1Color_01_4" ],
       [ "formatter< b::fs::path >", "structfmt_1_1formatter_3_01b_1_1fs_1_1path_01_4.html", "structfmt_1_1formatter_3_01b_1_1fs_1_1path_01_4" ],
       [ "formatter< b::string >", "structfmt_1_1formatter_3_01b_1_1string_01_4.html", "structfmt_1_1formatter_3_01b_1_1string_01_4" ],

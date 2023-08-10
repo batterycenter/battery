@@ -16,6 +16,7 @@ var hierarchy =
       [ "b::unicode_error", "classb_1_1unicode__error.html", null ]
     ] ],
     [ "b::filedialog", "classb_1_1filedialog.html", null ],
+    [ "fmt::formatter< b::bytearray >", "structfmt_1_1formatter_3_01b_1_1bytearray_01_4.html", null ],
     [ "fmt::formatter< b::Color >", "structfmt_1_1formatter_3_01b_1_1Color_01_4.html", null ],
     [ "fmt::formatter< b::fs::path >", "structfmt_1_1formatter_3_01b_1_1fs_1_1path_01_4.html", null ],
     [ "fmt::formatter< b::string >", "structfmt_1_1formatter_3_01b_1_1string_01_4.html", null ],

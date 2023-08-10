@@ -131,16 +131,17 @@ $(document).ready(function(){initNavTree('format_8hpp_source.html',''); initResi
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;battery/core/string.hpp&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;spdlog/fmt/fmt.h&gt;</span>                     <span class="comment">// TODO: Use std::format once it&#39;s fully implemented</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span>b {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span>... T&gt; <a class="code" href="classb_1_1string.html">b::string</a> format(fmt::format_string&lt;T...&gt; fmt, T&amp;&amp;... args) {</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="group__String.html#gafd392778bdfb77e576a63604b94a4db2">b::string::decode_utf8</a>(fmt::format(fmt, std::forward&lt;T&gt;(args)...));</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    }</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;} <span class="comment">// namespace b</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BATTERY_CORE_FORMAT_HPP</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;spdlog/fmt/ranges.h&gt;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span>b {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span>... T&gt; <a class="code" href="classb_1_1string.html">b::string</a> format(fmt::format_string&lt;T...&gt; fmt, T&amp;&amp;... args) {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="group__String.html#gafd392778bdfb77e576a63604b94a4db2">b::string::decode_utf8</a>(fmt::format(fmt, std::forward&lt;T&gt;(args)...));</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;} <span class="comment">// namespace b</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BATTERY_CORE_FORMAT_HPP</span></div>
 <div class="ttc" id="aclassb_1_1string_html"><div class="ttname"><a href="classb_1_1string.html">b::string</a></div><div class="ttdoc">A sophisticated, high-level string class with encoding awareness.</div><div class="ttdef"><b>Definition:</b> string.hpp:70</div></div>
 <div class="ttc" id="agroup__String_html_gafd392778bdfb77e576a63604b94a4db2"><div class="ttname"><a href="group__String.html#gafd392778bdfb77e576a63604b94a4db2">b::string::decode_utf8</a></div><div class="ttdeci">static string decode_utf8(const std::string &amp;str)</div><div class="ttdoc">Decode a byte series encoded in UTF-8 into generic b::string format.</div></div>
 </div><!-- fragment --></div><!-- contents -->

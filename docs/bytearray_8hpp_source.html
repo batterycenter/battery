@@ -126,59 +126,95 @@ $(document).ready(function(){initNavTree('bytearray_8hpp_source.html',''); initR
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;battery/core/string.hpp&quot;</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span>b {</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classb_1_1bytearray.html">   26</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classb_1_1bytearray.html">bytearray</a> : <span class="keyword">public</span> std::vector&lt;uint8_t&gt; {</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <a class="code" href="classb_1_1bytearray.html">bytearray</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <a class="code" href="classb_1_1bytearray.html">bytearray</a>(<span class="keyword">const</span> std::vector&lt;uint8_t&gt;&amp; vec) : std::vector&lt;uint8_t&gt;(vec) {}</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <a class="code" href="classb_1_1bytearray.html">bytearray</a>(std::vector&lt;uint8_t&gt;&amp;&amp; vec) : std::vector&lt;uint8_t&gt;(std::move(vec)) {}</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <a class="code" href="classb_1_1bytearray.html">bytearray</a>(<span class="keyword">const</span> std::string&amp; str) : std::vector&lt;uint8_t&gt;(str.begin(), str.end()) {}</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <a class="code" href="classb_1_1bytearray.html">bytearray</a>&amp; operator=(<span class="keyword">const</span> std::string&amp; str) {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            std::vector&lt;uint8_t&gt;::operator=(std::vector&lt;uint8_t&gt;(str.begin(), str.end()));</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        }</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keyword">operator</span> std::string()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            <span class="keywordflow">return</span> std::string(begin(), end());</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classb_1_1bytearray.html#a3f4043afebb4cbb0a87fc73f01392e2b">   47</a></span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> <a class="code" href="classb_1_1bytearray.html#a3f4043afebb4cbb0a87fc73f01392e2b">decode_utf8</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="group__String.html#gafd392778bdfb77e576a63604b94a4db2">b::string::decode_utf8</a>(*<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        }</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classb_1_1bytearray.html#a03418d9712e8730d31cb7fef53189956">   55</a></span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> <a class="code" href="classb_1_1bytearray.html#a03418d9712e8730d31cb7fef53189956">decode_ascii</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="group__String.html#ga57e05dad60e77919c3f39bedb26fd449">b::string::decode_ascii</a>(*<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        }</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classb_1_1bytearray.html#a0e6153c23134af4bea5c45e812438a4f">   64</a></span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> <a class="code" href="classb_1_1bytearray.html#a0e6153c23134af4bea5c45e812438a4f">decode_latin1</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="group__String.html#ga104735756a7f8ae7990d32ef780d893b">b::string::decode_latin1</a>(*<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        }</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="classb_1_1bytearray.html#af9c807b828cdfe88a6ee58b6b46cb4ec">   73</a></span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> <a class="code" href="classb_1_1bytearray.html#af9c807b828cdfe88a6ee58b6b46cb4ec">decode_iso8859_1</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="group__String.html#gaca77546593947c3231af7afab227454f">b::string::decode_iso8859_1</a>(*<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        }</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#ifdef B_OS_WINDOWS</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> decode_windows1252()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <span class="keywordflow">return</span> b::string::decode_windows1252(*<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        }</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    };</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;} <span class="comment">// namespace b</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// BATTERY_CORE_BYTE_HPP</span></div>
-<div class="ttc" id="aclassb_1_1bytearray_html"><div class="ttname"><a href="classb_1_1bytearray.html">b::bytearray</a></div><div class="ttdef"><b>Definition:</b> bytearray.hpp:26</div></div>
-<div class="ttc" id="aclassb_1_1bytearray_html_a03418d9712e8730d31cb7fef53189956"><div class="ttname"><a href="classb_1_1bytearray.html#a03418d9712e8730d31cb7fef53189956">b::bytearray::decode_ascii</a></div><div class="ttdeci">b::string decode_ascii() const</div><div class="ttdoc">Decode this byte array from plain ASCII encoding to generic b::string format.</div><div class="ttdef"><b>Definition:</b> bytearray.hpp:55</div></div>
-<div class="ttc" id="aclassb_1_1bytearray_html_a0e6153c23134af4bea5c45e812438a4f"><div class="ttname"><a href="classb_1_1bytearray.html#a0e6153c23134af4bea5c45e812438a4f">b::bytearray::decode_latin1</a></div><div class="ttdeci">b::string decode_latin1() const</div><div class="ttdoc">Decode this byte array from Latin-1 encoding to generic b::string format. Equivalent to b::string::de...</div><div class="ttdef"><b>Definition:</b> bytearray.hpp:64</div></div>
-<div class="ttc" id="aclassb_1_1bytearray_html_a3f4043afebb4cbb0a87fc73f01392e2b"><div class="ttname"><a href="classb_1_1bytearray.html#a3f4043afebb4cbb0a87fc73f01392e2b">b::bytearray::decode_utf8</a></div><div class="ttdeci">b::string decode_utf8() const</div><div class="ttdoc">Decode this byte array from UTF-8 encoding to generic b::string format.</div><div class="ttdef"><b>Definition:</b> bytearray.hpp:47</div></div>
-<div class="ttc" id="aclassb_1_1bytearray_html_af9c807b828cdfe88a6ee58b6b46cb4ec"><div class="ttname"><a href="classb_1_1bytearray.html#af9c807b828cdfe88a6ee58b6b46cb4ec">b::bytearray::decode_iso8859_1</a></div><div class="ttdeci">b::string decode_iso8859_1() const</div><div class="ttdoc">Decode this byte array from ISO-8859-1 encoding to generic b::string format. Equivalent to b::string:...</div><div class="ttdef"><b>Definition:</b> bytearray.hpp:73</div></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;battery/core/format.hpp&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span>b {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classb_1_1bytearray.html">   27</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classb_1_1bytearray.html">bytearray</a> : <span class="keyword">public</span> std::vector&lt;uint8_t&gt; {</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <a class="code" href="classb_1_1bytearray.html">bytearray</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <a class="code" href="classb_1_1bytearray.html">bytearray</a>(<span class="keyword">const</span> std::vector&lt;uint8_t&gt;&amp; vec) : std::vector&lt;uint8_t&gt;(vec) {}</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <a class="code" href="classb_1_1bytearray.html">bytearray</a>(std::vector&lt;uint8_t&gt;&amp;&amp; vec) : std::vector&lt;uint8_t&gt;(vec) {}</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <a class="code" href="classb_1_1bytearray.html">bytearray</a>(<span class="keyword">const</span> std::string&amp; str) : std::vector&lt;uint8_t&gt;(str.begin(), str.end()) {}</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <a class="code" href="classb_1_1bytearray.html">bytearray</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* str) : <a class="code" href="classb_1_1bytearray.html">bytearray</a>(std::string(str)) {}</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <a class="code" href="classb_1_1bytearray.html">bytearray</a>(std::initializer_list&lt;uint8_t&gt; list) : std::vector&lt;uint8_t&gt;(list) {}</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <a class="code" href="classb_1_1bytearray.html">bytearray</a>&amp; operator=(<span class="keyword">const</span> std::vector&lt;uint8_t&gt;&amp; vec) {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            std::vector&lt;uint8_t&gt;::operator=(std::vector&lt;uint8_t&gt;(vec));</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        }</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="code" href="classb_1_1bytearray.html">bytearray</a>&amp; operator=(std::vector&lt;uint8_t&gt;&amp;&amp; vec) {</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            std::vector&lt;uint8_t&gt;::operator=(std::vector&lt;uint8_t&gt;(vec));</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        }</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <a class="code" href="classb_1_1bytearray.html">bytearray</a>&amp; operator=(<span class="keyword">const</span> std::string&amp; str) {</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            std::vector&lt;uint8_t&gt;::operator=(std::vector&lt;uint8_t&gt;(str.begin(), str.end()));</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        }</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="code" href="classb_1_1bytearray.html">bytearray</a>&amp; operator=(<span class="keyword">const</span> <span class="keywordtype">char</span>* str) {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            this-&gt;operator=(std::string(str));</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        }</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <a class="code" href="classb_1_1bytearray.html">bytearray</a>&amp; operator=(std::initializer_list&lt;uint8_t&gt; list) {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            std::vector&lt;uint8_t&gt;::operator=(std::vector&lt;uint8_t&gt;(list));</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        [[nodiscard]] std::string str()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            <span class="keywordflow">return</span> { begin(), end() };</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        }</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keyword">explicit</span> <span class="keyword">operator</span> std::string()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="keywordflow">return</span> str();</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        }</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="classb_1_1bytearray.html#a3f4043afebb4cbb0a87fc73f01392e2b">   74</a></span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> <a class="code" href="classb_1_1bytearray.html#a3f4043afebb4cbb0a87fc73f01392e2b">decode_utf8</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="group__String.html#gafd392778bdfb77e576a63604b94a4db2">b::string::decode_utf8</a>(str());</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        }</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="classb_1_1bytearray.html#a03418d9712e8730d31cb7fef53189956">   82</a></span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> <a class="code" href="classb_1_1bytearray.html#a03418d9712e8730d31cb7fef53189956">decode_ascii</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="group__String.html#ga57e05dad60e77919c3f39bedb26fd449">b::string::decode_ascii</a>(str());</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        }</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classb_1_1bytearray.html#a0e6153c23134af4bea5c45e812438a4f">   91</a></span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> <a class="code" href="classb_1_1bytearray.html#a0e6153c23134af4bea5c45e812438a4f">decode_latin1</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="group__String.html#ga104735756a7f8ae7990d32ef780d893b">b::string::decode_latin1</a>(str());</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="classb_1_1bytearray.html#af9c807b828cdfe88a6ee58b6b46cb4ec">  100</a></span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> <a class="code" href="classb_1_1bytearray.html#af9c807b828cdfe88a6ee58b6b46cb4ec">decode_iso8859_1</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="group__String.html#gaca77546593947c3231af7afab227454f">b::string::decode_iso8859_1</a>(str());</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        }</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor">#ifdef B_OS_WINDOWS</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> decode_windows1252()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            <span class="keywordflow">return</span> b::string::decode_windows1252(str());</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        }</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    };</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;} <span class="comment">// namespace b</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno"><a class="line" href="structfmt_1_1formatter_3_01b_1_1bytearray_01_4.html">  119</a></span>&#160;<span class="keyword">template</span> &lt;&gt; <span class="keyword">struct </span>fmt::formatter&lt;b::bytearray&gt; {</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    constexpr <span class="keyword">auto</span> parse(format_parse_context&amp; ctx) -&gt; format_parse_context::iterator {</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keywordflow">return</span> ctx.begin();</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    }</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="keyword">auto</span> format(<span class="keyword">const</span> <a class="code" href="classb_1_1bytearray.html">b::bytearray</a>&amp; array, format_context&amp; ctx) <span class="keyword">const</span> -&gt; format_context::iterator {</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keywordflow">return</span> fmt::format_to(ctx.out(), <span class="stringliteral">&quot;{}&quot;</span>, <span class="keyword">static_cast&lt;</span>std::vector&lt;uint8_t&gt;<span class="keyword">&gt;</span>(array));</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    }</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;};</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// BATTERY_CORE_BYTE_HPP</span></div>
+<div class="ttc" id="aclassb_1_1bytearray_html"><div class="ttname"><a href="classb_1_1bytearray.html">b::bytearray</a></div><div class="ttdef"><b>Definition:</b> bytearray.hpp:27</div></div>
+<div class="ttc" id="aclassb_1_1bytearray_html_a03418d9712e8730d31cb7fef53189956"><div class="ttname"><a href="classb_1_1bytearray.html#a03418d9712e8730d31cb7fef53189956">b::bytearray::decode_ascii</a></div><div class="ttdeci">b::string decode_ascii() const</div><div class="ttdoc">Decode this byte array from plain ASCII encoding to generic b::string format.</div><div class="ttdef"><b>Definition:</b> bytearray.hpp:82</div></div>
+<div class="ttc" id="aclassb_1_1bytearray_html_a0e6153c23134af4bea5c45e812438a4f"><div class="ttname"><a href="classb_1_1bytearray.html#a0e6153c23134af4bea5c45e812438a4f">b::bytearray::decode_latin1</a></div><div class="ttdeci">b::string decode_latin1() const</div><div class="ttdoc">Decode this byte array from Latin-1 encoding to generic b::string format. Equivalent to b::string::de...</div><div class="ttdef"><b>Definition:</b> bytearray.hpp:91</div></div>
+<div class="ttc" id="aclassb_1_1bytearray_html_a3f4043afebb4cbb0a87fc73f01392e2b"><div class="ttname"><a href="classb_1_1bytearray.html#a3f4043afebb4cbb0a87fc73f01392e2b">b::bytearray::decode_utf8</a></div><div class="ttdeci">b::string decode_utf8() const</div><div class="ttdoc">Decode this byte array from UTF-8 encoding to generic b::string format.</div><div class="ttdef"><b>Definition:</b> bytearray.hpp:74</div></div>
+<div class="ttc" id="aclassb_1_1bytearray_html_af9c807b828cdfe88a6ee58b6b46cb4ec"><div class="ttname"><a href="classb_1_1bytearray.html#af9c807b828cdfe88a6ee58b6b46cb4ec">b::bytearray::decode_iso8859_1</a></div><div class="ttdeci">b::string decode_iso8859_1() const</div><div class="ttdoc">Decode this byte array from ISO-8859-1 encoding to generic b::string format. Equivalent to b::string:...</div><div class="ttdef"><b>Definition:</b> bytearray.hpp:100</div></div>
 <div class="ttc" id="aclassb_1_1string_html"><div class="ttname"><a href="classb_1_1string.html">b::string</a></div><div class="ttdoc">A sophisticated, high-level string class with encoding awareness.</div><div class="ttdef"><b>Definition:</b> string.hpp:70</div></div>
 <div class="ttc" id="agroup__String_html_ga104735756a7f8ae7990d32ef780d893b"><div class="ttname"><a href="group__String.html#ga104735756a7f8ae7990d32ef780d893b">b::string::decode_latin1</a></div><div class="ttdeci">static string decode_latin1(const std::string &amp;str)</div><div class="ttdoc">Decode a string encoded in Latin-1 into generic b::string format. Equivalent to decode_iso8859_1().</div></div>
 <div class="ttc" id="agroup__String_html_ga57e05dad60e77919c3f39bedb26fd449"><div class="ttname"><a href="group__String.html#ga57e05dad60e77919c3f39bedb26fd449">b::string::decode_ascii</a></div><div class="ttdeci">static string decode_ascii(const std::string &amp;str)</div><div class="ttdoc">Decode a string encoded in ASCII into generic b::string format. (ONLY 7-bit ASCII)</div></div>
