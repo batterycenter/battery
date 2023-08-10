@@ -1,5 +1,8 @@
 var classb_1_1unicode__error =
 [
-    [ "unicode_error", "classb_1_1unicode__error.html#ac6ee65b4d70b42f5ccf878e4781e5ccf", null ],
-    [ "what", "classb_1_1unicode__error.html#a32fc68dcfd4d3d4358d8886b358d1e5f", null ]
+    [ "unicode_error", "classb_1_1unicode__error.html#a08771602ab1c943e1f012ab2f507387e", null ],
+    [ "unicode_error", "classb_1_1unicode__error.html#a0fde89b78e8af46c8e6101f49beb0ae1", null ],
+    [ "unicode_error", "classb_1_1unicode__error.html#a97a37fb80c5de0c483cae91c4c36aa2e", null ],
+    [ "unicode_error", "classb_1_1unicode__error.html#acfa0331367ab8670195e6fdc0e35ecc3", null ],
+    [ "what", "classb_1_1unicode__error.html#af6d448065497265fb5a95bd4888fe4bd", null ]
 ];

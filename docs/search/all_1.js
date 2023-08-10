@@ -1,7 +1,7 @@
 var searchData=
 [
   ['back_6',['back',['../group__String.html#gaad5736199b5d4d53e91352323003eebe',1,'b::string::back()'],['../group__String.html#ga6de73fd794c6639d69f9d729ab9ca3ca',1,'b::string::back() const']]],
-  ['base64_5finvalid_5ferror_7',['base64_invalid_error',['../classb_1_1base64__invalid__error.html',1,'b']]],
+  ['base64_5fencoding_5ferror_7',['base64_encoding_error',['../classb_1_1base64__encoding__error.html',1,'b']]],
   ['basetray_8',['basetray',['../classb_1_1tray_1_1basetray.html',1,'b::tray']]],
   ['basicfilewatcher_9',['BasicFileWatcher',['../classb_1_1BasicFileWatcher.html',1,'b']]],
   ['battery_20concepts_10',['Battery Concepts',['../concepts.html',1,'']]],

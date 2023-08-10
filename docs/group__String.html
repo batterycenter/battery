@@ -489,18 +489,6 @@ const_reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><a cla
 const_reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga03a2969a0cba1b3799265918fd2900fc">b::string::crend</a> () const noexcept</td></tr>
 <tr class="memdesc:ga03a2969a0cba1b3799265918fd2900fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple, standard iterator forwarding. <br /></td></tr>
 <tr class="separator:ga03a2969a0cba1b3799265918fd2900fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga71854acdb47a9075330fc9501e7eb160"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">b::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga71854acdb47a9075330fc9501e7eb160">b::encode_base64</a> (const <a class="el" href="classb_1_1string.html">b::string</a> &amp;str)</td></tr>
-<tr class="memdesc:ga71854acdb47a9075330fc9501e7eb160"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a string or text message as Base-64, encoded in UTF-8.  <a href="group__String.html#ga71854acdb47a9075330fc9501e7eb160">More...</a><br /></td></tr>
-<tr class="separator:ga71854acdb47a9075330fc9501e7eb160"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga858164c1aa4300e534872546d6254a5a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">b::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga858164c1aa4300e534872546d6254a5a">b::encode_base64</a> (const <a class="el" href="classb_1_1bytearray.html">b::bytearray</a> &amp;data)</td></tr>
-<tr class="memdesc:ga858164c1aa4300e534872546d6254a5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a binary resource as Base-64.  <a href="group__String.html#ga858164c1aa4300e534872546d6254a5a">More...</a><br /></td></tr>
-<tr class="separator:ga858164c1aa4300e534872546d6254a5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gab8ab854fd9d5d652c2b4472dedc8927d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">b::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#gab8ab854fd9d5d652c2b4472dedc8927d">b::decode_base64_text</a> (const <a class="el" href="classb_1_1string.html">b::string</a> &amp;str)</td></tr>
-<tr class="memdesc:gab8ab854fd9d5d652c2b4472dedc8927d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a Base-64 encoded text resource back to its original form. The encoding is assumed to be UTF-8.  <a href="group__String.html#gab8ab854fd9d5d652c2b4472dedc8927d">More...</a><br /></td></tr>
-<tr class="separator:gab8ab854fd9d5d652c2b4472dedc8927d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga3c34293c1ca76e566ed05b4527f5abf4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1bytearray.html">b::bytearray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__String.html#ga3c34293c1ca76e566ed05b4527f5abf4">b::decode_base64_binary</a> (const <a class="el" href="classb_1_1string.html">b::string</a> &amp;str)</td></tr>
-<tr class="memdesc:ga3c34293c1ca76e566ed05b4527f5abf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a Base-64 encoded binary resource back to its original form.  <a href="group__String.html#ga3c34293c1ca76e566ed05b4527f5abf4">More...</a><br /></td></tr>
-<tr class="separator:ga3c34293c1ca76e566ed05b4527f5abf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa520a98c8921b81df228110d2bc1a8e9"><td class="memItemLeft" align="right" valign="top"><a id="gaa520a98c8921b81df228110d2bc1a8e9"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>std::hash&lt; b::string &gt;::operator()</b> (const <a class="el" href="classb_1_1string.html">b::string</a> &amp;str) const</td></tr>
 <tr class="separator:gaa520a98c8921b81df228110d2bc1a8e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -601,7 +589,7 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>fmt::formatter&lt; b:
 </div><div class="memdoc">
 
 <p>Get a reference to a specific character of the string (Unicode agnostic) </p>
-<p>This function has a const variant. If the index is out of range, std::out_of_range is thrown. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>This function has a const variant. If the index is out of range, <a class="el" href="classb_1_1out__of__range__error.html">b::out_of_range_error</a> is thrown. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>The index of the character to get </td></tr>
   </table>
@@ -609,7 +597,7 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>fmt::formatter&lt; b:
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::out_of_range</td><td>if the index is out of range </td></tr>
+    <tr><td class="paramname"><a class="el" href="classb_1_1out__of__range__error.html">b::out_of_range_error</a></td><td>if the index is out of range </td></tr>
   </table>
   </dd>
 </dl>
@@ -634,7 +622,7 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>fmt::formatter&lt; b:
 </div><div class="memdoc">
 
 <p>Get a reference to a specific character of the string (Unicode agnostic) </p>
-<p>This function has a const variant. If the index is out of range, std::out_of_range is thrown. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>This function has a const variant. If the index is out of range, <a class="el" href="classb_1_1out__of__range__error.html">b::out_of_range_error</a> is thrown. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>The index of the character to get </td></tr>
   </table>
@@ -642,7 +630,7 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>fmt::formatter&lt; b:
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::out_of_range</td><td>if the index is out of range </td></tr>
+    <tr><td class="paramname"><a class="el" href="classb_1_1out__of__range__error.html">b::out_of_range_error</a></td><td>if the index is out of range </td></tr>
   </table>
   </dd>
 </dl>
@@ -668,7 +656,7 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>fmt::formatter&lt; b:
 <p>Get a reference to the last character of the string (Unicode agnostic) </p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::out_of_range</td><td>if the string is empty </td></tr>
+    <tr><td class="paramname"><a class="el" href="classb_1_1out__of__range__error.html">b::out_of_range_error</a></td><td>if the string is empty </td></tr>
   </table>
   </dd>
 </dl>
@@ -694,7 +682,7 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>fmt::formatter&lt; b:
 <p>Get a const reference to the last character of the string (Unicode agnostic) </p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::out_of_range</td><td>if the string is empty </td></tr>
+    <tr><td class="paramname"><a class="el" href="classb_1_1out__of__range__error.html">b::out_of_range_error</a></td><td>if the string is empty </td></tr>
   </table>
   </dd>
 </dl>
@@ -811,75 +799,6 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>fmt::formatter&lt; b:
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="classb_1_1string.html" title="A sophisticated, high-level string class with encoding awareness.">b::string</a> </dd></dl>
-
-</div>
-</div>
-<a id="ga3c34293c1ca76e566ed05b4527f5abf4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga3c34293c1ca76e566ed05b4527f5abf4">&#9670;&nbsp;</a></span>decode_base64_binary()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classb_1_1bytearray.html">b::bytearray</a> b::decode_base64_binary </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
-          <td class="paramname"><em>str</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Decode a Base-64 encoded binary resource back to its original form. </p>
-<p>This function is to be used with binary resources such as images, icons, etc. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>A Base-64 encoded string representing a resource </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classb_1_1base64__invalid__error.html">b::base64_invalid_error</a></td><td>if the input string is not a valid Base-64 string or the input is empty </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Decoded binary resource as a byte array </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga858164c1aa4300e534872546d6254a5a" title="Encode a binary resource as Base-64.">b::encode_base64()</a> </dd></dl>
-
-</div>
-</div>
-<a id="gab8ab854fd9d5d652c2b4472dedc8927d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gab8ab854fd9d5d652c2b4472dedc8927d">&#9670;&nbsp;</a></span>decode_base64_text()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classb_1_1string.html">b::string</a> b::decode_base64_text </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
-          <td class="paramname"><em>str</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Decode a Base-64 encoded text resource back to its original form. The encoding is assumed to be UTF-8. </p>
-<p>The encoding of the string before it was encoded is assumed to be UTF-8. This function is to be used with text resources. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>A Base-64 encoded string representing a resource </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classb_1_1base64__invalid__error.html">b::base64_invalid_error</a></td><td>if the input string is not a valid Base-64 string or the input is empty </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000010">Todo:</a></b></dt><dd>Implement a way to specify the encoding of the string before it was encoded. </dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>Decoded resource in its original form when it was encoded. </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#ga858164c1aa4300e534872546d6254a5a" title="Encode a binary resource as Base-64.">b::encode_base64()</a> </dd></dl>
 
 </div>
 </div>
@@ -1339,64 +1258,6 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>fmt::formatter&lt; b:
 
 </div>
 </div>
-<a id="ga858164c1aa4300e534872546d6254a5a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga858164c1aa4300e534872546d6254a5a">&#9670;&nbsp;</a></span>encode_base64() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classb_1_1string.html">b::string</a> b::encode_base64 </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classb_1_1bytearray.html">b::bytearray</a> &amp;&#160;</td>
-          <td class="paramname"><em>data</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Encode a binary resource as Base-64. </p>
-<p>This is especially useful for embedding small resource files in the source code, or exchanging binary resources over a network. This overload is for encoding binary resources based on <code>std::vector&lt;uint8_t&gt;</code>. Both overloads do the same thing with another input type. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The byte-series to encode </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Encoded Base-64 string </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__String.html#gab8ab854fd9d5d652c2b4472dedc8927d" title="Decode a Base-64 encoded text resource back to its original form. The encoding is assumed to be UTF-8...">b::decode_base64_text()</a> </dd>
-<dd>
-<a class="el" href="group__String.html#ga3c34293c1ca76e566ed05b4527f5abf4" title="Decode a Base-64 encoded binary resource back to its original form.">b::decode_base64_binary()</a> </dd></dl>
-
-</div>
-</div>
-<a id="ga71854acdb47a9075330fc9501e7eb160"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga71854acdb47a9075330fc9501e7eb160">&#9670;&nbsp;</a></span>encode_base64() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classb_1_1string.html">b::string</a> b::encode_base64 </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classb_1_1string.html">b::string</a> &amp;&#160;</td>
-          <td class="paramname"><em>str</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Encode a string or text message as Base-64, encoded in UTF-8. </p>
-<p>This function is especially useful for exchanging binary resources over a network. See <code>b::encode_base64(const b::bytearray&amp;)</code> for more information about binary resources. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The string to encode </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Encoded Base-64 string </dd></dl>
-<dl class="section see"><dt>See also</dt><dd>b::decode_base64() </dd></dl>
-
-</div>
-</div>
 <a id="ga516c8c4fe17f3db23eebc0af05dcf5de"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga516c8c4fe17f3db23eebc0af05dcf5de">&#9670;&nbsp;</a></span>encode_native()</h2>
 
@@ -1541,7 +1402,7 @@ This function assumes that the native OS-specific encoding used for system calls
 <p>Get a reference to the first character of the string (Unicode agnostic) </p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::out_of_range</td><td>if the string is empty </td></tr>
+    <tr><td class="paramname"><a class="el" href="classb_1_1out__of__range__error.html">b::out_of_range_error</a></td><td>if the string is empty </td></tr>
   </table>
   </dd>
 </dl>
@@ -1567,7 +1428,7 @@ This function assumes that the native OS-specific encoding used for system calls
 <p>Get a const reference to the first character of the string (Unicode agnostic) </p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::out_of_range</td><td>if the string is empty </td></tr>
+    <tr><td class="paramname"><a class="el" href="classb_1_1out__of__range__error.html">b::out_of_range_error</a></td><td>if the string is empty </td></tr>
   </table>
   </dd>
 </dl>
@@ -1839,7 +1700,7 @@ This function assumes that the native OS-specific encoding used for system calls
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::out_of_range</td><td>if the index is out of bounds </td></tr>
+    <tr><td class="paramname"><a class="el" href="classb_1_1out__of__range__error.html">b::out_of_range_error</a></td><td>if the index is out of bounds </td></tr>
   </table>
   </dd>
 </dl>
@@ -1872,7 +1733,7 @@ This function assumes that the native OS-specific encoding used for system calls
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::out_of_range</td><td>if the index is out of bounds </td></tr>
+    <tr><td class="paramname"><a class="el" href="classb_1_1out__of__range__error.html">b::out_of_range_error</a></td><td>if the index is out of bounds </td></tr>
   </table>
   </dd>
 </dl>
@@ -1898,7 +1759,7 @@ This function assumes that the native OS-specific encoding used for system calls
 <p>Pop the last character from the string and return it (Unicode agnostic) </p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::out_of_range</td><td>if the string is empty </td></tr>
+    <tr><td class="paramname"><a class="el" href="classb_1_1out__of__range__error.html">b::out_of_range_error</a></td><td>if the string is empty </td></tr>
   </table>
   </dd>
 </dl>
@@ -2744,7 +2605,7 @@ This function assumes that the native OS-specific encoding used for system calls
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::out_of_range</td><td>if the start position is out of range </td></tr>
+    <tr><td class="paramname"><a class="el" href="classb_1_1out__of__range__error.html">b::out_of_range_error</a></td><td>if the start position is out of range </td></tr>
   </table>
   </dd>
 </dl>

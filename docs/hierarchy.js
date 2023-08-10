@@ -11,7 +11,8 @@ var hierarchy =
     [ "b::Color", "structb_1_1Color.html", null ],
     [ "b::ConsoleApplication", "classb_1_1ConsoleApplication.html", null ],
     [ "std::exception", null, [
-      [ "b::base64_invalid_error", "classb_1_1base64__invalid__error.html", null ],
+      [ "b::base64_encoding_error", "classb_1_1base64__encoding__error.html", null ],
+      [ "b::out_of_range_error", "classb_1_1out__of__range__error.html", null ],
       [ "b::unicode_error", "classb_1_1unicode__error.html", null ]
     ] ],
     [ "b::filedialog", "classb_1_1filedialog.html", null ],
