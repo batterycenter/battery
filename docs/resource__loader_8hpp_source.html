@@ -113,55 +113,40 @@ $(document).ready(function(){initNavTree('resource__loader_8hpp_source.html','')
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>b {</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="classb_1_1ResourceLoader.html">    8</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classb_1_1ResourceLoader.html">ResourceLoader</a> {</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <a class="code" href="classb_1_1ResourceLoader.html">ResourceLoader</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#ifndef B_PRODUCTION_MODE     </span><span class="comment">// Non-production mode</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <a class="code" href="classb_1_1ResourceLoader.html">ResourceLoader</a>(<span class="keyword">const</span> T&amp; resource, <span class="keyword">const</span> std::function&lt;<span class="keywordtype">void</span>(<a class="code" href="classb_1_1Resource.html">b::Resource</a>)&gt;&amp; callback, <span class="keywordtype">double</span> poll_interval = 0.1)</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;            : m_resourcePath(resource.filepath()),</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;              m_isBinary(resource.isBinary()),</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;              m_fileWatcher(std::make_unique&lt;b::FileWatcher&gt;(resource.filepath(), [<span class="keyword">this</span>]() { this-&gt;onChangeCallback(); }, poll_interval)),</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;              m_callback(callback) {}</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#else                               </span><span class="comment">// Production mode</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        resource_loader(<span class="keyword">const</span> T&amp; resource, <span class="keyword">const</span> std::function&lt;<span class="keywordtype">void</span>(b::resource)&gt;&amp; callback, <span class="keywordtype">double</span> poll_interval = 0.1) {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            callback(<span class="keyword">static_cast&lt;</span>b::resource<span class="keyword">&gt;</span>(resource));</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        }</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <a class="code" href="classb_1_1ResourceLoader.html">ResourceLoader</a>(<span class="keyword">const</span> <a class="code" href="classb_1_1ResourceLoader.html">ResourceLoader</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <a class="code" href="classb_1_1ResourceLoader.html">ResourceLoader</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classb_1_1ResourceLoader.html">ResourceLoader</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <a class="code" href="classb_1_1ResourceLoader.html">ResourceLoader</a>(<a class="code" href="classb_1_1ResourceLoader.html">ResourceLoader</a>&amp;&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <a class="code" href="classb_1_1ResourceLoader.html">ResourceLoader</a>&amp; operator=(<a class="code" href="classb_1_1ResourceLoader.html">ResourceLoader</a>&amp;&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#ifndef B_PRODUCTION_MODE     </span><span class="comment">// Non-production mode</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keywordtype">void</span> onChangeCallback() {      <span class="comment">// On every change, reload the resource</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            <span class="keyword">auto</span> str = m_isBinary ? b::fs::read_binary_file_nothrow(m_resourcePath) : b::fs::read_text_file_nothrow(m_resourcePath);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <span class="keywordflow">if</span> (!str.has_value()) {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                b::log::error(<span class="stringliteral">&quot;Failed to hot-reload resource &#39;{}&#39;: {}&quot;</span>, m_resourcePath, strerror(errno));</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            }</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            b::log::info(<span class="stringliteral">&quot;Hot-reloaded resource &#39;{}&#39;&quot;</span>, m_resourcePath);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            m_callback(b::Resource::FromBytes(str.value().encode_utf8(), m_resourcePath.<a class="code" href="classb_1_1fs_1_1path.html#a68abc484134fe471c20a3e508e7be422">raw_extension</a>().<a class="code" href="classb_1_1fs_1_1path.html#a29cc9df1be3f7c8c741a1b314363ace8">string</a>()));</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        }</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a> m_resourcePath;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordtype">bool</span> m_isBinary {};</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        std::function&lt;void(<a class="code" href="classb_1_1Resource.html">b::Resource</a>)&gt; m_callback;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        std::unique_ptr&lt;b::FileWatcher&gt; m_fileWatcher;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    };</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//    class ResourceLoader {</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//    public:</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//        ResourceLoader() = default;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//#ifndef B_PRODUCTION_MODE     // Non-production mode</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//        template&lt;typename T&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//        ResourceLoader(const T&amp; resource, const std::function&lt;void(b::Resource)&gt;&amp; callback, double poll_interval = 0.1)</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//            : m_resourcePath(resource.filepath()),</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">//              m_isBinary(resource.isBinary()),</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//              m_fileWatcher(std::make_unique&lt;b::FileWatcher&gt;(resource.filepath(), [this]() { this-&gt;onChangeCallback(); }, poll_interval)),</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//              m_callback(callback) {}</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//#else                               // Production mode</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//        template&lt;typename T&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//        resource_loader(const T&amp; resource, const std::function&lt;void(b::resource)&gt;&amp; callback, double poll_interval = 0.1) {</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//            callback(static_cast&lt;b::resource&gt;(resource));</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">//        }</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">//#endif</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">//        ResourceLoader(const ResourceLoader&amp;) = delete;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">//        ResourceLoader&amp; operator=(const ResourceLoader&amp;) = delete;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">//        ResourceLoader(ResourceLoader&amp;&amp;) = delete;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment">//        ResourceLoader&amp; operator=(ResourceLoader&amp;&amp;) = delete;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">//    private:</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment">//#ifndef B_PRODUCTION_MODE     // Non-production mode</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment"></span><span class="comment">//</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">//        b::fs::path m_resourcePath;</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">//        bool m_isBinary {};</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">//        std::function&lt;void(b::Resource)&gt; m_callback;</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">//        std::unique_ptr&lt;b::FileWatcher&gt; m_fileWatcher;</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">//#endif</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">//    };</span></div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;}</div>
-<div class="ttc" id="aclassb_1_1ResourceLoader_html"><div class="ttname"><a href="classb_1_1ResourceLoader.html">b::ResourceLoader</a></div><div class="ttdef"><b>Definition:</b> resource_loader.hpp:8</div></div>
-<div class="ttc" id="aclassb_1_1Resource_html"><div class="ttname"><a href="classb_1_1Resource.html">b::Resource</a></div><div class="ttdef"><b>Definition:</b> resource.hpp:8</div></div>
-<div class="ttc" id="aclassb_1_1fs_1_1path_html"><div class="ttname"><a href="classb_1_1fs_1_1path.html">b::fs::path</a></div><div class="ttdoc">A Unicode aware high-level filesystem path.</div><div class="ttdef"><b>Definition:</b> fs.hpp:49</div></div>
-<div class="ttc" id="aclassb_1_1fs_1_1path_html_a29cc9df1be3f7c8c741a1b314363ace8"><div class="ttname"><a href="classb_1_1fs_1_1path.html#a29cc9df1be3f7c8c741a1b314363ace8">b::fs::path::string</a></div><div class="ttdeci">b::string string() const</div><div class="ttdoc">Get the path as a platform native string (backslashes on Windows, forward slashes on others)</div></div>
-<div class="ttc" id="aclassb_1_1fs_1_1path_html_a68abc484134fe471c20a3e508e7be422"><div class="ttname"><a href="classb_1_1fs_1_1path.html#a68abc484134fe471c20a3e508e7be422">b::fs::path::raw_extension</a></div><div class="ttdeci">path raw_extension() const</div><div class="ttdoc">Get the extension portion of the path, but without the dot. (e.g. &quot;/a/b/c.txt&quot; -&gt; &quot;txt&quot;)</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

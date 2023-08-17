@@ -105,6 +105,7 @@ $(document).ready(function(){initNavTree('classb_1_1fs_1_1path.html',''); initRe
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classb_1_1fs_1_1path-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">b::fs::path Class Reference</div>  </div>
@@ -208,11 +209,11 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memdesc:a09ef98ebe465d20c7df99de4853a36c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Swap the contents of two paths.  <a href="classb_1_1fs_1_1path.html#a09ef98ebe465d20c7df99de4853a36c0">More...</a><br /></td></tr>
 <tr class="separator:a09ef98ebe465d20c7df99de4853a36c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29cc9df1be3f7c8c741a1b314363ace8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">b::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classb_1_1fs_1_1path.html#a29cc9df1be3f7c8c741a1b314363ace8">string</a> () const</td></tr>
-<tr class="memdesc:a29cc9df1be3f7c8c741a1b314363ace8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the path as a platform native string (backslashes on Windows, forward slashes on others)  <a href="classb_1_1fs_1_1path.html#a29cc9df1be3f7c8c741a1b314363ace8">More...</a><br /></td></tr>
+<tr class="memdesc:a29cc9df1be3f7c8c741a1b314363ace8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the path in generic format (On Windows, all separators converted to forward slashes)  <a href="classb_1_1fs_1_1path.html#a29cc9df1be3f7c8c741a1b314363ace8">More...</a><br /></td></tr>
 <tr class="separator:a29cc9df1be3f7c8c741a1b314363ace8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a5fa641ac8f6804680d091e6649abb6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">b::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classb_1_1fs_1_1path.html#a7a5fa641ac8f6804680d091e6649abb6">generic_string</a> () const</td></tr>
-<tr class="memdesc:a7a5fa641ac8f6804680d091e6649abb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the path as a generic string (keep forward slashes on all systems)  <a href="classb_1_1fs_1_1path.html#a7a5fa641ac8f6804680d091e6649abb6">More...</a><br /></td></tr>
-<tr class="separator:a7a5fa641ac8f6804680d091e6649abb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c1371af92f137cb588870289959d74b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classb_1_1string.html">b::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classb_1_1fs_1_1path.html#a9c1371af92f137cb588870289959d74b">native_string</a> () const</td></tr>
+<tr class="memdesc:a9c1371af92f137cb588870289959d74b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the path in platform-native format (Keeping backslashes and forward slashes as-is on all systems)  <a href="classb_1_1fs_1_1path.html#a9c1371af92f137cb588870289959d74b">More...</a><br /></td></tr>
+<tr class="separator:a9c1371af92f137cb588870289959d74b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e8292c1cf17bb7ffceb0dba4fe9e408"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classb_1_1fs_1_1path.html#a6e8292c1cf17bb7ffceb0dba4fe9e408">compare</a> (const <a class="el" href="classb_1_1fs_1_1path.html">path</a> &amp;other) const noexcept</td></tr>
 <tr class="memdesc:a6e8292c1cf17bb7ffceb0dba4fe9e408"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lexicographical comparison of two paths. (e.g. "/a/b" &lt; "/a/b/c")  <a href="classb_1_1fs_1_1path.html#a6e8292c1cf17bb7ffceb0dba4fe9e408">More...</a><br /></td></tr>
 <tr class="separator:a6e8292c1cf17bb7ffceb0dba4fe9e408"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -321,6 +322,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a1a69e68c73803baab73baf4e990a437b"><td class="memItemLeft" align="right" valign="top">std::strong_ordering&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classb_1_1fs_1_1path.html#a1a69e68c73803baab73baf4e990a437b">operator&lt;=&gt;</a> (const <a class="el" href="classb_1_1fs_1_1path.html">path</a> &amp;rhs) const noexcept</td></tr>
 <tr class="memdesc:a1a69e68c73803baab73baf4e990a437b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lexically compare with another path. No filesystem access is performed.  <a href="classb_1_1fs_1_1path.html#a1a69e68c73803baab73baf4e990a437b">More...</a><br /></td></tr>
 <tr class="separator:a1a69e68c73803baab73baf4e990a437b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a085de4fd845a55dcb5e12ba99aab063a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classb_1_1string.html">b::string</a> const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classb_1_1fs_1_1path.html#a085de4fd845a55dcb5e12ba99aab063a">preferred_separator</a></td></tr>
+<tr class="memdesc:a085de4fd845a55dcb5e12ba99aab063a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The preferred separator for the current platform (Backslash on Windows, forward slash on others)  <a href="classb_1_1fs_1_1path.html#a085de4fd845a55dcb5e12ba99aab063a">More...</a><br /></td></tr>
+<tr class="separator:a085de4fd845a55dcb5e12ba99aab063a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A Unicode aware high-level filesystem path. </p>
@@ -485,6 +492,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><div class="memdoc">
 
 <p>Get an iterator to the beginning of the path. </p>
+<dl class="section warning"><dt>Warning</dt><dd>This function exposes iterators from the underlying <code>std::filesystem::path</code> object, which is not Unicode aware. To make sure the encoding is correct, make sure to only interact with it using wide strings. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>An iterator to the beginning of the path. </dd></dl>
 
 </div>
@@ -513,6 +521,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><div class="memdoc">
 
 <p>Get an iterator to the beginning of the path. </p>
+<dl class="section warning"><dt>Warning</dt><dd>This function exposes iterators from the underlying <code>std::filesystem::path</code> object, which is not Unicode aware. To make sure the encoding is correct, make sure to only interact with it using wide strings. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>An iterator to the beginning of the path. </dd></dl>
 
 </div>
@@ -658,6 +667,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><div class="memdoc">
 
 <p>Get an iterator past the end of the path. </p>
+<dl class="section warning"><dt>Warning</dt><dd>This function exposes iterators from the underlying <code>std::filesystem::path</code> object, which is not Unicode aware. To make sure the encoding is correct, make sure to only interact with it using wide strings. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>An iterator past the end of the path. </dd></dl>
 
 </div>
@@ -686,6 +696,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><div class="memdoc">
 
 <p>Get an iterator past the end of the path. </p>
+<dl class="section warning"><dt>Warning</dt><dd>This function exposes iterators from the underlying <code>std::filesystem::path</code> object, which is not Unicode aware. To make sure the encoding is correct, make sure to only interact with it using wide strings. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>An iterator past the end of the path. </dd></dl>
 
 </div>
@@ -727,26 +738,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 <p>Get the filename portion of the path. (e.g. "/a/b/c" -&gt; "c") </p>
 <p>If the path has no filename, an empty path is returned. </p><dl class="section return"><dt>Returns</dt><dd>The filename portion of the path, or an empty path if the path has no filename. </dd></dl>
-
-</div>
-</div>
-<a id="a7a5fa641ac8f6804680d091e6649abb6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a5fa641ac8f6804680d091e6649abb6">&#9670;&nbsp;</a></span>generic_string()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classb_1_1string.html">b::string</a> b::fs::path::generic_string </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Get the path as a generic string (keep forward slashes on all systems) </p>
-<dl class="section return"><dt>Returns</dt><dd>The path in string format as a generic path </dd></dl>
 
 </div>
 </div>
@@ -1051,7 +1042,13 @@ b::fs::proximate() </dd></dl>
 </div><div class="memdoc">
 
 <p>Make the path absolute, relative to the current working directory. (If it is relative) </p>
-<p>If the path is already absolute, this function does nothing. </p><dl class="section return"><dt>Returns</dt><dd>A reference to self </dd></dl>
+<p>If the path is already absolute, this function does nothing. </p><dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classb_1_1filesystem__error.html">b::filesystem_error</a></td><td>if there is a filesystem error during the call. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A reference to self </dd></dl>
 
 </div>
 </div>
@@ -1072,6 +1069,26 @@ b::fs::proximate() </dd></dl>
 
 <p>Make preferred: convert to native format (Windows: backslashes, Linux: keep as-is) </p>
 <dl class="section return"><dt>Returns</dt><dd>A reference to self </dd></dl>
+
+</div>
+</div>
+<a id="a9c1371af92f137cb588870289959d74b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c1371af92f137cb588870289959d74b">&#9670;&nbsp;</a></span>native_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classb_1_1string.html">b::string</a> b::fs::path::native_string </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the path in platform-native format (Keeping backslashes and forward slashes as-is on all systems) </p>
+<dl class="section return"><dt>Returns</dt><dd>The path in platform-native string format </dd></dl>
 
 </div>
 </div>
@@ -1759,8 +1776,8 @@ b::fs::proximate() </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>Get the path as a platform native string (backslashes on Windows, forward slashes on others) </p>
-<dl class="section return"><dt>Returns</dt><dd>The path in string format as a platform native path </dd></dl>
+<p>Get the path in generic format (On Windows, all separators converted to forward slashes) </p>
+<dl class="section return"><dt>Returns</dt><dd>The path in generic string format </dd></dl>
 
 </div>
 </div>
@@ -1795,6 +1812,35 @@ b::fs::proximate() </dd></dl>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a085de4fd845a55dcb5e12ba99aab063a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a085de4fd845a55dcb5e12ba99aab063a">&#9670;&nbsp;</a></span>preferred_separator</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classb_1_1string.html">b::string</a> const b::fs::path::preferred_separator</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= b::string::decode&lt;b::enc::os_native&gt;(</div>
+<div class="line">                <a class="code" href="group__String.html#ga19b1337b1a80832de1a1420bd45549c4">b::native_string</a>(&amp;std::filesystem::path::preferred_separator, 1)</div>
+<div class="line">        )</div>
+<div class="ttc" id="agroup__String_html_ga19b1337b1a80832de1a1420bd45549c4"><div class="ttname"><a href="group__String.html#ga19b1337b1a80832de1a1420bd45549c4">b::native_string</a></div><div class="ttdeci">std::string native_string</div><div class="ttdoc">platform native string type: std::wstring on Windows, std::string on other platforms</div><div class="ttdef"><b>Definition:</b> string.hpp:43</div></div>
+</div><!-- fragment -->
+<p>The preferred separator for the current platform (Backslash on Windows, forward slash on others) </p>
 
 </div>
 </div>

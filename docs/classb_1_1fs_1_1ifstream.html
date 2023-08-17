@@ -109,6 +109,11 @@ $(document).ready(function(){initNavTree('classb_1_1fs_1_1ifstream.html',''); in
 <div class="title">b::fs::ifstream Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>An improved file input stream, that guarantees to work with Unicode file paths on every platform.  
+ <a href="classb_1_1fs_1_1ifstream.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="fs_8hpp_source.html">fs.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for b::fs::ifstream:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -120,14 +125,16 @@ $(document).ready(function(){initNavTree('classb_1_1fs_1_1ifstream.html',''); in
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac56b95d572e232cd0d9f082bde0f5652"><td class="memItemLeft" align="right" valign="top"><a id="ac56b95d572e232cd0d9f082bde0f5652"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ifstream</b> (const <a class="el" href="classb_1_1fs_1_1path.html">fs::path</a> &amp;<a class="el" href="classb_1_1fs_1_1path.html">path</a>, enum Mode filemode=Mode::TEXT)</td></tr>
-<tr class="separator:ac56b95d572e232cd0d9f082bde0f5652"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c452474ab18ccaf0977220681ff7523"><td class="memItemLeft" align="right" valign="top"><a id="a6c452474ab18ccaf0977220681ff7523"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ifstream</b> (const <a class="el" href="classb_1_1fs_1_1path.html">fs::path</a> &amp;<a class="el" href="classb_1_1fs_1_1path.html">path</a>, std::ios_base::openmode mode)</td></tr>
-<tr class="separator:a6c452474ab18ccaf0977220681ff7523"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09208f87aec990e73667861c856bc597"><td class="memItemLeft" align="right" valign="top"><a id="a09208f87aec990e73667861c856bc597"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ifstream</b> (const <a class="el" href="classb_1_1fs_1_1path.html">path</a> &amp;<a class="el" href="classb_1_1fs_1_1path.html">path</a>, std::ios_base::openmode mode=std::ios_base::in)</td></tr>
+<tr class="separator:a09208f87aec990e73667861c856bc597"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>An improved file input stream, that guarantees to work with Unicode file paths on every platform. </p>
+<dl class="section note"><dt>Note</dt><dd>You are encouraged to use <code>b::fs::read()</code> and <code>b::fs::write()</code> instead of this class, wherever possible. </dd>
+<dd>
+Be aware that the number of bytes needed to represent the data on disk may be different from the number of characters in the string. Do not take the file size as a measure of the number of characters. </dd></dl>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/core/include/battery/core/<a class="el" href="fs_8hpp_source.html">fs.hpp</a></li>
 </ul>
 </div><!-- contents -->

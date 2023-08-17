@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['v4_348',['v4',['../group__Uuid.html#ga13eb74f7043bb0068dcce8ea5888275b',1,'b::uuid']]]
+  ['unlock_363',['unlock',['../group__Lockfile.html#ga624bd42ba47412230cf3fb0a6dca93c8',1,'b::lockfile']]]
 ];

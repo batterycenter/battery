@@ -109,7 +109,7 @@ $(document).ready(function(){initNavTree('resource_8hpp_source.html',''); initRe
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;battery/core/fs.hpp&quot;</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;battery/core/bytearray.hpp&quot;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;battery/core/string.hpp&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>b {</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
@@ -156,7 +156,7 @@ $(document).ready(function(){initNavTree('resource_8hpp_source.html',''); initRe
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            }</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            <a class="code" href="classb_1_1string.html">b::string</a> str() {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                <span class="keywordflow">return</span> m_path.<a class="code" href="classb_1_1fs_1_1path.html#a7a5fa641ac8f6804680d091e6649abb6">generic_string</a>();</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                <span class="keywordflow">return</span> m_path.<a class="code" href="classb_1_1fs_1_1path.html#a29cc9df1be3f7c8c741a1b314363ace8">string</a>();</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            }</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keyword">operator</span> <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a>() {</div>
@@ -164,7 +164,7 @@ $(document).ready(function(){initNavTree('resource_8hpp_source.html',''); initRe
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            }</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keyword">operator</span> <a class="code" href="classb_1_1string.html">b::string</a>() {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                <span class="keywordflow">return</span> m_path.<a class="code" href="classb_1_1fs_1_1path.html#a7a5fa641ac8f6804680d091e6649abb6">generic_string</a>();</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                <span class="keywordflow">return</span> m_path.<a class="code" href="classb_1_1fs_1_1path.html#a29cc9df1be3f7c8c741a1b314363ace8">string</a>();</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            }</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            <span class="keywordtype">void</span> reset();</div>
@@ -180,13 +180,13 @@ $(document).ready(function(){initNavTree('resource_8hpp_source.html',''); initRe
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> m_filetype;</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    };</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;}</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;} <span class="comment">// namespace b</span></div>
 <div class="ttc" id="aclassb_1_1Resource_1_1OnDiskResource_html"><div class="ttname"><a href="classb_1_1Resource_1_1OnDiskResource.html">b::Resource::OnDiskResource</a></div><div class="ttdef"><b>Definition:</b> resource.hpp:30</div></div>
 <div class="ttc" id="aclassb_1_1Resource_html"><div class="ttname"><a href="classb_1_1Resource.html">b::Resource</a></div><div class="ttdef"><b>Definition:</b> resource.hpp:8</div></div>
-<div class="ttc" id="aclassb_1_1bytearray_html"><div class="ttname"><a href="classb_1_1bytearray.html">b::bytearray</a></div><div class="ttdoc">A higher-level byte array class to be used for binary data.</div><div class="ttdef"><b>Definition:</b> bytearray.hpp:34</div></div>
-<div class="ttc" id="aclassb_1_1fs_1_1path_html"><div class="ttname"><a href="classb_1_1fs_1_1path.html">b::fs::path</a></div><div class="ttdoc">A Unicode aware high-level filesystem path.</div><div class="ttdef"><b>Definition:</b> fs.hpp:49</div></div>
-<div class="ttc" id="aclassb_1_1fs_1_1path_html_a7a5fa641ac8f6804680d091e6649abb6"><div class="ttname"><a href="classb_1_1fs_1_1path.html#a7a5fa641ac8f6804680d091e6649abb6">b::fs::path::generic_string</a></div><div class="ttdeci">b::string generic_string() const</div><div class="ttdoc">Get the path as a generic string (keep forward slashes on all systems)</div></div>
-<div class="ttc" id="aclassb_1_1string_html"><div class="ttname"><a href="classb_1_1string.html">b::string</a></div><div class="ttdoc">A sophisticated, high-level string class with encoding awareness.</div><div class="ttdef"><b>Definition:</b> string.hpp:70</div></div>
+<div class="ttc" id="aclassb_1_1bytearray_html"><div class="ttname"><a href="classb_1_1bytearray.html">b::bytearray</a></div><div class="ttdoc">A higher-level byte array class to be used for binary data.</div><div class="ttdef"><b>Definition:</b> string.hpp:87</div></div>
+<div class="ttc" id="aclassb_1_1fs_1_1path_html"><div class="ttname"><a href="classb_1_1fs_1_1path.html">b::fs::path</a></div><div class="ttdoc">A Unicode aware high-level filesystem path.</div><div class="ttdef"><b>Definition:</b> fs.hpp:53</div></div>
+<div class="ttc" id="aclassb_1_1fs_1_1path_html_a29cc9df1be3f7c8c741a1b314363ace8"><div class="ttname"><a href="classb_1_1fs_1_1path.html#a29cc9df1be3f7c8c741a1b314363ace8">b::fs::path::string</a></div><div class="ttdeci">b::string string() const</div><div class="ttdoc">Get the path in generic format (On Windows, all separators converted to forward slashes)</div></div>
+<div class="ttc" id="aclassb_1_1string_html"><div class="ttname"><a href="classb_1_1string.html">b::string</a></div><div class="ttdoc">A sophisticated, high-level string class with encoding awareness.</div><div class="ttdef"><b>Definition:</b> string.hpp:160</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
