@@ -17,9 +17,9 @@
 // limitations under the License.
 //
 
-#include <fmt/format.h>
-#include <fmt/ranges.h>
-#include <fmt/std.h>
+#include <spdlog/fmt/fmt.h>
+#include <spdlog/fmt/ranges.h>
+#include <spdlog/fmt/std.h>
 #include <functional>
 #include <istream>
 #include <optional>
