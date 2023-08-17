@@ -17,14 +17,14 @@
 // limitations under the License.
 //
 
-#include <spdlog/fmt/fmt.h>
-#include <spdlog/fmt/ranges.h>
-#include <spdlog/fmt/std.h>
 #include <functional>
 #include <istream>
 #include <optional>
 #include <ostream>
 #include <regex>
+#include <spdlog/fmt/fmt.h>
+#include <spdlog/fmt/ranges.h>
+#include <spdlog/fmt/std.h>
 #include <string>
 #include <variant>
 #include <vector>

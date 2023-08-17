@@ -5,10 +5,10 @@ import tarfile
 
 github_dependencies = [
     # [ "ocornut", "imgui", "v1.89.8" ],
+    # [ "fmtlib", "fmt", "10.0.0" ],                    # MIT-alike License
     [ "gabime", "spdlog", "v1.12.0" ],                 # MIT License
-    [ "fmtlib", "fmt", "10.0.0" ],                    # MIT-alike License
     [ "DaanDeMeyer", "reproc", "v14.2.4" ],            # MIT License
-    [ "nemtrif", "utfcpp", "v3.2.3" ],                 # Boost Software License 1.0
+    [ "nemtrif", "utfcpp", "v3.2.4" ],                 # Boost Software License 1.0
     [ "jothepro", "doxygen-awesome-css", "v2.2.1" ],   # MIT License
     [ "batterycenter", "embed", "v1.0.0" ],            # Apache-2.0 License
 ]
