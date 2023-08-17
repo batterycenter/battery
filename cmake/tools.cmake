@@ -24,12 +24,6 @@ set(B_GTEST_INCLUDED OFF CACHE INTERNAL "Whether GoogleTest is included in the p
 #    endif()
 #endif()
 
-if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-    set(B_IS_ROOT_PROJECT ON CACHE INTERNAL "" FORCE)
-else()
-    set(B_IS_ROOT_PROJECT OFF CACHE INTERNAL "" FORCE)
-endif()
-
 #function(battery_test_if_compiles RESULT_VAR OUTPUT_VAR STD_VERSION SOURCE_CONTENT)
 #    message(STATUS "Checking for compiler feature ${RESULT_VAR}")
 #    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/try_compile/main.cpp ${SOURCE_CONTENT})
