@@ -1,7 +1,7 @@
 
 # battery core library
-battery_add_library(battery_core_no_main STATIC ALIAS battery::core_no_main)
-battery_add_source_files(battery_core_no_main
+b_add_library(battery_core_no_main STATIC ALIAS battery::core_no_main)
+b_add_source_files(battery_core_no_main
 
         src/tray/components/button.cpp
         src/tray/components/label.cpp
@@ -44,7 +44,7 @@ battery_add_source_files(battery_core_no_main
         src/time.cpp
         src/uuid.cpp)
 
-battery_set_ide_folder(battery_core_no_main "battery/modules")
+b_set_ide_folder(battery_core_no_main "battery/modules")
 
 #set_property(SOURCE src/extern/platform_folders.cpp PROPERTY CMAKE_CXX_CLANG_TIDY "")
 #set_property(SOURCE src/extern/utf8proc.c PROPERTY CMAKE_CXX_CLANG_TIDY "")
@@ -60,8 +60,8 @@ if (WIN32)
     target_link_libraries(battery_core_no_main Winmm.lib dwmapi.lib)   # for b::sleep_ms timer resolution and immersive dark mode
 endif ()
 
-battery_add_library(battery_core STATIC ALIAS battery::core)
-battery_add_source_files(battery_core battery_main/main.cpp)
+b_add_library(battery_core STATIC ALIAS battery::core)
+b_add_source_files(battery_core battery_main/main.cpp)
 target_link_libraries(battery_core battery::core_no_main)
 
 if (BUILD_TESTS)

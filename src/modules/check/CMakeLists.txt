@@ -13,4 +13,4 @@ add_custom_target(battery_check
     COMMENT "Running cncc"
 )
 
-battery_set_target_ide_folder(battery_check "battery/modules")
+b_set_target_ide_folder(battery_check "battery/modules")

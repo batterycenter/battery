@@ -3,7 +3,7 @@
 # battery_add_module(python)
 # target_link_libraries(... battery::python)
 
-battery_add_library(battery_python STATIC ALIAS battery::python)
+b_add_library(battery_python STATIC ALIAS battery::python)
 target_link_libraries(battery_python battery::core)
 
 set(SOURCES

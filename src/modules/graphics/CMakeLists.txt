@@ -3,8 +3,8 @@
 # battery_add_module(graphics)
 # target_link_libraries(... battery::graphics)
 
-battery_add_library(battery_graphics STATIC ALIAS battery::graphics)
-battery_add_source_files(battery_graphics
+b_add_library(battery_graphics STATIC ALIAS battery::graphics)
+b_add_source_files(battery_graphics
         src/widgets/base_widget.cpp
         src/widgets/button.cpp
         src/widgets/button_ex.cpp
@@ -38,7 +38,7 @@ battery_add_source_files(battery_graphics
         src/window.cpp
         )
 
-battery_set_ide_folder(battery_graphics "battery/modules")
+b_set_ide_folder(battery_graphics "battery/modules")
 
 battery_add_module(sfml)
 battery_add_module(imgui)

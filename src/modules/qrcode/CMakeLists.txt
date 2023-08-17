@@ -7,8 +7,8 @@
 
 option(BATTERY_QRCODE_SILENT "If true, the 'qrcode' module will not warn you if the 'graphics' module was not loaded before it." OFF)
 
-battery_add_library(battery_qrcode STATIC ALIAS battery::qrcode)
-battery_add_source_files(battery_qrcode   # This function also groups the files in the IDE
+b_add_library(battery_qrcode STATIC ALIAS battery::qrcode)
+b_add_source_files(battery_qrcode   # This function also groups the files in the IDE
         src/qrcode.cpp
     )
 

@@ -23,6 +23,19 @@ Battery aims to be the next big thing in the world of desktop applications after
 
 Let's make the world a better place by writing software that is fast and just works ❤️
 
+# Usage
+
+CMake >= 3.21 is required.
+
+```cmake
+include(FetchContent)
+FetchContent_Declare(battery
+    GIT_REPOSITORY https://github.com/batterycenter/battery
+    GIT_TAG        master
+)
+FetchContent_MakeAvailable(battery)
+```
+
 # License
 
 Battery is licensed under the Apache License 2.0.  

@@ -7,6 +7,6 @@ set(JSON_BuildTests OFF CACHE INTERNAL "")
 
 # Download the nlohmann::json json fileformat parsing library from Github
 battery_add_package("gh:nlohmann/json#v3.11.2")
-battery_add_alias_library(battery::json nlohmann_json)
+b_add_alias_library(battery::json nlohmann_json)
 
-battery_set_target_ide_folder(nlohmann_json "battery/modules")
+b_set_target_ide_folder(nlohmann_json "battery/modules")

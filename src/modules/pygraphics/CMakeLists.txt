@@ -3,12 +3,12 @@
 # battery_add_module(pygraphics)
 # target_link_libraries(... battery::pygraphics)
 
-battery_add_library(battery_pygraphics STATIC ALIAS battery::pygraphics)
-battery_add_source_files(battery_pygraphics
+b_add_library(battery_pygraphics STATIC ALIAS battery::pygraphics)
+b_add_source_files(battery_pygraphics
         src/window.cpp
         )
 
-battery_set_ide_folder(battery_pygraphics "battery/modules")
+b_set_ide_folder(battery_pygraphics "battery/modules")
 
 battery_add_module(python)
 battery_add_module(graphics)

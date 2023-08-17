@@ -13,6 +13,6 @@ battery_add_module(sfml)
 
 # Download the SFML ImGui Backend library from Github: Latest commit as of May 6, 2023
 battery_add_package("gh:SFML/imgui-sfml#ea890431d2c47e02f84b08d1467a881b88732102")
-battery_add_alias_library(battery::imgui_sfml ImGui-SFML)
+b_add_alias_library(battery::imgui_sfml ImGui-SFML)
 
-battery_set_target_ide_folder(ImGui-SFML "battery/modules")
+b_set_target_ide_folder(ImGui-SFML "battery/modules")

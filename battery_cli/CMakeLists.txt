@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(battery_cli VERSION 0.1.1 LANGUAGES C CXX)
 
 file(GLOB_RECURSE HEADERS "${CMAKE_CURRENT_LIST_DIR}/include/**")
-battery_add_executable(battery_cli ALIAS battery::cli ${HEADERS}
+b_add_executable(battery_cli ALIAS battery::cli ${HEADERS}
 	src/console.cpp
 	src/main.cpp
 	src/Project.cpp
@@ -10,14 +10,14 @@ battery_add_executable(battery_cli ALIAS battery::cli ${HEADERS}
 
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include" PREFIX "Header Files" FILES ${HEADERS})
 
-battery_set_output_name(battery_cli "b")
+b_set_output_name(battery_cli "b")
 target_include_directories(battery_cli PUBLIC include)
 target_link_libraries(battery_cli battery::core)
 
 battery_add_module(toml11)
 target_link_libraries(battery_cli battery::toml11)
 
-battery_precompile_headers(battery_cli "include/pch.hpp")
+b_precompile_headers(battery_cli "include/pch.hpp")
 
 battery_embed(battery_cli "${CMAKE_CURRENT_LIST_DIR}/../version.txt" "battery_cli/version" TEXT)
 

@@ -1,5 +1,5 @@
 
-function(battery_add_environment_definitions TARGET)
+function(b_set_environment_definitions TARGET)
     if (${CMAKE_SIZEOF_VOID_P} EQUAL 8)
         target_compile_definitions(${TARGET} PUBLIC B_ARCH_64)
     elseif (${CMAKE_SIZEOF_VOID_P} EQUAL 4)
