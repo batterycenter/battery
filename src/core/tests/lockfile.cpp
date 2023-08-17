@@ -1,9 +1,5 @@
 
-#include "battery/core/main.hpp"
-#include "battery/core/folders.hpp"
-#include "battery/core/fs.hpp"
-#include "battery/core/log.hpp"
-#include "battery/core/lockfile.hpp"
+#include "battery/core.hpp"
 #include <gtest/gtest.h>
 
 TEST(BatteryCore_Lockfile, basic_lockfile) {
@@ -23,7 +19,7 @@ TEST(BatteryCore_Lockfile, lockfile) {
     auto parent = b::Folders::AppCacheDir() / "unit_test_folder"_b;
     auto path = parent / "unit_test.lock"_b;
     if (b::fs::exists(parent)) {
-        b::fs::remove_all(parent);
+        b::fs::remove(parent);
     }
     return; // TODO: Fix this test
     {
@@ -66,14 +62,14 @@ TEST(BatteryCore_Lockfile, lockfile) {
         EXPECT_TRUE(lock1);
     }
 
-    b::fs::remove_all(parent);
+    b::fs::remove(parent);
 }
 
 TEST(BatteryCore_Lockfile, ScopedLockfile) {
     auto parent = b::Folders::AppCacheDir() / "unit_test_folder"_b;
     auto path = parent / "unit_test.lock"_b;
     if (b::fs::exists(parent)) {
-        b::fs::remove_all(parent);
+        b::fs::remove(parent);
     }
     return;
 
@@ -92,14 +88,14 @@ TEST(BatteryCore_Lockfile, ScopedLockfile) {
 
     EXPECT_NO_THROW({ b::scoped_lockfile lock7(path); });
 
-    b::fs::remove_all(parent);
+    b::fs::remove(parent);
 }
 
 TEST(BatteryCore_Lockfile, ScopedNoThrowLockfile) {
     auto parent = b::Folders::AppCacheDir() / "unit_test_folder"_b;
     auto path = parent / "unit_test.lock"_b;
     if (b::fs::exists(parent)) {
-        b::fs::remove_all(parent);
+        b::fs::remove(parent);
     }
     return;
 
@@ -132,5 +128,5 @@ TEST(BatteryCore_Lockfile, ScopedNoThrowLockfile) {
         EXPECT_TRUE(static_cast<bool>(lock7));
     }
 
-    b::fs::remove_all(parent);
+    b::fs::remove(parent);
 }

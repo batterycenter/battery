@@ -19,12 +19,12 @@
 
 #include "battery/core/async_worker.hpp"
 #include "battery/core/base64.hpp"
-#include "battery/core/bytearray.hpp"
 #include "battery/core/cache.hpp"
 #include "battery/core/color.hpp"
 #include "battery/core/console.hpp"
 #include "battery/core/console_application.hpp"
 #include "battery/core/constants.hpp"
+#include "battery/core/constexpr.hpp"
 #include "battery/core/containers.hpp"
 #include "battery/core/error.hpp"
 #include "battery/core/exception.hpp"

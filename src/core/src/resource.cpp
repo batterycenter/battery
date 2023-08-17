@@ -8,19 +8,19 @@
 
 namespace b {
 
-    Resource Resource::FromTextFile(const fs::path& filepath) {
-        Resource res;
-        res.m_data = fs::read_text_file(filepath).encode_utf8();
-        res.m_filetype = filepath.raw_extension().string().to_lower();
-        return res;
-    }
-
-    Resource Resource::FromBinaryFile(const fs::path& filepath) {
-        Resource res;
-        res.m_data = fs::read_binary_file(filepath).encode_utf8();
-        res.m_filetype = filepath.raw_extension().string().to_lower();
-        return res;
-    }
+//    Resource Resource::FromTextFile(const fs::path& filepath) {
+//        Resource res;
+//        res.m_data = fs::read_text_file(filepath).encode_utf8();
+//        res.m_filetype = filepath.raw_extension().string().to_lower();
+//        return res;
+//    }
+//
+//    Resource Resource::FromBinaryFile(const fs::path& filepath) {
+//        Resource res;
+//        res.m_data = fs::read_binary_file(filepath).encode_utf8();
+//        res.m_filetype = filepath.raw_extension().string().to_lower();
+//        return res;
+//    }
 
     Resource Resource::FromBytes(const b::bytearray& bytes, const b::string& filetype) {
         Resource res;
@@ -68,27 +68,27 @@ namespace b {
         return ""_b;
     }
 
-    bool Resource::writeToTextFile(const b::fs::path& filepath) const {
-        b::fs::ofstream file(filepath, b::fs::Mode::TEXT);
-        if (file.fail()) {
-            return false;
-        }
-//        file << m_data;
-        return true;
-    }
+//    bool Resource::writeToTextFile(const b::fs::path& filepath) const {
+//        b::fs::ofstream file(filepath, std::ios_base::in);
+//        if (file.fail()) {
+//            return false;
+//        }
+////        file << m_data;
+//        return true;
+//    }
 
-    bool Resource::writeToBinaryFile(const b::fs::path& filepath) const {
-        b::fs::ofstream file(filepath, b::fs::Mode::BINARY);
-        if (file.fail()) {
-            return false;
-        }
-//        file << m_data;
-        return true;
-    }
+//    bool Resource::writeToBinaryFile(const b::fs::path& filepath) const {
+//        b::fs::ofstream file(filepath, std::ios_base::in);
+//        if (file.fail()) {
+//            return false;
+//        }
+////        file << m_data;
+//        return true;
+//    }
 
     Resource::OnDiskResource::OnDiskResource(const b::fs::path &path, const b::string& data) : m_path(path) {
-        b::fs::ofstream file(path, b::fs::Mode::BINARY);
-        file << data.encode_utf8();
+//        b::fs::ofstream file(path, b::fs::Mode::BINARY);
+//        file << data.encode_utf8();
     }
 
     Resource::OnDiskResource::~OnDiskResource() {

@@ -143,34 +143,34 @@ TEST(BatteryCore_String, Decode) {
 
     // UTF-8
     std::vector<uint8_t> utf8 = { 0x53u, 0xc3u, 0xbcu, 0xc3u, 0x9fu, 0xc3u, 0xb6u, 0x6cu, 0xe5u, 0xb9u, 0xb4u };
-    EXPECT_EQ(b::string::decode_utf8(std::string(utf8.begin(), utf8.end())), testString);
-    EXPECT_EQ(b::string::decode_utf8(std::u8string(utf8.begin(), utf8.end())), testString);
-    EXPECT_EQ(b::string::decode_u8(std::u8string(utf8.begin(), utf8.end())), testString);
+    EXPECT_EQ(b::string::decode<b::enc::utf8>(std::string(utf8.begin(), utf8.end())), testString);
+    EXPECT_EQ(b::string::decode<b::enc::utf8>(std::u8string(utf8.begin(), utf8.end())), testString);
     std::vector<uint8_t> invalid = { 0xFF };
-    EXPECT_THROW(b::string::decode_utf8(std::string(invalid.begin(), invalid.end())), b::unicode_error);
-    EXPECT_THROW(b::string::decode_utf8(std::u8string(invalid.begin(), invalid.end())), b::unicode_error);
-    EXPECT_THROW(b::string::decode_u8(std::u8string(invalid.begin(), invalid.end())), b::unicode_error);
+    EXPECT_THROW(b::string::decode<b::enc::utf8>(std::string(invalid.begin(), invalid.end())), b::unicode_error);
+    EXPECT_THROW(b::string::decode<b::enc::utf8>(std::u8string(invalid.begin(), invalid.end())), b::unicode_error);
 
     // UTF-16
     std::u16string utf16 = u"\x0053\x00fc\x00df\x00f6\x006c\x5e74";
-    EXPECT_EQ(b::string::decode_utf16(std::u16string(utf16.begin(), utf16.end())), testString);
-    EXPECT_EQ(b::string::decode_utf16(std::wstring(utf16.begin(), utf16.end())), testString);
-    EXPECT_EQ(b::string::decode_widestring(std::wstring(utf16.begin(), utf16.end())), testString);
-    EXPECT_THROW(b::string::decode_utf16(std::u16string(u"\xD800\xD800")), b::unicode_error);
-    EXPECT_THROW(b::string::decode_utf16(std::wstring(L"\xD800\xD800")), b::unicode_error);
-    EXPECT_THROW(b::string::decode_widestring(std::wstring(L"\xD800\xD800")), b::unicode_error);
+    EXPECT_EQ(b::string::decode<b::enc::utf16>(std::u16string(utf16.begin(), utf16.end())), testString);
+    EXPECT_EQ(b::string::decode<b::enc::utf16>(std::wstring(utf16.begin(), utf16.end())), testString);
+    EXPECT_EQ(b::string::decode<b::enc::utf16_wide>(std::u16string(utf16.begin(), utf16.end())), testString);
+    EXPECT_EQ(b::string::decode<b::enc::utf16_wide>(std::wstring(utf16.begin(), utf16.end())), testString);
+    EXPECT_THROW(b::string::decode<b::enc::utf16>(std::u16string(u"\xD800\xD800")), b::unicode_error);
+    EXPECT_THROW(b::string::decode<b::enc::utf16>(std::wstring(L"\xD800\xD800")), b::unicode_error);
+    EXPECT_THROW(b::string::decode<b::enc::utf16_wide>(std::u16string(u"\xD800\xD800")), b::unicode_error);
+    EXPECT_THROW(b::string::decode<b::enc::utf16_wide>(std::wstring(L"\xD800\xD800")), b::unicode_error);
 
     // UTF-32
     std::u32string utf32 = U"\x00000053\x000000fc\x000000df\x000000f6\x0000006c\x00005e74";
-    EXPECT_EQ(b::string::decode_utf32(std::u32string(utf32.begin(), utf32.end())), testString);
-    EXPECT_EQ(b::string::decode_utf32(U'\x00005e74'), "年"_b);
-    EXPECT_THROW(b::string::decode_utf32(std::u32string(U"\xD800\xD800")), b::unicode_error);
-    EXPECT_THROW(b::string::decode_utf32(U'\xD800'), b::unicode_error);
+    EXPECT_EQ(b::string::decode<b::enc::utf32>(std::u32string(utf32.begin(), utf32.end())), testString);
+    EXPECT_EQ(b::string::decode<b::enc::utf32>(U'\x00005e74'), "年"_b);
+    EXPECT_THROW(b::string::decode<b::enc::utf32>(std::u32string(U"\xD800\xD800")), b::unicode_error);
+    EXPECT_THROW(b::string::decode<b::enc::utf32>(U'\xD800'), b::unicode_error);
 
     // Native (Windows = UTF-16 wide, Others = UTF-8)
 #ifdef B_OS_WINDOWS
-    EXPECT_EQ(b::string::decode_native(std::wstring(utf16.begin(), utf16.end())), testString);
-    EXPECT_THROW(b::string::decode_native(std::wstring(L"\xD800\xD800")), b::unicode_error);
+    EXPECT_EQ(b::string::decode<b::enc::os_native>(std::wstring(utf16.begin(), utf16.end())), testString);
+    EXPECT_THROW(b::string::decode<b::enc::os_native>(std::wstring(L"\xD800\xD800")), b::unicode_error);
 #else
     EXPECT_EQ(b::string::decode_native(std::string(utf8.begin(), utf8.end())), testString);
     EXPECT_THROW(b::string::decode_native(std::string(invalid.begin(), invalid.end())), b::unicode_error);
@@ -179,29 +179,24 @@ TEST(BatteryCore_String, Decode) {
     // ASCII
     b::string asciiTest = "Hello World!"_b;
     std::vector<uint8_t> ascii = { 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x21 };
-    EXPECT_EQ(b::string::decode_ascii(std::string(ascii.begin(), ascii.end())), asciiTest);
-    EXPECT_EQ(b::string::decode_ascii('A'), "A"_b);
-    EXPECT_THROW(b::string::decode_ascii("\xFF\xFF"), b::unicode_error);
-    EXPECT_THROW(b::string::decode_ascii('\xFF'), b::unicode_error);
+    EXPECT_EQ(b::string::decode<b::enc::ascii>(std::string(ascii.begin(), ascii.end())), asciiTest);
+    EXPECT_EQ(b::string::decode<b::enc::ascii>('A'), "A"_b);
+    EXPECT_THROW(b::string::decode<b::enc::ascii>("\xFF\xFF"), b::unicode_error);
+    EXPECT_THROW(b::string::decode<b::enc::ascii>('\xFF'), b::unicode_error);
 
-    // Latin-1 (equivalent to ISO-8859-1)
-    b::string latin1Test = "ÁÂÃÄÅÆÇÈÉÊË!"_b;
-    std::vector<uint8_t> latin1 = { 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7, 0xc8, 0xc9, 0xca, 0xcb, 0x21 };
-    EXPECT_EQ(b::string::decode_latin1(std::string(latin1.begin(), latin1.end())), latin1Test);
-    EXPECT_EQ(b::string::decode_latin1('A'), "A"_b);
-
-    // ISO-8859-1 (equivalent to Latin-1)
+    // ISO-8859-1
     b::string iso88591Test = "ÁÂÃÄÅÆÇÈÉÊË!"_b;
     std::vector<uint8_t> iso88591 = { 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7, 0xc8, 0xc9, 0xca, 0xcb, 0x21 };
-    EXPECT_EQ(b::string::decode_iso8859_1(std::string(iso88591.begin(), iso88591.end())), iso88591Test);
-    EXPECT_EQ(b::string::decode_iso8859_1('A'), "A"_b);
+    EXPECT_EQ(b::string::decode<b::enc::iso_8859_1>(std::string(iso88591.begin(), iso88591.end())), iso88591Test);
+    EXPECT_EQ(b::string::decode<b::enc::iso_8859_1>('A'), "A"_b);
 
     // Windows-1252
 #ifdef B_OS_WINDOWS
     b::string windows1252Test = "Süßöl!"_b;
     std::vector<uint8_t> windows1252 = { 0x53, 0xfc, 0xdf, 0xf6, 0x6c, 0x21 };
-    EXPECT_EQ(b::string::decode_windows1252(std::string(windows1252.begin(), windows1252.end())), windows1252Test);
-    EXPECT_EQ(b::string::decode_windows1252('A'), "A"_b);
+    EXPECT_EQ(b::string::decode<b::enc::cp1252>(
+            std::string(windows1252.begin(), windows1252.end())), windows1252Test);
+    EXPECT_EQ(b::string::decode<b::enc::cp1252>('A'), "A"_b);
 #endif
 }
 
@@ -210,23 +205,50 @@ TEST(BatteryCore_String, Encode) {
 
     // UTF-8
     std::vector<uint8_t> utf8 = {0x53, 0xc3, 0xbc, 0xc3, 0x9f, 0xc3, 0xb6, 0x6c, 0xe5, 0xb9, 0xb4};
-    EXPECT_EQ(testString.encode_utf8(), std::string(utf8.begin(), utf8.end()));
-    EXPECT_EQ(testString.encode_u8(), std::u8string(utf8.begin(), utf8.end()));
+    EXPECT_EQ(testString.encode<b::enc::utf8>(), std::string(utf8.begin(), utf8.end()));
+    EXPECT_EQ(testString.encode_u8<b::enc::utf8>(), std::u8string(utf8.begin(), utf8.end()));
 
     // UTF-16
     std::vector<uint16_t> utf16 = {0x0053, 0x00fc, 0x00df, 0x00f6, 0x006c, 0x5e74};
-    EXPECT_EQ(testString.encode_utf16(), std::u16string(utf16.begin(), utf16.end()));
-    EXPECT_EQ(testString.encode_widestring(), std::wstring(utf16.begin(), utf16.end()));
+    EXPECT_EQ(testString.encode<b::enc::utf16>(), std::u16string(utf16.begin(), utf16.end()));
+    EXPECT_EQ(testString.encode<b::enc::utf16_wide>(), std::wstring(utf16.begin(), utf16.end()));
 
     // UTF-32
     std::vector<uint32_t> utf32 = {0x00000053, 0x000000fc, 0x000000df, 0x000000f6, 0x0000006c, 0x00005e74};
-    EXPECT_EQ(testString.encode_utf32(), std::u32string(utf32.begin(), utf32.end()));
+    EXPECT_EQ(testString.encode<b::enc::utf32>(), std::u32string(utf32.begin(), utf32.end()));
 
     // Native (Windows = UTF-16 wide, Others = UTF-8)
 #ifdef B_OS_WINDOWS
-    EXPECT_EQ(testString.encode_native(), std::wstring(utf16.begin(), utf16.end()));
+    EXPECT_EQ(testString.encode<b::enc::os_native>(), std::wstring(utf16.begin(), utf16.end()));
 #else
-    EXPECT_EQ(testString.encode_native(), std::string(utf8.begin(), utf8.end()));
+    EXPECT_EQ(testString.encode_str<b::enc::os_native>(), std::string(utf8.begin(), utf8.end()));
+#endif
+}
+
+TEST(BatteryCore_String, EncodeBytes) {
+    b::string testString = "Süßöl年"_b;
+
+    // UTF-8
+    b::bytearray utf8 = {0x53, 0xc3, 0xbc, 0xc3, 0x9f, 0xc3, 0xb6, 0x6c, 0xe5, 0xb9, 0xb4};
+    EXPECT_EQ(testString.encode<b::enc::utf8>(), std::string(utf8.begin(), utf8.end()));
+    EXPECT_EQ(testString.encode_bytes<b::enc::utf8>(), utf8);
+
+    // UTF-16
+    b::bytearray utf16 = {0x53, 0x00, 0xfc, 0x00, 0xdf, 0x00, 0xf6, 0x00, 0x6c, 0x00, 0x74, 0x5e};
+    EXPECT_EQ(testString.encode_bytes<b::enc::utf16>(), utf16);
+    EXPECT_EQ(testString.encode_bytes<b::enc::utf16_wide>(), utf16);
+
+    // UTF-32
+    b::bytearray utf32 = {0x53, 0x00, 0x00, 0x00, 0xfc, 0x00, 0x00, 0x00,
+                          0xdf, 0x00, 0x00, 0x00, 0xf6, 0x00, 0x00, 0x00,
+                          0x6c, 0x00, 0x00, 0x00, 0x74, 0x5e, 0x00, 0x00};
+    EXPECT_EQ(testString.encode_bytes<b::enc::utf32>(), utf32);
+
+    // Native (Windows = UTF-16 wide, Others = UTF-8)
+#ifdef B_OS_WINDOWS
+    EXPECT_EQ(testString.encode_bytes<b::enc::os_native>(), utf16);
+#else
+    EXPECT_EQ(testString.encode<b::enc::os_native>(), utf8);
 #endif
 }
 
@@ -629,7 +651,7 @@ TEST(BatteryCore_String, Format) {
 }
 
 TEST(BatteryCore_String, StringLiterals) {
-    b::string reference = b::string::decode_u8(u8"Süßölgefäß");
+    b::string reference = "Süßölgefäß"_b;
     EXPECT_EQ(reference, "Süßölgefäß"_b);
     EXPECT_EQ(reference, u8"Süßölgefäß"_b);
     EXPECT_EQ(reference, u"Süßölgefäß");

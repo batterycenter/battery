@@ -26,7 +26,7 @@ namespace b {
     b::string cin_getline(size_t buffer_size) {          // We must do this so complicated because std::cin does not have UTF-8 support
 #ifdef B_OS_WINDOWS
         DWORD read = 0;
-        std::wstring buffer;
+        b::native_string buffer;
         buffer.resize(buffer_size);
 
         ReadConsoleW(GetStdHandle(STD_INPUT_HANDLE),
@@ -35,13 +35,14 @@ namespace b {
                      &read,
                      nullptr);
 
-        auto line = b::string::decode_native(buffer.substr(0, read));
+        auto line = b::string::decode<b::enc::os_native>(buffer.substr(0, read));
 #else
-        b::string line;
-        std::getline(std::cin, line);
+        b::native_string stdline;
+        std::getline(std::cin, stdline);
         if (line.size() > buffer_size) {    // Limit to buffer size for consistent behavior across platforms
-            line = line.substr(0, buffer_size);
+            stdline = stdline.substr(0, buffer_size);
         }
+        auto line = b::string::decode(stdline);
 #endif
         line.replace("\n"_b, ""_b);
         line.replace("\r"_b, ""_b);
@@ -50,7 +51,7 @@ namespace b {
 
     bool open_url_in_default_browser(const b::string& url) {
 #ifdef B_OS_WINDOWS
-        auto process = b::execute("start "_b + url);
+        auto process = b::execute(b::format("start {}", url));
         return process.exit_code == 0;
 #else
         auto process = b::execute("xdg-open "_b + url);

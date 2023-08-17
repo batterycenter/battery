@@ -35,10 +35,10 @@ namespace b {
         if (filename.has_parent_path()) {
             b::fs::create_directory(filename.parent_path());
         }
-        // In Windows, we create the file as non-exclusive and then lock it separately using LockFile(),
+        // On Windows, we create the file as non-exclusive and then lock it separately using LockFile(),
         // because this is apparently more robust than just opening the file in exclusive write mode.
 #ifdef B_OS_WINDOWS
-        auto nativeFilename = filename.string().encode_native();
+        auto nativeFilename = filename.string().encode<b::enc::os_native>();
         this->fileHandle = CreateFileW(
                 nativeFilename.c_str(),
                 GENERIC_READ | GENERIC_WRITE,
@@ -51,9 +51,10 @@ namespace b {
             throw std::runtime_error(b::format("Failed to create lockfile '{}': "
                                                "Failed to open file for writing: {}",
                                                filename,
-                                               b::internal::get_last_win32_error()).encode_utf8());
+                                               b::internal::get_last_win32_error()).encode<b::enc::utf8>());
         }
 #else
+        // TODO Refactor this to use fcntl or flock instead of an exclusive write
         this->fileHandle = reinterpret_cast<void *>(open(filename.c_str(), O_CREAT | O_RDWR, 0666));
         if (reinterpret_cast<int64_t>(this->fileHandle) <= -1) {
             throw std::runtime_error(b::format("Failed to create lockfile '{}': Failed to open file for writing: {}", filename, strerror(errno)));
@@ -72,13 +73,21 @@ namespace b {
 
     bool lockfile::lock(bool return_instead_of_throw) {
         if (!return_instead_of_throw) {
-            if (timeout.has_value()) lock_polling();
-            else lock_impl(true);
+            if (timeout.has_value()) {
+                lock_polling();
+            }
+            else {
+                lock_impl(true);
+            }
         }
         else {
             try {
-                if (timeout.has_value()) lock_polling();
-                else lock_impl(true);
+                if (timeout.has_value()) {
+                    lock_polling();
+                }
+                else {
+                    lock_impl(true);
+                }
             } catch (...) {
                 return false;
             }
@@ -125,7 +134,8 @@ namespace b {
     void lockfile::lock_impl(bool blocking) {
         std::scoped_lock lock(*this->mutex.get());
         if (this->locked) {
-            throw std::runtime_error(b::format("Failed to aquire lockfile '{}': Lock already in use", filename).encode_utf8());
+            throw std::runtime_error(
+                    b::format("Failed to aquire lockfile '{}': Lock already in use", filename).encode<b::enc::utf8>());
         }
 #ifdef B_OS_WINDOWS
         OVERLAPPED overlapped = { 0 };
@@ -133,7 +143,8 @@ namespace b {
         overlapped.OffsetHigh = 0;
         DWORD flags = blocking ? (LOCKFILE_EXCLUSIVE_LOCK | LOCKFILE_FAIL_IMMEDIATELY) : LOCKFILE_EXCLUSIVE_LOCK;
         if (!LockFileEx(this->fileHandle, flags, 0, 0xFFFFFFFF, 0xFFFFFFFF, &overlapped)) {
-            throw std::runtime_error(b::format("Failed to aquire lockfile '{}': Lock already in use", filename).encode_utf8());
+            throw std::runtime_error(
+                    b::format("Failed to aquire lockfile '{}': Lock already in use", filename).encode<b::enc::utf8>());
         }
 #else
         struct flock fl = {};
@@ -147,8 +158,8 @@ namespace b {
         if (ret == -1) {
             throw std::runtime_error(b::format("Failed to aquire lockfile '{}': Lock already in use", filename));
         }
-        this->locked = true;
 #endif
+        this->locked = true;
     }
 
     void lockfile::lock_polling() {
@@ -163,7 +174,8 @@ namespace b {
             }
             b::sleep(poll_interval);
         }
-        throw std::runtime_error(b::format("Failed to aquire lockfile '{}': Timeout expired", filename).encode_utf8());
+        throw std::runtime_error(
+                b::format("Failed to aquire lockfile '{}': Timeout expired", filename).encode<b::enc::utf8>());
     }
 
 
@@ -190,4 +202,4 @@ namespace b {
         }
     }
 
-}
+} // namespace b

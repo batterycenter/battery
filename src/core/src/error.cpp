@@ -14,12 +14,12 @@ namespace b {
 #ifdef B_OS_WINDOWS
         b::native_string const result = _wcserror(errnum);
 #else
-        std::string result(1024, '\0');
+        b::native_string result(1024, '\0');
         if (!0 == strerror_r(errnum, result.data(), result.size())) {
             return {};
         }
 #endif
-        return b::string::decode_native(result);
+        return b::string::decode<b::enc::os_native>(result);
     }
 
 } // namespace b

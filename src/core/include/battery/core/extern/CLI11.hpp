@@ -2685,8 +2685,8 @@ class Config {
     }
 
     /// Parse a config file, throw an error (ParseError:ConfigParseError or FileError) on failure
-    CLI11_NODISCARD std::vector<ConfigItem> from_file(const std::string &name) const {
-        b::fs::ifstream _input(b::string::decode_utf8(name));                         // BATTERY MODIFIED
+    CLI11_NODISCARD std::vector<ConfigItem> from_file(const std::string &name) const {          // BATTERY MODIFIED
+        b::fs::ifstream _input(b::string::decode<b::enc::utf8>(name));
         if(!_input.good())
             throw FileError::Missing(name);
 
@@ -3745,13 +3745,12 @@ Validator::_merge_description(const Validator &val1, const Validator &val2, cons
 namespace detail {
 
 #if defined CLI11_HAS_FILESYSTEM && CLI11_HAS_FILESYSTEM > 0
-CLI11_INLINE path_type check_path(const char *file) noexcept {
-    std::error_code ec;
-    auto stat = std::filesystem::status(b::string::decode_utf8(file).encode_u8(), ec);                 // BATTERY MODIFIED
-    if(ec) {
+CLI11_INLINE path_type check_path(const char *file) noexcept {                                  // BATTERY MODIFIED
+    auto stat = b::fs::try_status(b::string::decode<b::enc::utf8>(file));
+    if(!stat) {
         return path_type::nonexistent;
     }
-    switch(stat.type()) {
+    switch(stat.value().type()) {
     case std::filesystem::file_type::none:  // LCOV_EXCL_LINE
     case std::filesystem::file_type::not_found:
         return path_type::nonexistent;

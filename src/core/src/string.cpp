@@ -14,65 +14,65 @@ namespace b {
     // ========================================================
 
     string::string(const std::u8string& other) {
-        *this = decode_utf8(other);
+        *this = decode<b::enc::utf8>(other);
     }
 
     string::string(const char8_t* other) {
-        *this = decode_utf8(other);
+        *this = decode<b::enc::utf8>(std::u8string(other));
     }
 
     string::string(const std::u16string& other) {
-        *this = decode_utf16(other);
+        *this = decode<b::enc::utf16>(other);
     }
 
     string::string(const char16_t* other) {
-        *this = decode_utf16(other);
+        *this = decode<b::enc::utf16>(other);
     }
 
     string::string(const std::u32string& other) {
-        *this = decode_utf32(other);
+        *this = decode<b::enc::utf32>(other);
     }
 
     string::string(const char32_t* other) {
-        *this = decode_utf32(other);
+        *this = decode<b::enc::utf32>(other);
     }
 
     string::string(char32_t chr) {
-        *this = decode_utf32(chr);
+        *this = decode<b::enc::utf32>(chr);
     }
 
     string& string::operator=(const std::u8string& other) {
-        *this = decode_utf8(other);
+        *this = decode<b::enc::utf8>(other);
         return *this;
     }
 
     string& string::operator=(const char8_t* other) {
-        *this = decode_utf8(other);
+        *this = decode<b::enc::utf8>(std::u8string(other));
         return *this;
     }
 
     string& string::operator=(const std::u16string& other) {
-        *this = decode_utf16(other);
+        *this = decode<b::enc::utf16>(other);
         return *this;
     }
 
     string& string::operator=(const char16_t* other) {
-        *this = decode_utf16(other);
+        *this = decode<b::enc::utf16>(other);
         return *this;
     }
 
     string& string::operator=(const std::u32string& other) {
-        *this = decode_utf32(other);
+        *this = decode<b::enc::utf32>(other);
         return *this;
     }
 
     string& string::operator=(const char32_t* other) {
-        *this = decode_utf32(other);
+        *this = decode<b::enc::utf32>(other);
         return *this;
     }
 
     string& string::operator=(char32_t chr) {
-        *this = decode_utf32(chr);
+        *this = decode<b::enc::utf32>(chr);
         return *this;
     }
 
@@ -200,7 +200,7 @@ namespace b {
         return utf8::is_valid(str);
     }
 
-    string string::decode_utf8(const std::string& str) {
+    string string::internal::decode_utf8(const std::string& str) {
         if (!is_valid_utf8(str)) {
             throw b::unicode_error();
         }
@@ -209,21 +209,7 @@ namespace b {
         return result;
     }
 
-    string string::decode_utf8(const std::u8string& str) {
-        auto u8str = std::string(std::bit_cast<char*>(str.data()), str.size());
-        if (!is_valid_utf8(u8str)) {
-            throw b::unicode_error();
-        }
-        string result;
-        result.m_data = utf8::utf8to32(u8str);
-        return result;
-    }
-
-    string string::decode_u8(const std::u8string& str) {
-        return decode_utf8(str);
-    }
-
-    string string::decode_utf16(const std::u16string& str) {
+    string string::internal::decode_utf16(const std::u16string& str) {
         try {
             return decode_utf8(utf8::utf16to8(str));
         }
@@ -232,15 +218,7 @@ namespace b {
         }
     }
 
-    string string::decode_utf16(const std::wstring& str) {
-        return decode_utf16(std::u16string(std::bit_cast<char16_t *>(str.data()), str.size()));
-    }
-
-    string string::decode_widestring(const std::wstring& str) {
-        return decode_utf16(std::u16string(std::bit_cast<char16_t *>(str.data()), str.size()));
-    }
-
-    string string::decode_utf32(const std::u32string& str) {
+    string string::internal::decode_utf32(const std::u32string& str) {
         try {
             return decode_utf8(utf8::utf32to8(str));
         }
@@ -249,32 +227,11 @@ namespace b {
         }
     }
 
-    string string::decode_utf32(char32_t chr) {
-        return decode_utf32(std::u32string(1, chr));
+    string string::internal::decode_ascii(const std::string& str) {
+        return decode_utf8(str);
     }
 
-    string string::decode_native(const b::native_string& str) {
-#ifdef B_OS_WINDOWS
-        return decode_widestring(str);
-#else
-        return from_utf8(str);
-#endif
-    }
-
-    string string::decode_ascii(const std::string& str) {
-        if (!is_valid_utf8(str)) {
-            throw b::unicode_error();
-        }
-        string result;
-        result.m_data = utf8::utf8to32(str);
-        return result;
-    }
-
-    string string::decode_ascii(char chr) {
-        return decode_ascii(std::string(1, chr));
-    }
-
-    string string::decode_latin1(const std::string& str) {
+    string string::internal::decode_iso8859_1(const std::string& str) {
         std::string result;
         for (unsigned char const chr : str) {
             if (chr < 0x80u) {
@@ -288,24 +245,11 @@ namespace b {
         return utf8::utf8to32(result);
     }
 
-    string string::decode_latin1(char chr) {
-        return decode_latin1(std::string(1, chr));
-    }
-
-    string string::decode_iso8859_1(const std::string& str) {
-        return decode_latin1(str);
-    }
-
-    string string::decode_iso8859_1(char chr) {
-        return decode_latin1(chr);
-    }
-
 #ifdef B_OS_WINDOWS
-    string string::decode_windows1252(const std::string& str) {
+    string string::internal::decode_cp1252(const std::string& str) {
         // In this function we load a string in Windows-1252 encoding. We do this by using
         // MultiByteToWideChar to turn it into common UTF-16 Windows encoding, and then
-        // we can use the from_utf16 function to turn it into a b::string.
-
+        // we can use the decode_utf16 function to turn it into a b::string.
         if (str.empty()) {
             return {};
         }
@@ -324,7 +268,7 @@ namespace b {
         }
 
         std::wstring buffer(requiredBufferSize, 0);
-        auto result = MultiByteToWideChar(
+        auto charsWritten = MultiByteToWideChar(
                 CP_ACP,                           // ANSI code page
                 MB_ERR_INVALID_CHARS,             // Stop on invalid chars
                 str.c_str(),                      // Input string
@@ -333,60 +277,37 @@ namespace b {
                 static_cast<int>(buffer.size())   // Output buffer size
         );
 
-        if (result == 0) {
+        if (charsWritten == 0) {
             throw b::unicode_error();
         }
-
-        buffer.pop_back();      // Remove null terminator from the WinAPI
-        return decode_utf16(buffer);
-    }
-
-    string string::decode_windows1252(char chr) {
-        return decode_windows1252(std::string(1, chr));
+        buffer.resize(charsWritten - 1);    // Remove null terminator
+        return decode_utf16(std::u16string(buffer.begin(), buffer.end()));
     }
 #endif
 
-    std::string string::encode_utf8() const {
-        return utf8::utf32to8(m_data);
+    b::bytearray string::internal::encode_utf8(const b::string& str) {
+        return b::bytearray::from_string(utf8::utf32to8(str.m_data));
     }
 
-    std::u8string string::encode_u8() const {
-        std::string str = encode_utf8();
-        return { str.begin(), str.end() };
+    b::bytearray string::internal::encode_utf16(const b::string& str) {
+        auto u16 = utf8::utf8to16(utf8::utf32to8(str.m_data));
+        return b::bytearray::from_string(std::string(std::bit_cast<char*>(u16.data()), u16.size() * 2));
     }
 
-    std::u16string string::encode_utf16() const {
-        return utf8::utf8to16(utf8::utf32to8(m_data));
-    }
-
-    std::wstring string::encode_widestring() const {
-        auto u16 = encode_utf16();
-        return { std::bit_cast<wchar_t*>(u16.data()), u16.size() };
-    }
-
-    std::u32string string::encode_utf32() const {
-        return m_data;
-    }
-
-
-    native_string string::encode_native() const {
-#ifdef B_OS_WINDOWS
-        return encode_widestring();
-#else
-        return to_utf8();
-#endif
+    b::bytearray string::internal::encode_utf32(const b::string& str) {
+        return b::bytearray::from_string(std::string(std::bit_cast<char*>(str.m_data.data()), str.m_data.size() * 4));
     }
 
     string::operator std::u8string() const {
-        return encode_u8();
+        return encode_u8<b::enc::utf8>();
     }
 
     string::operator std::u16string() const {
-        return encode_utf16();
+        return encode<b::enc::utf16>();
     }
 
     string::operator std::u32string() const {
-        return encode_utf32();
+        return encode<b::enc::utf32>();
     }
 
     const std::u32string& string::str() const {
@@ -402,11 +323,11 @@ namespace b {
         size_t pos = 0;
         std::vector<b::string> result;
         while ((pos = data.find(delimiter.m_data)) != std::string::npos) {
-            result.emplace_back(b::string::decode_utf32(data.substr(0, pos)));
+            result.emplace_back(b::string::decode<b::enc::utf32>(data.substr(0, pos)));
             data.erase(0, pos + delimiter.m_data.length());
         }
         if (!data.empty()) {
-            result.emplace_back(b::string::decode_utf32(data));
+            result.emplace_back(b::string::decode<b::enc::utf32>(data));
         }
         return result;
     }
@@ -450,12 +371,12 @@ namespace b {
                                     const b::string& replace,
                                     std::regex_constants::match_flag_type flags) {
         auto result = std::regex_replace(
-                str.encode_widestring(),
-                std::wregex(pattern.encode_widestring()),
-                replace.encode_widestring(),
+                str.encode<b::enc::utf16_wide>(),
+                std::wregex(pattern.encode<b::enc::utf16_wide>()),
+                replace.encode<b::enc::utf16_wide>(),
                 flags
         );
-        return b::string::decode_widestring(result);
+        return b::string::decode<b::enc::utf16_wide>(result);
     }
 
     std::vector<b::string> string::regex_match(const b::string& pattern,
@@ -468,9 +389,9 @@ namespace b {
                                                std::regex_constants::match_flag_type flags) {
         std::vector<b::string> matches;
         std::wsmatch match;
-        std::wstring data = str.encode_widestring();
-        while (std::regex_search(data, match, std::wregex(pattern.encode_widestring()), flags)) {
-            matches.emplace_back(b::string::decode_widestring(match.str(0)));
+        std::wstring data = str.encode<b::enc::utf16_wide>();
+        while (std::regex_search(data, match, std::wregex(pattern.encode<b::enc::utf16_wide>()), flags)) {
+            matches.emplace_back(b::string::decode<b::enc::utf16_wide>(match.str(0)));
             data = match.suffix().str();
         }
         return matches;
@@ -504,7 +425,7 @@ namespace b {
         }
 
         buf.append(data, prevPos, data.size() - prevPos);
-        return b::string::decode_utf32(buf);
+        return b::string::decode<b::enc::utf32>(buf);
     }
 
     void string::replace(const b::string& pattern, const b::string& value) {
@@ -651,17 +572,17 @@ namespace b {
 } // namespace b
 
 b::string operator""_b(const char* str, size_t len) {
-    return b::string::decode_utf8(std::string(str, len));
+    return b::string::decode<b::enc::utf8>(std::string(str, len));
 }
 
 b::string operator""_b(const char8_t* str, size_t len) {
-    return b::string::decode_u8(std::u8string(str, len));
+    return b::string::decode<b::enc::utf8>(std::u8string(str, len));
 }
 
 b::string operator""_b(const char16_t* str, size_t len) {
-    return b::string::decode_utf16(std::u16string(str, len));
+    return b::string::decode<b::enc::utf16>(std::u16string(str, len));
 }
 
 b::string operator""_b(const char32_t* str, size_t len) {
-    return b::string::decode_utf32(std::u32string(str, len));
+    return b::string::decode<b::enc::utf32>(std::u32string(str, len));
 }

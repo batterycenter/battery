@@ -36,11 +36,11 @@ namespace b::uuid {
     b::string v4() {
         auto gen = uuid_data::get();
         auto uuid = gen->operator()();
-        return b::string::decode_utf8(to_string(uuid));
+        return b::string::decode<b::enc::utf8>(to_string(uuid));
     }
 
     bool is_valid(const b::string& uuid) {
-        auto opt = uuids::uuid::from_string(uuid.encode_utf8());
+        auto opt = uuids::uuid::from_string(uuid.encode<b::enc::utf8>());
         return opt.has_value();
     }
 

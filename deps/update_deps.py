@@ -6,6 +6,7 @@ import tarfile
 github_dependencies = [
     # [ "ocornut", "imgui", "v1.89.8" ],
     [ "gabime", "spdlog", "v1.12.0" ],                 # MIT License
+    [ "fmtlib", "fmt", "10.0.0" ],                    # MIT-alike License
     [ "DaanDeMeyer", "reproc", "v14.2.4" ],            # MIT License
     [ "nemtrif", "utfcpp", "v3.2.3" ],                 # Boost Software License 1.0
     [ "jothepro", "doxygen-awesome-css", "v2.2.1" ],   # MIT License
@@ -28,6 +29,9 @@ def main():
 
         print(f"Downloading and extracting {dep[0]}/{dep[1]}@{dep[2]} from GitHub...")
         response = requests.get(url, stream=True)
+        if (response.status_code != 200):
+            raise Exception(f"Failed to download {url}")
+
         file = tarfile.open(fileobj=response.raw, mode="r|gz")
 
         # With GitHub, the archive contains a folder with the name and version (like imgui-1.89.8)

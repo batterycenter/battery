@@ -1,17 +1,11 @@
 #pragma once
 
-#ifndef SPDLOG_COMPILED_LIB
-#define SPDLOG_COMPILED_LIB     // Force SPDLOG to recognize the prebuilt library
-#endif
-
 #include "battery/core/format.hpp"
-
-#include <variant>
-
-#include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/rotating_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/spdlog.h"
+#include <variant>
 
 #ifdef ERROR    // An 'ERROR' macro is leaked somewhere from some windows header, and it conflicts with our enums
 #undef ERROR
@@ -54,7 +48,7 @@ namespace b::log {
     }
 
     inline void pattern(const b::string& pattern) {
-        internal::userLogger->set_pattern(pattern.encode_utf8());
+        internal::userLogger->set_pattern(pattern.encode<b::enc::utf8>());
     }
 
     template<typename... T> auto trace(fmt::format_string<T...> fmt, T&&... args) { __init(); internal::userLogger->trace(fmt, std::forward<T>(args)...); }
@@ -64,8 +58,19 @@ namespace b::log {
     template<typename... T> auto error(fmt::format_string<T...> fmt, T&&... args) { __init(); internal::userLogger->error(fmt, std::forward<T>(args)...); }
     template<typename... T> auto critical(fmt::format_string<T...> fmt, T&&... args) { __init(); internal::userLogger->critical(fmt, std::forward<T>(args)...); }
 
+    template<typename... T> auto trace(const b::string& str) { trace("{}", str); }
+    template<typename... T> auto debug(const b::string& str) { debug("{}", str); }
+    template<typename... T> auto info(const b::string& str) { info("{}", str); }
+    template<typename... T> auto warn(const b::string& str) { warn("{}", str); }
+    template<typename... T> auto error(const b::string& str) { error("{}", str); }
+    template<typename... T> auto critical(const b::string& str) { critical("{}", str); }
 
-
+    template<typename... T> auto trace(const std::string& str) { trace("{}", str); }
+    template<typename... T> auto debug(const std::string& str) { debug("{}", str); }
+    template<typename... T> auto info(const std::string& str) { info("{}", str); }
+    template<typename... T> auto warn(const std::string& str) { warn("{}", str); }
+    template<typename... T> auto error(const std::string& str) { error("{}", str); }
+    template<typename... T> auto critical(const std::string& str) { critical("{}", str); }
 
     namespace core {
 
@@ -74,7 +79,7 @@ namespace b::log {
         }
 
         inline void pattern(const b::string& pattern) {
-            internal::coreLogger->set_pattern(pattern.encode_utf8());
+            internal::coreLogger->set_pattern(pattern.encode<b::enc::utf8>());
         }
 
         template<typename... T> auto trace(fmt::format_string<T...> fmt, T&&... args) { __init(); internal::coreLogger->trace(fmt, std::forward<T>(args)...); }
@@ -83,6 +88,20 @@ namespace b::log {
         template<typename... T> auto warn(fmt::format_string<T...> fmt, T&&... args) { __init(); internal::coreLogger->warn(fmt, std::forward<T>(args)...); }
         template<typename... T> auto error(fmt::format_string<T...> fmt, T&&... args) { __init(); internal::coreLogger->error(fmt, std::forward<T>(args)...); }
         template<typename... T> auto critical(fmt::format_string<T...> fmt, T&&... args) { __init(); internal::coreLogger->critical(fmt, std::forward<T>(args)...); }
+
+        template<typename... T> auto trace(const b::string& str) { trace("{}", str); }
+        template<typename... T> auto debug(const b::string& str) { debug("{}", str); }
+        template<typename... T> auto info(const b::string& str) { info("{}", str); }
+        template<typename... T> auto warn(const b::string& str) { warn("{}", str); }
+        template<typename... T> auto error(const b::string& str) { error("{}", str); }
+        template<typename... T> auto critical(const b::string& str) { critical("{}", str); }
+
+        template<typename... T> auto trace(const std::string& str) { trace("{}", str); }
+        template<typename... T> auto debug(const std::string& str) { debug("{}", str); }
+        template<typename... T> auto info(const std::string& str) { info("{}", str); }
+        template<typename... T> auto warn(const std::string& str) { warn("{}", str); }
+        template<typename... T> auto error(const std::string& str) { error("{}", str); }
+        template<typename... T> auto critical(const std::string& str) { critical("{}", str); }
 
     }
 

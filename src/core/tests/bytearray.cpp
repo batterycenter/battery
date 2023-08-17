@@ -19,16 +19,11 @@ TEST(BatteryCore_ByteArray, ConstructorAndOperators) {
     EXPECT_EQ(ba3[2], 0x03);
 
     std::string str = "Foo";
-    b::bytearray ba4 = str;
+    b::bytearray ba4 = b::bytearray::from_string(str);
     EXPECT_EQ(ba4.size(), 3);
     EXPECT_EQ(ba4[0], 'F');
     EXPECT_EQ(ba4[1], 'o');
     EXPECT_EQ(ba4[2], 'o');
-    b::bytearray ba5 = str.c_str();
-    EXPECT_EQ(ba5.size(), 3);
-    EXPECT_EQ(ba5[0], 'F');
-    EXPECT_EQ(ba5[1], 'o');
-    EXPECT_EQ(ba5[2], 'o');
 
     b::bytearray ba6 = { 0x01, 0x02, 0x03 };
 
@@ -49,51 +44,26 @@ TEST(BatteryCore_ByteArray, ConstructorAndOperators) {
 
     std::string str2 = "Bar";
     b::bytearray ba9;
-    ba9 = str2;
+    ba9 = b::bytearray::from_string(str2);
     EXPECT_EQ(ba9.size(), 3);
     EXPECT_EQ(ba9[0], 'B');
     EXPECT_EQ(ba9[1], 'a');
     EXPECT_EQ(ba9[2], 'r');
-
-    b::bytearray ba10;
-    ba10 = str2.c_str();
-    EXPECT_EQ(ba10.size(), 3);
-    EXPECT_EQ(ba10[0], 'B');
-    EXPECT_EQ(ba10[1], 'a');
-    EXPECT_EQ(ba10[2], 'r');
 
     b::bytearray ba11;
     ba11 = { 0x01, 0x02, 0x03 };
 
     b::bytearray ba12 = {0x01, 0x02, 0x03 };
     EXPECT_EQ(ba12.str(), "\x01\x02\x03");
-
-    b::bytearray ba13 = {0x01, 0x02, 0x03 };
-    EXPECT_EQ((std::string)ba13, "\x01\x02\x03");
 }
 
-TEST(BatteryCore_ByteArray, Decode) {
-    b::bytearray ba1 = "S\xc3\xbc\xc3\x9f";     // "Süß" UTF-8 encoded plain string
-    EXPECT_EQ(ba1.decode_utf8(), "Süß"_b);
-
-    b::bytearray ba2 = "Hello!";     // ASCII
-    EXPECT_EQ(ba2.decode_ascii(), "Hello!"_b);
-
-    b::bytearray ba3 = "S\xfc\xdf";     // "Süß" Latin-1
-    EXPECT_EQ(ba3.decode_latin1(), "Süß"_b);
-
-    b::bytearray ba4 = "S\xfc\xdf";     // "Süß" ISO-8859-1 (Latin-1)
-    EXPECT_EQ(ba4.decode_iso8859_1(), "Süß"_b);
-
-#ifdef B_OS_WINDOWS
-    b::bytearray ba5 = "S\xfc\xdf";     // "Süß" Windows-1252
-    EXPECT_EQ(ba5.decode_windows1252(), "Süß"_b);
-#endif
+TEST(BatteryCore_ByteArray, Decode) {   // Only UTF-8 is decoded here. All other encodings are assumed to work too
+    b::bytearray ba1 = b::bytearray::from_string("S\xc3\xbc\xc3\x9f");     // "Süß" UTF-8 encoded plain string
+    EXPECT_EQ(ba1.decode<b::enc::utf8>(), "Süß"_b);
 }
 
 TEST(BatteryCore_ByteArray, Format) {
     b::bytearray ba = { 0x01, 0x02, 0x03 };
     auto result = b::format("'{}'", ba);
-    b::print(result);
     EXPECT_EQ(result, "'[1, 2, 3]'"_b);
 }

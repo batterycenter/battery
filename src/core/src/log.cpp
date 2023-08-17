@@ -12,11 +12,11 @@ namespace b {                                       // polluting the global name
     }
 
     void print(const b::string& str) {
-        std::cout << str.encode_utf8();
+        std::cout << str.encode<b::enc::utf8>();
     }
 
     void print(const b_color_variants_t& color, const b::string& str) {
-        std::visit([&str](auto&& color) { std::cout << color << str.encode_utf8() << rang::fg::reset; }, color);
+        std::visit([&str](auto&& color) { std::cout << color << str.encode<b::enc::utf8>() << rang::fg::reset; }, color);
     }
 
     void print(const std::vector<b_color_variants_t>& colors, const b::string& str) {

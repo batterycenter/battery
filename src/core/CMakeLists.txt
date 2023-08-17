@@ -54,6 +54,7 @@ target_link_libraries(battery_core_no_main
     spdlog::spdlog 
     reproc::reproc++
     utf8::cpp
+    fmt::fmt
 )
 
 if (WIN32)

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "battery/core/fs.hpp"
-#include "battery/core/bytearray.hpp"
+#include "battery/core/string.hpp"
 
 namespace b {
 
@@ -48,7 +48,7 @@ namespace b {
             }
 
             b::string str() {
-                return m_path.generic_string();
+                return m_path.string();
             }
 
             operator b::fs::path() {
@@ -56,7 +56,7 @@ namespace b {
             }
 
             operator b::string() {
-                return m_path.generic_string();
+                return m_path.string();
             }
 
             void reset();
@@ -72,4 +72,4 @@ namespace b {
         b::string m_filetype;
     };
 
-}
+} // namespace b

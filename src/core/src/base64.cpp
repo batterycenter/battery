@@ -3,10 +3,10 @@
 
 namespace b {
 
-    static constexpr std::string_view CHAR_TO_BASE64 =
+    static constexpr const char* CHAR_TO_BASE64 =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-    static constexpr std::string_view BASE64_TO_CHAR =
+    static constexpr const char* BASE64_TO_CHAR =
             "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF"
             "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF"
             "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x3E\xFF\xFF\xFF\x3F"
@@ -25,7 +25,7 @@ namespace b {
             "\x29\x2A\x2B\x2C\x2D\x2E\x2F\x30\x31\x32\x33\xFF\xFF\xFF\xFF\xFF";
 
     b::string encode_base64(const b::string &str) {
-        return encode_base64(b::bytearray(str.encode_utf8()));
+        return encode_base64(str.encode_bytes<b::enc::utf8>());
     }
 
     b::string encode_base64(const b::bytearray &data) {
@@ -49,7 +49,7 @@ namespace b {
 
     std::optional<b::string> decode_base64_text(const b::string &str) {
         if (auto data = decode_base64_binary(str)) {
-            return data->decode_utf8();
+            return data->decode<b::enc::utf8>();
         }
         return {};
     }
@@ -65,6 +65,9 @@ namespace b {
             for (int i = 0; i < 4; i++) {
                 if (i < remaining) {
                     auto chr = str[index + i];
+                    if (chr > 127) {
+                        return {};
+                    }
                     uint8_t const val = BASE64_TO_CHAR[chr];
                     if (val == 0xFF && chr != '=') {
                         return {};

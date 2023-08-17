@@ -104,18 +104,26 @@ namespace b {
                 std::invoke(std::forward<Args>(args)...);
                 return true;
             }
-            catch (const std::exception& e) {
-                b::log::core::critical("Unhandled exception in b::thread: [std::exception]: {}", e.what());
+            catch (const std::bad_expected_access<std::error_code>& err) {
+                auto str = b::format("Unhandled exception: Bad expected access of <std::error_code>: {}",
+                                     err.error().message());
+                b::log::core::critical(str);
                 if (m_messageBoxOnExceptionEnabled) {
-                    b::message_box_error(b::string::decode_utf8(
-                            b::format("Unhandled exception in b::thread: [std::exception]: {}", e.what())
-                    ));
+                    b::message_box_error(str);
+                }
+            }
+            catch (const std::exception& err) {
+                auto str = b::format("Unhandled [std::exception]: {}", err.what());
+                b::log::core::critical(str);
+                if (m_messageBoxOnExceptionEnabled) {
+                    b::message_box_error(str);
                 }
             }
             catch (...) {
-                b::log::core::critical("Unidentifiable exception caught in b::thread, no further information");
+                auto str = b::format("Unhandled exception: unknown type, no further information");
+                b::log::core::critical(str);
                 if (m_messageBoxOnExceptionEnabled) {
-                    b::message_box_error("Unidentifiable exception caught in b::thread, no further information"_b);
+                    b::message_box_error(str);
                 }
             }
             return false;

@@ -18,7 +18,6 @@
 //
 
 #include "battery/core/string.hpp"
-#include "battery/core/bytearray.hpp"
 
 namespace b {
 

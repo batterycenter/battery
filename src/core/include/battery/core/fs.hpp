@@ -18,8 +18,11 @@
 //
 
 #include "battery/core/string.hpp"
+#include "battery/core/constexpr.hpp"
 #include "battery/core/error.hpp"
+#include "battery/core/exception.hpp"
 #include "battery/core/log.hpp"
+#include "battery/core/format.hpp"
 #include <bit>
 #include <filesystem>
 #include <fstream>
@@ -28,12 +31,13 @@
 
 namespace b::fs {
 
-    using std::filesystem::copy;					// Copy either a file or a directory
-    using std::filesystem::file_size;
-
-    using std::filesystem::status;					// Get filesystem status: what type of entry it is
-
-    // TODO: filesystem::path seems to be incorrect for UTF-8 (try status())
+    // We re-use these types directly
+    using std::filesystem::file_time_type;
+    using std::filesystem::file_status;
+    using std::filesystem::perms;
+    using std::filesystem::perm_options;
+    using std::filesystem::copy_options;
+    using std::filesystem::space_info;
 
     // ========================================================
     // ================== Begin path class ====================
@@ -51,6 +55,11 @@ namespace b::fs {
 
         using iterator = std::filesystem::path::iterator;
         using const_iterator = std::filesystem::path::const_iterator;
+
+        /// \brief The preferred separator for the current platform (Backslash on Windows, forward slash on others)
+        inline static b::string const preferred_separator = b::string::decode<b::enc::os_native>(
+                b::native_string(&std::filesystem::path::preferred_separator, 1)
+        );
 
         /// \brief default constructor
         path() = default;
@@ -128,6 +137,7 @@ namespace b::fs {
 
         /// \brief Make the path absolute, relative to the current working directory. (If it is relative)
         /// \details If the path is already absolute, this function does nothing.
+        /// \throw b::filesystem_error if there is a filesystem error during the call.
         /// \return A reference to self
         path& make_absolute();
 
@@ -159,13 +169,13 @@ namespace b::fs {
         /// \param other The other path to swap with
         void swap(path& other) noexcept;
 
-        /// \brief Get the path as a platform native string (backslashes on Windows, forward slashes on others)
-        /// \return The path in string format as a platform native path
+        /// \brief Get the path in generic format (On Windows, all separators converted to forward slashes)
+        /// \return The path in generic string format
         [[nodiscard]] b::string string() const;
 
-        /// \brief Get the path as a generic string (keep forward slashes on all systems)
-        /// \return The path in string format as a generic path
-        [[nodiscard]] b::string generic_string() const;
+        /// \brief Get the path in platform-native format (Keeping backslashes and forward slashes as-is on all systems)
+        /// \return The path in platform-native string format
+        [[nodiscard]] b::string native_string() const;
 
         /// \brief Lexicographical comparison of two paths. (e.g. "/a/b" < "/a/b/c")
         /// \param other The other path to compare with
@@ -304,23 +314,35 @@ namespace b::fs {
         /// \warning Only use this function if you know what you are doing! The `std::filesystem::path` object will
         ///          easily make your code fragile in terms of Unicode awareness if you are not careful.
         /// \return The native underlying path object as a copy.
-        std::filesystem::path std_path() const;
+        [[nodiscard]] std::filesystem::path std_path() const;
 
         /// \brief Get an iterator to the beginning of the path.
+        /// \warning This function exposes iterators from the underlying `std::filesystem::path` object,
+        ///          which is not Unicode aware. To make sure the encoding is correct, make sure to only
+        ///          interact with it using wide strings.
         /// \return An iterator to the beginning of the path.
-        iterator begin() noexcept;
+        [[nodiscard]] iterator begin() noexcept;
 
         /// \brief Get an iterator past the end of the path.
+        /// \warning This function exposes iterators from the underlying `std::filesystem::path` object,
+        ///          which is not Unicode aware. To make sure the encoding is correct, make sure to only
+        ///          interact with it using wide strings.
         /// \return An iterator past the end of the path.
-        iterator end() noexcept;
+        [[nodiscard]] iterator end() noexcept;
 
         /// \brief Get an iterator to the beginning of the path.
+        /// \warning This function exposes iterators from the underlying `std::filesystem::path` object,
+        ///          which is not Unicode aware. To make sure the encoding is correct, make sure to only
+        ///          interact with it using wide strings.
         /// \return An iterator to the beginning of the path.
-        const_iterator begin() const noexcept;
+        [[nodiscard]] const_iterator begin() const noexcept;
 
         /// \brief Get an iterator past the end of the path.
+        /// \warning This function exposes iterators from the underlying `std::filesystem::path` object,
+        ///          which is not Unicode aware. To make sure the encoding is correct, make sure to only
+        ///          interact with it using wide strings.
         /// \return An iterator past the end of the path.
-        const_iterator end() const noexcept;
+        [[nodiscard]] const_iterator end() const noexcept;
 
         /// \brief Lexically compare with another path. No filesystem access is performed.
         /// \param rhs The path to compare with.
@@ -388,293 +410,872 @@ namespace b::fs {
     /// \details This function is a wrapper around std::filesystem::absolute, with Unicode awareness.
     ///          No filesystem access is performed.
     /// \param path The path to make absolute
-    /// \return An absolute path that points to the same file as the input path
-    b::fs::path absolute(const b::fs::path& path);
+    /// \throw b::filesystem_error
+    /// \return An absolute path that points to the same file as the input path, or an error code.
+    [[nodiscard]] b::fs::path absolute(const b::fs::path& path);
 
-    /// \brief Make a relative path absolute, from the perspective of the current working directory (non-throwing)
+    /// \brief Make a relative path absolute, from the perspective of the current working directory
     /// \details This function is a wrapper around std::filesystem::absolute, with Unicode awareness.
     ///          No filesystem access is performed.
     /// \param path The path to make absolute
-    /// \param ec The error code to set if an error occurs
-    /// \return An absolute path that points to the same file as the input path
-    b::fs::path absolute(const b::fs::path& path, std::error_code& ec) noexcept;
+    /// \return An absolute path that points to the same file as the input path, or an error code.
+    [[nodiscard]] std::expected<b::fs::path,std::error_code> try_absolute(const b::fs::path& path) noexcept;
 
-    /// \brief Get or set the current working directory
-    /// \details This function is a wrapper around std::filesystem::current_path, but is Unicode agnostic
-    /// \return The current working directory
-    template<typename... T>
-    b::fs::path current_path(T&&... args) {
-        return b::fs::path(std::filesystem::current_path(std::forward<T>(args)...).u8string());
-    }
+    /// \brief Canonicalize and absolute a path. The path must exist on-disk.
+    /// \details Converts the path to an absolute path (from the current working directory) if it is not already, and
+    ///          then removes any "." and ".." segments from the path, so that the path appears in its shortest form.
+    /// \param path The path to canonicalize
+    /// \throw b::filesystem_error
+    /// \return An absolute path that points to the same file as the input path, in its shortest form, or an error code.
+    [[nodiscard]] b::fs::path canonical(const b::fs::path& path);
 
-    /// \brief Check if a path exists on-disk. This can either be a file or a directory.
-    /// \details This function is a wrapper around std::filesystem::exists, but is Unicode agnostic.
-    /// \param path The path to check
-    /// \todo Implement `bool exists( std::filesystem::file_status s ) noexcept`;
-    /// \todo Implement variant that takes std::error_code
-    /// \return True if the path exists, false otherwise
-    bool exists(const b::fs::path& path);
+    /// \brief Canonicalize and absolute a path. The path must exist on-disk.
+    /// \details Converts the path to an absolute path (from the current working directory) if it is not already, and
+    ///          then removes any "." and ".." segments from the path, so that the path appears in its shortest form.
+    /// \param path The path to canonicalize
+    /// \return An absolute path that points to the same file as the input path, in its shortest form, or an error code.
+    [[nodiscard]] std::expected<b::fs::path,std::error_code> try_canonical(const b::fs::path& path) noexcept;
 
-    /// \brief Check if a path on-disk referse to a directory, by querying the filesystem.
-    /// \param path The directory path to check
-    /// \todo Implement `bool is_directory( std::filesystem::file_status s ) noexcept`;
-    /// \todo Implement variant that takes std::error_code
-    /// \return True if the path refers to a directory, false otherwise
-    bool is_directory(const b::fs::path& path);
+    /// \brief Make a path relative from the perspective of a base path.
+    /// \details If no relative path can be constructed, an empty path is returned.
+    ///          This makes this function different from `b::fs::proximate()`.
+    /// \param path The path to make relative
+    /// \param base The path to make the input path relative to
+    /// \throw b::filesystem_error
+    /// \return A relative path that points to the same file as the input path, or an error code.
+    /// \see b::fs::proximate()
+    [[nodiscard]] b::fs::path relative(const b::fs::path& path, const b::fs::path& base);
 
-    /// \brief Check if a path on-disk referse to a regular file, by querying the filesystem.
-    /// \param path The file path to check
-    /// \todo Implement `bool is_regular_file( std::filesystem::file_status s ) noexcept`;
-    /// \todo Implement variant that takes std::error_code
-    /// \return True if the path refers to a regular file, false otherwise
-    bool is_regular_file(const b::fs::path& path);
+    /// \brief Make a path relative from the perspective of a base path.
+    /// \details If no relative path can be constructed, an empty path is returned.
+    ///          This makes this function different from `b::fs::proximate()`.
+    /// \param path The path to make relative
+    /// \param base The path to make the input path relative to
+    /// \return A relative path that points to the same file as the input path, or an error code.
+    /// \see b::fs::proximate()
+    [[nodiscard]] std::expected<b::fs::path,std::error_code>
+            try_relative(const b::fs::path& path, const b::fs::path& base) noexcept;
 
-    /// \brief Create a directory including parents on-disk. If the directory already exists, this function does nothing.
+    /// \brief Make a path relative from the perspective of a base path.
+    /// \details If no relative path can be constructed, the input path is returned unchanged.
+    ///          This makes this function different from `b::fs::relative()`.
+    /// \param path The path to make relative
+    /// \param base The path to make the input path relative to
+    /// \throw b::filesystem_error
+    /// \return A relative path that points to the same file as the input path, or an error code.
+    /// \see b::fs::relative()
+    [[nodiscard]] b::fs::path proximate(const b::fs::path& path, const b::fs::path& base);
+
+    /// \brief Make a path relative from the perspective of a base path.
+    /// \details If no relative path can be constructed, the input path is returned unchanged.
+    ///          This makes this function different from `b::fs::relative()`.
+    /// \param path The path to make relative
+    /// \param base The path to make the input path relative to
+    /// \return A relative path that points to the same file as the input path, or an error code.
+    /// \see b::fs::relative()
+    [[nodiscard]] std::expected<b::fs::path,std::error_code>
+            try_proximate(const b::fs::path& path, const b::fs::path& base) noexcept;
+
+    /// \brief Copy a file or directory from one place to another.
+    /// \details Use `b::fs::copy_options` to specify how the copy should be performed. use ...::recursive
+    ///          to copy directories recursively, or ...::skip_symlinks to skip symbolic links. Only one option can
+    ///          be specified at a time. Symlinks are followed by default.
+
+    ///          You are required to use the return value for error checking, even though it does not contain
+    ///          a real value. If you want to use exceptions, blindly call `b::fs::copy(...).value()`,
+    ///          this will throw an exception if the result contains an error.
+    ///          Consult https://en.cppreference.com/w/cpp/filesystem/copy for more.
+    /// \param from The path to copy from
+    /// \param to The path to copy to
+    /// \param options Options to control how the copy is performed (optional)
+    /// \return Nothing if the copy was successful, or an error code.
+    /// \throw b::filesystem_error
+    /// \see b::fs::copy_file()
+    /// \see b::fs::copy_symlink()
+    void copy(const b::fs::path& from, const b::fs::path& to,
+              std::optional<b::fs::copy_options> options = std::nullopt);
+
+    /// \brief Copy a file or directory from one place to another.
+    /// \details Use `b::fs::copy_options` to specify how the copy should be performed. use ...::recursive
+    ///          to copy directories recursively, or ...::skip_symlinks to skip symbolic links. Only one option can
+    ///          be specified at a time. Symlinks are followed by default.
+
+    ///          You are required to use the return value for error checking, even though it does not contain
+    ///          a real value. If you want to use exceptions, blindly call `b::fs::copy(...).value()`,
+    ///          this will throw an exception if the result contains an error.
+    ///          Consult https://en.cppreference.com/w/cpp/filesystem/copy for more.
+    /// \param from The path to copy from
+    /// \param to The path to copy to
+    /// \param options Options to control how the copy is performed (optional)
+    /// \return Nothing if the copy was successful, or an error code.
+    /// \see b::fs::copy_file()
+    /// \see b::fs::copy_symlink()
+    [[nodiscard]] std::expected<std::nullopt_t,std::error_code>
+            try_copy(const b::fs::path& from, const b::fs::path& to,
+                     std::optional<b::fs::copy_options> options = std::nullopt) noexcept;
+
+    /// \brief Copy a regular file. Like `b::fs::copy()`, but throws an error if the source is not a regular file.
+    /// \details See `b::fs::copy()` for more details. This function does the exact same thing, except it
+    ///          only works for regular files. Use it if you want to copy a file and want to make sure that it is
+    ///          certainly a regular file and not a directory or symlink.
+    /// \param from The path to copy from
+    /// \param to The path to copy to
+    /// \param options Options to control how the copy is performed (optional)
+    /// \return Nothing if the copy was successful, or an error code.
+    /// \throw b::filesystem_error
+    /// \see b::fs::copy()
+    /// \see b::fs::copy_symlink()
+    void copy_file(const b::fs::path& from, const b::fs::path& to,
+                   std::optional<b::fs::copy_options> options = std::nullopt);
+
+    /// \brief Copy a regular file. Like `b::fs::copy()`, but throws an error if the source is not a regular file.
+    /// \details See `b::fs::copy()` for more details. This function does the exact same thing, except it
+    ///          only works for regular files. Use it if you want to copy a file and want to make sure that it is
+    ///          certainly a regular file and not a directory or symlink.
+    /// \param from The path to copy from
+    /// \param to The path to copy to
+    /// \param options Options to control how the copy is performed (optional)
+    /// \return Nothing if the copy was successful, or an error code.
+    /// \see b::fs::copy()
+    /// \see b::fs::copy_symlink()
+    [[nodiscard]] std::expected<std::nullopt_t,std::error_code>
+            try_copy_file(const b::fs::path& from, const b::fs::path& to,
+                          std::optional<b::fs::copy_options> options = std::nullopt) noexcept;
+
+    /// \brief Copy a symlink. Like `b::fs::copy()`, but it is used to copy a symlink itself.
+    /// \details See `b::fs::copy()` for more details.
+    /// \param from The path to copy from
+    /// \param to The path to copy to
+    /// \return Nothing if the copy was successful, or an error code.
+    /// \throw b::filesystem_error
+    /// \see b::fs::copy()
+    /// \see b::fs::copy_file()
+    void copy_symlink(const b::fs::path& from, const b::fs::path& to);
+
+    /// \brief Copy a symlink. Like `b::fs::copy()`, but it is used to copy a symlink itself.
+    /// \details See `b::fs::copy()` for more details.
+    /// \param from The path to copy from
+    /// \param to The path to copy to
+    /// \return Nothing if the copy was successful, or an error code.
+    /// \see b::fs::copy()
+    /// \see b::fs::copy_file()
+    [[nodiscard]] std::expected<std::nullopt_t,std::error_code>
+            try_copy_symlink(const b::fs::path& from, const b::fs::path& to) noexcept;
+
+    /// \brief Create a directory including parents on-disk. If the directory already exists, do nothing.
     /// \details Note: `create_directory` and `create_directories` as in `std::filesystem` are not both provided
-    ///          separately, as it would not make sense from a high-level. This function is essentially a wrapper around
-    ///          `std::filesystem::create_directories`. This function achieves the same goal with less error potential.
+    ///          separately, as it would not make sense from a high-level. This function is a wrapper around
+    ///          `std::filesystem::create_directories` and `std::filesystem::create_directory` is not provided as
+    ///          this function achieves the same thing with less error potential. Call
+    ///          `b::fs::create_directory(...).value()` to only throw an exception if an error occurs.
     /// \param path The path to create
-    /// \todo Add a function to set permissions on the created directory (or on any file)
-    /// \return True if the directory was created, false otherwise
+    /// \throw b::filesystem_error
+    /// \return True if the directory was created, false otherwise, or an error code.
     bool create_directory(const b::fs::path& path);
+
+    /// \brief Create a directory including parents on-disk. If the directory already exists, do nothing.
+    /// \details Note: `create_directory` and `create_directories` as in `std::filesystem` are not both provided
+    ///          separately, as it would not make sense from a high-level. This function is a wrapper around
+    ///          `std::filesystem::create_directories` and `std::filesystem::create_directory` is not provided as
+    ///          this function achieves the same thing with less error potential. Call
+    ///          `b::fs::create_directory(...).value()` to only throw an exception if an error occurs.
+    /// \param path The path to create
+    /// \return True if the directory was created, false otherwise, or an error code.
+    [[nodiscard]] std::expected<bool,std::error_code> try_create_directory(const b::fs::path& path) noexcept;
+
+    /// \brief Create a hard link. Once created, the hard link is indistinguishable from the original file.
+    /// \details Even if the original file is deleted, the file still exists and can be accessed through the hard link.
+    ///          You are required to use the return value for error checking.
+    ///          Call `b::fs::create_hard_link(...).value()` to throw an exception if an error occurs.
+    /// \param target The path to create a hard link to
+    /// \param link The path to the hard link
+    /// \throw b::filesystem_error
+    /// \return Nothing if the creation was successful, or an error code.
+    void create_hard_link(const b::fs::path& target, const b::fs::path& link);
+
+    /// \brief Create a hard link. Once created, the hard link is indistinguishable from the original file.
+    /// \details Even if the original file is deleted, the file still exists and can be accessed through the hard link.
+    ///          You are required to use the return value for error checking.
+    ///          Call `b::fs::create_hard_link(...).value()` to throw an exception if an error occurs.
+    /// \param target The path to create a hard link to
+    /// \param link The path to the hard link
+    /// \return Nothing if the creation was successful, or an error code.
+    [[nodiscard]] std::expected<std::nullopt_t,std::error_code>
+            try_create_hard_link(const b::fs::path& target, const b::fs::path& link) noexcept;
+
+    /// \brief Create a symbolic link between regular files. The target file can be accessed through the symlink.
+    /// \param target The path to create a symlink to
+    /// \param link The path of the symlink
+    /// \throw b::filesystem_error
+    /// \return Nothing if the creation was successful, or an error code.
+    void create_symlink(const b::fs::path& target, const b::fs::path& link);
+
+    /// \brief Create a symbolic link between regular files. The target file can be accessed through the symlink.
+    /// \param target The path to create a symlink to
+    /// \param link The path of the symlink
+    /// \return Nothing if the creation was successful, or an error code.
+    [[nodiscard]] std::expected<std::nullopt_t,std::error_code>
+            try_create_symlink(const b::fs::path& target, const b::fs::path& link) noexcept;
+
+    /// \brief Create a symbolic link between directories. The target directory can be accessed through the symlink.
+    /// \param target The path to create a symlink to
+    /// \param link The path to the symlink
+    /// \throw b::filesystem_error
+    /// \return Nothing if the creation was successful, or an error code.
+    void create_directory_symlink(const b::fs::path& target, const b::fs::path& link);
+
+    /// \brief Create a symbolic link between directories. The target directory can be accessed through the symlink.
+    /// \param target The path to create a symlink to
+    /// \param link The path to the symlink
+    /// \return Nothing if the creation was successful, or an error code.
+    [[nodiscard]] std::expected<std::nullopt_t,std::error_code>
+            try_create_directory_symlink(const b::fs::path& target, const b::fs::path& link) noexcept;
+
+    /// \brief Get the current working directory
+    /// \return The current working directory or an error code
+    /// \throw b::filesystem_error
+    /// \see b::fs::current_path()
+    [[nodiscard]] b::fs::path current_path();
+
+    /// \brief Get the current working directory
+    /// \return The current working directory or an error code
+    /// \see b::fs::current_path()
+    [[nodiscard]] std::expected<b::fs::path,std::error_code> try_current_path() noexcept;
+
+    /// \brief Set the current working directory and return it
+    /// \param path The new current working directory
+    /// \return The new current working directory or an error code
+    /// \throw b::filesystem_error
+    /// \see b::fs::current_path()
+    void current_path(const b::fs::path& path);
+
+    /// \brief Set the current working directory and return it
+    /// \param path The new current working directory
+    /// \return The new current working directory or an error code
+    /// \see b::fs::current_path()
+    [[nodiscard]] std::expected<std::nullopt_t,std::error_code> try_current_path(const b::fs::path& path) noexcept;
+
+    /// \brief Check if a path exists on-disk. This can either be a file or a directory. Symlinks are followed.
+    /// \param path The path to check
+    /// \return True if the path exists, false otherwise, or an error code.
+    /// \throw b::filesystem_error
+    [[nodiscard]] bool exists(const b::fs::path& path);
+
+    /// \brief Check if a path exists on-disk. This can either be a file or a directory. Symlinks are followed.
+    /// \param path The path to check
+    /// \return True if the path exists, false otherwise, or an error code.
+    [[nodiscard]] std::expected<bool,std::error_code> try_exists(const b::fs::path& path) noexcept;
+
+    /// \brief Check if a path exists on-disk. This can either be a file or a directory. Symlinks are followed.
+    ///        This function cannot fail.
+    /// \param path The path to check
+    /// \return True if the path exists, false otherwise, or an error code.
+    [[nodiscard]] bool exists(b::fs::file_status status) noexcept;
+
+    /// \brief Check if two file paths resolve to the same target. (file or directory)
+    /// \details An error is reported if either of the paths does not exist. All hard links are equivalent and symlinks
+    ///          are equivalent with their respective target.
+    /// \param path1 The first path to check
+    /// \param path2 The second path to check
+    /// \throw b::filesystem_error
+    /// \return True if both file paths have the same file status, false otherwise, or an error code.
+    [[nodiscard]] bool equivalent(const b::fs::path& path1, const b::fs::path& path2);
+
+    /// \brief Check if two file paths resolve to the same target. (file or directory)
+    /// \details An error is reported if either of the paths does not exist. All hard links are equivalent and symlinks
+    ///          are equivalent with their respective target.
+    /// \param path1 The first path to check
+    /// \param path2 The second path to check
+    /// \return True if both file paths have the same file status, false otherwise, or an error code.
+    [[nodiscard]] std::expected<bool,std::error_code> try_equivalent(const b::fs::path& path1,
+                                                                     const b::fs::path& path2) noexcept;
+
+    /// \brief Get the on-disk filesize of a file in bytes. This might be different from the string length.
+    /// \warning The returned size is the size in bytes a file has on-disk. If you read the file as text,
+    ///          the string length after reading will be different. Firstly, because it is usually stored in UTF-8
+    ///          and the number of bytes does not correspond to the number of characters, and secondly because
+    ///          CRLF line endings on Windows are converted to LF when reading a text file, which also changes the
+    ///          number of bytes. Use this function only if you specifically need the number of bytes on-disk.
+    ///          Otherwise, read the file as text and retrieve the string length.
+    /// \param path The path to the file
+    /// \throw b::filesystem_error
+    /// \return The on-disk filesize in bytes or an error code.
+    [[nodiscard]] size_t file_size(const b::fs::path& path);
+
+    /// \brief Get the on-disk filesize of a file in bytes. This might be different from the string length.
+    /// \warning The returned size is the size in bytes a file has on-disk. If you read the file as text,
+    ///          the string length after reading will be different. Firstly, because it is usually stored in UTF-8
+    ///          and the number of bytes does not correspond to the number of characters, and secondly because
+    ///          CRLF line endings on Windows are converted to LF when reading a text file, which also changes the
+    ///          number of bytes. Use this function only if you specifically need the number of bytes on-disk.
+    ///          Otherwise, read the file as text and retrieve the string length.
+    /// \param path The path to the file
+    /// \return The on-disk filesize in bytes or an error code.
+    [[nodiscard]] std::expected<size_t,std::error_code> try_file_size(const b::fs::path& path) noexcept;
+
+    /// \brief Get how many hard links refer to a file or directory.
+    /// \details See https://en.cppreference.com/w/cpp/filesystem/hard_link_count
+    /// \param path The path to the file or directory
+    /// \throw b::filesystem_error
+    /// \return The number of hard links or an error code.
+    [[nodiscard]] size_t hard_link_count(const b::fs::path& path);
+
+    /// \brief Get how many hard links refer to a file or directory.
+    /// \details See https://en.cppreference.com/w/cpp/filesystem/hard_link_count
+    /// \param path The path to the file or directory
+    /// \return The number of hard links or an error code.
+    [[nodiscard]] std::expected<size_t,std::error_code> try_hard_link_count(const b::fs::path& path) noexcept;
 
     /// \brief Get the last modification time of a file or directory. Symlinks are followed.
     /// \param path The path to check
-    /// \todo Implement non-throwing variant
-    /// \todo Investigate if a custom std::filesystem::file_time_type should be written
-    /// \return The last modification time of the file or directory
-    std::filesystem::file_time_type last_write_time(const b::fs::path& path);
+    /// \throw b::filesystem_error
+    /// \return The last modification time of the file or directory, or an error code.
+    [[nodiscard]] b::fs::file_time_type last_write_time(const b::fs::path& path);
 
-    /// \brief Set the last modification time of a file or directory. Symlinks are followed.
-    /// \param path The path to write
-    /// \param newTime The new modification time
-    /// \todo Implement non-throwing variant
-    /// \todo Investigate if a custom std::filesystem::file_time_type should be written
-    void last_write_time(const b::fs::path& path, std::filesystem::file_time_type newTime);
+    /// \brief Get the last modification time of a file or directory. Symlinks are followed.
+    /// \param path The path to check
+    /// \return The last modification time of the file or directory, or an error code.
+    [[nodiscard]] std::expected<b::fs::file_time_type,std::error_code>
+            try_last_write_time(const b::fs::path& path) noexcept;
 
-    /// \brief Remove a file or an empty directory from disk. If the path does not exist, this function does nothing.
-    /// \details Symlinks are not followed, the link itself is removed.
-    /// \param path The path to remove
-    /// \todo Implement variant that takes std::error_code
-    /// \return True if the path was removed, false otherwise
-    bool remove(const b::fs::path& path);
+    /// \brief Set the last modification time of a file or directory to a specified value. Symlinks are followed.
+    /// \param path The path to check
+    /// \param newTime The new last modification time
+    /// \throw b::filesystem_error
+    /// \return The newly set last modification time of the file or directory, or an error code.
+    void last_write_time(const b::fs::path& path, b::fs::file_time_type newTime);
 
-    /// \brief Remove a file or a directory including all content from disk. Does nothing, if the path does not exist.
-    /// \details Symlinks are not followed, the link itself is removed. If the path refers to a directory, the directory
-    ///          is removed recursively.
-    /// \param path The path to remove
-    /// \todo Implement variant that takes std::error_code
-    /// \return The number of files and directories removed, which is 0 if the path did not exist to begin with
-    size_t remove_all(const b::fs::path& path);
+    /// \brief Set the last modification time of a file or directory to a specified value. Symlinks are followed.
+    /// \param path The path to check
+    /// \return The newly set last modification time of the file or directory, or an error code.
+    [[nodiscard]] std::expected<std::nullopt_t,std::error_code>
+            try_last_write_time(const b::fs::path& path, b::fs::file_time_type newTime) noexcept;
 
+    /// \brief Set permissions on a file or directory. Symlinks are followed unless the `nofollow` option is set.
+    /// \details See https://en.cppreference.com/w/cpp/filesystem/permissions. You are required to use the return
+    ///          value for error handling. Call `b::fs::permissions(...).value()` to throw an exception on error.
+    /// \param path The path to investigate
+    /// \param perms The new permissions
+    /// \param opts The options to use (optional)
+    /// \throw b::filesystem_error
+    /// \return Nothing or an error code.
+    void permissions(const b::fs::path& path,
+                     b::fs::perms perms,
+                     b::fs::perm_options opts = b::fs::perm_options::replace);
 
+    /// \brief Set permissions on a file or directory. Symlinks are followed unless the `nofollow` option is set.
+    /// \details See https://en.cppreference.com/w/cpp/filesystem/permissions. You are required to use the return
+    ///          value for error handling. Call `b::fs::permissions(...).value()` to throw an exception on error.
+    /// \param path The path to investigate
+    /// \param perms The new permissions
+    /// \param opts The options to use (optional)
+    /// \return Nothing or an error code.
+    [[nodiscard]] std::expected<std::nullopt_t,std::error_code>
+            try_permissions(const b::fs::path& path,
+                            b::fs::perms perms,
+                            b::fs::perm_options opts = b::fs::perm_options::replace) noexcept;
 
+    /// \brief Read a symlink and return the path it points to. It is an error if the path is not an existing symlink.
+    /// \param path The path to investigate
+    /// \throw b::filesystem_error
+    /// \return The path the symlink points to or an error code.
+    [[nodiscard]] b::fs::path read_symlink(const b::fs::path& path);
 
-    enum class Mode {
-        TEXT,
-        BINARY
-    };
+    /// \brief Read a symlink and return the path it points to. It is an error if the path is not an existing symlink.
+    /// \param path The path to investigate
+    /// \return The path the symlink points to or an error code.
+    [[nodiscard]] std::expected<b::fs::path,std::error_code> try_read_symlink(const b::fs::path& path) noexcept;
 
+    /// \brief Remove a file or a directory from disk, recursively. If the path does not exist, do nothing.
+    /// \details Symlinks are not followed, the link itself is removed. This function maps to
+    ///          `std::filesystem::remove_all`. `std::filesystem::remove` is not provided separately, because this
+    ///          function does the same thing with less error potential. Throwing an error if the file to be removed
+    ///          does not exist, does not make sense from a high-level perspective.
+    /// \param path The path to remove (file, directory or symlink)
+    /// \throw b::filesystem_error
+    /// \return The number of files and directories removed or an error code.
+    size_t remove(const b::fs::path& path);
+
+    /// \brief Remove a file or a directory from disk, recursively. If the path does not exist, do nothing.
+    /// \details Symlinks are not followed, the link itself is removed. This function maps to
+    ///          `std::filesystem::remove_all`. `std::filesystem::remove` is not provided separately, because this
+    ///          function does the same thing with less error potential. Throwing an error if the file to be removed
+    ///          does not exist, does not make sense from a high-level perspective.
+    /// \param path The path to remove (file, directory or symlink)
+    /// \return The number of files and directories removed or an error code.
+    [[nodiscard]] std::expected<size_t,std::error_code> try_remove(const b::fs::path& path) noexcept;
+
+    /// \brief Rename a file or directory on-disk. Symlinks are not followed.
+    /// \details You are required to use the return value for error handling. Call `b::fs::rename(...).value()` to
+    ///          simply throw an exception on error.
+    /// \param oldPath The path to rename
+    /// \param newPath The new path
+    /// \throw b::filesystem_error
+    /// \return Nothing or an error code.
+    void rename(const b::fs::path& oldPath, const b::fs::path& newPath);
+
+    /// \brief Rename a file or directory on-disk. Symlinks are not followed.
+    /// \details You are required to use the return value for error handling. Call `b::fs::rename(...).value()` to
+    ///          simply throw an exception on error.
+    /// \param oldPath The path to rename
+    /// \param newPath The new path
+    /// \return Nothing or an error code.
+    [[nodiscard]] std::expected<std::nullopt_t,std::error_code> try_rename(const b::fs::path& oldPath,
+                                                                           const b::fs::path& newPath) noexcept;
+
+    /// \brief Change the size of a file on-disk by discarding bytes or adding zero-bytes at the end.
+    /// \details You are required to use the return value for error handling. Call `b::fs::resize_file(...).value()` to
+    ///          simply throw an exception on error. Symlinks are followed.
+    /// \param path The path to the file
+    /// \param newSize The new size of the file in bytes
+    /// \throw b::filesystem_error
+    /// \return Nothing or an error code.
+    void resize_file(const b::fs::path& path, size_t newSize);
+
+    /// \brief Change the size of a file on-disk by discarding bytes or adding zero-bytes at the end.
+    /// \details You are required to use the return value for error handling. Call `b::fs::resize_file(...).value()` to
+    ///          simply throw an exception on error. Symlinks are followed.
+    /// \param path The path to the file
+    /// \param newSize The new size of the file in bytes
+    /// \return Nothing or an error code.
+    [[nodiscard]] std::expected<std::nullopt_t,std::error_code>
+            try_resize_file(const b::fs::path& path, size_t newSize) noexcept;
+
+    /// \brief Check how much space is available on the filesystem on which said path is located.
+    /// \details See https://en.cppreference.com/w/cpp/filesystem/space
+    /// \param path The path to the file or directory
+    /// \throw b::filesystem_error
+    /// \return The space info or an error code.
+    [[nodiscard]] b::fs::space_info space(const b::fs::path& path);
+
+    /// \brief Check how much space is available on the filesystem on which said path is located.
+    /// \details See https://en.cppreference.com/w/cpp/filesystem/space
+    /// \param path The path to the file or directory
+    /// \return The space info or an error code.
+    [[nodiscard]] std::expected<b::fs::space_info,std::error_code> try_space(const b::fs::path& path) noexcept;
+
+    /// \brief Get the file status of a file or directory. Symlinks are followed.
+    /// \details See https://en.cppreference.com/w/cpp/filesystem/status
+    /// \param path The path to the file or directory
+    /// \throw b::filesystem_error
+    /// \return The file status or an error code.
+    [[nodiscard]] b::fs::file_status status(const b::fs::path& path);
+
+    /// \brief Get the file status of a file or directory. Symlinks are followed.
+    /// \details See https://en.cppreference.com/w/cpp/filesystem/status
+    /// \param path The path to the file or directory
+    /// \return The file status or an error code.
+    [[nodiscard]] std::expected<b::fs::file_status,std::error_code> try_status(const b::fs::path& path) noexcept;
+
+    /// \brief Get the file status of a symlink.
+    /// \details See https://en.cppreference.com/w/cpp/filesystem/status
+    /// \param path The path to the symlink
+    /// \throw b::filesystem_error
+    /// \return The file status or an error code.
+    [[nodiscard]] b::fs::file_status symlink_status(const b::fs::path& path);
+
+    /// \brief Get the file status of a symlink.
+    /// \details See https://en.cppreference.com/w/cpp/filesystem/status
+    /// \param path The path to the symlink
+    /// \return The file status or an error code.
+    [[nodiscard]] std::expected<b::fs::file_status,std::error_code>
+            try_symlink_status(const b::fs::path& path) noexcept;
+
+    // std::filesystem::temp_directory_path is not provided. Use the b::folders module instead.
+
+    /// \brief Check if a path on-disk refers to a block device.
+    /// \details If the path does not exist, false is returned.
+    ///          Files such as `/dev/sda` or `/dev/loop0` are checked for.
+    /// \param path The directory path to check
+    /// \throw b::filesystem_error
+    /// \return True if the path refers to a block device, otherwise false
+    [[nodiscard]] bool is_block_file(const b::fs::path& path);
+
+    /// \brief Check if a path on-disk refers to a block device.
+    /// \details If the path does not exist, false is returned.
+    ///          Files such as `/dev/sda` or `/dev/loop0` are checked for.
+    /// \param path The directory path to check
+    /// \return True if the path refers to a block device, otherwise false, or an error code.
+    [[nodiscard]] std::expected<bool,std::error_code> try_is_block_file(const b::fs::path& path) noexcept;
+
+    /// \brief Check if a file status refers to a block device.
+    /// \details If the path does not exist, false is returned. This function cannot fail.
+    ///          Files such as `/dev/sda` or `/dev/loop0` are checked for.
+    /// \param status The file status to check
+    /// \return True if the path refers to a block device, otherwise false.
+    [[nodiscard]] bool is_block_file(b::fs::file_status status) noexcept;
+
+    /// \brief Check if a path on-disk refers to a character special file.
+    /// \details If the path does not exist, false is returned.
+    ///          Files such as `/dev/null` or `/dev/tty` are checked for.
+    /// \param path The directory path to check
+    /// \throw b::filesystem_error
+    /// \return True if the path refers to a character special file, otherwise false
+    [[nodiscard]] bool is_character_file(const b::fs::path& path);
+
+    /// \brief Check if a path on-disk refers to a character special file.
+    /// \details If the path does not exist, false is returned.
+    ///          Files such as `/dev/null` or `/dev/tty` are checked for.
+    /// \param path The directory path to check
+    /// \return True if the path refers to a character special file, otherwise false, or an error code.
+    [[nodiscard]] std::expected<bool,std::error_code> try_is_character_file(const b::fs::path& path) noexcept;
+
+    /// \brief Check if a file status refers to a character special file.
+    /// \details If the path does not exist, false is returned. This function cannot fail.
+    ///          Files such as `/dev/null` or `/dev/tty` are checked for.
+    /// \param status The file status to check
+    /// \return True if the path refers to a character special file, otherwise false.
+    [[nodiscard]] bool is_character_file(b::fs::file_status status) noexcept;
+
+    /// \brief Check if a path on-disk refers to a directory.
+    /// \details If the path does not exist, false is returned.
+    /// \param path The directory path to check
+    /// \throw b::filesystem_error
+    /// \return True if the path refers to a directory, otherwise false
+    [[nodiscard]] bool is_directory(const b::fs::path& path);
+
+    /// \brief Check if a path on-disk refers to a directory.
+    /// \details If the path does not exist, false is returned.
+    /// \param path The directory path to check
+    /// \return True if the path refers to a directory, otherwise false, or an error code.
+    [[nodiscard]] std::expected<bool,std::error_code> try_is_directory(const b::fs::path& path) noexcept;
+
+    /// \brief Check if a file status refers to a directory.
+    /// \details If the path does not exist, false is returned. This function cannot fail.
+    /// \param status The file status to check
+    /// \return True if the path refers to a directory, otherwise false.
+    [[nodiscard]] bool is_directory(b::fs::file_status status) noexcept;
+
+    /// \brief Check if a path on-disk is an empty file or an empty directory.
+    /// \details If the path does not exist, false is returned.
+    /// \param path The directory path to check
+    /// \throw b::filesystem_error
+    /// \return True if the condition is true, otherwise false
+    [[nodiscard]] bool is_empty(const b::fs::path& path);
+
+    /// \brief Check if a path on-disk is an empty file or an empty directory.
+    /// \details If the path does not exist, false is returned.
+    /// \param path The directory path to check
+    /// \return True if the condition is true, otherwise false, or an error code.
+    [[nodiscard]] std::expected<bool,std::error_code> try_is_empty(const b::fs::path& path) noexcept;
+
+    /// \brief Check if a path on-disk refers to a FIFO pipe.
+    /// \details If the path does not exist, false is returned.
+    /// \param path The directory path to check
+    /// \throw b::filesystem_error
+    /// \return True if the condition is true, otherwise false
+    [[nodiscard]] bool is_fifo(const b::fs::path& path);
+
+    /// \brief Check if a path on-disk refers to a FIFO pipe.
+    /// \details If the path does not exist, false is returned.
+    /// \param path The directory path to check
+    /// \return True if the condition is true, otherwise false, or an error code.
+    [[nodiscard]] std::expected<bool,std::error_code> try_is_fifo(const b::fs::path& path) noexcept;
+
+    /// \brief Check if a file status refers to a FIFO pipe.
+    /// \details If the path does not exist, false is returned. This function cannot fail.
+    /// \param status The file status to check
+    /// \return True if the condition is true, otherwise false.
+    [[nodiscard]] bool is_fifo(b::fs::file_status status) noexcept;
+
+    /// \brief Check if a path on-disk refers to a file of type 'other'.
+    /// \details If the path does not exist, false is returned. True is returned if the path is neither a file,
+    ///          nor a directory, nor a symlink.
+    /// \param path The directory path to check
+    /// \throw b::filesystem_error
+    /// \return True if the condition is true, otherwise false
+    [[nodiscard]] bool is_other(const b::fs::path& path);
+
+    /// \brief Check if a path on-disk refers to a file of type 'other'.
+    /// \details If the path does not exist, false is returned. True is returned if the path is neither a file,
+    ///          nor a directory, nor a symlink.
+    /// \param path The directory path to check
+    /// \return True if the condition is true, otherwise false, or an error code.
+    [[nodiscard]] std::expected<bool,std::error_code> try_is_other(const b::fs::path& path) noexcept;
+
+    /// \brief Check if a file status refers to a file of type 'other'.
+    /// \details If the path does not exist, false is returned. This function cannot fail. True is returned if
+    ///          the path is neither a file, nor a directory, nor a symlink.
+    /// \param status The file status to check
+    /// \return True if the condition is true, otherwise false.
+    [[nodiscard]] bool is_other(b::fs::file_status status) noexcept;
+
+    /// \brief Check if a path on-disk refers to a regular file.
+    /// \details If the path does not exist, false is returned.
+    /// \param path The directory path to check
+    /// \throw b::filesystem_error
+    /// \return True if the condition is true, otherwise false
+    [[nodiscard]] bool is_regular_file(const b::fs::path& path);
+
+    /// \brief Check if a path on-disk refers to a regular file.
+    /// \details If the path does not exist, false is returned.
+    /// \param path The directory path to check
+    /// \return True if the condition is true, otherwise false, or an error code.
+    [[nodiscard]] std::expected<bool,std::error_code> try_is_regular_file(const b::fs::path& path) noexcept;
+
+    /// \brief Check if a file status refers to a regular file.
+    /// \details If the path does not exist, false is returned. This function cannot fail.
+    /// \param status The file status to check
+    /// \return True if the condition is true, otherwise false.
+    [[nodiscard]] bool is_regular_file(b::fs::file_status status) noexcept;
+
+    /// \brief Check if a path on-disk refers to a named IPC socket.
+    /// \details If the path does not exist, false is returned.
+    /// \param path The directory path to check
+    /// \throw b::filesystem_error
+    /// \return True if the condition is true, otherwise false
+    [[nodiscard]] bool is_socket(const b::fs::path& path);
+
+    /// \brief Check if a path on-disk refers to a named IPC socket.
+    /// \details If the path does not exist, false is returned.
+    /// \param path The directory path to check
+    /// \return True if the condition is true, otherwise false, or an error code.
+    [[nodiscard]] std::expected<bool,std::error_code> try_is_socket(const b::fs::path& path) noexcept;
+
+    /// \brief Check if a file status refers to a named IPC socket.
+    /// \details If the path does not exist, false is returned. This function cannot fail.
+    /// \param status The file status to check
+    /// \return True if the condition is true, otherwise false.
+    [[nodiscard]] bool is_socket(b::fs::file_status status) noexcept;
+
+    /// \brief Check if a path on-disk refers to a symlink.
+    /// \details If the path does not exist, false is returned.
+    /// \param path The directory path to check
+    /// \throw b::filesystem_error
+    /// \return True if the condition is true, otherwise false
+    [[nodiscard]] bool is_symlink(const b::fs::path& path);
+
+    /// \brief Check if a path on-disk refers to a symlink.
+    /// \details If the path does not exist, false is returned.
+    /// \param path The directory path to check
+    /// \return True if the condition is true, otherwise false, or an error code.
+    [[nodiscard]] std::expected<bool,std::error_code> try_is_symlink(const b::fs::path& path) noexcept;
+
+    /// \brief Check if a file status refers to a symlink.
+    /// \details If the path does not exist, false is returned. This function cannot fail.
+    /// \param status The file status to check
+    /// \return True if the condition is true, otherwise false.
+    [[nodiscard]] bool is_symlink(b::fs::file_status status) noexcept;
+
+    /// \brief Check if a file status is known. This function cannot fail.
+    /// \param status The file status to check.
+    /// \return True if the status is known, otherwise false.
+    [[nodiscard]] bool status_known(b::fs::file_status status) noexcept;
+
+    /// \brief An improved file input stream, that guarantees to work with Unicode file paths on every platform.
+    /// \note You are encouraged to use `b::fs::read()` and `b::fs::write()` instead of this class, wherever possible.
+    /// \note Be aware that the number of bytes needed to represent the data on disk may be different from the number
+    ///       of characters in the string. Do not take the file size as a measure of the number of characters.
     class ifstream : public std::ifstream {
     public:
-        ifstream(const fs::path& path, enum Mode filemode = Mode::TEXT)
-                : std::ifstream(path.string().encode_native(),
-                                (filemode == Mode::TEXT) ? std::ios::in : (std::ios::in | std::ios::binary)),
-                                path(path)
-        {
-            binary = (filemode == Mode::BINARY);	// remember for later
-        }
-
-        ifstream(const fs::path& path, std::ios_base::openmode mode)
-                : std::ifstream(path.string().encode_native(), mode),
-                                path(path)
-        {
-            binary = (mode & std::ios::binary);		// remember for later
-        }
-
+        ifstream(const path& path, std::ios_base::openmode mode = std::ios_base::in)
+                : std::ifstream(path.string().encode<b::enc::os_native>(), mode) {}
         ~ifstream() override = default;
-
-    private:
-        fs::path path;
-        bool binary = false;
     };
 
-    namespace internal {
-        inline static std::optional<b::string> read_file_nothrow(const fs::path &path, enum Mode filemode) {
-            b::fs::ifstream file(path, filemode);
-            if (!file.is_open()) {
-                return {};
-            }
-            std::string str((std::istreambuf_iterator<char>(file)), (std::istreambuf_iterator<char>()));
-            return string::decode_utf8(str);      // TODO: Do this properly with encodings
-        }
-
-        inline static b::string read_file(const fs::path& path, enum Mode filemode) {
-            if (auto str = read_file_nothrow(path, filemode)) {
-                return str.value();
-            }
-            else {
-                throw std::runtime_error(b::format("Cannot read file as b::string: File failed while reading into buffer: {}", b::strerror(errno)).encode_utf8());
-            }
-        }
-
-        template<typename TFunc>
-        inline static size_t read_file_in_chunks_nothrow(const fs::path& path, size_t chunk_size, TFunc callback, enum Mode filemode) {
-            auto file = fs::ifstream(path, filemode);
-            if (file.fail()) {
-                return -1;
-            }
-            std::string buffer(chunk_size, 0);
-            size_t total_bytes = 0;
-
-            while (!file.eof()) {
-                file.read(buffer.data(), buffer.size());    // Read a chunk of the file
-                auto this_chunk_size = file.gcount();
-                total_bytes += this_chunk_size;
-
-                if (this_chunk_size != 0) {
-                    callback(b::string::decode_utf8(std::string(buffer.data(), static_cast<size_t>(this_chunk_size))));
-                }
-            }
-
-            return total_bytes;
-        }
-
-        template<typename TFunc>
-        inline static size_t read_file_in_chunks(const fs::path& path, size_t chunk_size, TFunc callback, enum Mode filemode) {
-            auto bytes_read = read_file_in_chunks_nothrow(path, chunk_size, callback, filemode);
-            if (bytes_read == -1) {
-                throw std::runtime_error(b::format("Cannot read file in chunks: File failed while chunk reading into buffer: {}", b::strerror(errno)));
-            }
-            else {
-                return bytes_read;
-            }
-        }
-    }
-
-    inline static std::optional<b::string> read_text_file_nothrow(const fs::path& path) {
-        return internal::read_file_nothrow(path, Mode::TEXT);
-    }
-
-    inline static std::optional<b::string> read_binary_file_nothrow(const fs::path& path) {
-        return internal::read_file_nothrow(path, Mode::BINARY);
-    }
-
-    inline static b::string read_text_file(const fs::path& path) {
-        return internal::read_file(path, Mode::TEXT);
-    }
-
-    inline static b::string read_binary_file(const fs::path& path) {
-        return internal::read_file(path, Mode::BINARY);
-    }
-
-    template<typename TFunc>
-    inline static size_t read_text_file_in_chunks_nothrow(const fs::path& path, size_t chunk_size, TFunc callback) {
-        return internal::read_file_in_chunks_nothrow(path, chunk_size, callback, Mode::TEXT);
-    }
-
-    template<typename TFunc>
-    inline static size_t read_binary_file_in_chunks_nothrow(const fs::path& path, size_t chunk_size, TFunc callback) {
-        return internal::read_file_in_chunks_nothrow(path, chunk_size, callback, Mode::BINARY);
-    }
-
-    template<typename TFunc>
-    inline static size_t read_text_file_in_chunks(const fs::path& path, size_t chunk_size, TFunc callback) {
-        return internal::read_file_in_chunks(path, chunk_size, callback, Mode::TEXT);
-    }
-
-    template<typename TFunc>
-    inline static size_t read_binary_file_in_chunks(const fs::path& path, size_t chunk_size, TFunc callback) {
-        return internal::read_file_in_chunks(path, chunk_size, callback, Mode::BINARY);
-    }
-//
-//    // In Binary mode this function is cheap, it reads the filesize from the filesystem.
-//    // In Text mode this function is expensive, it reads the entire file into memory, just for the filesize.
-//    // There is no other way to get the filesize in text mode, because the representation on-disk is different
-//    // from what is read into memory. (Due to line endings) Be aware that it returns the number of bytes in UTF-8
-//    inline static std::streamsize file_size_nothrow(const fs::path& path, enum Mode filemode) {
-//        if (filemode == b::fs::Mode::BINARY) {
-//            return std::filesystem::file_size(b::string(path).str());
-//        }
-//        else {
-//            auto str = fs::read_text_file_nothrow(path);
-//            if (str) {
-//                return str.value().length();
-//            }
-//            else {
-//                return -1;
-//            }
-//        }
-//    }
-//
-//    inline static std::streamsize file_size(const fs::path& path, enum Mode filemode) {
-//        auto size = file_size_nothrow(path, filemode);
-//        if (size == -1) {
-//            throw std::runtime_error(b::format("Cannot get compensated file size: File failed while reading into buffer: {}", b::strerror(errno)));
-//        }
-//        else {
-//            return size;
-//        }
-//    }
-
+    /// \brief An improved file output stream, that guarantees to work with Unicode file paths on every platform.
+    /// \note You are encouraged to use `b::fs::read()` and `b::fs::write()` instead of this class, wherever possible.
+    ///       The only situation where you must use this class is when you want to write a file in chunks.
+    /// \note Be aware that the number of bytes needed to represent the data on disk may be different from the number
+    ///       of characters in the string. Do not take the file size as a measure of the number of characters.
     class ofstream : public std::ofstream {
     public:
-        ofstream(const fs::path& path, enum Mode filemode = Mode::TEXT, bool createDirectory = true)
-                : std::ofstream(create_dir_return_path(path, createDirectory), parse_mode(filemode)) {}
-
         ofstream(const fs::path& path, std::ios_base::openmode filemode, bool createDirectory = true)
                 : std::ofstream(create_dir_return_path(path, createDirectory), filemode) {}
-
         ~ofstream() override = default;
 
     private:
-        std::ios::openmode parse_mode(enum Mode filemode) const {
-            if (filemode == Mode::TEXT) {
-                return std::ios::out;
-            }
-            else {
-                return std::ios::out | std::ios::binary;
-            }
-        }
-
-        b::native_string create_dir_return_path(const fs::path& path, bool createDirectory) const {
+        [[nodiscard]] b::native_string create_dir_return_path(const fs::path& path, bool createDirectory) const {
             if (path.has_parent_path() && createDirectory) {
                 if (!fs::exists(path.parent_path())) {
                     fs::create_directory(path.parent_path());
                 }
             }
-            return path.string().encode_native();
+            return path.string().encode<b::enc::os_native>();
         }
     };
 
-    namespace internal {
-//        inline static bool write_file_nothrow(const fs::path &path, const b::string &str, enum Mode filemode, bool createDirectory = true) {
-//            ofstream file(path, filemode, createDirectory);
-//            if (file.fail()) return false;
-//            file << str;
-//            return true;
-//        }
+    /// \brief Read the contents of a file into a fitting container, while agnosting the file encoding
+    /// \details The encoding can be specified as a template parameter. Use `auto str = b::fs::read(myFilePath);` to
+    ///          read a text file with UTF-8 encoding (default). The return value is a generic b::string, which can
+    ///          then be encoded in other formats. For example, use `auto str = b::fs::read<b::fs::latin1>(myFilePath);`
+    ///          to read a file with Latin-1 encoding. Binary files are an exception, for these use
+    ///          `auto bytes = b::fs::read<b::fs::binary>(myFilePath);`. In this case return type is a `b::bytearray`,
+    ///          better suited for holding byte-based binary resources without a specific encoding.
+    /// \note Be aware that the number of bytes needed to represent the data on disk may be different from the number
+    ///       of characters in the string. Do not take the file size as a measure of the number of characters.
+    /// \tparam encoding The encoding to use for the file
+    /// \param path The b::fs::path file path to load the file from
+    /// \return b::bytearray if b::fs::binary is used, otherwise an encoding-agnostic b::string
+    /// \see b::fs::read()
+    template<typename encoding = b::enc::utf8>
+    auto try_read(const fs::path &path) {
+        std::ios::openmode filemode = std::ios::in;
+        if constexpr (std::is_same_v<encoding, b::enc::binary>) {
+            filemode |= std::ios::binary;
+        }
+
+        b::fs::ifstream file(path, filemode);
+        if (!file.is_open()) {
+            return std::unexpected(b::filesystem_error(
+                    b::format("Failed loading file {}: {}", path, b::strerror(errno))
+            ));
+        }
+
+        auto content = b::bytearray::from_string(
+                std::string(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>())
+        );
+
+        return std::expected(b::string::decode<encoding>(content));
     }
 
-//    inline static bool write_text_file_nothrow(const fs::path& path, const b::string& str) {
-//        return internal::write_file_nothrow(path, str, Mode::TEXT);
-//    }
-//
-//    inline static bool write_binary_file_nothrow(const fs::path& path, const b::string& str) {
-//        return internal::write_file_nothrow(path, str, Mode::BINARY);
-//    }
+    /// \brief Read the contents of a file into a fitting container, while agnosting the file encoding
+    /// \details The encoding can be specified as a template parameter. Use `auto str = b::fs::read(myFilePath);` to
+    ///          read a text file with UTF-8 encoding (default). The return value is a generic b::string, which can
+    ///          then be encoded in other formats. For example, use `auto str = b::fs::read<b::fs::latin1>(myFilePath);`
+    ///          to read a file with Latin-1 encoding. Binary files are an exception, for these use
+    ///          `auto bytes = b::fs::read<b::fs::binary>(myFilePath);`. In this case return type is a `b::bytearray`,
+    ///          better suited for holding byte-based binary resources without a specific encoding.
+    /// \note Be aware that the number of bytes needed to represent the data on disk may be different from the number
+    ///       of characters in the string. Do not take the file size as a measure of the number of characters.
+    /// \tparam encoding The encoding to use for the file
+    /// \param path The b::fs::path file path to load the file from
+    /// \throw b::filesystem_error if loading the file fails
+    /// \return b::bytearray if b::fs::binary is used, otherwise an encoding-agnostic b::string
+    /// \see b::fs::try_read()
+    template<typename encoding = b::enc::utf8>
+    auto read(const fs::path &path) {
+        auto result = try_read<encoding>(path);
+        if (!result) {
+            throw b::filesystem_error(result.error().message());
+        }
+        return result.value();
+    }
 
-//    inline static void write_text_file(const fs::path& path, const b::string& str) {
-//        if (!write_text_file_nothrow(path, str)) {
-//            throw std::runtime_error(b::format("Cannot write file from b::string: File failed for writing: {}", b::strerror(errno)));
-//        }
-//    }
-//
-//    inline static void write_binary_file(const fs::path& path, const b::string& str) {
-//        if (!write_binary_file_nothrow(path, str)) {
-//            throw std::runtime_error(b::format("Cannot write file from b::string: File failed for writing: {}", b::strerror(errno)));
-//        }
-//    }
+    /// \brief Read the contents of a file in chunks
+    /// \details The chunk size is specified, as well as a callback function (preferrably a lambda), that is
+    ///          called for every chunk being read. When the read is finished, the total number of bytes read
+    ///          is being returned, or a b::filesystem_error object. To write a file in chunks, use
+    ///          `b::fs::ofstream` directly.
+    /// \note Be aware that the number of bytes needed to represent the data on disk may be different from the number
+    ///       of characters in the string. Do not take the file size as a measure of the number of characters.
+    /// \tparam encoding The encoding to use for the file
+    /// \tparam TFunc The type of the callback function (do not specify)
+    /// \param path The b::fs::path file path to load the file from
+    /// \param chunk_size The size of the chunks to read
+    /// \param callback The callback function to call for every chunk read
+    /// \return The total number of bytes read, or a b::filesystem_error exception object
+    template<typename encoding = b::enc::utf8, typename TFunc>
+    inline static std::expected<size_t, b::filesystem_error> try_read_chunked(const fs::path& path,
+                                                                              size_t chunk_size,
+                                                                              TFunc callback) {
+        std::ios::openmode filemode = std::ios::in;
+        if constexpr (std::is_same_v<encoding, b::enc::binary>) {
+            filemode |= std::ios::binary;
+        }
+
+        b::fs::ifstream file(path, filemode);
+        if (!file.is_open()) {
+            return std::unexpected(b::filesystem_error(
+                    b::format("Failed loading file {}: {}", path, b::strerror(errno))
+            ));
+        }
+
+        std::string buffer(chunk_size, 0);
+        size_t totalBytes = 0;
+        while (!file.eof()) {
+            file.read(buffer.data(), buffer.size());    // Read a chunk of the file
+            auto thisChunkSize = file.gcount();
+            totalBytes += thisChunkSize;
+
+            if (thisChunkSize != 0) {
+                auto chunk = b::string::decode<encoding>(
+                        std::string(buffer.data(), static_cast<size_t>(thisChunkSize))
+                );
+                callback(chunk);
+            }
+        }
+
+        return std::expected(totalBytes);
+    }
+
+    /// \brief Read the contents of a file in chunks
+    /// \details The chunk size is specified, as well as a callback function (preferrably a lambda), that is
+    ///          called for every chunk being read. When the read is finished, the total number of bytes read
+    ///          is being returned, or a b::filesystem_error object.
+    /// \note Be aware that the number of bytes needed to represent the data on disk may be different from the number
+    ///       of characters in the string. Do not take the file size as a measure of the number of characters.
+    /// \tparam encoding The encoding to use for the file
+    /// \tparam TFunc The type of the callback function (do not specify)
+    /// \param path The b::fs::path file path to load the file from
+    /// \param chunk_size The size of the chunks to read
+    /// \param callback The callback function to call for every chunk read
+    /// \throw b::filesystem_error if loading the file fails
+    /// \return The total number of bytes read
+    template<typename encoding = b::enc::utf8, typename TFunc>
+    inline static size_t read_chunked(const fs::path& path, size_t chunk_size, TFunc callback) {
+        auto result = try_read_chunked<encoding>(path, chunk_size, callback);
+        if (!result) {
+            throw result.error();
+        }
+        return result.value();
+    }
+
+    /// \brief Write into a file on-disk. Parent folders are automatically created.
+    /// \details The encoding can be specified as a template parameter. Use `auto str = b::fs::write(myFilePath, ...);`
+    ///          to write a text file with UTF-8 encoding (default). Use the template parameter `<b::enc::binary>` to
+    ///          write a binary file. In this case the input parameter is a `b::bytearray`, otherwise
+    ///          it is a `b::string`.
+    /// \note Be aware that the number of bytes needed to represent the data on disk may be different from the number
+    ///       of characters in the string. Do not take the file size as a measure of the number of characters.
+    /// \warning Always remember to respect https://utf8everywhere.org/. Never write a file to disk with anything
+    ///          other than UTF-8 encoding, unless you have a very good reason to do so.
+    /// \tparam encoding The encoding to use for the file
+    /// \param path The b::fs::path file path to open the file from
+    /// \param content The content to write into the file (b::bytearray or b::string, depending on the encoding)
+    /// \return The number of bytes written to disk, or a b::filesystem_error exception object
+    /// \see b::fs::write()
+    template<typename encoding = b::enc::utf8, typename T>
+    std::expected<size_t, b::filesystem_error> try_write(const fs::path &path, const T& content) {
+        std::ios::openmode filemode = std::ios::out;
+        if constexpr (std::is_same_v<encoding, b::enc::binary>) {
+            filemode |= std::ios::binary;
+        }
+
+        b::fs::ofstream file(path, filemode);
+        if (!file.is_open()) {
+            return std::unexpected(b::filesystem_error(
+                    b::format("Failed loading file {}: {}", path, b::strerror(errno))
+            ));
+        }
+
+        file.write(content.encode<encoding>());
+        return std::expected(static_cast<size_t>(file.tellp()));
+    }
+
+    /// \brief Write into a file on-disk. Parent folders are automatically created.
+    /// \details The encoding can be specified as a template parameter. Use `auto str = b::fs::write(myFilePath, ...);`
+    ///          to write a text file with UTF-8 encoding (default). Use the template parameter `<b::enc::binary>` to
+    ///          write a binary file. In this case the input parameter is a `b::bytearray`, otherwise
+    ///          it is a `b::string`.
+    /// \note Be aware that the number of bytes needed to represent the data on disk may be different from the number
+    ///       of characters in the string. Do not take the file size as a measure of the number of characters.
+    /// \warning Always remember to respect https://utf8everywhere.org/. Never write a file to disk with anything
+    ///          other than UTF-8 encoding, unless you have a very good reason to do so.
+    /// \tparam encoding The encoding to use for the file
+    /// \param path The b::fs::path file path to open the file from
+    /// \param content The content to write into the file (b::bytearray or b::string, depending on the encoding)
+    /// \throw b::filesystem_error if writing the file fails
+    /// \return The number of bytes written to disk
+    /// \see b::fs::try_write()
+    template<typename encoding = b::enc::utf8, typename T>
+    size_t write(const fs::path &path, const T& content) {
+        auto result = try_write<encoding>(path, content);
+        if (!result) {
+            throw result.error();
+        }
+        return result.value();
+    }
 
 } // namespace b::fs
 
@@ -682,7 +1283,7 @@ namespace b::fs {
 namespace std {
     template <> struct hash<b::fs::path> {
         size_t operator()(const b::fs::path& path) const {
-            return std::hash<std::string>()(path.generic_string().encode_utf8());
+            return std::hash<std::string>()(path.string().encode<b::enc::utf8>());
         }
     };
 } // namespace std

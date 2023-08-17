@@ -59,7 +59,8 @@ namespace b {
     }
 
     void process::stdin_write(const b::string& str) {
-        stdin_write(str.encode_utf8().data(), str.length());
+        auto utf8 = str.encode<b::enc::utf8>();
+        stdin_write(utf8.data(), utf8.length());
     }
 
     void process::stdin_write(const std::string_view& str) {
@@ -97,8 +98,7 @@ namespace b {
             options.stdout_callback(buffer);
         }
         if (!options.silent) {
-            std::string s;
-            b::print("{}", "");
+            b::print("{}", buffer);
         }
         return {};
     }
@@ -133,17 +133,17 @@ namespace b {
         }
 
         if (!options.executable.empty()) {
-            cmd.emplace_back(options.executable.encode_utf8());
+            cmd.emplace_back(options.executable.encode<b::enc::utf8>());
         }
         for (const auto& command : options.arguments) {
             if (command.empty()) {
                 continue;
             }
-            cmd.emplace_back(command.encode_utf8());
+            cmd.emplace_back(command.encode<b::enc::utf8>());
         }
 
         options.reproc_options.redirect.parent = options.passthrough_to_parent;
-        std::string workdir = options.working_directory.has_value() ? options.working_directory->string().encode_utf8() : "";
+        std::string workdir = options.working_directory.has_value() ? options.working_directory->string().encode<b::enc::utf8>() : "";
         options.reproc_options.working_directory = !workdir.empty() ? workdir.c_str() : nullptr;
         options.reproc_options.redirect.err.type = reproc::redirect::type::pipe;
 
@@ -151,7 +151,7 @@ namespace b {
             auto dir = options.working_directory.value();
             if (!fs::is_directory(dir)) {
                 throw std::invalid_argument(b::format("Cannot run process in working directory '{}': "
-                                                      "Directory does not exist", workdir).encode_utf8());
+                                                      "Directory does not exist", workdir).encode<b::enc::utf8>());
             }
         }
 
@@ -176,7 +176,7 @@ namespace b {
         std::error_code errorCode = _process.start(cmdCstr.data(), options.reproc_options);
         if (errorCode) {
             exit_code = errorCode.value();
-            error_message = b::string::decode_utf8(errorCode.message());
+            error_message = b::string::decode<b::enc::utf8>(errorCode.message());
             if (ctrl_c_handler) {
                 b::pop_ctrl_c_handler();
             }
@@ -186,15 +186,17 @@ namespace b {
         errorCode = reproc::drain(
                 _process,
                 [this] (auto, const uint8_t* buffer, size_t length) {
-                    return this->stdout_sink(b::string::decode_utf8(std::string(std::bit_cast<char *>(buffer), length)));
+                    auto data = b::bytearray(std::vector<uint8_t>(buffer, buffer + length));
+                    return this->stdout_sink(b::string::decode<b::enc::utf8>(data));
                 },
                 [this] (auto, const uint8_t* buffer, size_t length) {
-                    return this->stderr_sink(b::string::decode_utf8(std::string(std::bit_cast<char *>(buffer), length)));
+                    auto data = b::bytearray(std::vector<uint8_t>(buffer, buffer + length));
+                    return this->stderr_sink(b::string::decode<b::enc::utf8>(data));
                 });
 
         if (errorCode) {
             exit_code = errorCode.value();
-            error_message = b::string::decode_utf8(errorCode.message());
+            error_message = b::string::decode<b::enc::utf8>(errorCode.message());
             if (ctrl_c_handler) {
                 b::pop_ctrl_c_handler();
             }
@@ -204,7 +206,7 @@ namespace b {
         auto [status, _ec] = _process.wait(reproc::infinite);
         if (_ec) {
             exit_code = status;
-            error_message = b::string::decode_utf8(_ec.message());
+            error_message = b::string::decode<b::enc::utf8>(_ec.message());
             if (ctrl_c_handler) {
                 b::pop_ctrl_c_handler();
             }
@@ -218,7 +220,7 @@ namespace b {
         }
 
         exit_code = status;
-        error_message = b::string::decode_utf8(_ec.message());
+        error_message = b::string::decode<b::enc::utf8>(_ec.message());
         if (ctrl_c_handler) {
             b::pop_ctrl_c_handler();
         }

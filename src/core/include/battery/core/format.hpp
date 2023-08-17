@@ -17,13 +17,7 @@
 // limitations under the License.
 //
 
-#ifndef SPDLOG_COMPILED_LIB
-#define SPDLOG_COMPILED_LIB     // Force SPDLOG to recognize the prebuilt library
-#endif
-
 #include "battery/core/string.hpp"
-#include <spdlog/fmt/fmt.h>                     // TODO: Use std::format once it's fully implemented
-#include <spdlog/fmt/ranges.h>
 
 namespace b {
 
@@ -36,8 +30,9 @@ namespace b {
     /// \param fmt The format string
     /// \param args The arguments to format
     /// \return The formatted string
-    template<typename... T> b::string format(fmt::format_string<T...> fmt, T&&... args) {
-        return b::string::decode_utf8(fmt::format(fmt, std::forward<T>(args)...));
+    template<typename... T>
+    b::string format(fmt::format_string<T...> fmt, T&&... args) {
+        return b::string::decode<b::enc::utf8>(fmt::format(fmt, std::forward<T>(args)...));
     }
 
 } // namespace b

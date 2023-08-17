@@ -33,11 +33,11 @@
 //     }
 // };
 
-#include <battery/core/main.hpp>
+#include "battery/core.hpp"
 
 int b::main([[maybe_unused]] const std::vector<b::string>& args) {
 
-    //test();
+
 
     return 0;
 }

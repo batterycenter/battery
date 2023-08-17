@@ -10,7 +10,7 @@ target_sources(battery_core_tests PRIVATE
     base64.cpp
     bytearray.cpp
     cache.cpp
-    filesystem.cpp
+        fs.cpp
     lockfile.cpp
     main.cpp
     process.cpp

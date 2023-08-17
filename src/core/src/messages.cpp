@@ -30,12 +30,15 @@ namespace b {
                     0,
                     nullptr);
 
-            auto tmp = b::string::decode_native(std::wstring(messageBuffer));
+            auto tmp = b::string::decode<b::enc::os_native>(std::wstring(messageBuffer));
             LocalFree(messageBuffer);
             return tmp;
         }
         static void win32_message_box(const b::string& message, const b::string& title, UINT options) {
-            ::MessageBoxW(nullptr, message.encode_native().c_str(), title.encode_native().c_str(), options);
+            ::MessageBoxW(nullptr,
+                          message.encode<b::enc::os_native>().c_str(),
+                          title.encode<b::enc::os_native>().c_str(),
+                          options);
         }
 #else
         void linux_run_zenity(const std::vector<b::string>& commands) {
