@@ -1,7 +1,7 @@
 
 # Usage of this module:
 # battery_add_module(eventbus)
-# target_link_libraries(... battery::eventbus)
+# target_link_libraries(... PUBLIC battery::eventbus)
 
 # Download the EventBus library from Github
 set(ENABLE_TEST OFF)
@@ -14,5 +14,5 @@ b_add_source_files(battery_eventbus   # This function also groups the files in t
         )
 target_include_directories(battery_eventbus PUBLIC include)
 
-target_link_libraries(battery_eventbus battery::core EventBus)
+target_link_libraries(battery_eventbus PUBLIC battery::core EventBus)
 b_set_target_ide_folder(battery_eventbus "battery/modules")

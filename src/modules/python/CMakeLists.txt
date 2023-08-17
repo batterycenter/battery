@@ -1,10 +1,10 @@
 
 # Usage of this module:
 # battery_add_module(python)
-# target_link_libraries(... battery::python)
+# target_link_libraries(... PUBLIC battery::python)
 
 b_add_library(battery_python STATIC ALIAS battery::python)
-target_link_libraries(battery_python battery::core)
+target_link_libraries(battery_python PUBLIC battery::core)
 
 set(SOURCES
         src/python.cpp)
@@ -22,7 +22,7 @@ include(cmake/python.cmake)
 battery_find_python()
 battery_download_python_embedded_distro()
 
-target_link_libraries(battery_python Python::Python pybind11::embed)
+target_link_libraries(battery_python PUBLIC Python::Python pybind11::embed)
 
 # Unit-testing
 if (BUILD_TESTS)

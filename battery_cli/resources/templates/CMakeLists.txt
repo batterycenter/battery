@@ -16,7 +16,7 @@ b_add_executable(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
 # What libraries to link to
-target_link_libraries(${PROJECT_NAME} battery::core)
+target_link_libraries(${PROJECT_NAME} PUBLIC battery::core)
 
 # Enable precompiled headers for faster compilation
 b_precompile_headers(${PROJECT_NAME} "${CMAKE_CURRENT_LIST_DIR}/include/pch.hpp")

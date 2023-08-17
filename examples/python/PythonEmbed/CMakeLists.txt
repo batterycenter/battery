@@ -1,7 +1,7 @@
 battery_add_example(Example_PythonEmbed src/main.cpp)
 
 battery_add_module(python)
-target_link_libraries(Example_PythonEmbed battery::python)
+target_link_libraries(Example_PythonEmbed PUBLIC battery::python)
 battery_copy_python_runtime_files_after_build(Example_PythonEmbed)
 
 battery_embed(Example_PythonEmbed resources/script.py script_py TEXT)

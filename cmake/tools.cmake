@@ -82,7 +82,7 @@ function(b_apply_common_target_options TARGET)  # For all libraries and executab
 
     # Link against pthreads if applicable
     find_package (Threads REQUIRED)
-    target_link_libraries(${TARGET} Threads::Threads)
+    target_link_libraries(${TARGET} PUBLIC Threads::Threads)
 
     if (ENABLE_CLANG_TIDY)
         if (MSVC)
@@ -192,7 +192,7 @@ function(b_add_test TARGET)
         b_set_target_ide_folder(gtest "battery/tests")
     endif()
     b_add_executable(${TARGET} ${ARGN})
-    target_link_libraries(${TARGET} gtest)
+    target_link_libraries(${TARGET} PUBLIC gtest)
     gtest_discover_tests(${TARGET})
     b_add_msvc_header_files(${TARGET})
 endfunction()

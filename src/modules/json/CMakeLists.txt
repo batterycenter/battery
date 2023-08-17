@@ -1,7 +1,7 @@
 
 # Usage of this module:
 # battery_add_module(json)
-# target_link_libraries(... battery::json)
+# target_link_libraries(... PUBLIC battery::json)
 
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 

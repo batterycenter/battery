@@ -1,7 +1,7 @@
 
 # Usage of this module:
 # battery_add_module(imgui)
-# target_link_libraries(... battery::imgui)
+# target_link_libraries(... PUBLIC battery::imgui)
 
 # Pull latest commit from GitHub from May 9, 2923 -> docking branch
 battery_add_package("gh:ocornut/imgui#031148dc56d70158b3ad84d9be95b04bb3f5baaf")

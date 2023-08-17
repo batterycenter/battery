@@ -1,7 +1,7 @@
 
 # Usage of this module:
 # battery_add_module(graphics)
-# target_link_libraries(... battery::graphics)
+# target_link_libraries(... PUBLIC battery::graphics)
 
 b_add_library(battery_graphics STATIC ALIAS battery::graphics)
 b_add_source_files(battery_graphics
@@ -48,7 +48,7 @@ battery_add_module(json)
 battery_add_module(eventbus)
 battery_add_module(python)
 
-target_link_libraries(battery_graphics
+target_link_libraries(battery_graphics PUBLIC 
         battery::core
         battery::sfml::graphics
         battery::sfml::window

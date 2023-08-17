@@ -1,7 +1,7 @@
 
 # Usage of this module:
 # battery_add_module(pygraphics)
-# target_link_libraries(... battery::pygraphics)
+# target_link_libraries(... PUBLIC battery::pygraphics)
 
 b_add_library(battery_pygraphics STATIC ALIAS battery::pygraphics)
 b_add_source_files(battery_pygraphics
@@ -13,7 +13,7 @@ b_set_ide_folder(battery_pygraphics "battery/modules")
 battery_add_module(python)
 battery_add_module(graphics)
 
-target_link_libraries(battery_graphics
+target_link_libraries(battery_graphics PUBLIC 
         battery::core
         battery::python
         battery::graphics

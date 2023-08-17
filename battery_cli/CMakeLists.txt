@@ -12,10 +12,10 @@ source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include" PREFIX "Header Files" FILE
 
 b_set_output_name(battery_cli "b")
 target_include_directories(battery_cli PUBLIC include)
-target_link_libraries(battery_cli battery::core)
+target_link_libraries(battery_cli PUBLIC battery::core)
 
 battery_add_module(toml11)
-target_link_libraries(battery_cli battery::toml11)
+target_link_libraries(battery_cli PUBLIC battery::toml11)
 
 b_precompile_headers(battery_cli "include/pch.hpp")
 

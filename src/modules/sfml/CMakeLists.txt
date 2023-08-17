@@ -1,7 +1,7 @@
 
 # Usage of this module:
 # battery_add_module(sfml)
-#  - target_link_libraries(<target>
+#  - target_link_libraries(<target> PUBLIC 
 #        battery::sfml::graphics
 #        battery::sfml::window
 #        battery::sfml::system

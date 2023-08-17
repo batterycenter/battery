@@ -3,4 +3,4 @@ battery_add_example(Example_SimpleGraphics
         src/App.cpp)
 
 battery_add_module(graphics)
-target_link_libraries(Example_SimpleGraphics battery::graphics)
+target_link_libraries(Example_SimpleGraphics PUBLIC battery::graphics)

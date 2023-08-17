@@ -1,7 +1,7 @@
 
 # Usage of this module:
 # battery_add_module(imgui_sfml)
-# target_link_libraries(... battery::imgui_sfml)
+# target_link_libraries(... PUBLIC battery::imgui_sfml)
 
 # Download the Dear ImGui User interface library from Github
 battery_add_module(imgui)           # This should set IMGUI_DIR

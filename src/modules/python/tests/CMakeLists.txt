@@ -1,6 +1,6 @@
 
 b_add_test(battery_python_tests)
-target_link_libraries(battery_python_tests battery::core battery::python)
+target_link_libraries(battery_python_tests PUBLIC battery::core battery::python)
 target_compile_definitions(battery_python_tests PRIVATE TESTDATA_FOLDER="${CMAKE_CURRENT_LIST_DIR}/testdata")
 
 target_sources(battery_python_tests PRIVATE

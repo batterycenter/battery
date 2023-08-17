@@ -50,19 +50,19 @@ b_set_ide_folder(battery_core_no_main "battery/modules")
 #set_property(SOURCE src/extern/utf8proc.c PROPERTY CMAKE_CXX_CLANG_TIDY "")
 #set_property(SOURCE src/extern/utf8proc_data.c PROPERTY CMAKE_CXX_CLANG_TIDY "")
 
-target_link_libraries(battery_core_no_main 
+target_link_libraries(battery_core_no_main PUBLIC 
     spdlog::spdlog 
     reproc::reproc++
     utf8::cpp
 )
 
 if (WIN32)
-    target_link_libraries(battery_core_no_main Winmm.lib dwmapi.lib)   # for b::sleep_ms timer resolution and immersive dark mode
+    target_link_libraries(battery_core_no_main PUBLIC Winmm.lib dwmapi.lib)   # for b::sleep_ms timer resolution and immersive dark mode
 endif ()
 
 b_add_library(battery_core STATIC ALIAS battery::core)
 b_add_source_files(battery_core battery_main/main.cpp)
-target_link_libraries(battery_core battery::core_no_main)
+target_link_libraries(battery_core PUBLIC battery::core_no_main)
 
 if (BUILD_TESTS)
     add_subdirectory(tests)
