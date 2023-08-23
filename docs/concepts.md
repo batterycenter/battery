@@ -12,10 +12,10 @@ The most important concepts are explained later again in the relevant sections, 
  - Always read and write files as binary, to store with LF line endings exclusively, even on Windows. CRLF has no place in modern, cross-platform computing. Windows deals with LF just fine these days.
  - Never use wide strings or UTF-16 anywhere except directly adjacent to system APIs or Library APIs.
  - There is no such thing as an ASCII-only string, every string can generally contain text in any language
- - A *character* can always consist of multiple bytes. Character literals are fine, but a *char* is not guaranteed to be sufficient for what you think of as a *character*
- - The string length is always in terms of bytes or code units used in memory. User-perceived characters on screen cannot be mapped to individual code points (not even in UTF-32) and do not need to be
- - Even when you do low-level ASCII parsing, always consider every input and output to be UTF-8, and use Battery's utilities to strip non-ASCII characters if applicable. After that you are allowed to consider every byte as one *character*.
- - Never use ANSI-Win32 functions or the dependent Macro. Always use the Unicode variant explicitly (postfixed with W)
+ - A *character* can always consist of multiple bytes. Be careful when storing single characters and be especially careful with the `char` datatype.
+ - The string length is always noted in terms of bytes or code units used in memory. User-perceived characters on screen cannot be mapped to individual code points (and do not need to be since the user-perceived characters are usually completely irrelevant for logic)
+ - Even when doing low-level ASCII parsing, always consider every input and output to be UTF-8. If applicable, use Battery's utilities to strip non-ASCII characters. Only after that are you allowed to think of one byte as one *character*.
+ - Never use ANSI-Win32 functions (like `CreateFileA`) or their Macro (`CreateFile`). Always use their Unicode variant explicitly (like `CreateFileW`)
 
 <details>
 <summary>More about Windows</summary>
