@@ -1,7 +1,15 @@
 
-@page concepts Battery Concepts
+@page guidelines Battery Guidelines
 
 # Unicode
+
+Test Section
+
+<details>
+  <summary>Read More</summary>
+  <p>Additional information goes here.</p>
+  <p>More details can be added.</p>
+</details>
 
 Battery provides you with many concepts that make your life easier: You do not have to stay inline with them,
 but if you do, you will have a much better time.
