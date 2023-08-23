@@ -21,7 +21,7 @@ The most important concepts are explained later again in the relevant sections, 
 <summary>More about Windows</summary>
 <p>Just as http://utf8everywhere.org/ states, this is not a religious war against Windows or Microsoft. In fact, Battery was for a long time Windows-only and is still primarily developed for Windows.</p>
 
-<p>Microsoft is not to be blamed for inventing ANSI, CRLF or choosing UTF-16, because they were the first ones to do it back then. We only think it is time to move on and it is time to ban ANSI from modern software development.</p>
+<p>Microsoft is not to be blamed for inventing the ANSI encoding, CRLF or choosing UTF-16, because they were one of the first ones to see the challenge back then. We just think it is time to move on and that nowadays it is time to ban ANSI encoding from modern software development.</p>
 </details>
 
 Battery provides you with many concepts that make your life easier: You do not have to stay inline with them,
