@@ -1,9 +1,17 @@
 
 @page guidelines Battery Guidelines
 
-# Unicode
+# UTF-8 Everywhere
 
-Test Section
+Battery strictly follows http://utf8everywhere.org/. Read it thoroughly for an in-depth primer on Unicode.
+
+The most important concepts are explained later again in the relevamt section, but here are the main takeaways from the manifesto:
+ - Every string and char* is always and everywhere considered to be UTF-8 encoded, the same is for any file on-disk and data from a network.
+ - Do not use BOMs, since anything is considered to be UTF-8 anyways and it makes things such as file concatenation a nightmare.
+ - There is no such thing as an ASCII-only string, every string can contain text in any language
+ - A *character* can always consist of multiple bytes, thus be careful with *char*s
+ - The string length is always in terms of bytes or code units used in memory. User-perceived characters on screen cannot be mapped to individual code points (not even in UTF-32) and do not need to be
+ - Even when you do low-level ASCII parsing, always consider every input and output to be UTF-8, and use Battery's utilities to strip non-ASCII characters if applicable. After that you are allowed to consider every byte as one *character*.
 
 <details>
   <summary>Read More</summary>
