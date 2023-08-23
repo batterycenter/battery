@@ -4,7 +4,7 @@ var searchData=
   ['base64_5fencoding_5ferror_8',['base64_encoding_error',['../classb_1_1base64__encoding__error.html',1,'b']]],
   ['basetray_9',['basetray',['../classb_1_1tray_1_1basetray.html',1,'b::tray']]],
   ['basicfilewatcher_10',['BasicFileWatcher',['../classb_1_1BasicFileWatcher.html',1,'b']]],
-  ['battery_20concepts_11',['Battery Concepts',['../concepts.html',1,'']]],
+  ['battery_20guidelines_11',['Battery Guidelines',['../guidelines.html',1,'']]],
   ['battery_20library_12',['Battery Library',['../index.html',1,'']]],
   ['begin_13',['begin',['../classb_1_1fs_1_1path.html#aec10b58784b65cb48dc03a1abc109e14',1,'b::fs::path::begin() noexcept'],['../classb_1_1fs_1_1path.html#ad02fe3c4299a1f7f42ef67ff981d7afa',1,'b::fs::path::begin() const noexcept'],['../group__String.html#gab93b348e814ed95937059338190ace1f',1,'b::string::begin() noexcept'],['../group__String.html#ga377bd9028fe9b07f76f658c6dd00daba',1,'b::string::begin() const noexcept']]],
   ['binary_14',['binary',['../structb_1_1enc_1_1binary.html',1,'b::enc']]],
