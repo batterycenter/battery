@@ -117,10 +117,10 @@ UTF-8 Everywhere</h1>
 <li>Always read and write files as binary, to store with LF line endings exclusively, even on Windows. CRLF has no place in modern, cross-platform computing. Windows deals with LF just fine these days.</li>
 <li>Never use wide strings or UTF-16 anywhere except directly adjacent to system APIs or Library APIs.</li>
 <li>There is no such thing as an ASCII-only string, every string can generally contain text in any language</li>
-<li>A <em>character</em> can always consist of multiple bytes. Character literals are fine, but a <em>char</em> is not guaranteed to be sufficient for what you think of as a <em>character</em></li>
-<li>The string length is always in terms of bytes or code units used in memory. User-perceived characters on screen cannot be mapped to individual code points (not even in UTF-32) and do not need to be</li>
-<li>Even when you do low-level ASCII parsing, always consider every input and output to be UTF-8, and use Battery's utilities to strip non-ASCII characters if applicable. After that you are allowed to consider every byte as one <em>character</em>.</li>
-<li>Never use ANSI-Win32 functions or the dependent Macro. Always use the Unicode variant explicitly (postfixed with W)</li>
+<li>A <em>character</em> can always consist of multiple bytes. Be careful when storing single characters and be especially careful with the <code>char</code> datatype.</li>
+<li>The string length is always noted in terms of bytes or code units used in memory. User-perceived characters on screen cannot be mapped to individual code points (and do not need to be since the user-perceived characters are usually completely irrelevant for logic)</li>
+<li>Even when doing low-level ASCII parsing, always consider every input and output to be UTF-8. If applicable, use Battery's utilities to strip non-ASCII characters. Only after that are you allowed to think of one byte as one <em>character</em>.</li>
+<li>Never use ANSI-Win32 functions (like <code>CreateFileA</code>) or their Macro (<code>CreateFile</code>). Always use their Unicode variant explicitly (like <code>CreateFileW</code>)</li>
 </ul>
 <p>&lt;details&gt;</p>
 <p>Just as <a href="http://utf8everywhere.org/">http://utf8everywhere.org/</a> states, this is not a religious war against Windows or Microsoft. In fact, Battery was for a long time Windows-only and is still primarily developed for Windows.</p>
