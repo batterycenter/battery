@@ -5,18 +5,22 @@
 
 Battery strictly follows http://utf8everywhere.org/. Read it thoroughly for an in-depth primer on Unicode.
 
-The most important concepts are explained later again in the relevamt section, but here are the main takeaways from the manifesto:
+The most important concepts are explained later again in the relevant sections, but here are the main takeaways from the manifesto:
  - Every string and char* is always and everywhere considered to be UTF-8 encoded, the same is for any file on-disk and data from a network.
  - Do not use BOMs, since anything is considered to be UTF-8 anyways and it makes things such as file concatenation a nightmare.
- - There is no such thing as an ASCII-only string, every string can contain text in any language
- - A *character* can always consist of multiple bytes, thus be careful with *char*s
+ - All files you work with, especially the source code files must all be written as UTF-8
+ - Always read and write files as binary, to store with LF line endings exclusively, even on Windows. CRLF has no place in modern, cross-platform computing. Windows deals with LF just fine these days.
+ - Never use wide strings or UTF-16 anywhere except directly adjacent to system APIs or Library APIs.
+ - There is no such thing as an ASCII-only string, every string can generally contain text in any language
+ - A *character* can always consist of multiple bytes. Character literals are fine, but a *char* is not guaranteed to be sufficient for what you think of as a *character*
  - The string length is always in terms of bytes or code units used in memory. User-perceived characters on screen cannot be mapped to individual code points (not even in UTF-32) and do not need to be
  - Even when you do low-level ASCII parsing, always consider every input and output to be UTF-8, and use Battery's utilities to strip non-ASCII characters if applicable. After that you are allowed to consider every byte as one *character*.
+ - Never use ANSI-Win32 functions or the dependent Macro. Always use the Unicode variant explicitly (postfixed with W)
 
 <details>
-  <summary>Read More</summary>
-  <p>Additional information goes here.</p>
-  <p>More details can be added.</p>
+  <summary>More about Windows</summary>
+  <p>Just as http://utf8everywhere.org/ states, this is not a religious war against Windows or Microsoft. In fact, Battery was for a long time Windows-only and is still primarily developed for Windows.</p>
+<p>Microsoft is not to be blamed for inventing ANSI, CRLF or choosing UTF-16, because they were the first ones to do it back then. We only think it is time to move on and it is time to ban ANSI from modern software development.</p>
 </details>
 
 Battery provides you with many concepts that make your life easier: You do not have to stay inline with them,
