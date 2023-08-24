@@ -15,7 +15,7 @@ https://learnmoderncpp.com/2021/03/24/a-unicode-primer/
  - The word ANSI has no official meaning, but is usually used to refer to Windows Western 1252 enconding.
  - ANSI/Windows-1252 is a Microsoft-specific superset of Latin-1 and provides even more characters in 8 bits.
  - None of these are able to encode even the slightest percentage of all available characters world-wide.
- - Unicode is not an encoding, but a standard, that defines a code point for virtually any character in any language in the world, and is thus superior to all encodings listed so far. *UTF-8*, *UTF-16* and *UTF-32* are encodings that embed the *Unicode codepoints* in 1, 2 or 4 bytes.
+ - Unicode is not an encoding, but a standard, that defines a code point for virtually any character in any language in the world, and is thus superior to all encodings listed so far. *UTF-8*, *UTF-16* and *UTF-32* are encodings that encode the *Unicode codepoints* in 1 to 4 bytes.
  - In UTF-32, every 4 bytes represent one *Unicode codepoint*. It is available as Big-Endian and Little-Endian.
  - In UTF-8, every *Unicode codepoint* is encoded in 1 to 4 bytes or *code units*. Multiple *code units* make up a *Codepoint*.
  - In UTF-16, every *Unicode codepoint* is encoded in 1 or 2 *16-bit code units*, which is 2 or 4 bytes correspondingly. Unicode characters from the *BMP (Basic Multilingual Plane)* use two bytes and are very common. Less common characters outside the BMP are called *Surrogates* and use 4 bytes.
