@@ -1,5 +1,7 @@
 var NAVTREEINDEX4 =
 {
+"structfmt_1_1formatter_3_01b_1_1fs_1_1path_01_4.html#ac6467828ce3d8279e6e7be757d6fd407":[6,0,1,1,1],
+"structfmt_1_1formatter_3_01b_1_1string_01_4.html":[4,2,13],
 "structstd_1_1hash_3_01b_1_1fs_1_1path_01_4.html":[6,0,2,0],
 "structstd_1_1hash_3_01b_1_1fs_1_1path_01_4.html#ab844094117f1a1079c4527e87c496a13":[6,0,2,0,0],
 "structstd_1_1hash_3_01b_1_1string_01_4.html":[4,2,11],

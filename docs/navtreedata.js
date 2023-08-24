@@ -26,35 +26,37 @@ var NAVTREE =
 [
   [ "Battery", "index.html", [
     [ "Battery Library", "index.html", [
-      [ "Heading", "index.html#autotoc_md15", null ],
-      [ "Code fragment", "index.html#autotoc_md16", null ],
-      [ "HLKSAs", "index.html#autotoc_md17", null ],
-      [ "ds", "index.html#autotoc_md18", null ],
-      [ "fd", "index.html#autotoc_md19", null ],
-      [ "Doxygen", "index.html#autotoc_md20", [
-        [ "Doxygen sub-group", "index.html#autotoc_md21", null ]
+      [ "Heading", "index.html#autotoc_md17", null ],
+      [ "Code fragment", "index.html#autotoc_md18", null ],
+      [ "HLKSAs", "index.html#autotoc_md19", null ],
+      [ "ds", "index.html#autotoc_md20", null ],
+      [ "fd", "index.html#autotoc_md21", null ],
+      [ "Doxygen", "index.html#autotoc_md22", [
+        [ "Doxygen sub-group", "index.html#autotoc_md23", null ]
       ] ]
     ] ],
     [ "Battery Guidelines", "guidelines.html", [
-      [ "UTF-8 Everywhere", "guidelines.html#autotoc_md0", [
-        [ "Unicode (UTF-8)", "guidelines.html#autotoc_md1", [
-          [ "What is Unicode?", "guidelines.html#autotoc_md2", null ],
-          [ "The Problem", "guidelines.html#autotoc_md3", null ]
+      [ "UTF-8 Everywhere", "guidelines.html#autotoc_md0", null ],
+      [ "Working with Strings", "guidelines.html#autotoc_md1", null ],
+      [ "File I/O", "guidelines.html#autotoc_md2", [
+        [ "Unicode (UTF-8)", "guidelines.html#autotoc_md3", [
+          [ "What is Unicode?", "guidelines.html#autotoc_md4", null ],
+          [ "The Problem", "guidelines.html#autotoc_md5", null ]
         ] ],
-        [ "Terminology", "guidelines.html#autotoc_md4", null ],
-        [ "Working with Unicode", "guidelines.html#autotoc_md5", null ],
-        [ "Source files", "guidelines.html#autotoc_md6", null ],
+        [ "Terminology", "guidelines.html#autotoc_md6", null ],
+        [ "Working with Unicode", "guidelines.html#autotoc_md7", null ],
+        [ "Source files", "guidelines.html#autotoc_md8", null ],
         [ "WinAPI / Linux API", "guidelines.html#WIN_LINUX_API", [
-          [ "WinAPI: Do not use ANSI functions!", "guidelines.html#autotoc_md7", null ],
+          [ "WinAPI: Do not use ANSI functions!", "guidelines.html#autotoc_md9", null ],
           [ "Use OsString whenever applicable", "guidelines.html#OsString", null ],
-          [ "Using high-level containers", "guidelines.html#autotoc_md8", null ],
-          [ "Keeping WinAPI / Linux API cross-platform", "guidelines.html#autotoc_md9", null ]
+          [ "Using high-level containers", "guidelines.html#autotoc_md10", null ],
+          [ "Keeping WinAPI / Linux API cross-platform", "guidelines.html#autotoc_md11", null ]
         ] ]
       ] ],
-      [ "Lockfiles", "guidelines.html#autotoc_md10", [
-        [ "Different types", "guidelines.html#autotoc_md11", null ]
+      [ "Lockfiles", "guidelines.html#autotoc_md12", [
+        [ "Different types", "guidelines.html#autotoc_md13", null ]
       ] ],
-      [ "OsString -> Always terminates at '\\0'", "guidelines.html#autotoc_md12", null ]
+      [ "OsString -> Always terminates at '\\0'", "guidelines.html#autotoc_md14", null ]
     ] ],
     [ "Getting Started", "md_docs_getting_started.html", null ],
     [ "Todo List", "todo.html", null ],
@@ -84,7 +86,7 @@ var NAVTREEINDEX =
 "classb_1_1tray_1_1separator.html#a5332b6dc78f8de76dd4c6fa37b9f560d",
 "fs_8hpp.html#aeeaa34d45b8c21d377007bc39558ee45",
 "group__Time.html",
-"structstd_1_1hash_3_01b_1_1fs_1_1path_01_4.html"
+"structfmt_1_1formatter_3_01b_1_1fs_1_1path_01_4.html#ac6467828ce3d8279e6e7be757d6fd407"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
