@@ -3,19 +3,14 @@
 
 # UTF-8 Everywhere
 
-Battery strictly follows http://utf8everywhere.org/. Read it thoroughly for an in-depth primer on Unicode.
+Battery strictly follows http://utf8everywhere.org/. This manifesto describes many concepts in detail, that greatly influenced decisions and guidelines documented on this page. Read it yourself for an in-depth primer on Unicode and String encodings.
 
 The most important concepts are explained later again in the relevant sections, but here are the main takeaways from the manifesto:
- - Every string and char* is always and everywhere considered to be UTF-8 encoded, the same is for any file on-disk and data from a network.
- - Do not use BOMs, since anything is considered to be UTF-8 anyways and it makes things such as file concatenation a nightmare.
+ 
  - All files you work with, especially the source code files must all be written as UTF-8
  - Always read and write files as binary, to store with LF line endings exclusively, even on Windows. CRLF has no place in modern, cross-platform computing. Windows deals with LF just fine these days.
  - Never use wide strings or UTF-16 anywhere except directly adjacent to system APIs or Library APIs.
- - There is no such thing as an ASCII-only string, every string can generally contain text in any language
- - A *character* can always consist of multiple bytes. Be careful when storing single characters and be especially careful with the `char` datatype.
- - The string length is always noted in terms of bytes or code units used in memory. User-perceived characters on screen cannot be mapped to individual code points (and do not need to be since the user-perceived characters are usually completely irrelevant for logic)
- - Even when doing low-level ASCII parsing, always consider every input and output to be UTF-8. If applicable, use Battery's utilities to strip non-ASCII characters. Only after that are you allowed to think of one byte as one *character*.
- - Never use ANSI-Win32 functions (like `CreateFileA`) or their Macro (`CreateFile`). Always use their Unicode variant explicitly (like `CreateFileW`)
+ - Never use ANSI-Win32 functions (like `CreateFileA`) or their Macro (`CreateFile`). Always use t13heir Unicode variant explicitly (like `CreateFileW`)
 
 <details>
 <summary>More about Windows</summary>
@@ -24,11 +19,27 @@ The most important concepts are explained later again in the relevant sections, 
 <p>Microsoft is not to be blamed for inventing the ANSI encoding, CRLF or choosing UTF-16, because they were one of the first ones to see the challenge back then. We just think it is time to move on and that nowadays it is time to ban ANSI encoding from modern software development.</p>
 </details>
 
-Battery provides you with many concepts that make your life easier: You do not have to stay inline with them,
-but if you do, you will have a much better time.
+# Working with Strings
 
-Many following concepts are explained in detail, why they cause headache and how you can use Battery to 
-prevent that headache.
+ - Every `std::string` and `char*` is always considered to be UTF-8 encoded
+ - A *character* can always consist of multiple bytes. Be careful when storing single characters and be especially careful with the `char` datatype. Prefer `std::string`, even for single characters.
+ - User-perceived characters on screen cannot be mapped to individual code points and do not need to be. Usually, the user-perceived characters are completely irrelevant for logic.
+ - The string length is always noted in terms of bytes or code units used in memory. `str.length() ` != `number of characters`
+ - There is no such thing as an ASCII-only string. Everything is considered to be UTF-8. If necessary, use Battery's utilities to strip non-ASCII characters. Only after that are you allowed to think of one byte as one *character*.
+
+# File I/O
+
+ - Every text file is always and everywhere read and written as UTF-8. Do not ever write files with other encodings.
+ - Every text file is always read and written in binary mode, to preserve line endings.
+ - Every text file is always written with LF line endings, even on Windows. See below for more.
+ - Do not use BOMs, since anything is considered to be UTF-8 anyways and it makes things such as file concatenation a nightmare.
+
+<details>
+<summary>Why not CRLF on Windows?</summary>
+<p>CRLF line endings have been around for a very long time and Microsoft chose them when typewriters were popular. Later, Unix, POSIX and all derivatives chose LF, because it does the job and the extra byte is simply unnecessary. The rest of the world settled on LF, only Windows is still using CRLF.</p>
+<p>Actually, Windows deals with LF just fine these days. The only programs that have issues with CRLF are the built-in Windows programs themselves, like the original Notepad. But even that is changing. As of Windows 11, even the built-in Notepad already has proper LF and UTF-8 support. Thus, just write every file as LF and help preventing bugs by extincting CRLF.</p>
+</details>
+
 
 ## Unicode (UTF-8)
 
