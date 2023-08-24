@@ -122,8 +122,8 @@ Unicode Terminology</h2>
 <li>None of these are able to encode even the slightest percentage of all available characters world-wide.</li>
 <li>Unicode is not an encoding, but a standard, that defines a code point for virtually any character in any language in the world, and is thus superior to all encodings listed so far. <em>UTF-8</em>, <em>UTF-16</em> and <em>UTF-32</em> are encodings that encode the <em>Unicode codepoints</em> in 1 to 4 bytes.</li>
 <li>In UTF-32, every 4 bytes represent one <em>Unicode codepoint</em>. It is available as Big-Endian and Little-Endian.</li>
-<li>In UTF-8, every <em>Unicode codepoint</em> is encoded in 1 to 4 bytes or <em>code units</em>. Multiple <em>code units</em> make up a <em>Codepoint</em>.</li>
-<li>In UTF-16, every <em>Unicode codepoint</em> is encoded in 1 or 2 <em>16-bit code units</em>, which is 2 or 4 bytes correspondingly. Unicode characters from the <em>BMP (Basic Multilingual Plane)</em> use two bytes and are very common. Less common characters outside the BMP are called <em>Surrogates</em> and use 4 bytes.</li>
+<li>In UTF-16, every <em>Unicode codepoint</em> is encoded in 1 or 2 <em>16-bit code units</em>, which is 2 or 4 bytes correspondingly. Unicode characters from the <em>BMP (Basic Multilingual Plane)</em> use two bytes and are very common. Less common characters outside the BMP are called <em>Surrogates</em> and use 4 bytes. UTF-16 is available as Big-Endian and Little-Endian.</li>
+<li>In UTF-8, every <em>Unicode codepoint</em> is encoded in 1 to 4 bytes or <em>code units</em>. Multiple <em>code units</em> make up a <em>Codepoint</em>. UTF-8 does not suffer from Endianness issues.</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md2"></a>
 Programming Environment</h1>
