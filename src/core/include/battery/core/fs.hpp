@@ -155,6 +155,12 @@ namespace b::fs {
         /// \return The path in platform-native string format
         [[nodiscard]] std::string native_string() const;
 
+        /// \brief Conversion operator to std::string
+        /// \return The path in UTF-8 string format
+        [[nodiscard]] operator std::string() const {
+            return string();
+        }
+
         /// \brief Lexicographical comparison of two paths. (e.g. "/a/b" < "/a/b/c")
         /// \param other The other path to compare with
         /// \return -1 if this path is less, 0 if they are equal, 1 if this path is greater
@@ -1285,9 +1291,5 @@ template <> struct fmt::formatter<b::fs::path> {
         return fmt::format_to(ctx.out(), "{}", path.string());
     }
 };
-
-// Specify stream operators to be able to use `b::fs::path` with CLI11
-std::istringstream &operator>>(std::istringstream &in, b::fs::path &val);
-std::stringstream &operator<<(std::stringstream &in, b::fs::path &val);
 
 #endif // BATTERY_CORE_FS_HPP
