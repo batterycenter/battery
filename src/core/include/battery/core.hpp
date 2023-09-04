@@ -54,6 +54,8 @@
 #include "battery/core/uuid.hpp"
 #include "battery/core/vec.hpp"
 
+#include "battery/cli11.hpp"
+
 #include "battery/core/extern/indicators.hpp"   // TODO: Think about moving these to different files
 #include "battery/core/extern/json.hpp"         // TODO: Think about moving these to different files
 
