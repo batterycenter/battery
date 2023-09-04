@@ -15,7 +15,7 @@ namespace b {
         static ConsoleApplication & get();
         static bool instanceExists();
 
-        std::vector<b::string> args;
+        std::vector<std::string> args;
         double framerate { 0.0 };
         double frametime { 0.0 };
         uint64_t framecount { 0 };
@@ -31,7 +31,7 @@ namespace b {
         void stopApplication();
         void setStopRequested(bool stop_requested);
 
-        [[nodiscard]] int run(const b::string& appname, const std::vector<b::string>& args);
+        [[nodiscard]] int run(const std::string& appname, const std::vector<std::string>& args);
 
         ConsoleApplication& operator=(const ConsoleApplication&) = delete;
         ConsoleApplication& operator=(ConsoleApplication&&) = delete;

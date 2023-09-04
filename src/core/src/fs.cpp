@@ -7,15 +7,12 @@ namespace b::fs {
     // ================== Begin path class ====================
     // ========================================================
 
-    path::path(const b::string& path) : m_path(static_cast<std::u8string>(path)) {}
+    path::path(const char* path) : m_path(std::bit_cast<char8_t*>(path)) {}
+    path::path(const std::string& path) : m_path(std::u8string(path.begin(), path.end())) {}
+    path::path(const std::u8string& path) : m_path(path) {}
 
-    path& path::operator=(const b::string& path) {
+    path& path::operator=(const std::string& path) {
         assign(path);
-        return *this;
-    }
-
-    path& path::assign(const b::string& path) {
-        m_path = static_cast<std::u8string>(path);
         return *this;
     }
 
@@ -24,36 +21,18 @@ namespace b::fs {
         return *this;
     }
 
-    path& path::append(const b::string& path) {
-        m_path.append(static_cast<std::u8string>(path));
-        return *this;
-    }
-
     path& path::append(const b::fs::path& path) {
         m_path.append(path.m_path.u8string());
         return *this;
-    }
-
-    path& path::operator/=(const b::string& path) {
-        return append(path);
     }
 
     path& path::operator/=(const b::fs::path& path) {
         return append(path);
     }
 
-    path& path::concat(const b::string& path) {
-        m_path.concat(static_cast<std::u8string>(path));
-        return *this;
-    }
-
     path& path::concat(const b::fs::path& path) {
         m_path.concat(path.m_path.u8string());
         return *this;
-    }
-
-    path& path::operator+=(const b::string& path) {
-        return concat(path);
     }
 
     path& path::operator+=(const b::fs::path& path) {
@@ -79,18 +58,8 @@ namespace b::fs {
         return *this;
     }
 
-    path& path::replace_filename(const b::string& filename) {
-        m_path.replace_filename(static_cast<std::u8string>(filename));
-        return *this;
-    }
-
     path& path::replace_filename(const b::fs::path& filename) {
         m_path.replace_filename(filename.m_path);
-        return *this;
-    }
-
-    path& path::replace_extension(const b::string& extension) {
-        m_path.replace_extension(static_cast<std::u8string>(extension));
         return *this;
     }
 
@@ -103,12 +72,14 @@ namespace b::fs {
         m_path.swap(other.m_path);
     }
 
-    b::string path::string() const {
-        return { m_path.generic_u8string() };
+    std::string path::string() const {
+        auto str = m_path.generic_u8string();
+        return std::string(str.begin(), str.end());
     }
 
-    b::string path::native_string() const {
-        return { m_path.u8string() };
+    std::string path::native_string() const {
+        auto str = m_path.u8string();
+        return std::string(str.begin(), str.end());
     }
 
     int path::compare(const path& other) const noexcept {
@@ -970,6 +941,69 @@ namespace b::fs {
 
     bool status_known(b::fs::file_status status) noexcept {
         return std::filesystem::status_known(status);
+    }
+
+    std::expected<std::string, b::filesystem_error> try_read(const b::fs::path &path) {
+        auto result = try_read_binary(path);
+        if (!result) {
+            return std::unexpected(result.error());
+        }
+        return std::string(result.value().begin(), result.value().end());
+    }
+
+    std::string read(const fs::path &path) {
+        auto result = try_read(path);
+        if (!result) {
+            throw result.error();
+        }
+        return result.value();
+    }
+
+    std::expected<b::bytearray, b::filesystem_error> try_read_binary(const b::fs::path &path) {
+        b::fs::ifstream file(path, std::ios::in | std::ios::binary);
+        if (!file.is_open()) {
+            return std::unexpected(b::filesystem_error(
+                    b::format("Failed loading file {}: {}", path, b::strerror(errno))
+            ));
+        }
+
+        return b::bytearray(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>());
+    }
+
+    b::bytearray read_binary(const fs::path &path) {
+        auto result = try_read_binary(path);
+        if (!result) {
+            throw result.error();
+        }
+        return result.value();
+    }
+
+    std::expected<size_t, b::filesystem_error> try_write(const fs::path &path, const std::string& content) {
+        b::fs::ofstream file(path, std::ios::out | std::ios::binary);
+        if (!file.is_open()) {
+            return std::unexpected(b::filesystem_error(
+                    b::format("Failed loading file {}: {}", path, b::strerror(errno))
+            ));
+        }
+
+        file << content;
+        return static_cast<size_t>(file.tellp());
+    }
+
+    std::expected<size_t, b::filesystem_error> try_write(const fs::path &path, const b::bytearray& content) {
+        return try_write(path, std::string(content.begin(), content.end()));
+    }
+
+    size_t write(const fs::path &path, const std::string& content) {
+        auto result = try_write(path, content);
+        if (!result) {
+            throw result.error();
+        }
+        return result.value();
+    }
+
+    size_t write(const fs::path &path, const b::bytearray& content) {
+        return write(path, std::string(content.begin(), content.end()));
     }
 
 } // namespace b::fs

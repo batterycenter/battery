@@ -11,6 +11,7 @@ github_dependencies = [
     [ "nemtrif", "utfcpp", "v3.2.4" ],                 # Boost Software License 1.0
     [ "jothepro", "doxygen-awesome-css", "v2.2.1" ],   # MIT License
     [ "batterycenter", "embed", "v1.0.0" ],            # Apache-2.0 License
+    # [ "CLIUtils", "CLI11", "v2.3.2" ],               # 3-Clause BSD License
 ]
 
 def main():
@@ -23,6 +24,7 @@ def main():
             shutil.rmtree(file)
             print(f"Removing {file}... Done")
 
+    # Download and extract all repositories from GitHub
     for dep in github_dependencies:
         tmpfolder = os.path.join(deps_folder, "tmp")
         url = f'https://github.com/{dep[0]}/{dep[1]}/archive/refs/tags/{dep[2]}.tar.gz'
@@ -45,6 +47,8 @@ def main():
         shutil.rmtree(tmpfolder)
 
         print(f"Downloading and extracting {dep[0]}/{dep[1]}@{dep[2]} from GitHub... Done")
+
+    # Download single files from GitHub
 
 if __name__ == "__main__":
     main()

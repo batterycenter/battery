@@ -44,8 +44,8 @@ namespace b::tray {
     }
 
     template<typename T>
-    static HINSTANCE registerClass(T wndProc, b::string identifier) {
-        auto nativeIdentifier = identifier.encode<b::enc::os_native>();
+    static HINSTANCE registerClass(T wndProc, std::string identifier) {
+        auto nativeIdentifier = b::widen(identifier);
 
         WNDCLASSEX windowClass;
         memset(&windowClass, 0, sizeof(windowClass));
@@ -60,12 +60,12 @@ namespace b::tray {
         return windowClass.hInstance;
     }
 
-    tray::tray(b::string identifier, b::string tooltip, MouseButton clickAction)
+    tray::tray(std::string identifier, std::string tooltip, MouseButton clickAction)
             : basetray(std::move(identifier), std::move(tooltip), clickAction) {
         auto windowClass = registerClass(wndProc, getIdentifier());
 
         // NOLINTNEXTLINE
-        m_hwnd = CreateWindow(getIdentifier().encode<b::enc::os_native>().c_str(), nullptr, 0, 0, 0, 0, 0, nullptr, nullptr,
+        m_hwnd = CreateWindow(b::widen(getIdentifier()).c_str(), nullptr, 0, 0, 0, 0, 0, nullptr, nullptr,
                               windowClass, nullptr);
         if (m_hwnd == nullptr) {
             throw std::runtime_error("Failed to create window");
@@ -74,7 +74,7 @@ namespace b::tray {
             throw std::runtime_error("Failed to update window");
         }
 
-        auto nativeTooltip = getTooltip().encode<b::enc::os_native>();
+        auto nativeTooltip = b::widen(getTooltip());
         std::memset(&m_notifyData, 0, sizeof(m_notifyData));
         m_notifyData.cbSize = sizeof(m_notifyData);
         m_notifyData.hWnd = m_hwnd;
@@ -94,7 +94,7 @@ namespace b::tray {
         DestroyIcon(m_notifyData.hIcon);
         DestroyMenu(m_menu);
 
-        UnregisterClass(getIdentifier().encode<b::enc::os_native>().c_str(), GetModuleHandle(nullptr));
+        UnregisterClass(b::widen(getIdentifier()).c_str(), GetModuleHandle(nullptr));
         PostMessage(m_hwnd, WM_QUIT, 0, 0);
 
         DestroyIcon(m_notifyData.hIcon);
@@ -118,7 +118,7 @@ namespace b::tray {
         for (const auto &entry: entries) {
             tray_entry *item = entry.get();
 
-            auto nativeName = item->getText().encode<b::enc::os_native>();
+            auto nativeName = b::widen(item->getText());
             MENUITEMINFO winItem{0};
 
             winItem.wID = ++id;

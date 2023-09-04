@@ -19,12 +19,12 @@ namespace b {
     /// \details The error message for the current value of `errno` is returned.
     /// \return The error message.
     /// \see b::strerror(int)
-    b::string strerror();
+    std::string strerror();
 
     /// \brief Get the error message for a specific error enum
     /// \details This function is commonly used in conjunction with `strerror(errno)`.
     /// \return The error message.
     /// \see b::strerror()
-    b::string strerror(int errnum);
+    std::string strerror(int errnum);
 
 }

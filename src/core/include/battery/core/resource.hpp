@@ -11,26 +11,25 @@ namespace b {
 
         static Resource FromTextFile(const fs::path& filepath);
         static Resource FromBinaryFile(const fs::path& filepath);
-        static Resource FromBytes(const b::bytearray& bytes, const b::string& filetype = ""_b);
-        static Resource FromBuffer(const void* buffer, size_t length, const b::string& filetype = ""_b);
-        static Resource FromBase64(const b::string& base64, const b::string& filetype = ""_b);
+        static Resource FromBytes(const b::bytearray& bytes, const std::string& filetype = "");
+        static Resource FromBuffer(const void* buffer, size_t length, const std::string& filetype = "");
+        static Resource FromBase64(const std::string& base64, const std::string& filetype = "");
 
         [[nodiscard]] const unsigned char* data() const;
         [[nodiscard]] size_t size() const;
         // If specified correctly, the filetype will be a string hinting the encoding of the data. Empty is unknown,
         // it's parsed from the file path or specified manually. Guaranteed to be lowercase. Example: "" or "png" or "txt".
         // Can be used in the receiving function to parse the data differently based on the file type
-        [[nodiscard]] b::string filetype() const;
-        [[nodiscard]] b::string string() const;
-        [[nodiscard]] std::vector<uint8_t> asVector() const;
-        [[nodiscard]] b::string base64() const;
-        [[nodiscard]] bool writeToTextFile(const fs::path& filepath) const;
-        [[nodiscard]] bool writeToBinaryFile(const fs::path& filepath) const;
+        [[nodiscard]] std::string filetype() const;
+        [[nodiscard]] std::string string() const;
+        [[nodiscard]] b::bytearray bytes() const;
+        [[nodiscard]] std::string base64() const;
+        [[nodiscard]] bool writeToFile(const fs::path& filepath) const;
 
         class OnDiskResource {
         public:
             OnDiskResource() = default;
-            explicit OnDiskResource(const b::fs::path& path, const b::string& data);
+            explicit OnDiskResource(const b::fs::path& path, const std::string& data);
             ~OnDiskResource();
 
             OnDiskResource(const OnDiskResource&) = delete;     // We cannot allow a copy. A move is allowed
@@ -47,7 +46,7 @@ namespace b {
                 return *this;
             }
 
-            b::string str() {
+            std::string str() {
                 return m_path.string();
             }
 
@@ -55,7 +54,7 @@ namespace b {
                 return m_path;
             }
 
-            operator b::string() {
+            operator std::string() {
                 return m_path.string();
             }
 
@@ -69,7 +68,7 @@ namespace b {
 
     private:
         b::bytearray m_data;
-        b::string m_filetype;
+        std::string m_filetype;
     };
 
 } // namespace b

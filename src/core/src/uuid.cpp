@@ -33,14 +33,14 @@ namespace b::uuid {
         };
     };
 
-    b::string v4() {
+    std::string v4() {
         auto gen = uuid_data::get();
         auto uuid = gen->operator()();
-        return b::string::decode<b::enc::utf8>(to_string(uuid));
+        return to_string(uuid);
     }
 
-    bool is_valid(const b::string& uuid) {
-        auto opt = uuids::uuid::from_string(uuid.encode<b::enc::utf8>());
+    bool is_valid(const std::string& uuid) {
+        auto opt = uuids::uuid::from_string(uuid);
         return opt.has_value();
     }
 

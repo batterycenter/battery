@@ -1,79 +1,168 @@
 
 @page guidelines Battery Guidelines
 
-# UTF-8 Everywhere
+# Battery Guidelines
 
-Battery strictly follows http://utf8everywhere.org/. This manifesto describes many concepts in detail, that greatly influenced decisions and guidelines documented on this page. Read it yourself for an in-depth primer on Unicode and String encodings.
+This document encompasses many core guidelines and rules, that
+ - apply to general purpose programming in modern C++
+ - define how to use the Battery library and related tools efficiently
 
-## Unicode Terminology
+Make sure to follow all rules as closely as possible. This will ensure that Battery works correctly, 
+and that your code is portable, readable and maintainable. Neglecting these rules will have the result
+that your code might be bound to a specific platform, or might have hidden bugs (e.g. issues with non-ASCII filenames).
 
-https://learnmoderncpp.com/2021/03/24/a-unicode-primer/
+This is a living document, make sure to keep an eye on it.
 
- - ASCII is the most common character encoding. It uses 7 bits only and one byte is always one character. It is sometimes also called UTF-7.
- - Extended ASCII is not a real term and criticized as misleading, but is usually used to refer to Latin-1 or ISO-8859-1.
- - Latin-1 or ISO-8859-1 is a superset of ASCII and uses all 8 bits to provide more characters.
- - The word ANSI has no official meaning, but is usually used to refer to Windows Western 1252 enconding.
- - ANSI/Windows-1252 is a Microsoft-specific superset of Latin-1 and provides even more characters in 8 bits.
- - None of these are able to encode even the slightest percentage of all available characters world-wide.
- - Unicode is not an encoding, but a standard, that defines a code point for virtually any character in any language in the world, and is thus superior to all encodings listed so far. *UTF-8*, *UTF-16* and *UTF-32* are encodings that encode the *Unicode codepoints* in 1 to 4 bytes.
- - In UTF-32, every 4 bytes represent one *Unicode codepoint*. It is available as Big-Endian and Little-Endian.
- - In UTF-16, every *Unicode codepoint* is encoded in 1 or 2 *16-bit code units*, which is 2 or 4 bytes correspondingly. Unicode characters from the *BMP (Basic Multilingual Plane)* use two bytes and are very common. Less common characters outside the BMP are called *Surrogates* and use 4 bytes. UTF-16 is available as Big-Endian and Little-Endian.
- - In UTF-8, every *Unicode codepoint* is encoded in 1 to 4 bytes or *code units*. Multiple *code units* make up a *Codepoint*. UTF-8 does not suffer from Endianness issues.
+Battery is always open for suggestions and improvements.
 
-# Programming Environment
+## Table of Contents
 
- - Every source file must be edited using UTF-8 to ensure Unicode String literals work correctly. Most modern IDEs use it as their default anyways, except Visual Studio.
+ - [Philosophy](#philosophy)
+ - [Terminology](#terminology)
+ - [Programming Environment](#programming-environment)
+ - [Working with Strings](#working-with-strings)
+ - [File I/O](#file-io)
+ - [Working with the Windows API](#working-with-the-windows-api)
+
+
+## Philosophy
+
+Battery's philosophy is not to allow every possible way of doing something. The philosophy is to provide exactly 
+one way of doing something, which is guaranteed to work across all supported systems and to be bug-resistant.
+
+Battery allows you to quickly develop production-ready applications. This is why it provides only one way of achieving
+something. If you need to do something and Battery supports it, choose the one advertised way and you will be finished
+in no time. If Battery does not support something, feel free to open a GitHub issue and request a new feature. 
+Otherwise, write your own solution, on your own risk. You are responsible for keeping the code portable.
+
+Battery also chooses to use latest technology and does not hesitate to remove or block deprecated features.
+In this philosophy, there is no room for flawed systems.
+
+The modules in Battery are actually just 3rd-party libraries. If you need to use a 3rd-party library, choose one of 
+Battery's modules. All of the default-available modules in CMake are
+well-supported and known to work on all systems. Battery is all about guarantees.
+
+### UTF-8 Everywhere
+
+Battery strictly follows http://utf8everywhere.org/. This manifesto describes many concepts in detail, 
+that greatly influenced decisions and guidelines documented on this page. You are encouraged to read it yourself 
+for an in-depth primer on Unicode and String encodings.
+
+## Terminology
+
+### Unicode and Text Encodings
+
+- ASCII is the most common character encoding. It uses 7 bits only and one byte is always one character.
+  It is sometimes called UTF-7.
+- Extended ASCII is not a real term and criticized as misleading, but is usually used to refer to
+  Latin-1 or ISO-8859-1.
+- Latin-1 or ISO-8859-1 is a superset of ASCII and uses all 8 bits to provide more characters.
+- The word ANSI has no official meaning, but is usually used to refer to Windows Western 1252 enconding.
+- ANSI/Windows-1252 is a Microsoft-specific superset of Latin-1 and provides even more characters in 8 bits.
+- None of these are able to encode even the slightest percentage of all available characters world-wide.
+- Unicode is not an encoding, but a standard, that defines a code point for virtually any character in any
+  language in the world, and is thus superior to all encodings listed so far.
+  *UTF-8*, *UTF-16* and *UTF-32* are encodings that encode the *Unicode codepoints* in 1 to 4 bytes.
+- In UTF-32, every 4 bytes represent one *Unicode codepoint*. It is available as Big-Endian and Little-Endian.
+- In UTF-16, every *Unicode codepoint* is encoded in 1 or 2 *16-bit code units*,
+  which is 2 or 4 bytes correspondingly. Unicode characters from the *BMP (Basic Multilingual Plane)*
+  use two bytes and are very common. Less common characters outside the BMP are called *Surrogates* and use 4 bytes.
+  UTF-16 is available as Big-Endian and Little-Endian.
+- In UTF-8, every *Unicode codepoint* is encoded in 1 to 4 bytes or *code units*. Multiple *code units*
+  make up a *Codepoint*. UTF-8 does not suffer from Endianness issues.
+
+## Programming Environment
+
+ - Every source file must be edited using UTF-8 to ensure Unicode String literals work correctly. 
+Most modern IDEs use it as their default anyways, except Visual Studio.
 
 <details>
 <summary>How to use UTF-8 source files in Visual Studio?</summary>
-<p>Visual Studio will work fine with UTF-8, it just doesn't it is as a default when creating files. If you create a file within Visual Studio, open it in VS Code as Windows Western 1252 and save it as UTF-8 (without BOM). After that just continue editing like usual.</p>
+<blockquote>
+Visual Studio will work fine with UTF-8, it just doesn't it is as a default when creating files. 
+If you create a file within Visual Studio, open it in VS Code as *Windows Western 1252* 
+and save it as UTF-8 (without BOM). After that just continue editing like usual.
+</blockquote>
 </details>
 
-# Working with Strings
+## Working with Strings
 
  - Every `std::string` and `char*` is always considered to be UTF-8 encoded
- - Never, ever, do anything with ANSI encoding (also called Windows Western or cp1252). Stay far away from it. See below for why.
- - A *character* can always consist of multiple bytes. Be careful when storing single characters and be especially careful with the `char` datatype. Prefer `std::string`, even for single characters.
- - User-perceived characters on screen cannot be mapped to individual code points and do not need to be. Usually, the user-perceived characters are completely irrelevant for logic.
- - The string length is always noted in terms of bytes or code units used in memory. `str.length() ` != `number of characters`
- - There is no such thing as an ASCII-only string. Everything is considered to be UTF-8. If necessary, use Battery's utilities to strip non-ASCII characters. Only after that are you allowed to think of one byte as one *character*.
- - Never use wide strings or UTF-16 anywhere except directly adjacent to system APIs or Library APIs. See [Working with the Windows API](#working-with-the-windows-api)
+ - Never, ever, do anything with ANSI encoding (also called Windows Western or cp1252). Stay far away from it. 
+See below for why. 
+ - Never use `std::string` to store non-text resources. Strings must only contain valid, printable UTF-8 code units,
+non-printable characters have nothing to do in a string.
+Use `std::vector` or `b::bytearray` for binary resources instead.
+ - A *character* can always consist of multiple bytes. Be careful when storing single characters and be 
+especially careful with the `char` datatype. Prefer `std::string`, even for single characters.
+ - User-perceived characters on screen cannot be mapped to individual code points and do not need to be. 
+Usually, the user-perceived characters are completely irrelevant for logic.
+ - The string length is always noted in terms of bytes or code units used in memory. 
+`str.length() ` != `number of characters`
+ - There is no such thing as an ASCII-only string. Everything is considered to be UTF-8. 
+If necessary, use Battery's utilities to strip non-ASCII characters. Only after that are you allowed 
+to think of one byte as one *character*.
+ - Never use wide strings or UTF-16 anywhere except directly adjacent to system APIs or Library APIs. 
+See [Working with the Windows API](#working-with-the-windows-api)
 
 <details>
 <summary>More about Windows and ANSI</summary>
-<p>Just as http://utf8everywhere.org/ states, this is not a religious war against Windows or Microsoft. In fact, Battery was for a long time Windows-only and is still primarily developed for Windows.</p>
-
-<p>Microsoft is not to be blamed for inventing the ANSI encoding, CRLF or choosing UTF-16, because they were one of the first ones to see the challenge back then. We just think it is time to move on and that nowadays it is time to ban ANSI encoding from modern software development. See [utf8everywhere](http://utf8everywhere.org/) for explanations why this encoding is straight-up broken</p>
+<blockquote>
+Just as utf8everywhere.org states, this is not a religious war against Windows. 
+In fact, Battery was for a long time Windows-only and is still primarily developed for Windows.
+<br><br>
+Microsoft is not to be blamed for inventing the ANSI encoding, CRLF or choosing UTF-16, 
+as they were one of the first ones to face the challenge back then. We think it is time 
+to move on and that nowadays it is time to ban ANSI encoding from modern software development. 
+See [utf8everywhere](http://utf8everywhere.org/) for explanations on why this encoding is broken.
+</blockquote>
 </details>
 
-# File I/O
+## File I/O
 
- - Every text file is always and everywhere read and written as UTF-8. Do not ever write files with other encodings.
- - Every text file is always read and written in binary mode, to preserve line endings.
- - Every text file is always written with LF line endings, even on Windows. See below for more.
- - Do not use BOMs, since anything is considered to be UTF-8 anyways and it makes things such as file concatenation a nightmare.
+ - Read and write all files as UTF-8
+ - Read and write all files in binary mode with LF Line Endings (even on Windows)
+ - Do not use UTF-8 with BOMs.
 
 <details>
 <summary>Why not CRLF on Windows?</summary>
-<p>CRLF line endings have been around for a very long time and Microsoft chose them when typewriters were popular. Later, Unix, POSIX and all derivatives chose LF, because it does the job and the extra byte is simply unnecessary. The rest of the world settled on LF, only Windows is still using CRLF.</p>
-<p>Actually, Windows deals with LF just fine these days. The only programs that have issues with CRLF are the built-in Windows programs themselves, like the original Notepad. But even that is changing. As of Windows 11, even the built-in Notepad already has proper LF and UTF-8 support. Thus, just write every file as LF and help preventing bugs by extincting CRLF.</p>
+<blockquote>
+Microsoft chose CRLF line endings a very long time ago, about when typewriters were still popular. 
+It made sense back then. Later, the rest of the world settled on LF. 
+You might think that all files on Windows must always be CRLF, but that is wrong.
+<br><br>
+The reality is that Windows deals with LF just fine these days. The only programs that have issues with LF 
+are the built-in Windows programs themselves, like the original Notepad. But even that is changing. 
+As of Windows 11, even the built-in Notepad already has proper LF and UTF-8 support. 
+Thus, there is no need to continue using outdated concepts. 
+Just write every file as LF and help preventing bugs by extincting CRLF.
+</blockquote>
 </details>
 
-# Working with the Windows API
+## Working with the Windows API
 
- - Try not to do it in the first place. Using it makes your code platform dependent. Use the functions provided by Battery instead or create a GitHub issue to request a new feature. If you still insist on using it, do the following:
+ - Do not use the Windows API directly if possible. Use the functions provided by Battery instead.
+ - If you have to use the Windows API directly, follow these rules:
  - Never use ANSI-Win32 functions (e.g. `CreateFileA`).
  - Never use the Win32 function macros (e.g. `CreateFile`)
  - Always use the Unicode variant explicitly (e.g. `CreateFileW`)
- - Use `std::wstring` or `L""` string literals to represent UTF-16, needed by the Windows API
- - Never use `std::wstring` or `L""` string literals anywhere else except directly adjacent to system APIs.
- - Always widen UTF-8 strings directly adjacent to system calls (e.g. `MessageBoxW(...,b::widen(str).c_str(),...)`), and when receiving strings, do the opposite (e.g. `return b::narrow(wideStringBufferFromAPI);`). This only applies when the string is immediately processed. See below for what to do when the string must live longer.
+ - Use `b::native_string` and `L""` string literals to represent UTF-16
+ - Never use them anywhere else except directly adjacent to system APIs.
+ - Widen UTF-8 strings only where needed (e.g. `MessageBoxW(...,b::widen(str).c_str(),...)`).  
+When receiving strings, do the opposite (e.g. `auto str = b::narrow(win32WideStringBuffer);`).
 
+**Warning:** 
 <details>
 <summary>My string must live longer than one function call</summary>
-<p>For some WinAPI functions, the string must live longer than one line of code. This might be the case when a string is psrt of a struct, that is then passed to a function for processing (e.g. `RegisterClassExW` and the corresponding `WNDCLASSW` struct). 
-
-If you write `wndClass.lpClassName = b::widen(str).c_str();`, the string will immediately be destroyed after this line, leaving the pointer pointing to invalid memory. Therefore, save the string as a separate variable (e.g. `auto wideStr = b::widen(str);`. This variable must live at least until it has been processed by the system. Now you can write `wndClass.lpClassName = wideStr.c_str();` and it will work correctly.</p>
+<blockquote>
+For some WinAPI functions, the string must live longer than one line of code. This might be the case 
+when a string is part of a struct, that is then passed to a function for processing 
+(e.g. <code>RegisterClassExW</code> and the corresponding <code>WNDCLASSW</code> struct). 
+<br><br>
+If you write <code>wndClass.lpClassName = b::widen(str).c_str();</code>, the string will immediately be destroyed 
+after this line, leaving the pointer pointing to invalid memory. Therefore, save the string as a separate variable 
+(e.g. <code>auto wideStr = b::widen(str);</code>. This variable must live at least until it has been processed 
+by the system. Now you can write <code>wndClass.lpClassName = wideStr.c_str();</code> and it will work as intended.
 </details>
 
 

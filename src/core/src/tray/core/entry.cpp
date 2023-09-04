@@ -23,7 +23,7 @@
 
 namespace b::tray {
 
-    tray_entry::tray_entry(b::string text) : text(std::move(text)) {}
+    tray_entry::tray_entry(std::string text) : text(std::move(text)) {}
 
     basetray *tray_entry::getParent() {
         return parent;
@@ -33,11 +33,11 @@ namespace b::tray {
         parent = newParent;
     }
 
-    b::string tray_entry::getText() const {
+    std::string tray_entry::getText() const {
         return text;
     }
 
-    void tray_entry::setText(b::string newText) {
+    void tray_entry::setText(std::string newText) {
         text = std::move(newText);
         if (parent) {
             parent->update();

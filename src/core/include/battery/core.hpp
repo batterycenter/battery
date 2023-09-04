@@ -19,6 +19,7 @@
 
 #include "battery/core/async_worker.hpp"
 #include "battery/core/base64.hpp"
+#include "battery/core/bytearray.hpp"
 #include "battery/core/cache.hpp"
 #include "battery/core/color.hpp"
 #include "battery/core/console.hpp"
@@ -53,7 +54,6 @@
 #include "battery/core/uuid.hpp"
 #include "battery/core/vec.hpp"
 
-#include "battery/core/extern/CLI11.hpp"        // TODO: Think about moving these to different files
 #include "battery/core/extern/indicators.hpp"   // TODO: Think about moving these to different files
 #include "battery/core/extern/json.hpp"         // TODO: Think about moving these to different files
 

@@ -24,12 +24,12 @@ namespace b {
             "\xFF\x1A\x1B\x1C\x1D\x1E\x1F\x20\x21\x22\x23\x24\x25\x26\x27\x28"
             "\x29\x2A\x2B\x2C\x2D\x2E\x2F\x30\x31\x32\x33\xFF\xFF\xFF\xFF\xFF";
 
-    b::string encode_base64(const b::string &str) {
-        return encode_base64(str.encode_bytes<b::enc::utf8>());
+    std::string encode_base64(const std::string &str) {
+        return encode_base64(b::bytearray(str.begin(), str.end()));
     }
 
-    b::string encode_base64(const b::bytearray &data) {
-        b::string result;
+    std::string encode_base64(const b::bytearray &data) {
+        std::string result;
         for (size_t index = 0; index < data.size(); index += 3) {
             size_t const remaining = std::min<size_t>(data.size() - index, 3u); // 1, 2 or 3 bytes remaining each pass
 
@@ -47,14 +47,14 @@ namespace b {
         return result;
     }
 
-    std::optional<b::string> decode_base64_text(const b::string &str) {
+    std::optional<std::string> decode_base64_text(const std::string &str) {
         if (auto data = decode_base64_binary(str)) {
-            return data->decode<b::enc::utf8>();
+            return std::string(data->begin(), data->end());
         }
         return {};
     }
 
-    std::optional<b::bytearray> decode_base64_binary(const b::string &str) {
+    std::optional<b::bytearray> decode_base64_binary(const std::string &str) {
         std::vector<uint8_t> result;
         for (size_t index = 0; index < str.size(); index += 4) {
             size_t const remaining = std::min<size_t>(str.size() - index, 4u); // 1, 2, 3 or 4 characters remaining

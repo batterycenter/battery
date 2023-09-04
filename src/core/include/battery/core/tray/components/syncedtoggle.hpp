@@ -28,7 +28,7 @@ namespace b::tray {
 
     class synced_toggle : public tray_entry {
     public:
-        synced_toggle(b::string text, bool &state, std::function<void(bool&)> callback = [](const bool&){/**/});
+        synced_toggle(std::string text, bool &state, std::function<void(bool&)> callback = [](const bool&){/**/});
         ~synced_toggle() override = default;
 
         void onToggled();

@@ -3,6 +3,7 @@
 #include "battery/core/folders.hpp"
 #include "battery/core/fs.hpp"
 #include "battery/core/uuid.hpp"
+#include "battery/core/base64.hpp"
 
 #include "utf8.h"
 
@@ -22,14 +23,14 @@ namespace b {
 //        return res;
 //    }
 
-    Resource Resource::FromBytes(const b::bytearray& bytes, const b::string& filetype) {
+    Resource Resource::FromBytes(const b::bytearray& bytes, const std::string& filetype) {
         Resource res;
         res.m_data = bytes;
         res.m_filetype = filetype;
         return res;
     }
 
-    Resource Resource::FromBuffer(const void* buffer, size_t length, const b::string& filetype) {
+    Resource Resource::FromBuffer(const void* buffer, size_t length, const std::string& filetype) {
         Resource res;
         res.m_data.resize(length);
         res.m_filetype = filetype;
@@ -37,7 +38,7 @@ namespace b {
         return res;
     }
 
-    Resource Resource::FromBase64(const b::string& base64, const b::string& filetype) {
+    Resource Resource::FromBase64(const std::string& base64, const std::string& filetype) {
         return Resource();
 //        return Resource::FromBytes(b::decode_base64(base64.to_utf8()), filetype);
     }
@@ -50,43 +51,27 @@ namespace b {
         return m_data.size();
     }
 
-    b::string Resource::filetype() const {
+    std::string Resource::filetype() const {
         return m_filetype;
     }
 
-    b::string Resource::string() const {
-//        return m_data;
-        return ""_b;
-    }
-
-    std::vector<uint8_t> Resource::asVector() const {
+    std::string Resource::string() const {
         return { m_data.begin(), m_data.end() };
     }
 
-    b::string Resource::base64() const {
-//        return b::encode_base64(string());
-        return ""_b;
+    b::bytearray Resource::bytes() const {
+        return m_data;
     }
 
-//    bool Resource::writeToTextFile(const b::fs::path& filepath) const {
-//        b::fs::ofstream file(filepath, std::ios_base::in);
-//        if (file.fail()) {
-//            return false;
-//        }
-////        file << m_data;
-//        return true;
-//    }
+    std::string Resource::base64() const {
+        return b::encode_base64(string());
+    }
 
-//    bool Resource::writeToBinaryFile(const b::fs::path& filepath) const {
-//        b::fs::ofstream file(filepath, std::ios_base::in);
-//        if (file.fail()) {
-//            return false;
-//        }
-////        file << m_data;
-//        return true;
-//    }
+    bool Resource::writeToFile(const b::fs::path& filepath) const {
+        return b::fs::try_write(filepath, m_data).has_value();
+    }
 
-    Resource::OnDiskResource::OnDiskResource(const b::fs::path &path, const b::string& data) : m_path(path) {
+    Resource::OnDiskResource::OnDiskResource(const b::fs::path &path, const std::string& data) : m_path(path) {
 //        b::fs::ofstream file(path, b::fs::Mode::BINARY);
 //        file << data.encode_utf8();
     }

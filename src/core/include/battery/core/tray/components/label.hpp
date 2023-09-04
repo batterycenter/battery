@@ -26,7 +26,7 @@ namespace b::tray {
 
     class label : public tray_entry {
     public:
-        explicit label(b::string text);
+        explicit label(std::string text);
         ~label() override = default;
     };
 

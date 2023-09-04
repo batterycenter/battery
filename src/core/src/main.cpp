@@ -10,18 +10,18 @@
 
 namespace b {
 
-    static std::vector<b::string> parse_cli([[maybe_unused]] int argc, [[maybe_unused]] const char** argv) {
-        std::vector<b::string> args;
+    static std::vector<std::string> parse_cli([[maybe_unused]] int argc, [[maybe_unused]] const char** argv) {
+        std::vector<std::string> args;
 #ifdef B_OS_WINDOWS                 // On Windows, parse CLI arguments from WinAPI and convert to UTF-8
         int _argc = 0;
         LPWSTR* _args = ::CommandLineToArgvW((LPCWSTR)GetCommandLineW(), &_argc);
         if (_args == nullptr) {
             b::log::core::critical("CommandLineToArgvW failed: {}", b::internal::get_last_win32_error());
-            b::message_box_error("[Battery->WinAPI]: CommandLineToArgvW failed: "_b + b::internal::get_last_win32_error());
+            b::message_box_error("[Battery->WinAPI]: CommandLineToArgvW failed: " + b::internal::get_last_win32_error());
             return {};
         }
         for (int i = 0; i < _argc; i++) {
-            args.push_back(b::string::decode<b::enc::os_native>(std::wstring(_args[i])));
+            args.push_back(b::narrow(std::wstring(_args[i])));
         }
         ::LocalFree(_args);
 
@@ -55,14 +55,14 @@ namespace b {
 #endif
     }
 	
-    const char** args_to_argv(const std::vector<b::string>& args) {
+    const char** args_to_argv(const std::vector<std::string>& args) {
         static std::vector<std::string> argsData;  // Static, so the data will stay in memory forever (needed by c_str())
         static std::vector<const char*> arguments;
 
         // Store the actual data into argsData
         argsData.clear();
         for (const auto& arg : args) {
-            argsData.push_back(arg.encode<b::enc::utf8>());
+            argsData.push_back(arg);
         }
 
         // Now get pointers to each of them

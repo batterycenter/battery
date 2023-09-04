@@ -39,7 +39,7 @@ namespace b {
         worker.join();
     }
 
-    b::string process::remove_trailing_whitespace(b::string buffer) {
+    std::string process::remove_trailing_whitespace(std::string buffer) {
         if (buffer.empty()) {
             return buffer;
         }
@@ -58,9 +58,8 @@ namespace b {
         return buffer;
     }
 
-    void process::stdin_write(const b::string& str) {
-        auto utf8 = str.encode<b::enc::utf8>();
-        stdin_write(utf8.data(), utf8.length());
+    void process::stdin_write(const std::string& str) {
+        stdin_write(str.data(), str.length());
     }
 
     void process::stdin_write(const std::string_view& str) {
@@ -84,13 +83,13 @@ namespace b {
         _process.terminate();
     }
 
-    std::error_code process::stdout_sink(const b::string& data) {
+    std::error_code process::stdout_sink(const std::string& data) {
         auto buffer = data;
         if (data.empty()) {
             return {};
         }
         if (options.suppress_carriage_return) {
-            buffer.replace("\r"_b, ""_b);
+            buffer = b::replace(buffer, "\r", "");
         }
         output_stdout += buffer;
         output_combined += buffer;
@@ -103,13 +102,13 @@ namespace b {
         return {};
     }
 
-    std::error_code process::stderr_sink(const b::string& data) {
+    std::error_code process::stderr_sink(const std::string& data) {
         auto buffer = data;
         if (data.empty()) {
             return {};
         }
         if (options.suppress_carriage_return) {
-            buffer.replace("\r"_b, ""_b);
+            buffer = b::replace(buffer, "\r", "");
         }
         output_stderr += buffer;
         output_combined += buffer;
@@ -133,17 +132,17 @@ namespace b {
         }
 
         if (!options.executable.empty()) {
-            cmd.emplace_back(options.executable.encode<b::enc::utf8>());
+            cmd.emplace_back(options.executable);
         }
         for (const auto& command : options.arguments) {
             if (command.empty()) {
                 continue;
             }
-            cmd.emplace_back(command.encode<b::enc::utf8>());
+            cmd.emplace_back(command);
         }
 
         options.reproc_options.redirect.parent = options.passthrough_to_parent;
-        std::string workdir = options.working_directory.has_value() ? options.working_directory->string().encode<b::enc::utf8>() : "";
+        std::string workdir = options.working_directory.has_value() ? options.working_directory->string() : "";
         options.reproc_options.working_directory = !workdir.empty() ? workdir.c_str() : nullptr;
         options.reproc_options.redirect.err.type = reproc::redirect::type::pipe;
 
@@ -151,7 +150,7 @@ namespace b {
             auto dir = options.working_directory.value();
             if (!fs::is_directory(dir)) {
                 throw std::invalid_argument(b::format("Cannot run process in working directory '{}': "
-                                                      "Directory does not exist", workdir).encode<b::enc::utf8>());
+                                                      "Directory does not exist", workdir));
             }
         }
 
@@ -176,7 +175,7 @@ namespace b {
         std::error_code errorCode = _process.start(cmdCstr.data(), options.reproc_options);
         if (errorCode) {
             exit_code = errorCode.value();
-            error_message = b::string::decode<b::enc::utf8>(errorCode.message());
+            error_message = errorCode.message();
             if (ctrl_c_handler) {
                 b::pop_ctrl_c_handler();
             }
@@ -186,17 +185,15 @@ namespace b {
         errorCode = reproc::drain(
                 _process,
                 [this] (auto, const uint8_t* buffer, size_t length) {
-                    auto data = b::bytearray(std::vector<uint8_t>(buffer, buffer + length));
-                    return this->stdout_sink(b::string::decode<b::enc::utf8>(data));
+                    return this->stdout_sink(std::string(std::bit_cast<const char*>(buffer), length));
                 },
                 [this] (auto, const uint8_t* buffer, size_t length) {
-                    auto data = b::bytearray(std::vector<uint8_t>(buffer, buffer + length));
-                    return this->stderr_sink(b::string::decode<b::enc::utf8>(data));
+                    return this->stderr_sink(std::string(std::bit_cast<const char*>(buffer), length));
                 });
 
         if (errorCode) {
             exit_code = errorCode.value();
-            error_message = b::string::decode<b::enc::utf8>(errorCode.message());
+            error_message = errorCode.message();
             if (ctrl_c_handler) {
                 b::pop_ctrl_c_handler();
             }
@@ -206,7 +203,7 @@ namespace b {
         auto [status, _ec] = _process.wait(reproc::infinite);
         if (_ec) {
             exit_code = status;
-            error_message = b::string::decode<b::enc::utf8>(_ec.message());
+            error_message = _ec.message();
             if (ctrl_c_handler) {
                 b::pop_ctrl_c_handler();
             }
@@ -220,13 +217,13 @@ namespace b {
         }
 
         exit_code = status;
-        error_message = b::string::decode<b::enc::utf8>(_ec.message());
+        error_message = _ec.message();
         if (ctrl_c_handler) {
             b::pop_ctrl_c_handler();
         }
     }
 
-    process execute(const b::string& command, const process::options_t& options) {
+    process execute(const std::string& command, const process::options_t& options) {
         b::process process;
         process.options = options;
         process.options.passthrough_to_parent = true;

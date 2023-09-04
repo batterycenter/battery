@@ -22,7 +22,7 @@
 
 namespace b::tray {
 
-    basetray::basetray(b::string identifier, b::string tooltip, MouseButton clickAction)
+    basetray::basetray(std::string identifier, std::string tooltip, MouseButton clickAction)
             : identifier(std::move(identifier)),
               tooltip(std::move(tooltip)),
               clickAction(clickAction) {}
@@ -31,11 +31,11 @@ namespace b::tray {
         return entries;
     }
 
-    b::string basetray::getIdentifier() const {
+    std::string basetray::getIdentifier() const {
         return identifier;
     }
 
-    b::string basetray::getTooltip() const {
+    std::string basetray::getTooltip() const {
         return tooltip;
     }
 

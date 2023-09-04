@@ -23,7 +23,7 @@
 
 namespace b {
 
-    b::string cin_getline(size_t buffer_size) {          // We must do this so complicated because std::cin does not have UTF-8 support
+    std::string cin_getline(size_t buffer_size) {          // We must do this so complicated because std::cin does not have UTF-8 support
 #ifdef B_OS_WINDOWS
         DWORD read = 0;
         b::native_string buffer;
@@ -35,21 +35,20 @@ namespace b {
                      &read,
                      nullptr);
 
-        auto line = b::string::decode<b::enc::os_native>(buffer.substr(0, read));
+        auto line = b::narrow(buffer.substr(0, read));
 #else
-        b::native_string stdline;
-        std::getline(std::cin, stdline);
+        std::string line;
+        std::getline(std::cin, line);
         if (line.size() > buffer_size) {    // Limit to buffer size for consistent behavior across platforms
-            stdline = stdline.substr(0, buffer_size);
+            line = line.substr(0, buffer_size);
         }
-        auto line = b::string::decode(stdline);
 #endif
-        line.replace("\n"_b, ""_b);
-        line.replace("\r"_b, ""_b);
+        line = b::replace(line, "\n", "");
+        line = b::replace(line, "\r", "");
         return line;
     }
 
-    bool open_url_in_default_browser(const b::string& url) {
+    bool open_url_in_default_browser(const std::string& url) {
 #ifdef B_OS_WINDOWS
         auto process = b::execute(b::format("start {}", url));
         return process.exit_code == 0;

@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 
 TEST(BatteryCore_Lockfile, basic_lockfile) {
-    auto path = "unit_test.lock"_b;
+    auto path = "unit_test.lock";
     if (b::fs::exists(path)) {
         b::fs::remove(path);
     }
@@ -16,8 +16,8 @@ TEST(BatteryCore_Lockfile, basic_lockfile) {
 }
 
 TEST(BatteryCore_Lockfile, lockfile) {
-    auto parent = b::Folders::AppCacheDir() / "unit_test_folder"_b;
-    auto path = parent / "unit_test.lock"_b;
+    auto parent = b::Folders::AppCacheDir() / "unit_test_folder";
+    auto path = parent / "unit_test.lock";
     if (b::fs::exists(parent)) {
         b::fs::remove(parent);
     }
@@ -66,8 +66,8 @@ TEST(BatteryCore_Lockfile, lockfile) {
 }
 
 TEST(BatteryCore_Lockfile, ScopedLockfile) {
-    auto parent = b::Folders::AppCacheDir() / "unit_test_folder"_b;
-    auto path = parent / "unit_test.lock"_b;
+    auto parent = b::Folders::AppCacheDir() / "unit_test_folder";
+    auto path = parent / "unit_test.lock";
     if (b::fs::exists(parent)) {
         b::fs::remove(parent);
     }
@@ -92,8 +92,8 @@ TEST(BatteryCore_Lockfile, ScopedLockfile) {
 }
 
 TEST(BatteryCore_Lockfile, ScopedNoThrowLockfile) {
-    auto parent = b::Folders::AppCacheDir() / "unit_test_folder"_b;
-    auto path = parent / "unit_test.lock"_b;
+    auto parent = b::Folders::AppCacheDir() / "unit_test_folder";
+    auto path = parent / "unit_test.lock";
     if (b::fs::exists(parent)) {
         b::fs::remove(parent);
     }

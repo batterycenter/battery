@@ -45,15 +45,17 @@ b_add_source_files(battery_core_no_main
         src/uuid.cpp)
 
 b_set_ide_folder(battery_core_no_main "battery/modules")
+battery_add_module(cli11)
 
 #set_property(SOURCE src/extern/platform_folders.cpp PROPERTY CMAKE_CXX_CLANG_TIDY "")
 #set_property(SOURCE src/extern/utf8proc.c PROPERTY CMAKE_CXX_CLANG_TIDY "")
 #set_property(SOURCE src/extern/utf8proc_data.c PROPERTY CMAKE_CXX_CLANG_TIDY "")
 
 target_link_libraries(battery_core_no_main PUBLIC 
-    spdlog::spdlog 
-    reproc::reproc++
-    utf8::cpp
+        spdlog::spdlog
+        reproc::reproc++
+        utf8::cpp
+        battery::cli11
 )
 
 if (WIN32)

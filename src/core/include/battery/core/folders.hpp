@@ -40,8 +40,8 @@ namespace b {
         fs::path SystemVideoDir();           // System-wide directory for user videos                                                                        (Defaults -> Win: %USERPROFILE%/Videos, Linux & Mac: ~/Videos)
         fs::path SystemDownloadsDir();       // System-wide directory for user downloaded files                                                              (Defaults -> Win: %USERPROFILE%/Downloads, Linux & Mac: ~/Downloads)
 
-        inline static b::string& ApplicationName() {
-            static b::string appname = b::Constants::DefaultApplicationName();
+        inline static std::string& ApplicationName() {
+            static std::string appname = b::Constants::DefaultApplicationName();
             return appname;
         }
     };

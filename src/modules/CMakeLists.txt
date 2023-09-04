@@ -1,19 +1,20 @@
 
 # Add all bundled modules
 battery_clear_available_modules()
-battery_make_module_available(check ${CMAKE_CURRENT_LIST_DIR}/check)
-battery_make_module_available(eventbus ${CMAKE_CURRENT_LIST_DIR}/eventbus)
-battery_make_module_available(graphics ${CMAKE_CURRENT_LIST_DIR}/graphics)
-battery_make_module_available(imgui ${CMAKE_CURRENT_LIST_DIR}/imgui)
-battery_make_module_available(imgui_sfml ${CMAKE_CURRENT_LIST_DIR}/imgui_sfml)
-battery_make_module_available(json ${CMAKE_CURRENT_LIST_DIR}/json)
-battery_make_module_available(magic_enum ${CMAKE_CURRENT_LIST_DIR}/magic_enum)
-battery_make_module_available(network ${CMAKE_CURRENT_LIST_DIR}/network)
-battery_make_module_available(pygraphics ${CMAKE_CURRENT_LIST_DIR}/pygraphics)
-battery_make_module_available(python ${CMAKE_CURRENT_LIST_DIR}/python)
-battery_make_module_available(qrcode ${CMAKE_CURRENT_LIST_DIR}/qrcode)
-battery_make_module_available(sfml ${CMAKE_CURRENT_LIST_DIR}/sfml)
-battery_make_module_available(toml11 ${CMAKE_CURRENT_LIST_DIR}/toml11)
+#battery_make_module_available(check ${CMAKE_CURRENT_LIST_DIR}/check)
+battery_make_module_available(cli11 ${CMAKE_CURRENT_LIST_DIR}/cli11)
+#battery_make_module_available(eventbus ${CMAKE_CURRENT_LIST_DIR}/eventbus)
+#battery_make_module_available(graphics ${CMAKE_CURRENT_LIST_DIR}/graphics)
+#battery_make_module_available(imgui ${CMAKE_CURRENT_LIST_DIR}/imgui)
+#battery_make_module_available(imgui_sfml ${CMAKE_CURRENT_LIST_DIR}/imgui_sfml)
+#battery_make_module_available(json ${CMAKE_CURRENT_LIST_DIR}/json)
+#battery_make_module_available(magic_enum ${CMAKE_CURRENT_LIST_DIR}/magic_enum)
+#battery_make_module_available(network ${CMAKE_CURRENT_LIST_DIR}/network)
+#battery_make_module_available(pygraphics ${CMAKE_CURRENT_LIST_DIR}/pygraphics)
+#battery_make_module_available(python ${CMAKE_CURRENT_LIST_DIR}/python)
+#battery_make_module_available(qrcode ${CMAKE_CURRENT_LIST_DIR}/qrcode)
+#battery_make_module_available(sfml ${CMAKE_CURRENT_LIST_DIR}/sfml)
+#battery_make_module_available(toml11 ${CMAKE_CURRENT_LIST_DIR}/toml11)
 
 # This does not immediately add the module, it only makes it available
 # Each module's CMakeLists.txt in its subdirectory will only be called 

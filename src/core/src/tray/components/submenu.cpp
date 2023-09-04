@@ -23,7 +23,7 @@
 
 namespace b::tray {
 
-    submenu::submenu(b::string text)
+    submenu::submenu(std::string text)
             : tray_entry(std::move(text)) {}
 
     void submenu::update() {

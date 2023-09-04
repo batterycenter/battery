@@ -18,6 +18,7 @@
 //
 
 #include "battery/core/string.hpp"
+#include "battery/core/bytearray.hpp"
 
 namespace b {
 
@@ -29,7 +30,7 @@ namespace b {
     /// \return Encoded Base-64 string
     /// \see b::decode_base64()
     ///
-    b::string encode_base64(const b::string& str);
+    std::string encode_base64(const std::string& str);
 
     ///
     /// \brief Encode a binary resource as Base-64
@@ -41,7 +42,7 @@ namespace b {
     /// \see b::decode_base64_text()
     /// \see b::decode_base64_binary()
     ///
-    b::string encode_base64(const b::bytearray& data);
+    std::string encode_base64(const b::bytearray& data);
 
     ///
     /// \brief Decode a Base-64 encoded text resource back to its original form. The encoding is assumed to be UTF-8.
@@ -53,7 +54,7 @@ namespace b {
     /// \return Decoded resource in its original form when it was encoded.
     /// \see b::encode_base64()
     ///
-    std::optional<b::string> decode_base64_text(const b::string& str);
+    std::optional<std::string> decode_base64_text(const std::string& str);
 
     ///
     /// \brief Decode a Base-64 encoded binary resource back to its original form.
@@ -63,7 +64,7 @@ namespace b {
     /// \return Decoded binary resource as a byte array
     /// \see b::encode_base64()
     ///
-    std::optional<b::bytearray> decode_base64_binary(const b::string& str);
+    std::optional<b::bytearray> decode_base64_binary(const std::string& str);
 
 }   // namespace b
 

@@ -107,21 +107,21 @@ namespace b {
             catch (const std::bad_expected_access<std::error_code>& err) {
                 auto str = b::format("Unhandled exception: Bad expected access of <std::error_code>: {}",
                                      err.error().message());
-                b::log::core::critical(str);
+                b::log::core::critical("{}", str);
                 if (m_messageBoxOnExceptionEnabled) {
                     b::message_box_error(str);
                 }
             }
             catch (const std::exception& err) {
                 auto str = b::format("Unhandled [std::exception]: {}", err.what());
-                b::log::core::critical(str);
+                b::log::core::critical("{}", str);
                 if (m_messageBoxOnExceptionEnabled) {
                     b::message_box_error(str);
                 }
             }
             catch (...) {
                 auto str = b::format("Unhandled exception: unknown type, no further information");
-                b::log::core::critical(str);
+                b::log::core::critical("{}", str);
                 if (m_messageBoxOnExceptionEnabled) {
                     b::message_box_error(str);
                 }

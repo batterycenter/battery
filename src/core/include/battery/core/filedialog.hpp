@@ -10,8 +10,8 @@ namespace b {
         bool confirm_overwrite = true;
         b::fs::path default_extension;      // Format: "txt"
         b::fs::path initial_folder;
-        b::string separator;      // WHAAATTT (TODO)
-        std::vector<std::pair<b::string, b::string>> filters = { { "All files"_b, "*.*"_b } };  // TODO: Allow this text to be localized
+        std::string separator;      // TODO: Don't know what this is for
+        std::vector<std::pair<std::string, std::string>> filters = { { "All files", "*.*" } };  // TODO: Allow this text to be localized
 
         filedialog() = default;
 

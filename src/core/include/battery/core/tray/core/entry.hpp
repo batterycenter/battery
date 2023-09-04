@@ -27,20 +27,20 @@ namespace b::tray {
 
     class tray_entry {
     public:
-        explicit tray_entry(b::string text);
+        explicit tray_entry(std::string text);
         virtual ~tray_entry() = default;
 
         basetray *getParent();
         void setParent(basetray *);
 
-        [[nodiscard]] b::string getText() const;
-        void setText(b::string);
+        [[nodiscard]] std::string getText() const;
+        void setText(std::string);
 
         void setDisabled(bool);
         [[nodiscard]] bool isDisabled() const;
 
     protected:
-        b::string text;
+        std::string text;
         bool disabled = false;
         basetray *parent = nullptr;
     };

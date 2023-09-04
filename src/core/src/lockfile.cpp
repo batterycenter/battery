@@ -38,9 +38,9 @@ namespace b {
         // On Windows, we create the file as non-exclusive and then lock it separately using LockFile(),
         // because this is apparently more robust than just opening the file in exclusive write mode.
 #ifdef B_OS_WINDOWS
-        auto nativeFilename = filename.string().encode<b::enc::os_native>();
+        auto nativeFilename = filename.string();
         this->fileHandle = CreateFileW(
-                nativeFilename.c_str(),
+                b::widen(nativeFilename).c_str(),
                 GENERIC_READ | GENERIC_WRITE,
                 FILE_SHARE_READ | FILE_SHARE_WRITE,
                 nullptr,
@@ -51,7 +51,7 @@ namespace b {
             throw std::runtime_error(b::format("Failed to create lockfile '{}': "
                                                "Failed to open file for writing: {}",
                                                filename,
-                                               b::internal::get_last_win32_error()).encode<b::enc::utf8>());
+                                               b::internal::get_last_win32_error()));
         }
 #else
         // TODO Refactor this to use fcntl or flock instead of an exclusive write
@@ -134,8 +134,7 @@ namespace b {
     void lockfile::lock_impl(bool blocking) {
         std::scoped_lock lock(*this->mutex.get());
         if (this->locked) {
-            throw std::runtime_error(
-                    b::format("Failed to aquire lockfile '{}': Lock already in use", filename).encode<b::enc::utf8>());
+            throw std::runtime_error(b::format("Failed to aquire lockfile '{}': Lock already in use", filename));
         }
 #ifdef B_OS_WINDOWS
         OVERLAPPED overlapped = { 0 };
@@ -143,8 +142,7 @@ namespace b {
         overlapped.OffsetHigh = 0;
         DWORD flags = blocking ? (LOCKFILE_EXCLUSIVE_LOCK | LOCKFILE_FAIL_IMMEDIATELY) : LOCKFILE_EXCLUSIVE_LOCK;
         if (!LockFileEx(this->fileHandle, flags, 0, 0xFFFFFFFF, 0xFFFFFFFF, &overlapped)) {
-            throw std::runtime_error(
-                    b::format("Failed to aquire lockfile '{}': Lock already in use", filename).encode<b::enc::utf8>());
+            throw std::runtime_error(b::format("Failed to aquire lockfile '{}': Lock already in use", filename));
         }
 #else
         struct flock fl = {};
@@ -174,11 +172,8 @@ namespace b {
             }
             b::sleep(poll_interval);
         }
-        throw std::runtime_error(
-                b::format("Failed to aquire lockfile '{}': Timeout expired", filename).encode<b::enc::utf8>());
+        throw std::runtime_error(b::format("Failed to aquire lockfile '{}': Timeout expired", filename));
     }
-
-
 
     scoped_lockfile::scoped_lockfile(const b::fs::path& filename, lockfile_mode mode, std::optional<double> timeout)
             : _lockfile(filename) {

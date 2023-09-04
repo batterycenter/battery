@@ -6,20 +6,20 @@
 
 namespace b {
 
-    b::string strerror() {
+    std::string strerror() {
         return strerror(errno);
     }
 
-    b::string strerror(int errnum) {
+    std::string strerror(int errnum) {
 #ifdef B_OS_WINDOWS
-        b::native_string const result = _wcserror(errnum);
+        return b::narrow(_wcserror(errnum));
 #else
-        b::native_string result(1024, '\0');
+        std::string result(1024, '\0');
         if (!0 == strerror_r(errnum, result.data(), result.size())) {
             return {};
         }
+        return result;
 #endif
-        return b::string::decode<b::enc::os_native>(result);
     }
 
 } // namespace b

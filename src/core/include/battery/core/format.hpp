@@ -17,7 +17,9 @@
 // limitations under the License.
 //
 
-#include "battery/core/string.hpp"
+#include <spdlog/fmt/fmt.h>
+#include <spdlog/fmt/ranges.h>
+#include <spdlog/fmt/std.h>
 
 namespace b {
 
@@ -30,10 +32,7 @@ namespace b {
     /// \param fmt The format string
     /// \param args The arguments to format
     /// \return The formatted string
-    template<typename... T>
-    b::string format(fmt::format_string<T...> fmt, T&&... args) {
-        return b::string::decode<b::enc::utf8>(fmt::format(fmt, std::forward<T>(args)...));
-    }
+    using fmt::format;
 
 } // namespace b
 

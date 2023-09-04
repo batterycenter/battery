@@ -32,7 +32,7 @@ namespace b::uuid {
     /// \return A new, unique uuid in the form of an b::string
     /// \see b::uuid::is_valid()
     ///
-    b::string v4();
+    std::string v4();
 
     ///
     /// \brief Test if a string is in the correct format to be interpreted as a uuid.
@@ -40,6 +40,6 @@ namespace b::uuid {
     /// \return True if the string is a valid uuid, false otherwise
     /// \see b::uuid::v4()
     ///
-    bool is_valid(const b::string& uuid);
+    bool is_valid(const std::string& uuid);
 
 } // namespace b::uuid

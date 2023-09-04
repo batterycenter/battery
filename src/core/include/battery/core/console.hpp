@@ -1,13 +1,15 @@
-#pragma once
+
+#ifndef BATTERY_CORE_CONSOLE_HPP
+#define BATTERY_CORE_CONSOLE_HPP
 
 #include <memory>
 #include "battery/core/string.hpp"
 
 namespace b {
 
-    b::string cin_getline(size_t buffer_size = 1024);
+    std::string cin_getline(size_t buffer_size = 1024);
 
-    bool open_url_in_default_browser(const b::string& url);
+    bool open_url_in_default_browser(const std::string& url);
 
     namespace console {
 
@@ -78,3 +80,5 @@ namespace b {
     } // namespace console
 
 } // namespace b
+
+#endif // BATTERY_CORE_CONSOLE_HPP

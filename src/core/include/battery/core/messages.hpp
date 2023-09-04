@@ -6,18 +6,14 @@ namespace b {
 
     namespace internal {
 #ifdef B_OS_WINDOWS
-
-        b::string get_last_win32_error();
-
+        std::string get_last_win32_error();
 #else
-
-        void linux_run_zenity(const std::vector<b::string>& commands);
-
+        void linux_run_zenity(const std::vector<std::string>& commands);
 #endif
     }
 
-    void message_box_info(const b::string& message);
-    void message_box_warning(const b::string& message);
-    void message_box_error(const b::string& message);
+    void message_box_info(const std::string& message);
+    void message_box_warning(const std::string& message);
+    void message_box_error(const std::string& message);
 
 }

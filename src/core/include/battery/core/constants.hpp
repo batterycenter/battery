@@ -20,8 +20,8 @@ namespace b {
     // to catch first-time constructor exceptions and avoid static initialization order fiascos
     // https://isocpp.org/wiki/faq/ctors#static-init-order
     namespace Constants {
-        b::string BatteryIconBase64();
-        b::string DefaultApplicationName();
+        std::string BatteryIconBase64();
+        std::string DefaultApplicationName();
 
         bool MessageBoxOnExceptionDefault();
         bool CatchCommonExceptionsDefault();

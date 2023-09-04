@@ -23,6 +23,7 @@
 #include "battery/core/exception.hpp"
 #include "battery/core/log.hpp"
 #include "battery/core/format.hpp"
+#include "battery/core/bytearray.hpp"
 #include <bit>
 #include <filesystem>
 #include <fstream>
@@ -57,9 +58,13 @@ namespace b::fs {
         using const_iterator = std::filesystem::path::const_iterator;
 
         /// \brief The preferred separator for the current platform (Backslash on Windows, forward slash on others)
-        inline static b::string const preferred_separator = b::string::decode<b::enc::os_native>(
-                b::native_string(&std::filesystem::path::preferred_separator, 1)
-        );
+#ifdef B_OS_WINDOWS
+        inline static std::string const preferred_separator =
+                b::narrow(b::native_string(&std::filesystem::path::preferred_separator, 1));
+#else
+        inline static std::string const preferred_separator =
+                b::native_string(&std::filesystem::path::preferred_separator, 1);
+#endif
 
         /// \brief default constructor
         path() = default;
@@ -69,29 +74,27 @@ namespace b::fs {
         path& operator=(const path&) = default;
         path& operator=(path&&) = default;
 
-        /// \brief Construct from a string (Unicode aware)
+        /// \brief Construct from a UTF-8 string
         /// \param path The path to construct from
-        path(const b::string& path);
+        path(const char* path);
 
-        /// \brief Assign from a string (Unicode aware)
+        /// \brief Construct from a UTF-8 string
+        /// \param path The path to construct from
+        path(const std::string& path);
+
+        /// \brief Construct from a UTF-8 string
+        /// \param path The path to construct from
+        path(const std::u8string& path);
+
+        /// \brief Assign from a UTF-8 string
         /// \param path The path to assign from
         /// \return A reference to self
-        path& operator=(const b::string& path);
+        path& operator=(const std::string& path);
 
-        /// \brief Assign from a string (Unicode aware)
-        /// \param path The path to assign from
-        /// \return A reference to self
-        path& assign(const b::string& path);
-
-        /// \brief Assign from a string (Unicode aware)
+        /// \brief Assign from a UTF-8 string
         /// \param path The path to assign from
         /// \return A reference to self
         path& assign(const b::fs::path& path);
-
-        /// \brief Append another path by adding a directory separator
-        /// \param path The path to append
-        /// \return A reference to self
-        path& append(const b::string& path);
 
         /// \brief Append another path by adding a directory separator
         /// \param path The path to append
@@ -101,27 +104,12 @@ namespace b::fs {
         /// \brief Append another path by adding a directory separator
         /// \param path The path to append
         /// \return A reference to self
-        path& operator/=(const b::string& path);
-
-        /// \brief Append another path by adding a directory separator
-        /// \param path The path to append
-        /// \return A reference to self
         path& operator/=(const b::fs::path& path);
 
         /// \brief Concatenate another path without intentionally adding a directory separator
         /// \param path The path to concatenate
         /// \return A reference to self
-        path& concat(const b::string& path);
-
-        /// \brief Concatenate another path without intentionally adding a directory separator
-        /// \param path The path to concatenate
-        /// \return A reference to self
         path& concat(const b::fs::path& path);
-
-        /// \brief Concatenate another path without intentionally adding a directory separator
-        /// \param path The path to concatenate
-        /// \return A reference to self
-        path& operator+=(const b::string& path);
 
         /// \brief Concatenate another path without intentionally adding a directory separator
         /// \param path The path to concatenate
@@ -148,17 +136,7 @@ namespace b::fs {
         /// \brief Replace or add the filename portion of the path. (Everything after the last directory separator)
         /// \param filename The filename to replace with
         /// \return A reference to self
-        path& replace_filename(const b::string& filename);
-
-        /// \brief Replace or add the filename portion of the path. (Everything after the last directory separator)
-        /// \param filename The filename to replace with
-        /// \return A reference to self
         path& replace_filename(const b::fs::path& filename);
-
-        /// \brief Replace or add the filename extension portion of the path.
-        /// \param extension The extension to replace with
-        /// \return A reference to self
-        path& replace_extension(const b::string& extension);
 
         /// \brief Replace or add the filename extension portion of the path.
         /// \param extension The extension to replace with
@@ -171,11 +149,11 @@ namespace b::fs {
 
         /// \brief Get the path in generic format (On Windows, all separators converted to forward slashes)
         /// \return The path in generic string format
-        [[nodiscard]] b::string string() const;
+        [[nodiscard]] std::string string() const;
 
         /// \brief Get the path in platform-native format (Keeping backslashes and forward slashes as-is on all systems)
         /// \return The path in platform-native string format
-        [[nodiscard]] b::string native_string() const;
+        [[nodiscard]] std::string native_string() const;
 
         /// \brief Lexicographical comparison of two paths. (e.g. "/a/b" < "/a/b/c")
         /// \param other The other path to compare with
@@ -1069,7 +1047,7 @@ namespace b::fs {
     class ifstream : public std::ifstream {
     public:
         ifstream(const path& path, std::ios_base::openmode mode = std::ios_base::in)
-                : std::ifstream(path.string().encode<b::enc::os_native>(), mode) {}
+                : std::ifstream(b::to_native(path.string()), mode) {}
         ~ifstream() override = default;
     };
 
@@ -1091,90 +1069,65 @@ namespace b::fs {
                     fs::create_directory(path.parent_path());
                 }
             }
-            return path.string().encode<b::enc::os_native>();
+            return b::to_native(path.string());
         }
     };
 
-    /// \brief Read the contents of a file into a fitting container, while agnosting the file encoding
-    /// \details The encoding can be specified as a template parameter. Use `auto str = b::fs::read(myFilePath);` to
-    ///          read a text file with UTF-8 encoding (default). The return value is a generic b::string, which can
-    ///          then be encoded in other formats. For example, use `auto str = b::fs::read<b::fs::latin1>(myFilePath);`
-    ///          to read a file with Latin-1 encoding. Binary files are an exception, for these use
-    ///          `auto bytes = b::fs::read<b::fs::binary>(myFilePath);`. In this case return type is a `b::bytearray`,
-    ///          better suited for holding byte-based binary resources without a specific encoding.
+    /// \brief Read the contents of a text file as a string
+    /// \details The file is read in binary mode and stored in the string as-is. No encoding conversion is performed.
+    ///          Line Endings are preserved. Any file should always be written with LF line endings anyways.
+    ///          You are required to interpret the returned string as UTF-8 as enforced by https://utf8everywhere.org.
     /// \note Be aware that the number of bytes needed to represent the data on disk may be different from the number
     ///       of characters in the string. Do not take the file size as a measure of the number of characters.
-    /// \tparam encoding The encoding to use for the file
     /// \param path The b::fs::path file path to load the file from
-    /// \return b::bytearray if b::fs::binary is used, otherwise an encoding-agnostic b::string
+    /// \return std::string with the UTF-8 encoded file contents
     /// \see b::fs::read()
-    template<typename encoding = b::enc::utf8>
-    auto try_read(const fs::path &path) {
-        std::ios::openmode filemode = std::ios::in;
-        if constexpr (std::is_same_v<encoding, b::enc::binary>) {
-            filemode |= std::ios::binary;
-        }
+    std::expected<std::string, b::filesystem_error> try_read(const b::fs::path &path);
 
-        b::fs::ifstream file(path, filemode);
-        if (!file.is_open()) {
-            return std::unexpected(b::filesystem_error(
-                    b::format("Failed loading file {}: {}", path, b::strerror(errno))
-            ));
-        }
-
-        auto content = b::bytearray::from_string(
-                std::string(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>())
-        );
-
-        return std::expected(b::string::decode<encoding>(content));
-    }
-
-    /// \brief Read the contents of a file into a fitting container, while agnosting the file encoding
-    /// \details The encoding can be specified as a template parameter. Use `auto str = b::fs::read(myFilePath);` to
-    ///          read a text file with UTF-8 encoding (default). The return value is a generic b::string, which can
-    ///          then be encoded in other formats. For example, use `auto str = b::fs::read<b::fs::latin1>(myFilePath);`
-    ///          to read a file with Latin-1 encoding. Binary files are an exception, for these use
-    ///          `auto bytes = b::fs::read<b::fs::binary>(myFilePath);`. In this case return type is a `b::bytearray`,
-    ///          better suited for holding byte-based binary resources without a specific encoding.
+    /// \brief Read the contents of a text file as a string
+    /// \details The file is read in binary mode and stored in the string as-is. No encoding conversion is performed.
+    ///          You are required to interpret the returned string as UTF-8 as enforced by https://utf8everywhere.org.
     /// \note Be aware that the number of bytes needed to represent the data on disk may be different from the number
     ///       of characters in the string. Do not take the file size as a measure of the number of characters.
-    /// \tparam encoding The encoding to use for the file
     /// \param path The b::fs::path file path to load the file from
     /// \throw b::filesystem_error if loading the file fails
-    /// \return b::bytearray if b::fs::binary is used, otherwise an encoding-agnostic b::string
+    /// \return std::string with the UTF-8 encoded file contents
     /// \see b::fs::try_read()
-    template<typename encoding = b::enc::utf8>
-    auto read(const fs::path &path) {
-        auto result = try_read<encoding>(path);
-        if (!result) {
-            throw b::filesystem_error(result.error().message());
-        }
-        return result.value();
-    }
+    std::string read(const fs::path &path);
 
-    /// \brief Read the contents of a file in chunks
-    /// \details The chunk size is specified, as well as a callback function (preferrably a lambda), that is
+    /// \brief Read the contents of a binary file as a b::bytearray
+    /// \details Use this function for all non-text files such as images, audio, video, etc.
+    ///          Do not ever store binary data in an `std::string`, use `b::bytearray` for that instead.
+    /// \param path The b::fs::path file path to load the file from
+    /// \return std::string with the UTF-8 encoded file contents
+    /// \see b::fs::read()
+    std::expected<b::bytearray, b::filesystem_error> try_read_binary(const b::fs::path &path);
+
+    /// \brief Read the contents of a binary file as a b::bytearray
+    /// \details Use this function for all non-text files such as images, audio, video, etc.
+    ///          Do not ever store binary data in an `std::string`, use `b::bytearray` for that instead.
+    /// \param path The b::fs::path file path to load the file from
+    /// \throw b::filesystem_error if loading the file fails
+    /// \return std::string with the UTF-8 encoded file contents
+    /// \see b::fs::try_read()
+    b::bytearray read_binary(const fs::path &path);
+
+    /// \brief Read the contents of a text file in chunks
+    /// \details The chunk size is specified, as well as a callback function (usually a lambda), that is
     ///          called for every chunk being read. When the read is finished, the total number of bytes read
     ///          is being returned, or a b::filesystem_error object. To write a file in chunks, use
     ///          `b::fs::ofstream` directly.
     /// \note Be aware that the number of bytes needed to represent the data on disk may be different from the number
     ///       of characters in the string. Do not take the file size as a measure of the number of characters.
-    /// \tparam encoding The encoding to use for the file
     /// \tparam TFunc The type of the callback function (do not specify)
     /// \param path The b::fs::path file path to load the file from
     /// \param chunk_size The size of the chunks to read
     /// \param callback The callback function to call for every chunk read
     /// \return The total number of bytes read, or a b::filesystem_error exception object
-    template<typename encoding = b::enc::utf8, typename TFunc>
-    inline static std::expected<size_t, b::filesystem_error> try_read_chunked(const fs::path& path,
-                                                                              size_t chunk_size,
-                                                                              TFunc callback) {
-        std::ios::openmode filemode = std::ios::in;
-        if constexpr (std::is_same_v<encoding, b::enc::binary>) {
-            filemode |= std::ios::binary;
-        }
-
-        b::fs::ifstream file(path, filemode);
+    template<typename TFunc>
+    inline static std::expected<size_t, b::filesystem_error>
+            try_read_chunked(const fs::path& path, size_t chunk_size, TFunc callback) {
+        b::fs::ifstream file(path, std::ios::in | std::ios::binary);
         if (!file.is_open()) {
             return std::unexpected(b::filesystem_error(
                     b::format("Failed loading file {}: {}", path, b::strerror(errno))
@@ -1189,93 +1142,128 @@ namespace b::fs {
             totalBytes += thisChunkSize;
 
             if (thisChunkSize != 0) {
-                auto chunk = b::string::decode<encoding>(
-                        std::string(buffer.data(), static_cast<size_t>(thisChunkSize))
-                );
+                auto chunk = std::string(buffer.data(), static_cast<size_t>(thisChunkSize));
                 callback(chunk);
             }
         }
 
-        return std::expected(totalBytes);
+        return totalBytes;
     }
 
-    /// \brief Read the contents of a file in chunks
-    /// \details The chunk size is specified, as well as a callback function (preferrably a lambda), that is
+    /// \brief Read the contents of a text file in chunks
+    /// \details The chunk size is specified, as well as a callback function (usually a lambda), that is
     ///          called for every chunk being read. When the read is finished, the total number of bytes read
     ///          is being returned, or a b::filesystem_error object.
     /// \note Be aware that the number of bytes needed to represent the data on disk may be different from the number
     ///       of characters in the string. Do not take the file size as a measure of the number of characters.
-    /// \tparam encoding The encoding to use for the file
     /// \tparam TFunc The type of the callback function (do not specify)
     /// \param path The b::fs::path file path to load the file from
     /// \param chunk_size The size of the chunks to read
     /// \param callback The callback function to call for every chunk read
     /// \throw b::filesystem_error if loading the file fails
     /// \return The total number of bytes read
-    template<typename encoding = b::enc::utf8, typename TFunc>
+    template<typename TFunc>
     inline static size_t read_chunked(const fs::path& path, size_t chunk_size, TFunc callback) {
-        auto result = try_read_chunked<encoding>(path, chunk_size, callback);
+        auto result = try_read_chunked(path, chunk_size, callback);
         if (!result) {
             throw result.error();
         }
         return result.value();
     }
 
-    /// \brief Write into a file on-disk. Parent folders are automatically created.
-    /// \details The encoding can be specified as a template parameter. Use `auto str = b::fs::write(myFilePath, ...);`
-    ///          to write a text file with UTF-8 encoding (default). Use the template parameter `<b::enc::binary>` to
-    ///          write a binary file. In this case the input parameter is a `b::bytearray`, otherwise
-    ///          it is a `b::string`.
+    /// \brief Read the contents of a binary file in chunks
+    /// \details The chunk size is specified, as well as a callback function (usually a lambda), that is
+    ///          called for every chunk being read. When the read is finished, the total number of bytes read
+    ///          is being returned, or a b::filesystem_error object. To write a file in chunks, use
+    ///          `b::fs::ofstream` directly.
     /// \note Be aware that the number of bytes needed to represent the data on disk may be different from the number
     ///       of characters in the string. Do not take the file size as a measure of the number of characters.
-    /// \warning Always remember to respect https://utf8everywhere.org/. Never write a file to disk with anything
-    ///          other than UTF-8 encoding, unless you have a very good reason to do so.
-    /// \tparam encoding The encoding to use for the file
-    /// \param path The b::fs::path file path to open the file from
-    /// \param content The content to write into the file (b::bytearray or b::string, depending on the encoding)
-    /// \return The number of bytes written to disk, or a b::filesystem_error exception object
-    /// \see b::fs::write()
-    template<typename encoding = b::enc::utf8, typename T>
-    std::expected<size_t, b::filesystem_error> try_write(const fs::path &path, const T& content) {
-        std::ios::openmode filemode = std::ios::out;
-        if constexpr (std::is_same_v<encoding, b::enc::binary>) {
-            filemode |= std::ios::binary;
-        }
-
-        b::fs::ofstream file(path, filemode);
+    /// \tparam TFunc The type of the callback function (do not specify)
+    /// \param path The b::fs::path file path to load the file from
+    /// \param chunk_size The size of the chunks to read
+    /// \param callback The callback function to call for every chunk read
+    /// \return The total number of bytes read, or a b::filesystem_error exception object
+    template<typename TFunc>
+    inline static std::expected<size_t, b::filesystem_error>
+            try_read_binary_chunked(const fs::path& path, size_t chunk_size, TFunc callback) {
+        b::fs::ifstream file(path, std::ios::in | std::ios::binary);
         if (!file.is_open()) {
             return std::unexpected(b::filesystem_error(
                     b::format("Failed loading file {}: {}", path, b::strerror(errno))
             ));
         }
 
-        file.write(content.encode<encoding>());
-        return std::expected(static_cast<size_t>(file.tellp()));
+        std::string buffer(chunk_size, 0);
+        size_t totalBytes = 0;
+        while (!file.eof()) {
+            file.read(buffer.data(), buffer.size());    // Read a chunk of the file
+            auto thisChunkSize = file.gcount();
+            totalBytes += thisChunkSize;
+
+            if (thisChunkSize != 0) {
+                auto chunk = std::string(buffer.data(), static_cast<size_t>(thisChunkSize));
+                callback(b::bytearray(chunk.begin(), chunk.end()));
+            }
+        }
+
+        return totalBytes;
     }
 
-    /// \brief Write into a file on-disk. Parent folders are automatically created.
-    /// \details The encoding can be specified as a template parameter. Use `auto str = b::fs::write(myFilePath, ...);`
-    ///          to write a text file with UTF-8 encoding (default). Use the template parameter `<b::enc::binary>` to
-    ///          write a binary file. In this case the input parameter is a `b::bytearray`, otherwise
-    ///          it is a `b::string`.
+    /// \brief Read the contents of a binary file in chunks
+    /// \details The chunk size is specified, as well as a callback function (usually a lambda), that is
+    ///          called for every chunk being read. When the read is finished, the total number of bytes read
+    ///          is being returned, or a b::filesystem_error object.
     /// \note Be aware that the number of bytes needed to represent the data on disk may be different from the number
     ///       of characters in the string. Do not take the file size as a measure of the number of characters.
-    /// \warning Always remember to respect https://utf8everywhere.org/. Never write a file to disk with anything
-    ///          other than UTF-8 encoding, unless you have a very good reason to do so.
-    /// \tparam encoding The encoding to use for the file
-    /// \param path The b::fs::path file path to open the file from
-    /// \param content The content to write into the file (b::bytearray or b::string, depending on the encoding)
-    /// \throw b::filesystem_error if writing the file fails
-    /// \return The number of bytes written to disk
-    /// \see b::fs::try_write()
-    template<typename encoding = b::enc::utf8, typename T>
-    size_t write(const fs::path &path, const T& content) {
-        auto result = try_write<encoding>(path, content);
+    /// \tparam TFunc The type of the callback function (do not specify)
+    /// \param path The b::fs::path file path to load the file from
+    /// \param chunk_size The size of the chunks to read
+    /// \param callback The callback function to call for every chunk read
+    /// \throw b::filesystem_error if loading the file fails
+    /// \return The total number of bytes read
+    template<typename TFunc>
+    inline static size_t read_binary_chunked(const fs::path& path, size_t chunk_size, TFunc callback) {
+        auto result = try_read_binary_chunked(path, chunk_size, callback);
         if (!result) {
             throw result.error();
         }
         return result.value();
     }
+
+    /// \brief Write into a file on-disk. Parent folders are automatically created.
+    /// \details You must make sure that the content being written to the file is UTF-8 encoded, if the data
+    ///          represents text. Line Endings are preserved by this function.
+    /// \note Be aware that the number of bytes needed to represent the data on disk may be different from the number
+    ///       of characters in the string. Do not take the file size as a measure of the number of characters.
+    /// \warning Always remember to respect https://utf8everywhere.org/. Never write a file to disk with anything
+    ///          other than UTF-8 encoding, unless you have a very good reason to do so.
+    /// \param path The b::fs::path file path to open the file from
+    /// \param content The content to write into the file (b::bytearray or b::string, depending on the encoding)
+    /// \return The number of bytes written to disk, or a b::filesystem_error exception object
+    /// \see b::fs::write()
+    std::expected<size_t, b::filesystem_error> try_write(const fs::path &path, const std::string& content);
+
+    /// \brief Overload of `b::fs::try_write()`
+    /// \see b::fs::try_write()
+    std::expected<size_t, b::filesystem_error> try_write(const fs::path &path, const b::bytearray& content);
+
+    /// \brief Write into a file on-disk. Parent folders are automatically created.
+    /// \details You must make sure that the content being written to the file is UTF-8 encoded, if the data
+    ///          represents text. Line Endings are preserved by this function.
+    /// \note Be aware that the number of bytes needed to represent the data on disk may be different from the number
+    ///       of characters in the string. Do not take the file size as a measure of the number of characters.
+    /// \warning Always remember to respect https://utf8everywhere.org/. Never write a file to disk with anything
+    ///          other than UTF-8 encoding, unless you have a very good reason to do so.
+    /// \param path The b::fs::path file path to open the file from
+    /// \param content The content to write into the file (b::bytearray or b::string, depending on the encoding)
+    /// \throw b::filesystem_error if writing the file fails
+    /// \return The number of bytes written to disk, or a b::filesystem_error exception object
+    /// \see b::fs::try_write()
+    size_t write(const fs::path &path, const std::string& content);
+
+    /// \brief Overload of `b::fs::try_write()`
+    /// \see b::fs::try_write()
+    size_t write(const fs::path &path, const b::bytearray& content);
 
 } // namespace b::fs
 
@@ -1283,7 +1271,7 @@ namespace b::fs {
 namespace std {
     template <> struct hash<b::fs::path> {
         size_t operator()(const b::fs::path& path) const {
-            return std::hash<std::string>()(path.string().encode<b::enc::utf8>());
+            return std::hash<std::string>()(path.string());
         }
     };
 } // namespace std

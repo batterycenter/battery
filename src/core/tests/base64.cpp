@@ -2,9 +2,9 @@
 #include "battery/core.hpp"
 #include <gtest/gtest.h>
 
-const auto BASE64_UTF8_TEST = u8"Lorem ipsum dolor sit amet イロハニホヘト チリヌシ ヱヒモセスン Heizölrückstoßabdämpfung";
+const auto BASE64_UTF8_TEST = "Lorem ipsum dolor sit amet イロハニホヘト チリヌシ ヱヒモセスン Heizölrückstoßabdämpfung";
 const auto BASE64_UTF8_TEST_ENCODED = "TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQg44Kk44Ot44OP44OL44Ob44OY44OIIOODgeO"
-                                      "DquODjOOCtyDjg7Hjg5Ljg6Ljgrvjgrnjg7MgSGVpesO2bHLDvGNrc3Rvw59hYmTDpG1wZnVuZw=="_b;
+                                      "DquODjOOCtyDjg7Hjg5Ljg6Ljgrvjgrnjg7MgSGVpesO2bHLDvGNrc3Rvw59hYmTDpG1wZnVuZw==";
 
 const std::vector<uint8_t> BASE64_BINARY_TEST = {
         0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
@@ -24,7 +24,7 @@ const std::vector<uint8_t> BASE64_BINARY_TEST = {
         0xE0, 0xE1, 0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0xE7, 0xE8, 0xE9, 0xEA, 0xEB, 0xEC, 0xED, 0xEE, 0xEF,
         0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF,
 };
-const auto BASE64_BINARY_TEST_ENCODED = u8"AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc"
+const auto BASE64_BINARY_TEST_ENCODED = "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc"
                                         "4OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3"
                                         "BxcnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanq"
                                         "Kmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g"
@@ -47,38 +47,38 @@ TEST(BatteryCore_Base64, Base64BinaryDecode) {
 }
 
 TEST(BatteryCore_Base64, Base64TextEncodePadding) {
-    EXPECT_EQ(b::encode_base64("M"_b), "TQ=="_b);
-    EXPECT_EQ(b::encode_base64("Ma"_b), "TWE="_b);
-    EXPECT_EQ(b::encode_base64("Man"_b), "TWFu"_b);
-    EXPECT_EQ(b::encode_base64("light w"_b), "bGlnaHQgdw=="_b);
-    EXPECT_EQ(b::encode_base64("light wo"_b), "bGlnaHQgd28="_b);
-    EXPECT_EQ(b::encode_base64("light wor"_b), "bGlnaHQgd29y"_b);
-    EXPECT_EQ(b::encode_base64("light work"_b), "bGlnaHQgd29yaw=="_b);
-    EXPECT_EQ(b::encode_base64("light work."_b), "bGlnaHQgd29yay4="_b);
+    EXPECT_EQ(b::encode_base64("M"), "TQ==");
+    EXPECT_EQ(b::encode_base64("Ma"), "TWE=");
+    EXPECT_EQ(b::encode_base64("Man"), "TWFu");
+    EXPECT_EQ(b::encode_base64("light w"), "bGlnaHQgdw==");
+    EXPECT_EQ(b::encode_base64("light wo"), "bGlnaHQgd28=");
+    EXPECT_EQ(b::encode_base64("light wor"), "bGlnaHQgd29y");
+    EXPECT_EQ(b::encode_base64("light work"), "bGlnaHQgd29yaw==");
+    EXPECT_EQ(b::encode_base64("light work."), "bGlnaHQgd29yay4=");
 }
 
 TEST(BatteryCore_Base64, Base64DecodeFail) {
-    ASSERT_FALSE(b::decode_base64_text("T(Fu"_b).has_value());
-    ASSERT_FALSE(b::decode_base64_text("TWF."_b).has_value());
-    ASSERT_FALSE(b::decode_base64_text("T\"F."_b).has_value());
-    ASSERT_FALSE(b::decode_base64_text("TW#u"_b).has_value());
-    ASSERT_FALSE(b::decode_base64_binary("T(Fu"_b).has_value());
-    ASSERT_FALSE(b::decode_base64_binary("TWF."_b).has_value());
-    ASSERT_FALSE(b::decode_base64_binary("T\"F."_b).has_value());
-    ASSERT_FALSE(b::decode_base64_binary("TW#u"_b).has_value());
+    ASSERT_FALSE(b::decode_base64_text("T(Fu").has_value());
+    ASSERT_FALSE(b::decode_base64_text("TWF.").has_value());
+    ASSERT_FALSE(b::decode_base64_text("T\"F.").has_value());
+    ASSERT_FALSE(b::decode_base64_text("TW#u").has_value());
+    ASSERT_FALSE(b::decode_base64_binary("T(Fu").has_value());
+    ASSERT_FALSE(b::decode_base64_binary("TWF.").has_value());
+    ASSERT_FALSE(b::decode_base64_binary("T\"F.").has_value());
+    ASSERT_FALSE(b::decode_base64_binary("TW#u").has_value());
 }
 
 TEST(BatteryCore_Base64, Base64TextDecodePadding) {
-    EXPECT_EQ(b::decode_base64_text("TWFu"_b).value(), "Man"_b);
-    EXPECT_EQ(b::decode_base64_text("TWE="_b).value(), "Ma"_b);
-    EXPECT_EQ(b::decode_base64_text("TWE"_b).value(), "Ma"_b);
-    EXPECT_EQ(b::decode_base64_text("TQ=="_b).value(), "M"_b);
-    EXPECT_EQ(b::decode_base64_text("TQ="_b).value(), "M"_b);
-    EXPECT_EQ(b::decode_base64_text("TQ"_b).value(), "M"_b);
-    EXPECT_EQ(b::decode_base64_text("bGlnaHQgdw=="_b).value(), "light w"_b);
-    EXPECT_EQ(b::decode_base64_text("bGlnaHQgd28="_b).value(), "light wo"_b);
-    EXPECT_EQ(b::decode_base64_text("bGlnaHQgd29y"_b).value(), "light wor"_b);
-    EXPECT_EQ(b::decode_base64_text("bGlnaHQgdw"_b).value(), "light w"_b);
-    EXPECT_EQ(b::decode_base64_text("bGlnaHQgd28"_b).value(), "light wo"_b);
-    EXPECT_EQ(b::decode_base64_text("bGlnaHQgd29y"_b).value(), "light wor"_b);
+    EXPECT_EQ(b::decode_base64_text("TWFu").value(), "Man");
+    EXPECT_EQ(b::decode_base64_text("TWE=").value(), "Ma");
+    EXPECT_EQ(b::decode_base64_text("TWE").value(), "Ma");
+    EXPECT_EQ(b::decode_base64_text("TQ==").value(), "M");
+    EXPECT_EQ(b::decode_base64_text("TQ=").value(), "M");
+    EXPECT_EQ(b::decode_base64_text("TQ").value(), "M");
+    EXPECT_EQ(b::decode_base64_text("bGlnaHQgdw==").value(), "light w");
+    EXPECT_EQ(b::decode_base64_text("bGlnaHQgd28=").value(), "light wo");
+    EXPECT_EQ(b::decode_base64_text("bGlnaHQgd29y").value(), "light wor");
+    EXPECT_EQ(b::decode_base64_text("bGlnaHQgdw").value(), "light w");
+    EXPECT_EQ(b::decode_base64_text("bGlnaHQgd28").value(), "light wo");
+    EXPECT_EQ(b::decode_base64_text("bGlnaHQgd29y").value(), "light wor");
 }

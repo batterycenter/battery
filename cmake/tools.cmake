@@ -80,10 +80,6 @@ function(b_apply_common_target_options TARGET)  # For all libraries and executab
     target_compile_features(${TARGET} PRIVATE cxx_std_23)
     set_target_properties(${TARGET} PROPERTIES CXX_EXTENSIONS OFF)
 
-    # Link against pthreads if applicable
-    find_package (Threads REQUIRED)
-    target_link_libraries(${TARGET} PUBLIC Threads::Threads)
-
     if (ENABLE_CLANG_TIDY)
         if (MSVC)
             set(EXTRA_FLAGS ";--extra-arg=/EHsc")

@@ -42,8 +42,8 @@ public:
 
     bool async() {
         for (int i = 0; i < 5; i++) {
-            data = "Private class members"_b;
-            b::string str = data;
+            data = "Private class members";
+            std::string str = data;
             b::sleep(0.1);
         }
         success = true;
@@ -52,13 +52,13 @@ public:
 
     void async_int(int i) {
         if (i != 187)
-            throw std::invalid_argument("Expected value 187, but got value " + std::to_string(i) + ": Thread is broken");
+            throw std::invalid_argument(b::format("Expected value 187, but got value {}: Thread is broken", i));
         success = true;
     }
 
     static void static_async_int(int i) {
         if (i != 187)
-            throw std::invalid_argument("Expected value 187, but got value " + std::to_string(i) + ": Thread is broken");
+            throw std::invalid_argument(b::format("Expected value 187, but got value {}: Thread is broken", i));
         success = true;
     }
 
@@ -70,7 +70,7 @@ public:
     inline static std::atomic<bool> success = false;
 
 private:
-    b::string data;
+    std::string data;
     b::thread thread;
     std::atomic<bool> bool_data = false;
 };

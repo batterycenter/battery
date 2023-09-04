@@ -60,7 +60,7 @@ namespace b {
 
 
 
-    int ConsoleApplication::run(const b::string& appname, const std::vector<b::string>& args) {
+    int ConsoleApplication::run(const std::string& appname, const std::vector<std::string>& args) {
         this->args = args;
         b::Folders::ApplicationName() = appname;
 
@@ -95,7 +95,7 @@ namespace b {
 
 
     template<typename Fn, typename... Args>
-    bool CatchExceptions(const b::string& funcname, Fn&& func, Args&&... args) {
+    bool CatchExceptions(const std::string& funcname, Fn&& func, Args&&... args) {
         try {
             std::invoke(std::forward<Fn>(func), std::forward<Args>(args)...);
             return true;
@@ -110,15 +110,15 @@ namespace b {
     }
 
     bool ConsoleApplication::_setup() {
-        return CatchExceptions("b::application::setup()"_b, &ConsoleApplication::onConsoleSetup, this);
+        return CatchExceptions("b::application::setup()", &ConsoleApplication::onConsoleSetup, this);
     }
 
     bool ConsoleApplication::_update() {
-        return CatchExceptions("b::application::update()"_b, &ConsoleApplication::onConsoleUpdate, this);
+        return CatchExceptions("b::application::update()", &ConsoleApplication::onConsoleUpdate, this);
     }
 
     bool ConsoleApplication::_exit() {
-        return CatchExceptions("b::application::exit()"_b, &ConsoleApplication::onConsoleExit, this);
+        return CatchExceptions("b::application::exit()", &ConsoleApplication::onConsoleExit, this);
     }
 
 } // namespace b
