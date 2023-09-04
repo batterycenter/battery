@@ -44,4 +44,8 @@ jobs:
           destination-repository-name: 'battery'
           user-email: herrnamenlos123@gmail.com
           target-branch: docs
-
+          
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
