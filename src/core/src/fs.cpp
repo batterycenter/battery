@@ -1009,16 +1009,14 @@ namespace b::fs {
 } // namespace b::fs
 
 // Specify stream operators to be able to use `b::fs::path` with CLI11
-namespace CLI {
-    std::istringstream &operator>>(std::istringstream &in, b::fs::path &val) {
-        std::string str;
-        in >> str;
-        val = b::fs::path(str);
-        return in;
-    }
+std::istringstream &operator>>(std::istringstream &in, b::fs::path &val) {
+    std::string str;
+    in >> str;
+    val = b::fs::path(str);
+    return in;
+}
 
-    std::stringstream &operator<<(std::stringstream &in, b::fs::path &val) {
-        in << val.string();
-        return in;
-    }
-} // namespace CLI
+std::stringstream &operator<<(std::stringstream &in, b::fs::path &val) {
+    in << val.string();
+    return in;
+}
