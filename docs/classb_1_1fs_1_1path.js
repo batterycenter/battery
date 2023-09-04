@@ -36,6 +36,7 @@ var classb_1_1fs_1_1path =
     [ "make_absolute", "classb_1_1fs_1_1path.html#a5cdba756811975f338ce648949102e7f", null ],
     [ "make_preferred", "classb_1_1fs_1_1path.html#a4f5acdc560fb05054753157c788f247a", null ],
     [ "native_string", "classb_1_1fs_1_1path.html#a33e93e1a46f842118bac2ba400d7f15e", null ],
+    [ "operator std::string", "classb_1_1fs_1_1path.html#af95feae2b2382896920da0b6a2d87714", null ],
     [ "operator!=", "classb_1_1fs_1_1path.html#acde425f5d8aa5a7a7da3c2c209629242", null ],
     [ "operator+=", "classb_1_1fs_1_1path.html#a2b332245fedcdccaf7d89a501a75ea9a", null ],
     [ "operator/=", "classb_1_1fs_1_1path.html#ad938c7323515ad9d3ef32c1490ba8168", null ],

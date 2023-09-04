@@ -14,5 +14,6 @@ var searchData=
   ['operator_3e_79',['operator&gt;',['../classb_1_1fs_1_1path.html#a36c69a259557a86f124e90a7119b6307',1,'b::fs::path']]],
   ['operator_3e_3d_80',['operator&gt;=',['../classb_1_1fs_1_1path.html#a10e29794f6c43af3b7d842e6e5fc37f5',1,'b::fs::path']]],
   ['options_5ft_81',['options_t',['../structb_1_1process_1_1options__t.html',1,'b::process']]],
-  ['out_5fof_5frange_5ferror_82',['out_of_range_error',['../classb_1_1out__of__range__error.html',1,'b']]]
+  ['out_5fof_5frange_5ferror_82',['out_of_range_error',['../classb_1_1out__of__range__error.html',1,'b']]],
+  ['string_83',['string',['../classb_1_1fs_1_1path.html#af95feae2b2382896920da0b6a2d87714',1,'b::fs::path']]]
 ];

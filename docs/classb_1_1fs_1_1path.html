@@ -199,6 +199,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a33e93e1a46f842118bac2ba400d7f15e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classb_1_1fs_1_1path.html#a33e93e1a46f842118bac2ba400d7f15e">native_string</a> () const</td></tr>
 <tr class="memdesc:a33e93e1a46f842118bac2ba400d7f15e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the path in platform-native format (Keeping backslashes and forward slashes as-is on all systems)  <a href="classb_1_1fs_1_1path.html#a33e93e1a46f842118bac2ba400d7f15e">More...</a><br /></td></tr>
 <tr class="separator:a33e93e1a46f842118bac2ba400d7f15e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af95feae2b2382896920da0b6a2d87714"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classb_1_1fs_1_1path.html#af95feae2b2382896920da0b6a2d87714">operator std::string</a> () const</td></tr>
+<tr class="memdesc:af95feae2b2382896920da0b6a2d87714"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conversion operator to std::string.  <a href="classb_1_1fs_1_1path.html#af95feae2b2382896920da0b6a2d87714">More...</a><br /></td></tr>
+<tr class="separator:af95feae2b2382896920da0b6a2d87714"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e8292c1cf17bb7ffceb0dba4fe9e408"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classb_1_1fs_1_1path.html#a6e8292c1cf17bb7ffceb0dba4fe9e408">compare</a> (const <a class="el" href="classb_1_1fs_1_1path.html">path</a> &amp;other) const noexcept</td></tr>
 <tr class="memdesc:a6e8292c1cf17bb7ffceb0dba4fe9e408"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lexicographical comparison of two paths. (e.g. "/a/b" &lt; "/a/b/c")  <a href="classb_1_1fs_1_1path.html#a6e8292c1cf17bb7ffceb0dba4fe9e408">More...</a><br /></td></tr>
 <tr class="separator:a6e8292c1cf17bb7ffceb0dba4fe9e408"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1045,6 +1048,34 @@ b::fs::proximate() </dd></dl>
 
 <p>Get the path in platform-native format (Keeping backslashes and forward slashes as-is on all systems) </p>
 <dl class="section return"><dt>Returns</dt><dd>The path in platform-native string format </dd></dl>
+
+</div>
+</div>
+<a id="af95feae2b2382896920da0b6a2d87714"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af95feae2b2382896920da0b6a2d87714">&#9670;&nbsp;</a></span>operator std::string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">b::fs::path::operator std::string </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Conversion operator to std::string. </p>
+<dl class="section return"><dt>Returns</dt><dd>The path in UTF-8 string format </dd></dl>
 
 </div>
 </div>

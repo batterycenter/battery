@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"structb_1_1string__literal.html#a924b70aba6f5b716078987a3fca1c38c":[4,0,0,6,1],
 "structb_1_1string__literal.html#a9ad539bd662e0d1b8ff32459109d23fa":[4,0,0,6,2],
 "structb_1_1string__literal.html#ab835b8555ea4b1d0954114fd2198e128":[4,0,0,6,0],
 "structfmt_1_1formatter_3_01b_1_1Color_01_4.html":[4,0,1,0],
