@@ -620,12 +620,10 @@ $(document).ready(function(){initNavTree('fs_8hpp_source.html',''); initResizabl
 <div class="line"><a name="l01287"></a><span class="lineno"> 1287</span>&#160;};</div>
 <div class="line"><a name="l01288"></a><span class="lineno"> 1288</span>&#160; </div>
 <div class="line"><a name="l01289"></a><span class="lineno"> 1289</span>&#160;<span class="comment">// Specify stream operators to be able to use `b::fs::path` with CLI11</span></div>
-<div class="line"><a name="l01290"></a><span class="lineno"> 1290</span>&#160;<span class="keyword">namespace </span>CLI {</div>
-<div class="line"><a name="l01291"></a><span class="lineno"> 1291</span>&#160;    std::istringstream &amp;operator&gt;&gt;(std::istringstream &amp;in, <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a> &amp;val);</div>
-<div class="line"><a name="l01292"></a><span class="lineno"> 1292</span>&#160;    std::stringstream &amp;operator&lt;&lt;(std::stringstream &amp;in, <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a> &amp;val);</div>
-<div class="line"><a name="l01293"></a><span class="lineno"> 1293</span>&#160;} <span class="comment">// namespace CLI</span></div>
-<div class="line"><a name="l01294"></a><span class="lineno"> 1294</span>&#160; </div>
-<div class="line"><a name="l01295"></a><span class="lineno"> 1295</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// BATTERY_CORE_FS_HPP</span></div>
+<div class="line"><a name="l01290"></a><span class="lineno"> 1290</span>&#160;std::istringstream &amp;operator&gt;&gt;(std::istringstream &amp;in, <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a> &amp;val);</div>
+<div class="line"><a name="l01291"></a><span class="lineno"> 1291</span>&#160;std::stringstream &amp;operator&lt;&lt;(std::stringstream &amp;in, <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a> &amp;val);</div>
+<div class="line"><a name="l01292"></a><span class="lineno"> 1292</span>&#160; </div>
+<div class="line"><a name="l01293"></a><span class="lineno"> 1293</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// BATTERY_CORE_FS_HPP</span></div>
 <div class="ttc" id="aclassb_1_1filesystem__error_html"><div class="ttname"><a href="classb_1_1filesystem__error.html">b::filesystem_error</a></div><div class="ttdef"><b>Definition:</b> exception.hpp:60</div></div>
 <div class="ttc" id="aclassb_1_1fs_1_1ifstream_html"><div class="ttname"><a href="classb_1_1fs_1_1ifstream.html">b::fs::ifstream</a></div><div class="ttdoc">An improved file input stream, that guarantees to work with Unicode file paths on every platform.</div><div class="ttdef"><b>Definition:</b> fs.hpp:1047</div></div>
 <div class="ttc" id="aclassb_1_1fs_1_1ofstream_html"><div class="ttname"><a href="classb_1_1fs_1_1ofstream.html">b::fs::ofstream</a></div><div class="ttdoc">An improved file output stream, that guarantees to work with Unicode file paths on every platform.</div><div class="ttdef"><b>Definition:</b> fs.hpp:1059</div></div>
