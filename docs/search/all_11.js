@@ -1,16 +1,6 @@
 var searchData=
 [
-  ['terminal_165',['terminal',['../classb_1_1console_1_1terminal.html',1,'b::console']]],
-  ['thread_166',['thread',['../classb_1_1thread.html',1,'b::thread'],['../group__Thread.html#gad90e4e197e15b7292a56b92d74296167',1,'b::thread::thread()']]],
-  ['thread_167',['Thread',['../group__Thread.html',1,'']]],
-  ['time_168',['time',['../group__Time.html#ga878d81512dbbfd652b659c1304e5a120',1,'b']]],
-  ['time_169',['Time',['../group__Time.html',1,'']]],
-  ['timeout_170',['timeout',['../group__Lockfile.html#gaf97e84811696bb78b744b545568f6b12',1,'b::lockfile']]],
-  ['to_5flower_171',['to_lower',['../group__String.html#gafc7245064ff2183b7297bad42480db1a',1,'b::string::to_lower()'],['../group__String.html#gaadb48f2828afe98ac500105680143b11',1,'b::string::to_lower(const b::string &amp;str)']]],
-  ['to_5fupper_172',['to_upper',['../group__String.html#gad9b130e2d05796ca8a158c8cb72cd1e0',1,'b::string::to_upper()'],['../group__String.html#ga7c89cdcccc380c2126ad723af5031e06',1,'b::string::to_upper(const b::string &amp;str)']]],
-  ['todo_20list_173',['Todo List',['../todo.html',1,'']]],
-  ['toggle_174',['toggle',['../classb_1_1tray_1_1toggle.html',1,'b::tray']]],
-  ['tray_175',['tray',['../classb_1_1tray_1_1tray.html',1,'b::tray']]],
-  ['tray_5fentry_176',['tray_entry',['../classb_1_1tray_1_1tray__entry.html',1,'b::tray']]],
-  ['try_5flock_177',['try_lock',['../group__Lockfile.html#gab3d5620da722529ff060c5a10a506780',1,'b::lockfile']]]
+  ['unicode_5ferror_136',['unicode_error',['../classb_1_1unicode__error.html',1,'b']]],
+  ['unlock_137',['unlock',['../group__Lockfile.html#ga624bd42ba47412230cf3fb0a6dca93c8',1,'b::lockfile']]],
+  ['uuid_138',['Uuid',['../group__Uuid.html',1,'']]]
 ];

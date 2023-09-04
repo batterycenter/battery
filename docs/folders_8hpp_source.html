@@ -148,14 +148,13 @@ $(document).ready(function(){initNavTree('folders_8hpp_source.html',''); initRes
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        fs::path SystemVideoDir();           <span class="comment">// System-wide directory for user videos                                                                        (Defaults -&gt; Win: %USERPROFILE%/Videos, Linux &amp; Mac: ~/Videos)</span></div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        fs::path SystemDownloadsDir();       <span class="comment">// System-wide directory for user downloaded files                                                              (Defaults -&gt; Win: %USERPROFILE%/Downloads, Linux &amp; Mac: ~/Downloads)</span></div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">inline</span> <span class="keyword">static</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; ApplicationName() {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <span class="keyword">static</span> <a class="code" href="classb_1_1string.html">b::string</a> appname = b::Constants::DefaultApplicationName();</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">inline</span> <span class="keyword">static</span> std::string&amp; ApplicationName() {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <span class="keyword">static</span> std::string appname = b::Constants::DefaultApplicationName();</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="keywordflow">return</span> appname;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        }</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    };</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;}</div>
-<div class="ttc" id="aclassb_1_1string_html"><div class="ttname"><a href="classb_1_1string.html">b::string</a></div><div class="ttdoc">A sophisticated, high-level string class with encoding awareness.</div><div class="ttdef"><b>Definition:</b> string.hpp:160</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

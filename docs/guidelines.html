@@ -107,14 +107,40 @@ $(document).ready(function(){initNavTree('guidelines.html',''); initResizable();
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p>How to use UTF-8 source files in Visual Studio?</p>
-<h1><a class="anchor" id="autotoc_md0"></a>
-UTF-8 Everywhere</h1>
-<p>Battery strictly follows <a href="http://utf8everywhere.org/">http://utf8everywhere.org/</a>. This manifesto describes many concepts in detail, that greatly influenced decisions and guidelines documented on this page. Read it yourself for an in-depth primer on Unicode and String encodings.</p>
-<h2><a class="anchor" id="autotoc_md1"></a>
-Unicode Terminology</h2>
-<p><a href="https://learnmoderncpp.com/2021/03/24/a-unicode-primer/">https://learnmoderncpp.com/2021/03/24/a-unicode-primer/</a></p>
+<h1><a class="anchor" id="autotoc_md1"></a>
+Battery Guidelines</h1>
+<p>This document encompasses many core guidelines and rules, that</p><ul>
+<li>apply to general purpose programming in modern C++</li>
+<li>define how to use the Battery library and related tools efficiently</li>
+</ul>
+<p>Make sure to follow all rules as closely as possible. This will ensure that Battery works correctly, and that your code is portable, readable and maintainable. Neglecting these rules will have the result that your code might be bound to a specific platform, or might have hidden bugs (e.g. issues with non-ASCII filenames).</p>
+<p>This is a living document, make sure to keep an eye on it.</p>
+<p>Battery is always open for suggestions and improvements.</p>
+<h2><a class="anchor" id="autotoc_md2"></a>
+Table of Contents</h2>
 <ul>
-<li>ASCII is the most common character encoding. It uses 7 bits only and one byte is always one character. It is sometimes also called UTF-7.</li>
+<li><a href="#philosophy">Philosophy</a></li>
+<li><a href="#terminology">Terminology</a></li>
+<li><a href="#programming-environment">Programming Environment</a></li>
+<li><a href="#working-with-strings">Working with Strings</a></li>
+<li><a href="#file-io">File I/O</a></li>
+<li><a href="#working-with-the-windows-api">Working with the Windows API</a></li>
+</ul>
+<h2><a class="anchor" id="autotoc_md3"></a>
+Philosophy</h2>
+<p>Battery's philosophy is not to allow every possible way of doing something. The philosophy is to provide exactly one way of doing something, which is guaranteed to work across all supported systems and to be bug-resistant.</p>
+<p>Battery allows you to quickly develop production-ready applications. This is why it provides only one way of achieving something. If you need to do something and Battery supports it, choose the one advertised way and you will be finished in no time. If Battery does not support something, feel free to open a GitHub issue and request a new feature. Otherwise, write your own solution, on your own risk. You are responsible for keeping the code portable.</p>
+<p>Battery also chooses to use latest technology and does not hesitate to remove or block deprecated features. In this philosophy, there is no room for flawed systems.</p>
+<p>The modules in Battery are actually just 3rd-party libraries. If you need to use a 3rd-party library, choose one of Battery's modules. All of the default-available modules in CMake are well-supported and known to work on all systems. Battery is all about guarantees.</p>
+<h3><a class="anchor" id="autotoc_md4"></a>
+UTF-8 Everywhere</h3>
+<p>Battery strictly follows <a href="http://utf8everywhere.org/">http://utf8everywhere.org/</a>. This manifesto describes many concepts in detail, that greatly influenced decisions and guidelines documented on this page. You are encouraged to read it yourself for an in-depth primer on Unicode and String encodings.</p>
+<h2><a class="anchor" id="autotoc_md5"></a>
+Terminology</h2>
+<h3><a class="anchor" id="autotoc_md6"></a>
+Unicode and Text Encodings</h3>
+<ul>
+<li>ASCII is the most common character encoding. It uses 7 bits only and one byte is always one character. It is sometimes called UTF-7.</li>
 <li>Extended ASCII is not a real term and criticized as misleading, but is usually used to refer to Latin-1 or ISO-8859-1.</li>
 <li>Latin-1 or ISO-8859-1 is a superset of ASCII and uses all 8 bits to provide more characters.</li>
 <li>The word ANSI has no official meaning, but is usually used to refer to Windows Western 1252 enconding.</li>
@@ -125,19 +151,22 @@ Unicode Terminology</h2>
 <li>In UTF-16, every <em>Unicode codepoint</em> is encoded in 1 or 2 <em>16-bit code units</em>, which is 2 or 4 bytes correspondingly. Unicode characters from the <em>BMP (Basic Multilingual Plane)</em> use two bytes and are very common. Less common characters outside the BMP are called <em>Surrogates</em> and use 4 bytes. UTF-16 is available as Big-Endian and Little-Endian.</li>
 <li>In UTF-8, every <em>Unicode codepoint</em> is encoded in 1 to 4 bytes or <em>code units</em>. Multiple <em>code units</em> make up a <em>Codepoint</em>. UTF-8 does not suffer from Endianness issues.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md2"></a>
-Programming Environment</h1>
+<h2><a class="anchor" id="autotoc_md7"></a>
+Programming Environment</h2>
 <ul>
 <li>Every source file must be edited using UTF-8 to ensure Unicode String literals work correctly. Most modern IDEs use it as their default anyways, except Visual Studio.</li>
 </ul>
 <p>&lt;details&gt;</p>
-<p>Visual Studio will work fine with UTF-8, it just doesn't it is as a default when creating files. If you create a file within Visual Studio, open it in VS Code as Windows Western 1252 and save it as UTF-8 (without BOM). After that just continue editing like usual.</p>
+<blockquote class="doxtable">
+<p>Visual Studio will work fine with UTF-8, it just doesn't it is as a default when creating files. If you create a file within Visual Studio, open it in VS Code as <em>Windows Western 1252</em> and save it as UTF-8 (without BOM). After that just continue editing like usual. </p>
+</blockquote>
 <p>&lt;/details&gt;</p>
-<h1><a class="anchor" id="autotoc_md3"></a>
-Working with Strings</h1>
+<h2><a class="anchor" id="autotoc_md8"></a>
+Working with Strings</h2>
 <ul>
 <li>Every <code>std::string</code> and <code>char*</code> is always considered to be UTF-8 encoded</li>
 <li>Never, ever, do anything with ANSI encoding (also called Windows Western or cp1252). Stay far away from it. See below for why.</li>
+<li>Never use <code>std::string</code> to store non-text resources. Strings must only contain valid, printable UTF-8 code units, non-printable characters have nothing to do in a string. Use <code>std::vector</code> or <code>b::bytearray</code> for binary resources instead.</li>
 <li>A <em>character</em> can always consist of multiple bytes. Be careful when storing single characters and be especially careful with the <code>char</code> datatype. Prefer <code>std::string</code>, even for single characters.</li>
 <li>User-perceived characters on screen cannot be mapped to individual code points and do not need to be. Usually, the user-perceived characters are completely irrelevant for logic.</li>
 <li>The string length is always noted in terms of bytes or code units used in memory. <code>str.length()</code> != <code>number of characters</code></li>
@@ -146,39 +175,54 @@ Working with Strings</h1>
 </ul>
 <p>&lt;details&gt;</p>
 <p>More about Windows and ANSI </p>
-<p>Just as <a href="http://utf8everywhere.org/">http://utf8everywhere.org/</a> states, this is not a religious war against Windows or Microsoft. In fact, Battery was for a long time Windows-only and is still primarily developed for Windows.</p>
-<p>Microsoft is not to be blamed for inventing the ANSI encoding, CRLF or choosing UTF-16, because they were one of the first ones to see the challenge back then. We just think it is time to move on and that nowadays it is time to ban ANSI encoding from modern software development. See <a href="http://utf8everywhere.org/">utf8everywhere</a> for explanations why this encoding is straight-up broken</p>
+<blockquote class="doxtable">
+<p>Just as utf8everywhere.org states, this is not a religious war against Windows. In fact, Battery was for a long time Windows-only and is still primarily developed for Windows. <br  />
+<br  />
+ Microsoft is not to be blamed for inventing the ANSI encoding, CRLF or choosing UTF-16, as they were one of the first ones to face the challenge back then. We think it is time to move on and that nowadays it is time to ban ANSI encoding from modern software development. See <a href="http://utf8everywhere.org/">utf8everywhere</a> for explanations on why this encoding is broken. </p>
+</blockquote>
 <p>&lt;/details&gt;</p>
-<h1><a class="anchor" id="autotoc_md4"></a>
-File I/O</h1>
+<h2><a class="anchor" id="autotoc_md9"></a>
+File I/O</h2>
 <ul>
-<li>Every text file is always and everywhere read and written as UTF-8. Do not ever write files with other encodings.</li>
-<li>Every text file is always read and written in binary mode, to preserve line endings.</li>
-<li>Every text file is always written with LF line endings, even on Windows. See below for more.</li>
-<li>Do not use BOMs, since anything is considered to be UTF-8 anyways and it makes things such as file concatenation a nightmare.</li>
+<li>Read and write all files as UTF-8</li>
+<li>Read and write all files in binary mode with LF Line Endings (even on Windows)</li>
+<li>Do not use UTF-8 with BOMs.</li>
 </ul>
 <p>&lt;details&gt;</p>
 <p>Why not CRLF on Windows? </p>
-<p>CRLF line endings have been around for a very long time and Microsoft chose them when typewriters were popular. Later, Unix, POSIX and all derivatives chose LF, because it does the job and the extra byte is simply unnecessary. The rest of the world settled on LF, only Windows is still using CRLF.</p>
-<p>Actually, Windows deals with LF just fine these days. The only programs that have issues with CRLF are the built-in Windows programs themselves, like the original Notepad. But even that is changing. As of Windows 11, even the built-in Notepad already has proper LF and UTF-8 support. Thus, just write every file as LF and help preventing bugs by extincting CRLF.</p>
+<blockquote class="doxtable">
+<p>Microsoft chose CRLF line endings a very long time ago, about when typewriters were still popular. It made sense back then. Later, the rest of the world settled on LF. You might think that all files on Windows must always be CRLF, but that is wrong. <br  />
+<br  />
+ The reality is that Windows deals with LF just fine these days. The only programs that have issues with LF are the built-in Windows programs themselves, like the original Notepad. But even that is changing. As of Windows 11, even the built-in Notepad already has proper LF and UTF-8 support. Thus, there is no need to continue using outdated concepts. Just write every file as LF and help preventing bugs by extincting CRLF. </p>
+</blockquote>
 <p>&lt;/details&gt;</p>
-<h1><a class="anchor" id="autotoc_md5"></a>
-Working with the Windows API</h1>
+<h2><a class="anchor" id="autotoc_md10"></a>
+Working with the Windows API</h2>
 <ul>
-<li>Try not to do it in the first place. Using it makes your code platform dependent. Use the functions provided by Battery instead or create a GitHub issue to request a new feature. If you still insist on using it, do the following:</li>
+<li>Do not use the Windows API directly if possible. Use the functions provided by Battery instead.</li>
+<li>If you have to use the Windows API directly, follow these rules:</li>
 <li>Never use ANSI-Win32 functions (e.g. <code>CreateFileA</code>).</li>
 <li>Never use the Win32 function macros (e.g. <code>CreateFile</code>)</li>
 <li>Always use the Unicode variant explicitly (e.g. <code>CreateFileW</code>)</li>
-<li>Use <code>std::wstring</code> or <code>L""</code> string literals to represent UTF-16, needed by the Windows API</li>
-<li>Never use <code>std::wstring</code> or <code>L""</code> string literals anywhere else except directly adjacent to system APIs.</li>
-<li>Always widen UTF-8 strings directly adjacent to system calls (e.g. <code>MessageBoxW(...,b::widen(str).c_str(),...)</code>), and when receiving strings, do the opposite (e.g. <code>return b::narrow(wideStringBufferFromAPI);</code>). This only applies when the string is immediately processed. See below for what to do when the string must live longer.</li>
+<li>Use <code>b::native_string</code> and <code>L""</code> string literals to represent UTF-16</li>
+<li>Never use them anywhere else except directly adjacent to system APIs.</li>
+<li>Widen UTF-8 strings only where needed (e.g. <code>MessageBoxW(...,b::widen(str).c_str(),...)</code>). <br  />
+ When receiving strings, do the opposite (e.g. <code>auto str = b::narrow(win32WideStringBuffer);</code>).</li>
 </ul>
-<p>&lt;details&gt;</p>
+<p><b>Warning:</b> &lt;details&gt;</p>
 <p>My string must live longer than one function call </p>
-<p>For some WinAPI functions, the string must live longer than one line of code. This might be the case when a string is psrt of a struct, that is then passed to a function for processing (e.g. <code>RegisterClassExW</code> and the corresponding <code>WNDCLASSW</code> struct).</p>
-<p>If you write <code>wndClass.lpClassName = b::widen(str).c_str();</code>, the string will immediately be destroyed after this line, leaving the pointer pointing to invalid memory. Therefore, save the string as a separate variable (e.g. <code>auto wideStr = b::widen(str);</code>. This variable must live at least until it has been processed by the system. Now you can write <code>wndClass.lpClassName = wideStr.c_str();</code> and it will work correctly.</p>
-<p>&lt;/details&gt;</p>
-<h2><a class="anchor" id="autotoc_md6"></a>
+<blockquote class="doxtable">
+<p>For some WinAPI functions, the string must live longer than one line of code. This might be the case when a string is part of a struct, that is then passed to a function for processing (e.g. </p><div class="fragment"><div class="line">RegisterClassExW</div>
+</div><!-- fragment --><p> and the corresponding </p><div class="fragment"><div class="line">WNDCLASSW</div>
+</div><!-- fragment --><p> struct). <br  />
+<br  />
+ If you write </p><div class="fragment"><div class="line">wndClass.lpClassName = b::widen(str).c_str();</div>
+</div><!-- fragment --><p>, the string will immediately be destroyed after this line, leaving the pointer pointing to invalid memory. Therefore, save the string as a separate variable (e.g. </p><div class="fragment"><div class="line">auto wideStr = b::widen(str);</div>
+</div><!-- fragment --><p>. This variable must live at least until it has been processed by the system. Now you can write </p><div class="fragment"><div class="line">wndClass.lpClassName = wideStr.c_str();</div>
+</div><!-- fragment --><p> and it will work as intended. &lt;/details&gt;</p>
+<p></p>
+</blockquote>
+<h2><a class="anchor" id="autotoc_md11"></a>
 Working with Unicode</h2>
 <p>Following online tools can be used for working with Unicode. Be very cautious of the terminology used.</p>
 <p>In the following websites, <em>unicode</em> is equivalent to <em>utf-8</em>. <br  />
@@ -190,7 +234,7 @@ Working with Unicode</h2>
 </p>
 <p>Convert <em>utf-8 encoded bytes</em> to a <em>Unicode string</em> (set base to 16 for hexadecimal bytes): <a href="https://onlineutf8tools.com/convert-bytes-to-utf8">https://onlineutf8tools.com/convert-bytes-to-utf8</a></p>
 <p>Many other converters are available on this site. Be careful of what exactly is encoded in which format. It's often not obvious.</p>
-<h2><a class="anchor" id="autotoc_md7"></a>
+<h2><a class="anchor" id="autotoc_md12"></a>
 Source files</h2>
 <p>To make <code>UTF-8</code> encoded string literals work, you must also save your source files as <code>UTF-8</code>. This is the default in most modern IDE's like Visual Studio Code or Jetbrains CLion.</p>
 <p>You can usually select the file encoding in the bottom right corner, it should always be set to <code>UTF-8</code> for every file you work with. This is necessary so that your compiler interprets the source file correctly, otherwise the string literals means something different to the compiler. CMake additionally adds a flag to parse every source file as <code>UTF-8</code>.</p>
@@ -199,7 +243,7 @@ Source files</h2>
 WinAPI / Linux API</h2>
 <p>You are not encouraged to use the Windows API or the Linux API in any way. They are huge, unportable between OSes and you probably write a few thousand bugs when using these directly. Almost anything you want to do is probably implemented in the C++ Standard library or is available as a third-party cross-platform library. In such a case, use it.</p>
 <p>In the very rare circumstances that you still have to use the WinAPI or the Linux API directly, because there is no other way, there are a few things to keep in mind.</p>
-<h3><a class="anchor" id="autotoc_md8"></a>
+<h3><a class="anchor" id="autotoc_md13"></a>
 WinAPI: Do not use ANSI functions!</h3>
 <p>In the Win32 API, almost every function and data structure has two variants: e.g. <code>CreateWindowsA()</code> and <code>CreateWindowsW()</code>. The <code>...A()</code>-function is the ANSI function, forget that and never use it! There is no way it can support Unicode.</p>
 <p>The <code>...W()</code>-functions on the other hand, are the WideString variants, or <code>UTF-16</code>. These are the ones you want to use. You have to convert your <code>UTF-8</code> string to <code>UTF-16</code> for the function call, and if you get something back, you convert it from <code>UTF-16</code> back to <code>UTF-8</code> immediately. See section <a href="#OsString">OsString</a>.</p>
@@ -229,13 +273,13 @@ Use OsString whenever applicable</h3>
 <div class="line">std::string str = OsString(message);</div>
 </div><!-- fragment --><p>In this case, <code>FormatMessageW</code> takes a pointer to our pointer, allocates a buffer and writes the pointer to our pointer. Then we construct a <code>std::wstring</code> from the buffer, free the buffer and then convert our <code>wstring</code> to a <code>std::string</code>. Now it is <code>UTF-8</code> and we can happily use it whereever we want.</p>
 <p>Just make sure that <code>wstring</code>, <code>wchar_t</code>, <code>LPWSTR</code> and so on are only used directly on the WinAPI and nowhere else.</p>
-<h3><a class="anchor" id="autotoc_md9"></a>
+<h3><a class="anchor" id="autotoc_md14"></a>
 Using high-level containers</h3>
 <p>The Linux API doesn't have the <code>UTF-8</code> problems, it only gives you headache because it is so complicated and so easy to write bugs and memory leaks. Besides from the fact that it makes your code unportable, of course.</p>
 <p>If you write code using any of these APIs, you should make sure to always take the time and read the documentation on the <a href="https://linux.die.net/man/">Linux man pages</a> or the <a href="https://learn.microsoft.com/en-us/windows/win32/api/">Microsoft Docs</a>. The best way is to search the internet, find out what functions to use, and then look out for the documentation of the needed functions on these two documentation pages.</p>
 <p>The most important things to look out for in the function documentation are return values, error codes and exceptions, but most importantly: constraints on input parameters and if they allocate or free the memory you pass to it.</p>
 <p>Once you know exactly how to deal with this function, you can apply high-level containers to make it safe. Most importantly <code>std::string</code> and <code>std::vector</code>. Many API calls need arrays of some sort and every kind of array can be implemented with an <code>std::vector</code>, instead of using <code>new</code> and <code>delete</code>. This will result in very safe code and the memory will be freed automatically. One example of using a high-level container directly with the API can be seen in <a href="#OsString">OsString</a>.</p>
-<h3><a class="anchor" id="autotoc_md10"></a>
+<h3><a class="anchor" id="autotoc_md15"></a>
 Keeping WinAPI / Linux API cross-platform</h3>
 <p>The primary goal of Battery is to unify your code to compile on any platform. If you use the WinAPI or Linux API you prevent this of course, and it will only compile on one platform. Here is a guide on how you can make it cross-platform again, yourself.</p>
 <p>Battery has a few <code>define</code>s which help you with this:</p>
@@ -269,17 +313,17 @@ Keeping WinAPI / Linux API cross-platform</h3>
 <div class="line">    <span class="keywordflow">return</span> bar;</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>This is how you write functions that use OS-specific features without sacrificing cross-platform availability.</p>
-<h1><a class="anchor" id="autotoc_md11"></a>
+<h1><a class="anchor" id="autotoc_md16"></a>
 Lockfiles</h1>
 <p>Having multiple instances of your process is a great thing, but sometimes you need to make sure that only one instance can ever be running. This is what Lockfiles are good for. You might use them if you want to make sure that exactly one process can run and not a second, or if you have several processes that do critical work and one process doing critical work must block all others until it is finished.</p>
 <p>You know this behaviour when you are on Linux, and call <code>apt</code> in two different terminals: The first terminal will run, and the second will give you an error like: "Cannot lock frontend, lockfile failed" or something similar. This is because the first process locked a file and the second cannot lock it again. It has to wait until the first one unlocks it again and then the second process can lock it and do critical work.</p>
-<h2><a class="anchor" id="autotoc_md12"></a>
+<h2><a class="anchor" id="autotoc_md17"></a>
 Different types</h2>
 <p>Especially in more modern and more high-level programming languages, there are Fake-Lockfiles. This can also be found for C++ sometimes. Such Fake-Lockfiles simply create a file and the resource is 'locked' when the file exists. The resource is unlocked again when deleting the file. The problem with that is that the file remains when the process crashes or is stopped unexpectedly (PC shutdown). As a result the file remains and there is an infinite lock. You know this behaviour from tools where you must sometimes go into a folder, delete a file called <code>data.lock</code> for example, and then it works again.</p>
 <p>Battery implements real Lockfiles: The difference is that the lock is not retrieved by creating a file, it is retrieved by opening the file in exclusive write mode. This means that in this case the file always remains and the first process opens it in exclusive write mode, which lock out anyone else. Nothing is written to the file, it is just kept open.</p>
 <p>The advantage with this is that when the process stops or crashes, the lock is dropped immediately by the operating system. It is much closer to the process needing a resource: If a process does not exist anymore, it does not need the resource anymore.</p>
 <p>The only disadvantage with this is that this operation might not be supported on networked locations. If you want a local Hard-Lock that is tied to a very specific process, use the hard lock option. If you want a Soft-Lock that can also work across network drives and is not tied to a specific process, use the soft lock option. Just be aware of the infinite lockup problem, when your process stops unexpectedly and then restarts.</p>
-<h1><a class="anchor" id="autotoc_md13"></a>
+<h1><a class="anchor" id="autotoc_md18"></a>
 OsString -&gt; Always terminates at '\0'</h1>
 <pre class="fragment">auto path = std::filesystem::current_path();    // get path
 std::filesystem::current_path(path);            // set path

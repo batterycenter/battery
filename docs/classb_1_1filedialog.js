@@ -7,7 +7,7 @@ var classb_1_1filedialog =
     [ "confirm_overwrite", "classb_1_1filedialog.html#a51f5fd6f277a568ed7e8d11f6572366f", null ],
     [ "default_extension", "classb_1_1filedialog.html#a7285a5b838f9a5081fc41cdab63257e6", null ],
     [ "directory", "classb_1_1filedialog.html#a4092deeda8e1a36cecb842cbf5e5cfda", null ],
-    [ "filters", "classb_1_1filedialog.html#a1039c7eb8dcfd9d6a3659fe5a037a9fe", null ],
+    [ "filters", "classb_1_1filedialog.html#acf6a33bddf0ae2f2c570359f31a0039c", null ],
     [ "initial_folder", "classb_1_1filedialog.html#a117bc0aea50cbce01f30d7e0fdac1ec3", null ],
-    [ "separator", "classb_1_1filedialog.html#ad4500d265866737fdc805363bc1491f5", null ]
+    [ "separator", "classb_1_1filedialog.html#abb8e763fa407516e3eecb41ec587a530", null ]
 ];

@@ -1,6 +1,5 @@
 var hierarchy =
 [
-    [ "b::enc::ascii", "structb_1_1enc_1_1ascii.html", null ],
     [ "b::async_worker< T >", "classb_1_1async__worker.html", null ],
     [ "b::async_worker< void >", "classb_1_1async__worker.html", null ],
     [ "b::tray::basetray", "classb_1_1tray_1_1basetray.html", [
@@ -9,7 +8,6 @@ var hierarchy =
     [ "b::BasicFileWatcher", "classb_1_1BasicFileWatcher.html", [
       [ "b::FileWatcher", "classb_1_1FileWatcher.html", null ]
     ] ],
-    [ "b::enc::binary", "structb_1_1enc_1_1binary.html", null ],
     [ "b::Color", "structb_1_1Color.html", null ],
     [ "b::ConsoleApplication", "classb_1_1ConsoleApplication.html", null ],
     [ "std::exception", null, [
@@ -20,14 +18,10 @@ var hierarchy =
       [ "b::unicode_error", "classb_1_1unicode__error.html", null ]
     ] ],
     [ "b::filedialog", "classb_1_1filedialog.html", null ],
-    [ "fmt::formatter< b::bytearray >", "structfmt_1_1formatter_3_01b_1_1bytearray_01_4.html", null ],
     [ "fmt::formatter< b::Color >", "structfmt_1_1formatter_3_01b_1_1Color_01_4.html", null ],
     [ "fmt::formatter< b::fs::path >", "structfmt_1_1formatter_3_01b_1_1fs_1_1path_01_4.html", null ],
-    [ "fmt::formatter< b::string >", "structfmt_1_1formatter_3_01b_1_1string_01_4.html", null ],
     [ "fmt::formatter< b::Vec2 >", "structfmt_1_1formatter_3_01b_1_1Vec2_01_4.html", null ],
     [ "std::hash< b::fs::path >", "structstd_1_1hash_3_01b_1_1fs_1_1path_01_4.html", null ],
-    [ "std::hash< b::string >", "structstd_1_1hash_3_01b_1_1string_01_4.html", null ],
-    [ "b::string::internal", "structb_1_1string_1_1internal.html", null ],
     [ "std::ios_base", null, [
       [ "std::basic_ios< Char >", null, [
         [ "std::basic_istream< Char >", null, [
@@ -46,20 +40,17 @@ var hierarchy =
         ] ]
       ] ]
     ] ],
-    [ "b::enc::iso_8859_1", "structb_1_1enc_1_1iso__8859__1.html", null ],
     [ "std::jthread", null, [
       [ "b::thread", "classb_1_1thread.html", null ]
     ] ],
     [ "b::lockfile", "classb_1_1lockfile.html", null ],
     [ "b::Resource::OnDiskResource", "classb_1_1Resource_1_1OnDiskResource.html", null ],
     [ "b::process::options_t", "structb_1_1process_1_1options__t.html", null ],
-    [ "b::enc::os_native", "structb_1_1enc_1_1os__native.html", null ],
     [ "b::fs::path", "classb_1_1fs_1_1path.html", null ],
     [ "b::process", "classb_1_1process.html", null ],
     [ "b::Resource", "classb_1_1Resource.html", null ],
     [ "b::scoped_lockfile", "classb_1_1scoped__lockfile.html", null ],
     [ "b::scoped_lockfile_nothrow", "classb_1_1scoped__lockfile__nothrow.html", null ],
-    [ "b::string", "classb_1_1string.html", null ],
     [ "b::string_literal< N >", "structb_1_1string__literal.html", null ],
     [ "b::console::terminal", "classb_1_1console_1_1terminal.html", null ],
     [ "b::tray::tray_entry", "classb_1_1tray_1_1tray__entry.html", [
@@ -70,12 +61,5 @@ var hierarchy =
       [ "b::tray::synced_toggle", "classb_1_1tray_1_1synced__toggle.html", null ],
       [ "b::tray::toggle", "classb_1_1tray_1_1toggle.html", null ]
     ] ],
-    [ "b::enc::utf16", "structb_1_1enc_1_1utf16.html", null ],
-    [ "b::enc::utf16_wide", "structb_1_1enc_1_1utf16__wide.html", null ],
-    [ "b::enc::utf32", "structb_1_1enc_1_1utf32.html", null ],
-    [ "b::enc::utf8", "structb_1_1enc_1_1utf8.html", null ],
-    [ "b::Vec2", "structb_1_1Vec2.html", null ],
-    [ "std::vector< T >", null, [
-      [ "b::bytearray", "classb_1_1bytearray.html", null ]
-    ] ]
+    [ "b::Vec2", "structb_1_1Vec2.html", null ]
 ];

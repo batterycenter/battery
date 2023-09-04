@@ -118,8 +118,8 @@ $(document).ready(function(){initNavTree('filedialog_8hpp_source.html',''); init
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keywordtype">bool</span> confirm_overwrite = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a> default_extension;      <span class="comment">// Format: &quot;txt&quot;</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <a class="code" href="classb_1_1fs_1_1path.html">b::fs::path</a> initial_folder;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> separator;      <span class="comment">// WHAAATTT (TODO)</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        std::vector&lt;std::pair&lt;b::string, b::string&gt;&gt; filters = { { <span class="stringliteral">&quot;All files&quot;</span>_b, <span class="stringliteral">&quot;*.*&quot;</span>_b } };  <span class="comment">// TODO: Allow this text to be localized</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        std::string separator;      <span class="comment">// TODO: Don&#39;t know what this is for</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        std::vector&lt;std::pair&lt;std::string, std::string&gt;&gt; filters = { { <span class="stringliteral">&quot;All files&quot;</span>, <span class="stringliteral">&quot;*.*&quot;</span> } };  <span class="comment">// TODO: Allow this text to be localized</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <a class="code" href="classb_1_1filedialog.html">filedialog</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
@@ -130,8 +130,7 @@ $(document).ready(function(){initNavTree('filedialog_8hpp_source.html',''); init
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;}</div>
 <div class="ttc" id="aclassb_1_1filedialog_html"><div class="ttname"><a href="classb_1_1filedialog.html">b::filedialog</a></div><div class="ttdef"><b>Definition:</b> filedialog.hpp:7</div></div>
-<div class="ttc" id="aclassb_1_1fs_1_1path_html"><div class="ttname"><a href="classb_1_1fs_1_1path.html">b::fs::path</a></div><div class="ttdoc">A Unicode aware high-level filesystem path.</div><div class="ttdef"><b>Definition:</b> fs.hpp:53</div></div>
-<div class="ttc" id="aclassb_1_1string_html"><div class="ttname"><a href="classb_1_1string.html">b::string</a></div><div class="ttdoc">A sophisticated, high-level string class with encoding awareness.</div><div class="ttdef"><b>Definition:</b> string.hpp:160</div></div>
+<div class="ttc" id="aclassb_1_1fs_1_1path_html"><div class="ttname"><a href="classb_1_1fs_1_1path.html">b::fs::path</a></div><div class="ttdoc">A Unicode aware high-level filesystem path.</div><div class="ttdef"><b>Definition:</b> fs.hpp:54</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

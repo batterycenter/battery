@@ -123,7 +123,7 @@ $(document).ready(function(){initNavTree('console__application_8hpp_source.html'
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">static</span> <a class="code" href="classb_1_1ConsoleApplication.html">ConsoleApplication</a> &amp; get();</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">bool</span> instanceExists();</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        std::vector&lt;b::string&gt; args;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        std::vector&lt;std::string&gt; args;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="keywordtype">double</span> framerate { 0.0 };</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keywordtype">double</span> frametime { 0.0 };</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        uint64_t framecount { 0 };</div>
@@ -139,7 +139,7 @@ $(document).ready(function(){initNavTree('console__application_8hpp_source.html'
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keywordtype">void</span> stopApplication();</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordtype">void</span> setStopRequested(<span class="keywordtype">bool</span> stop_requested);</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        [[nodiscard]] <span class="keywordtype">int</span> run(<span class="keyword">const</span> <a class="code" href="classb_1_1string.html">b::string</a>&amp; appname, <span class="keyword">const</span> std::vector&lt;b::string&gt;&amp; args);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        [[nodiscard]] <span class="keywordtype">int</span> run(<span class="keyword">const</span> std::string&amp; appname, <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; args);</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <a class="code" href="classb_1_1ConsoleApplication.html">ConsoleApplication</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classb_1_1ConsoleApplication.html">ConsoleApplication</a>&amp;) = <span class="keyword">delete</span>;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <a class="code" href="classb_1_1ConsoleApplication.html">ConsoleApplication</a>&amp; operator=(<a class="code" href="classb_1_1ConsoleApplication.html">ConsoleApplication</a>&amp;&amp;) = <span class="keyword">delete</span>;</div>
@@ -159,7 +159,6 @@ $(document).ready(function(){initNavTree('console__application_8hpp_source.html'
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;}</div>
 <div class="ttc" id="aclassb_1_1ConsoleApplication_html"><div class="ttname"><a href="classb_1_1ConsoleApplication.html">b::ConsoleApplication</a></div><div class="ttdef"><b>Definition:</b> console_application.hpp:10</div></div>
-<div class="ttc" id="aclassb_1_1string_html"><div class="ttname"><a href="classb_1_1string.html">b::string</a></div><div class="ttdoc">A sophisticated, high-level string class with encoding awareness.</div><div class="ttdef"><b>Definition:</b> string.hpp:160</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

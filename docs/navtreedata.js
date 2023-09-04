@@ -26,43 +26,44 @@ var NAVTREE =
 [
   [ "Battery", "index.html", [
     [ "Battery Library", "index.html", [
-      [ "Heading", "index.html#autotoc_md16", null ],
-      [ "Code fragment", "index.html#autotoc_md17", null ],
-      [ "HLKSAs", "index.html#autotoc_md18", null ],
-      [ "ds", "index.html#autotoc_md19", null ],
-      [ "fd", "index.html#autotoc_md20", null ],
-      [ "Doxygen", "index.html#autotoc_md21", [
-        [ "Doxygen sub-group", "index.html#autotoc_md22", null ]
+      [ "Heading", "index.html#autotoc_md20", null ],
+      [ "Code fragment", "index.html#autotoc_md21", null ],
+      [ "HLKSAs", "index.html#autotoc_md22", null ],
+      [ "ds", "index.html#autotoc_md23", null ],
+      [ "fd", "index.html#autotoc_md24", null ],
+      [ "Doxygen", "index.html#autotoc_md25", [
+        [ "Doxygen sub-group", "index.html#autotoc_md26", null ]
       ] ]
     ] ],
+    [ "Getting Started", "md_docs_getting_started.html", null ],
     [ "Battery Guidelines", "guidelines.html", [
-      [ "UTF-8 Everywhere", "guidelines.html#autotoc_md0", [
-        [ "Unicode Terminology", "guidelines.html#autotoc_md1", null ]
-      ] ],
-      [ "Programming Environment", "guidelines.html#autotoc_md2", null ],
-      [ "Working with Strings", "guidelines.html#autotoc_md3", null ],
-      [ "File I/O", "guidelines.html#autotoc_md4", null ],
-      [ "Working with the Windows API", "guidelines.html#autotoc_md5", [
-        [ "Working with Unicode", "guidelines.html#autotoc_md6", null ],
-        [ "Source files", "guidelines.html#autotoc_md7", null ],
+      [ "Battery Guidelines", "guidelines.html#autotoc_md1", [
+        [ "Table of Contents", "guidelines.html#autotoc_md2", null ],
+        [ "Philosophy", "guidelines.html#autotoc_md3", [
+          [ "UTF-8 Everywhere", "guidelines.html#autotoc_md4", null ]
+        ] ],
+        [ "Terminology", "guidelines.html#autotoc_md5", [
+          [ "Unicode and Text Encodings", "guidelines.html#autotoc_md6", null ]
+        ] ],
+        [ "Programming Environment", "guidelines.html#autotoc_md7", null ],
+        [ "Working with Strings", "guidelines.html#autotoc_md8", null ],
+        [ "File I/O", "guidelines.html#autotoc_md9", null ],
+        [ "Working with the Windows API", "guidelines.html#autotoc_md10", null ],
+        [ "Working with Unicode", "guidelines.html#autotoc_md11", null ],
+        [ "Source files", "guidelines.html#autotoc_md12", null ],
         [ "WinAPI / Linux API", "guidelines.html#WIN_LINUX_API", [
-          [ "WinAPI: Do not use ANSI functions!", "guidelines.html#autotoc_md8", null ],
+          [ "WinAPI: Do not use ANSI functions!", "guidelines.html#autotoc_md13", null ],
           [ "Use OsString whenever applicable", "guidelines.html#OsString", null ],
-          [ "Using high-level containers", "guidelines.html#autotoc_md9", null ],
-          [ "Keeping WinAPI / Linux API cross-platform", "guidelines.html#autotoc_md10", null ]
+          [ "Using high-level containers", "guidelines.html#autotoc_md14", null ],
+          [ "Keeping WinAPI / Linux API cross-platform", "guidelines.html#autotoc_md15", null ]
         ] ]
       ] ],
-      [ "Lockfiles", "guidelines.html#autotoc_md11", [
-        [ "Different types", "guidelines.html#autotoc_md12", null ]
+      [ "Lockfiles", "guidelines.html#autotoc_md16", [
+        [ "Different types", "guidelines.html#autotoc_md17", null ]
       ] ],
-      [ "OsString -> Always terminates at '\\0'", "guidelines.html#autotoc_md13", null ]
+      [ "OsString -> Always terminates at '\\0'", "guidelines.html#autotoc_md18", null ]
     ] ],
-    [ "Getting Started", "md_docs_getting_started.html", null ],
-    [ "Todo List", "todo.html", null ],
     [ "Modules", "modules.html", "modules" ],
-    [ "Namespaces", "namespaces.html", [
-      [ "Namespace List", "namespaces.html", "namespaces_dup" ]
-    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
@@ -81,11 +82,9 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"",
-"classb_1_1tray_1_1separator.html#a5332b6dc78f8de76dd4c6fa37b9f560d",
-"fs_8hpp.html#aeeaa34d45b8c21d377007bc39558ee45",
-"group__Time.html",
-"structfmt_1_1formatter_3_01b_1_1string_01_4.html"
+"annotated.html",
+"classb_1_1tray_1_1tray__entry.html",
+"structb_1_1string__literal.html#a9ad539bd662e0d1b8ff32459109d23fa"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

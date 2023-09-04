@@ -145,7 +145,7 @@ $(document).ready(function(){initNavTree('traybase_8hpp_source.html',''); initRe
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
 <div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classb_1_1tray_1_1basetray.html">   38</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classb_1_1tray_1_1basetray.html">basetray</a> {</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;      <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <a class="code" href="classb_1_1tray_1_1basetray.html">basetray</a>(<a class="code" href="classb_1_1string.html">b::string</a> identifier, <a class="code" href="classb_1_1string.html">b::string</a> tooltip, MouseButton clickAction);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <a class="code" href="classb_1_1tray_1_1basetray.html">basetray</a>(std::string identifier, std::string tooltip, MouseButton clickAction);</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="classb_1_1tray_1_1basetray.html">basetray</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span>... T&gt;</div>
@@ -170,14 +170,14 @@ $(document).ready(function(){initNavTree('traybase_8hpp_source.html',''); initRe
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> exit() = 0;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> update() = 0;</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        [[nodiscard]] std::vector&lt;std::shared_ptr&lt;tray_entry&gt;&gt; getEntries() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        [[nodiscard]] <a class="code" href="classb_1_1string.html">b::string</a> getIdentifier() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        [[nodiscard]] <a class="code" href="classb_1_1string.html">b::string</a> getTooltip() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        [[nodiscard]] std::string getIdentifier() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        [[nodiscard]] std::string getTooltip() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        [[nodiscard]] MouseButton getClickAction() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        [[nodiscard]] std::vector&lt;std::pair&lt;MouseButton, std::function&lt;void()&gt;&gt;&gt; getClickCallbacks() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> identifier;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <a class="code" href="classb_1_1string.html">b::string</a> tooltip;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        std::string identifier;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        std::string tooltip;</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        MouseButton clickAction;</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        std::vector&lt;std::shared_ptr&lt;tray_entry&gt;&gt; entries;</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        std::vector&lt;std::pair&lt;MouseButton, std::function&lt;void()&gt;&gt;&gt; clickCallbacks;</div>
@@ -185,7 +185,6 @@ $(document).ready(function(){initNavTree('traybase_8hpp_source.html',''); initRe
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;} <span class="comment">// namespace Tray</span></div>
 <div class="ttc" id="aclassb_1_1Resource_html"><div class="ttname"><a href="classb_1_1Resource.html">b::Resource</a></div><div class="ttdef"><b>Definition:</b> resource.hpp:8</div></div>
-<div class="ttc" id="aclassb_1_1string_html"><div class="ttname"><a href="classb_1_1string.html">b::string</a></div><div class="ttdoc">A sophisticated, high-level string class with encoding awareness.</div><div class="ttdef"><b>Definition:</b> string.hpp:160</div></div>
 <div class="ttc" id="aclassb_1_1tray_1_1basetray_html"><div class="ttname"><a href="classb_1_1tray_1_1basetray.html">b::tray::basetray</a></div><div class="ttdef"><b>Definition:</b> traybase.hpp:38</div></div>
 <div class="ttc" id="aclassb_1_1tray_1_1button_html"><div class="ttname"><a href="classb_1_1tray_1_1button.html">b::tray::button</a></div><div class="ttdef"><b>Definition:</b> button.hpp:27</div></div>
 </div><!-- fragment --></div><!-- contents -->

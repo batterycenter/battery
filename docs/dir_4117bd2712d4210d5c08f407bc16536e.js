@@ -3,6 +3,7 @@ var dir_4117bd2712d4210d5c08f407bc16536e =
     [ "tray", "dir_ee38df1b32bf5d9ced820d919da85e0e.html", "dir_ee38df1b32bf5d9ced820d919da85e0e" ],
     [ "async_worker.hpp", "async__worker_8hpp_source.html", null ],
     [ "base64.hpp", "base64_8hpp_source.html", null ],
+    [ "bytearray.hpp", "bytearray_8hpp_source.html", null ],
     [ "cache.hpp", "cache_8hpp_source.html", null ],
     [ "color.hpp", "color_8hpp_source.html", null ],
     [ "console.hpp", "console_8hpp_source.html", null ],

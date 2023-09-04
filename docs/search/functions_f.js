@@ -1,21 +1,13 @@
 var searchData=
 [
-  ['raw_5fextension_327',['raw_extension',['../classb_1_1fs_1_1path.html#a68abc484134fe471c20a3e508e7be422',1,'b::fs::path']]],
-  ['rbegin_328',['rbegin',['../group__String.html#ga51d17add50601ee55e48805f69f7f97a',1,'b::string::rbegin() noexcept'],['../group__String.html#ga503790c9bdaf911f43fafe062b998be6',1,'b::string::rbegin() const noexcept']]],
-  ['regex_5fmatch_329',['regex_match',['../group__String.html#ga5ba44f28f7cbd37134489b83f0c79f8a',1,'b::string::regex_match(const b::string &amp;pattern, std::regex_constants::match_flag_type flags=std::regex_constants::match_default)'],['../group__String.html#gabbe4e23ce882b5d0e5f9d98db8ef2b33',1,'b::string::regex_match(const b::string &amp;str, const b::string &amp;pattern, std::regex_constants::match_flag_type flags=std::regex_constants::match_default)']]],
-  ['regex_5freplace_330',['regex_replace',['../group__String.html#ga3eff87401596b1e67c06ccd1d925c9e6',1,'b::string::regex_replace(const b::string &amp;pattern, const b::string &amp;replace, std::regex_constants::match_flag_type flags=std::regex_constants::match_default)'],['../group__String.html#gae7af1ede721c3a999655a9cd3cb517fc',1,'b::string::regex_replace(const b::string &amp;str, const b::string &amp;pattern, const b::string &amp;replace, std::regex_constants::match_flag_type flags=std::regex_constants::match_default)']]],
-  ['relative_5froot_5fpath_331',['relative_root_path',['../classb_1_1fs_1_1path.html#a4c3621b07db7d1320ea9e05666ee0343',1,'b::fs::path']]],
-  ['remove_5ffilename_332',['remove_filename',['../classb_1_1fs_1_1path.html#a16bae8e76d9559e9c8e8d9728ec681a1',1,'b::fs::path']]],
-  ['rend_333',['rend',['../group__String.html#gae001cbb98b6ba1cff8c63256776e85df',1,'b::string::rend() noexcept'],['../group__String.html#gaf16e36e2d0f2b46077aaab52decfe545',1,'b::string::rend() const noexcept']]],
-  ['replace_334',['replace',['../group__String.html#ga6bb31ac121c3c5164e0b530e4bd35b35',1,'b::string::replace(const b::string &amp;pattern, std::function&lt; b::string(int)&gt; replacer)'],['../group__String.html#ga9530bd60344b5b745fb8b5f9e1d2fa32',1,'b::string::replace(const b::string &amp;str, const b::string &amp;pattern, std::function&lt; b::string(int)&gt; replacer)'],['../group__String.html#gab31175e5c566d1d275e2361df2e09c01',1,'b::string::replace(const b::string &amp;pattern, const b::string &amp;value)'],['../group__String.html#gaf609a3dc9dd65f0a29ebf1cb73e5a370',1,'b::string::replace(const b::string &amp;str, const b::string &amp;pattern, const b::string &amp;value)']]],
-  ['replace_5fextension_335',['replace_extension',['../classb_1_1fs_1_1path.html#af460de29f60f5ec59ca3497213ecbbc7',1,'b::fs::path::replace_extension(const b::string &amp;extension)'],['../classb_1_1fs_1_1path.html#a4e502f6542d2823d6c3fa0da4d5401c6',1,'b::fs::path::replace_extension(const b::fs::path &amp;extension)']]],
-  ['replace_5ffilename_336',['replace_filename',['../classb_1_1fs_1_1path.html#a9714fd4f15cab651233cc4524cdbe2b3',1,'b::fs::path::replace_filename(const b::string &amp;filename)'],['../classb_1_1fs_1_1path.html#a37bbfe4458a9f700a4a3db17471895cc',1,'b::fs::path::replace_filename(const b::fs::path &amp;filename)']]],
-  ['replace_5ffirst_337',['replace_first',['../group__String.html#ga8c216ea5c62cdbedfbe1e048cafde649',1,'b::string::replace_first(const b::string &amp;pattern, const b::string &amp;value)'],['../group__String.html#ga9e63477b6defd10074d456d9af0baadb',1,'b::string::replace_first(const b::string &amp;str, const b::string &amp;pattern, const b::string &amp;value)']]],
-  ['replace_5flast_338',['replace_last',['../group__String.html#gad0365137f8563f5548c024f2c0e6dec2',1,'b::string::replace_last(const b::string &amp;pattern, const b::string &amp;value)'],['../group__String.html#ga4a1fc99e9269cf04b073f36d80ceef9a',1,'b::string::replace_last(const b::string &amp;str, const b::string &amp;pattern, const b::string &amp;value)']]],
-  ['reserve_339',['reserve',['../group__String.html#gaae7d37c3a539274294e5d2f3619b7483',1,'b::string']]],
-  ['resize_340',['resize',['../group__String.html#ga514e44401962011be5e8c293b6880e6c',1,'b::string::resize(size_t newSize)'],['../group__String.html#ga0b70c4a17c36745bfb9a6fc685372b26',1,'b::string::resize(size_t newSize, char32_t fill)']]],
-  ['reverse_341',['reverse',['../group__String.html#gad56bcaf8ba4766c20e38a6b4f57cacac',1,'b::string::reverse()'],['../group__String.html#gac1733b620f4285775f6375630de50fbd',1,'b::string::reverse(const string &amp;str)']]],
-  ['root_5fdirectory_342',['root_directory',['../classb_1_1fs_1_1path.html#a86d694fe8ddbed967df0a81442487725',1,'b::fs::path']]],
-  ['root_5fname_343',['root_name',['../classb_1_1fs_1_1path.html#a70cf9a92084090570c68c08a55e1ac68',1,'b::fs::path']]],
-  ['root_5fpath_344',['root_path',['../classb_1_1fs_1_1path.html#ae0d2aa6e1fef3dc3605b6f68134710d9',1,'b::fs::path']]]
+  ['scoped_5flockfile_253',['scoped_lockfile',['../group__Lockfile.html#gacb93bd48431953b20e06d8afc670e2a2',1,'b::scoped_lockfile']]],
+  ['scoped_5flockfile_5fnothrow_254',['scoped_lockfile_nothrow',['../group__Lockfile.html#ga0fcd83f04700b94a71a8dec4231bc642',1,'b::scoped_lockfile_nothrow']]],
+  ['sleep_255',['sleep',['../group__Time.html#ga680b05f8ca38128e0a273b5a89519492',1,'b']]],
+  ['sleep_5fms_256',['sleep_ms',['../group__Time.html#ga8772061768d9a949d15bd15bb3e8b02b',1,'b']]],
+  ['sleep_5fprecise_257',['sleep_precise',['../group__Time.html#gab47f0f4461f636f015b2353e20669523',1,'b']]],
+  ['split_258',['split',['../group__String.html#ga815d742dd731ef1857d5146204cb0990',1,'b']]],
+  ['std_5fpath_259',['std_path',['../classb_1_1fs_1_1path.html#aa1fd117f737f9cf91c8b1d4892fcbff4',1,'b::fs::path']]],
+  ['stem_260',['stem',['../classb_1_1fs_1_1path.html#aa9f515cbbd807bede94ab1f1fbb2db2c',1,'b::fs::path']]],
+  ['string_261',['string',['../classb_1_1fs_1_1path.html#aaea1472016d7d7541c5f567e591e58f8',1,'b::fs::path']]],
+  ['swap_262',['swap',['../classb_1_1fs_1_1path.html#a09ef98ebe465d20c7df99de4853a36c0',1,'b::fs::path']]]
 ];

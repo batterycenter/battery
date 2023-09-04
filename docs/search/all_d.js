@@ -1,25 +1,10 @@
 var searchData=
 [
-  ['ofstream_96',['ofstream',['../classb_1_1fs_1_1ofstream.html',1,'b::fs']]],
-  ['ondiskresource_97',['OnDiskResource',['../classb_1_1Resource_1_1OnDiskResource.html',1,'b::Resource']]],
-  ['operator_20bool_98',['operator bool',['../group__Lockfile.html#ga5e8eb65b9e8b4d43caf3483e4829bb62',1,'b::lockfile::operator bool()'],['../group__Lockfile.html#ga3f0c0176a3a77cd814a1b4606656e4bb',1,'b::scoped_lockfile_nothrow::operator bool()']]],
-  ['operator_21_3d_99',['operator!=',['../group__String.html#gae722ccd9ad23c77c3320167f05e97320',1,'b::string::operator!=()'],['../classb_1_1fs_1_1path.html#acde425f5d8aa5a7a7da3c2c209629242',1,'b::fs::path::operator!=()']]],
-  ['operator_22_22_5fb_100',['operator&quot;&quot;_b',['../group__String.html#gad3355e3698324c9cf5a76144c2a35a41',1,'operator&quot;&quot;_b(const char32_t *str, size_t len):&#160;string.hpp'],['../group__String.html#gac71436492d7e9ef7f402924cbb7d90ae',1,'operator&quot;&quot;_b(const char16_t *str, size_t len):&#160;string.hpp'],['../group__String.html#ga0e24e43f0f78040cb5b906e53b3d3296',1,'operator&quot;&quot;_b(const char8_t *str, size_t len):&#160;string.hpp'],['../group__String.html#gaf61a1ee89f4140af2325d7d882d351e2',1,'operator&quot;&quot;_b(const char *str, size_t len):&#160;string.hpp']]],
-  ['operator_2b_101',['operator+',['../group__String.html#ga46cdfb64d84048a55d59b6f134762b0a',1,'b::string']]],
-  ['operator_2b_3d_102',['operator+=',['../classb_1_1fs_1_1path.html#aac9489031e91bac2612cd7b406093870',1,'b::fs::path::operator+=(const b::string &amp;path)'],['../classb_1_1fs_1_1path.html#a2b332245fedcdccaf7d89a501a75ea9a',1,'b::fs::path::operator+=(const b::fs::path &amp;path)'],['../group__String.html#ga94740dde3091b8875a8d6b780def2b81',1,'b::string::operator+=()']]],
-  ['operator_2f_3d_103',['operator/=',['../classb_1_1fs_1_1path.html#a86237efb2d1495402ee3556fa8ea8226',1,'b::fs::path::operator/=(const b::string &amp;path)'],['../classb_1_1fs_1_1path.html#ad938c7323515ad9d3ef32c1490ba8168',1,'b::fs::path::operator/=(const b::fs::path &amp;path)']]],
-  ['operator_3c_104',['operator&lt;',['../classb_1_1fs_1_1path.html#aa8741613cb335490e2d1f6f71a27e1c6',1,'b::fs::path']]],
-  ['operator_3c_3d_105',['operator&lt;=',['../classb_1_1fs_1_1path.html#a834bd43550b8c96d3f98410f5c5c5f93',1,'b::fs::path']]],
-  ['operator_3c_3d_3e_106',['operator&lt;=&gt;',['../classb_1_1fs_1_1path.html#a1a69e68c73803baab73baf4e990a437b',1,'b::fs::path']]],
-  ['operator_3d_107',['operator=',['../group__String.html#ga30a4cd0c875eff7228f4a031f6b5fc14',1,'b::string::operator=(const char32_t *other)'],['../group__String.html#ga6338f02e320f1de26dc6ca3fb73e4c27',1,'b::string::operator=(const std::u32string &amp;other)'],['../group__String.html#gaf11c95635440dd6b0c36dcddd0a4987a',1,'b::string::operator=(const char16_t *other)'],['../group__String.html#ga136f02e6cd39d931547b71b13d0162f4',1,'b::string::operator=(const std::u16string &amp;other)'],['../group__String.html#gae65bc73595ccb7b2723b9808bfd67955',1,'b::string::operator=(const char8_t *other)'],['../group__String.html#ga18cacdcbedd66afff3bc593e37b02138',1,'b::string::operator=(const std::u8string &amp;other)'],['../group__String.html#ga31d3e97dce65ad98d6a1e53a50ca629d',1,'b::bytearray::operator=(std::initializer_list&lt; uint8_t &gt; list)'],['../group__String.html#gad1f12ab955cf7b8acfece9f6ab91bf75',1,'b::bytearray::operator=(std::vector&lt; uint8_t &gt; &amp;&amp;vec)'],['../group__String.html#gaab4098cb08aa3d8f1c243077a80921fd',1,'b::bytearray::operator=(const std::vector&lt; uint8_t &gt; &amp;vec)'],['../classb_1_1fs_1_1path.html#ae572f3aed7e3777fec4726954d14b153',1,'b::fs::path::operator=()'],['../group__String.html#ga32a7175634c52c4b8ad4fa003968b932',1,'b::string::operator=()']]],
-  ['operator_3d_3d_108',['operator==',['../classb_1_1fs_1_1path.html#a6a27c1820a546e73e69528cae2fa0c52',1,'b::fs::path::operator==()'],['../group__String.html#gabedc97a4b9aad303d291f102ef7ccff4',1,'b::string::operator==()']]],
-  ['operator_3e_109',['operator&gt;',['../classb_1_1fs_1_1path.html#a36c69a259557a86f124e90a7119b6307',1,'b::fs::path']]],
-  ['operator_3e_3d_110',['operator&gt;=',['../classb_1_1fs_1_1path.html#a10e29794f6c43af3b7d842e6e5fc37f5',1,'b::fs::path']]],
-  ['operator_5b_5d_111',['operator[]',['../group__String.html#ga35d96ab70d45b904690cbbad2b10be81',1,'b::string::operator[](size_t index)'],['../group__String.html#ga43d20c575b4e51db18c38f4d3b923c27',1,'b::string::operator[](size_t index) const']]],
-  ['options_5ft_112',['options_t',['../structb_1_1process_1_1options__t.html',1,'b::process']]],
-  ['os_5fnative_113',['os_native',['../structb_1_1enc_1_1os__native.html',1,'b::enc']]],
-  ['out_5fof_5frange_5ferror_114',['out_of_range_error',['../classb_1_1out__of__range__error.html',1,'b']]],
-  ['u16string_115',['u16string',['../group__String.html#gab2e9ced3e01e9c04aacac26d22b62297',1,'b::string']]],
-  ['u32string_116',['u32string',['../group__String.html#ga3fae332b0e64f805c97e1755fb1c9f69',1,'b::string']]],
-  ['u8string_117',['u8string',['../group__String.html#gae8e71b9b72ecffdbed3719734fd740ef',1,'b::string']]]
+  ['parent_5fpath_83',['parent_path',['../classb_1_1fs_1_1path.html#a83914456233686880d89d9cb3132ef95',1,'b::fs::path']]],
+  ['path_84',['path',['../classb_1_1fs_1_1path.html',1,'b::fs::path'],['../classb_1_1fs_1_1path.html#a76fd6b48cd4d5f94276b38dffaf9a0b5',1,'b::fs::path::path()=default'],['../classb_1_1fs_1_1path.html#a5aaa666f4a046bed0efd072b34fd40fb',1,'b::fs::path::path(const char *path)'],['../classb_1_1fs_1_1path.html#ab198b7e1a4ce1b7ea88ba72b1f90dbf1',1,'b::fs::path::path(const std::string &amp;path)'],['../classb_1_1fs_1_1path.html#ac6a58a9dabe95509e6eb8780cb508968',1,'b::fs::path::path(const std::u8string &amp;path)']]],
+  ['poll_5finterval_85',['poll_interval',['../group__Lockfile.html#gab1beab2c0b17a246da6241353cd292dd',1,'b::lockfile']]],
+  ['pop_5fctrl_5fc_5fhandler_86',['pop_ctrl_c_handler',['../group__signal.html#ga5c4bbd9de357b2ce6a27fba5af2a3306',1,'b']]],
+  ['preferred_5fseparator_87',['preferred_separator',['../classb_1_1fs_1_1path.html#a24087dcc52df8a4c5aeda3e83205688c',1,'b::fs::path']]],
+  ['process_88',['process',['../classb_1_1process.html',1,'b']]],
+  ['push_5fctrl_5fc_5fhandler_89',['push_ctrl_c_handler',['../group__signal.html#ga8cbe51d08e05a042a69bb97f794d01d6',1,'b']]]
 ];
