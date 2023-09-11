@@ -4,8 +4,8 @@ import requests
 import tarfile
 
 github_dependencies = [
-    # [ "ocornut", "imgui", "v1.89.8" ],
-    # [ "fmtlib", "fmt", "10.0.0" ],                    # MIT-alike License
+    # [ "fmtlib", "fmt", "10.0.0" ],                   # MIT-alike License
+    [ "ocornut", "imgui", "v1.89.8" ],                 # MIT License
     [ "gabime", "spdlog", "v1.12.0" ],                 # MIT License
     [ "DaanDeMeyer", "reproc", "v14.2.4" ],            # MIT License
     [ "nemtrif", "utfcpp", "v3.2.4" ],                 # Boost Software License 1.0

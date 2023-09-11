@@ -1,11 +1,11 @@
 
-function(battery_clear_available_modules)
+function(b_clear_available_modules)
     set(B_AVAILABLE_MODULES "" CACHE STRING "List of available battery modules" FORCE)
     set(B_AVAILABLE_MODULE_PATHS "" CACHE STRING "List of available battery module paths" FORCE)
     set(B_AVAILABLE_MODULE_BINARY_DIRS "" CACHE STRING "List of available battery module binary dirs" FORCE)
 endfunction()
 
-function(battery_make_module_available module_name module_path)
+function(b_make_module_available module_name module_path)
 
     # First add it to the list of available modules
     set(AVAILABLE_MODULES_TEMP ${B_AVAILABLE_MODULES})
@@ -27,7 +27,7 @@ function(battery_make_module_available module_name module_path)
 
 endfunction()
 
-function(battery_add_module module_name)
+function(b_add_module module_name)
 
     # First we need to find the module path
     set(module_found FALSE)
