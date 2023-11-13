@@ -62,9 +62,9 @@ namespace b {
             // Load 4 6-bit characters (24 bits) of input data into the temporary buffer
             uint32_t buf = 0;
             uint32_t shift = 18u;
-            for (int i = 0; i < 4; i++) {
+            for (size_t i = 0; i < 4; i++) {
                 if (i < remaining) {
-                    auto chr = str[index + i];
+                    unsigned char chr = str[index + i];
                     if (chr > 127) {
                         return {};
                     }

@@ -1053,7 +1053,7 @@ namespace b::fs {
     class ifstream : public std::ifstream {
     public:
         ifstream(const path& path, std::ios_base::openmode mode = std::ios_base::in)
-                : std::ifstream(b::to_native(path.string()), mode) {}
+                : std::ifstream(b::to_native(path.string()).c_str(), mode) {}
         ~ifstream() override = default;
     };
 
@@ -1065,7 +1065,7 @@ namespace b::fs {
     class ofstream : public std::ofstream {
     public:
         ofstream(const fs::path& path, std::ios_base::openmode filemode, bool createDirectory = true)
-                : std::ofstream(create_dir_return_path(path, createDirectory), filemode) {}
+                : std::ofstream(create_dir_return_path(path, createDirectory).c_str(), filemode) {}
         ~ofstream() override = default;
 
     private:
@@ -1136,7 +1136,7 @@ namespace b::fs {
         b::fs::ifstream file(path, std::ios::in | std::ios::binary);
         if (!file.is_open()) {
             return std::unexpected(b::filesystem_error(
-                    b::format("Failed loading file {}: {}", path, b::strerror(errno))
+                    b::format("Failed loading file {}: {}", path.string(), b::strerror(errno))
             ));
         }
 

@@ -20,6 +20,8 @@
 #include "battery/core/string.hpp"
 #include "battery/core/bytearray.hpp"
 
+#include <optional>
+
 namespace b {
 
     ///

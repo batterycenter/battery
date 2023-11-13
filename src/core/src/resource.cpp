@@ -39,8 +39,10 @@ namespace b {
     }
 
     Resource Resource::FromBase64(const std::string& base64, const std::string& filetype) {
-        return Resource();
-//        return Resource::FromBytes(b::decode_base64(base64.to_utf8()), filetype);
+        if (auto bytes = b::decode_base64_binary(base64); bytes) {
+            return Resource::FromBytes(*bytes, filetype);
+        }
+        return {};
     }
 
     const unsigned char* Resource::data() const {

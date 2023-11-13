@@ -17,7 +17,7 @@ namespace b {
         explicit out_of_range_error(const std::string& str) :
                 m_message(b::format("b::out_of_range_error: {}", str)) {}
 
-        const char* what() const {    // NOLINT (readability-convert-member-functions-to-static)
+        const char* what() const noexcept {    // NOLINT (readability-convert-member-functions-to-static)
             return m_message.c_str();
         }
 
@@ -33,7 +33,7 @@ namespace b {
         explicit unicode_error(const std::string& str) :
                 m_message(b::format("b::unicode_error: {}", str)) {}
 
-        const char* what() const {    // NOLINT (readability-convert-member-functions-to-static)
+        const char* what() const noexcept {    // NOLINT (readability-convert-member-functions-to-static)
             return m_message.c_str();
         }
 
@@ -49,7 +49,7 @@ namespace b {
         explicit base64_encoding_error(const std::string& str) :
                 m_message(b::format("b::base64_encoding_error: {}", str)) {}
 
-        const char* what() const {    // NOLINT (readability-convert-member-functions-to-static)
+        const char* what() const noexcept {    // NOLINT (readability-convert-member-functions-to-static)
             return m_message.c_str();
         }
 
@@ -68,7 +68,7 @@ namespace b {
         explicit filesystem_error(const std::string& str) :
                 m_message(b::format("b::filesystem_error: {}", str)) {}
 
-        const char* what() const {    // NOLINT (readability-convert-member-functions-to-static)
+        const char* what() const noexcept {    // NOLINT (readability-convert-member-functions-to-static)
             return m_message.c_str();
         }
 
@@ -87,7 +87,7 @@ namespace b {
         explicit file_io_error(const std::string& str) :
                 m_message(b::format("b::file_io_error: {}", str)) {}
 
-        const char* what() const {    // NOLINT (readability-convert-member-functions-to-static)
+        const char* what() const noexcept {    // NOLINT (readability-convert-member-functions-to-static)
             return m_message.c_str();
         }
 
