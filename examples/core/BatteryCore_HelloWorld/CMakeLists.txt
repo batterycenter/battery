@@ -1,1 +1,1 @@
-battery_add_example(Example_BatteryCore_HelloWorld src/main.cpp)
+b_add_example(Example_BatteryCore_HelloWorld src/main.cpp)

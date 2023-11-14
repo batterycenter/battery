@@ -1,1 +1,1 @@
-battery_add_example(Example_FileDialog src/main.cpp)
+b_add_example(Example_FileDialog src/main.cpp)

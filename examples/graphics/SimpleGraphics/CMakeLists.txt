@@ -1,6 +1,6 @@
-battery_add_example(Example_SimpleGraphics
+b_add_example(Example_SimpleGraphics
         src/main.cpp
         src/App.cpp)
 
-battery_add_module(graphics)
-target_link_libraries(Example_SimpleGraphics PUBLIC battery::graphics)
+#b_add_module(graphics)
+target_link_libraries(Example_SimpleGraphics PUBLIC battery::core_no_main SDL2::SDL2 SDL2::SDL2main)

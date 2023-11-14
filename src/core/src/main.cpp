@@ -81,7 +81,7 @@ namespace b {
 
         int result = -1;
         b::thread::catch_common_exceptions([&result, argc, argv]() {
-            result = b::main(parse_cli(argc, argv));
+//            result = b::main(parse_cli(argc, argv));
         });
         return result;
     }

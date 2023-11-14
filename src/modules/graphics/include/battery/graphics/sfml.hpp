@@ -5,7 +5,6 @@
 #include "SFML/System.hpp"
 #include "SFML/Network.hpp"
 #include "SFML/Audio.hpp"
-#include "battery/python/python.hpp"
 #include "battery/core/string.hpp"
 #include "battery/core/extern/json.hpp"
 

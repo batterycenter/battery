@@ -41,6 +41,7 @@ b_add_source_files(battery_graphics
 b_set_ide_folder(battery_graphics "battery/modules")
 
 b_add_module(imgui)
+#b_add_module(python)
 #b_add_module(imgui_sfml)
 #b_add_module(magic_enum)
 #b_add_module(json)
@@ -49,6 +50,7 @@ b_add_module(imgui)
 target_link_libraries(battery_graphics PUBLIC
         battery::core
         battery::imgui
+        SDL2
 #        battery::imgui_sfml
 #        battery::magic_enum
 #        battery::json

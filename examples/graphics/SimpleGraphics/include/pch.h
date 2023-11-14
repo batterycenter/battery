@@ -1,2 +1,2 @@
 
-#include "battery/core/all.hpp"
+#include "battery/core.hpp"

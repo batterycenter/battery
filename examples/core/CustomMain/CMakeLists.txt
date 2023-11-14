@@ -1,1 +1,1 @@
-battery_add_example_no_main(Example_CustomMain src/main.cpp)
+b_add_example_no_main(Example_CustomMain src/main.cpp)

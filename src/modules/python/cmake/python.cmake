@@ -40,7 +40,7 @@ macro(battery_find_python)
     message(STATUS "Building for Python ${Python_VERSION} (${PYTHON_ARCH}-bit)")
 
     # Download python bindings library
-    battery_add_package("gh:pybind/pybind11#v2.10.4")
+    b_add_package("gh:pybind/pybind11#v2.10.4")
 endmacro()
 
 macro(battery_download_python_embedded_distro)

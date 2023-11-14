@@ -1,6 +1,6 @@
 #pragma once
 
-#include "battery/python/python.hpp"
+//#include "battery/python/python.hpp"
 
 namespace b::widgets {
 
@@ -9,11 +9,11 @@ namespace b::widgets {
     void dummy(double width, double height);
 
     namespace dummies {
-        inline void definePythonFunctions(b::py::module& module) {
-            module.def("vspace", &b::widgets::vspace);
-            module.def("hspace", &b::widgets::hspace);
-            module.def("dummy", &b::widgets::dummy);
-        }
+//        inline void definePythonFunctions(b::py::module& module) {
+//            module.def("vspace", &b::widgets::vspace);
+//            module.def("hspace", &b::widgets::hspace);
+//            module.def("dummy", &b::widgets::dummy);
+//        }
     }
 
 }

@@ -14,8 +14,8 @@ namespace b {
     // dealing with the wide strings on different platforms. (taking std::u16string from utf8cpp and
     // converting to std::wstring might work on Windows but might cause issues on others.)
     // For all other conversions, we use utf8cpp.
-    // <codecvt> is deprecated since C++17, but not yet removed and we will keep using it until it is
-    // replaced by a better alternative.
+    // <codecvt> is deprecated since C++17, but will not be removed any time soon as no alternative
+    // has been found yet. We will keep using it until it is removed or replaced by a better alternative.
 
     std::wstring widen(const std::string& str) {
         std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;

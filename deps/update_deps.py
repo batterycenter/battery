@@ -1,7 +1,7 @@
 import os
 import shutil
 import requests
-import tarfile
+import zipfile
 
 github_dependencies = [
     # [ "fmtlib", "fmt", "10.0.0" ],                   # MIT-alike License
@@ -11,6 +11,7 @@ github_dependencies = [
     [ "nemtrif", "utfcpp", "v3.2.4" ],                 # Boost Software License 1.0
     [ "jothepro", "doxygen-awesome-css", "v2.2.1" ],   # MIT License
     [ "batterycenter", "embed", "v1.1.0" ],            # Apache-2.0 License
+    [ "libsdl-org", "SDL", "release-2.28.5" ],         # Zlib License
     # [ "CLIUtils", "CLI11", "v2.3.2" ],               # 3-Clause BSD License
 ]
 
@@ -27,28 +28,39 @@ def main():
     # Download and extract all repositories from GitHub
     for dep in github_dependencies:
         tmpfolder = os.path.join(deps_folder, "tmp")
-        url = f'https://github.com/{dep[0]}/{dep[1]}/archive/refs/tags/{dep[2]}.tar.gz'
+        extractfolder = os.path.join(tmpfolder, "extracted")
+        url = f'https://github.com/{dep[0]}/{dep[1]}/archive/refs/tags/{dep[2]}.zip'
 
         print(f"Downloading and extracting {dep[0]}/{dep[1]}@{dep[2]} from GitHub...")
         response = requests.get(url, stream=True)
         if (response.status_code != 200):
             raise Exception(f"Failed to download {url}")
 
-        file = tarfile.open(fileobj=response.raw, mode="r|gz")
+        os.makedirs(tmpfolder, exist_ok=True)
+        with open("tmp/archive.zip", "wb") as file:
+            for chunk in response.iter_content(chunk_size=1024):
+                file.write(chunk)
+
+        zip = zipfile.ZipFile("tmp/archive.zip", "r")
+        zip.extractall(extractfolder)
+        zip.close()
 
         # With GitHub, the archive contains a folder with the name and version (like imgui-1.89.8)
         # We want the files to live in a folder called just "imgui", so we have to rename it on-disk,
         # as modifying the tarfile before extracting it would involve writing it to disk anyways.
-        file.extractall(tmpfolder)
-        dir = os.listdir(tmpfolder)
+
+        dir = os.listdir(extractfolder)
         if len(dir) != 1:
             raise Exception("Expected a single folder in the archive, found more")
-        os.rename(os.path.join(tmpfolder, dir[0]), os.path.join(deps_folder, dep[1]))
+        os.rename(os.path.join(extractfolder, dir[0]), os.path.join(deps_folder, dep[1]))
         shutil.rmtree(tmpfolder)
 
         print(f"Downloading and extracting {dep[0]}/{dep[1]}@{dep[2]} from GitHub... Done")
 
-    # Download single files from GitHub
+    # And now delete certain files
+    print("Deleting SDL2 unit test files...")       # Delete test folder because it is huge and not necessary for us
+    shutil.rmtree(os.path.join(deps_folder, "SDL", "test"))
+    print("Deleting SDL2 unit test files... Done")
 
 if __name__ == "__main__":
     main()
