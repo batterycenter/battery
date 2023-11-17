@@ -1,6 +1,6 @@
 
-#include "battery/core/cache.hpp"
-#include "battery/core/fs.hpp"
+#include "battery/cache.hpp"
+#include "battery/fs.hpp"
 
 namespace b {
 

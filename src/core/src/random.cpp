@@ -1,5 +1,5 @@
 
-#include "battery/core/random.hpp"
+#include "battery/random.hpp"
 #include <random>
 
 namespace b {

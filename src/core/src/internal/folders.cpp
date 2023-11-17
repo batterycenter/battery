@@ -1,5 +1,5 @@
 
-#include "battery/core/internal/platform.hpp"
+#include "battery/internal/platform.hpp"
 
 namespace battery::internal {
 

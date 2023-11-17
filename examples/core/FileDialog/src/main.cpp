@@ -1,5 +1,5 @@
 
-#include "battery/core.hpp"
+#include "battery/battery.hpp"
 
 enum class Options {
     OPEN_FILE,

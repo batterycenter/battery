@@ -1,7 +1,7 @@
 #pragma once
 
 #include "battery/graphics/sfml.hpp"
-#include "battery/core/log.hpp"
+#include "battery/log.hpp"
 
 namespace b {
 

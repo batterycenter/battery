@@ -1,5 +1,5 @@
 
-#include "battery/core/fs.hpp"
+#include "battery/fs.hpp"
 
 namespace b::fs {
 

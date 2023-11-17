@@ -14,13 +14,13 @@
 // limitations under the License.
 //
 
-#include "battery/core/lockfile.hpp"
-#include "battery/core/string.hpp"
-#include "battery/core/fs.hpp"
-#include "battery/core/time.hpp"
-#include "battery/core/messages.hpp"
+#include "battery/lockfile.hpp"
+#include "battery/string.hpp"
+#include "battery/fs.hpp"
+#include "battery/time.hpp"
+#include "battery/messages.hpp"
 
-#include "battery/core/log.hpp"
+#include "battery/log.hpp"
 
 #ifdef B_OS_WINDOWS
 #include <Windows.h>

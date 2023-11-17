@@ -1,8 +1,8 @@
 
-#include <battery/core/main.hpp>
-#include <battery/core/log.hpp>
-#include <battery/core/lockfile.hpp>
-#include <battery/core/time.hpp>
+#include "battery/main.hpp"
+#include "battery/log.hpp"
+#include "battery/lockfile.hpp"
+#include "battery/time.hpp"
 
 int b::main([[maybe_unused]] const std::vector<b::string>& args) {
 

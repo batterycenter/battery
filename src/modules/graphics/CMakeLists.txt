@@ -21,7 +21,6 @@ b_add_source_files(battery_graphics
         src/widgets/text.cpp
         src/widgets/panel.cpp
 
-        src/application.cpp
         src/batch_renderer.cpp
         src/canvas.cpp
         src/color_hex.cpp
@@ -35,7 +34,6 @@ b_add_source_files(battery_graphics
         src/styles.cpp
         src/unit_property.cpp
         src/widget_builder.cpp
-        src/window.cpp
         )
 
 b_set_ide_folder(battery_graphics "battery/modules")

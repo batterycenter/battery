@@ -1,5 +1,5 @@
 
-#include "battery/core/main.hpp"
+#include "battery/main.hpp"
 #include <gtest/gtest.h>
 
 int b::main(const std::vector<std::string>& args) {

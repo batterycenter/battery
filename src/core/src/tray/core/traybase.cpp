@@ -18,7 +18,7 @@
 // It has been heavily modified and modernized to work with battery.
 //
 
-#include "battery/core/tray/core/traybase.hpp"
+#include "battery/tray/core/traybase.hpp"
 
 namespace b::tray {
 

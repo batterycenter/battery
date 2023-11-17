@@ -1,5 +1,5 @@
 
-#include "battery/core.hpp"
+#include "battery/battery.hpp"
 #include <gtest/gtest.h>
 
 const auto BASE64_UTF8_TEST = "Lorem ipsum dolor sit amet イロハニホヘト チリヌシ ヱヒモセスン Heizölrückstoßabdämpfung";

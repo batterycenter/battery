@@ -1,5 +1,5 @@
 
-#include "battery/core/format.hpp"
+#include "battery/format.hpp"
 
 namespace b {
 

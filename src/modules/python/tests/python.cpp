@@ -1,7 +1,7 @@
 
 #include <gtest/gtest.h>
-#include "battery/core/main.hpp"
-#include <battery/core/log.hpp>
+#include "battery/main.hpp"
+#include "battery/log.hpp"
 
 #include <battery/python/python.hpp>
 #include <pybind11/stl.h>   // We need this to be able to send and receive STL containers like std::vector from python

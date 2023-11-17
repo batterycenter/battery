@@ -1,0 +1,98 @@
+language: cpp
+sudo: false
+
+matrix:
+  exclude: # On OSX g++ is a symlink to clang++ by default
+    - os: osx
+      compiler: gcc
+
+  include:
+    # Bionic Ubuntu 18.04
+    - os: linux
+      name: "Bionic - gcc 7.4.0"
+      dist: bionic # We can't install packages on Bionic, not sure why. Travis ignores addons...
+      compiler: gcc
+    # Bionic Ubuntu 18.04
+    - os: linux
+      name: "Bionic - clang 7"
+      dist: bionic # We can't install packages on Bionic, not sure why. Travis ignores addons...
+      compiler: clang
+
+    # clang-6
+    - os: linux
+      name: "Xenial - clang 6"
+      dist: xenial
+      env: [USE_CC='/usr/bin/clang-6.0', USE_CXX='/usr/bin/clang++-6.0']
+      addons:
+        apt:
+          packages: ['clang-6.0', 'cmake', 'libstdc++-9-dev', 'libstdc++6']
+          sources: ['ubuntu-toolchain-r-test', 'ubuntu-toolchain-r-test']
+    # clang-8
+    - os: linux
+      name: "Xenial - clang 8"
+      dist: xenial
+      env: [USE_CC='/usr/bin/clang-8', USE_CXX='/usr/bin/clang++-8']
+      addons:
+        apt:
+          packages: ['clang-8', 'cmake', 'libstdc++-9-dev', 'libstdc++6']
+          sources: ['llvm-toolchain-xenial-8', 'ubuntu-toolchain-r-test']
+    # clang-9
+    - os: linux
+      name: "Xenial - clang 9"
+      dist: xenial
+      env: [USE_CC='/usr/bin/clang-9', USE_CXX='/usr/bin/clang++-9']
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - sourceline: 'deb https://apt.llvm.org/xenial/ llvm-toolchain-xenial-9 main'
+              key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          packages: ['clang-9', 'cmake', 'libstdc++-9-dev', 'libstdc++6']
+
+    # gcc-8
+    - os: linux
+      name: "Xenial - gcc 8"
+      dist: xenial
+      env: [USE_CC='/usr/bin/gcc-8', USE_CXX='/usr/bin/g++-8']
+      addons:
+        apt:
+          packages: ['gcc-8', 'g++-8', 'cmake']
+          sources: ['ubuntu-toolchain-r-test']
+    # gcc-9
+    - os: linux
+      name: "Xenial - gcc 9"
+      dist: xenial
+      env: [USE_CC='/usr/bin/gcc-9', USE_CXX='/usr/bin/g++-9']
+      addons:
+        apt:
+          packages: ['gcc-9', 'g++-9', 'cmake']
+          sources: ['ubuntu-toolchain-r-test']
+
+    - os: osx
+      osx_image: xcode10.3
+      compiler: clang
+    - os: osx
+      osx_image: xcode11.3
+      compiler: clang
+
+
+before_install:
+  # Override compilers set by Travis
+  - if [ ! -z "${USE_CC}" ]; then echo "Override CC=${USE_CC}"; eval "CC=${USE_CC}"; fi
+  - if [ ! -z "${USE_CXX}" ]; then echo "Override CXX=${USE_CXX}"; eval "CXX=${USE_CXX}"; fi
+  - echo ${CC} && ${CC} --version
+  - echo ${CXX} && ${CXX} --version
+  # Install catch 2 dependency
+  - wget https://github.com/catchorg/Catch2/archive/v2.11.1.zip
+  - unzip v2.11.1.zip && cd Catch2-2.11.1 && mkdir -p build/ && cd build/
+  - cmake -DCMAKE_BUILD_TYPE=Release .. -DCMAKE_CXX_STANDARD=14 -DCMAKE_INSTALL_PREFIX=~/.local/ && cmake --build . --target install
+  - cd ../..
+
+script:
+  #Build & Install library
+  - (mkdir -p lib/build-debug/ &&  cd lib/build-debug && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=~/.local/ .. && cmake --build . --target install)
+  - (mkdir -p lib/build-release/ &&  cd lib/build-release && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/.local/ .. && cmake --build . --target install)
+  # Run tests
+  - (mkdir -p test/build-debug/ &&  cd test/build-debug && cmake ${EXTRA_CMAKE_FLAGS} -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=~/.local/ .. && cmake --build . && ctest -V .)
+  - (mkdir -p test/build-release/ &&  cd test/build-release && cmake ${EXTRA_CMAKE_FLAGS} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/.local/ .. && cmake --build . && ctest -V .)
+

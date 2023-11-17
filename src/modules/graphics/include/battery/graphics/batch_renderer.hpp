@@ -1,8 +1,8 @@
 #pragma once
 
 #include "battery/graphics/sfml.hpp"
-#include "battery/core/vec.hpp"
-#include "battery/core/color.hpp"
+#include "battery/vec.hpp"
+#include "battery/color.hpp"
 
 namespace b {
 

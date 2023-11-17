@@ -1,7 +1,7 @@
 
 #include "battery/graphics/unit_property.hpp"
 #include "battery/graphics/color_hex.hpp"
-#include "battery/core/log.hpp"
+#include "battery/log.hpp"
 
 namespace b {
 

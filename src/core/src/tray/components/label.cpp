@@ -18,7 +18,7 @@
 // It has been heavily modified and modernized to work with battery.
 //
 
-#include "battery/core/tray/components/label.hpp"
+#include "battery/tray/components/label.hpp"
 
 namespace b::tray {
 

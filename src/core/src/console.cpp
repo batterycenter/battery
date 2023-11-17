@@ -1,9 +1,9 @@
 
-#include "battery/core/console.hpp"
-#include "battery/core/string.hpp"
-#include "battery/core/log.hpp"
-#include "battery/core/process.hpp"
-#include "battery/core/extern/magic_enum.hpp"
+#include "battery/console.hpp"
+#include "battery/string.hpp"
+#include "battery/log.hpp"
+#include "battery/process.hpp"
+#include "battery/extern/magic_enum.hpp"
 
 #ifdef B_OS_WINDOWS
 #include <conio.h>

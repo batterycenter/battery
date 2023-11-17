@@ -1,5 +1,5 @@
 
-#include "battery/core/time.hpp"
+#include "battery/time.hpp"
 
 #include <thread>
 #include <chrono>

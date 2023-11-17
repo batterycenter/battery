@@ -1,5 +1,5 @@
 
-#include "battery/core/base64.hpp"
+#include "battery/base64.hpp"
 
 namespace b {
 

@@ -1,3 +1,3 @@
 
-#include "battery/core.hpp"
+#include "battery/battery.hpp"
 #include "battery/graphics.hpp"

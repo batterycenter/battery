@@ -1,7 +1,7 @@
 
 #include "battery/graphics/widget_builder.hpp"
 #include "battery/graphics/property_stack.hpp"
-#include "battery/core/log.hpp"
+#include "battery/log.hpp"
 #include "magic_enum.hpp"
 
 namespace b::widgets {

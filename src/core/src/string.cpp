@@ -1,9 +1,9 @@
 
-#include "battery/core/exception.hpp"
-#include "battery/core/string.hpp"
-#include "battery/core/extern/utf8proc.h"
-#include "battery/core/internal/windows.hpp"
-#include "battery/core/log.hpp"
+#include "battery/exception.hpp"
+#include "battery/string.hpp"
+#include "battery/extern/utf8proc.h"
+#include "battery/internal/windows.hpp"
+#include "battery/log.hpp"
 #include "utf8.h"
 #include <codecvt>
 #include <regex>

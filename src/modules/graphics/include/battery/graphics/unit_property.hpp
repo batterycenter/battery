@@ -1,6 +1,6 @@
 #pragma once
 
-#include "battery/core/string.hpp"
+#include "battery/string.hpp"
 #include "battery/graphics/sfml.hpp"
 #include "battery/python/python.hpp"
 

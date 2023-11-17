@@ -1,8 +1,8 @@
 #pragma once
 
 #include "battery/python/python.hpp"
-#include "battery/core/map.hpp"
-#include "battery/core/containers.hpp"
+#include "battery/map.hpp"
+#include "battery/containers.hpp"
 
 #define B_DEF_PY_ATTR(attr) .def_readwrite(#attr, &ContextType::attr)
 #define B_DEF_PY_CLASS_PROPS(...) B_MAP(B_DEF_PY_ATTR, __VA_ARGS__)

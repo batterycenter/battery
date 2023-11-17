@@ -1,6 +1,6 @@
 
 #include "battery/graphics/styles.hpp"
-#include "battery/core/resource_loader.hpp"
+#include "battery/resource_loader.hpp"
 #include "battery/graphics/color_hex.hpp"
 #include "battery/graphics/property_stack.hpp"
 #include "resources/DefaultThemesJson.hpp"

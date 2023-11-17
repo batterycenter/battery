@@ -1,8 +1,8 @@
 
-#include "battery/core/signal.hpp"
-#include "battery/core/log.hpp"
-#include "battery/core/time.hpp"
-#include "battery/core/thread.hpp"
+#include "battery/signal.hpp"
+#include "battery/log.hpp"
+#include "battery/time.hpp"
+#include "battery/thread.hpp"
 
 #include <queue>
 #include <stack>

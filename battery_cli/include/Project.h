@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "battery/core.hpp"
+#include "battery/battery.hpp"
 
 #include "Error.h"
 

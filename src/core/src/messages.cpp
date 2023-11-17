@@ -1,7 +1,7 @@
 
-#include "battery/core/messages.hpp"
-#include "battery/core/string.hpp"
-#include "battery/core/process.hpp"
+#include "battery/messages.hpp"
+#include "battery/string.hpp"
+#include "battery/process.hpp"
 
 #ifdef B_OS_WINDOWS
 #include <Windows.h>

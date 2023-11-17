@@ -5,11 +5,11 @@
 #include "SFML/System.hpp"
 #include "SFML/Network.hpp"
 #include "SFML/Audio.hpp"
-#include "battery/core/string.hpp"
+#include "battery/string.hpp"
 #include "battery/core/extern/json.hpp"
 
 #define IMGUI_DEFINE_MATH_OPERATORS
-#include "battery/core/vec.hpp"
+#include "battery/vec.hpp"
 #include "imgui.h"
 #include "imgui-SFML.h"
 

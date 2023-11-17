@@ -1,6 +1,6 @@
 #pragma once
 
-#include "battery/core/resource.hpp"
+#include "battery/resource.hpp"
 #include "battery/graphics/sfml.hpp"
 
 namespace b {

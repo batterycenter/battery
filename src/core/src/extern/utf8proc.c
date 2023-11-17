@@ -41,7 +41,7 @@
  */
 
 
-#include "battery/core/extern/utf8proc.h"
+#include "battery/extern/utf8proc.h"
 
 // defined in 'utf8proc_data.c'
 extern const utf8proc_uint16_t utf8proc_sequences[];

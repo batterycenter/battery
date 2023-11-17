@@ -2,7 +2,7 @@
 #include "battery/graphics/property_stack.hpp"
 #include "battery/graphics/sfml.hpp"
 #include "battery/graphics/color_hex.hpp"
-#include "battery/core/log.hpp"
+#include "battery/log.hpp"
 #include "magic_enum.hpp"
 
 #define IMGUI_DEFINE_MATH_OPERATORS

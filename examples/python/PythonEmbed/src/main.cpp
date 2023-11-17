@@ -1,6 +1,6 @@
 
-#include <battery/core/main.hpp>
-#include <battery/core/log.hpp>
+#include "battery/main.hpp"
+#include "battery/log.hpp"
 #include <battery/python/python.hpp>
 
 #include "resources/script_py.hpp"

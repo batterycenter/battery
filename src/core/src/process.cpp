@@ -1,7 +1,7 @@
 
-#include "battery/core/process.hpp"
-#include "battery/core/signal.hpp"
-#include "battery/core/time.hpp"
+#include "battery/process.hpp"
+#include "battery/signal.hpp"
+#include "battery/time.hpp"
 
 #include "reproc++/drain.hpp"
 

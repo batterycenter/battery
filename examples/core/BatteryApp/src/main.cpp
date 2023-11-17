@@ -33,7 +33,7 @@
 //     }
 // };
 
-#include "battery/core.hpp"
+#include "battery/battery.hpp"
 
 int b::main([[maybe_unused]] const std::vector<std::string>& args) {
 

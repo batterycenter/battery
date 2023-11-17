@@ -3,4 +3,4 @@ b_add_example(Example_SimpleGraphics
         src/App.cpp)
 
 #b_add_module(graphics)
-target_link_libraries(Example_SimpleGraphics PUBLIC battery::core_no_main SDL2::SDL2 SDL2::SDL2main)
+target_link_libraries(Example_SimpleGraphics PUBLIC battery::core)

@@ -1,7 +1,7 @@
 
-#include "battery/core/folders.hpp"
-#include "battery/core/extern/platform_folders.h"
-#include "battery/core/internal/windows.hpp"
+#include "battery/folders.hpp"
+#include "battery/extern/platform_folders.h"
+#include "battery/internal/windows.hpp"
 
 namespace b {
 

@@ -61,7 +61,7 @@ function(b_add_module module_name)
 
         # Mark the module as loaded globally, for all compiled targets
         set(B_MODULE_LOADED_${module_name} ON CACHE INTERNAL "" FORCE)
-        target_compile_definitions(battery_core_no_main PUBLIC B_MODULE_LOADED_${module_name})
+        target_compile_definitions(battery_core PUBLIC B_MODULE_LOADED_${module_name})
     endif()
 
 endfunction()

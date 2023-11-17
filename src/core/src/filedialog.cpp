@@ -1,10 +1,10 @@
 
-#include "battery/core/filedialog.hpp"
-#include "battery/core.hpp"
+#include "battery/filedialog.hpp"
+#include "battery/battery.hpp"
 #include <source_location>
 
 #ifdef B_OS_WINDOWS
-#include "battery/core/internal/windows.hpp"
+#include "battery/internal/windows.hpp"
 #include <shobjidl.h>
 #endif
 

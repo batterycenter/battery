@@ -1,3 +1,3 @@
 #pragma once
 
-#include "battery/core.hpp"
+#include "battery/battery.hpp"

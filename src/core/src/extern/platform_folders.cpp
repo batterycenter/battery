@@ -33,7 +33,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 // NOLINTBEGIN
-#include "battery/core/extern/platform_folders.h"                                   // BATTERY MODIFIED
+#include "battery/extern/platform_folders.h"                                   // BATTERY MODIFIED
 #include <iostream>
 #include <stdexcept>
 #include <cstdio>

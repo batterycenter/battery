@@ -18,7 +18,7 @@
 // It has been heavily modified and modernized to work with battery.
 //
 
-#include "battery/core/tray/components/toggle.hpp"
+#include "battery/tray/components/toggle.hpp"
 
 namespace b::tray {
 

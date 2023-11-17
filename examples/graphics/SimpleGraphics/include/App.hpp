@@ -1,32 +1,34 @@
 #pragma once
 
-#include "battery/core.hpp"
-//#include "battery/graphics.hpp"
+#include "battery/battery.hpp"
 
-//class MainWindow : public b::BaseWindow {
-//public:
-//    MainWindow() = default;
-//
-//    sf::Font font;
-//    sf::Texture battery;
-//    b::vec2 position = { 100.0f, 100.0f };
-//    b::vec2 velocity = { 1.0f, 1.0f };
-//
-//    void onAttach() override;
-//    void onUpdate() override;
-//    void onDetach() override;
-//};
+class MainWindow : public b::Window {
+public:
+    MainWindow() = default;
 
-//class App : public b::BaseApplication {
-//public:
-//    App() = default;
-//
-//    inline static MainWindow* s_mainWindow;
-//
-//    void onSetup() override {
-//        this->attachWindow<MainWindow>(&s_mainWindow);
-//    }
-//
-//    void onUpdate() override {}
-//    void onCleanup() override {}
-//};
+    b::Vec2 position = { 100.0f, 100.0f };
+    b::Vec2 velocity = { 1.0f, 1.0f };
+
+    void onAttach() override {}
+    void onUpdate() override {}
+    void onDetach() override {}
+};
+
+class App : public b::Application {
+public:
+    App() = default;
+
+    MainWindow window;
+
+    void onSetup() override {
+        window.create("Test test", { 800, 600 });
+    }
+
+    void onUpdate() override {
+        window.update();
+    }
+
+    void onClose() override {
+
+    }
+};

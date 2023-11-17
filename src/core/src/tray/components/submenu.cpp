@@ -18,8 +18,8 @@
 // It has been heavily modified and modernized to work with battery.
 //
 
-#include "battery/core/tray/core/entry.hpp"
-#include "battery/core/tray/components/submenu.hpp"
+#include "battery/tray/core/entry.hpp"
+#include "battery/tray/components/submenu.hpp"
 
 namespace b::tray {
 

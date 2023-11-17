@@ -1,5 +1,5 @@
 
-#include "battery/core/file_watcher.hpp"
+#include "battery/file_watcher.hpp"
 
 namespace b {
 

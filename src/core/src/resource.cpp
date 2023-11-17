@@ -1,9 +1,9 @@
 
-#include "battery/core/resource.hpp"
-#include "battery/core/folders.hpp"
-#include "battery/core/fs.hpp"
-#include "battery/core/uuid.hpp"
-#include "battery/core/base64.hpp"
+#include "battery/resource.hpp"
+#include "battery/folders.hpp"
+#include "battery/fs.hpp"
+#include "battery/uuid.hpp"
+#include "battery/base64.hpp"
 
 #include "utf8.h"
 

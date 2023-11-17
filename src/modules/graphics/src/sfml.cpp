@@ -5,8 +5,8 @@
 #include "battery/graphics/widgets/all.hpp"
 #include "battery/graphics/font_stack.hpp"
 #include "battery/graphics/application.hpp"
-#include "battery/core/log.hpp"
-#include "battery/core/constants.hpp"
+#include "battery/log.hpp"
+#include "battery/constants.hpp"
 
 namespace b {
 

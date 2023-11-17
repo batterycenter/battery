@@ -1,6 +1,6 @@
 
-#include "battery/core/uuid.hpp"
-#include "battery/core/extern/uuidv4.h"
+#include "battery/uuid.hpp"
+#include "battery/extern/uuidv4.h"
 
 #include <iostream>
 

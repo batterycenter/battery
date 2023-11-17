@@ -18,8 +18,8 @@
 // It has been heavily modified and modernized to work with battery.
 //
 
-#include "battery/core/tray/core/entry.hpp"
-#include "battery/core/tray/components/separator.hpp"
+#include "battery/tray/core/entry.hpp"
+#include "battery/tray/components/separator.hpp"
 
 namespace b::tray {
 

@@ -133,6 +133,10 @@ function(b_add_library TARGET TYPE)
     set(multiValueArguments TARGETS)
     cmake_parse_arguments(ARGS "${options}" "${singleValueArguments}" "${multiValueArguments}" ${ARGN})
 
+    if (NOT TYPE STREQUAL "STATIC" AND NOT TYPE STREQUAL "SHARED")
+        message(FATAL_ERROR "b_add_library expects a library type of either STATIC or SHARED, not '${TYPE}'")
+    endif ()
+
     add_library(${TARGET} ${TYPE} ${ARGS_UNPARSED_ARGUMENTS})
     if (ARGS_ALIAS)
         add_library(${ARGS_ALIAS} ALIAS ${TARGET})

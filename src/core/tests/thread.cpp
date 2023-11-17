@@ -1,5 +1,5 @@
 
-#include "battery/core.hpp"
+#include "battery/battery.hpp"
 #include <gtest/gtest.h>
 
 class S {

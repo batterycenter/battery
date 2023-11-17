@@ -1,12 +1,11 @@
 
-#include "battery/core/main.hpp"
-#include "battery/core/string.hpp"
-#include "battery/core/log.hpp"
-#include "battery/core/folders.hpp"
-#include "battery/core/messages.hpp"
-#include "battery/core/time.hpp"
-#include "battery/core/thread.hpp"
-#include "battery/core/internal/windows.hpp"
+#include "battery/string.hpp"
+#include "battery/log.hpp"
+#include "battery/folders.hpp"
+#include "battery/messages.hpp"
+#include "battery/time.hpp"
+#include "battery/thread.hpp"
+#include "battery/internal/windows.hpp"
 
 namespace b {
 

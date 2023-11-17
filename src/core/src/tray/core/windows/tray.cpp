@@ -20,17 +20,17 @@
 
 #ifdef B_OS_WINDOWS
 
-#include "battery/core/string.hpp"
-#include "battery/core/resource.hpp"
-#include "battery/core/constants.hpp"
-#include "battery/core/tray/core/entry.hpp"
-#include "battery/core/tray/core/windows/tray.hpp"
-#include "battery/core/tray/components/button.hpp"
-#include "battery/core/tray/components/label.hpp"
-#include "battery/core/tray/components/separator.hpp"
-#include "battery/core/tray/components/submenu.hpp"
-#include "battery/core/tray/components/syncedtoggle.hpp"
-#include "battery/core/tray/components/toggle.hpp"
+#include "battery/string.hpp"
+#include "battery/resource.hpp"
+#include "battery/constants.hpp"
+#include "battery/tray/core/entry.hpp"
+#include "battery/tray/core/windows/tray.hpp"
+#include "battery/tray/components/button.hpp"
+#include "battery/tray/components/label.hpp"
+#include "battery/tray/components/separator.hpp"
+#include "battery/tray/components/submenu.hpp"
+#include "battery/tray/components/syncedtoggle.hpp"
+#include "battery/tray/components/toggle.hpp"
 
 #include <stdexcept>
 #include <Windows.h>

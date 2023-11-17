@@ -1,5 +1,5 @@
 
-#include "battery/core/error.hpp"
+#include "battery/error.hpp"
 
 #include <array>
 #include <cstring>
