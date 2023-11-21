@@ -22,16 +22,9 @@ namespace b {
 
     Window::Window() {
         m_windowPositionJsonFilePath = b::Folders::AppConfigDir() / "windowposition.cache";
-        m_windowIDs.insert({ SDL_GetWindowID(m_sdlWindow), *this });
     }
 
     Window::~Window() noexcept {
-        m_windowIDs.erase(SDL_GetWindowID(m_sdlWindow));
-
-        if (m_options.rememberWindowPosition) {
-            writeCachedWindowState();
-        }
-
         close();
     }
 
@@ -76,6 +69,7 @@ namespace b {
                 static_cast<int>(newSize.y),
                 flags
         );
+        m_windowIDs.insert({ SDL_GetWindowID(m_sdlWindow), *this });
 
         if (maximized) {
 
@@ -98,6 +92,12 @@ namespace b {
 
     void Window::close() {
         if (m_sdlWindow) {
+
+            if (m_options.rememberWindowPosition) {
+                writeCachedWindowState();
+            }
+
+            m_windowIDs.erase(SDL_GetWindowID(m_sdlWindow));
             SDL_DestroyWindow(m_sdlWindow);
             m_sdlWindow = nullptr;
         }

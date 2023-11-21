@@ -29,6 +29,6 @@ public:
     }
 
     void onClose() override {
-
+        window.close();
     }
 };
