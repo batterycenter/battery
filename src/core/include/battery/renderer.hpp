@@ -1,6 +1,7 @@
 #pragma once
 
 #include <imgui.h>
+#include "window.hpp"
 
 struct SDL_Window;
 struct SDL_Renderer;
@@ -8,23 +9,23 @@ typedef void *SDL_GLContext;
 
 namespace b {
 
-    class Renderer {
+    class RenderWindow : public Window {
     public:
-        explicit Renderer(SDL_Window* sdlWindow);
-        ~Renderer();
+        RenderWindow(const std::string& title, const b::Vec2& size, std::optional<WindowOptions> options = {});
+        ~RenderWindow();
 
         void clear(const ImColor& color);
 
-        void render();
+        void prepareFrame();
+        void renderFrame();
 
         // Prevent all move and assignment operations because of the raw pointers
-        Renderer(const Renderer&) = delete;
-        Renderer& operator=(const Renderer&) = delete;
-        Renderer(Renderer&&) = delete;
-        Renderer& operator=(Renderer&&) = delete;
+        RenderWindow(const RenderWindow&) = delete;
+        RenderWindow& operator=(const RenderWindow&) = delete;
+        RenderWindow(RenderWindow&&) = delete;
+        RenderWindow& operator=(RenderWindow&&) = delete;
 
     private:
-        SDL_Window* m_sdlWindowReference {};  // This pointer is only a reference and DOES NOT OWN the window!!!
         SDL_Renderer* m_sdlRenderer {};
     };
 

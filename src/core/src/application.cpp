@@ -21,7 +21,7 @@ namespace b {
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
         IMG_Init(IMG_INIT_PNG);
 
-        window = std::make_unique<b::Window>(Constants::DefaultWindowTitle(), Constants::DefaultWindowSize());
+        window = std::make_unique<b::RenderWindow>(Constants::DefaultWindowTitle(), Constants::DefaultWindowSize());
     }
 
     Application::~Application() {
@@ -109,7 +109,13 @@ namespace b {
             if (!this->callUpdate()) {
                 close();
             }
-            window->render();
+
+            window->prepareFrame();
+            if (!this->callRender()) {
+                close();
+            }
+            window->renderFrame();
+
             sleep(m_requestedFrametime - (b::time() - lastFrame));
             m_actualFrametime = b::time() - lastFrame;
             if (m_actualFrametime > 0.0) {
@@ -155,6 +161,10 @@ namespace b {
 
     bool Application::callUpdate() {
         return CatchExceptions("b::application::update()", &Application::onUpdate, this);
+    }
+
+    bool Application::callRender() {
+        return CatchExceptions("b::application::render()", &Application::onRender, this);
     }
 
     bool Application::callClose() {

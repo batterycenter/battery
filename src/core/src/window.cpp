@@ -51,7 +51,7 @@ namespace b {
         }
 
         // Setup SDL window flags
-        int flags = 0;
+        uint32_t flags = 0;
         if (m_options.startAsVisible) {
             flags |= SDL_WINDOW_SHOWN;
         }
@@ -72,15 +72,10 @@ namespace b {
                 flags | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI
         );
         m_sdlWindowID = SDL_GetWindowID(m_sdlWindow);
-        m_windowIDs.insert({ m_sdlWindowID, *this });
         updateWin32DarkMode();
 
-//        SDL_SetHint(SDL_HINT_WINDOWS_DPI_SCALING, "1");
-
-        m_renderer = std::make_unique<Renderer>(m_sdlWindow);
-
         if (maximized) {
-
+            maximize();
         }
 
         // Load default battery icon
@@ -89,11 +84,11 @@ namespace b {
 
     Window::~Window() noexcept {
         if (m_sdlWindow) {
-            m_renderer.reset();
-
-            writeCachedWindowState({ getSize(), getPosition(), isMaximized() });
-
-            m_windowIDs.erase(m_sdlWindowID);
+            bool maximized = isMaximized();
+            if (maximized) {
+                restore();
+            }
+            writeCachedWindowState({ getSize(), getPosition(), maximized });
             SDL_DestroyWindow(m_sdlWindow);
             m_sdlWindow = nullptr;
         }
@@ -186,16 +181,10 @@ namespace b {
     }
 
     void Window::setPosition(const b::Vec2& position) {
-        if (!m_sdlWindow) {
-            throw b::window_not_created_error();
-        }
         SDL_SetWindowPosition(m_sdlWindow, static_cast<int>(position.x), static_cast<int>(position.y));
     }
 
     b::Vec2 Window::getPosition() const {
-        if (!m_sdlWindow) {
-            throw b::window_not_created_error();
-        }
         int x = 0;
         int y = 0;
         SDL_GetWindowPosition(m_sdlWindow, &x, &y);
@@ -203,16 +192,10 @@ namespace b {
     }
 
     void Window::setSize(const b::Vec2& size) {
-        if (!m_sdlWindow) {
-            throw b::window_not_created_error();
-        }
         SDL_SetWindowSize(m_sdlWindow, static_cast<int>(size.x), static_cast<int>(size.y));
     }
 
     b::Vec2 Window::getSize() const {
-        if (!m_sdlWindow) {
-            throw b::window_not_created_error();
-        }
         int x = 0;
         int y = 0;
         SDL_GetWindowSize(m_sdlWindow, &x, &y);
@@ -220,25 +203,16 @@ namespace b {
     }
 
     void Window::focus() {
-        if (!m_sdlWindow) {
-            throw b::window_not_created_error();
-        }
         SDL_RaiseWindow(m_sdlWindow);
         SDL_SetWindowInputFocus(m_sdlWindow);
     }
 
     bool Window::hasFocus() const {
-        if (!m_sdlWindow) {
-            throw b::window_not_created_error();
-        }
         auto flags = SDL_GetWindowFlags(m_sdlWindow);
         return flags & SDL_WINDOW_INPUT_FOCUS || flags & SDL_WINDOW_MOUSE_FOCUS;
     }
 
     void Window::setTitle(const std::string& title) {
-        if (!m_sdlWindow) {
-            throw b::window_not_created_error();
-        }
         SDL_SetWindowTitle(m_sdlWindow, title.c_str());
     }
 
@@ -252,10 +226,6 @@ namespace b {
 #else
 #error not implemented
 #endif
-    }
-
-    void Window::update() {
-
     }
 
 //    void Window::invokeUpdate() {
@@ -419,12 +389,6 @@ namespace b {
                 static_cast<uint32_t>(color.Value.y * 255) << 8 |
                 static_cast<uint32_t>(color.Value.x * 255);
         return colorref;
-    }
-
-    void Window::render() {
-        if (m_renderer) {
-            m_renderer->render();
-        }
     }
 
     void Window::updateWin32DarkMode() {

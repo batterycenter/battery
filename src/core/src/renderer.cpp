@@ -9,10 +9,11 @@
 
 namespace b {
 
-    Renderer::Renderer(SDL_Window* sdlWindow) : m_sdlWindowReference(sdlWindow) {
+    RenderWindow::RenderWindow(const std::string& title, const b::Vec2& size, std::optional<WindowOptions> options)
+            : Window(title, size, options) {
 
         // Setup SDL renderer
-        m_sdlRenderer = SDL_CreateRenderer(m_sdlWindowReference, -1, SDL_RENDERER_ACCELERATED);
+        m_sdlRenderer = SDL_CreateRenderer(m_sdlWindow, -1, SDL_RENDERER_ACCELERATED);
         if (m_sdlRenderer == nullptr) {
             throw std::runtime_error(b::format("b::Window: Failed to create SDL renderer: {}",
                                                SDL_GetError()));
@@ -22,7 +23,7 @@ namespace b {
         ImGui::CreateContext();
 
         // Setup ImGui
-        if (!ImGui_ImplSDL2_InitForSDLRenderer(m_sdlWindowReference, m_sdlRenderer)) {
+        if (!ImGui_ImplSDL2_InitForSDLRenderer(m_sdlWindow, m_sdlRenderer)) {
             throw std::runtime_error(b::format("b::Window: Failed to init ImGui SDL2 backend: {}",
                                                SDL_GetError()));
         }
@@ -32,7 +33,7 @@ namespace b {
         }
     }
 
-    Renderer::~Renderer() {
+    RenderWindow::~RenderWindow() {
         ImGui_ImplSDLRenderer2_Shutdown();
         ImGui_ImplSDL2_Shutdown();
         ImGui::DestroyContext();
@@ -42,7 +43,7 @@ namespace b {
         }
     }
 
-    void Renderer::clear(const ImColor& color) {
+    void RenderWindow::clear(const ImColor& color) {
         SDL_SetRenderDrawColor(m_sdlRenderer,
                                static_cast<uint8_t>(color.Value.x * 255.f),
                                static_cast<uint8_t>(color.Value.y * 255.f),
@@ -51,7 +52,7 @@ namespace b {
         SDL_RenderClear(m_sdlRenderer);
     }
 
-    void Renderer::render() {
+    void RenderWindow::prepareFrame() {
         SDL_GL_SetSwapInterval(1);
 
         clear(b::Constants::DefaultWindowBackgroundColor());
@@ -59,15 +60,12 @@ namespace b {
         ImGui_ImplSDLRenderer2_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
+    }
 
-        // Here do something
-        ImGui::ShowDemoWindow();
-
+    void RenderWindow::renderFrame() {
         ImGui::Render();
         ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
         SDL_RenderPresent(m_sdlRenderer);
-
-//        SDL_GL_SwapWindow(m_sdlWindowReference);
     }
 
 }   // namespace b

@@ -20,6 +20,10 @@ public:
 //        b::println("Frame {}", framecount());
     }
 
+    void onRender() override {
+        ImGui::ShowDemoWindow();
+    }
+
     void onClose() override {
         b::log::info("Application closed");
     }

@@ -6,7 +6,6 @@
 #include "vec.hpp"
 #include "resource_loader.hpp"
 #include "eventbus.hpp"
-#include "renderer.hpp"
 #include "glaze/glaze.hpp"
 #include "imgui.h"
 
@@ -78,8 +77,6 @@ namespace b {
         virtual void onRender() {};
         virtual void onDetach() {};
 
-        void setWindowPositionJsonFilePath(const b::fs::path& filename);
-
         void showInTaskbar();
         void hideFromTaskbar();
         void maximize();
@@ -109,8 +106,6 @@ namespace b {
         Window(Window&&) = delete;
         Window& operator=(Window&&) = delete;
 
-        void update();
-
         template<typename T, typename... TArgs>
         auto attachEventHandler(TArgs&&... args) {
             return m_eventbus.attachEventHandler<T>(std::forward<TArgs>(args)...);
@@ -121,10 +116,6 @@ namespace b {
             return m_eventbus.dispatchEvent<T>(std::forward<TArgs>(args)...);
         }
 
-        static auto& getWindowIDs() {
-            return m_windowIDs;
-        }
-
         uint32_t getSDLWindowID() const {
             return m_sdlWindowID;
         }
@@ -132,14 +123,10 @@ namespace b {
         bool processImGuiSDLEvent(SDL_Event* event);
         bool processSDLWindowEvent(SDL_Event* event);
 
-        void render();
-
     protected:
 
         SDL_Window* m_sdlWindow {};
-        std::unique_ptr<Renderer> m_renderer;
         uint32_t m_sdlWindowID = 0;
-        inline static std::unordered_map<uint32_t, std::reference_wrapper<Window>> m_windowIDs;
         inline static bool m_windowExists {};
 
     private:

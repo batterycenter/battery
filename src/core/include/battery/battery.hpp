@@ -42,6 +42,7 @@
 #include "messages.hpp"
 #include "process.hpp"
 #include "random.hpp"
+#include "renderer.hpp"
 #include "renderwindow.hpp"
 #include "resource.hpp"
 #include "resource_loader.hpp"

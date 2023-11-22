@@ -6,13 +6,13 @@
 #include "string.hpp"
 #include "eventbus.hpp"
 #include "events.hpp"
-#include "window.hpp"
+#include "renderer.hpp"
 
 namespace b {
 
     class Application {
     public:
-        std::unique_ptr<Window> window;
+        std::unique_ptr<RenderWindow> window;
 
         Application();
         virtual ~Application();
@@ -28,6 +28,7 @@ namespace b {
 
         virtual void onSetup() = 0;
         virtual void onUpdate() = 0;
+        virtual void onRender() = 0;
         virtual void onClose() = 0;
 
         void setRequestedFramerate(double requestedFramerate);
@@ -61,6 +62,7 @@ namespace b {
 
         bool callSetup();
         bool callUpdate();
+        bool callRender();
         bool callClose();
         void pollEvents();
 
