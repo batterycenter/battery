@@ -37,6 +37,7 @@ b_add_source_files(battery_core
         src/folders.cpp
         src/format.cpp
         src/fs.cpp
+        src/imguilua.cpp
         src/process.cpp
         src/random.cpp
         src/renderer.cpp
@@ -66,6 +67,8 @@ target_link_libraries(battery_core PUBLIC
         SDL2_image::SDL2_image-static
         imgui::imgui
         EventBus
+        lua_static
+        LuaBridge
 )
 
 if (WIN32)

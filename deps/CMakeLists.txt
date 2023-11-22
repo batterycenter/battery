@@ -20,6 +20,12 @@ b_add_library(imgui STATIC ALIAS imgui::imgui
 target_include_directories(imgui PUBLIC "imgui")
 target_include_directories(imgui PRIVATE "SDL/include")
 
+# Lua
+add_subdirectory(Lua)
+
+# LuaBridge3
+add_subdirectory(LuaBridge3)
+
 # reproc
 set(REPROC++ ON CACHE BOOL "" FORCE)
 add_subdirectory(reproc)

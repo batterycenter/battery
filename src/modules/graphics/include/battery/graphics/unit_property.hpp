@@ -6,7 +6,7 @@
 
 namespace b {
 
-    enum class Unit {                   // BE CAREFUL WHEN CHANGING!!! (implementations check == COLOR_HEX as synonym for NOT NUMERIC)
+    enum class Unit {  // BE CAREFUL WHEN CHANGING!!! (implementations check == COLOR_HEX as synonym for NOT NUMERIC)
         NONE,               // Invalid
         UNITLESS,           // eg. '2.7'
         PIXEL,              // eg. '35.2px'
