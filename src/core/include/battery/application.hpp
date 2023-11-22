@@ -6,11 +6,14 @@
 #include "string.hpp"
 #include "eventbus.hpp"
 #include "events.hpp"
+#include "renderwindow.hpp"
 
 namespace b {
 
     class Application {
     public:
+        RenderWindow window;
+
         Application();
         virtual ~Application();
 
@@ -37,6 +40,11 @@ namespace b {
         [[nodiscard]] int run(const std::string& appname, int argc, const char** argv);
 
         template<typename T, typename... TArgs>
+        auto attachEventHandler(TArgs&&... args) {
+            return m_eventbus.attachEventHandler<T>(std::forward<TArgs>(args)...);
+        }
+
+        template<typename T, typename... TArgs>
         auto dispatchEvent(TArgs&&... args) {
             return m_eventbus.dispatchEvent<T>(std::forward<TArgs>(args)...);
         }
@@ -61,9 +69,9 @@ namespace b {
 
         b::EventBus m_eventbus;
 
-        std::vector<std::string> m_args;
         double m_actualFramerate { 0.0 };
         double m_actualFrametime { 0.0 };
+        std::vector<std::string> m_args;
         uint64_t m_framecount { 0 };
         int m_exitCode { 0 };
 

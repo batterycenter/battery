@@ -43,6 +43,7 @@ b_add_source_files(battery_core
         src/resource.cpp
         src/signal.cpp
         src/string.cpp
+        src/thread.cpp
         src/time.cpp
         src/uuid.cpp
         src/window.cpp)

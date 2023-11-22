@@ -1,6 +1,7 @@
 #pragma once
 
 #include "dexode/EventBus.hpp"
+#include "battery/log.hpp"
 
 namespace b {
 

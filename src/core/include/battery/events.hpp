@@ -7,7 +7,7 @@ namespace b {
 
     struct Event {};
 
-    struct ApplicationQuitEvent : public Event {};          // SDL_QUIT
+//    struct ApplicationQuitEvent : public Event {};          // SDL_QUIT
     struct WindowCloseEvent : public Event {};              // SDL_WINDOWEVENT_CLOSE
     struct WindowResizeEvent : public Event {               // SDL_WINDOWEVENT_RESIZED
         b::Vec2 size;

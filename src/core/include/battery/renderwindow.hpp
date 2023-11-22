@@ -1,7 +1,6 @@
 #pragma once
 
 #include "battery/window.hpp"
-#include "imgui.h"
 
 namespace b {
 
@@ -54,14 +53,13 @@ namespace b {
         std::optional<std::string> m_errorMessage;
 
     private:
-        void processEvent(SDL_Event* event) override;
-
         void renderContent();
         void updateWin32DarkMode();
         void processWindowEvents();
         void renderErrorMessage(const std::string& error);
         void attach();
         void detach();
+
 
 //        b::widgets::panel m_errorPanelWidget;
 //        b::widgets::text m_errorTextWidget;

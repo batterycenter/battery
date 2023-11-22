@@ -2,33 +2,25 @@
 
 #include "battery/battery.hpp"
 
-class MainWindow : public b::Window {
-public:
-    MainWindow() = default;
-
-    b::Vec2 position = { 100.0f, 100.0f };
-    b::Vec2 velocity = { 1.0f, 1.0f };
-
-    void onAttach() override {}
-    void onUpdate() override {}
-    void onDetach() override {}
-};
-
 class App : public b::Application {
 public:
     App() = default;
 
-    MainWindow window;
-
     void onSetup() override {
-        window.create("Test test", { 800, 600 });
+        window.attachEventHandler<b::WindowMovedEvent>([](const auto& event) {
+            b::log::info("Window moved to {}, {}", event.position.x, event.position.y);
+        });
+        window.attachEventHandler<b::WindowCloseEvent>([&](const auto&  /*event*/) {
+            b::log::info("Window close");
+            close();
+        });
     }
 
     void onUpdate() override {
-        window.update();
+//        b::println("Frame {}", framecount());
     }
 
     void onClose() override {
-        window.close();
+        b::log::info("Application closed");
     }
 };

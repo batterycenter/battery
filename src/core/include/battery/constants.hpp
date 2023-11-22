@@ -1,6 +1,8 @@
 #pragma once
 
 #include "string.hpp"
+#include "vec.hpp"
+#include "imgui.h"
 
 namespace b {
 
@@ -27,6 +29,11 @@ namespace b {
         bool CatchCommonExceptionsDefault();
         Platform Platform();
         Arch Architecture();
+
+        ImColor DefaultWindowBackgroundColor();
+        std::pair<std::string, double> DefaultFont();
+        b::Vec2 DefaultWindowSize();
+        std::string DefaultWindowTitle();
 
         double Pi();
 

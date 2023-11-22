@@ -14,16 +14,18 @@ namespace b {
 
     Application::Application() {
         if (m_instance != nullptr) {
-            throw std::runtime_error("Only one instance of b::console_application "
-                                     "or b::application is ever allowed to exist");
+            throw std::runtime_error("Only one instance of b::Application is ever allowed to exist");
         }
         m_instance = this;
 
-        SDL_Init(SDL_INIT_EVERYTHING);
+        SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
         IMG_Init(IMG_INIT_PNG);
+
+        window.create(Constants::DefaultWindowTitle(), Constants::DefaultWindowSize());
     }
 
     Application::~Application() {
+        window.destroy();
         IMG_Quit();
         SDL_Quit();
         m_instance = nullptr;
@@ -31,7 +33,7 @@ namespace b {
 
     Application& Application::get() {
         if (m_instance == nullptr) {
-            throw std::runtime_error("No instance of b::console_application or b::application exists");
+            throw std::runtime_error("No instance of b::Application exists");
         }
         return *m_instance;
     }
@@ -121,6 +123,9 @@ namespace b {
             }
             sleep(m_requestedFrametime - (b::time() - lastFrame));
             m_actualFrametime = b::time() - lastFrame;
+            if (m_actualFrametime > 0.0) {
+                m_actualFramerate = 1.0 / m_actualFrametime;
+            }
             lastFrame = b::time();
 
             postUpdate();
@@ -152,9 +157,6 @@ namespace b {
     }
 
     void Application::postUpdate() {
-        if (m_actualFrametime > 0.0) {
-            m_actualFramerate = 1.0 / m_actualFrametime;
-        }
         m_framecount++;
     }
 
@@ -174,112 +176,20 @@ namespace b {
         SDL_Event event;
 
         while (SDL_PollEvent(&event)) {
-            auto idValid = Window::m_windowIDs.contains(event.window.windowID);
-            auto getWindow = [&]() -> Window& {
-                if (!idValid) {
-                    throw b::impossible_situation_error("[Application::pollEvents] Window ID is invalid");
-                }
-                return Window::m_windowIDs.at(event.window.windowID);
-            };
+            window.processSDLEvent(&event);
 
             switch (event.type) {
 
                 // This is the global quit: When the last window was closed, including SIGINT
-                case SDL_QUIT:
-                    if (!dispatchEvent<ApplicationQuitEvent>()) {
-                        close();
-                    }
-                    if (idValid) {
-                        auto& window = getWindow();
-                        if (!window.dispatchEvent<WindowCloseEvent>()) {
-                            window.close();
-                        }
-                    }
-                    break;
+//                case SDL_QUIT:
+//                    if (!dispatchEvent<ApplicationQuitEvent>()) {
+//                        close();
+//                    }
+//                    break;
 
-                // Close event but only per window
-                case SDL_WINDOWEVENT_CLOSE:
-                    if (idValid) {
-                        auto& window = getWindow();
-                        if (!window.dispatchEvent<WindowCloseEvent>()) {
-                            window.close();
-                        }
-                    }
-                    break;
-
-                case SDL_WINDOWEVENT_RESIZED:
-                    if (idValid) {
-                        getWindow().dispatchEvent<WindowResizeEvent>(
-                                b::Vec2(event.window.data1, event.window.data2)
-                            );
-                    }
-                    break;
-
-                case SDL_WINDOWEVENT_FOCUS_LOST:
-                    if (idValid) {
-                        getWindow().dispatchEvent<WindowLostFocusEvent>();
-                    }
-                    break;
-
-                case SDL_WINDOWEVENT_FOCUS_GAINED:
-                    if (idValid) {
-                        getWindow().dispatchEvent<WindowGainedFocusEvent>();
-                    }
-                    break;
-
-                case SDL_WINDOWEVENT_MAXIMIZED:
-                    if (idValid) {
-                        getWindow().dispatchEvent<WindowMaximizedEvent>();
-                    }
-                    break;
-
-                case SDL_WINDOWEVENT_MINIMIZED:
-                    if (idValid) {
-                        getWindow().dispatchEvent<WindowMinimizedEvent>();
-                    }
-                    break;
-
-                case SDL_WINDOWEVENT_RESTORED:
-                    if (idValid) {
-                        getWindow().dispatchEvent<WindowRestoredEvent>();
-                    }
-                    break;
-
-                case SDL_WINDOWEVENT_MOVED:
-                    if (idValid) {
-                        getWindow().dispatchEvent<WindowMovedEvent>(
-                                b::Vec2(event.window.data1, event.window.data2)
-                            );
-                    }
-                    break;
-
-                case SDL_WINDOWEVENT_HIDDEN:
-                    if (idValid) {
-                        getWindow().dispatchEvent<WindowHiddenEvent>();
-                    }
-                    break;
-
-                case SDL_WINDOWEVENT_SHOWN:
-                    if (idValid) {
-                        getWindow().dispatchEvent<WindowShownEvent>();
-                    }
-                    break;
-
-                case SDL_WINDOWEVENT_EXPOSED:
-                    if (idValid) {
-                        getWindow().dispatchEvent<WindowExposedEvent>();
-                    }
-                    break;
-
-                case SDL_WINDOWEVENT_ENTER:
-                    if (idValid) {
-                        getWindow().dispatchEvent<MouseEnteredWindowEvent>();
-                    }
-                    break;
-
-                case SDL_WINDOWEVENT_LEAVE:
-                    if (idValid) {
-                        getWindow().dispatchEvent<MouseLeftWindowEvent>();
+                case SDL_WINDOWEVENT:
+                    if (event.window.windowID == window.getSDLWindowID()) {
+                        window.processSDLWindowEvent(&event);
                     }
                     break;
 

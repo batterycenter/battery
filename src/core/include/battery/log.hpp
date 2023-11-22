@@ -91,4 +91,10 @@ namespace b {
     /// \param args The arguments to format
     using fmt::print;
 
+    template<typename... T>
+    void println(fmt::format_string<T...> fmt, T&&... args) {
+        fmt::print(fmt, std::forward<T>(args)...);
+        fmt::print("\n");
+    }
+
 } // namespace b

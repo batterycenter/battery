@@ -55,4 +55,20 @@ namespace b {
 #endif
     }
 
+    ImColor Constants::DefaultWindowBackgroundColor() {
+        return { 20, 20, 20, 255 };
+    }
+
+    std::pair<std::string, double> Constants::DefaultFont() {
+        return { "roboto-regular", 18.f };
+    }
+
+    b::Vec2 Constants::DefaultWindowSize() {
+        return { 800, 600 };
+    }
+
+    std::string Constants::DefaultWindowTitle() {
+        return "Battery Window";
+    }
+
 }  // namespace b

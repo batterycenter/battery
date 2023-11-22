@@ -79,7 +79,7 @@ namespace b {
         print_production_warning();
 
         int result = -1;
-        b::thread::catch_common_exceptions([&result, argc, argv]() {
+        b::thread::catchCommonExceptions([&result, argc, argv]() {
 //            result = b::main(parse_cli(argc, argv));
         });
         return result;

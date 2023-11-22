@@ -1,7 +1,11 @@
 
+#include "battery/application.hpp"
 #include "battery/window.hpp"
 #include "battery/fs.hpp"
 #include "battery/exception.hpp"
+
+#include "backends/imgui_impl_sdl2.h"
+#include "backends/imgui_impl_opengl3.h"
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_syswm.h"
@@ -25,7 +29,7 @@ namespace b {
     }
 
     Window::~Window() noexcept {
-        close();
+        destroy();
     }
 
     b::Application& Window::app() const {
@@ -34,14 +38,23 @@ namespace b {
 
     void Window::create(const std::string& title, const b::Vec2& size, std::optional<WindowOptions> options) {
 
-        b::Vec2 newSize = size;
-        b::Vec2 newPosition = (getPrimaryMonitorSize() - size) / 2.0;
-        bool maximized = false;
+        // Check if a window already exists
+        if (m_windowExists) {
+            throw std::runtime_error("b::Window: The ImGui SDL backend used by battery does not "
+                                     "support multiple windows yet and a window already exists.");
+        }
+        m_windowExists = true;
 
+        // Load options
         if (options) {
             m_options = *options;
             m_win32IDMActive = !m_options.useWin32ImmersiveDarkMode;
         }
+
+        // Calculate window size and position
+        b::Vec2 newSize = size;
+        b::Vec2 newPosition = (getPrimaryMonitorSize() - size) / 2.0;
+        bool maximized = false;
 
         // Restore the previous window position and size
         if (m_options.rememberWindowPosition) {
@@ -52,6 +65,7 @@ namespace b {
             }
         }
 
+        // Setup SDL window flags
         int flags = 0;
         if (m_options.startAsVisible) {
             flags |= SDL_WINDOW_SHOWN;
@@ -59,45 +73,73 @@ namespace b {
         else {
             flags |= SDL_WINDOW_HIDDEN;
         }
+        if (m_options.resizable) {
+            flags |= SDL_WINDOW_RESIZABLE;
+        }
 
-        // Create the window
+        // Create the SDL window
         m_sdlWindow = SDL_CreateWindow(
                 title.c_str(),
                 static_cast<int>(newPosition.x),
                 static_cast<int>(newPosition.y),
                 static_cast<int>(newSize.x),
                 static_cast<int>(newSize.y),
-                flags
+                flags | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI
         );
-        m_windowIDs.insert({ SDL_GetWindowID(m_sdlWindow), *this });
+        m_sdlWindowID = SDL_GetWindowID(m_sdlWindow);
+        m_windowIDs.insert({ m_sdlWindowID, *this });
+        updateWin32DarkMode();
 
         if (maximized) {
 
         }
 
-//        if (m_firstWindowCreation) {
-//            if (!ImGui::SFML::Init(getRenderWindow())) {
-//                throw std::runtime_error("Failed to initialize ImGui-SFML");
-//            }
-//
-//            b::make_default_themes_available();     // TODO: Move these to a better place
-//            b::LoadDefaultFonts();
-//
-//            m_firstWindowCreation = false;
-//        }
+        // setup Dear ImGui context
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+//        io.Fonts->AddFontFromFileTTF("verdana.ttf", 18.0f, NULL, NULL);
+
+//        setImGuiStyle();
+
+        // Setup SDL renderer
+        m_sdlRenderer = SDL_CreateRenderer(m_sdlWindow, -1,
+                                           SDL_RENDERER_ACCELERATED);
+        if (m_sdlRenderer == nullptr) {
+            throw std::runtime_error(b::format("b::Window: Failed to create SDL renderer: {}",
+                                               SDL_GetError()));
+        }
+
+        // Setup SDL OpenGL context
+        m_sdlGLContext = SDL_GL_CreateContext(m_sdlWindow);
+        if (m_sdlGLContext == nullptr) {
+            throw std::runtime_error(b::format("b::Window: Failed to create SDL OpenGL context: {}",
+                                               SDL_GetError()));
+        }
+
+        ImGui_ImplSDL2_InitForOpenGL(m_sdlWindow, m_sdlGLContext);
+        ImGui_ImplOpenGL3_Init();
 
         // Load default battery icon
         setIcon(b::Resource::FromBase64(b::Constants::BatteryIconBase64()));
     }
 
-    void Window::close() {
+    void Window::destroy() {
         if (m_sdlWindow) {
+
+            ImGui_ImplOpenGL3_Shutdown();
+            SDL_GL_DeleteContext(m_sdlGLContext);
+
+            ImGui_ImplSDL2_Shutdown();
+            SDL_DestroyRenderer(m_sdlRenderer);
+
+            ImGui::DestroyContext();
 
             if (m_options.rememberWindowPosition) {
                 writeCachedWindowState();
             }
 
-            m_windowIDs.erase(SDL_GetWindowID(m_sdlWindow));
+            m_windowIDs.erase(m_sdlWindowID);
             SDL_DestroyWindow(m_sdlWindow);
             m_sdlWindow = nullptr;
         }
@@ -267,12 +309,12 @@ namespace b {
     }
 
     void Window::update() {
-
+        updateWin32DarkMode();
     }
 
 //    void Window::invokeUpdate() {
 //
-//        updateWin32DarkMode();
+//
 //        mouse.setScrollDelta({});   // Reset scroll to zero
 //        processWindowEvents();
 //        mouse.updatePositionData(sf::Mouse::getPosition(getRenderWindow()));
@@ -321,6 +363,69 @@ namespace b {
 //            ImGui::PopFont();
 //        }
 //    }
+
+    bool Window::processSDLEvent(SDL_Event* event) {
+        return ImGui_ImplSDL2_ProcessEvent(event);
+    }
+
+    bool Window::processSDLWindowEvent(SDL_Event* event) {
+        switch (event->window.event) {
+            case SDL_WINDOWEVENT_CLOSE:
+                if (!dispatchEvent<WindowCloseEvent>()) {
+                    app().close();
+                }
+                return true;
+
+            case SDL_WINDOWEVENT_RESIZED:
+                dispatchEvent<WindowResizeEvent>(b::Vec2(event->window.data1, event->window.data2));
+                return true;
+
+            case SDL_WINDOWEVENT_FOCUS_LOST:
+                dispatchEvent<WindowLostFocusEvent>();
+                return true;
+
+            case SDL_WINDOWEVENT_FOCUS_GAINED:
+                dispatchEvent<WindowGainedFocusEvent>();
+                return true;
+
+            case SDL_WINDOWEVENT_MAXIMIZED:
+                dispatchEvent<WindowMaximizedEvent>();
+                return true;
+
+            case SDL_WINDOWEVENT_MINIMIZED:
+                dispatchEvent<WindowMinimizedEvent>();
+                return true;
+
+            case SDL_WINDOWEVENT_RESTORED:
+                dispatchEvent<WindowRestoredEvent>();
+                return true;
+
+            case SDL_WINDOWEVENT_MOVED:
+                dispatchEvent<WindowMovedEvent>(b::Vec2(event->window.data1, event->window.data2));
+                return true;
+
+            case SDL_WINDOWEVENT_HIDDEN:
+                dispatchEvent<WindowHiddenEvent>();
+                return true;
+
+            case SDL_WINDOWEVENT_SHOWN:
+                dispatchEvent<WindowShownEvent>();
+                return true;
+
+            case SDL_WINDOWEVENT_EXPOSED:
+                dispatchEvent<WindowExposedEvent>();
+                return true;
+
+            case SDL_WINDOWEVENT_ENTER:
+                dispatchEvent<MouseEnteredWindowEvent>();
+                return true;
+
+            case SDL_WINDOWEVENT_LEAVE:
+                dispatchEvent<MouseLeftWindowEvent>();
+                return true;
+        }
+        return false;
+    }
 
     bool Window::loadCachedWindowState() {
         if (m_windowPositionJsonFilePath.empty()) {

@@ -25,7 +25,6 @@
 #include "log.hpp"
 #include "time.hpp"
 #include "constants.hpp"
-#include "application.hpp"
 
 #ifndef __cpp_lib_jthread
 #error "Your compiler does not support std::jthread. Please use a newer compiler that has C++20 support."
@@ -56,22 +55,17 @@ namespace b {
         /// \param[in] function The function to execute in the thread
         /// \param[in] args Any number of parameters to pass to the function when calling it
         ///
-
         template <class Fn, class... Args>
         explicit thread(Fn&& func, Args&&... args)
           : std::jthread([func = std::forward<Fn>(func), ...args = std::forward<Args>(args), this]() mutable {
                 m_waitRunningPromise.set_value();
                 if constexpr (std::is_invocable_v<std::decay_t<Fn>, std::stop_token, std::decay_t<Args>...>) {
-                    if (!catch_common_exceptions(std::move(func), get_stop_token(), std::move(args)...)) {
-                        if (b::Application::instanceExists()) {
-                            b::Application::get().close();
-                        }
+                    if (!catchCommonExceptions(std::move(func), get_stop_token(), std::move(args)...)) {
+                        closeApplicationIfExists();
                     }
                 } else {
-                    if (!catch_common_exceptions(std::move(func), std::move(args)...)) {
-                        if (b::Application::instanceExists()) {
-                            b::Application::get().close();
-                        }
+                    if (!catchCommonExceptions(std::move(func), std::move(args)...)) {
+                        closeApplicationIfExists();
                     }
                 }
             }) {
@@ -79,22 +73,28 @@ namespace b {
           }
 
         ///
+        /// \brief Close a b::Application instance if one exists
+        /// \internal This function is used internally by b::thread
+        ///
+        static void closeApplicationIfExists();
+
+        ///
         /// \brief Run a function and catch all exceptions with nice error messages.
         /// \details Just specify a large lambda, containing everything to execute. When any exception is not handled and caught,
-        ///          an error is printed with an optional error message box. See `b::thread::enable_message_box_on_exception()`
-        ///          and `b::thread::enable_catch_common_exceptions()` to set this behaviour. If the message box is disabled,
-        ///          only the error message is printed to the console, if catch_common_exceptions is disabled, no exception
+        ///          an error is printed with an optional error message box. See `b::thread::enableMessageBoxOnException()`
+        ///          and `b::thread::enableCatchCommonExceptions()` to set this behaviour. If the message box is disabled,
+        ///          only the error message is printed to the console, if catchCommonExceptions is disabled, no exception
         ///          is caught at all. Even though the main thread is not a `b::thread`, the main thread is also impacted by
         ///          these settings. Although this function is used mainly internally, you could also use this function
         ///          to create your own safe thread.
         ///
         ///          Defaults: In Debug mode, both settings are enabled, in Release mode only the message box is disabled.
         /// \param[in] func The lambda function to execute safely
-        /// \see b::thread::enable_message_box_on_exception()
-        /// \see b::thread::enable_catch_common_exceptions()
+        /// \see b::thread::enableMessageBoxOnException()
+        /// \see b::thread::enableCatchCommonExceptions()
         ///
         template<class... Args>
-        inline static bool catch_common_exceptions(Args&&... args) {
+        inline static bool catchCommonExceptions(Args&&... args) {
             if (!m_catchCommonExceptionsEnabled) {            // Catching is disabled: Call and return
                 std::invoke(std::forward<Args>(args)...);
                 return true;
@@ -131,22 +131,22 @@ namespace b {
         }
 
         ///
-        /// \brief Specify the behaviour for `b::thread::catch_common_exceptions()`.
-        /// \details Please check `b::thread::catch_common_exceptions()` for an explanation.
+        /// \brief Specify the behaviour for `b::thread::catchCommonExceptions()`.
+        /// \details Please check `b::thread::catchCommonExceptions()` for an explanation.
         /// \param[in] enable if a message box should appear when an exception is caught
-        /// \see b::thread::catch_common_exceptions()
+        /// \see b::thread::catchCommonExceptions()
         ///
-        inline static void enable_message_box_on_exception(bool enable) {
+        inline static void enableMessageBoxOnException(bool enable) {
             m_messageBoxOnExceptionEnabled = enable;
         }
 
         ///
-        /// \brief Specify the behaviour for `b::thread::catch_common_exceptions()`.
-        /// \details Please check `b::thread::catch_common_exceptions()` for an explanation.
+        /// \brief Specify the behaviour for `b::thread::catchCommonExceptions()`.
+        /// \details Please check `b::thread::catchCommonExceptions()` for an explanation.
         /// \param[in] enable if exceptions should be caught at all
-        /// \see b::thread::catch_common_exceptions()
+        /// \see b::thread::catchCommonExceptions()
         ///
-        inline static void enable_catch_common_exceptions(bool enable) {
+        inline static void enableCatchCommonExceptions(bool enable) {
             m_catchCommonExceptionsEnabled = enable;
         }
 
