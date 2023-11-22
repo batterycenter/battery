@@ -6,13 +6,13 @@
 #include "string.hpp"
 #include "eventbus.hpp"
 #include "events.hpp"
-#include "renderwindow.hpp"
+#include "window.hpp"
 
 namespace b {
 
     class Application {
     public:
-        RenderWindow window;
+        std::unique_ptr<Window> window;
 
         Application();
         virtual ~Application();

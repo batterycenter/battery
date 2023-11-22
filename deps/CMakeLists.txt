@@ -15,7 +15,7 @@ b_add_library(imgui STATIC ALIAS imgui::imgui
         imgui/imgui_tables.cpp
         imgui/imgui_widgets.cpp
         imgui/backends/imgui_impl_sdl2.cpp
-        imgui/backends/imgui_impl_opengl3.cpp
+        imgui/backends/imgui_impl_sdlrenderer2.cpp
 )
 target_include_directories(imgui PUBLIC "imgui")
 target_include_directories(imgui PRIVATE "SDL/include")

@@ -5,7 +5,7 @@
 #include "battery/exception.hpp"
 
 #include "backends/imgui_impl_sdl2.h"
-#include "backends/imgui_impl_opengl3.h"
+#include "backends/imgui_impl_sdlrenderer2.h"
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_syswm.h"
@@ -24,19 +24,7 @@ namespace b {
         return b::Vec2(DM.w, DM.h);
     }
 
-    Window::Window() {
-        m_windowPositionJsonFilePath = b::Folders::AppConfigDir() / "windowposition.cache";
-    }
-
-    Window::~Window() noexcept {
-        destroy();
-    }
-
-    b::Application& Window::app() const {
-        return b::Application::get();
-    }
-
-    void Window::create(const std::string& title, const b::Vec2& size, std::optional<WindowOptions> options) {
+    Window::Window(const std::string& title, const b::Vec2& size, std::optional<WindowOptions> options) {
 
         // Check if a window already exists
         if (m_windowExists) {
@@ -56,12 +44,10 @@ namespace b {
         bool maximized = false;
 
         // Restore the previous window position and size
-        if (m_options.rememberWindowPosition) {
-            if (loadCachedWindowState()) {
-                newPosition = m_lastWindowState.position;
-                newSize = m_lastWindowState.size;
-                maximized = m_lastWindowState.maximized;
-            }
+        if (auto state = loadCachedWindowState(); state) {
+            newPosition = state->position;
+            newSize = state->size;
+            maximized = state->maximized;
         }
 
         // Setup SDL window flags
@@ -89,54 +75,23 @@ namespace b {
         m_windowIDs.insert({ m_sdlWindowID, *this });
         updateWin32DarkMode();
 
+//        SDL_SetHint(SDL_HINT_WINDOWS_DPI_SCALING, "1");
+
+        m_renderer = std::make_unique<Renderer>(m_sdlWindow);
+
         if (maximized) {
 
         }
-
-        // setup Dear ImGui context
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO(); (void)io;
-//        io.Fonts->AddFontFromFileTTF("verdana.ttf", 18.0f, NULL, NULL);
-
-//        setImGuiStyle();
-
-        // Setup SDL renderer
-        m_sdlRenderer = SDL_CreateRenderer(m_sdlWindow, -1,
-                                           SDL_RENDERER_ACCELERATED);
-        if (m_sdlRenderer == nullptr) {
-            throw std::runtime_error(b::format("b::Window: Failed to create SDL renderer: {}",
-                                               SDL_GetError()));
-        }
-
-        // Setup SDL OpenGL context
-        m_sdlGLContext = SDL_GL_CreateContext(m_sdlWindow);
-        if (m_sdlGLContext == nullptr) {
-            throw std::runtime_error(b::format("b::Window: Failed to create SDL OpenGL context: {}",
-                                               SDL_GetError()));
-        }
-
-        ImGui_ImplSDL2_InitForOpenGL(m_sdlWindow, m_sdlGLContext);
-        ImGui_ImplOpenGL3_Init();
 
         // Load default battery icon
         setIcon(b::Resource::FromBase64(b::Constants::BatteryIconBase64()));
     }
 
-    void Window::destroy() {
+    Window::~Window() noexcept {
         if (m_sdlWindow) {
+            m_renderer.reset();
 
-            ImGui_ImplOpenGL3_Shutdown();
-            SDL_GL_DeleteContext(m_sdlGLContext);
-
-            ImGui_ImplSDL2_Shutdown();
-            SDL_DestroyRenderer(m_sdlRenderer);
-
-            ImGui::DestroyContext();
-
-            if (m_options.rememberWindowPosition) {
-                writeCachedWindowState();
-            }
+            writeCachedWindowState({ getSize(), getPosition(), isMaximized() });
 
             m_windowIDs.erase(m_sdlWindowID);
             SDL_DestroyWindow(m_sdlWindow);
@@ -144,12 +99,8 @@ namespace b {
         }
     }
 
-    void Window::setWindowPositionJsonFilePath(const b::fs::path& filename) {
-        if (isOpen()) {
-            b::log::warn("b::Window::setWindowPositionJsonFilePath() called after window was already created. "
-                         "This will not have any effect on the current window.");
-        }
-        m_windowPositionJsonFilePath = filename;
+    b::Application& Window::app() const {
+        return b::Application::get();
     }
 
     void Window::showInTaskbar() {
@@ -284,10 +235,6 @@ namespace b {
         return flags & SDL_WINDOW_INPUT_FOCUS || flags & SDL_WINDOW_MOUSE_FOCUS;
     }
 
-    bool Window::isOpen() const {
-        return m_sdlWindow != nullptr;
-    }
-
     void Window::setTitle(const std::string& title) {
         if (!m_sdlWindow) {
             throw b::window_not_created_error();
@@ -363,7 +310,7 @@ namespace b {
 //        }
 //    }
 
-    bool Window::processSDLEvent(SDL_Event* event) {
+    bool Window::processImGuiSDLEvent(SDL_Event* event) {
         return ImGui_ImplSDL2_ProcessEvent(event);
     }
 
@@ -426,20 +373,44 @@ namespace b {
         return false;
     }
 
-    bool Window::loadCachedWindowState() {
-        if (m_windowPositionJsonFilePath.empty()) {
-            return false;
+    std::optional<WindowState> Window::loadCachedWindowState() const {
+        if (!m_options.lastWindowStateJsonFilePath) {
+            return {};
+        }
+        if (m_options.lastWindowStateJsonFilePath->empty()) {
+            return {};
         }
 
-        if (!b::fs::exists(m_windowPositionJsonFilePath)) {
-            return false;
+        if (!b::fs::exists(*m_options.lastWindowStateJsonFilePath)) {
+            return {};
         }
 
-        return glz::read_json(m_lastWindowState, b::fs::read(m_windowPositionJsonFilePath));
+        auto state = glz::read_json<WindowState>(
+                b::fs::read(*m_options.lastWindowStateJsonFilePath));
+
+        if (state) {
+            return *state;
+        }
+        else {
+            return {};
+        }
     }
 
-    void Window::writeCachedWindowState() {
-        (void)b::fs::try_write(m_windowPositionJsonFilePath, glz::write_json(m_lastWindowState));
+    bool Window::writeCachedWindowState(WindowState state) const {
+        if (!m_options.lastWindowStateJsonFilePath) {
+            return false;
+        }
+        if (m_options.lastWindowStateJsonFilePath->empty()) {
+            return false;
+        }
+        auto result = b::fs::try_write(*m_options.lastWindowStateJsonFilePath,
+                                       glz::write_json(state));
+        if (result) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     static COLORREF ImColToColorref(const ImColor& color) {
@@ -448,6 +419,12 @@ namespace b {
                 static_cast<uint32_t>(color.Value.y * 255) << 8 |
                 static_cast<uint32_t>(color.Value.x * 255);
         return colorref;
+    }
+
+    void Window::render() {
+        if (m_renderer) {
+            m_renderer->render();
+        }
     }
 
     void Window::updateWin32DarkMode() {

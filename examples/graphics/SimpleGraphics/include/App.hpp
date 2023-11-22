@@ -7,10 +7,10 @@ public:
     App() = default;
 
     void onSetup() override {
-        window.attachEventHandler<b::WindowMovedEvent>([](const auto& event) {
+        window->attachEventHandler<b::WindowMovedEvent>([](const auto& event) {
             b::log::info("Window moved to {}, {}", event.position.x, event.position.y);
         });
-        window.attachEventHandler<b::WindowCloseEvent>([&](const auto&  /*event*/) {
+        window->attachEventHandler<b::WindowCloseEvent>([&](const auto&  /*event*/) {
             b::log::info("Window close");
             close();
         });

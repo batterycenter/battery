@@ -6,13 +6,12 @@
 #include "vec.hpp"
 #include "resource_loader.hpp"
 #include "eventbus.hpp"
+#include "renderer.hpp"
 #include "glaze/glaze.hpp"
 #include "imgui.h"
 
 union SDL_Event;
 struct SDL_Window;
-struct SDL_Renderer;
-typedef void *SDL_GLContext;
 
 namespace b {
 
@@ -50,7 +49,7 @@ namespace b {
 #endif
 
     struct WindowOptions {
-        bool rememberWindowPosition = false;
+        std::optional<b::fs::path> lastWindowStateJsonFilePath = b::Folders::AppConfigDir() / "windowposition.cache";
         std::optional<ImColor> win32CustomTitleBarColor = Constants::DefaultWindowTitlebarColor();
         std::optional<ImColor> win32CustomWindowFrameColor = Constants::DefaultWindowFrameColor();
         bool startAsVisible = true;
@@ -69,13 +68,10 @@ namespace b {
 //        bool useWin32ImmersiveDarkMode = true;
 //        widget_style style;
 
-        Window();
+        Window(const std::string& title, const b::Vec2& size, std::optional<WindowOptions> options = {});
         ~Window() noexcept;
 
         b::Application& app() const;
-
-        void create(const std::string& title, const b::Vec2& size, std::optional<WindowOptions> options = {});
-        void destroy();
 
         virtual void onAttach() {};
         virtual void onUpdate() {};
@@ -102,8 +98,6 @@ namespace b {
 
         void focus();
         bool hasFocus() const;
-
-        bool isOpen() const;
 
         void setTitle(const std::string& title);
 
@@ -135,29 +129,28 @@ namespace b {
             return m_sdlWindowID;
         }
 
-        bool processSDLEvent(SDL_Event* event);
+        bool processImGuiSDLEvent(SDL_Event* event);
         bool processSDLWindowEvent(SDL_Event* event);
+
+        void render();
 
     protected:
 
         SDL_Window* m_sdlWindow {};
-        SDL_Renderer* m_sdlRenderer {};
-        SDL_GLContext m_sdlGLContext {};
+        std::unique_ptr<Renderer> m_renderer;
         uint32_t m_sdlWindowID = 0;
         inline static std::unordered_map<uint32_t, std::reference_wrapper<Window>> m_windowIDs;
         inline static bool m_windowExists {};
 
     private:
 
-        bool loadCachedWindowState();
-        void writeCachedWindowState();
+        std::optional<WindowState> loadCachedWindowState() const;
+        bool writeCachedWindowState(WindowState state) const;
 
         void renderContent();
         void updateWin32DarkMode();
         void processWindowEvents();
         void renderErrorMessage(const std::string& error);
-
-        b::fs::path m_windowPositionJsonFilePath;
 
 //        b::Events::MouseMoveEvent m_mouseMoveEventData;
 //        std::shared_ptr<b::event_bus> m_eventbus;
@@ -165,7 +158,6 @@ namespace b {
         b::EventBus m_eventbus;
 
         WindowOptions m_options {};
-        WindowState m_lastWindowState {};
     };
 
 }

@@ -21,11 +21,11 @@ namespace b {
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
         IMG_Init(IMG_INIT_PNG);
 
-        window.create(Constants::DefaultWindowTitle(), Constants::DefaultWindowSize());
+        window = std::make_unique<b::Window>(Constants::DefaultWindowTitle(), Constants::DefaultWindowSize());
     }
 
     Application::~Application() {
-        window.destroy();
+        window.reset();
         IMG_Quit();
         SDL_Quit();
         m_instance = nullptr;
@@ -60,18 +60,6 @@ namespace b {
 
     int Application::exitCode() const {
         return this->m_exitCode;
-    }
-
-    void Application::onSetup() {
-        // No default action
-    }
-
-    void Application::onUpdate() {
-        // No default action
-    }
-
-    void Application::onClose() {
-        // No default action
     }
 
 
@@ -121,6 +109,7 @@ namespace b {
             if (!this->callUpdate()) {
                 close();
             }
+            window->render();
             sleep(m_requestedFrametime - (b::time() - lastFrame));
             m_actualFrametime = b::time() - lastFrame;
             if (m_actualFrametime > 0.0) {
@@ -176,7 +165,9 @@ namespace b {
         SDL_Event event;
 
         while (SDL_PollEvent(&event)) {
-            window.processSDLEvent(&event);
+            if (window) {
+                window->processImGuiSDLEvent(&event);
+            }
 
             switch (event.type) {
 
@@ -188,8 +179,10 @@ namespace b {
 //                    break;
 
                 case SDL_WINDOWEVENT:
-                    if (event.window.windowID == window.getSDLWindowID()) {
-                        window.processSDLWindowEvent(&event);
+                    if (window) {
+                        if (event.window.windowID == window->getSDLWindowID()) {
+                            window->processSDLWindowEvent(&event);
+                        }
                     }
                     break;
 

@@ -39,6 +39,7 @@ b_add_source_files(battery_core
         src/fs.cpp
         src/process.cpp
         src/random.cpp
+        src/renderer.cpp
         src/renderwindow.cpp
         src/resource.cpp
         src/signal.cpp
