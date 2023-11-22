@@ -1,6 +1,7 @@
 #pragma once
 
 #include "battery/battery.hpp"
+#include "battery/embed.hpp"
 
 class App : public b::Application {
 public:
@@ -14,6 +15,10 @@ public:
             b::log::info("Window close");
             close();
         });
+
+        b::embed<"ui/main.lua">().get([](const auto& file) {
+            b::log::info("File: {}", file.str());
+        });
     }
 
     void onUpdate() override {
@@ -21,7 +26,7 @@ public:
     }
 
     void onRender() override {
-        ImGui::ShowDemoWindow();
+//        b::println("Document: {}", );
     }
 
     void onClose() override {

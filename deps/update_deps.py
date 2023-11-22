@@ -10,7 +10,7 @@ github_dependencies = [
     [ "DaanDeMeyer", "reproc", "v14.2.4" ],            # MIT License
     [ "nemtrif", "utfcpp", "v3.2.4" ],                 # Boost Software License 1.0
     [ "jothepro", "doxygen-awesome-css", "v2.2.1" ],   # MIT License
-    [ "batterycenter", "embed", "v1.1.0" ],            # Apache-2.0 License
+    [ "batterycenter", "embed", "v1.2.3" ],            # Apache-2.0 License
     [ "libsdl-org", "SDL", "release-2.28.5" ],         # Zlib License
     [ "libsdl-org", "SDL_image", "release-2.6.3" ],    # Zlib License
     [ "gelldur", "EventBus", "v3.0.4" ],               # Apache-2.0 License
