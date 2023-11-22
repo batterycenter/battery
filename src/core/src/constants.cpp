@@ -59,6 +59,14 @@ namespace b {
         return { 20, 20, 20, 255 };
     }
 
+    ImColor Constants::DefaultWindowTitlebarColor() {
+        return { 25, 25, 25, 255 };
+    }
+
+    ImColor Constants::DefaultWindowFrameColor() {
+        return { 56, 56, 56, 255 };
+    }
+
     std::pair<std::string, double> Constants::DefaultFont() {
         return { "roboto-regular", 18.f };
     }

@@ -48,7 +48,6 @@ namespace b {
         // Load options
         if (options) {
             m_options = *options;
-            m_win32IDMActive = !m_options.useWin32ImmersiveDarkMode;
         }
 
         // Calculate window size and position
@@ -309,7 +308,7 @@ namespace b {
     }
 
     void Window::update() {
-        updateWin32DarkMode();
+
     }
 
 //    void Window::invokeUpdate() {
@@ -439,22 +438,35 @@ namespace b {
         return glz::read_json(m_lastWindowState, b::fs::read(m_windowPositionJsonFilePath));
     }
 
-    bool Window::writeCachedWindowState() {
-        return b::fs::write(m_windowPositionJsonFilePath, glz::write_json(m_lastWindowState));
+    void Window::writeCachedWindowState() {
+        (void)b::fs::try_write(m_windowPositionJsonFilePath, glz::write_json(m_lastWindowState));
+    }
+
+    static COLORREF ImColToColorref(const ImColor& color) {
+        COLORREF colorref =
+                static_cast<uint32_t>(color.Value.z * 255) << 16 |
+                static_cast<uint32_t>(color.Value.y * 255) << 8 |
+                static_cast<uint32_t>(color.Value.x * 255);
+        return colorref;
     }
 
     void Window::updateWin32DarkMode() {
         // bool const useWin32ImmersiveDarkMode = b::style::get<bool>("b::window.win32ImmersiveDarkMode"); // TODO: <- Interesting Copilot suggestion
 #ifdef B_OS_WINDOWS
-        if (m_options.useWin32ImmersiveDarkMode != m_win32IDMActive) {
-            BOOL useDarkMode = static_cast<BOOL>(m_options.useWin32ImmersiveDarkMode);
-            bool const setImmersiveDarkModeSuccess = SUCCEEDED(DwmSetWindowAttribute(
-                    getSystemHandle(), DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE,
-                    &useDarkMode, sizeof(useDarkMode)));
-            m_win32IDMActive = m_options.useWin32ImmersiveDarkMode;
-            if (!setImmersiveDarkModeSuccess) {
-                throw std::runtime_error("Failed to set immersive dark mode on b::window");
-            }
+        // The titlebar color itself
+        if (m_options.win32CustomTitleBarColor) {
+            COLORREF titlebarColor = ImColToColorref(*m_options.win32CustomTitleBarColor);
+            DwmSetWindowAttribute(
+                    getSystemHandle(), DWMWINDOWATTRIBUTE::DWMWA_CAPTION_COLOR,
+                    &titlebarColor, sizeof(titlebarColor));
+        }
+
+        // The titlebar frame color (1-pixel boundary)
+        if (m_options.win32CustomWindowFrameColor) {
+            COLORREF frameColor = ImColToColorref(*m_options.win32CustomWindowFrameColor);
+            DwmSetWindowAttribute(
+                    getSystemHandle(), DWMWINDOWATTRIBUTE::DWMWA_BORDER_COLOR,
+                    &frameColor, sizeof(frameColor));
         }
 #endif
     }

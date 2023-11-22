@@ -51,7 +51,8 @@ namespace b {
 
     struct WindowOptions {
         bool rememberWindowPosition = false;
-        bool useWin32ImmersiveDarkMode = true;
+        std::optional<ImColor> win32CustomTitleBarColor = Constants::DefaultWindowTitlebarColor();
+        std::optional<ImColor> win32CustomWindowFrameColor = Constants::DefaultWindowFrameColor();
         bool startAsVisible = true;
         bool resizable = true;
     };
@@ -149,7 +150,7 @@ namespace b {
     private:
 
         bool loadCachedWindowState();
-        bool writeCachedWindowState();
+        void writeCachedWindowState();
 
         void renderContent();
         void updateWin32DarkMode();
@@ -165,8 +166,6 @@ namespace b {
 
         WindowOptions m_options {};
         WindowState m_lastWindowState {};
-
-        bool m_win32IDMActive {};
     };
 
 }

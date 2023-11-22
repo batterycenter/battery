@@ -31,6 +31,8 @@ namespace b {
         Arch Architecture();
 
         ImColor DefaultWindowBackgroundColor();
+        ImColor DefaultWindowTitlebarColor();
+        ImColor DefaultWindowFrameColor();
         std::pair<std::string, double> DefaultFont();
         b::Vec2 DefaultWindowSize();
         std::string DefaultWindowTitle();
