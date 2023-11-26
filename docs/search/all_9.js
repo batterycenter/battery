@@ -1,11 +1,14 @@
 var searchData=
 [
-  ['label_55',['label',['../classb_1_1tray_1_1label.html',1,'b::tray']]],
-  ['lexically_5fnormal_56',['lexically_normal',['../classb_1_1fs_1_1path.html#a1f62300cb7a013b75ccfee5590be8bff',1,'b::fs::path']]],
-  ['lexically_5fproximate_57',['lexically_proximate',['../classb_1_1fs_1_1path.html#afd4ecfadf37b62b0b80ffad5c40521fe',1,'b::fs::path']]],
-  ['lexically_5frelative_58',['lexically_relative',['../classb_1_1fs_1_1path.html#a103921769d25ae3079d14f3c81e1ea67',1,'b::fs::path']]],
-  ['lock_59',['lock',['../group__Lockfile.html#ga57a99437c491cabe160f577f94ff3b2a',1,'b::lockfile']]],
-  ['lockfile_60',['lockfile',['../classb_1_1lockfile.html',1,'b::lockfile'],['../group__Lockfile.html#ga238f952b89fde5c57c7cc40c26ea50f9',1,'b::lockfile::lockfile()']]],
-  ['lockfile_61',['Lockfile',['../group__Lockfile.html',1,'']]],
-  ['lockfile_5fmode_62',['lockfile_mode',['../group__Lockfile.html#gac8c29eb933f46e4cafcefa7cc9c22367',1,'b']]]
+  ['join_422',['join',['../group__String.html#gadeaee7520beb3bda87417ec53af6b542',1,'b']]],
+  ['json_5fhedley_5fdeprecated_5ffor_423',['JSON_HEDLEY_DEPRECATED_FOR',['../classbasic__json.html#a29c1ab02ab3b9d508d3aab74f07d12de',1,'basic_json::JSON_HEDLEY_DEPRECATED_FOR(3.11.0, basic_json::json_pointer or nlohmann::json_pointer&lt; basic_json::string_t &gt;) ValueType value(const'],['../classbasic__json.html#a9bbd9e1d431316722cf550ffec328d39',1,'basic_json::JSON_HEDLEY_DEPRECATED_FOR(3.11.0, basic_json::json_pointer or nlohmann::json_pointer&lt; basic_json::string_t &gt;) const _reference operator[](const']]],
+  ['json_5fpointer_424',['json_pointer',['../classjson__pointer.html',1,'json_pointer&lt; RefStringType &gt;'],['../classbasic__json.html#a7c7e3533ab09b9e9d24a516379961a93',1,'basic_json::json_pointer()'],['../classjson__pointer.html#a5288b8f5d6ff6faca37f664b98a16ecd',1,'json_pointer::json_pointer()']]],
+  ['json_5fref_425',['json_ref',['../classdetail_1_1json__ref.html',1,'detail']]],
+  ['json_5freverse_5fiterator_426',['json_reverse_iterator',['../classdetail_1_1json__reverse__iterator.html',1,'detail::json_reverse_iterator&lt; Base &gt;'],['../classdetail_1_1json__reverse__iterator.html#ad0012dca9469c2d5669ca2e446c8957d',1,'detail::json_reverse_iterator::json_reverse_iterator(const typename base_iterator::iterator_type &amp;it) noexcept'],['../classdetail_1_1json__reverse__iterator.html#a95ef832171f9aba019f284125bed75ca',1,'detail::json_reverse_iterator::json_reverse_iterator(const base_iterator &amp;it) noexcept']]],
+  ['json_5fsax_427',['json_sax',['../structjson__sax.html',1,'']]],
+  ['json_5fsax_5facceptor_428',['json_sax_acceptor',['../classdetail_1_1json__sax__acceptor.html',1,'detail']]],
+  ['json_5fsax_5fdom_5fcallback_5fparser_429',['json_sax_dom_callback_parser',['../classdetail_1_1json__sax__dom__callback__parser.html',1,'detail']]],
+  ['json_5fsax_5fdom_5fparser_430',['json_sax_dom_parser',['../classdetail_1_1json__sax__dom__parser.html',1,'detail::json_sax_dom_parser&lt; BasicJsonType &gt;'],['../classdetail_1_1json__sax__dom__parser.html#a3ee72f78d1ebdd8f8573ccf2b8e3ea6f',1,'detail::json_sax_dom_parser::json_sax_dom_parser()']]],
+  ['json_5fsax_5ft_431',['json_sax_t',['../classbasic__json.html#a0c291e7719ceccef199189e5ee4ecd4f',1,'basic_json']]],
+  ['json_5ft_432',['json_t',['../structglz_1_1json__t.html',1,'glz']]]
 ];

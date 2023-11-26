@@ -1,0 +1,25 @@
+var structglz_1_1opts =
+[
+    [ "closing_handled", "structglz_1_1opts.html#a0caee63e959f50a2403364de866ecd0d", null ],
+    [ "comments", "structglz_1_1opts.html#adc7ac28ce907e3960b29f5eaaf37502d", null ],
+    [ "error_on_const_read", "structglz_1_1opts.html#a84f3146ee6be9d3faedb6308351fe6a4", null ],
+    [ "error_on_missing_keys", "structglz_1_1opts.html#a51c5f715fc0691453cb2faa3f96bed96", null ],
+    [ "error_on_unknown_keys", "structglz_1_1opts.html#a409dcfdc4e3ee5a30464dd29feec7594", null ],
+    [ "force_conformance", "structglz_1_1opts.html#a8023324bbb789b6f7574946618c2530e", null ],
+    [ "format", "structglz_1_1opts.html#aacd7c3c2cd184863aa8ac960ef2188e6", null ],
+    [ "indentation_char", "structglz_1_1opts.html#a7ad26b5d1ebb0974af9b87cd03e5b727", null ],
+    [ "indentation_width", "structglz_1_1opts.html#a97a96fb4ce276a58753d16ae835b197f", null ],
+    [ "layout", "structglz_1_1opts.html#a3cd9f9e1a8424a86b19831ad0994b9ec", null ],
+    [ "no_header", "structglz_1_1opts.html#aad993d1af3f71dbb4ade525da404363b", null ],
+    [ "number", "structglz_1_1opts.html#aee8470ebf41a4a2c92a52bbc01dca3a6", null ],
+    [ "opening_handled", "structglz_1_1opts.html#ae40a5a7e568cb28c1cdbce0c72dd36db", null ],
+    [ "prettify", "structglz_1_1opts.html#a288d17f11d98b1898ff85967feb5adbc", null ],
+    [ "quoted_num", "structglz_1_1opts.html#a499fcc973d15c7b68dedca431a8c30ec", null ],
+    [ "raw", "structglz_1_1opts.html#a25971ec12d733bbbf65cffbd5685a727", null ],
+    [ "raw_string", "structglz_1_1opts.html#aaad3c5c97d07b64391991b4576863914", null ],
+    [ "shrink_to_fit", "structglz_1_1opts.html#a3c159352402af191b4917f0726849dea", null ],
+    [ "skip_null_members", "structglz_1_1opts.html#aa6e80a6b25068bb579b9125c7c8b7ee5", null ],
+    [ "use_hash_comparison", "structglz_1_1opts.html#a5d1d0e19e496e2d73a5c223a0acfc736", null ],
+    [ "write_type_info", "structglz_1_1opts.html#ad1488a1404d4f3679938aeb0c97fa991", null ],
+    [ "ws_handled", "structglz_1_1opts.html#a9a4bf94e39d986ae9e4adc20efae16e6", null ]
+];

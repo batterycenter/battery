@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['file_5fio_5ferror_152',['file_io_error',['../classb_1_1file__io__error.html',1,'b']]],
-  ['filedialog_153',['filedialog',['../classb_1_1filedialog.html',1,'b']]],
-  ['filesystem_5ferror_154',['filesystem_error',['../classb_1_1filesystem__error.html',1,'b']]],
-  ['filewatcher_155',['FileWatcher',['../classb_1_1FileWatcher.html',1,'b']]],
-  ['formatter_3c_20b_3a_3acolor_20_3e_156',['formatter&lt; b::Color &gt;',['../structfmt_1_1formatter_3_01b_1_1Color_01_4.html',1,'fmt']]],
-  ['formatter_3c_20b_3a_3afs_3a_3apath_20_3e_157',['formatter&lt; b::fs::path &gt;',['../structfmt_1_1formatter_3_01b_1_1fs_1_1path_01_4.html',1,'fmt']]],
-  ['formatter_3c_20b_3a_3avec2_20_3e_158',['formatter&lt; b::Vec2 &gt;',['../structfmt_1_1formatter_3_01b_1_1Vec2_01_4.html',1,'fmt']]]
+  ['dataerror_1092',['DataError',['../structinja_1_1DataError.html',1,'inja']]],
+  ['datanode_1093',['DataNode',['../classinja_1_1DataNode.html',1,'inja']]],
+  ['design_1094',['design',['../structglz_1_1study_1_1design.html',1,'glz::study']]],
+  ['detector_1095',['detector',['../structdetail_1_1detector.html',1,'detail']]],
+  ['detector_3c_20default_2c_20void_5ft_3c_20op_3c_20args_2e_2e_2e_20_3e_20_3e_2c_20op_2c_20args_2e_2e_2e_20_3e_1096',['detector&lt; Default, void_t&lt; Op&lt; Args... &gt; &gt;, Op, Args... &gt;',['../structdetail_1_1detector_3_01Default_00_01void__t_3_01Op_3_01Args_8_8_8_01_4_01_4_00_01Op_00_01Args_8_8_8_01_4.html',1,'detail']]],
+  ['diyfp_1097',['diyfp',['../structdetail_1_1dtoa__impl_1_1diyfp.html',1,'detail::dtoa_impl']]]
 ];

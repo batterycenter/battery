@@ -1,4 +1,32 @@
 var searchData=
 [
-  ['unlock_272',['unlock',['../group__Lockfile.html#ga624bd42ba47412230cf3fb0a6dca93c8',1,'b::lockfile']]]
+  ['sax_5fparse_1784',['sax_parse',['../classbasic__json.html#a4e2094d16fe8fd49c20eca61fa88d602',1,'basic_json::sax_parse()'],['../classdetail_1_1binary__reader.html#a8e1b5452ae426e1d7b48761859e7f52d',1,'detail::binary_reader::sax_parse()'],['../classbasic__json.html#a696ab4a7073c479bb1ef24c23c3d3d67',1,'basic_json::sax_parse()']]],
+  ['scoped_5flockfile_1785',['scoped_lockfile',['../group__Lockfile.html#gacb93bd48431953b20e06d8afc670e2a2',1,'b::scoped_lockfile']]],
+  ['scoped_5flockfile_5fnothrow_1786',['scoped_lockfile_nothrow',['../group__Lockfile.html#ga0fcd83f04700b94a71a8dec4231bc642',1,'b::scoped_lockfile_nothrow']]],
+  ['serializer_1787',['serializer',['../classdetail_1_1serializer.html#a3d025f3aa1e8661554858b8aaab08c3b',1,'detail::serializer']]],
+  ['set_5fbegin_1788',['set_begin',['../classdetail_1_1primitive__iterator__t.html#ae05402e355829cd46a9b31365a7b1a49',1,'detail::primitive_iterator_t']]],
+  ['set_5fcomment_1789',['set_comment',['../classinja_1_1Environment.html#a7068e0cde9fdf7d3260930694e185ccb',1,'inja::Environment']]],
+  ['set_5fend_1790',['set_end',['../classdetail_1_1primitive__iterator__t.html#a761383c368d1c32f11bbeb31a04e6488',1,'detail::primitive_iterator_t::set_end()'],['../classdetail_1_1iter__impl.html#afc94db3b8f35616347c25fae68e09509',1,'detail::iter_impl::set_end()']]],
+  ['set_5fexpression_1791',['set_expression',['../classinja_1_1Environment.html#aa5cca8f0975585166e24c2c8ee7b064c',1,'inja::Environment']]],
+  ['set_5finclude_5fcallback_1792',['set_include_callback',['../classinja_1_1Environment.html#a7e20675dd67e09b763c1a46d97516c68',1,'inja::Environment']]],
+  ['set_5fline_5fstatement_1793',['set_line_statement',['../classinja_1_1Environment.html#a7325934e8d2fcfd2753604830519342e',1,'inja::Environment']]],
+  ['set_5flstrip_5fblocks_1794',['set_lstrip_blocks',['../classinja_1_1Environment.html#a7020420515499399b851f03da31b685d',1,'inja::Environment']]],
+  ['set_5fsearch_5fincluded_5ftemplates_5fin_5ffiles_1795',['set_search_included_templates_in_files',['../classinja_1_1Environment.html#a5a7f1d50859105cad3acad42024180f8',1,'inja::Environment']]],
+  ['set_5fstatement_1796',['set_statement',['../classinja_1_1Environment.html#a3de73df9dc768bd00633a41a58fb5d41',1,'inja::Environment']]],
+  ['set_5fsubtype_1797',['set_subtype',['../classbyte__container__with__subtype.html#aa211ecfe3f0a626e96c54ea7e160491b',1,'byte_container_with_subtype']]],
+  ['set_5fthrow_5fat_5fmissing_5fincludes_1798',['set_throw_at_missing_includes',['../classinja_1_1Environment.html#a3306a8128013daff4e00b5b55e84f995',1,'inja::Environment']]],
+  ['set_5ftrim_5fblocks_1799',['set_trim_blocks',['../classinja_1_1Environment.html#a6825801f1d4b98728b71056dddf44a85',1,'inja::Environment']]],
+  ['skip_5fbom_1800',['skip_bom',['../classdetail_1_1lexer.html#a04ae0c7807a761f4162ff42290be5490',1,'detail::lexer']]],
+  ['sleep_1801',['sleep',['../group__Time.html#ga680b05f8ca38128e0a273b5a89519492',1,'b']]],
+  ['sleep_5fms_1802',['sleep_ms',['../group__Time.html#ga8772061768d9a949d15bd15bb3e8b02b',1,'b']]],
+  ['sleep_5fprecise_1803',['sleep_precise',['../group__Time.html#gab47f0f4461f636f015b2353e20669523',1,'b']]],
+  ['split_1804',['split',['../group__String.html#ga815d742dd731ef1857d5146204cb0990',1,'b']]],
+  ['start_5farray_1805',['start_array',['../structjson__sax.html#afc4d5c0d123f2e3c939060a778c4f22c',1,'json_sax']]],
+  ['start_5fobject_1806',['start_object',['../structjson__sax.html#a54a0883df64f40664395e3dad674aaa5',1,'json_sax']]],
+  ['std_5fpath_1807',['std_path',['../classb_1_1fs_1_1path.html#aa1fd117f737f9cf91c8b1d4892fcbff4',1,'b::fs::path']]],
+  ['stem_1808',['stem',['../classb_1_1fs_1_1path.html#aa9f515cbbd807bede94ab1f1fbb2db2c',1,'b::fs::path']]],
+  ['string_1809',['string',['../classb_1_1fs_1_1path.html#aaea1472016d7d7541c5f567e591e58f8',1,'b::fs::path::string()'],['../structjson__sax.html#a3da9ee0c61f1a37e6c6a3d2dccb16765',1,'json_sax::string()']]],
+  ['sub_1810',['sub',['../structdetail_1_1dtoa__impl_1_1diyfp.html#a75142bace0b78b1e1433b1d35a7ff252',1,'detail::dtoa_impl::diyfp']]],
+  ['subtype_1811',['subtype',['../classbyte__container__with__subtype.html#a678460360dd494c33fbfde782e7c8201',1,'byte_container_with_subtype']]],
+  ['swap_1812',['swap',['../classbasic__json.html#a57541a1c736f6ea94fe4a92dd61b3c37',1,'basic_json::swap(reference other) noexcept(std::is_nothrow_move_constructible&lt; value_t &gt;::value &amp;&amp;std::is_nothrow_move_assignable&lt; value_t &gt;::value &amp;&amp;std::is_nothrow_move_constructible&lt; json_value &gt;::value &amp;&amp;std::is_nothrow_move_assignable&lt; json_value &gt;::value)'],['../classbasic__json.html#af1bc171c2ec496dcc63c9035354d1138',1,'basic_json::swap(array_t &amp;other)'],['../classbasic__json.html#a2061fc20992f76b6fe4a7d2456391b8f',1,'basic_json::swap(object_t &amp;other)'],['../classbasic__json.html#aa914de665383b10bdd6265e6b63b8d93',1,'basic_json::swap(string_t &amp;other)'],['../classbasic__json.html#a23296c72c9f837e20cfdc28d8018dd57',1,'basic_json::swap(binary_t &amp;other)'],['../classbasic__json.html#a636ae0a887a94436f43f26c94aa1f748',1,'basic_json::swap(typename binary_t::container_type &amp;other)'],['../classb_1_1fs_1_1path.html#a09ef98ebe465d20c7df99de4853a36c0',1,'b::fs::path::swap()']]]
 ];

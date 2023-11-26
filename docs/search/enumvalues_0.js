@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['blocking_283',['blocking',['../group__Lockfile.html#ggac8c29eb933f46e4cafcefa7cc9c22367a14343966a1d7dce7526e57cf2206d19d',1,'b']]]
+  ['array_1955',['array',['../namespacedetail.html#a917c3efabea8a20dc72d9ae2c673d632af1f713c9e000f5d3f280adbd124df4f5',1,'detail']]],
+  ['array_5fend_1956',['array_end',['../namespacedetail.html#a47b1bb0bbd3596589ed9187059c312efa49642fb732aa2e112188fba1f9d3ef7f',1,'detail']]],
+  ['array_5fstart_1957',['array_start',['../namespacedetail.html#a47b1bb0bbd3596589ed9187059c312efaa4388a3d92419edbb1c6efd4d52461f3',1,'detail']]]
 ];

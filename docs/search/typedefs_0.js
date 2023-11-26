@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['native_5fstring_281',['native_string',['../group__String.html#ga19b1337b1a80832de1a1420bd45549c4',1,'b']]]
+  ['allocator_5ftype_1907',['allocator_type',['../classbasic__json.html#a485873eed243b6ca7e30c96130a5ec2d',1,'basic_json']]],
+  ['array_5ft_1908',['array_t',['../classbasic__json.html#a7cf28eb944e7c06aa47f0bc3a9d6f454',1,'basic_json']]]
 ];

@@ -1,9 +1,27 @@
 var searchData=
 [
-  ['ifstream_48',['ifstream',['../classb_1_1fs_1_1ifstream.html',1,'b::fs']]],
-  ['is_5fabsolute_49',['is_absolute',['../classb_1_1fs_1_1path.html#afca840007837ebad58229a1806b829fc',1,'b::fs::path']]],
-  ['is_5flocked_50',['is_locked',['../group__Lockfile.html#ga6a2ce98e0d031a1c028ca210246b0060',1,'b::lockfile']]],
-  ['is_5frelative_51',['is_relative',['../classb_1_1fs_1_1path.html#a4341a6d5585761d85c52dd3a432a34ca',1,'b::fs::path']]],
-  ['is_5futf8_52',['is_utf8',['../group__String.html#gaef7fd267e4e8f3e5a46121170cf1918f',1,'b']]],
-  ['is_5fvalid_53',['is_valid',['../group__Uuid.html#ga7454f7247f3a4aadf8475bea98c6c691',1,'b::uuid']]]
+  ['has_5fextension_268',['has_extension',['../classb_1_1fs_1_1path.html#a0f05dc8747b714c119ed3f518dce5bb4',1,'b::fs::path']]],
+  ['has_5ffilename_269',['has_filename',['../classb_1_1fs_1_1path.html#a56b16ef1a945a66f542e7e2aca964ce1',1,'b::fs::path']]],
+  ['has_5ffrom_5fjson_270',['has_from_json',['../structdetail_1_1has__from__json.html',1,'detail']]],
+  ['has_5ffrom_5fjson_3c_20basicjsontype_2c_20t_2c_20enable_5fif_5ft_3c_20_21is_5fbasic_5fjson_3c_20t_20_3e_3a_3avalue_20_3e_20_3e_271',['has_from_json&lt; BasicJsonType, T, enable_if_t&lt; !is_basic_json&lt; T &gt;::value &gt; &gt;',['../structdetail_1_1has__from__json_3_01BasicJsonType_00_01T_00_01enable__if__t_3_01_9is__basic__json_3_01T_01_4_1_1value_01_4_01_4.html',1,'detail']]],
+  ['has_5fkey_5fcompare_272',['has_key_compare',['../structdetail_1_1has__key__compare.html',1,'detail']]],
+  ['has_5fnon_5fdefault_5ffrom_5fjson_273',['has_non_default_from_json',['../structdetail_1_1has__non__default__from__json.html',1,'detail']]],
+  ['has_5fnon_5fdefault_5ffrom_5fjson_3c_20basicjsontype_2c_20t_2c_20enable_5fif_5ft_3c_20_21is_5fbasic_5fjson_3c_20t_20_3e_3a_3avalue_20_3e_20_3e_274',['has_non_default_from_json&lt; BasicJsonType, T, enable_if_t&lt; !is_basic_json&lt; T &gt;::value &gt; &gt;',['../structdetail_1_1has__non__default__from__json_3_01BasicJsonType_00_01T_00_01enable__if__t_3_01_912047717fa07cfa9d99fe9eafcf1e11e.html',1,'detail']]],
+  ['has_5fparent_5fpath_275',['has_parent_path',['../classb_1_1fs_1_1path.html#ac2690650bd6be50073199384055eb169',1,'b::fs::path']]],
+  ['has_5frelative_5froot_5fpath_276',['has_relative_root_path',['../classb_1_1fs_1_1path.html#aeeef1a5b2b13a4575f6668119c8b2833',1,'b::fs::path']]],
+  ['has_5froot_5fdirectory_277',['has_root_directory',['../classb_1_1fs_1_1path.html#a506fc081f171d1ed0bb3f457e9919a3c',1,'b::fs::path']]],
+  ['has_5froot_5fname_278',['has_root_name',['../classb_1_1fs_1_1path.html#ab71013e8c719c6c6d012f233f9b56181',1,'b::fs::path']]],
+  ['has_5froot_5fpath_279',['has_root_path',['../classb_1_1fs_1_1path.html#a142b3e447bcdbc802d209998bc0c4537',1,'b::fs::path']]],
+  ['has_5fstem_280',['has_stem',['../classb_1_1fs_1_1path.html#adb58cebc334429fa7d8ef403fc8e5cac',1,'b::fs::path']]],
+  ['has_5fsubtype_281',['has_subtype',['../classbyte__container__with__subtype.html#a793fab04ad06741b6909dde032d9ea35',1,'byte_container_with_subtype']]],
+  ['has_5fto_5fjson_282',['has_to_json',['../structdetail_1_1has__to__json.html',1,'detail']]],
+  ['has_5fto_5fjson_3c_20basicjsontype_2c_20t_2c_20enable_5fif_5ft_3c_20_21is_5fbasic_5fjson_3c_20t_20_3e_3a_3avalue_20_3e_20_3e_283',['has_to_json&lt; BasicJsonType, T, enable_if_t&lt; !is_basic_json&lt; T &gt;::value &gt; &gt;',['../structdetail_1_1has__to__json_3_01BasicJsonType_00_01T_00_01enable__if__t_3_01_9is__basic__json_3_01T_01_4_1_1value_01_4_01_4.html',1,'detail']]],
+  ['hash_284',['hash',['../namespacedetail.html#a9dd43d16a6a490b032ceaca358755a29',1,'detail']]],
+  ['hash128_285',['hash128',['../structglz_1_1hash128.html',1,'glz']]],
+  ['hash128_5fi_286',['hash128_i',['../structglz_1_1hash128__i.html',1,'glz']]],
+  ['hash_3c_20b_3a_3afs_3a_3apath_20_3e_287',['hash&lt; b::fs::path &gt;',['../structstd_1_1hash_3_01b_1_1fs_1_1path_01_4.html',1,'std']]],
+  ['hash_3c_20nlohmann_3a_3anlohmann_5fbasic_5fjson_5ftpl_20_3e_288',['hash&lt; nlohmann::NLOHMANN_BASIC_JSON_TPL &gt;',['../structstd_1_1hash_3_01nlohmann_1_1NLOHMANN__BASIC__JSON__TPL_01_4.html',1,'std']]],
+  ['hash_3c_20uuids_3a_3auuid_20_3e_289',['hash&lt; uuids::uuid &gt;',['../structstd_1_1hash_3_01uuids_1_1uuid_01_4.html',1,'std']]],
+  ['hidden_290',['hidden',['../structglz_1_1hidden.html',1,'glz']]],
+  ['hide_291',['hide',['../structglz_1_1hide.html',1,'glz']]]
 ];

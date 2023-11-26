@@ -113,8 +113,6 @@ $(document).ready(function(){initNavTree('classb_1_1lockfile.html',''); initResi
 
 <p>A lockfile class that can be used to synchronize processes by the use of atomic filesystem operations.  
  <a href="classb_1_1lockfile.html#details">More...</a></p>
-
-<p><code>#include &lt;<a class="el" href="lockfile_8hpp_source.html">battery/core/lockfile.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -159,7 +157,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gr
 <p>This class contains the base functionality with explicit calls to <a class="el" href="group__Lockfile.html#ga57a99437c491cabe160f577f94ff3b2a" title="Lock the lockfile in blocking mode.">lock()</a>, <a class="el" href="group__Lockfile.html#gab3d5620da722529ff060c5a10a506780" title="Lock the lockfile and fail immediately if the lock is already occupied.">try_lock()</a> and <a class="el" href="group__Lockfile.html#ga624bd42ba47412230cf3fb0a6dca93c8" title="Unlock the lockfile.">unlock()</a>. See the <code><a class="el" href="classb_1_1scoped__lockfile.html" title="RAII convenience wrapper for b::lockfile">b::scoped_lockfile</a></code> class for a more convenient way to use this class. </p><dl class="section warning"><dt>Warning</dt><dd>When the lock is in blocking mode and a timeout is set, the lock is polled in a default interval of 10ms. This might lead to slighly higher CPU and filesystem usage. When no timeout is specified, the operating system is taking care of the waiting (thus practically no CPU or filesystem usage)</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classb_1_1scoped__lockfile.html" title="RAII convenience wrapper for b::lockfile">b::scoped_lockfile</a> </dd></dl>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
-<li>src/core/include/battery/core/<a class="el" href="lockfile_8hpp_source.html">lockfile.hpp</a></li>
+<li>src/core/include/battery/<a class="el" href="lockfile_8hpp_source.html">lockfile.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
