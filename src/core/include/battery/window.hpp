@@ -44,7 +44,7 @@ namespace b {
 #ifdef B_OS_WINDOWS
     using WindowHandle = HWND;
 #else
-#error not implemented
+    using WindowHandle = void*;
 #endif
 
     struct WindowOptions {
@@ -98,7 +98,7 @@ namespace b {
 
         void setTitle(const std::string& title);
 
-        HWND getSystemHandle();
+        WindowHandle getSystemHandle();
 
         // Prevent all move and assignment operations due to the SDL handle
         Window(const Window&) = delete;

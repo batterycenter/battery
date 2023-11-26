@@ -1,4 +1,3 @@
-#pragma once
 
 #include "battery/application.hpp"
 #include "battery/events.hpp"

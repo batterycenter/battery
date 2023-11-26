@@ -55,7 +55,7 @@ namespace b {
         }
 #else
         // TODO Refactor this to use fcntl or flock instead of an exclusive write
-        this->fileHandle = reinterpret_cast<void *>(open(filename.c_str(), O_CREAT | O_RDWR, 0666));
+        this->fileHandle = reinterpret_cast<void *>(open(filename.string().c_str(), O_CREAT | O_RDWR, 0666));
         if (reinterpret_cast<int64_t>(this->fileHandle) <= -1) {
             throw std::runtime_error(b::format("Failed to create lockfile '{}': Failed to open file for writing: {}", filename, strerror(errno)));
         }

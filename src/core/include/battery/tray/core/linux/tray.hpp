@@ -29,10 +29,10 @@ namespace b::tray {
 
     class tray : public basetray {
     public:
-        tray(b::string identifier, b::string tooltip, MouseButton clickAction = MouseButton::BOTH);
+        tray(std::string identifier, std::string tooltip, MouseButton clickAction = MouseButton::BOTH);
         ~tray();
 
-        virtual void setIcon(const b::resource& icon) override;
+        virtual void setIcon(const b::Resource& icon) override;
         void run() override;
         [[nodiscard]] bool run_nonblocking() override;
         void exit() override;

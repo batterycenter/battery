@@ -28,6 +28,7 @@
 #include <filesystem>
 #include <fstream>
 #include <functional>
+#include <optional>
 #include <sstream>
 
 namespace b::fs {

@@ -216,7 +216,7 @@ namespace b {
         SDL_SetWindowTitle(m_sdlWindow, title.c_str());
     }
 
-    HWND Window::getSystemHandle() {
+    WindowHandle Window::getSystemHandle() {
         SDL_SysWMinfo wmInfo;
         SDL_VERSION(&wmInfo.version);
         SDL_GetWindowWMInfo(m_sdlWindow, &wmInfo);
@@ -224,7 +224,8 @@ namespace b {
 #ifdef B_OS_WINDOWS
         return wmInfo.info.win.window;
 #else
-#error not implemented
+#warning not implemented
+        return nullptr;
 #endif
     }
 
@@ -383,6 +384,7 @@ namespace b {
         }
     }
 
+#ifdef B_OS_WINDOWS
     static COLORREF ImColToColorref(const ImColor& color) {
         COLORREF colorref =
                 static_cast<uint32_t>(color.Value.z * 255) << 16 |
@@ -390,6 +392,7 @@ namespace b {
                 static_cast<uint32_t>(color.Value.x * 255);
         return colorref;
     }
+#endif
 
     void Window::updateWin32DarkMode() {
         // bool const useWin32ImmersiveDarkMode = b::style::get<bool>("b::window.win32ImmersiveDarkMode"); // TODO: <- Interesting Copilot suggestion

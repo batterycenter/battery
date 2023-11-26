@@ -41,7 +41,7 @@ namespace b {
                           options);
         }
 #else
-        void linux_run_zenity(const std::vector<b::string>& commands) {
+        void linux_run_zenity(const std::vector<std::string>& commands) {
             b::process zenity;
             zenity.options.executable = "zenity";
             zenity.options.arguments = commands;

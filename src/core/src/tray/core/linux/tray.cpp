@@ -31,16 +31,16 @@
 #include "battery/tray/components/separator.hpp"
 #include "battery/tray/components/syncedtoggle.hpp"
 
-#include "battery/core/fs.hpp"
-#include "battery/core/time.hpp"
-#include "battery/core/constants.hpp"
+#include "battery/fs.hpp"
+#include "battery/time.hpp"
+#include "battery/constants.hpp"
 
 namespace b::tray {
 
     struct tray::tray_data {
         AppIndicator *appIndicator;
         std::vector<std::pair<GtkContainer *, GtkWidget *>> imageWidgets;
-        b::resource::on_disk_resource iconfile;     // Apparently the icon is loaded at a later time, so we have to keep
+        b::Resource::OnDiskResource iconfile;       // Apparently the icon is loaded at a later time, so we have to keep
                                                     // the resource alive (The file on disk must not be deleted too early)
         static void callback(GtkWidget *, gpointer);
         static GtkMenuShell *construct(const std::vector<std::shared_ptr<tray_entry>> &entries, tray *parent);
@@ -98,7 +98,7 @@ namespace b::tray {
         return menu;
     }
 
-    tray::tray(b::string identifier, b::string tooltip, MouseButton clickAction)
+    tray::tray(std::string identifier, std::string tooltip, MouseButton clickAction)
             : basetray(std::move(identifier), std::move(tooltip), clickAction),
               data(std::make_unique<tray_data>())
     {
@@ -110,7 +110,7 @@ namespace b::tray {
         data->appIndicator = app_indicator_new(getIdentifier().c_str(), "",
                                          APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
         app_indicator_set_status(data->appIndicator, APP_INDICATOR_STATUS_ACTIVE);
-        setIcon(b::resource::from_base64(b::constants::battery_icon_base64()));
+        setIcon(b::Resource::FromBase64(b::Constants::BatteryIconBase64()));
     }
 
     tray::~tray() {}    // Must be defined in this file (unique_ptr incomplete type)
@@ -131,8 +131,8 @@ namespace b::tray {
         }
     }
 
-    void tray::setIcon(const b::resource& icon) {
-        data->iconfile = icon.as_temporary_on_disk_resource();
+    void tray::setIcon(const b::Resource& icon) {
+        data->iconfile = icon.asTemporaryOnDiskResource();
         app_indicator_set_icon(data->appIndicator, data->iconfile.str().c_str());
     };
 

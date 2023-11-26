@@ -1,10 +1,13 @@
 
-# embed
+set(OLD_BUILD_EXAMPLES ${BUILD_EXAMPLES})
 set(BUILD_EXAMPLES OFF CACHE BOOL  "" FORCE)
+set(OLD_ENABLE_TEST ${ENABLE_TEST})
+set(ENABLE_TEST OFF CACHE BOOL  "" FORCE)
+
+# embed
 add_subdirectory(embed)
 
 # EventBus
-set(ENABLE_TEST OFF CACHE BOOL "" FORCE)
 add_subdirectory(EventBus)
 
 # imgui
@@ -55,3 +58,6 @@ target_compile_definitions(spdlog PUBLIC SPDLOG_COMPILED_LIB)
 
 # utfcpp
 add_subdirectory(utfcpp)
+
+set(BUILD_EXAMPLES ${OLD_BUILD_EXAMPLES} CACHE BOOL "" FORCE)
+set(ENABLE_TEST ${OLD_ENABLE_TEST} CACHE BOOL  "" FORCE)

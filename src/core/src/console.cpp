@@ -53,7 +53,7 @@ namespace b {
         auto process = b::execute(b::format("start {}", url));
         return process.exit_code == 0;
 #else
-        auto process = b::execute("xdg-open "_b + url);
+        auto process = b::execute(b::format("xdg-open {}", url));
         return process.exit_code == 0;
 #endif
     }

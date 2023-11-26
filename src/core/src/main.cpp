@@ -27,7 +27,7 @@ namespace b {
         return args;
 #else                   // All other platforms simply pass-through
         for (int i = 0; i < argc; i++) {
-            args.emplace_back(b::string::from_utf8(argv[i]));     // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+            args.emplace_back(argv[i]);     // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
         }
 #endif
         return args;

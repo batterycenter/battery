@@ -15,7 +15,7 @@ namespace b {
         return b::narrow(_wcserror(errnum));
 #else
         std::string result(1024, '\0');
-        if (!0 == strerror_r(errnum, result.data(), result.size())) {
+        if (0 != strerror_r(errnum, result.data(), result.size())) {
             return {};
         }
         return result;
