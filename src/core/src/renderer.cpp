@@ -1,4 +1,5 @@
 
+#include "battery/embed.hpp"
 #include "battery/renderer.hpp"
 #include "battery/constants.hpp"
 #include "battery/log.hpp"
@@ -6,6 +7,8 @@
 #include "backends/imgui_impl_sdlrenderer2.h"
 #include "SDL2/SDL.h"
 #include <stdexcept>
+
+#include "imgui.h"
 
 namespace b {
 
@@ -31,6 +34,13 @@ namespace b {
             throw std::runtime_error(b::format("b::Window: Failed to init ImGui SDLRenderer2 backend: {}",
                                                SDL_GetError()));
         }
+
+        ImFontConfig fontCfg;
+        fontCfg.FontDataOwnedByAtlas = false;
+        auto ttf = b::embed<"resources/roboto-medium.ttf">();
+        ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)ttf.data(), ttf.size(),
+                                                   Constants::DefaultFontSize(), &fontCfg);
+        ImGui::GetIO().FontDefault = ImGui::GetIO().Fonts->Fonts.back();
     }
 
     RenderWindow::~RenderWindow() {

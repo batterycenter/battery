@@ -33,7 +33,7 @@ namespace b {
         ImColor DefaultWindowBackgroundColor();
         ImColor DefaultWindowTitlebarColor();
         ImColor DefaultWindowFrameColor();
-        std::pair<std::string, double> DefaultFont();
+        double DefaultFontSize();
         b::Vec2 DefaultWindowSize();
         std::string DefaultWindowTitle();
 

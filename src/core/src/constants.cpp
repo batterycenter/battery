@@ -67,8 +67,8 @@ namespace b {
         return { 56, 56, 56, 255 };
     }
 
-    std::pair<std::string, double> Constants::DefaultFont() {
-        return { "roboto-regular", 18.f };
+    double Constants::DefaultFontSize() {
+        return 18.f;
     }
 
     b::Vec2 Constants::DefaultWindowSize() {
