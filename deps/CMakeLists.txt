@@ -1,10 +1,10 @@
 
 # embed
-set(BUILD_EXAMPLES OFF)
+set(BUILD_EXAMPLES OFF CACHE BOOL  "" FORCE)
 add_subdirectory(embed)
 
 # EventBus
-set(ENABLE_TEST OFF)
+set(ENABLE_TEST OFF CACHE BOOL "" FORCE)
 add_subdirectory(EventBus)
 
 # imgui
