@@ -66,5 +66,14 @@ def main():
     shutil.rmtree(os.path.join(deps_folder, "SDL", "test"))
     print("Deleting SDL2 unit test files... Done")
 
+    # Patch EventBus
+    print("Patching EventBus...")
+    with open(os.path.join(deps_folder, "EventBus", "CMakeLists.txt"), "r") as file:
+        content = file.read()
+        content = content.replace("add_subdirectory(use_case)", "#add_subdirectory(use_case)")
+        with open(os.path.join(deps_folder, "EventBus", "CMakeLists.txt"), "w") as file:
+            file.write(content)
+    print("Patching EventBus... Done")
+
 if __name__ == "__main__":
     main()

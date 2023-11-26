@@ -80,7 +80,7 @@ set(CMAKE_CXX_FLAGS_UBSAN
 	FORCE)
 
 add_subdirectory(lib)
-add_subdirectory(use_case)
+#add_subdirectory(use_case)
 
 if(ENABLE_TEST)
 	enable_testing()
