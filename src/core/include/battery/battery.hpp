@@ -56,7 +56,7 @@
 #include "vec.hpp"
 #include "window.hpp"
 
-#include "battery/cli11.hpp"
+//#include "battery/cli11.hpp"
 
 #include "battery/extern/indicators.hpp"   // TODO: Think about moving these to different files
 #include "battery/extern/json.hpp"         // TODO: Think about moving these to different files
