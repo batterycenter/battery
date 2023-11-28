@@ -12,7 +12,7 @@
 
 namespace b {
 
-    RenderWindow::RenderWindow(const std::string& title, const b::Vec2& size, std::optional<WindowOptions> options)
+    RenderWindow::RenderWindow(const std::string& title, const b::Vec2& size, const WindowOptions& options)
             : Window(title, size, options) {
 
         // Setup SDL renderer

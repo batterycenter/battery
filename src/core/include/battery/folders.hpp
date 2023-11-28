@@ -10,6 +10,10 @@ namespace b {
     // to catch first-time constructor exceptions and avoid static initialization order fiascos
     // https://isocpp.org/wiki/faq/ctors#static-init-order
     namespace Folders {
+
+        std::string ApplicationName();
+        void SetApplicationName(const std::string& name);
+
         fs::path ExecutablePath();
         fs::path ExecutableDir();
 
@@ -39,11 +43,6 @@ namespace b {
         fs::path SystemMusicDir();           // System-wide directory for user music                                                                         (Defaults -> Win: %USERPROFILE%/Music, Linux & Mac: ~/Music)
         fs::path SystemVideoDir();           // System-wide directory for user videos                                                                        (Defaults -> Win: %USERPROFILE%/Videos, Linux & Mac: ~/Videos)
         fs::path SystemDownloadsDir();       // System-wide directory for user downloaded files                                                              (Defaults -> Win: %USERPROFILE%/Downloads, Linux & Mac: ~/Downloads)
-
-        inline static std::string& ApplicationName() {
-            static std::string appname = b::Constants::DefaultApplicationName();
-            return appname;
-        }
     };
 
 }

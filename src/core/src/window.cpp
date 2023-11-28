@@ -24,7 +24,8 @@ namespace b {
         return b::Vec2(DM.w, DM.h);
     }
 
-    Window::Window(const std::string& title, const b::Vec2& size, std::optional<WindowOptions> options) {
+    Window::Window(const std::string& title, const b::Vec2& size, const WindowOptions& options)
+            : m_options(options) {
 
         // Check if a window already exists
         if (m_windowExists) {
@@ -32,11 +33,6 @@ namespace b {
                                      "support multiple windows yet and a window already exists.");
         }
         m_windowExists = true;
-
-        // Load options
-        if (options) {
-            m_options = *options;
-        }
 
         // Calculate window size and position
         b::Vec2 newSize = size;
@@ -74,12 +70,18 @@ namespace b {
         m_sdlWindowID = SDL_GetWindowID(m_sdlWindow);
         updateWin32DarkMode();
 
+        if (isWindowOffscreen()) {
+            b::log::warn("b::Window was completely outside of any connected monitor. Centering on primary monitor.");
+            centerOnPrimaryMonitor();
+        }
+
         if (maximized) {
             maximize();
         }
 
         // Load default battery icon
         setIcon(b::Resource::FromBase64(b::Constants::BatteryIconBase64()));
+        focus();
     }
 
     Window::~Window() noexcept {
@@ -202,6 +204,57 @@ namespace b {
         return b::Vec2(x, y);
     }
 
+#ifdef B_OS_WINDOWS
+    static BOOL getWin32MonitorsImpl(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData) {
+        auto *monitors = reinterpret_cast<std::vector<HMONITOR>*>(dwData);
+        monitors->push_back(hMonitor);
+        return TRUE;
+    }
+
+    static std::vector<HMONITOR> getAllWin32Monitors() {
+        std::vector<HMONITOR> monitors;
+        if (EnumDisplayMonitors(nullptr, nullptr, getWin32MonitorsImpl, reinterpret_cast<LPARAM>(&monitors)) == 0) {
+            return {};
+        }
+        return monitors;
+    }
+
+    static bool isPointInRect(const b::Vec2& point, const RECT& rect) {
+        return point.x >= rect.left && point.x <= rect.right && point.y >= rect.top && point.y <= rect.bottom;
+    }
+#endif
+
+    bool Window::isWindowOffscreen() const {
+#ifdef B_OS_WINDOWS
+        MONITORINFO monitorInfo;
+        monitorInfo.cbSize = sizeof(MONITORINFO);
+        for (auto& monitor : getAllWin32Monitors()) {
+            if (GetMonitorInfoW(monitor, &monitorInfo) == 0) {
+                b::log::error("GetMonitorInfoW failed, pretending that window is outside of monitor space");
+                return true;
+            }
+
+            // We say the window is on the monitor if at least one corner is in the area
+            auto pos = getPosition();
+            auto size = getSize();
+            if (isPointInRect({ pos.x, pos.y }, monitorInfo.rcWork) ||
+                isPointInRect({ pos.x + size.x, pos.y }, monitorInfo.rcWork) ||
+                isPointInRect({ pos.x + size.x, pos.y + size.y }, monitorInfo.rcWork) ||
+                isPointInRect({ pos.x, pos.y + size.y }, monitorInfo.rcWork)) {
+                return false;
+            }
+        }
+#endif
+        return true;
+    }
+
+    void Window::centerOnPrimaryMonitor() {
+        auto monitorSize = getPrimaryMonitorSize();
+        auto size = b::Vec2(std::min(getSize().x, monitorSize.x), std::min(getSize().y, monitorSize.y));
+        setSize(size);
+        setPosition((monitorSize - size) / 2.0);
+    }
+
     void Window::focus() {
         SDL_RaiseWindow(m_sdlWindow);
         SDL_SetWindowInputFocus(m_sdlWindow);
@@ -216,7 +269,7 @@ namespace b {
         SDL_SetWindowTitle(m_sdlWindow, title.c_str());
     }
 
-    WindowHandle Window::getSystemHandle() {
+    WindowHandle Window::getSystemHandle() const {
         SDL_SysWMinfo wmInfo;
         SDL_VERSION(&wmInfo.version);
         SDL_GetWindowWMInfo(m_sdlWindow, &wmInfo);

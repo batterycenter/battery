@@ -20,8 +20,6 @@ namespace b {
 
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
         IMG_Init(IMG_INIT_PNG);
-
-        window = std::make_unique<b::RenderWindow>(Constants::DefaultWindowTitle(), Constants::DefaultWindowSize());
     }
 
     Application::~Application() {
@@ -89,7 +87,8 @@ namespace b {
 
 
     int Application::run(const std::string& appname, int argc, const char** argv) {
-        b::Folders::ApplicationName() = appname;
+        b::Folders::SetApplicationName(appname);
+        window = std::make_unique<b::RenderWindow>(Constants::DefaultWindowTitle(), Constants::DefaultWindowSize());
 
         m_args.clear();
         m_args.reserve(argc);

@@ -48,7 +48,7 @@ namespace b {
 #endif
 
     struct WindowOptions {
-        std::optional<b::fs::path> lastWindowStateJsonFilePath = b::Folders::AppConfigDir() / "windowposition.cache";
+        std::optional<b::fs::path> lastWindowStateJsonFilePath = b::Folders::AppConfigDir() / "windowstate.json";
         std::optional<ImColor> win32CustomTitleBarColor = Constants::DefaultWindowTitlebarColor();
         std::optional<ImColor> win32CustomWindowFrameColor = Constants::DefaultWindowFrameColor();
         bool startAsVisible = true;
@@ -67,7 +67,7 @@ namespace b {
 //        bool useWin32ImmersiveDarkMode = true;
 //        widget_style style;
 
-        Window(const std::string& title, const b::Vec2& size, std::optional<WindowOptions> options = {});
+        Window(const std::string& title, const b::Vec2& size, const WindowOptions& options = WindowOptions());
         ~Window() noexcept;
 
         b::Application& app() const;
@@ -93,12 +93,17 @@ namespace b {
         void setSize(const b::Vec2& size);
         b::Vec2 getSize() const;
 
+        // True if the window is completely outside of any monitor
+        bool isWindowOffscreen() const;
+
+        void centerOnPrimaryMonitor();
+
         void focus();
         bool hasFocus() const;
 
         void setTitle(const std::string& title);
 
-        WindowHandle getSystemHandle();
+        WindowHandle getSystemHandle() const;
 
         // Prevent all move and assignment operations due to the SDL handle
         Window(const Window&) = delete;

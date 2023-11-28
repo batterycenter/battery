@@ -11,7 +11,7 @@ namespace b {
 
     class RenderWindow : public Window {
     public:
-        RenderWindow(const std::string& title, const b::Vec2& size, std::optional<WindowOptions> options = {});
+        RenderWindow(const std::string& title, const b::Vec2& size, const WindowOptions& options = WindowOptions());
         ~RenderWindow();
 
         void clear(const ImColor& color);

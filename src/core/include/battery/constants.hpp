@@ -22,24 +22,25 @@ namespace b {
     // to catch first-time constructor exceptions and avoid static initialization order fiascos
     // https://isocpp.org/wiki/faq/ctors#static-init-order
     namespace Constants {
-        std::string BatteryIconBase64();
-        std::string DefaultApplicationName();
+        std::string BatteryIconBase64() noexcept;
+        std::string DefaultApplicationName() noexcept;
 
-        bool MessageBoxOnExceptionDefault();
-        bool CatchCommonExceptionsDefault();
-        Platform Platform();
-        Arch Architecture();
+        bool MessageBoxOnExceptionDefault() noexcept;
+        bool CatchCommonExceptionsDefault() noexcept;
+        Platform Platform() noexcept;
+        Arch Architecture() noexcept;
 
-        ImColor DefaultWindowBackgroundColor();
-        ImColor DefaultWindowTitlebarColor();
-        ImColor DefaultWindowFrameColor();
-        double DefaultFontSize();
-        b::Vec2 DefaultWindowSize();
-        std::string DefaultWindowTitle();
+        double Pi() noexcept;
 
-        double Pi();
+        bool IsProductionMode() noexcept;
 
-        bool IsProductionMode();
+        ImColor DefaultWindowBackgroundColor() noexcept;
+        ImColor DefaultWindowTitlebarColor() noexcept;
+        ImColor DefaultWindowFrameColor() noexcept;
+        double DefaultFontSize() noexcept;
+        b::Vec2 DefaultWindowSize() noexcept;
+        std::string DefaultWindowTitle() noexcept;
+
     } // namespace Constants
 
 } // namespace b

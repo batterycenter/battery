@@ -5,6 +5,19 @@
 
 namespace b {
 
+    static std::string& AppName() {
+        static std::string appname = b::Constants::DefaultApplicationName();
+        return appname;
+    }
+
+    std::string Folders::ApplicationName() {
+        return AppName();
+    }
+
+    void Folders::SetApplicationName(const std::string& name) {
+        AppName() = name;
+    }
+
     fs::path Folders::ExecutablePath() {
 #ifdef B_OS_WINDOWS
         std::array<wchar_t, static_cast<size_t>(MAX_PATH * 5)> buffer = {};
@@ -31,47 +44,47 @@ namespace b {
 
 
     fs::path Folders::AppHomeDir() {
-        return SystemHomeDir() + ApplicationName();
+        return SystemHomeDir() / ApplicationName();
     }
 
     fs::path Folders::AppConfigDir() {
-        return SystemConfigDir() + ApplicationName();
+        return SystemConfigDir() / ApplicationName();
     }
 
     fs::path Folders::AppLocalShareDir() {
-        return SystemLocalShareDir() + ApplicationName();
+        return SystemLocalShareDir() / ApplicationName();
     }
 
     fs::path Folders::AppCacheDir() {
-        return SystemCacheDir() + ApplicationName();
+        return SystemCacheDir() / ApplicationName();
     }
 
     fs::path Folders::AppRootDir() {
-        return SystemAppRootDir() + ApplicationName();
+        return SystemAppRootDir() / ApplicationName();
     }
 
     fs::path Folders::AppDocumentsDir() {
-        return SystemDocumentsDir() + ApplicationName();
+        return SystemDocumentsDir() / ApplicationName();
     }
 
     fs::path Folders::AppDesktopDir() {
-        return SystemDesktopDir() + ApplicationName();
+        return SystemDesktopDir() / ApplicationName();
     }
 
     fs::path Folders::AppPicturesDir() {
-        return SystemPicturesDir() + ApplicationName();
+        return SystemPicturesDir() / ApplicationName();
     }
 
     fs::path Folders::AppMusicDir() {
-        return SystemMusicDir() + ApplicationName();
+        return SystemMusicDir() / ApplicationName();
     }
 
     fs::path Folders::AppVideoDir() {
-        return SystemVideoDir() + ApplicationName();
+        return SystemVideoDir() / ApplicationName();
     }
 
     fs::path Folders::AppDownloadsDir() {
-        return SystemDownloadsDir() + ApplicationName();
+        return SystemDownloadsDir() / ApplicationName();
     }
 
 
