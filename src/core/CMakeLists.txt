@@ -51,7 +51,7 @@ b_add_source_files(battery_core
         src/window.cpp)
 
 b_set_ide_folder(battery_core "battery/modules")
-b_add_module(cli11)
+#b_add_module(cli11)
 
 #set_property(SOURCE src/extern/platform_folders.cpp PROPERTY CMAKE_CXX_CLANG_TIDY "")
 #set_property(SOURCE src/extern/utf8proc.c PROPERTY CMAKE_CXX_CLANG_TIDY "")
@@ -61,7 +61,7 @@ target_link_libraries(battery_core PUBLIC
         spdlog::spdlog
         reproc::reproc++
         utf8::cpp
-        battery::cli11
+#        battery::cli11
         SDL2::SDL2
         SDL2::SDL2main
         SDL2_image::SDL2_image-static
