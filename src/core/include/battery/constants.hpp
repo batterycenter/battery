@@ -24,6 +24,8 @@ namespace b {
     namespace Constants {
         std::string BatteryIconBase64() noexcept;
         std::string DefaultApplicationName() noexcept;
+        double AnimationHeartbeatInterval() noexcept;
+        double BlinkingCursorHeartbeatInterval() noexcept;
 
         bool MessageBoxOnExceptionDefault() noexcept;
         bool CatchCommonExceptionsDefault() noexcept;

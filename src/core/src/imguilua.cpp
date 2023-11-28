@@ -1,6 +1,7 @@
 
 #include "battery/imguilua.hpp"
 #include "battery/log.hpp"
+#include "battery/application.hpp"
 #include "battery/extern/magic_enum.hpp"
 #include "imgui_internal.h"
 
@@ -12,7 +13,10 @@ extern "C" {
 
 #include <LuaBridge/LuaBridge.h>
 
-#define ADD_STATIC_FUNCTION(name) \
+#define ADD_STATIC_IMGUI_FUNCTION(name) \
+        addStaticFunction(#name, &ImGui::name)
+
+#define ADD_STATIC_IMGUILUA_FUNCTION(name) \
         addStaticFunction(#name, &ImGuiLua::name)
 
 namespace b {
@@ -34,7 +38,7 @@ namespace b {
     }
 
     bool ImGuiLua::Begin(const std::string &name) {
-        return ImGui::Begin(name.data());
+        return ImGui::Begin(name.c_str());
     }
 
     void ImGuiLua::End() {
@@ -46,11 +50,11 @@ namespace b {
     }
 
     void ImGuiLua::Text(const std::string& text) {
-        ImGui::Text("%s", text.data());
+        ImGui::Text("%s", text.c_str());
     }
 
     bool ImGuiLua::Button(const std::string& text, const ImVec2& size) {
-        return ImGui::Button(text.data(), size);
+        return ImGui::Button(text.c_str(), size);
     }
 
 
@@ -154,39 +158,11 @@ namespace b {
         }
     }
 
-
-
-    float ImGuiLua::GetFontSize() {
-        return ImGui::GetFontSize();
+    void ImGuiLua::RequestAnimationFrameIn(double seconds) {
+        b::Application::get().requestAnimationFrameIn(seconds);
     }
 
 
-
-    void ImGuiLua::SetCursorPos(const ImVec2& pos) {
-        ImGui::SetCursorPos(pos);
-    }
-
-    float ImGuiLua::GetCursorPosX() {
-        return ImGui::GetCursorPosX();
-    }
-
-    float ImGuiLua::GetCursorPosY() {
-        return ImGui::GetCursorPosY();
-    }
-
-
-
-    void ImGuiLua::SetNextItemWidth(float width) {
-        ImGui::SetNextItemWidth(width);
-    }
-
-    ImVec2 ImGuiLua::GetWindowContentRegionMin() {
-        return ImGui::GetWindowContentRegionMin();
-    }
-
-    ImVec2 ImGuiLua::GetWindowContentRegionMax() {
-        return ImGui::GetWindowContentRegionMax();
-    }
 
     void ImGuiLua::DeclareLuaBridge(lua_State* L) {
         luabridge::getGlobalNamespace(L)
@@ -212,28 +188,34 @@ namespace b {
                 .endClass();
 
         luabridge::getGlobalNamespace(L)
+                .beginNamespace("b")
+                .addFunction("requestAnimationFrameIn", &ImGuiLua::RequestAnimationFrameIn)
+                .endNamespace();
+
+        luabridge::getGlobalNamespace(L)
                 .beginClass<ImGuiLua>("ImGui")
 
-                .ADD_STATIC_FUNCTION(Begin)
-                .ADD_STATIC_FUNCTION(End)
+                .ADD_STATIC_IMGUILUA_FUNCTION(Begin)
+                .ADD_STATIC_IMGUILUA_FUNCTION(End)
 
-                .ADD_STATIC_FUNCTION(ShowDemoWindow)
+                .ADD_STATIC_IMGUILUA_FUNCTION(ShowDemoWindow)
 
-                .ADD_STATIC_FUNCTION(Text)
-                .ADD_STATIC_FUNCTION(Button)
+                .ADD_STATIC_IMGUILUA_FUNCTION(Text)
+                .ADD_STATIC_IMGUILUA_FUNCTION(Button)
 
-                .ADD_STATIC_FUNCTION(ApplyStyleColorPermanent)
-                .ADD_STATIC_FUNCTION(ApplyStyleVec2Permanent)
-                .ADD_STATIC_FUNCTION(ApplyStyleFloatPermanent)
+                .ADD_STATIC_IMGUILUA_FUNCTION(ApplyStyleColorPermanent)
+                .ADD_STATIC_IMGUILUA_FUNCTION(ApplyStyleVec2Permanent)
+                .ADD_STATIC_IMGUILUA_FUNCTION(ApplyStyleFloatPermanent)
 
-                .ADD_STATIC_FUNCTION(GetFontSize)
-                .ADD_STATIC_FUNCTION(SetCursorPos)
-                .ADD_STATIC_FUNCTION(GetCursorPosX)
-                .ADD_STATIC_FUNCTION(GetCursorPosY)
+                .ADD_STATIC_IMGUI_FUNCTION(GetFontSize)
+                .ADD_STATIC_IMGUI_FUNCTION(SetCursorPos)
+                .ADD_STATIC_IMGUI_FUNCTION(GetCursorPosX)
+                .ADD_STATIC_IMGUI_FUNCTION(GetCursorPosY)
 
-                .ADD_STATIC_FUNCTION(SetNextItemWidth)
-                .ADD_STATIC_FUNCTION(GetWindowContentRegionMin)
-                .ADD_STATIC_FUNCTION(GetWindowContentRegionMax)
+                .ADD_STATIC_IMGUI_FUNCTION(SetNextItemWidth)
+                .ADD_STATIC_IMGUI_FUNCTION(GetWindowContentRegionMin)
+                .ADD_STATIC_IMGUI_FUNCTION(GetWindowContentRegionMax)
+
                 .endClass();
     }
 

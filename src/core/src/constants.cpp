@@ -11,6 +11,14 @@ namespace b {
         return "BatteryApp";
     }
 
+    double Constants::AnimationHeartbeatInterval() noexcept {
+        return 1.0;
+    }
+
+    double Constants::BlinkingCursorHeartbeatInterval() noexcept {
+        return 0.05;
+    }
+
     Platform Constants::Platform() noexcept {
 #ifdef B_OS_WINDOWS
         return Platform::Windows;

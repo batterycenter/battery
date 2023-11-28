@@ -62,14 +62,7 @@ namespace b {
         static void ApplyStyleVec2Permanent(const std::string& enumValue, const ImVec2& value);
         static void ApplyStyleFloatPermanent(const std::string& enumValue, float value);
 
-        static float GetFontSize();
-        static void SetCursorPos(const ImVec2& pos);
-        static float GetCursorPosX();
-        static float GetCursorPosY();
-
-        static void SetNextItemWidth(float width);
-        static ImVec2 GetWindowContentRegionMin();
-        static ImVec2 GetWindowContentRegionMax();
+        static void RequestAnimationFrameIn(double seconds);
 
         static void DeclareLuaBridge(lua_State* L);
 

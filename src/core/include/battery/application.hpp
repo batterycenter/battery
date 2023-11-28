@@ -38,6 +38,8 @@ namespace b {
         void close();
         void setCloseRequested(bool closeRequested);
 
+        void requestAnimationFrameIn(double seconds);
+
         [[nodiscard]] int run(const std::string& appname, int argc, const char** argv);
 
         template<typename T, typename... TArgs>
@@ -64,10 +66,11 @@ namespace b {
         bool callUpdate();
         bool callRender();
         bool callClose();
-        void pollEvents();
+        void waitEvent();
 
         bool m_closeRequested { false };
         double m_requestedFrametime { 1.0 / 60.0 };
+        std::optional<double> m_requestAnimationFrameIn {};
 
         b::EventBus m_eventbus;
 

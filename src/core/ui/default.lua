@@ -185,7 +185,7 @@ end
 --            ImGuiStyleVar_ItemSpacing = { 10, 4 }
 --        }
 -- All keys are ImGui enum names and can take HTML color codes, numbers or a table with 2 numbers
-function __loadStyle(style)
+function loadStyle(style)
     for key, value in pairs(style) do
         if key:sub(1, 9) == "ImGuiCol_" then
             local unitvalue = toUnit(value)
@@ -235,10 +235,10 @@ function __loadDefaultBatteryStyle()
         ImGuiCol_HeaderActive = "#A0A0A0",
         ImGuiCol_Separator = "#6D6D7F7F",
         ImGuiCol_SeparatorHovered = "#54FF00",
-        ImGuiCol_SeparatorActive = "#78fc38",
-        ImGuiCol_ResizeGrip = "#4296F93F",
-        ImGuiCol_ResizeGripHovered = "#4296F9AA",
-        ImGuiCol_ResizeGripActive = "#4296F9F2",
+        ImGuiCol_SeparatorActive = "#76F13BBA",
+        ImGuiCol_ResizeGrip = "#FFFFFF40",
+        ImGuiCol_ResizeGripHovered = "#7BFA0985",
+        ImGuiCol_ResizeGripActive = "#5CD120D0",
         ImGuiCol_Tab = "#4E4E4ED5",
         ImGuiCol_TabHovered = "#969696CC",
         ImGuiCol_TabActive = "#6B6B6B",
@@ -262,6 +262,6 @@ function __loadDefaultBatteryStyle()
         ImGuiStyleVar_ChildRounding = 6,
         ImGuiStyleVar_ItemSpacing = { 10, 4 }
     }
-    __loadStyle(style)
+    loadStyle(style)
 end
 __loadDefaultBatteryStyle()

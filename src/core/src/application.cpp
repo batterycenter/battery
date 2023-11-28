@@ -83,6 +83,10 @@ namespace b {
         this->m_closeRequested = closeRequested;
     }
 
+    void Application::requestAnimationFrameIn(double seconds) {
+        m_requestAnimationFrameIn = seconds;
+    }
+
 
 
 
@@ -147,7 +151,7 @@ namespace b {
     }
 
     void Application::preUpdate() {
-        pollEvents();
+        waitEvent();
     }
 
     void Application::postUpdate() {
@@ -170,30 +174,42 @@ namespace b {
         return CatchExceptions("b::application::exit()", &Application::onClose, this);
     }
 
-    void Application::pollEvents() {
+    void Application::waitEvent() {
         SDL_Event event;
 
-        while (SDL_PollEvent(&event)) {
-            if (window) {
-                window->processImGuiSDLEvent(&event);
-            }
+        double delay = Constants::AnimationHeartbeatInterval();
+        if (ImGui::GetIO().WantTextInput) {
+            delay = std::min(delay, Constants::BlinkingCursorHeartbeatInterval());
+        }
+        if (m_requestAnimationFrameIn) {
+            delay = std::min(delay, *m_requestAnimationFrameIn);
+            m_requestAnimationFrameIn = {};
+        }
 
-            switch (event.type) {
+        if (0 == SDL_WaitEventTimeout(&event, static_cast<int>(delay * 1000))) {
+            return;
+        }
 
-                // This is the global quit: When the last window was closed, including SIGINT
+        if (window) {
+            window->processImGuiSDLEvent(&event);
+        }
+
+        switch (event.type) {
+
+            // This is the global quit: When the last window was closed, including SIGINT
 //                case SDL_QUIT:
 //                    if (!dispatchEvent<ApplicationQuitEvent>()) {
 //                        close();
 //                    }
 //                    break;
 
-                case SDL_WINDOWEVENT:
-                    if (window) {
-                        if (event.window.windowID == window->getSDLWindowID()) {
-                            window->processSDLWindowEvent(&event);
-                        }
+            case SDL_WINDOWEVENT:
+                if (window) {
+                    if (event.window.windowID == window->getSDLWindowID()) {
+                        window->processSDLWindowEvent(&event);
                     }
-                    break;
+                }
+                break;
 
 //                case sf::Event::MouseWheelScrolled:
 //                    if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
@@ -262,10 +278,8 @@ namespace b {
 //                    dispatchEvent<b::Events::SensorChangeEvent>(event.sensor);
 //                    break;
 
-                default:
-                    break;
-            }
-
+            default:
+                break;
         }
     }
 
