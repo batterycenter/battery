@@ -2,6 +2,7 @@
 #include "battery/imguilua.hpp"
 #include "battery/log.hpp"
 #include "battery/extern/magic_enum.hpp"
+#include "imgui_internal.h"
 
 extern "C" {
     #include <lua.h>
@@ -15,6 +16,22 @@ extern "C" {
         addStaticFunction(#name, &ImGuiLua::name)
 
 namespace b {
+
+    void LuaLoader::updateScript(lua_State* luaState) {
+        if (m_haveLuaResource) {
+            std::lock_guard const lock(m_luaResourceMutex);
+            if (m_luaResourceChanged) {
+                m_luaResourceChanged = false;
+                b::log::info("Lua Script reloaded");
+                b::ImGuiLua::RunLuaString(luaState, m_luaResourceString, m_debugFilename);
+            }
+        }
+    }
+
+    void LuaLoader::invokeRender(lua_State* luaState) {
+        b::ImGuiLua::CallLuaFunction(luaState, "render");
+        ImGui::ErrorCheckEndFrameRecover(nullptr);
+    }
 
     bool ImGuiLua::Begin(const std::string &name) {
         return ImGui::Begin(name.data());
@@ -221,32 +238,42 @@ namespace b {
     }
 
     lua_State* ImGuiLua::CreateLuaState() {
-        lua_State* L = luaL_newstate();
-        luaL_openlibs(L);
-        DeclareLuaBridge(L);
-        return L;
+        lua_State* state = luaL_newstate();
+        luaL_openlibs(state);
+        DeclareLuaBridge(state);
+        return state;
     }
 
-    void ImGuiLua::RunLuaString(lua_State* L, const std::string& lua) {
+    void ImGuiLua::RunLuaString(lua_State* L, const std::string& lua, const std::string& luaDebugFilename) {
         int scriptLoadStatus = luaL_dostring(L, lua.c_str());
         if (scriptLoadStatus != 0) {
-            b::log::error("ImGuiLua::RunLuaString: {}", lua_tostring(L, -1));
+            if (!luaDebugFilename.empty()) {
+                b::log::error("File {}: {}", luaDebugFilename, lua_tostring(L, -1));
+            }
+            else {
+                b::log::error("b::ImGuiLua::RunLuaString(): {}", lua_tostring(L, -1));
+            }
             lua_pop(L, 1);
         }
     }
 
-    bool ImGuiLua::CallLuaFunction(lua_State* L, const std::string& function_name) {
-        luabridge::LuaRef func = luabridge::getGlobal(L, function_name.c_str());
+    bool ImGuiLua::CallLuaFunction(lua_State* L, const std::string& functionName, const std::string& luaDebugFilename) {
+        luabridge::LuaRef const func = luabridge::getGlobal(L, functionName.c_str());
         if (func.isFunction()) {
-            luabridge::LuaResult res = func();
+            luabridge::LuaResult const res = func();
             if (!res) {
-                b::log::error("ImGuiLua::CallLuaFunction: {}() returned an error: {}",
-                              function_name, res.errorMessage());
+                if (!luaDebugFilename.empty()) {
+                    b::log::error("File {}: {}() returned an error: {}", luaDebugFilename, functionName, res.errorMessage());
+                }
+                else {
+                    b::log::error("b::ImGuiLua::CallLuaFunction(): {}() returned an error: {}",
+                                  functionName, res.errorMessage());
+                }
                 return false;
             }
         }
         else {
-            b::log::error("ImGuiLua::CallLuaFunction: function {}() does not exist", function_name);
+            b::log::error("ImGuiLua::CallLuaFunction: function {}() does not exist", functionName);
             return false;
         }
         return true;

@@ -72,7 +72,7 @@ namespace b {
     }
 
     b::Vec2 Constants::DefaultWindowSize() noexcept {
-        return { 800, 600 };
+        return { 1080, 720 };
     }
 
     std::string Constants::DefaultWindowTitle() noexcept {

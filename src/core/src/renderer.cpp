@@ -9,6 +9,7 @@
 #include <stdexcept>
 
 #include "imgui.h"
+#include "imgui_internal.h"
 
 namespace b {
 
@@ -41,6 +42,11 @@ namespace b {
         ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)ttf.data(), ttf.size(),
                                                    Constants::DefaultFontSize(), &fontCfg);
         ImGui::GetIO().FontDefault = ImGui::GetIO().Fonts->Fonts.back();
+
+        m_luaState = b::ImGuiLua::CreateLuaState();
+        bindEmbeddedLuaScript<"ui/default.lua">();
+        bindEmbeddedLuaScript<"ui/widgets.lua">();
+        m_numInternalLuaLoaders = m_luaLoaders.size();
     }
 
     RenderWindow::~RenderWindow() {
@@ -70,9 +76,17 @@ namespace b {
         ImGui_ImplSDLRenderer2_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
+
+        for (auto& loader : m_luaLoaders) {
+            loader->updateScript(m_luaState);
+        }
     }
 
     void RenderWindow::renderFrame() {
+        if (m_luaLoaders.size() > m_numInternalLuaLoaders) {
+            LuaLoader::invokeRender(m_luaState);
+        }
+
         ImGui::Render();
         ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
         SDL_RenderPresent(m_sdlRenderer);

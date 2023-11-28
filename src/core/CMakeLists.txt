@@ -72,6 +72,8 @@ target_link_libraries(battery_core PUBLIC
 )
 
 b_embed(battery_core resources/roboto-medium.ttf)
+b_embed(battery_core ui/default.lua)
+b_embed(battery_core ui/widgets.lua)
 
 if (WIN32)
     target_link_libraries(battery_core PUBLIC Winmm.lib dwmapi.lib)   # for b::sleep_ms timer resolution and immersive dark mode

@@ -2,6 +2,8 @@
 
 #include <imgui.h>
 #include "window.hpp"
+#include "battery/embed.hpp"
+#include "battery/imguilua.hpp"
 
 struct SDL_Window;
 struct SDL_Renderer;
@@ -19,6 +21,12 @@ namespace b {
         void prepareFrame();
         void renderFrame();
 
+        template<embed_string_literal identifier>
+        void bindEmbeddedLuaScript() {
+            m_luaLoaders.emplace_back(std::make_unique<LuaLoader>());
+            m_luaLoaders.back()->bindEmbeddedLuaScript<identifier>();
+        }
+
         // Prevent all move and assignment operations because of the raw pointers
         RenderWindow(const RenderWindow&) = delete;
         RenderWindow& operator=(const RenderWindow&) = delete;
@@ -27,6 +35,10 @@ namespace b {
 
     private:
         SDL_Renderer* m_sdlRenderer {};
+
+        lua_State* m_luaState;
+        std::vector<std::unique_ptr<LuaLoader>> m_luaLoaders;
+        size_t m_numInternalLuaLoaders = 0;
     };
 
 }  // namespace b

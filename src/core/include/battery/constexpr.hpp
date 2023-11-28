@@ -1,5 +1,7 @@
-#ifndef BATTERY_CORE_CONSTEXPR_HPP
-#define BATTERY_CORE_CONSTEXPR_HPP
+#pragma once
+
+#include <algorithm>
+#include <string>
 
 namespace b {
 
@@ -11,14 +13,18 @@ namespace b {
         constexpr bool operator!=(const string_literal& other) const {
             return std::equal(value, value + N, other.value);
         }
+        std::string str() const {
+            return std::string(value, N);
+        }
+        constexpr bool _false() const {
+            return false;
+        }
         char value[N];
     };
 
+    template<size_t N, size_t M>
+    constexpr bool operator==(const string_literal<N>& left, const char (&right)[M]) {
+        return std::equal(left.value, left.value + N, right);
+    }
+
 } // namespace b
-
-template<size_t N, size_t M>
-constexpr bool operator==(const b::string_literal<N>& left, const char (&right)[M]) {
-    return std::equal(left.value, left.value + N, right);
-}
-
-#endif // BATTERY_CORE_CONSTEXPR_HPP
