@@ -34,8 +34,10 @@ function(b_set_environment_definitions TARGET)
 
     if (B_PRODUCTION_MODE)
         target_compile_definitions(${TARGET} PUBLIC B_PRODUCTION_MODE)
-    else()
-        message(WARNING "Development mode is enabled, allowing hot-reloaded resources. Before releasing your app, "
-                "make sure to switch to production mode using -DB_PRODUCTION_MODE=ON")
     endif()
 endfunction()
+
+if (NOT B_PRODUCTION_MODE)
+    message(WARNING "Development mode is enabled, allowing hot-reloaded resources. Before releasing your app, "
+            "make sure to switch to production mode using -DB_PRODUCTION_MODE=ON")
+endif()
