@@ -92,6 +92,8 @@ https://github.com/JuliaStrings/utf8proc -> MIT "expat"
 
 https://github.com/reunanen/cpp-exclusive-lock-file -> MIT License
 
+https://gist.github.com/darkfall/1656050?permalink_comment_id=3490904#gistcomment-3490904
+
 TODO: Add unit testing
 
 TODO: Add pipelines and automate testing

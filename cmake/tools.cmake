@@ -258,6 +258,8 @@ function(b_icon TARGET ICON_FILE)
     # And we also automatically embed it
     b_embed(${TARGET} ${ICON_FILE})
 
+    # We use this amazing Powershell script: https://gist.github.com/darkfall/1656050?permalink_comment_id=3490904#gistcomment-3490904
+
     if (WIN32)
         get_filename_component(ICON_FILE ${ICON_FILE} ABSOLUTE)
         if (NOT EXISTS ${ICON_FILE})
