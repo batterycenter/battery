@@ -254,5 +254,35 @@ function(b_require_find_package PACKAGE_NAME PACKAGE_NAME_FOUND ADDITIONAL_MESSA
 
 endfunction()
 
+function(b_icon TARGET ICON_FILE)
+    # And we also automatically embed it
+    b_embed(${TARGET} ${ICON_FILE})
+
+    if (WIN32)
+        get_filename_component(ICON_FILE ${ICON_FILE} ABSOLUTE)
+        if (NOT EXISTS ${ICON_FILE})
+            message(FATAL_ERROR "b_icon(): Icon file '${ICON_FILE}' does not exist!")
+        endif()
+
+        get_filename_component(ICON_NAME ${ICON_FILE} NAME_WLE)
+        set(TARGET_FILE ${CMAKE_CURRENT_BINARY_DIR}/icons/${ICON_NAME}.ico)
+        if (NOT EXISTS ${TARGET_FILE})
+            file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/icons)
+            execute_process(COMMAND
+                    powershell -command
+                    "& { . ${B_ROOT_DIR}/cmake/convert_ico_win32.ps1; ConvertTo-Icon -Path ${ICON_FILE} -Destination ${TARGET_FILE} }"
+                    RESULT_VARIABLE RESULT
+                    OUTPUT_VARIABLE OUTPUT
+                )
+            if (NOT RESULT EQUAL 0)
+                message(FATAL_ERROR "b_icon(): Failed to convert icon file '${ICON_FILE}' to Windows icon file '${TARGET_FILE}'. Error: ${OUTPUT}")
+            endif()
+        endif()
+
+        file(WRITE ${TARGET_FILE}.rc "IDI_ICON1 ICON DISCARDABLE \"${TARGET_FILE}\"")
+        target_sources(${TARGET} PRIVATE ${TARGET_FILE}.rc)
+    endif()
+endfunction()
+
 include(${CMAKE_CURRENT_LIST_DIR}/modules.cmake)        # This defines the module helper functions
 include(${CMAKE_CURRENT_LIST_DIR}/environment.cmake)    # battery_add_environment_definitions()
