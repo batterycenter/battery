@@ -50,20 +50,6 @@ namespace b {
 
     class ImGuiLua {
     public:
-        static bool Begin(const std::string &name);
-        static void End();
-
-        static void ShowDemoWindow();
-
-        static void Text(const std::string &text);
-        static bool Button(const std::string &text, const ImVec2& size);
-
-        static void ApplyStyleColorPermanent(const std::string& enumValue, const ImColor& color);
-        static void ApplyStyleVec2Permanent(const std::string& enumValue, const ImVec2& value);
-        static void ApplyStyleFloatPermanent(const std::string& enumValue, float value);
-
-        static void RequestAnimationFrameIn(double seconds);
-
         static void DeclareLuaBridge(lua_State* L);
 
         static lua_State* CreateLuaState();

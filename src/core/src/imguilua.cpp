@@ -13,11 +13,16 @@ extern "C" {
 
 #include <LuaBridge/LuaBridge.h>
 
-#define ADD_STATIC_IMGUI_FUNCTION(name) \
-        addStaticFunction(#name, &ImGui::name)
+#define ADD_IMGUI_FUNCTION(name) \
+        addFunction(#name, &ImGui::name)
 
-#define ADD_STATIC_IMGUILUA_FUNCTION(name) \
-        addStaticFunction(#name, &ImGuiLua::name)
+#define ADD_FUNCTION(name) \
+        addFunction(#name, &name)
+
+#define NS_ADD_ENUM(enum) \
+        for (auto [enumValue, enumKey] : magic_enum::enum_entries<enum>()) { \
+            ns.addVariable(enumKey.data(), enumValue); \
+        }
 
 namespace b {
 
@@ -37,28 +42,16 @@ namespace b {
         ImGui::ErrorCheckEndFrameRecover(nullptr);
     }
 
-    bool ImGuiLua::Begin(const std::string &name) {
-        return ImGui::Begin(name.c_str());
-    }
-
-    void ImGuiLua::End() {
-        ImGui::End();
-    }
-
-    void ImGuiLua::ShowDemoWindow() {
-        ImGui::ShowDemoWindow();
-    }
-
-    void ImGuiLua::Text(const std::string& text) {
+    void Text(const std::string& text) {
         ImGui::Text("%s", text.c_str());
     }
 
-    bool ImGuiLua::Button(const std::string& text, const ImVec2& size) {
+    bool Button(const std::string& text, const ImVec2& size) {
         return ImGui::Button(text.c_str(), size);
     }
 
 
-    void ImGuiLua::ApplyStyleColorPermanent(const std::string& enumValue, const ImColor& color) {
+    void ApplyStyleColorPermanent(const std::string& enumValue, const ImColor& color) {
         auto colorEnum = magic_enum::enum_cast<ImGuiCol_>(enumValue);
         if (!colorEnum) {
             throw std::invalid_argument(
@@ -74,7 +67,7 @@ namespace b {
         }
     }
 
-    void ImGuiLua::ApplyStyleVec2Permanent(const std::string& enumValue, const ImVec2& value) {
+    void ApplyStyleVec2Permanent(const std::string& enumValue, const ImVec2& value) {
         auto stylevarEnum = magic_enum::enum_cast<ImGuiStyleVar_>(enumValue);
         if (!stylevarEnum) {
             throw std::invalid_argument(
@@ -116,7 +109,7 @@ namespace b {
         }
     }
 
-    void ImGuiLua::ApplyStyleFloatPermanent(const std::string& enumValue, float value) {
+    void ApplyStyleFloatPermanent(const std::string& enumValue, float value) {
         auto stylevarEnum = magic_enum::enum_cast<ImGuiStyleVar_>(enumValue);
         if (!stylevarEnum) {
             throw std::invalid_argument(
@@ -158,7 +151,65 @@ namespace b {
         }
     }
 
-    void ImGuiLua::RequestAnimationFrameIn(double seconds) {
+    void PushStyleColor(const std::string& enumValue, const ImColor& color) {
+        auto stylevarEnum = magic_enum::enum_cast<ImGuiCol_>(enumValue);
+        if (!stylevarEnum) {
+            throw std::invalid_argument(b::format("ImGuiLua::PushStyleColor: Unknown ImGuiStyleCol '{}'", enumValue));
+        }
+        ImGui::PushStyleColor(*stylevarEnum, color.Value);
+    }
+
+    void PushStyleVarVec2(const std::string& enumValue, const ImVec2& value) {
+        auto stylevarEnum = magic_enum::enum_cast<ImGuiStyleVar_>(enumValue);
+        if (!stylevarEnum) {
+            throw std::invalid_argument(b::format("ImGuiLua::PushStyleVarVec2: Unknown ImGuiStyleVar '{}'", enumValue));
+        }
+
+        // Check if the type is really vec2
+        auto* const varInfo = ImGui::GetStyleVarInfo(*stylevarEnum);
+        if (varInfo->Type == ImGuiDataType_Float && varInfo->Count == 2) {
+            ImGui::PushStyleVar(*stylevarEnum, value);
+        }
+        else {
+            b::log::error("ImGuiLua::PushStyleVarVec2: ImGuiStyleVar '{}' "
+                          "needs a vec2, not float", enumValue);
+            // We push a value regardless that has no effect, to not break PopStyleVar()
+            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImGui::GetStyle().FramePadding);
+        }
+    }
+
+    void PushStyleVarFloat(const std::string& enumValue, float value) {
+        auto stylevarEnum = magic_enum::enum_cast<ImGuiStyleVar_>(enumValue);
+        if (!stylevarEnum) {
+            throw std::invalid_argument(b::format("ImGuiLua::PushStyleVarFloat: Unknown ImGuiStyleVar '{}'", enumValue));
+        }
+
+        // Check if the type is really float
+        auto* const varInfo = ImGui::GetStyleVarInfo(*stylevarEnum);
+        if (varInfo->Type == ImGuiDataType_Float && varInfo->Count == 1) {
+            ImGui::PushStyleVar(*stylevarEnum, value);
+        }
+        else {
+            b::log::error("ImGuiLua::PushStyleVarFloat: ImGuiStyleVar '{}' "
+                          "needs a float, not vec2", enumValue);
+            // We push a value regardless that has no effect, to not break PopStyleVar()
+            ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha);
+        }
+    }
+
+    void PopStyleColor() {
+        ImGui::PopStyleColor();
+    }
+
+    void PopStyleVarVec2() {
+        ImGui::PopStyleVar();
+    }
+
+    void PopStyleVarFloat() {
+        ImGui::PopStyleVar();
+    }
+
+    void RequestAnimationFrameIn(double seconds) {
         b::Application::get().requestAnimationFrameIn(seconds);
     }
 
@@ -189,34 +240,65 @@ namespace b {
 
         luabridge::getGlobalNamespace(L)
                 .beginNamespace("b")
-                .addFunction("requestAnimationFrameIn", &ImGuiLua::RequestAnimationFrameIn)
+                .ADD_FUNCTION(RequestAnimationFrameIn)
                 .endNamespace();
 
-        luabridge::getGlobalNamespace(L)
-                .beginClass<ImGuiLua>("ImGui")
+        auto ns = luabridge::getGlobalNamespace(L).beginNamespace("ImGui");
+        NS_ADD_ENUM(ImGuiWindowFlags_);
+        NS_ADD_ENUM(ImGuiButtonFlags_);
+        NS_ADD_ENUM(ImGuiColorEditFlags_);
+        NS_ADD_ENUM(ImGuiInputFlags_);
+        NS_ADD_ENUM(ImGuiPopupFlags_);
+        NS_ADD_ENUM(ImGuiScrollFlags_);
+        NS_ADD_ENUM(ImGuiSelectableFlags_);
+        NS_ADD_ENUM(ImGuiSeparatorFlags_);
+        NS_ADD_ENUM(ImGuiSliderFlags_);
+        NS_ADD_ENUM(ImGuiTabBarFlags_);
+        NS_ADD_ENUM(ImGuiTabItemFlags_);
+        NS_ADD_ENUM(ImGuiTextFlags_);
 
-                .ADD_STATIC_IMGUILUA_FUNCTION(Begin)
-                .ADD_STATIC_IMGUILUA_FUNCTION(End)
+        ns.addFunction("Begin", [](const std::string& name, int flags) {
+            return ImGui::Begin(name.c_str(), nullptr, flags);
+        });
+        ns.addFunction("End", &ImGui::End);
+        ns.addFunction("BeginChild", [](const std::string &name, const ImVec2& size, bool border, int flags) -> bool {
+            return ImGui::BeginChild(name.c_str(), size, border, flags);
+        });
+        ns.addFunction("EndChild", &ImGui::EndChild);
+        ns.addFunction("PushIDInt", [](int id) {
+            ImGui::PushID(id);
+        });
+        ns.addFunction("PushIDStr", [](const std::string& id) {
+            ImGui::PushID(id.c_str());
+        });
+        ns.addFunction("PopID", &ImGui::PopID);
+        ns.addFunction("ShowDemoWindow", []() { ImGui::ShowDemoWindow(); });
 
-                .ADD_STATIC_IMGUILUA_FUNCTION(ShowDemoWindow)
+        ns.ADD_FUNCTION(Text);
+        ns.ADD_FUNCTION(Button);
 
-                .ADD_STATIC_IMGUILUA_FUNCTION(Text)
-                .ADD_STATIC_IMGUILUA_FUNCTION(Button)
+        ns.ADD_FUNCTION(ApplyStyleColorPermanent);
+        ns.ADD_FUNCTION(ApplyStyleVec2Permanent);
+        ns.ADD_FUNCTION(ApplyStyleFloatPermanent);
 
-                .ADD_STATIC_IMGUILUA_FUNCTION(ApplyStyleColorPermanent)
-                .ADD_STATIC_IMGUILUA_FUNCTION(ApplyStyleVec2Permanent)
-                .ADD_STATIC_IMGUILUA_FUNCTION(ApplyStyleFloatPermanent)
+        ns.ADD_FUNCTION(PushStyleColor);
+        ns.ADD_FUNCTION(PushStyleVarVec2);
+        ns.ADD_FUNCTION(PushStyleVarFloat);
 
-                .ADD_STATIC_IMGUI_FUNCTION(GetFontSize)
-                .ADD_STATIC_IMGUI_FUNCTION(SetCursorPos)
-                .ADD_STATIC_IMGUI_FUNCTION(GetCursorPosX)
-                .ADD_STATIC_IMGUI_FUNCTION(GetCursorPosY)
+        ns.ADD_FUNCTION(PopStyleColor);
+        ns.ADD_FUNCTION(PopStyleVarVec2);
+        ns.ADD_FUNCTION(PopStyleVarFloat);
 
-                .ADD_STATIC_IMGUI_FUNCTION(SetNextItemWidth)
-                .ADD_STATIC_IMGUI_FUNCTION(GetWindowContentRegionMin)
-                .ADD_STATIC_IMGUI_FUNCTION(GetWindowContentRegionMax)
+        ns.ADD_IMGUI_FUNCTION(GetFontSize);
+        ns.ADD_IMGUI_FUNCTION(SetCursorPos);
+        ns.ADD_IMGUI_FUNCTION(GetCursorPosX);
+        ns.ADD_IMGUI_FUNCTION(GetCursorPosY);
 
-                .endClass();
+        ns.ADD_IMGUI_FUNCTION(SetNextItemWidth);
+        ns.ADD_IMGUI_FUNCTION(GetWindowContentRegionMin);
+        ns.ADD_IMGUI_FUNCTION(GetWindowContentRegionMax);
+
+        ns.endNamespace();
     }
 
     lua_State* ImGuiLua::CreateLuaState() {

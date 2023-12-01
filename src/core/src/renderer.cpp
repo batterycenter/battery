@@ -84,7 +84,9 @@ namespace b {
 
     void RenderWindow::renderFrame() {
         if (m_luaLoaders.size() > m_numInternalLuaLoaders) {
+            ImGuiLua::CallLuaFunction(m_luaState, "preRender");
             LuaLoader::invokeRender(m_luaState);
+            ImGuiLua::CallLuaFunction(m_luaState, "postRender");
         }
 
         ImGui::Render();

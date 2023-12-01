@@ -7,15 +7,23 @@
 -- Inputs:
 --      func The name of the function
 --      args The table of arguments to check
---      expectedList A list of accepted arguments
+--      expectedList A list of lists of accepted arguments
 function __checkArgs(func, args, expectedList)
-    local expected = {}
-    for _, v in ipairs(expectedList) do
-        expected[v] = true
-    end
-    for key, _ in pairs(args) do
-        if not expected[key] then
-            print("[WARNING] Function " .. func .. "() has no parameter '"..key.."'")
+    for suppliedArgument, _ in pairs(args) do
+        local found = false
+
+        for _, subtable in ipairs(expectedList) do  -- For every subtable
+            local expected = {}
+            for _, v in ipairs(subtable) do     -- Load all values of the table as keys of a new table
+                expected[v] = true
+            end
+            if expected[suppliedArgument] then
+                found = true
+            end
+        end
+
+        if not found then
+            print("[Lua Warning] Function " .. func .. "() has no argument '"..suppliedArgument.."'")
         end
     end
 end
@@ -124,17 +132,38 @@ function __getVerticalPx(unitvalue)
     return px
 end
 
+-- This function takes a string or value (like "100%", "2.5em", etc) and calculates
+-- what that value corresponds to in the current context, and returns a number of pixels.
+-- It references the horizontal direction.
+function getX(unit)
+    return __getHorizontalPx(toUnit(unit))
+end
+
+-- This function takes a string or value (like "100%", "2.5em", etc) and calculates
+-- what that value corresponds to in the current context, and returns a number of pixels.
+-- It references the vertical direction.
+function getY(unit)
+    return __getVerticalPx(toUnit(unit))
+end
+
 -- Get the desired bounding box of the current widget, which is calculated by
 -- its positional properties and the current content width.
--- Return is in the form of a table containing {left=..., top=..., right=..., bottom=...}
+-- Return is in the form of a table containing {left=..., top=..., right=..., bottom=..., width=..., height=...}
 -- Units are directly tied to ImGui Cursor coordinates
-function __getBoundingBox(args)
-    local left_px = __getHorizontalPx(toUnit(args.left or nil))
-    local right_px = __getHorizontalPx(toUnit(args.right or nil))
-    local width_px = __getHorizontalPx(toUnit(args.width or nil))
-    local top_px = __getVerticalPx(toUnit(args.top or nil))
-    local bottom_px = __getVerticalPx(toUnit(args.bottom or nil))
-    local height_px = __getVerticalPx(toUnit(args.height or nil))
+function getBoundingBox(args)
+    local left_px = __getHorizontalPx(toUnit(args.margin))
+    local right_px = __getHorizontalPx(toUnit(args.margin))
+    local width_px = nil
+    local top_px = __getVerticalPx(toUnit(args.margin))
+    local bottom_px = __getVerticalPx(toUnit(args.margin))
+    local height_px = nil
+
+    left_px = __getHorizontalPx(toUnit(args.left)) or left_px
+    right_px = __getHorizontalPx(toUnit(args.right)) or right_px
+    width_px = __getHorizontalPx(toUnit(args.width)) or width_px
+    top_px = __getVerticalPx(toUnit(args.top)) or top_px
+    bottom_px = __getVerticalPx(toUnit(args.bottom)) or bottom_px
+    height_px = __getVerticalPx(toUnit(args.height)) or height_px
 
     local cursor_left = ImGui.GetCursorPosX()
     local cursor_width = 0
@@ -174,7 +203,14 @@ function __getBoundingBox(args)
         cursor_height = height_px
     end
 
-    return {left=cursor_left, top=cursor_top, right=cursor_left+cursor_width, bottom=cursor_top+cursor_height}
+    return {
+        left=cursor_left,
+        top=cursor_top,
+        right=cursor_left + cursor_width,
+        bottom=cursor_top+cursor_height,
+        width=cursor_width,
+        height=cursor_height
+    }
 end
 
 -- Take a table and load the style into ImGui.

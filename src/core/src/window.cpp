@@ -205,21 +205,21 @@ namespace b {
     }
 
 #ifdef B_OS_WINDOWS
-    static BOOL getWin32MonitorsImpl(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData) {
+    static BOOL GetWin32MonitorsImpl(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData) {
         auto *monitors = reinterpret_cast<std::vector<HMONITOR>*>(dwData);
         monitors->push_back(hMonitor);
         return TRUE;
     }
 
-    static std::vector<HMONITOR> getAllWin32Monitors() {
+    static std::vector<HMONITOR> GetAllWin32Monitors() {
         std::vector<HMONITOR> monitors;
-        if (EnumDisplayMonitors(nullptr, nullptr, getWin32MonitorsImpl, reinterpret_cast<LPARAM>(&monitors)) == 0) {
+        if (EnumDisplayMonitors(nullptr, nullptr, GetWin32MonitorsImpl, reinterpret_cast<LPARAM>(&monitors)) == 0) {
             return {};
         }
         return monitors;
     }
 
-    static bool isPointInRect(const b::Vec2& point, const RECT& rect) {
+    static bool IsPointInRect(const b::Vec2& point, const RECT& rect) {
         return point.x >= rect.left && point.x <= rect.right && point.y >= rect.top && point.y <= rect.bottom;
     }
 #endif
@@ -228,7 +228,7 @@ namespace b {
 #ifdef B_OS_WINDOWS
         MONITORINFO monitorInfo;
         monitorInfo.cbSize = sizeof(MONITORINFO);
-        for (auto& monitor : getAllWin32Monitors()) {
+        for (auto& monitor : GetAllWin32Monitors()) {
             if (GetMonitorInfoW(monitor, &monitorInfo) == 0) {
                 b::log::error("GetMonitorInfoW failed, pretending that window is outside of monitor space");
                 return true;
@@ -237,10 +237,10 @@ namespace b {
             // We say the window is on the monitor if at least one corner is in the area
             auto pos = getPosition();
             auto size = getSize();
-            if (isPointInRect({ pos.x, pos.y }, monitorInfo.rcWork) ||
-                isPointInRect({ pos.x + size.x, pos.y }, monitorInfo.rcWork) ||
-                isPointInRect({ pos.x + size.x, pos.y + size.y }, monitorInfo.rcWork) ||
-                isPointInRect({ pos.x, pos.y + size.y }, monitorInfo.rcWork)) {
+            if (IsPointInRect({ pos.x, pos.y }, monitorInfo.rcWork) ||
+                IsPointInRect({ pos.x + size.x, pos.y }, monitorInfo.rcWork) ||
+                IsPointInRect({ pos.x + size.x, pos.y + size.y }, monitorInfo.rcWork) ||
+                IsPointInRect({ pos.x, pos.y + size.y }, monitorInfo.rcWork)) {
                 return false;
             }
         }
@@ -415,9 +415,8 @@ namespace b {
         if (state) {
             return *state;
         }
-        else {
-            return {};
-        }
+        return {};
+
     }
 
     bool Window::writeCachedWindowState(WindowState state) const {
@@ -429,17 +428,12 @@ namespace b {
         }
         auto result = b::fs::try_write(*m_options.lastWindowStateJsonFilePath,
                                        glz::write_json(state));
-        if (result) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return static_cast<bool>(result);
     }
 
 #ifdef B_OS_WINDOWS
     static COLORREF ImColToColorref(const ImColor& color) {
-        COLORREF colorref =
+        COLORREF const colorref =
                 static_cast<uint32_t>(color.Value.z * 255) << 16 |
                 static_cast<uint32_t>(color.Value.y * 255) << 8 |
                 static_cast<uint32_t>(color.Value.x * 255);
