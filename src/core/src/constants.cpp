@@ -51,8 +51,8 @@ namespace b {
     bool Constants::MessageBoxOnExceptionDefault() noexcept { return true; }
     bool Constants::CatchCommonExceptionsDefault() noexcept { return true; }
 #else
-    bool Constants::MessageBoxOnExceptionDefault() { return false; }
-    bool Constants::CatchCommonExceptionsDefault() { return true; }
+    bool Constants::MessageBoxOnExceptionDefault() noexcept { return false; }
+    bool Constants::CatchCommonExceptionsDefault() noexcept { return true; }
 #endif
 
     bool Constants::IsProductionMode() noexcept {

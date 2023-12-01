@@ -40,7 +40,7 @@ namespace b {
 
         void requestAnimationFrameIn(double seconds);
 
-        [[nodiscard]] int run(const std::string& appname, int argc, const char** argv);
+        [[nodiscard]] int run(const std::string& appname, int argc, char* argv[]);
 
         template<typename T, typename... TArgs>
         auto attachEventHandler(TArgs&&... args) {

@@ -61,4 +61,6 @@
 #include "battery/extern/indicators.hpp"   // TODO: Think about moving these to different files
 #include "battery/extern/json.hpp"         // TODO: Think about moving these to different files
 
+#include "SDL2/SDL_main.h"
+
 #endif // BATTERY_BATTERY_HPP

@@ -90,9 +90,14 @@ namespace b {
 
 
 
-    int Application::run(const std::string& appname, int argc, const char** argv) {
+    int Application::run(const std::string& appname, int argc, char* argv[]) {
         b::Folders::SetApplicationName(appname);
         window = std::make_unique<b::RenderWindow>(Constants::DefaultWindowTitle(), Constants::DefaultWindowSize());
+
+#ifndef B_PRODUCTION_MODE
+        b::log::warn("Battery is not running in production mode, enabling hot-reloaded resources. "
+                     "Make sure to enable production mode before releasing your app!");
+#endif
 
         m_args.clear();
         m_args.reserve(argc);

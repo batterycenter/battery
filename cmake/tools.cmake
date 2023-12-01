@@ -172,6 +172,10 @@ function(b_add_executable TARGET)
     b_set_exe_output_folder(${TARGET} ${CMAKE_BINARY_DIR}/bin/$<IF:$<CONFIG:Debug>,debug,release>/${TARGET})
     b_apply_common_target_options(${TARGET})   # Apply things like C++ Standard, preprocessor defines, etc.
     b_add_msvc_header_files(${TARGET})
+
+    if (B_PRODUCTION_MODE AND WIN32)
+        set_target_properties(${TARGET} PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS")
+    endif()
 endfunction()
 
 function(b_add_test TARGET)
