@@ -1119,6 +1119,13 @@ namespace b::fs {
     /// \see b::fs::try_read()
     b::bytearray read_binary(const fs::path &path);
 
+    namespace Internal {
+
+        /// \internal
+        std::string FormatFilesystemError(const std::string& message, const b::fs::path& path);
+
+    }
+
     /// \brief Read the contents of a text file in chunks
     /// \details The chunk size is specified, as well as a callback function (usually a lambda), that is
     ///          called for every chunk being read. When the read is finished, the total number of bytes read
@@ -1136,9 +1143,7 @@ namespace b::fs {
             try_read_chunked(const fs::path& path, size_t chunk_size, TFunc callback) {
         b::fs::ifstream file(path, std::ios::in | std::ios::binary);
         if (!file.is_open()) {
-            return std::unexpected(b::filesystem_error(
-                    b::format("Failed loading file {}: {}", path.string(), b::strerror(errno))
-            ));
+            return std::unexpected(b::filesystem_error(FormatFilesystemError(path)));
         }
 
         std::string buffer(chunk_size, 0);
@@ -1195,9 +1200,7 @@ namespace b::fs {
             try_read_binary_chunked(const fs::path& path, size_t chunk_size, TFunc callback) {
         b::fs::ifstream file(path, std::ios::in | std::ios::binary);
         if (!file.is_open()) {
-            return std::unexpected(b::filesystem_error(
-                    b::format("Failed loading file {}: {}", path, b::strerror(errno))
-            ));
+            return std::unexpected(b::filesystem_error(Internal::FormatFilesystemError(path)));
         }
 
         std::string buffer(chunk_size, 0);
