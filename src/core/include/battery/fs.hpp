@@ -1122,7 +1122,7 @@ namespace b::fs {
     namespace Internal {
 
         /// \internal
-        std::string FormatFilesystemError(const std::string& message, const b::fs::path& path);
+        std::string FormatFilesystemError(const b::fs::path& path);
 
     }
 
@@ -1143,7 +1143,7 @@ namespace b::fs {
             try_read_chunked(const fs::path& path, size_t chunk_size, TFunc callback) {
         b::fs::ifstream file(path, std::ios::in | std::ios::binary);
         if (!file.is_open()) {
-            return std::unexpected(b::filesystem_error(FormatFilesystemError(path)));
+            return std::unexpected(b::filesystem_error(Internal::FormatFilesystemError(path)));
         }
 
         std::string buffer(chunk_size, 0);

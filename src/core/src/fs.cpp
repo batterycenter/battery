@@ -978,9 +978,9 @@ namespace b::fs {
         return result.value();
     }
 
-    namespace internal {
+    namespace Internal {
 
-        std::string FormatFilesystemError(const std::string& message, const b::fs::path& path) {
+        std::string FormatFilesystemError(const b::fs::path& path) {
             return b::format("Failed loading file {}: {}", path.string(), b::strerror(errno));
         }
 
