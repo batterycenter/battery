@@ -69,7 +69,7 @@ namespace b {
     }
 
     void RenderWindow::prepareFrame() {
-        SDL_GL_SetSwapInterval(1);
+        // SDL_GL_SetSwapInterval(1);
 
         clear(b::Constants::DefaultWindowBackgroundColor());
 

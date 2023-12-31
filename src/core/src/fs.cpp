@@ -978,6 +978,14 @@ namespace b::fs {
         return result.value();
     }
 
+    namespace Internal {
+
+        std::string FormatFilesystemError(const b::fs::path& path) {
+            return b::format("Failed loading file {}: {}", path.string(), b::strerror(errno));
+        }
+
+    }
+
     std::expected<size_t, b::filesystem_error> try_write(const fs::path &path, const std::string& content) {
         b::fs::ofstream file(path, std::ios::out | std::ios::binary);
         if (!file.is_open()) {
