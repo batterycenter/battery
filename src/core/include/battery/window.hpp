@@ -121,6 +121,10 @@ namespace b {
             return m_eventbus.dispatchEvent<T>(std::forward<TArgs>(args)...);
         }
 
+        SDL_Window* getSDLWindow() const {
+            return m_sdlWindow;
+        }
+
         uint32_t getSDLWindowID() const {
             return m_sdlWindowID;
         }
