@@ -43,6 +43,6 @@ namespace b::tray {
         std::unique_ptr<tray_data> data;
     };
 
-} // namespace Tray
+}  // namespace b::tray
 
 #endif // !B_OS_WINDOWS

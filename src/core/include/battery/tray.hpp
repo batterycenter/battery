@@ -21,6 +21,9 @@
 // TODO: The left and right mouse button callbacks are still not implemented on linux!!!
 
 #pragma once
+
+#ifndef B_OS_WEB
+
 #include "battery/tray/components/button.hpp"
 #include "battery/tray/components/label.hpp"
 #include "battery/tray/components/separator.hpp"
@@ -30,3 +33,5 @@
 
 #include "battery/tray/core/windows/tray.hpp"
 #include "battery/tray/core/linux/tray.hpp"
+
+#endif // !B_OS_WEB

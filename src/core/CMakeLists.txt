@@ -83,7 +83,7 @@ if (BUILD_TESTS)
     add_subdirectory(tests)
 endif()
 
-if (UNIX)
+if (UNIX AND NOT EMSCRIPTEN)
     find_package(PkgConfig)
     if (NOT PKG_CONFIG_FOUND)
         message(FATAL_ERROR "PkgConfig not found! Please install them using your package manager \n(Hint: 'sudo apt install pkg-config'), or use -DBATTERY_CORE_NO_TRAY=true to compile without tray icon support.")

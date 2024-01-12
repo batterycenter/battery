@@ -18,6 +18,8 @@
 // It has been heavily modified and modernized to work with battery.
 //
 
+#ifndef B_OS_WEB
+
 #include "battery/tray/core/traybase.hpp"
 
 namespace b::tray {
@@ -52,3 +54,5 @@ namespace b::tray {
     }
 
 }
+
+#endif // !B_OS_WEB

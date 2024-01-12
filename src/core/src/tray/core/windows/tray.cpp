@@ -19,6 +19,7 @@
 //
 
 #ifdef B_OS_WINDOWS
+#ifndef B_OS_WEB
 
 #include "battery/string.hpp"
 #include "battery/resource.hpp"
@@ -247,4 +248,5 @@ namespace b::tray {
 
 }
 
+#endif // !B_OS_WEB
 #endif // B_OS_WINDOWS

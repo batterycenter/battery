@@ -19,6 +19,7 @@
 //
 
 #ifndef B_OS_WINDOWS
+#ifndef B_OS_WEB
 
 #include <stdexcept>
 #include <libayatana-appindicator/app-indicator.h>
@@ -151,4 +152,5 @@ namespace b::tray {
 
 }
 
+#endif // !B_OS_WEB
 #endif // !B_OS_WINDOWS
