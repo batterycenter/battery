@@ -1,5 +1,6 @@
 #pragma once
 
+#ifndef B_OS_WEB
 #include "fs.hpp"
 #include "thread.hpp"
 
@@ -36,4 +37,6 @@ namespace b {
         b::thread m_thread {};
     };
 
-}
+} // namespace b
+
+#endif // !B_OS_WEB

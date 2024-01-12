@@ -11,6 +11,7 @@ namespace b {
 
     bool open_url_in_default_browser(const std::string& url);
 
+#ifndef B_OS_WEB
     namespace console {
 
         enum class keycode : int64_t {
@@ -78,6 +79,7 @@ namespace b {
         };
 
     } // namespace console
+#endif // !B_OS_WEB
 
 } // namespace b
 

@@ -7,6 +7,20 @@
 #include <Windows.h>
 #endif
 
+#ifdef B_OS_WEB
+#include <emscripten.h>
+extern "C" {
+  EMSCRIPTEN_KEEPALIVE
+  void emscripten_alert_message_box(const char* title, const char* message) {
+    EM_ASM({
+      var title = UTF8ToString($0);
+      var message = UTF8ToString($1);
+      alert(message);
+    }, title, message);
+  }
+}
+#endif // B_OS_WEB
+
 // TODO: Check if zenity is available at program startup
 
 namespace b {
@@ -40,6 +54,10 @@ namespace b {
                           b::widen(title).c_str(),
                           options);
         }
+#elif defined(B_OS_WEB)
+        void emscripten_alert(const std::string& message, const std::string& title) {
+            emscripten_alert_message_box(title.c_str(), message.c_str());
+        }
 #else
         void linux_run_zenity(const std::vector<std::string>& commands) {
             b::process zenity;
@@ -53,6 +71,8 @@ namespace b {
     void message_box_info(const std::string& message) {
 #ifdef B_OS_WINDOWS
         internal::win32_message_box(message, "Info", MB_ICONINFORMATION | MB_OK);
+#elif defined(B_OS_WEB)
+        internal::emscripten_alert(message, "Info");
 #else
         internal::linux_run_zenity({ "--info", "--text=" + message });
 #endif
@@ -61,6 +81,8 @@ namespace b {
     void message_box_warning(const std::string& message) {
 #ifdef B_OS_WINDOWS
         internal::win32_message_box(message, "Warning", MB_ICONWARNING | MB_OK);
+#elif defined(B_OS_WEB)
+        internal::emscripten_alert(message, "Warning");
 #else
         internal::linux_run_zenity({ "--warning", "--text=" + message });
 #endif
@@ -69,6 +91,8 @@ namespace b {
     void message_box_error(const std::string& message) {
 #ifdef B_OS_WINDOWS
         internal::win32_message_box(message, "Error", MB_ICONERROR | MB_OK);
+#elif defined(B_OS_WEB)
+        internal::emscripten_alert(message, "Error");
 #else
         internal::linux_run_zenity({ "--error", "--text=" + message });
 #endif

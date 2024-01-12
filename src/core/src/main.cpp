@@ -5,7 +5,9 @@
 #include "battery/messages.hpp"
 #include "battery/time.hpp"
 #include "battery/thread.hpp"
+#include "battery/application.hpp"
 #include "battery/internal/windows.hpp"
+#include "battery/window.hpp"
 
 namespace b {
 
@@ -72,16 +74,18 @@ namespace b {
         return arguments.data();
     }
 
-    int invoke_main(int argc, const char** argv) {
-        b::time();                  // First call sets zero-time to now
-        setup_windows_console();
-        set_windows_dpi_awareness();
-        print_production_warning();
 
-        int result = -1;
-        b::thread::catchCommonExceptions([&result, argc, argv]() {
-//            result = b::main(parse_cli(argc, argv));
+} // namespace b
+
+int main(int argc, char* argv[]) {
+    b::time();                  // First call sets zero-time to now
+    b::setup_windows_console();
+    b::set_windows_dpi_awareness();
+    b::print_production_warning();
+
+    int result = -1;
+    b::CatchCommonExceptions([&result, &argc, &argv]() {
+            result = b::Application::get().run(argc, argv);
         });
-        return result;
-    }
+    return result;
 }

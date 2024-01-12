@@ -2,7 +2,9 @@
 #include "battery/uuid.hpp"
 #include "battery/extern/uuidv4.h"
 
+#include <algorithm>
 #include <iostream>
+#include <random>
 
 namespace b::uuid {
 

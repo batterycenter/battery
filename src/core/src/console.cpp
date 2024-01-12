@@ -11,8 +11,23 @@
 #else
 #include <termios.h>
 #include <sys/ioctl.h>
+#ifndef B_OS_WEB
 #include <asm-generic/ioctls.h>
 #endif
+#endif
+
+#ifdef B_OS_WEB
+#include <emscripten.h>
+extern "C" {
+  EMSCRIPTEN_KEEPALIVE
+  void emscripten_open_url_in_browertab(const char* url) {
+    EM_ASM({
+      var url = UTF8ToString($0);
+      window.open(url, '_blank');
+    }, url);
+  }
+}
+#endif // B_OS_WEB
 
 #include <cstdio>
 #include <iostream>
@@ -52,12 +67,16 @@ namespace b {
 #ifdef B_OS_WINDOWS
         auto process = b::execute(b::format("start {}", url));
         return process.exit_code == 0;
+#elif defined(B_OS_WEB)
+        emscripten_open_url_in_browertab(url.c_str());
+        return true;
 #else
         auto process = b::execute(b::format("xdg-open {}", url));
         return process.exit_code == 0;
 #endif
     }
 
+#ifndef B_OS_WEB
     namespace console {
 
         struct terminal::terminal_data {
@@ -187,5 +206,6 @@ namespace b {
         }
 
     } // namespace console
+#endif // B_OS_WEB
 
 } // namespace b

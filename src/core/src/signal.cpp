@@ -15,6 +15,7 @@
 
 namespace b {
 
+#ifndef B_OS_WEB
     static void enable_native_signal_handler();
     static void disable_native_signal_handler();
 
@@ -158,5 +159,7 @@ namespace b {
         raise(SIGINT);
 #endif
     }
+
+#endif // !B_OS_WEB
 
 } // namespace b

@@ -16,6 +16,8 @@
 
 #pragma once
 
+#ifndef B_OS_WEB
+
 #include <string>
 #include "fs.hpp"
 
@@ -246,4 +248,6 @@ namespace b {
         b::lockfile _lockfile;
     };
 
-}
+} // !B_OS_WEB
+
+#endif // !B_OS_WEB

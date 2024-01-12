@@ -1,5 +1,6 @@
 #pragma once
 
+#ifndef B_OS_WEB
 #include "thread.hpp"
 #include <mutex>
 #include <future>
@@ -46,4 +47,6 @@ namespace b {
         std::future<T> worker;
     };
 
-}
+} // namespace b
+
+#endif // !B_OS_WEB

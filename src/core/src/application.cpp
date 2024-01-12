@@ -1,11 +1,18 @@
 
+#include <memory>
+#include <stdexcept>
 #include <utility>
+
+#ifdef B_OS_WEB
+#include "emscripten.h"
+#endif // B_OS_WEB
 
 #include "battery/application.hpp"
 #include "battery/folders.hpp"
 #include "battery/log.hpp"
 #include "battery/time.hpp"
 #include "battery/window.hpp"
+#include "battery/thread.hpp"
 
 #include "SDL2/SDL.h"
 #include "SDL_image.h"
@@ -13,12 +20,11 @@
 namespace b {
 
     Application::Application() {
-        if (m_instance != nullptr) {
-            throw std::runtime_error("Only one instance of b::Application is ever allowed to exist");
+        if (0 != SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS)) {
+            auto msg = b::format("SDL Failed to initialize: {}", SDL_GetError());
+            b::log::critical("{}", msg);
+            throw std::runtime_error(msg);
         }
-        m_instance = this;
-
-        SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
         IMG_Init(IMG_INIT_PNG);
     }
 
@@ -26,18 +32,11 @@ namespace b {
         window.reset();
         IMG_Quit();
         SDL_Quit();
-        m_instance = nullptr;
     }
 
     Application& Application::get() {
-        if (m_instance == nullptr) {
-            throw std::runtime_error("No instance of b::Application exists");
-        }
-        return *m_instance;
-    }
-
-    bool Application::instanceExists() {
-        return m_instance != nullptr;
+        static std::unique_ptr<b::Application> instance = ::CreateApp();
+        return *instance;
     }
 
     const std::vector<std::string>& Application::args() const {
@@ -90,9 +89,35 @@ namespace b {
 
 
 
-    int Application::run(const std::string& appname, int argc, char* argv[]) {
-        b::Folders::SetApplicationName(appname);
-        window = std::make_unique<b::RenderWindow>(Constants::DefaultWindowTitle(), Constants::DefaultWindowSize());
+    void Application::runSingleFrame() {
+
+        if (!window) {
+            return;
+        }
+
+        preUpdate();
+
+        if (!this->callUpdate()) {
+            close();
+        }
+
+        window->prepareFrame();
+        if (!this->callRender()) {
+            close();
+        }
+        window->renderFrame();
+
+        sleep(m_requestedFrametime - (b::time() - m_lastFrame));
+        m_actualFrametime = b::time() - m_lastFrame;
+        if (m_actualFrametime > 0.0) {
+            m_actualFramerate = 1.0 / m_actualFrametime;
+        }
+        m_lastFrame = b::time();
+
+        postUpdate();
+    }
+
+    int Application::run(int argc, char* argv[]) {
 
 #ifndef B_PRODUCTION_MODE
         b::log::warn("Battery is not running in production mode, enabling hot-reloaded resources. "
@@ -105,40 +130,28 @@ namespace b {
             m_args.emplace_back(argv[i]);
         }
 
+#ifdef B_OS_WEB
+        b::log::info("Setting Emscripten main loop");
+        emscripten_set_main_loop([]() {
+                b::Application::get().runSingleFrame();
+                }, -1, false);
+#endif // B_OS_WEB
+
+        window = std::make_unique<b::RenderWindow>(Constants::DefaultWindowTitle(), Constants::DefaultWindowSize());
         if (!callSetup()) {
             close();
         }
 
-        auto lastFrame = b::time();
+#ifdef B_OS_WEB
+        return 0;
+#else // B_OS_WEB
         while (!this->m_closeRequested) {
-
-            preUpdate();
-
-            if (!this->callUpdate()) {
-                close();
-            }
-
-            window->prepareFrame();
-            if (!this->callRender()) {
-                close();
-            }
-            window->renderFrame();
-
-            sleep(m_requestedFrametime - (b::time() - lastFrame));
-            m_actualFrametime = b::time() - lastFrame;
-            if (m_actualFrametime > 0.0) {
-                m_actualFramerate = 1.0 / m_actualFrametime;
-            }
-            lastFrame = b::time();
-
-            postUpdate();
+            runSingleFrame();
         }
-
         callClose();
         return m_exitCode;
+#endif // B_OS_WEB
     }
-
-
 
     template<typename Fn, typename... Args>
     bool CatchExceptions(const std::string& funcname, Fn&& func, Args&&... args) {
@@ -179,22 +192,7 @@ namespace b {
         return CatchExceptions("b::application::exit()", &Application::onClose, this);
     }
 
-    void Application::waitEvent() {
-        SDL_Event event;
-
-        double delay = Constants::AnimationHeartbeatInterval();
-        if (ImGui::GetIO().WantTextInput) {
-            delay = std::min(delay, Constants::BlinkingCursorHeartbeatInterval());
-        }
-        if (m_requestAnimationFrameIn) {
-            delay = std::min(delay, *m_requestAnimationFrameIn);
-            m_requestAnimationFrameIn = {};
-        }
-
-        if (0 == SDL_WaitEventTimeout(&event, static_cast<int>(delay * 1000))) {
-            return;
-        }
-
+    void Application::processEvent(SDL_Event& event) {
         if (window) {
             window->processImGuiSDLEvent(&event);
         }
@@ -286,6 +284,32 @@ namespace b {
             default:
                 break;
         }
+    }
+
+    void Application::waitEvent() {
+        SDL_Event event;
+
+        double delay = Constants::AnimationHeartbeatInterval();
+        if (ImGui::GetIO().WantTextInput) {
+            delay = std::min(delay, Constants::BlinkingCursorHeartbeatInterval());
+        }
+        if (m_requestAnimationFrameIn) {
+            delay = std::min(delay, *m_requestAnimationFrameIn);
+            m_requestAnimationFrameIn = {};
+        }
+
+#ifndef B_OS_WEB
+        if (0 != SDL_WaitEventTimeout(&event, static_cast<int>(delay * 1000))) {
+            processEvent(event);
+        }
+#else // B_OS_WEB
+        while (true) {
+            if (0 == SDL_WaitEventTimeout(&event, 0)) {
+                break;
+            }
+            processEvent(event);
+        }
+#endif // B_OS_WEB
     }
 
 } // namespace b

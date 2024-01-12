@@ -4,9 +4,12 @@
 #include <functional>
 #include <map>
 #include "string.hpp"
+#include "time.hpp"
 #include "eventbus.hpp"
 #include "events.hpp"
 #include "renderer.hpp"
+
+extern std::unique_ptr<b::Application> CreateApp();
 
 namespace b {
 
@@ -18,13 +21,12 @@ namespace b {
         virtual ~Application();
 
         static Application& get();
-        static bool instanceExists();
 
-        const std::vector<std::string>& args() const;
-        double framerate() const;
-        double frametime() const;
-        uint64_t framecount() const;
-        int exitCode() const;
+        [[nodiscard]] const std::vector<std::string>& args() const;
+        [[nodiscard]] double framerate() const;
+        [[nodiscard]] double frametime() const;
+        [[nodiscard]] uint64_t framecount() const;
+        [[nodiscard]] int exitCode() const;
 
         virtual void onSetup() = 0;
         virtual void onUpdate() = 0;
@@ -40,7 +42,8 @@ namespace b {
 
         void requestAnimationFrameIn(double seconds);
 
-        [[nodiscard]] int run(const std::string& appname, int argc, char* argv[]);
+        void runSingleFrame();
+        [[nodiscard]] int run(int argc, char* argv[]);
 
         template<typename T, typename... TArgs>
         auto attachEventHandler(TArgs&&... args) {
@@ -66,6 +69,7 @@ namespace b {
         bool callUpdate();
         bool callRender();
         bool callClose();
+        void processEvent(SDL_Event& event);
         void waitEvent();
 
         bool m_closeRequested { false };
@@ -74,13 +78,12 @@ namespace b {
 
         b::EventBus m_eventbus;
 
+        double m_lastFrame = b::time();
         double m_actualFramerate { 0.0 };
         double m_actualFrametime { 0.0 };
         std::vector<std::string> m_args;
         uint64_t m_framecount { 0 };
         int m_exitCode { 0 };
-
-        inline static Application* m_instance { nullptr };
     };
 
 }

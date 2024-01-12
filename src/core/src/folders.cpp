@@ -25,6 +25,8 @@ namespace b {
             return {};
         }
         return b::narrow(buffer.data());
+#elif defined(B_OS_WEB)
+        return b::Folders::ApplicationName();
 #else
         std::array<char, PATH_MAX> buffer = {};
         auto count = readlink("/proc/self/exe", buffer.data(), buffer.size());

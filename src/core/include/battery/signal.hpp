@@ -25,6 +25,7 @@
 ///
 namespace b {
 
+#ifndef B_OS_WEB
     ///
     /// \brief Set a handler to be executed when the user presses Ctrl+C during execution
     /// \details The callback function is pushed onto a stack and when a Ctrl+C event is received, the topmost function is called.
@@ -53,5 +54,7 @@ namespace b {
     /// \see pop_ctrl_c_handler()
     ///
     void generate_ctrl_c_event();
+
+#endif // !B_OS_WEB
 
 } // namespace b

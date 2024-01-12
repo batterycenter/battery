@@ -1,4 +1,5 @@
 
+#ifndef B_OS_WEB
 #include "battery/file_watcher.hpp"
 
 namespace b {
@@ -33,3 +34,5 @@ namespace b {
     }
 
 } // namespace b
+
+#endif // !B_OS_WEB

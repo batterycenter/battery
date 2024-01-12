@@ -1,4 +1,6 @@
 
+#ifndef B_OS_WEB
+
 #include "battery/process.hpp"
 #include "battery/signal.hpp"
 #include "battery/time.hpp"
@@ -234,3 +236,5 @@ namespace b {
     }
 
 } // namespace b
+
+#endif // !B_OS_WEB

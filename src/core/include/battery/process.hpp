@@ -1,5 +1,6 @@
 #pragma once
 
+#ifndef B_OS_WEB
 #include "fs.hpp"
 #include "async_worker.hpp"
 
@@ -86,4 +87,6 @@ namespace b {
 
     process execute(const std::string& command, const process::options_t& options = process::options_t());
 
-}
+} // namespace b
+
+#endif // !B_OS_WEB

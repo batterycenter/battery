@@ -2,8 +2,8 @@
 #include "battery/imguilua.hpp"
 #include "battery/log.hpp"
 #include "battery/application.hpp"
-#include "battery/extern/magic_enum.hpp"
 #include "imgui_internal.h"
+#include "battery/extern/magic_enum.hpp"
 
 extern "C" {
     #include <lua.h>

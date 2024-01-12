@@ -14,6 +14,8 @@
 // limitations under the License.
 //
 
+#ifndef B_OS_WEB
+
 #include "battery/lockfile.hpp"
 #include "battery/string.hpp"
 #include "battery/fs.hpp"
@@ -198,3 +200,5 @@ namespace b {
     }
 
 } // namespace b
+
+#endif // !B_OS_WEB

@@ -16,12 +16,23 @@
 #include <dwmapi.h>
 #endif
 
+#ifdef B_OS_WEB
+#include <emscripten.h>
+EM_JS(double, emscripten_get_window_width, (), {
+    return window.innerWidth;
+});
+
+EM_JS(double, emscripten_get_window_height, (), {
+    return window.innerHeight;
+});
+#endif // !B_OS_WEB
+
 namespace b {
 
-    b::Vec2 getPrimaryMonitorSize() {
-        SDL_DisplayMode DM;
-        SDL_GetCurrentDisplayMode(0, &DM);
-        return b::Vec2(DM.w, DM.h);
+    b::Vec2 GetPrimaryMonitorSize() {
+        SDL_DisplayMode dm;
+        SDL_GetCurrentDisplayMode(0, &dm);
+        return b::Vec2(dm.w, dm.h);
     }
 
     Window::Window(const std::string& title, const b::Vec2& size, const WindowOptions& options)
@@ -36,18 +47,25 @@ namespace b {
 
         // Calculate window size and position
         b::Vec2 newSize = size;
-        b::Vec2 newPosition = (getPrimaryMonitorSize() - size) / 2.0;
+        b::Vec2 newPosition = (GetPrimaryMonitorSize() - size) / 2.0;
         bool maximized = false;
 
         // Restore the previous window position and size
+#ifndef B_OS_WEB
         if (auto state = loadCachedWindowState(); state) {
             newPosition = state->position;
             newSize = state->size;
             maximized = state->maximized;
         }
+#else
+        newSize = { emscripten_get_window_width(), emscripten_get_window_height() };
+        newPosition = { 0, 0 };
+#endif // !B_OS_WEB
 
         // Setup SDL window flags
         uint32_t flags = 0;
+
+#ifndef B_OS_WEB
         if (m_options.startAsVisible) {
             flags |= SDL_WINDOW_SHOWN;
         }
@@ -57,6 +75,9 @@ namespace b {
         if (m_options.resizable) {
             flags |= SDL_WINDOW_RESIZABLE;
         }
+#else // !B_OS_WEB
+        flags |= SDL_WINDOW_SHOWN;
+#endif // !B_OS_WEB
 
         // Create the SDL window
         m_sdlWindow = SDL_CreateWindow(
@@ -67,6 +88,10 @@ namespace b {
                 static_cast<int>(newSize.y),
                 flags | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI
         );
+        if (m_sdlWindow == nullptr) {
+            throw std::runtime_error(b::format("b::Window: Failed to create SDL Window: {}",
+                                               SDL_GetError()));
+        }
         m_sdlWindowID = SDL_GetWindowID(m_sdlWindow);
         updateWin32DarkMode();
 
@@ -75,9 +100,11 @@ namespace b {
             centerOnPrimaryMonitor();
         }
 
+#ifndef B_OS_WEB
         if (maximized) {
             maximize();
         }
+#endif // B_OS_WEB
 
         // Load default battery icon
         setIcon(b::Resource::FromBase64(b::Constants::BatteryIconBase64()));
@@ -85,12 +112,14 @@ namespace b {
     }
 
     Window::~Window() noexcept {
-        if (m_sdlWindow) {
+        if (m_sdlWindow != nullptr) {
             bool maximized = isMaximized();
             if (maximized) {
                 restore();
             }
+#ifndef B_OS_WEB
             writeCachedWindowState({ getSize(), getPosition(), maximized });
+#endif // !B_OS_WEB
             SDL_DestroyWindow(m_sdlWindow);
             m_sdlWindow = nullptr;
         }
@@ -126,6 +155,8 @@ namespace b {
     void Window::maximize() {
 #ifdef B_OS_WINDOWS
         ShowWindow(getSystemHandle(), SW_MAXIMIZE);
+#elif defined B_OS_WEB
+        setSize(GetPrimaryMonitorSize());
 #else
 #warning "Not implemented"
 #endif
@@ -152,6 +183,7 @@ namespace b {
         return IsZoomed(getSystemHandle()) != 0;
 #else
 #warning "Not implemented"
+        return false;
 #endif
     }
 
@@ -160,6 +192,7 @@ namespace b {
         return IsIconic(getSystemHandle()) != 0;
 #else
 #warning "Not implemented"
+        return false;
 #endif
     }
 
@@ -249,7 +282,7 @@ namespace b {
     }
 
     void Window::centerOnPrimaryMonitor() {
-        auto monitorSize = getPrimaryMonitorSize();
+        auto monitorSize = GetPrimaryMonitorSize();
         auto size = b::Vec2(std::min(getSize().x, monitorSize.x), std::min(getSize().y, monitorSize.y));
         setSize(size);
         setPosition((monitorSize - size) / 2.0);
@@ -397,6 +430,7 @@ namespace b {
         return false;
     }
 
+#ifndef B_OS_WEB
     std::optional<WindowState> Window::loadCachedWindowState() const {
         if (!m_options.lastWindowStateJsonFilePath) {
             return {};
@@ -430,6 +464,7 @@ namespace b {
                                        glz::write_json(state));
         return static_cast<bool>(result);
     }
+#endif // !B_OS_WEB
 
 #ifdef B_OS_WINDOWS
     static COLORREF ImColToColorref(const ImColor& color) {

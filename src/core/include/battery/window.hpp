@@ -4,6 +4,7 @@
 
 #include "string.hpp"
 #include "vec.hpp"
+#include "folders.hpp"
 #include "resource_loader.hpp"
 #include "eventbus.hpp"
 #include "glaze/glaze.hpp"
@@ -48,14 +49,16 @@ namespace b {
 #endif
 
     struct WindowOptions {
+#ifndef B_OS_WEB
         std::optional<b::fs::path> lastWindowStateJsonFilePath = b::Folders::AppConfigDir() / "windowstate.json";
         std::optional<ImColor> win32CustomTitleBarColor = Constants::DefaultWindowTitlebarColor();
         std::optional<ImColor> win32CustomWindowFrameColor = Constants::DefaultWindowFrameColor();
         bool startAsVisible = true;
         bool resizable = true;
+#endif // !B_OS_WEB
     };
 
-    static b::Vec2 getPrimaryMonitorSize();
+    static b::Vec2 GetPrimaryMonitorSize();
 
     class Window {
     public:
@@ -68,7 +71,7 @@ namespace b {
 //        widget_style style;
 
         Window(const std::string& title, const b::Vec2& size, const WindowOptions& options = WindowOptions());
-        ~Window() noexcept;
+        virtual ~Window() noexcept;
 
         b::Application& app() const;
 
@@ -140,8 +143,10 @@ namespace b {
 
     private:
 
+#ifndef B_OS_WEB
         std::optional<WindowState> loadCachedWindowState() const;
         bool writeCachedWindowState(WindowState state) const;
+#endif // !B_OS_WEB
 
         void renderContent();
         void updateWin32DarkMode();
@@ -156,4 +161,4 @@ namespace b {
         WindowOptions m_options {};
     };
 
-}
+}  // namespace b
