@@ -1,7 +1,7 @@
 /*
   Glaze Library
 
-  Copyright (c) 2019 - present, Anyar Inc.
+  Copyright (c) 2019 - present, Stephen Berry
 
   Permission is hereby granted, free of charge, to any person obtaining
   a copy of this software and associated documentation files (the
@@ -41,74 +41,20 @@
 namespace glz
 {
    template <class T>
-   inline parse_error read_file(T& value, const sv file_name, auto&& buffer) noexcept
+   [[deprecated(
+      "Use specific read_file_json, etc. This old version was a bad design and would instatiate all "
+      "formats")]] inline parse_error
+   read_file(T&, const sv, auto&&) noexcept
    {
-      context ctx{};
-      ctx.current_file = file_name;
-
-      std::filesystem::path path{file_name};
-
-      const auto ec = file_to_buffer(buffer, ctx.current_file);
-
-      if (bool(ec)) {
-         return {ec};
-      }
-
-      if (path.has_extension()) {
-         const auto extension = path.extension().string();
-
-         if (extension == ".json" || extension == ".jsonc") {
-            return read<opts{}>(value, buffer, ctx);
-         }
-         else if (extension == ".beve") {
-            return read<opts{.format = binary}>(value, buffer, ctx);
-         }
-         else {
-            return {error_code::file_extension_not_supported};
-         }
-      }
-      else {
-         return {error_code::could_not_determine_extension};
-      }
+      return {};
    }
 
    template <class T>
-   [[nodiscard]] inline write_error write_file(T& value, const sv file_name, auto&& buffer) noexcept
+   [[deprecated(
+      "Use specific write_file_json, etc. This old version was a bad design and would instatiate all "
+      "formats")]] [[nodiscard]] inline write_error
+   write_file(T&, const sv, auto&&) noexcept
    {
-      context ctx{};
-      ctx.current_file = file_name;
-
-      std::filesystem::path path{file_name};
-
-      if (path.has_extension()) {
-         const auto extension = path.extension().string();
-
-         if (extension == ".json") {
-            write<opts{}>(value, buffer, ctx);
-         }
-         else if (extension == ".jsonc") {
-            write<opts{.comments = true}>(value, buffer, ctx);
-         }
-         else if (extension == ".beve") {
-            write<opts{.format = binary}>(value, buffer, ctx);
-         }
-         else {
-            return {error_code::file_extension_not_supported};
-         }
-      }
-      else {
-         return {error_code::could_not_determine_extension};
-      }
-
-      std::ofstream file(std::string{file_name});
-
-      if (file) {
-         file << buffer;
-      }
-      else {
-         return {error_code::file_open_failure};
-      }
-
       return {};
    }
 }

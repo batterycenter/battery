@@ -173,25 +173,54 @@ namespace glz
          }
       };
 
-      template <glaze_object_t T>
+      template <class T>
+         requires(glaze_object_t<T> || reflectable<T>)
       struct to_csv<T>
       {
          template <auto Opts, class B>
          static void op(auto&& value, is_context auto&& ctx, B&& b, auto&& ix) noexcept
          {
             using V = std::decay_t<T>;
-            static constexpr auto N = std::tuple_size_v<meta_t<V>>;
+
+            static constexpr auto N = [] {
+               if constexpr (reflectable<T>) {
+                  return count_members<T>;
+               }
+               else {
+                  return std::tuple_size_v<meta_t<T>>;
+               }
+            }();
+
+            [[maybe_unused]] decltype(auto) t = [&] {
+               if constexpr (reflectable<T>) {
+                  return to_tuple(value);
+               }
+               else {
+                  return nullptr;
+               }
+            }();
 
             if constexpr (Opts.layout == rowwise) {
                for_each<N>([&](auto I) {
-                  static constexpr auto item = glz::tuplet::get<I>(meta_v<V>);
-                  static constexpr sv key = glz::tuplet::get<0>(item);
+                  using Element = glaze_tuple_element<I, N, T>;
+                  static constexpr size_t member_index = Element::member_index;
 
-                  using item_type = std::decay_t<decltype(get_member(value, glz::tuplet::get<1>(item)))>;
-                  using V = typename item_type::value_type;
+                  using item_type = typename std::decay<typename Element::type>::type;
+                  using value_type = typename item_type::value_type;
 
-                  if constexpr (writable_array_t<V>) {
-                     auto&& member = get_member(value, glz::tuplet::get<1>(item));
+                  static constexpr sv key = key_name<I, T, Element::use_reflection>;
+
+                  decltype(auto) mem = [&] {
+                     if constexpr (reflectable<T>) {
+                        return std::get<I>(t);
+                     }
+                     else {
+                        return get<member_index>(get<I>(meta_v<V>));
+                     }
+                  }();
+
+                  if constexpr (writable_array_t<value_type>) {
+                     decltype(auto) member = get_member(value, mem);
                      const auto count = member.size();
                      const auto size = member[0].size();
                      for (size_t i = 0; i < size; ++i) {
@@ -216,7 +245,7 @@ namespace glz
                   else {
                      dump<key>(b, ix);
                      dump<','>(b, ix);
-                     write<csv>::op<Opts>(get_member(value, glz::tuplet::get<1>(item)), ctx, b, ix);
+                     write<csv>::op<Opts>(get_member(value, mem), ctx, b, ix);
                      dump<'\n'>(b, ix);
                   }
                });
@@ -224,13 +253,23 @@ namespace glz
             else {
                // write titles
                for_each<N>([&](auto I) {
-                  static constexpr auto item = glz::tuplet::get<I>(meta_v<V>);
-                  static constexpr sv key = glz::tuplet::get<0>(item);
+                  using Element = glaze_tuple_element<I, N, T>;
+                  static constexpr size_t member_index = Element::member_index;
+                  using X = std::decay_t<typename Element::type>;
 
-                  using X = std::decay_t<decltype(get_member(value, glz::tuplet::get<1>(item)))>;
+                  static constexpr sv key = key_name<I, T, Element::use_reflection>;
+
+                  decltype(auto) member = [&] {
+                     if constexpr (reflectable<T>) {
+                        return std::get<I>(t);
+                     }
+                     else {
+                        return get<member_index>(get<I>(meta_v<V>));
+                     }
+                  }();
 
                   if constexpr (fixed_array_value_t<X>) {
-                     const auto size = get_member(value, glz::tuplet::get<1>(item))[0].size();
+                     const auto size = get_member(value, member)[0].size();
                      for (size_t i = 0; i < size; ++i) {
                         dump<key>(b, ix);
                         dump<'['>(b, ix);
@@ -257,12 +296,21 @@ namespace glz
 
                while (true) {
                   for_each<N>([&](auto I) {
-                     static constexpr auto item = glz::tuplet::get<I>(meta_v<V>);
+                     using Element = glaze_tuple_element<I, N, T>;
+                     static constexpr size_t member_index = Element::member_index;
+                     using X = std::decay_t<typename Element::type>;
 
-                     using X = std::decay_t<decltype(get_member(value, glz::tuplet::get<1>(item)))>;
+                     decltype(auto) mem = [&] {
+                        if constexpr (reflectable<T>) {
+                           return std::get<I>(t);
+                        }
+                        else {
+                           return get<member_index>(get<I>(meta_v<V>));
+                        }
+                     }();
 
                      if constexpr (fixed_array_value_t<X>) {
-                        auto&& member = get_member(value, glz::tuplet::get<1>(item));
+                        decltype(auto) member = get_member(value, mem);
                         if (row >= member.size()) {
                            end = true;
                            return;
@@ -277,7 +325,7 @@ namespace glz
                         }
                      }
                      else {
-                        auto&& member = get_member(value, glz::tuplet::get<1>(item));
+                        decltype(auto) member = get_member(value, mem);
                         if (row >= member.size()) {
                            end = true;
                            return;
@@ -304,17 +352,17 @@ namespace glz
       };
    }
 
-   template <class T, class Buffer>
+   template <uint32_t layout = rowwise, class T, class Buffer>
    GLZ_ALWAYS_INLINE auto write_csv(T&& value, Buffer&& buffer) noexcept
    {
-      return write<opts{.format = csv}>(std::forward<T>(value), std::forward<Buffer>(buffer));
+      return write<opts{.format = csv, .layout = layout}>(std::forward<T>(value), std::forward<Buffer>(buffer));
    }
 
-   template <class T>
+   template <uint32_t layout = rowwise, class T>
    GLZ_ALWAYS_INLINE auto write_csv(T&& value) noexcept
    {
       std::string buffer{};
-      write<opts{.format = csv}>(std::forward<T>(value), buffer);
+      write<opts{.format = csv, .layout = layout}>(std::forward<T>(value), buffer);
       return buffer;
    }
 

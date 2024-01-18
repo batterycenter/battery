@@ -102,7 +102,7 @@ namespace b {
     };
 
 #ifdef B_OS_WINDOWS
-    static int windows_handler(DWORD dwCtrlType) {  // Separate function instead of lambda: We need the function pointer twice
+    static int __stdcall windows_handler(DWORD dwCtrlType) {  // Separate function instead of lambda: We need the function pointer twice
         switch (dwCtrlType) {
             case CTRL_C_EVENT:
             case CTRL_BREAK_EVENT:

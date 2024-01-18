@@ -75,6 +75,7 @@ namespace glz
                                                const std::string_view filename = "")
       {
          std::string s{};
+         s.reserve(error.size() + info.context.size() + filename.size() + 128);
 
          if (!filename.empty()) {
             s += filename;
@@ -112,5 +113,5 @@ namespace glz
          fmt::format_to(it, FMT_COMPILE("{: <{}}^\n"), "", info.column - 1);*/
          return s;
       }
-   } // namespace detail
-} // namespace test
+   }
+}

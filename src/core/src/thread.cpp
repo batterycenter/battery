@@ -7,9 +7,10 @@
 namespace b {
 
     void thread::closeApplicationIfExists() {
-        if (b::Application::instanceExists()) {
-            b::Application::get().close();
-        }
+        b::log::error("thread::closeApplicationIfExists() not implemented");
+        // if (b::Application::instanceExists()) {
+        //     b::Application::get().close();
+        // }
     }
 
 } // namespace b

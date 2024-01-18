@@ -91,8 +91,9 @@ namespace glz
       }
 
       template <class Arg_tuple, class F, class Parent, size_t... Is>
-         requires std::invocable<F, Parent, ref_t<std::tuple_element_t<Is, Arg_tuple>>...> decltype(auto)
-      call_args(F&& f, Parent&& parent, [[maybe_unused]] std::span<void*> args, std::index_sequence<Is...>)
+         requires std::invocable<F, Parent, ref_t<std::tuple_element_t<Is, Arg_tuple>>...>
+      decltype(auto) call_args(F&& f, Parent&& parent, [[maybe_unused]] std::span<void*> args,
+                               std::index_sequence<Is...>)
       {
          return f(parent, to_ref<std::tuple_element_t<Is, Arg_tuple>>(args[Is])...);
       }
@@ -245,8 +246,8 @@ namespace glz
                            static constexpr auto h = glz::hash<F>();
                            if (h == type_hash) [[likely]] {
                               auto* f = new F{};
-                              *f = [parent = &parent, val = &val](auto&&... args) -> decltype(auto) {
-                                 return ((*parent).*(*val))(std::forward<decltype(args)>(args)...);
+                              *f = [=, parent = &parent](auto&&... args) -> decltype(auto) {
+                                 return ((*parent).*(val))(std::forward<decltype(args)>(args)...);
                               };
                               result = std::unique_ptr<void, void (*)(void*)>{
                                  f, [](void* ptr) { delete static_cast<F*>(ptr); }};

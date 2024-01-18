@@ -8,6 +8,7 @@
 #include "eventbus.hpp"
 #include "events.hpp"
 #include "renderer.hpp"
+#include <optional>
 
 extern std::unique_ptr<b::Application> CreateApp();
 
