@@ -20,7 +20,7 @@ public:
             close();
         });
 
-        bindEmbeddedLuaScript<"ui/main.lua">();
+        window->bindEmbeddedLuaScript<"ui/main.lua">();
     }
 
     void onUpdate() override {

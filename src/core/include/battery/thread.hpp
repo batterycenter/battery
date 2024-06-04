@@ -140,11 +140,11 @@ namespace b {
           : std::jthread([func = std::forward<Fn>(func), ...args = std::forward<Args>(args), this]() mutable {
                 m_waitRunningPromise.set_value();
                 if constexpr (std::is_invocable_v<std::decay_t<Fn>, std::stop_token, std::decay_t<Args>...>) {
-                    if (!catchCommonExceptions(std::move(func), get_stop_token(), std::move(args)...)) {
+                    if (!CatchCommonExceptions(std::move(func), get_stop_token(), std::move(args)...)) {
                         closeApplicationIfExists();
                     }
                 } else {
-                    if (!catchCommonExceptions(std::move(func), std::move(args)...)) {
+                    if (!CatchCommonExceptions(std::move(func), std::move(args)...)) {
                         closeApplicationIfExists();
                     }
                 }

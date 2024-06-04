@@ -7,9 +7,9 @@
 namespace b {
 
     void thread::closeApplicationIfExists() {
-        if (b::Application::instanceExists()) {
-            b::Application::get().close();
-        }
+//        if (b::Application::instanceExists()) {
+//            b::Application::get().close();
+//        }
     }
 
 } // namespace b

@@ -35,7 +35,7 @@
 
 #include "battery/battery.hpp"
 
-int b::main([[maybe_unused]] const std::vector<std::string>& args) {
+int main([[maybe_unused]] const std::vector<std::string>& args) {
 
     return 0;
 }
