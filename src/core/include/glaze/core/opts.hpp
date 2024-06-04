@@ -30,12 +30,17 @@ namespace glz
       bool number = false; // read numbers as strings and write these string as numbers
       bool raw = false; // write out string like values without quotes
       bool raw_string = false; // do not decode/encode escaped characters for strings (improves read/write performance)
+      bool structs_as_arrays = false; // Handle structs (reading/writing) without keys, which applies to reflectable and
+                                      // glaze_object_t concepts
 
       // INTERNAL USE
       bool opening_handled = false; // the opening character has been handled
       bool closing_handled = false; // the closing character has been handled
       bool ws_handled = false; // whitespace has already been parsed
       bool no_header = false; // whether or not a binary header is needed
+      bool write_unknown = true; // whether to write unkwown fields
+
+      [[nodiscard]] constexpr bool operator==(const opts&) const noexcept = default;
    };
 
    template <opts Opts>
@@ -109,4 +114,36 @@ namespace glz
 
    template <opts Opts, auto member_ptr>
    inline constexpr auto opt_false = opt_off<Opts, member_ptr>();
+
+   template <opts Opts>
+   constexpr auto write_unknown_off()
+   {
+      opts ret = Opts;
+      ret.write_unknown = false;
+      return ret;
+   }
+
+   template <opts Opts>
+   constexpr auto write_unknown_on()
+   {
+      opts ret = Opts;
+      ret.write_unknown = true;
+      return ret;
+   }
+
+   template <opts Opts>
+   constexpr auto set_binary()
+   {
+      opts ret = Opts;
+      ret.format = binary;
+      return ret;
+   }
+
+   template <opts Opts>
+   constexpr auto set_json()
+   {
+      opts ret = Opts;
+      ret.format = json;
+      return ret;
+   }
 }

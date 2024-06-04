@@ -10,10 +10,6 @@ namespace glz::detail
    template <opts Opts>
    GLZ_FLATTEN void skip_object(is_context auto&& ctx, auto&& it, auto&& end) noexcept
    {
-      if (bool(ctx.error)) [[unlikely]] {
-         return;
-      }
-
       if constexpr (!Opts.force_conformance) {
          skip_until_closed<'{', '}'>(ctx, it, end);
       }
@@ -34,37 +30,33 @@ namespace glz::detail
             skip_string<Opts>(ctx, it, end);
             if (bool(ctx.error)) [[unlikely]]
                return;
-            skip_ws<Opts>(ctx, it, end);
+            skip_ws_no_pre_check<Opts>(ctx, it, end);
             if (bool(ctx.error)) [[unlikely]]
                return;
-            match<':'>(ctx, it, end);
+            match<':'>(ctx, it);
             if (bool(ctx.error)) [[unlikely]]
                return;
-            skip_ws<Opts>(ctx, it, end);
+            skip_ws_no_pre_check<Opts>(ctx, it, end);
             if (bool(ctx.error)) [[unlikely]]
                return;
             skip_value<Opts>(ctx, it, end);
             if (bool(ctx.error)) [[unlikely]]
                return;
-            skip_ws<Opts>(ctx, it, end);
+            skip_ws_no_pre_check<Opts>(ctx, it, end);
             if (bool(ctx.error)) [[unlikely]]
                return;
             if (*it != ',') break;
-            skip_ws<Opts>(ctx, ++it, end);
+            skip_ws_no_pre_check<Opts>(ctx, ++it, end);
             if (bool(ctx.error)) [[unlikely]]
                return;
          }
-         match<'}'>(ctx, it, end);
+         match<'}'>(ctx, it);
       }
    }
 
    template <opts Opts>
    GLZ_FLATTEN void skip_array(is_context auto&& ctx, auto&& it, auto&& end) noexcept
    {
-      if (bool(ctx.error)) [[unlikely]] {
-         return;
-      }
-
       if constexpr (!Opts.force_conformance) {
          skip_until_closed<'[', ']'>(ctx, it, end);
       }
@@ -81,28 +73,26 @@ namespace glz::detail
             skip_value<Opts>(ctx, it, end);
             if (bool(ctx.error)) [[unlikely]]
                return;
-            skip_ws<Opts>(ctx, it, end);
+            skip_ws_no_pre_check<Opts>(ctx, it, end);
             if (bool(ctx.error)) [[unlikely]]
                return;
             if (*it != ',') break;
-            skip_ws<Opts>(ctx, ++it, end);
+            skip_ws_no_pre_check<Opts>(ctx, ++it, end);
             if (bool(ctx.error)) [[unlikely]]
                return;
          }
-         match<']'>(ctx, it, end);
+         match<']'>(ctx, it);
       }
    }
 
    template <opts Opts>
    GLZ_FLATTEN void skip_value(is_context auto&& ctx, auto&& it, auto&& end) noexcept
    {
-      if (bool(ctx.error)) [[unlikely]] {
-         return;
-      }
-
       if constexpr (!Opts.force_conformance) {
          if constexpr (!Opts.ws_handled) {
             skip_ws<Opts>(ctx, it, end);
+            if (bool(ctx.error)) [[unlikely]]
+               return;
          }
          while (true) {
             switch (*it) {
@@ -145,6 +135,8 @@ namespace glz::detail
       else {
          if constexpr (!Opts.ws_handled) {
             skip_ws<Opts>(ctx, it, end);
+            if (bool(ctx.error)) [[unlikely]]
+               return;
          }
          switch (*it) {
          case '{': {

@@ -8,6 +8,7 @@
 #include "glaze/core/format.hpp"
 #include "glaze/core/read.hpp"
 #include "glaze/file/file_ops.hpp"
+#include "glaze/reflection/reflect.hpp"
 #include "glaze/util/parse.hpp"
 #include "glaze/util/strod.hpp"
 
@@ -66,7 +67,7 @@ namespace glz
                      return;
                   }
 
-                  if (i > std::numeric_limits<V>::max()) [[unlikely]] {
+                  if (i > (std::numeric_limits<V>::max)()) [[unlikely]] {
                      ctx.error = error_code::parse_number_failure;
                      return;
                   }
@@ -85,7 +86,7 @@ namespace glz
                      return;
                   }
 
-                  if (i > std::numeric_limits<V>::max()) [[unlikely]] {
+                  if (i > (std::numeric_limits<V>::max)()) [[unlikely]] {
                      ctx.error = error_code::parse_number_failure;
                      return;
                   }
@@ -93,17 +94,11 @@ namespace glz
                }
             }
             else {
-               // TODO: fix this also, taken from json
-               using X =
-                  std::conditional_t<std::is_const_v<std::remove_pointer_t<std::remove_reference_t<decltype(it)>>>,
-                                     const uint8_t*, uint8_t*>;
-               auto cur = reinterpret_cast<X>(it);
-               auto s = parse_float<V, Opts.force_conformance>(value, cur);
+               auto s = parse_float<V, Opts.force_conformance>(value, it);
                if (!s) [[unlikely]] {
                   ctx.error = error_code::parse_number_failure;
                   return;
                }
-               it = reinterpret_cast<std::remove_reference_t<decltype(it)>>(cur);
             }
          }
       };
@@ -259,7 +254,7 @@ namespace glz
                      }
                   }
 
-                  match<','>(ctx, it, end);
+                  match<','>(ctx, it);
 
                   using key_type = typename std::decay_t<decltype(value)>::key_type;
                   auto& member = value[key_type(key)];
@@ -362,14 +357,37 @@ namespace glz
          }
       };
 
-      template <glaze_object_t T>
+      template <class T>
+         requires(glaze_object_t<T> || reflectable<T>)
       struct from_csv<T>
       {
          template <auto Opts, class It>
          static void op(auto&& value, is_context auto&& ctx, It&& it, auto&& end)
          {
-            static constexpr auto frozen_map = detail::make_map<T, Opts.use_hash_comparison>();
-            // static constexpr auto N = std::tuple_size_v<meta_t<T>>;
+            static constexpr auto num_members = [] {
+               if constexpr (reflectable<T>) {
+                  return count_members<T>;
+               }
+               else {
+                  return std::tuple_size_v<meta_t<T>>;
+               }
+            }();
+
+            decltype(auto) frozen_map = [&] {
+               if constexpr (reflectable<T> && num_members > 0) {
+                  static constinit auto cmap = make_map<T, Opts.use_hash_comparison>();
+                  // We want to run this populate outside of the while loop
+                  populate_map(value, cmap); // Function required for MSVC to build
+                  return cmap;
+               }
+               else if constexpr (glaze_object_t<T> && num_members > 0) {
+                  static constexpr auto cmap = make_map<T, Opts.use_hash_comparison>();
+                  return cmap;
+               }
+               else {
+                  return nullptr;
+               }
+            }();
 
             if constexpr (Opts.layout == rowwise) {
                while (it != end) {
@@ -377,7 +395,7 @@ namespace glz
                   goto_delim<','>(it, end);
                   sv key{start, static_cast<size_t>(it - start)};
 
-                  size_t csv_index;
+                  size_t csv_index{};
 
                   const auto brace_pos = key.find('[');
                   if (brace_pos != sv::npos) {
@@ -385,13 +403,16 @@ namespace glz
                      const auto index = key.substr(brace_pos + 1, close_brace - (brace_pos + 1));
                      key = key.substr(0, brace_pos);
                      const auto [ptr, ec] = std::from_chars(index.data(), index.data() + index.size(), csv_index);
-                     if (ec != std::errc()) {
+                     if (ec != std::errc()) [[unlikely]] {
                         ctx.error = error_code::syntax_error;
                         return;
                      }
                   }
 
-                  match<','>(ctx, it, end);
+                  match<','>(ctx, it);
+                  if (bool(ctx.error)) [[unlikely]] {
+                     return;
+                  }
 
                   const auto& member_it = frozen_map.find(key);
 
@@ -414,11 +435,14 @@ namespace glz
                                     ++it;
                                     break;
                                  }
+                                 else if (it == end) {
+                                    return;
+                                 }
 
-                                 if (*it == ',') {
+                                 if (*it == ',') [[likely]] {
                                     ++it;
                                  }
-                                 else {
+                                 else [[unlikely]] {
                                     ctx.error = error_code::syntax_error;
                                     return;
                                  }
@@ -435,10 +459,10 @@ namespace glz
                                     break;
                                  }
 
-                                 if (*it == ',') {
+                                 if (*it == ',') [[likely]] {
                                     ++it;
                                  }
-                                 else {
+                                 else [[unlikely]] {
                                     ctx.error = error_code::syntax_error;
                                     return;
                                  }
@@ -446,6 +470,10 @@ namespace glz
                            }
                         },
                         member_it->second);
+
+                     if (bool(ctx.error)) [[unlikely]] {
+                        return;
+                     }
                   }
                   else [[unlikely]] {
                      ctx.error = error_code::unknown_key;
@@ -457,14 +485,14 @@ namespace glz
             {
                const auto keys = read_column_wise_keys(ctx, it, end);
 
-               if (bool(ctx.error)) {
+               if (bool(ctx.error)) [[unlikely]] {
                   return;
                }
 
-               if (*it == '\n') {
+               if (*it == '\n') [[likely]] {
                   ++it; // skip new line
                }
-               else {
+               else [[unlikely]] {
                   ctx.error = error_code::syntax_error;
                   return;
                }
@@ -517,13 +545,13 @@ namespace glz
    }
 
    template <uint32_t layout = rowwise, class T, class Buffer>
-   inline auto read_csv(T&& value, Buffer&& buffer) noexcept
+   [[nodiscard]] inline auto read_csv(T&& value, Buffer&& buffer) noexcept
    {
       return read<opts{.format = csv, .layout = layout}>(value, std::forward<Buffer>(buffer));
    }
 
    template <uint32_t layout = rowwise, class T, class Buffer>
-   inline auto read_csv(Buffer&& buffer) noexcept
+   [[nodiscard]] inline auto read_csv(Buffer&& buffer) noexcept
    {
       T value{};
       read<opts{.format = csv, .layout = rowwise}>(value, std::forward<Buffer>(buffer));
@@ -531,7 +559,7 @@ namespace glz
    }
 
    template <uint32_t layout = rowwise, class T>
-   inline parse_error read_file_csv(T& value, const sv file_name)
+   [[nodiscard]] inline parse_error read_file_csv(T& value, const sv file_name)
    {
       context ctx{};
       ctx.current_file = file_name;

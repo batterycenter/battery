@@ -40,6 +40,8 @@ namespace glz
    template <class... Ts>
    struct recorder
    {
+      static constexpr auto glaze_reflect = false;
+
       using container_type = std::variant<std::deque<Ts>...>;
 
       std::deque<std::pair<std::string, std::pair<container_type, const void*>>> data;
@@ -122,11 +124,11 @@ namespace glz
             }
 
             if constexpr (!Options.opening_handled) {
-               skip_ws<Options>(ctx, it, end);
-               match<'{'>(ctx, it, end);
+               skip_ws_no_pre_check<Options>(ctx, it, end);
+               match<'{'>(ctx, it);
             }
 
-            skip_ws<Options>(ctx, it, end);
+            skip_ws_no_pre_check<Options>(ctx, it, end);
 
             static constexpr auto Opts = opening_handled_off<ws_handled_off<Options>()>();
 
@@ -148,20 +150,20 @@ namespace glz
                }
 
                skip_ws<Opts>(ctx, it, end);
-               match<':'>(ctx, it, end);
+               match<':'>(ctx, it);
                skip_ws<Opts>(ctx, it, end);
 
                std::visit([&](auto&& deq) { read<json>::op<Opts>(deq, ctx, it, end); }, v.first);
 
                if (i < n - 1) {
                   skip_ws<Opts>(ctx, it, end);
-                  match<','>(ctx, it, end);
+                  match<','>(ctx, it);
                   skip_ws<Opts>(ctx, it, end);
                }
             }
 
             skip_ws<Opts>(ctx, it, end);
-            match<'}'>(ctx, it, end);
+            match<'}'>(ctx, it);
          }
       };
 

@@ -238,15 +238,15 @@ namespace b {
     }
 
 #ifdef B_OS_WINDOWS
-    static BOOL GetWin32MonitorsImpl(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData) {
-        auto *monitors = reinterpret_cast<std::vector<HMONITOR>*>(dwData);
+    static BOOL __stdcall GetWin32MonitorsImpl(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData) {
+        auto *monitors = std::bit_cast<std::vector<HMONITOR>*>(dwData);
         monitors->push_back(hMonitor);
         return TRUE;
     }
 
     static std::vector<HMONITOR> GetAllWin32Monitors() {
         std::vector<HMONITOR> monitors;
-        if (EnumDisplayMonitors(nullptr, nullptr, GetWin32MonitorsImpl, reinterpret_cast<LPARAM>(&monitors)) == 0) {
+        if (EnumDisplayMonitors(NULL, NULL, (MONITORENUMPROC)GetWin32MonitorsImpl, std::bit_cast<LPARAM>(&monitors)) == 0) {
             return {};
         }
         return monitors;
