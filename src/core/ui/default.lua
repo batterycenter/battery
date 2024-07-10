@@ -9,6 +9,12 @@
 --      args The table of arguments to check
 --      expectedList A list of lists of accepted arguments
 function __checkArgs(func, args, expectedList)
+    if not args then
+        return
+    end
+    if not args.items then
+        return
+    end
     for suppliedArgument, _ in pairs(args) do
         local found = false
 

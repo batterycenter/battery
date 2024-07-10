@@ -428,14 +428,17 @@ ImGuiLua::RunLuaString(lua_State* L,
         int execStatus = lua_pcall(L, 0, LUA_MULTRET, 0);
         if (execStatus != LUA_OK) {
             const char* errorMessage = lua_tostring(L, -1);
-            return std::unexpected(
-                b::format("Script execution error: {}", errorMessage));
+            auto error = b::format("Script execution error: {}", errorMessage);
+            b::log::error("{}", error);
+            return std::unexpected(error);
             lua_pop(L, 1);
         }
     }
     else {
         const char* errorMessage = lua_tostring(L, -1);
-        return std::unexpected(b::format("Script loading error: {}", errorMessage));
+        auto error = b::format("Script loading error: {}", errorMessage);
+        b::log::error("{}", error);
+        return std::unexpected(error);
         lua_pop(L, 1);
     }
     return std::nullopt;
@@ -451,22 +454,28 @@ ImGuiLua::CallLuaFunction(lua_State* L,
         luabridge::LuaResult const res = func();
         if (!res) {
             if (!luaDebugFilename.empty()) {
-                return std::unexpected(b::format("File {}: {}() returned an error: {}",
-                                                 luaDebugFilename,
-                                                 functionName,
-                                                 res.errorMessage()));
+                auto error = b::format("File {}: {}() returned an error: {}",
+                                       luaDebugFilename,
+                                       functionName,
+                                       res.errorMessage());
+                b::log::error("{}", error);
+                return std::unexpected(error);
             }
             else {
-                return std::unexpected(b::format(
+                auto error = b::format(
                     "b::ImGuiLua::CallLuaFunction(): {}() returned an error: {}",
                     functionName,
-                    res.errorMessage()));
+                    res.errorMessage());
+                b::log::error("{}", error);
+                return std::unexpected(error);
             }
         }
     }
     else {
-        return std::unexpected(b::format(
-            "ImGuiLua::CallLuaFunction: function {}() does not exist", functionName));
+        auto error = b::format("ImGuiLua::CallLuaFunction: function {}() does not exist",
+                               functionName);
+        b::log::error("{}", error);
+        return std::unexpected(error);
     }
     return std::nullopt;
 }
