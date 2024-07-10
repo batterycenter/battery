@@ -90,8 +90,10 @@ function(b_apply_common_target_options TARGET)  # For all libraries and executab
     # Set common Preprocessor Flags
     if(MSVC)        # TODO: Document all of these MSVC shitties
         target_compile_options(${TARGET} PRIVATE /Zc:__cplusplus)   # Use the standards-compliant __cplusplus macro
-        target_compile_options(${TARGET} PRIVATE /Zc:preprocessor)  # Use the standards-compliant preprocessor instead of MSVC legacy mode
-        target_compile_options(${TARGET} PRIVATE /MP)               # Use multiple cores for compilation
+        if (NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+            target_compile_options(${TARGET} PRIVATE /Zc:preprocessor)  # Use the standards-compliant preprocessor instead of MSVC legacy mode
+            target_compile_options(${TARGET} PRIVATE /MP)               # Use multiple cores for compilation
+        endif ()
         target_compile_options(${TARGET} PRIVATE /W2)               # Warning level
         target_compile_options(${TARGET} PRIVATE /utf-8)            # Use UTF-8 source and execution character sets
     else()

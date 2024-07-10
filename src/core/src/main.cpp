@@ -1,91 +1,102 @@
 
-#include "battery/string.hpp"
-#include "battery/log.hpp"
-#include "battery/folders.hpp"
-#include "battery/messages.hpp"
-#include "battery/time.hpp"
-#include "battery/thread.hpp"
 #include "battery/application.hpp"
+#include "battery/folders.hpp"
 #include "battery/internal/windows.hpp"
+#include "battery/log.hpp"
+#include "battery/messages.hpp"
+#include "battery/string.hpp"
+#include "battery/thread.hpp"
+#include "battery/time.hpp"
 #include "battery/window.hpp"
 
 namespace b {
 
-    static std::vector<std::string> parse_cli([[maybe_unused]] int argc, [[maybe_unused]] const char** argv) {
-        std::vector<std::string> args;
-#ifdef B_OS_WINDOWS                 // On Windows, parse CLI arguments from WinAPI and convert to UTF-8
-        int _argc = 0;
-        LPWSTR* _args = ::CommandLineToArgvW((LPCWSTR)GetCommandLineW(), &_argc);
-        if (_args == nullptr) {
-            b::log::core::critical("CommandLineToArgvW failed: {}", b::internal::get_last_win32_error());
-            b::message_box_error("[Battery->WinAPI]: CommandLineToArgvW failed: " + b::internal::get_last_win32_error());
-            return {};
-        }
-        for (int i = 0; i < _argc; i++) {
-            args.push_back(b::narrow(std::wstring(_args[i])));
-        }
-        ::LocalFree(_args);
+// static std::vector<std::string> parse_cli([[maybe_unused]] int argc,
+//                                           [[maybe_unused]] const char** argv)
+// {
+//     std::vector<std::string> args;
+// #ifdef B_OS_WINDOWS // On Windows, parse CLI arguments from WinAPI and
+//     convert to UTF - 8 int _argc = 0;
+//     LPWSTR* _args = ::CommandLineToArgvW((LPCWSTR)GetCommandLineW(), &_argc);
+//     if (_args == nullptr) {
+//         b::log::core::critical("CommandLineToArgvW failed: {}",
+//                                b::internal::get_last_win32_error());
+//         b::message_box_error("[Battery->WinAPI]: CommandLineToArgvW failed: "
+//                              + b::internal::get_last_win32_error());
+//         return {};
+//     }
+//     for (int i = 0; i < _argc; i++) {
+//         args.push_back(b::narrow(std::wstring(_args[i])));
+//     }
+//     ::LocalFree(_args);
+//
+//     return args;
+// #else // All other platforms simply pass-through
+//     for (int i = 0; i < argc; i++) {
+//         args.emplace_back(argv[i]); //
+//         NOLINT(cppcoreguidelines - pro - bounds - pointer - arithmetic)
+//     }
+// #endif
+//     return args;
+// }
 
-        return args;
-#else                   // All other platforms simply pass-through
-        for (int i = 0; i < argc; i++) {
-            args.emplace_back(argv[i]);     // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-        }
-#endif
-        return args;
-    }
-
-    static void setup_windows_console() {
+static void setup_windows_console()
+{
 #ifdef B_OS_WINDOWS
-        SetConsoleCP(CP_UTF8);
-        SetConsoleOutputCP(CP_UTF8);
-        b::log::core::trace("Switched terminal codepage to Unicode (UTF-8)");
+    SetConsoleCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
+    b::log::core::trace("Switched terminal codepage to Unicode (UTF-8)");
 #endif
-    }
+}
 
-    static void set_windows_dpi_awareness() {
+static void set_windows_dpi_awareness()
+{
 #ifdef B_OS_WINDOWS
-        SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        b::log::core::trace("Enabling DPI-awareness");
+    SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+    b::log::core::trace("Enabling DPI-awareness");
 #endif
-    }
+}
 
-    static void print_production_warning() {
+static void print_production_warning()
+{
 #ifndef B_PRODUCTION_MODE
-        b::log::core::warn("Battery is running in non-production mode, enabling live-reloaded resources. Make sure to enable production mode before releasing your app!");
+    b::log::core::warn(
+        "Battery is running in non-production mode, enabling live-reloaded resources. "
+        "Make sure to enable production mode before releasing your app!");
 #endif
-    }
-	
-    const char** args_to_argv(const std::vector<std::string>& args) {
-        static std::vector<std::string> argsData;  // Static, so the data will stay in memory forever (needed by c_str())
-        static std::vector<const char*> arguments;
+}
 
-        // Store the actual data into argsData
-        argsData.clear();
-        for (const auto& arg : args) {
-            argsData.push_back(arg);
-        }
+const char** args_to_argv(const std::vector<std::string>& args)
+{
+    static std::vector<std::string>
+        argsData; // Static, so the data will stay in memory forever (needed by c_str())
+    static std::vector<const char*> arguments;
 
-        // Now get pointers to each of them
-        arguments.clear();
-		for (const auto& arg : argsData) {
-			arguments.push_back(arg.c_str());
-		}
-        return arguments.data();
+    // Store the actual data into argsData
+    argsData.clear();
+    for (const auto& arg : args) {
+        argsData.push_back(arg);
     }
 
+    // Now get pointers to each of them
+    arguments.clear();
+    for (const auto& arg : argsData) {
+        arguments.push_back(arg.c_str());
+    }
+    return arguments.data();
+}
 
 } // namespace b
 
-int main(int argc, char* argv[]) {
-    b::time();                  // First call sets zero-time to now
+int main(int argc, char* argv[])
+{
+    b::time(); // First call sets zero-time to now
     b::setup_windows_console();
     b::set_windows_dpi_awareness();
     b::print_production_warning();
 
     int result = -1;
-    b::CatchCommonExceptions([&result, &argc, &argv]() {
-            result = b::Application::get().run(argc, argv);
-        });
+    b::CatchCommonExceptions(
+        [&result, &argc, &argv]() { result = b::Application::get().run(argc, argv); });
     return result;
 }

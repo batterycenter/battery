@@ -17,13 +17,13 @@
 // limitations under the License.
 //
 
+#include "application.hpp"
 #include "async_worker.hpp"
 #include "base64.hpp"
 #include "bytearray.hpp"
 #include "cache.hpp"
 #include "color.hpp"
 #include "console.hpp"
-#include "application.hpp"
 #include "constants.hpp"
 #include "constexpr.hpp"
 #include "containers.hpp"
@@ -56,10 +56,14 @@
 #include "vec.hpp"
 #include "window.hpp"
 
-//#include "battery/cli11.hpp"
+// #include "battery/cli11.hpp"
 
-#include "battery/extern/indicators.hpp"   // TODO: Think about moving these to different files
-#include "battery/extern/json.hpp"         // TODO: Think about moving these to different files
+#pragma GCC diagnostic push // Ignore deprecation warnings from 'indicators' library
+#pragma GCC diagnostic ignored "-Wtautological-constant-out-of-range-compare"
+#include "battery/extern/indicators.hpp" // TODO: Think about moving these to different files
+#pragma GCC diagnostic pop
+
+#include "battery/extern/json.hpp" // TODO: Think about moving these to different files
 
 #include "SDL2/SDL_main.h"
 

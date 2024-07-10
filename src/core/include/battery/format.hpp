@@ -17,23 +17,30 @@
 // limitations under the License.
 //
 
+#pragma GCC diagnostic push // Ignore deprecation warnings from 'fmt' library
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 #include "spdlog/fmt/fmt.h"
 #include "spdlog/fmt/ranges.h"
 #include "spdlog/fmt/std.h"
 
+#pragma GCC diagnostic pop
+
 namespace b {
 
-    /// \brief Format a string using Python formatting syntax
-    /// \details This function uses fmt::format under the hood. See https://fmt.dev/latest/syntax.html for more info.
-    ///          Example usage: `b::format("Hello, {0}!", "world")`. The format string must be a plain string literal,
-    ///          the arguments can be any type that provides a formatter for fmt::format. Custom types can be formatted
-    ///          by providing a specialization of fmt::formatter.
-    ///          See https://fmt.dev/latest/api.html#formatting-user-defined-types
-    /// \param fmt The format string
-    /// \param args The arguments to format
-    /// \return The formatted string
-    using fmt::format;
+/// \brief Format a string using Python formatting syntax
+/// \details This function uses fmt::format under the hood. See
+/// https://fmt.dev/latest/syntax.html for more info.
+///          Example usage: `b::format("Hello, {0}!", "world")`. The format string
+///          must be a plain string literal, the arguments can be any type that
+///          provides a formatter for fmt::format. Custom types can be formatted by
+///          providing a specialization of fmt::formatter. See
+///          https://fmt.dev/latest/api.html#formatting-user-defined-types
+/// \param fmt The format string
+/// \param args The arguments to format
+/// \return The formatted string
+using fmt::format;
 
 } // namespace b
 
-#endif //BATTERY_CORE_FORMAT_HPP
+#endif // BATTERY_CORE_FORMAT_HPP

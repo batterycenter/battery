@@ -19,21 +19,20 @@
 
 #include <string>
 #include <vector>
-#include "spdlog/fmt/fmt.h"
-#include "spdlog/fmt/ranges.h"
-#include "spdlog/fmt/std.h"
 
 namespace b {
 
-    using bytearray = std::vector<uint8_t>;
+using bytearray = std::vector<uint8_t>;
 
-    /// \brief A higher-level byte array class to be used for binary data
-    /// \details This class is a wrapper around std::vector<uint8_t>. The goal is to provide a standalone type for
-    ///          binary data, such as binary files, etc. It goes hand-in-hand with the b::string class and the
-    ///          filesystem functions. The end goal is that resources are stored as either b::string if they represent
-    ///          text, or b::bytearray if they represent binary data (or a text with a specific encoding). Binary data
-    ///          should use this class instead of std::string, potentially containing non-printable characters. It
-    ///          can also be conveniently formatted and printed.
+/// \brief A higher-level byte array class to be used for binary data
+/// \details This class is a wrapper around std::vector<uint8_t>. The goal is to provide
+/// a standalone type for
+///          binary data, such as binary files, etc. It goes hand-in-hand with the
+///          b::string class and the filesystem functions. The end goal is that resources
+///          are stored as either b::string if they represent text, or b::bytearray if
+///          they represent binary data (or a text with a specific encoding). Binary data
+///          should use this class instead of std::string, potentially containing
+///          non-printable characters. It can also be conveniently formatted and printed.
 //    class bytearray : public std::vector<uint8_t> {
 //    public:
 //        /// \brief Construct an empty byte array
@@ -78,13 +77,16 @@ namespace b {
 } // namespace b
 
 ///// \brief fmt formatter to allow formatting b::bytearray with fmt::format
-//template <> struct fmt::formatter<b::bytearray> {
-//    constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator {
-//        return ctx.begin();
-//    }
-//    auto format(const b::bytearray& array, format_context& ctx) const -> format_context::iterator {
-//        return fmt::format_to(ctx.out(), "{}", static_cast<std::vector<uint8_t>>(array));
-//    }
-//};
+// template <> struct fmt::formatter<b::bytearray> {
+//     constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator
+//     {
+//         return ctx.begin();
+//     }
+//     auto format(const b::bytearray& array, format_context& ctx) const ->
+//     format_context::iterator {
+//         return fmt::format_to(ctx.out(), "{}",
+//         static_cast<std::vector<uint8_t>>(array));
+//     }
+// };
 
 #endif // BATTERY_CORE_BYTEARRAY_HPP

@@ -59,7 +59,6 @@ What is NOT to be embedded:
 
  - In the future, file globbing might be implemented, so that a whole directory can be embedded 
 without specifying each file's name. This might be useful for embedded web servers, that might have hundreds of files.
- - Currently, each identifier can only be used once in the entire solution, even across multiple targets.
  - A function for writing a file or a whole directory to disk, to allow legacy APIs to load the file from disk. 
 Currently, every file would need to be retrieved and written to disk manually.
 
@@ -294,6 +293,41 @@ If there is strictly no other way than loading from the filesystem, you can stil
 disk when needed, let the legacy API load it, and then delete it again, if you want to keep your application 
 portable and want to avoid shipping resource files.
 
+### Embedding files from a subdirectory
+
+Say you want to achieve following structure:
+```
+ - CMakeLists.txt       -> 'add_executable(MyTarget)' and 'add_subdirectory(resources)'
+ - resources
+   - CMakeLists.txt     -> Here, calling 'b_embed(MyTarget ...)'
+   - resource1.txt
+   - resource2.txt
+   - ...
+```
+
+This structure unfortunately cannot be achieved easily, due to CMake's encapsulation rules.
+Any generated resource in CMake must be defined in the same directory as the target it is applied to (also applies to `b_embed()`).
+Hence, you must always keep `b_embed()` in the same CMake file where the target is created.
+
+Therefore, the idiomatic way to achieve said goal is to create a static proxy library in the subdirectory, call
+`b_embed()` on the proxy library, and then link your executable to the proxy library. The convenience function `b_embed_proxy_target()` can be used for this task. 
+
+#### Example
+resources/CMakeLists.txt:  
+```cmake
+b_embed_proxy_target(MyTarget MyTarget-resources)
+b_embed(MyTarget-resources resource1.txt)
+b_embed(MyTarget-resources resource2.txt)
+...
+```
+CMakeLists.txt:
+```cmake
+add_executable(MyTarget)
+target_compile_features(MyTarget PUBLIC cxx_std_20)
+
+add_subdirectory(resources)
+```
+
 # Contribution
 
 This library is open for contributions. Feel free to open an issue or a pull request, I am very happy about feedback 
@@ -315,3 +349,11 @@ Regarding the library itself, you are allowed to modify it and redistribute it a
 Since Version 1.1.0, this library is implemented in a single CMake file. You are allowed to re-upload this file
 as part of your own public repository, as long as the license header in the top is retained and any modifications
 are clearly marked.
+
+## Support 💪
+
+I do all of my projects in my free time and I do not get any money for that. I just like what I do, do it for myself and want to share it so that others can benefit too.
+
+I like beer and any support is greatly apprechiated :)
+
+<a href="https://www.buymeacoffee.com/herrnamenlos123"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a beer&emoji=🍺&slug=herrnamenlos123&button_colour=FFDD00&font_colour=000000&font_family=Lato&outline_colour=000000&coffee_colour=ffffff" /></a>
