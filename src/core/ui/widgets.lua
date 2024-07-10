@@ -42,6 +42,25 @@ function Window(args, callback)
     ImGui.PopID()
 end
 
+function Dropdown(args)
+    local items = { "AAAA", "BBBB", "CCCC", "DDDD", "EEEE", "FFFF", "GGGG", "HHHH", "IIII", "JJJJ", "KKKK", "LLLLLLL", "MMMM", "OOOOOOO", "PPPP", "QQQQQQQQQQ", "RRR", "SSSS" }
+    local current_item = items[1];
+
+    if (ImGui.BeginCombo("##combo", current_item)) then
+        for n = 0..items.length do
+            -- ImGui.Selectable(n)
+        --     bool is_selected = (current_item == items[n]); // You can store your selection however you want, outside or inside your objects
+        --     if ImGui.Selectable(items[n], is_selected) then
+        --         current_item = items[n];
+        --     end
+        --     if is_selected then
+        --         ImGui.SetItemDefaultFocus()
+            -- end
+        endfor
+        ImGui.EndCombo();
+    end
+end
+
 function Container(args, callback)
     __checkArgs("Container", args,
             { boundingBoxArgs, { "flags", "nativeBorder", "childArgs1", "childArgs2" }})
