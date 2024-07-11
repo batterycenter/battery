@@ -5,6 +5,15 @@
 #include "window.hpp"
 #include <imgui.h>
 
+extern "C" {
+#include <lauxlib.h>
+#include <lua.h>
+#include <lualib.h>
+}
+#include <LuaBridge/Array.h>
+#include <LuaBridge/LuaBridge.h>
+#include <LuaBridge/Vector.h>
+
 struct SDL_Window;
 struct SDL_Renderer;
 typedef void* SDL_GLContext;
@@ -22,6 +31,15 @@ public:
 
     void prepareFrame();
     void renderFrame();
+
+    template <typename TFunc>
+    void makeFunctionAvailable(const std::string& name, TFunc&& func)
+    {
+        luabridge::getGlobalNamespace(m_luaState)
+            .beginNamespace("App")
+            .addFunction(name.c_str(), func)
+            .endNamespace();
+    }
 
     template <embed_string_literal identifier> void bindEmbeddedLuaScript()
     {

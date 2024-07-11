@@ -12,9 +12,6 @@ function __checkArgs(func, args, expectedList)
     if not args then
         return
     end
-    if not args.items then
-        return
-    end
     for suppliedArgument, _ in pairs(args) do
         local found = false
 
@@ -41,6 +38,7 @@ end
 --    -> a HTML color code of type #RRGGBBAA or #RRGGBB (unit="color")
 --    -> percentage value e.g. "100%" (unit="%")
 --    -> value relative to current font size e.g. "2.5em" (unit="em")
+--    -> value relative to global font size e.g. "0.5rem" (unit="rem")
 --    -> absolute value in pixels e.g. "100px" (unit="px")
 --    -> a value without a unit e.g. 5.7 or "5.7" (unit="unitless")
 function toUnit(string)
@@ -48,7 +46,7 @@ function toUnit(string)
         return nil
     end
     function __getValueFromString(string, unit)
-        local value = tonumber(string:sub(1, -1 - #unit))
+        local value = tonumber(string:sub(1, #string - #unit))
         if value == nil then
             error("unit '"..string.."': Expected a number")
         end
@@ -76,6 +74,8 @@ function toUnit(string)
             return __getValueFromString(string, "px")
         elseif string:sub(-1) == "%" then
             return __getValueFromString(string, "%")
+        elseif string:sub(-3) == "rem" then
+            return __getValueFromString(string, "rem")
         elseif string:sub(-2) == "em" then
             return __getValueFromString(string, "em")
         elseif string:sub(1,1) == "#" then
@@ -103,7 +103,7 @@ function toUnit(string)
 end
 
 -- This is an internal function for getBoundingBox(). Do not use this function directly.
-function __getHorizontalPx(unitvalue)
+function __getHorizontalPx(unitvalue, args)
     if unitvalue == nil then
         return nil
     end
@@ -111,9 +111,15 @@ function __getHorizontalPx(unitvalue)
     if unitvalue.unit == "px" then
         px = unitvalue.value
     elseif unitvalue.unit == "%" then
-        px = unitvalue.value * (ImGui.GetWindowContentRegionMax().x - ImGui.GetWindowContentRegionMin().x) / 100.0
+        if args and args.useGlobalWindowSize then
+            px = unitvalue.value * ImGui.GetIO().DisplaySize.x / 100.0
+        else
+            px = unitvalue.value * (ImGui.GetWindowContentRegionMax().x - ImGui.GetWindowContentRegionMin().x) / 100.0
+        end
     elseif unitvalue.unit == "em" then
         px = unitvalue.value * ImGui.GetFontSize()
+    elseif unitvalue.unit == "rem" then
+        px = unitvalue.value * b.GetGlobalFontSize()
     else
         px = unitvalue.value
     end
@@ -121,7 +127,7 @@ function __getHorizontalPx(unitvalue)
 end
 
 -- This is an internal function for getBoundingBox(). Do not use this function directly.
-function __getVerticalPx(unitvalue)
+function __getVerticalPx(unitvalue, args)
     if unitvalue == nil then
         return nil
     end
@@ -129,9 +135,15 @@ function __getVerticalPx(unitvalue)
     if unitvalue.unit == "px" then
         px = unitvalue.value
     elseif unitvalue.unit == "%" then
-        px = unitvalue.value * (ImGui.GetWindowContentRegionMax().y - ImGui.GetWindowContentRegionMin().y) / 100.0
+        if args and args.useGlobalWindowSize then
+            px = unitvalue.value * ImGui.GetIO().DisplaySize.y / 100.0
+        else
+            px = unitvalue.value * (ImGui.GetWindowContentRegionMax().y - ImGui.GetWindowContentRegionMin().y) / 100.0
+        end
     elseif unitvalue.unit == "em" then
         px = unitvalue.value * ImGui.GetFontSize()
+    elseif unitvalue.unit == "rem" then
+        px = unitvalue.value * b.GetGlobalFontSize()
     else
         px = unitvalue.value
     end
@@ -141,49 +153,83 @@ end
 -- This function takes a string or value (like "100%", "2.5em", etc) and calculates
 -- what that value corresponds to in the current context, and returns a number of pixels.
 -- It references the horizontal direction.
-function getX(unit)
-    return __getHorizontalPx(toUnit(unit))
+function getX(unit, args)
+    return __getHorizontalPx(toUnit(unit), args)
 end
 
 -- This function takes a string or value (like "100%", "2.5em", etc) and calculates
 -- what that value corresponds to in the current context, and returns a number of pixels.
 -- It references the vertical direction.
-function getY(unit)
-    return __getVerticalPx(toUnit(unit))
+function getY(unit, args)
+    return __getVerticalPx(toUnit(unit), args)
+end
+
+function getSize(unit, args)
+    unitvalue = toUnit(unit)
+    if unitvalue == nil then
+        return nil
+    end
+    if unitvalue.unit == "px" then
+        return unitvalue.value
+    elseif unitvalue.unit == "%" then
+        error("In this context, percentage values are not allowed")
+    elseif unitvalue.unit == "em" then
+        return unitvalue.value * ImGui.GetFontSize()
+    elseif unitvalue.unit == "rem" then
+        return unitvalue.value * b.GetGlobalFontSize()
+    else
+        return unitvalue.value
+    end
+end
+
+function getMaxCoordX(args)
+    if args and args.useGlobalWindowSize then
+        return ImGui.GetIO().DisplaySize.x
+    else
+        return ImGui.GetWindowContentRegionMax().x
+    end
+end
+
+function getMaxCoords(args)
+    if args and args.useGlobalWindowSize then
+        return ImGui.GetIO().DisplaySize
+    else
+        return ImGui.GetWindowContentRegionMax()
+    end
 end
 
 -- Get the desired bounding box of the current widget, which is calculated by
 -- its positional properties and the current content width.
 -- Return is in the form of a table containing {left=..., top=..., right=..., bottom=..., width=..., height=...}
 -- Units are directly tied to ImGui Cursor coordinates
-function getBoundingBox(args)
-    local left_px = __getHorizontalPx(toUnit(args.margin))
-    local right_px = __getHorizontalPx(toUnit(args.margin))
+function getBoundingBox(args, additionalArgs)
+    local left_px = __getHorizontalPx(toUnit(args.margin), additionalArgs)
+    local right_px = __getHorizontalPx(toUnit(args.margin), additionalArgs)
     local width_px = nil
-    local top_px = __getVerticalPx(toUnit(args.margin))
-    local bottom_px = __getVerticalPx(toUnit(args.margin))
+    local top_px = __getVerticalPx(toUnit(args.margin), additionalArgs)
+    local bottom_px = __getVerticalPx(toUnit(args.margin), additionalArgs)
     local height_px = nil
 
-    left_px = __getHorizontalPx(toUnit(args.left)) or left_px
-    right_px = __getHorizontalPx(toUnit(args.right)) or right_px
-    width_px = __getHorizontalPx(toUnit(args.width)) or width_px
-    top_px = __getVerticalPx(toUnit(args.top)) or top_px
-    bottom_px = __getVerticalPx(toUnit(args.bottom)) or bottom_px
-    height_px = __getVerticalPx(toUnit(args.height)) or height_px
+    left_px = __getHorizontalPx(toUnit(args.left), additionalArgs) or left_px
+    right_px = __getHorizontalPx(toUnit(args.right), additionalArgs) or right_px
+    width_px = __getHorizontalPx(toUnit(args.width), additionalArgs) or width_px
+    top_px = __getVerticalPx(toUnit(args.top), additionalArgs) or top_px
+    bottom_px = __getVerticalPx(toUnit(args.bottom), additionalArgs) or bottom_px
+    height_px = __getVerticalPx(toUnit(args.height), additionalArgs) or height_px
 
     local cursor_left = ImGui.GetCursorPosX()
     local cursor_width = 0
     if width_px and right_px then
-        cursor_left = ImGui.GetWindowContentRegionMax().x - right_px - width_px
+        cursor_left = getMaxCoords(args).x - right_px - width_px
         cursor_width = width_px
     elseif left_px and right_px then
         cursor_left = left_px
-        cursor_width = ImGui.GetWindowContentRegionMax().x - right_px - left_px
+        cursor_width = getMaxCoords(args).x - right_px - left_px
     elseif left_px and width_px then
         cursor_left = left_px
         cursor_width = width_px
     elseif right_px then
-        cursor_width = ImGui.GetWindowContentRegionMax().x - right_px - cursor_left
+        cursor_width = getMaxCoords(args).x - right_px - cursor_left
     elseif left_px then
         cursor_left = left_px
     elseif width_px then
@@ -193,16 +239,16 @@ function getBoundingBox(args)
     local cursor_top = ImGui.GetCursorPosY()
     local cursor_height = 0
     if height_px and bottom_px then
-        cursor_top = ImGui.GetWindowContentRegionMax().y - bottom_px - height_px
+        cursor_top = getMaxCoords(args).y - bottom_px - height_px
         cursor_height = height_px
     elseif top_px and bottom_px then
         cursor_top = top_px
-        cursor_height = ImGui.GetWindowContentRegionMax().y - bottom_px - top_px
+        cursor_height = getMaxCoords(args).y - bottom_px - top_px
     elseif top_px and height_px then
         cursor_top = top_px
         cursor_height = height_px
     elseif bottom_px then
-        cursor_height = ImGui.GetWindowContentRegionMax().y - bottom_px - cursor_top
+        cursor_height = getMaxCoords(args).y - bottom_px - cursor_top
     elseif top_px then
         cursor_top = top_px
     elseif height_px then
@@ -297,6 +343,7 @@ function __loadDefaultBatteryStyle()
         ImGuiCol_NavWindowingDimBg = "#CCCCCC33",
         ImGuiCol_ModalWindowDimBg = "#CCCCCC59",
         ImGuiStyleVar_FramePadding = { 5, 5 },
+        ImGuiStyleVar_WindowPadding = { 10, 8 },
         ImGuiStyleVar_WindowRounding = 8,
         ImGuiStyleVar_FrameRounding = 6,
         ImGuiStyleVar_PopupRounding = 6,

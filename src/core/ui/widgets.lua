@@ -1,5 +1,6 @@
 
 local boundingBoxArgs = { "left", "right", "top", "bottom", "width", "height", "margin" }
+local paddingArgs = { "px", "py" }
 __id = 0
 
 function math.clamp(x, min, max)
@@ -20,23 +21,36 @@ function postRender()
 end
 
 function Button(args)
-    __checkArgs("Button", args, { boundingBoxArgs, { "text" }})
+    __checkArgs("Button", args, { boundingBoxArgs, { "text", "callback" }})
 
     local text = args.text or "Button"
     local bb = getBoundingBox(args)
     ImGui.SetCursorPos(ImVec2(bb.left, bb.top))
     ImGui.PushIDInt(getID())
-    local ret = ImGui.Button(text, ImVec2(bb.right-bb.left, bb.bottom-bb.top))
+    local pressed = ImGui.Button(text, ImVec2(bb.right-bb.left, bb.bottom-bb.top))
     ImGui.PopID()
-    return ret
+    if pressed and args.callback then
+        args.callback()
+    end
 end
 
-function Window(args, callback)
-    __checkArgs("Window", args, {{ "title", "flags" }})
-
+function Window(args)
+    __checkArgs("Window", args, { boundingBoxArgs, paddingArgs, { "title", "flags", "callback", "flags", "border", "radius" }})
+    
+    local bb = getBoundingBox(args, { useGlobalWindowSize = true })
+    ImGui.SetNextWindowPos(ImVec2(bb.left, bb.top))
+    ImGui.SetNextWindowSize(ImVec2(bb.width, bb.height))
+    local style = ImGui.GetStyle()
+    ImGui.PushStyleVarFloat("ImGuiStyleVar_WindowBorderSize", getSize(args.border) or style.WindowBorderSize)
+    ImGui.PushStyleVarFloat("ImGuiStyleVar_WindowRounding", getSize(args.radius) or style.WindowRounding)
+    ImGui.PushStyleVarVec2("ImGuiStyleVar_WindowPadding", ImVec2(getX(args.px) or style.WindowPadding.x, getY(args.py) or style.WindowPadding.y))
     ImGui.PushIDInt(getID())
-    if ImGui.Begin(args.title or "Window", 0) then
-        callback()
+    windowOpen = ImGui.Begin(args.title or "Window", args.flags or 0)
+    ImGui.PopStyleVarVec2()
+    ImGui.PopStyleVarFloat()
+    ImGui.PopStyleVarFloat()
+    if windowOpen and args.callback then
+        args.callback()
     end
     ImGui.End()
     ImGui.PopID()

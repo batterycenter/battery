@@ -10,13 +10,13 @@ github_dependencies = [
     [ "DaanDeMeyer", "reproc", "v14.2.4" ],            # MIT License
     [ "nemtrif", "utfcpp", "v3.2.4" ],                 # Boost Software License 1.0
     [ "jothepro", "doxygen-awesome-css", "v2.2.1" ],   # MIT License
-    [ "batterycenter", "embed", "v1.2.17" ],           # Apache-2.0 License
     [ "libsdl-org", "SDL", "release-2.28.5" ],         # Zlib License
     [ "libsdl-org", "SDL_image", "release-2.6.3" ],    # Zlib License
     [ "gelldur", "EventBus", "v3.0.4" ],               # Apache-2.0 License
     [ "kunitoki", "LuaBridge3", "3.0-rc4" ],           # MIT License
     [ "walterschell", "Lua", "v5.4.5" ],               # No License
     # [ "CLIUtils", "CLI11", "v2.3.2" ],               # 3-Clause BSD License
+    [ "batterycenter", "embed", "v1.2.18" ],           # Apache-2.0 License
 ]
 
 def main():

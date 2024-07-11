@@ -14,6 +14,7 @@ extern "C" {
 }
 
 #include <LuaBridge/LuaBridge.h>
+#include <LuaBridge/detail/Stack.h>
 
 #define ADD_IMGUI_FUNCTION(name) addFunction(#name, &ImGui::name)
 
@@ -333,6 +334,163 @@ void ImGuiLua::DeclareLuaBridge(lua_State* L)
         .endClass();
 
     luabridge::getGlobalNamespace(L)
+        .beginNamespace("ImGuiWindowFlags")
+        .addProperty("None", []() -> int { return ImGuiWindowFlags_None; })
+        .addProperty("NoTitleBar", []() -> int { return ImGuiWindowFlags_NoTitleBar; })
+        .addProperty("NoResize", []() -> int { return ImGuiWindowFlags_NoResize; })
+        .addProperty("NoMove", []() -> int { return ImGuiWindowFlags_NoMove; })
+        .addProperty("NoScrollbar", []() -> int { return ImGuiWindowFlags_NoScrollbar; })
+        .addProperty("NoScrollWithMouse",
+                     []() -> int { return ImGuiWindowFlags_NoScrollWithMouse; })
+        .addProperty("NoCollapse", []() -> int { return ImGuiWindowFlags_NoCollapse; })
+        .addProperty("AlwaysAutoResize",
+                     []() -> int { return ImGuiWindowFlags_AlwaysAutoResize; })
+        .addProperty("NoBackground",
+                     []() -> int { return ImGuiWindowFlags_NoBackground; })
+        .addProperty("NoSavedSettings",
+                     []() -> int { return ImGuiWindowFlags_NoSavedSettings; })
+        .addProperty("NoMouseInputs",
+                     []() -> int { return ImGuiWindowFlags_NoMouseInputs; })
+        .addProperty("MenuBar", []() -> int { return ImGuiWindowFlags_MenuBar; })
+        .addProperty("HorizontalScrollbar",
+                     []() -> int { return ImGuiWindowFlags_HorizontalScrollbar; })
+        .addProperty("NoFocusOnAppearing",
+                     []() -> int { return ImGuiWindowFlags_NoFocusOnAppearing; })
+        .addProperty("NoBringToFrontOnFocus",
+                     []() -> int { return ImGuiWindowFlags_NoBringToFrontOnFocus; })
+        .addProperty("AlwaysVerticalScrollbar",
+                     []() -> int { return ImGuiWindowFlags_AlwaysVerticalScrollbar; })
+        .addProperty("AlwaysHorizontalScrollbar",
+                     []() -> int { return ImGuiWindowFlags_AlwaysHorizontalScrollbar; })
+        .addProperty("AlwaysUseWindowPadding",
+                     []() -> int { return ImGuiWindowFlags_AlwaysUseWindowPadding; })
+        .addProperty("NoNavInputs", []() -> int { return ImGuiWindowFlags_NoNavInputs; })
+        .addProperty("NoNavFocus", []() -> int { return ImGuiWindowFlags_NoNavFocus; })
+        .addProperty("UnsavedDocument",
+                     []() -> int { return ImGuiWindowFlags_UnsavedDocument; })
+        .addProperty("NoNav", []() -> int { return ImGuiWindowFlags_NoNav; })
+        .addProperty("NoDecoration",
+                     []() -> int { return ImGuiWindowFlags_NoDecoration; })
+        .addProperty("NoInputs", []() -> int { return ImGuiWindowFlags_NoInputs; })
+        .endNamespace();
+
+    luabridge::getGlobalNamespace(L)
+        .beginClass<ImGuiIO>("ImGuiIO")
+        // .addProperty("ConfigFlags", &ImGuiIO::ConfigFlags)
+        // .addProperty("BackendFlags", &ImGuiIO::BackendFlags)
+        .addProperty("DisplaySize", &ImGuiIO::DisplaySize)
+        .addProperty("DeltaTime", &ImGuiIO::DeltaTime)
+        .addProperty("IniSavingRate", &ImGuiIO::IniSavingRate)
+        .addProperty("IniFilename", &ImGuiIO::IniFilename)
+        .addProperty("LogFilename", &ImGuiIO::LogFilename)
+        // .addProperty("UserData", &ImGuiIO::UserData)
+        // .addProperty("Fonts", &ImGuiIO::Fonts)
+        .addProperty("FontGlobalScale", &ImGuiIO::FontGlobalScale)
+        .addProperty("FontAllowUserScaling", &ImGuiIO::FontAllowUserScaling)
+        // .addProperty("FontDefault", &ImGuiIO::FontDefault)
+        .addProperty("DisplayFramebufferScale", &ImGuiIO::DisplayFramebufferScale)
+        .addProperty("MouseDrawCursor", &ImGuiIO::MouseDrawCursor)
+        .addProperty("ConfigMacOSXBehaviors", &ImGuiIO::ConfigMacOSXBehaviors)
+        .addProperty("ConfigInputTrickleEventQueue",
+                     &ImGuiIO::ConfigInputTrickleEventQueue)
+        .addProperty("ConfigInputTextCursorBlink", &ImGuiIO::ConfigInputTextCursorBlink)
+        .addProperty("ConfigInputTextEnterKeepActive",
+                     &ImGuiIO::ConfigInputTextEnterKeepActive)
+        .addProperty("ConfigDragClickToInputText", &ImGuiIO::ConfigDragClickToInputText)
+        .addProperty("ConfigWindowsResizeFromEdges",
+                     &ImGuiIO::ConfigWindowsResizeFromEdges)
+        .addProperty("ConfigWindowsMoveFromTitleBarOnly",
+                     &ImGuiIO::ConfigWindowsMoveFromTitleBarOnly)
+        .addProperty("ConfigMemoryCompactTimer", &ImGuiIO::ConfigMemoryCompactTimer)
+        .addProperty("MouseDoubleClickTime", &ImGuiIO::MouseDoubleClickTime)
+        .addProperty("MouseDoubleClickMaxDist", &ImGuiIO::MouseDoubleClickMaxDist)
+        .addProperty("MouseDragThreshold", &ImGuiIO::MouseDragThreshold)
+        .addProperty("KeyRepeatDelay", &ImGuiIO::KeyRepeatDelay)
+        .addProperty("KeyRepeatRate", &ImGuiIO::KeyRepeatRate)
+        .addProperty("ConfigDebugBeginReturnValueOnce",
+                     &ImGuiIO::ConfigDebugBeginReturnValueOnce)
+        .addProperty("ConfigDebugBeginReturnValueLoop",
+                     &ImGuiIO::ConfigDebugBeginReturnValueLoop)
+        .addProperty("ConfigDebugIgnoreFocusLoss", &ImGuiIO::ConfigDebugIgnoreFocusLoss)
+        .addProperty("ConfigDebugIniSettings", &ImGuiIO::ConfigDebugIniSettings)
+        .addProperty("BackendPlatformName", &ImGuiIO::BackendPlatformName)
+        .addProperty("BackendRendererName", &ImGuiIO::BackendRendererName)
+        .addProperty("BackendPlatformUserData", &ImGuiIO::BackendPlatformUserData)
+        // .addProperty("GetClipboardTextFn", &ImGuiIO::GetClipboardTextFn)
+        // .addProperty("SetClipboardTextFn", &ImGuiIO::SetClipboardTextFn)
+        .addProperty("ClipboardUserData", &ImGuiIO::ClipboardUserData)
+        .addProperty("SetPlatformImeDataFn", &ImGuiIO::SetPlatformImeDataFn)
+        .addProperty("WantCaptureMouse", &ImGuiIO::WantCaptureMouse)
+        .addProperty("WantCaptureKeyboard", &ImGuiIO::WantCaptureKeyboard)
+        .addProperty("WantTextInput", &ImGuiIO::WantTextInput)
+        .addProperty("WantSetMousePos", &ImGuiIO::WantSetMousePos)
+        .addProperty("WantSaveIniSettings", &ImGuiIO::WantSaveIniSettings)
+        .addProperty("NavActive", &ImGuiIO::NavActive)
+        .addProperty("NavVisible", &ImGuiIO::NavVisible)
+        .addProperty("Framerate", &ImGuiIO::Framerate)
+        .addProperty("MetricsRenderVertices", &ImGuiIO::MetricsRenderVertices)
+        .addProperty("MetricsRenderIndices", &ImGuiIO::MetricsRenderIndices)
+        .addProperty("MetricsRenderWindows", &ImGuiIO::MetricsRenderWindows)
+        .addProperty("MetricsActiveWindows", &ImGuiIO::MetricsActiveWindows)
+        .addProperty("MetricsActiveAllocations", &ImGuiIO::MetricsActiveAllocations)
+        .addProperty("MouseDelta", &ImGuiIO::MouseDelta)
+        .endClass();
+
+    luabridge::getGlobalNamespace(L)
+        .beginClass<ImGuiStyle>("ImGuiStyle")
+        .addProperty("Alpha", &ImGuiStyle::Alpha)
+        .addProperty("DisabledAlpha", &ImGuiStyle::DisabledAlpha)
+        .addProperty("WindowPadding", &ImGuiStyle::WindowPadding)
+        .addProperty("WindowRounding", &ImGuiStyle::WindowRounding)
+        .addProperty("WindowBorderSize", &ImGuiStyle::WindowBorderSize)
+        .addProperty("WindowMinSize", &ImGuiStyle::WindowMinSize)
+        .addProperty("WindowTitleAlign", &ImGuiStyle::WindowTitleAlign)
+        .addProperty("WindowMenuButtonPosition", &ImGuiStyle::WindowMenuButtonPosition)
+        .addProperty("ChildRounding", &ImGuiStyle::ChildRounding)
+        .addProperty("ChildBorderSize", &ImGuiStyle::ChildBorderSize)
+        .addProperty("PopupRounding", &ImGuiStyle::PopupRounding)
+        .addProperty("PopupBorderSize", &ImGuiStyle::PopupBorderSize)
+        .addProperty("FramePadding", &ImGuiStyle::FramePadding)
+        .addProperty("FrameRounding", &ImGuiStyle::FrameRounding)
+        .addProperty("FrameBorderSize", &ImGuiStyle::FrameBorderSize)
+        .addProperty("ItemSpacing", &ImGuiStyle::ItemSpacing)
+        .addProperty("ItemInnerSpacing", &ImGuiStyle::ItemInnerSpacing)
+        .addProperty("CellPadding", &ImGuiStyle::CellPadding)
+        .addProperty("TouchExtraPadding", &ImGuiStyle::TouchExtraPadding)
+        .addProperty("IndentSpacing", &ImGuiStyle::IndentSpacing)
+        .addProperty("ColumnsMinSpacing", &ImGuiStyle::ColumnsMinSpacing)
+        .addProperty("ScrollbarSize", &ImGuiStyle::ScrollbarSize)
+        .addProperty("ScrollbarRounding", &ImGuiStyle::ScrollbarRounding)
+        .addProperty("GrabMinSize", &ImGuiStyle::GrabMinSize)
+        .addProperty("GrabRounding", &ImGuiStyle::GrabRounding)
+        .addProperty("LogSliderDeadzone", &ImGuiStyle::LogSliderDeadzone)
+        .addProperty("TabRounding", &ImGuiStyle::TabRounding)
+        .addProperty("TabBorderSize", &ImGuiStyle::TabBorderSize)
+        .addProperty("TabMinWidthForCloseButton", &ImGuiStyle::TabMinWidthForCloseButton)
+        .addProperty("ColorButtonPosition", &ImGuiStyle::ColorButtonPosition)
+        .addProperty("ButtonTextAlign", &ImGuiStyle::ButtonTextAlign)
+        .addProperty("SelectableTextAlign", &ImGuiStyle::SelectableTextAlign)
+        .addProperty("SeparatorTextBorderSize", &ImGuiStyle::SeparatorTextBorderSize)
+        .addProperty("SeparatorTextAlign", &ImGuiStyle::SeparatorTextAlign)
+        .addProperty("SeparatorTextPadding", &ImGuiStyle::SeparatorTextPadding)
+        .addProperty("DisplayWindowPadding", &ImGuiStyle::DisplayWindowPadding)
+        .addProperty("DisplaySafeAreaPadding", &ImGuiStyle::DisplaySafeAreaPadding)
+        .addProperty("MouseCursorScale", &ImGuiStyle::MouseCursorScale)
+        .addProperty("AntiAliasedLines", &ImGuiStyle::AntiAliasedLines)
+        .addProperty("AntiAliasedLinesUseTex", &ImGuiStyle::AntiAliasedLinesUseTex)
+        .addProperty("AntiAliasedFill", &ImGuiStyle::AntiAliasedFill)
+        .addProperty("CurveTessellationTol", &ImGuiStyle::CurveTessellationTol)
+        .addProperty("CircleTessellationMaxError",
+                     &ImGuiStyle::CircleTessellationMaxError)
+        // .addProperty("Colors", &ImGuiStyle::Colors)
+        .addProperty("HoverStationaryDelay", &ImGuiStyle::HoverStationaryDelay)
+        .addProperty("HoverDelayShort", &ImGuiStyle::HoverDelayShort)
+        .addProperty("HoverDelayNormal", &ImGuiStyle::HoverDelayNormal)
+        .addProperty("HoverFlagsForTooltipMouse", &ImGuiStyle::HoverFlagsForTooltipMouse)
+        .addProperty("HoverFlagsForTooltipNav", &ImGuiStyle::HoverFlagsForTooltipNav)
+        .endClass();
+
+    luabridge::getGlobalNamespace(L)
         .beginClass<ImColor>("ImColor")
         .addConstructor<void (*)(int, int, int, int)>()
         .addProperty("Value", &ImColor::Value)
@@ -341,6 +499,8 @@ void ImGuiLua::DeclareLuaBridge(lua_State* L)
     luabridge::getGlobalNamespace(L)
         .beginNamespace("b")
         .ADD_FUNCTION(RequestAnimationFrameIn)
+        .addFunction("GetGlobalFontSize",
+                     []() { return ImGui::GetDefaultFont()->FontSize; })
         .endNamespace();
 
     auto ns = luabridge::getGlobalNamespace(L).beginNamespace("ImGui");
@@ -367,6 +527,7 @@ void ImGuiLua::DeclareLuaBridge(lua_State* L)
             return ImGui::BeginChild(name.c_str(), size, border, flags);
         });
     ns.addFunction("EndChild", &ImGui::EndChild);
+    ns.addFunction("SameLine", []() { ImGui::SameLine(); });
     ns.addFunction("PushIDInt", [](int id) { ImGui::PushID(id); });
     ns.addFunction("PushIDStr",
                    [](const std::string& id) { ImGui::PushID(id.c_str()); });
@@ -377,10 +538,15 @@ void ImGuiLua::DeclareLuaBridge(lua_State* L)
                        return ImGui::BeginCombo(name.c_str(), currentItem.c_str());
                    });
     ns.addFunction("EndCombo", []() { ImGui::EndCombo(); });
+    ns.addFunction("SetNextWindowPos",
+                   [](const ImVec2& pos) { ImGui::SetNextWindowPos(pos); });
+    ns.addFunction("SetNextWindowSize",
+                   [](const ImVec2& size) { ImGui::SetNextWindowSize(size); });
     ns.addFunction("Selectable", [](const std::string& text, bool isSelected) {
         return ImGui::Selectable(text.c_str(), isSelected);
     });
     ns.addFunction("SetItemDefaultFocus", []() { return ImGui::SetItemDefaultFocus(); });
+    ns.addFunction("GetIO", []() { return ImGui::GetIO(); });
 
     ns.ADD_FUNCTION(Text);
     ns.ADD_FUNCTION(Button);
@@ -401,6 +567,7 @@ void ImGuiLua::DeclareLuaBridge(lua_State* L)
     ns.ADD_IMGUI_FUNCTION(SetCursorPos);
     ns.ADD_IMGUI_FUNCTION(GetCursorPosX);
     ns.ADD_IMGUI_FUNCTION(GetCursorPosY);
+    ns.ADD_IMGUI_FUNCTION(GetStyle);
 
     ns.ADD_IMGUI_FUNCTION(SetNextItemWidth);
     ns.ADD_IMGUI_FUNCTION(GetWindowContentRegionMin);
@@ -428,7 +595,7 @@ ImGuiLua::RunLuaString(lua_State* L,
         int execStatus = lua_pcall(L, 0, LUA_MULTRET, 0);
         if (execStatus != LUA_OK) {
             const char* errorMessage = lua_tostring(L, -1);
-            auto error = b::format("Script execution error: {}", errorMessage);
+            auto error = b::format("{}", errorMessage);
             b::log::error("{}", error);
             return std::unexpected(error);
             lua_pop(L, 1);
@@ -436,7 +603,7 @@ ImGuiLua::RunLuaString(lua_State* L,
     }
     else {
         const char* errorMessage = lua_tostring(L, -1);
-        auto error = b::format("Script loading error: {}", errorMessage);
+        auto error = b::format("{}", errorMessage);
         b::log::error("{}", error);
         return std::unexpected(error);
         lua_pop(L, 1);
@@ -454,26 +621,20 @@ ImGuiLua::CallLuaFunction(lua_State* L,
         luabridge::LuaResult const res = func();
         if (!res) {
             if (!luaDebugFilename.empty()) {
-                auto error = b::format("File {}: {}() returned an error: {}",
-                                       luaDebugFilename,
-                                       functionName,
-                                       res.errorMessage());
+                auto error = b::format(
+                    "{}(): {}", luaDebugFilename, functionName, res.errorMessage());
                 b::log::error("{}", error);
                 return std::unexpected(error);
             }
             else {
-                auto error = b::format(
-                    "b::ImGuiLua::CallLuaFunction(): {}() returned an error: {}",
-                    functionName,
-                    res.errorMessage());
+                auto error = b::format("{}(): {}", functionName, res.errorMessage());
                 b::log::error("{}", error);
                 return std::unexpected(error);
             }
         }
     }
     else {
-        auto error = b::format("ImGuiLua::CallLuaFunction: function {}() does not exist",
-                               functionName);
+        auto error = b::format("{}(): Function does not exist", functionName);
         b::log::error("{}", error);
         return std::unexpected(error);
     }
