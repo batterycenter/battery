@@ -6,6 +6,7 @@ import zipfile
 github_dependencies = [
     # [ "fmtlib", "fmt", "10.0.0" ],                   # MIT-alike License
     [ "ocornut", "imgui", "v1.89.8" ],                 # MIT License
+    [ "epezent", "implot", "v0.16" ],                  # MIT License
     [ "gabime", "spdlog", "v1.12.0" ],                 # MIT License
     [ "DaanDeMeyer", "reproc", "v14.2.4" ],            # MIT License
     [ "nemtrif", "utfcpp", "v3.2.4" ],                 # Boost Software License 1.0
@@ -16,7 +17,7 @@ github_dependencies = [
     [ "kunitoki", "LuaBridge3", "3.0-rc4" ],           # MIT License
     [ "walterschell", "Lua", "v5.4.5" ],               # No License
     # [ "CLIUtils", "CLI11", "v2.3.2" ],               # 3-Clause BSD License
-    [ "batterycenter", "embed", "v1.2.18" ],           # Apache-2.0 License
+    [ "batterycenter", "embed", "v1.2.19" ],           # Apache-2.0 License
 ]
 
 def main():

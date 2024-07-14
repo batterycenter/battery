@@ -66,6 +66,7 @@ target_link_libraries(battery_core PUBLIC
         SDL2::SDL2main
         SDL2_image::SDL2_image-static
         imgui::imgui
+        implot::implot
         EventBus
         lua_static
         LuaBridge

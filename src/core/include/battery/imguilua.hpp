@@ -68,6 +68,9 @@ public:
                     const std::string& luaDebugFilename = {});
 
     ImGuiLua() = delete;
+
+    static bool
+    Spinner(const char* label, float radius, int thickness, const ImU32& color);
 };
 
 } // namespace b

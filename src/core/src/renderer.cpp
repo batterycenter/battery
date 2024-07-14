@@ -11,6 +11,7 @@
 
 #include "imgui.h"
 #include "imgui_internal.h"
+#include "implot.h"
 
 namespace b {
 
@@ -29,6 +30,7 @@ RenderWindow::RenderWindow(const std::string& title,
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImPlot::CreateContext();
 
     // Setup ImGui
     if (!ImGui_ImplSDL2_InitForSDLRenderer(m_sdlWindow, m_sdlRenderer)) {
@@ -57,6 +59,7 @@ RenderWindow::~RenderWindow()
 {
     ImGui_ImplSDLRenderer2_Shutdown();
     ImGui_ImplSDL2_Shutdown();
+    ImPlot::DestroyContext();
     ImGui::DestroyContext();
 
     if (m_sdlRenderer != nullptr) {

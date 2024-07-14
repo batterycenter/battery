@@ -23,6 +23,15 @@ b_add_library(imgui STATIC ALIAS imgui::imgui
 target_include_directories(imgui PUBLIC "imgui")
 target_include_directories(imgui PRIVATE "SDL/include")
 
+# implot
+b_add_library(implot STATIC ALIAS implot::implot
+        implot/implot.cpp
+        implot/implot_demo.cpp
+        implot/implot_items.cpp
+)
+target_include_directories(implot PUBLIC "implot")
+target_link_libraries(implot PRIVATE imgui::imgui)
+
 # Lua
 add_subdirectory(Lua)
 
