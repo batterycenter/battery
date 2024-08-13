@@ -237,7 +237,8 @@ static b::fs::path Win32SaveDialog(const b::filedialog& dialog,
 b::fs::path filedialog::sync_open()
 {
 #ifdef B_OS_WINDOWS
-    auto path = Win32OpenDialog(*this, false, default_extension.string())[0];
+    auto paths = Win32OpenDialog(*this, false, default_extension.string());
+    auto path = paths.size() > 0 ? paths[0] : b::fs::path();
 #else
 #warning FILEDIALOG NOT IMPLEMENTED
     auto path = b::fs::path();
