@@ -529,6 +529,14 @@ void ImGuiLua::DeclareLuaBridge(lua_State* L)
             return ImGui::BeginChild(name.c_str(), size, border, flags);
         });
     ns.addFunction("EndChild", &ImGui::EndChild);
+    ns.addFunction("BeginPopupModal", [](const std::string& name, int flags) {
+        return ImGui::BeginPopupModal(name.c_str(), nullptr, flags);
+    });
+    ns.addFunction("EndPopup", &ImGui::EndPopup);
+    ns.addFunction("OpenPopup", [](const std::string& name) {
+        return ImGui::OpenPopup(name.c_str());
+    });
+    ns.addFunction("CloseCurrentPopup", &ImGui::CloseCurrentPopup);
     ns.addFunction("SameLine", []() { ImGui::SameLine(); });
     ns.addFunction("PushIDInt", [](int id) { ImGui::PushID(id); });
     ns.addFunction("PushIDStr",
