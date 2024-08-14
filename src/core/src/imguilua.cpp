@@ -734,6 +734,7 @@ bool ImGuiLua::Spinner(const char* label,
     }
 
     window->DrawList->PathStroke(color, false, thickness);
+    return true;
 }
 
 } // namespace b

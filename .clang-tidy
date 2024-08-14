@@ -10,6 +10,7 @@ Checks: '*,
   -readability-uppercase-literal-suffix
   -readability-identifier-length
   -misc-use-anonymous-namespace
+  -llvmlibc-restrict-system-libc-headers
   -llvm-else-after-return
   -fuchsia-*
   -altera-*
