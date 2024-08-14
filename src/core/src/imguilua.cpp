@@ -15,6 +15,7 @@ extern "C" {
 }
 
 #include <LuaBridge/LuaBridge.h>
+#include <LuaBridge/detail/FuncTraits.h>
 #include <LuaBridge/detail/Stack.h>
 
 #define ADD_IMGUI_FUNCTION(name) addFunction(#name, &ImGui::name)
@@ -562,6 +563,20 @@ void ImGuiLua::DeclareLuaBridge(lua_State* L)
         [](const std::string& label, float radius, int thickness, const ImColor& color) {
             return Spinner(label.c_str(), radius, thickness, color);
         });
+
+    ns.addFunction("InputText",
+                   [](const std::string& name,
+                      const std::string& value,
+                      luabridge::LuaRef setValue) {
+                       std::string buffer = value;
+                       buffer.resize(128, '\0');
+                       ImGui::InputText(name.c_str(),
+                                        const_cast<char*>(buffer.data()),
+                                        buffer.size());
+                       if (std::string(buffer.c_str()) != value) {
+                           setValue(std::string(buffer.c_str()));
+                       }
+                   });
 
     ns.ADD_FUNCTION(Text);
     ns.ADD_FUNCTION(Button);
