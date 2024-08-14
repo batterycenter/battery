@@ -543,6 +543,7 @@ void ImGuiLua::DeclareLuaBridge(lua_State* L)
     ns.addFunction("PushIDStr",
                    [](const std::string& id) { ImGui::PushID(id.c_str()); });
     ns.addFunction("PopID", &ImGui::PopID);
+    ns.addFunction("Separator", &ImGui::Separator);
     ns.addFunction("ShowDemoWindow", []() { ImGui::ShowDemoWindow(); });
     ns.addFunction("BeginCombo",
                    [](const std::string& name, const std::string& currentItem) {
