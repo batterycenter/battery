@@ -41,6 +41,11 @@ public:
             .endNamespace();
     }
 
+    lua_State* getLuaState()
+    {
+        return m_luaState;
+    }
+
     template <embed_string_literal identifier> void bindEmbeddedLuaScript()
     {
         m_luaLoaders.emplace_back(std::make_unique<LuaLoader>());
