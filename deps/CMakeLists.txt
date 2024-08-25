@@ -33,6 +33,7 @@ target_include_directories(implot PUBLIC "implot")
 target_link_libraries(implot PRIVATE imgui::imgui)
 
 # Lua
+set(LUA_ENABLE_SHARED ON CACHE BOOL "" FORCE)
 add_subdirectory(Lua)
 
 # LuaBridge3
