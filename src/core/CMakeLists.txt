@@ -100,3 +100,40 @@ if (UNIX AND NOT EMSCRIPTEN)
     target_include_directories(battery_core PRIVATE ${LIBAPPINDICATOR_INCLUDE_DIRS})
     target_link_libraries(battery_core PUBLIC ${LIBAPPINDICATOR_LIBRARIES})
 endif()
+
+if (B_INSTALL)
+    install(TARGETS 
+        battery_core 
+        spdlog 
+        utf8cpp
+        SDL2-static
+        SDL2main
+        # SDL2_image
+        imgui
+        implot
+        LuaBridge
+        EXPORT BatteryTargets 
+        DESTINATION lib)
+    install(DIRECTORY include/battery DESTINATION include)
+    install(DIRECTORY LuaBridge DESTINATION "LuaBridge3")
+
+    # Create and install the Config files
+    include(CMakePackageConfigHelpers)
+    write_basic_package_version_file(
+        "${CMAKE_CURRENT_BINARY_DIR}/BatteryConfigVersion.cmake"
+        VERSION ${PROJECT_VERSION}
+        COMPATIBILITY AnyNewerVersion
+    )
+
+    install(EXPORT BatteryTargets
+        FILE BatteryTargets.cmake
+        NAMESPACE battery::
+        DESTINATION lib/cmake/battery
+    )
+
+    install(FILES
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/BatteryConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/BatteryConfigVersion.cmake"
+        DESTINATION lib/cmake/battery
+    )
+endif()

@@ -20,7 +20,10 @@ b_add_library(imgui STATIC ALIAS imgui::imgui
         imgui/backends/imgui_impl_sdl2.cpp
         imgui/backends/imgui_impl_sdlrenderer2.cpp
 )
-target_include_directories(imgui PUBLIC "imgui")
+target_include_directories(imgui PUBLIC 
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgui>
+        $<INSTALL_INTERFACE:imgui>
+)
 target_include_directories(imgui PRIVATE "SDL/include")
 
 # implot
@@ -29,7 +32,10 @@ b_add_library(implot STATIC ALIAS implot::implot
         implot/implot_demo.cpp
         implot/implot_items.cpp
 )
-target_include_directories(implot PUBLIC "implot")
+target_include_directories(implot PUBLIC 
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/implot>
+        $<INSTALL_INTERFACE:implot>
+)
 target_link_libraries(implot PRIVATE imgui::imgui)
 
 # Lua
@@ -58,7 +64,7 @@ set(SDL_THREADS ON CACHE BOOL "" FORCE)
 add_subdirectory(SDL)
 
 # SDL_image
-set(SDL2IMAGE_INSTALL OFF CACHE BOOL "" FORCE)
+set(SDL2IMAGE_INSTALL ON CACHE BOOL "" FORCE)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 add_subdirectory(SDL_image)
 

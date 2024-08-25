@@ -107,7 +107,10 @@ function(b_apply_common_target_options TARGET)  # For all libraries and executab
                 _CRT_SECURE_NO_WARNINGS     # Prevent MSVC from complaining about memset, strcpy, etc.
         )
     endif()
-    target_include_directories(${TARGET} PUBLIC include)
+    target_include_directories(${TARGET} PUBLIC 
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+    )
     target_compile_definitions(${TARGET} PUBLIC UNICODE _UNICODE UTF8PROC_STATIC)
     b_set_environment_definitions(${TARGET})
 
