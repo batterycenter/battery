@@ -18,7 +18,7 @@ static void SetDefaultFolder(IFileDialog* dialog, const b::fs::path& defaultPath
     if (defaultPath.empty()) {
         return;
     }
-    b::log::info("Setting default folder to {}", defaultPath.native_string());
+    // b::log::info("Setting default folder to {}", defaultPath.native_string());
 
     IShellItem* folder = nullptr;
     const HRESULT result = SHCreateItemFromParsingName(

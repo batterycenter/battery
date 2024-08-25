@@ -575,6 +575,9 @@ void ImGuiLua::DeclareLuaBridge(lua_State* L)
             return ImGui::BeginChild(name.c_str(), size, border, flags);
         });
     ns.addFunction("EndChild", &ImGui::EndChild);
+    ns.addFunction("BeginPopup", [](const std::string& name, int flags) {
+        return ImGui::BeginPopup(name.c_str(), flags);
+    });
     ns.addFunction("BeginPopupModal", [](const std::string& name, int flags) {
         return ImGui::BeginPopupModal(name.c_str(), nullptr, flags);
     });
@@ -635,6 +638,23 @@ void ImGuiLua::DeclareLuaBridge(lua_State* L)
                                         const_cast<char*>(buffer.data()),
                                         buffer.size(),
                                         flags);
+                       if (std::string(buffer.c_str()) != value) {
+                           setValue(std::string(buffer.c_str()));
+                       }
+                   });
+    ns.addFunction("InputTextMultiline",
+                   [](const std::string& name,
+                      const std::string& value,
+                      luabridge::LuaRef setValue,
+                      const ImVec2& size,
+                      int flags) {
+                       std::string buffer = value;
+                       buffer.resize(128, '\0');
+                       ImGui::InputTextMultiline(name.c_str(),
+                                                 const_cast<char*>(buffer.data()),
+                                                 buffer.size(),
+                                                 size,
+                                                 flags);
                        if (std::string(buffer.c_str()) != value) {
                            setValue(std::string(buffer.c_str()));
                        }
