@@ -380,33 +380,46 @@ void ImGuiLua::DeclareLuaBridge(lua_State* L)
     luabridge::getGlobalNamespace(L)
         .beginNamespace("ImGuiInputTextFlags")
         .addProperty("None", []() -> int { return ImGuiInputTextFlags_None; })
-        .addProperty("CharsDecimal", []() -> int { return ImGuiInputTextFlags_CharsDecimal; })
+        .addProperty("CharsDecimal",
+                     []() -> int { return ImGuiInputTextFlags_CharsDecimal; })
         .addProperty("CharsHexadecimal",
                      []() -> int { return ImGuiInputTextFlags_CharsHexadecimal; })
-        .addProperty("CharsUppercase", []() -> int { return ImGuiInputTextFlags_CharsUppercase; })
-        .addProperty("CharsNoBlank", []() -> int { return ImGuiInputTextFlags_CharsNoBlank; })
-        .addProperty("AutoSelectAll", []() -> int { return ImGuiInputTextFlags_AutoSelectAll; })
+        .addProperty("CharsUppercase",
+                     []() -> int { return ImGuiInputTextFlags_CharsUppercase; })
+        .addProperty("CharsNoBlank",
+                     []() -> int { return ImGuiInputTextFlags_CharsNoBlank; })
+        .addProperty("AutoSelectAll",
+                     []() -> int { return ImGuiInputTextFlags_AutoSelectAll; })
         .addProperty("EnterReturnsTrue",
                      []() -> int { return ImGuiInputTextFlags_EnterReturnsTrue; })
         .addProperty("CallbackCompletion",
                      []() -> int { return ImGuiInputTextFlags_CallbackCompletion; })
-        .addProperty("CallbackHistory", []() -> int { return ImGuiInputTextFlags_CallbackHistory; })
-        .addProperty("CallbackAlways", []() -> int { return ImGuiInputTextFlags_CallbackAlways; })
+        .addProperty("CallbackHistory",
+                     []() -> int { return ImGuiInputTextFlags_CallbackHistory; })
+        .addProperty("CallbackAlways",
+                     []() -> int { return ImGuiInputTextFlags_CallbackAlways; })
         .addProperty("CallbackCharFilter",
                      []() -> int { return ImGuiInputTextFlags_CallbackCharFilter; })
-        .addProperty("AllowTabInput", []() -> int { return ImGuiInputTextFlags_AllowTabInput; })
+        .addProperty("AllowTabInput",
+                     []() -> int { return ImGuiInputTextFlags_AllowTabInput; })
         .addProperty("CtrlEnterForNewLine",
                      []() -> int { return ImGuiInputTextFlags_CtrlEnterForNewLine; })
         .addProperty("NoHorizontalScroll",
                      []() -> int { return ImGuiInputTextFlags_NoHorizontalScroll; })
-        .addProperty("AlwaysOverwrite", []() -> int { return ImGuiInputTextFlags_AlwaysOverwrite; })
+        .addProperty("AlwaysOverwrite",
+                     []() -> int { return ImGuiInputTextFlags_AlwaysOverwrite; })
         .addProperty("ReadOnly", []() -> int { return ImGuiInputTextFlags_ReadOnly; })
         .addProperty("Password", []() -> int { return ImGuiInputTextFlags_Password; })
-        .addProperty("NoUndoRedo", []() -> int { return ImGuiInputTextFlags_NoUndoRedo; })
-        .addProperty("CharsScientific", []() -> int { return ImGuiInputTextFlags_CharsScientific; })
-        .addProperty("CallbackResize", []() -> int { return ImGuiInputTextFlags_CallbackResize; })
-        .addProperty("CallbackEdit", []() -> int { return ImGuiInputTextFlags_CallbackEdit; })
-        .addProperty("EscapeClearsAll", []() -> int { return ImGuiInputTextFlags_EscapeClearsAll; })
+        .addProperty("NoUndoRedo",
+                     []() -> int { return ImGuiInputTextFlags_NoUndoRedo; })
+        .addProperty("CharsScientific",
+                     []() -> int { return ImGuiInputTextFlags_CharsScientific; })
+        .addProperty("CallbackResize",
+                     []() -> int { return ImGuiInputTextFlags_CallbackResize; })
+        .addProperty("CallbackEdit",
+                     []() -> int { return ImGuiInputTextFlags_CallbackEdit; })
+        .addProperty("EscapeClearsAll",
+                     []() -> int { return ImGuiInputTextFlags_EscapeClearsAll; })
         .endNamespace();
 
     luabridge::getGlobalNamespace(L)
@@ -614,12 +627,14 @@ void ImGuiLua::DeclareLuaBridge(lua_State* L)
     ns.addFunction("InputText",
                    [](const std::string& name,
                       const std::string& value,
-                      luabridge::LuaRef setValue) {
+                      luabridge::LuaRef setValue,
+                      int flags) {
                        std::string buffer = value;
                        buffer.resize(128, '\0');
                        ImGui::InputText(name.c_str(),
                                         const_cast<char*>(buffer.data()),
-                                        buffer.size());
+                                        buffer.size(),
+                                        flags);
                        if (std::string(buffer.c_str()) != value) {
                            setValue(std::string(buffer.c_str()));
                        }
